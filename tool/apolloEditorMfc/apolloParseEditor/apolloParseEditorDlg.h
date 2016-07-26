@@ -4,8 +4,9 @@
 
 #pragma once
 
-#define CONFIG_FILE_PATH "editor_setting.xml"
-#define CONFIG_IO_SETTING "io_config.xml"
+#define CONFIG_FILE_PATH "../cfg/editor_setting.xml"
+#define CONFIG_IO_SETTING "../cfg/io_config.xml"
+
 #include "nd_common/nd_common.h"
 
 // CapolloParseEditorDlg ¶Ô»°¿ò

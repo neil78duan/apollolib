@@ -111,101 +111,101 @@
     <ClInclude Include="InsertNodeListDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\logic_compile\logic_compile.h">
-      <Filter>logictool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\logic_compile\logicParser.h">
-      <Filter>logictool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\logic_compile\dbl_mgr.h">
-      <Filter>logictool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\logic_compile\logicDataType.h">
-      <Filter>logictool</Filter>
-    </ClInclude>
     <ClInclude Include="DlgFunclist.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\logic_compile\objectBaseMgr.h">
-      <Filter>logictool</Filter>
     </ClInclude>
     <ClInclude Include="DrawTreeCtrl.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\logic_compile\logicEngineRoot.h">
-      <Filter>logictool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\attribute\attr_mgr.h">
-      <Filter>attribute</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\attribute\roleattr_help.h">
-      <Filter>attribute</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\attribute\stat_data.h">
-      <Filter>attribute</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\attribute\stat_machine.h">
-      <Filter>attribute</Filter>
-    </ClInclude>
     <ClInclude Include="gmToolDlg.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\netMessage\_msgid_export.h">
-      <Filter>netMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\netMessage\apollo_msg_entry.h">
-      <Filter>netMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\netMessage\auto_dataType.h">
-      <Filter>netMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\netMessage\auto_dataTypeDb_v1.h">
-      <Filter>netMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\netMessage\auto_macroDefine.h">
-      <Filter>netMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\netMessage\dataStream.h">
-      <Filter>netMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\netMessage\dbDataConvert.h">
-      <Filter>netMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\netMessage\message_inc.h">
-      <Filter>netMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\netMessage\MessageID.h">
-      <Filter>netMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\cli_common\apollo_robort.h">
-      <Filter>cli_common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\cli_common\gameMessage.h">
-      <Filter>cli_common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\cli_common\login_apollo.h">
-      <Filter>cli_common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\cli_common\netui_atl.h">
-      <Filter>cli_common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\logic_compile\logic_editor_helper.h">
-      <Filter>logictool</Filter>
     </ClInclude>
     <ClInclude Include="NewfileDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\logic_compile\logic_function.h">
-      <Filter>logictool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\logic_compile\dbldata2netstream.h">
-      <Filter>logictool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\logic_compile\logicStruct.hpp">
-      <Filter>logictool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\cli_common\dftCliMsgHandler.h">
+    <ClInclude Include="..\..\..\cli_common\apollo_robort.h">
       <Filter>cli_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cli_common\dftCliMsgHandler.h">
+      <Filter>cli_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cli_common\gameMessage.h">
+      <Filter>cli_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cli_common\login_apollo.h">
+      <Filter>cli_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cli_common\netui_atl.h">
+      <Filter>cli_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\attribute\attr_mgr.h">
+      <Filter>attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\attribute\roleattr_help.h">
+      <Filter>attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\attribute\stat_data.h">
+      <Filter>attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\attribute\stat_machine.h">
+      <Filter>attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_compile\dbl_mgr.h">
+      <Filter>logictool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_compile\dbldata2netstream.h">
+      <Filter>logictool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_compile\logic_compile.h">
+      <Filter>logictool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_compile\logic_editor_helper.h">
+      <Filter>logictool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_compile\logic_function.h">
+      <Filter>logictool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_compile\logicDataType.h">
+      <Filter>logictool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_compile\logicEngineRoot.h">
+      <Filter>logictool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_compile\logicParser.h">
+      <Filter>logictool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_compile\logicStruct.hpp">
+      <Filter>logictool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_compile\objectBaseMgr.h">
+      <Filter>logictool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\netMessage\_msgid_export.h">
+      <Filter>netMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\netMessage\apollo_msg_entry.h">
+      <Filter>netMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\netMessage\auto_dataType.h">
+      <Filter>netMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\netMessage\auto_dataTypeDb_v1.h">
+      <Filter>netMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\netMessage\auto_macroDefine.h">
+      <Filter>netMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\netMessage\dataStream.h">
+      <Filter>netMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\netMessage\dbDataConvert.h">
+      <Filter>netMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\netMessage\message_inc.h">
+      <Filter>netMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\netMessage\MessageID.h">
+      <Filter>netMessage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -269,89 +269,89 @@
     <ClCompile Include="InsertNodeListDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\logic_compile\logic_compile.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\logic_compile\logicParser.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\logic_compile\dbl_mgr.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\logic_compile\logicDataType.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
     <ClCompile Include="DlgFunclist.cpp">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\logic_compile\objectBaseMgr.cpp">
-      <Filter>logictool</Filter>
     </ClCompile>
     <ClCompile Include="DrawTreeCtrl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\logic_compile\logicEngineRoot.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\attribute\attr_mgr.cpp">
-      <Filter>attribute</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\attribute\roleattr_help.cpp">
-      <Filter>attribute</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\attribute\stat_data.cpp">
-      <Filter>attribute</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\attribute\stat_machine.cpp">
-      <Filter>attribute</Filter>
-    </ClCompile>
     <ClCompile Include="gmToolDlg.cpp">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\netMessage\auto_dataType.cpp">
-      <Filter>netMessage</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\netMessage\auto_dataTypeDb_v1.cpp">
-      <Filter>netMessage</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\netMessage\dataStream.cpp">
-      <Filter>netMessage</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\netMessage\dbDataConvert.cpp">
-      <Filter>netMessage</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\netMessage\MessageName.cpp">
-      <Filter>netMessage</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\cli_common\apollo_robort.cpp">
-      <Filter>cli_common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\cli_common\gameMessage.cpp">
-      <Filter>cli_common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\cli_common\login_apollo.cpp">
-      <Filter>cli_common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\cli_common\netui_atl.cpp">
-      <Filter>cli_common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\logic_compile\logic_editor_helper.cpp">
-      <Filter>logictool</Filter>
     </ClCompile>
     <ClCompile Include="NewfileDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\logic_compile\logic_function.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\logic_compile\dbldata2netstream.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\logic_compile\logicStruct.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp">
+    <ClCompile Include="..\..\..\cli_common\apollo_robort.cpp">
       <Filter>cli_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cli_common\dftCliMsgHandler.cpp">
+      <Filter>cli_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cli_common\gameMessage.cpp">
+      <Filter>cli_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cli_common\login_apollo.cpp">
+      <Filter>cli_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cli_common\netui_atl.cpp">
+      <Filter>cli_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\attribute\attr_mgr.cpp">
+      <Filter>attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\attribute\roleattr_help.cpp">
+      <Filter>attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\attribute\stat_data.cpp">
+      <Filter>attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\attribute\stat_machine.cpp">
+      <Filter>attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_compile\dbl_mgr.cpp">
+      <Filter>logictool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_compile\dbldata2netstream.cpp">
+      <Filter>logictool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_compile\logic_compile.cpp">
+      <Filter>logictool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_compile\logic_editor_helper.cpp">
+      <Filter>logictool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_compile\logic_function.cpp">
+      <Filter>logictool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_compile\logicDataType.cpp">
+      <Filter>logictool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_compile\logicEngineRoot.cpp">
+      <Filter>logictool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_compile\logicParser.cpp">
+      <Filter>logictool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_compile\logicStruct.cpp">
+      <Filter>logictool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_compile\objectBaseMgr.cpp">
+      <Filter>logictool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\netMessage\auto_dataType.cpp">
+      <Filter>netMessage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\netMessage\auto_dataTypeDb_v1.cpp">
+      <Filter>netMessage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\netMessage\dataStream.cpp">
+      <Filter>netMessage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\netMessage\dbDataConvert.cpp">
+      <Filter>netMessage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\netMessage\MessageName.cpp">
+      <Filter>netMessage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -364,8 +364,17 @@
       <Filter>资源文件</Filter>
     </None>
     <None Include="ClassDiagram.cd" />
-    <None Include="..\..\attribute\Makefile">
+    <None Include="..\..\..\cli_common\Makefile">
+      <Filter>cli_common</Filter>
+    </None>
+    <None Include="..\..\..\attribute\Makefile">
       <Filter>attribute</Filter>
+    </None>
+    <None Include="..\..\..\logic_compile\Makefile">
+      <Filter>logictool</Filter>
+    </None>
+    <None Include="..\..\..\netMessage\Makefile">
+      <Filter>netMessage</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

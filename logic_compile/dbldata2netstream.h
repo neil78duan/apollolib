@@ -29,7 +29,7 @@ void destroyUserDefData(userDefineDataType_map_t &userDataRoot);
 void dumpMessageData(userDefineDataType_map_t &userDataRoot);
 int get_type_from_alias(const char *name);
 
-int testFormatMsgRead(userDefineDataType_map_t &userDataRoot);
+//int testFormatMsgRead(userDefineDataType_map_t &userDataRoot);
 
 //build data struct from message define-body such as "int16_t: number, [int32:mailid, MailInfo:mail_body]"
 //bool buildUserDefFromText(DBLDataNode &dataType, const char *text, userDefineDataType_map_t &userDataRoot);

@@ -9,7 +9,7 @@
 
 #include "nd_common/nd_common.h"
 #include "netui_atl.h"
-#include "commonTest.h"
+//#include "commonTest.h"
 #include "login_apollo.h"
 #include "apollo_errors.h"
 #include "message_inc.h"

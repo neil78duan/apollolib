@@ -339,6 +339,7 @@ void dumpMessageData(userDefineDataType_map_t &userDataRoot)
 	fclose(pf);
 }
 
+/*
 #include "message_inc.h"
 int testFormatMsgRead(userDefineDataType_map_t &userDataRoot)
 {
@@ -396,3 +397,4 @@ int testFormatMsgRead(userDefineDataType_map_t &userDataRoot)
 
 
 }
+*/
