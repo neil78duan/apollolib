@@ -1,0 +1,32 @@
+<?xml  version="1.0" encoding="utf8" ?>
+<func_list>
+	<node desc="修改服务器时间(int:add_hours, int:add_minutes)">CPP.apollo_func_change_time</node>
+	<node desc="安装事件处理器(str:function, int:event_id)">CPP.apollo_func_install_event_handler</node>
+	<node desc="读取消息(int:数据类型)">CPP.apollo_func_read_msg</node>
+	<node desc="重新载入策划数据()">CPP.apollo_func_reload_data_table</node>
+	<node desc="发送消息(str:msgName, msg_varlist...)">CPP.apollo_func_send_msg</node>
+	<node desc="处理消息(str:listener, str:func, int maxId, int minId, int privilege)">CPP.apollo_set_message_handler</node>
+	<node desc="加经验(exp)">CPP.gscript_add_exp</node>
+	<node desc="系统广播(内容,...)">CPP.gscript_broad_syste_notice</node>
+	<node desc="获得角色附加数据(str:name)">CPP.gscript_get_addition</node>
+	<node desc="获得装备阶级(itemdata)">CPP.gscript_get_equip_level</node>
+	<node desc="获得装备强化等级(itemdata)">CPP.gscript_get_equip_strength</node>
+	<node desc="获得物品类型(itemdata)">CPP.gscript_get_item_type</node>
+	<node desc="获得角色自己名字()">CPP.gscript_get_self_name</node>
+	<node desc="获得技能等级(skilldata)">CPP.gscript_get_skill_level</node>
+	<node desc="PVP_NPC_初始化()">CPP.gscript_init_pvp_NPC</node>
+	<node desc="脱装备(int:id)">CPP.gscript_putoff_equip</node>
+	<node desc="穿装备(int:id)">CPP.gscript_puton_equip</node>
+	<node desc="属性重算()">CPP.gscript_recalc_attribues</node>
+	<node desc="发送游戏错误(error_type, param)">CPP.gscript_reply_common_error</node>
+	<node desc="发公告给当前用户(arg1, ...)">CPP.gscript_send_player_notice</node>
+	<node desc="修改角色附加数据(str:name, var)">CPP.gscript_set_addition</node>
+	<node desc="设置装备阶级(itemdata)">CPP.gscript_set_equip_level</node>
+	<node desc="设置装备强化等级(itemdata)">CPP.gscript_set_equip_strength</node>
+	<node desc="设置名字名字()">CPP.gscript_set_self_name</node>
+	<node desc="设置技能等级(skilldata)">CPP.gscript_set_skill_level</node>
+	<node desc="关服()">CPP.gscript_shutdown_server</node>
+	<node desc="同步属性()">CPP.gscript_sync_attribues</node>
+	<node desc="从表格读取属性(str:name, int:id)">CPP.gscript_table_attrs_read</node>
+	<node desc="使用物品(itemInstId)">CPP.gscript_use_item</node>
+</func_list>

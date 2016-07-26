@@ -1,0 +1,22 @@
+<?xml  version="1.0" encoding="utf8" ?>
+<event_list>
+	<node desc="空事件">0</node>
+	<node desc="服务器启动成功()">1</node>
+	<node desc="服务器关闭()">2</node>
+	<node desc="角色登录(player)">3</node>
+	<node desc="角色退出(player)">4</node>
+	<node desc="角色创建(player)">5</node>
+	<node desc="角色删除(player)">6</node>
+	<node desc="角色进入地图(player, mapid)">7</node>
+	<node desc="属性变化(player,a_id, a_val)">8</node>
+	<node desc="升级(player, newlevel)">9</node>
+	<node desc="获得物品(player, itemid)">10</node>
+	<node desc="杀死怪物(player,monster_id)">11</node>
+	<node desc="获得技能(player,skill_id)">12</node>
+	<node desc="角色离开地图(player, mapid)">13</node>
+	<node desc="角色死亡(player)">14</node>
+	<node desc="接受任务(player,taskid)">15</node>
+	<node desc="完成任务(player,taskid)">16</node>
+	<node desc="每日更新(player)">17</node>
+	<node desc="成功输入邀请码(player)">18</node>
+</event_list>

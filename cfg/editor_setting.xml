@@ -1,0 +1,681 @@
+<?xml version="1.0" encoding="gbk"?>
+<alias kinds="hide">
+	<aim>目标</aim>
+	<index>编号</index>
+	<val>数值</val>
+	<var>初始值</var>
+	<type>类型</type>
+	<num>数量</num>
+	<func_name>函数名</func_name>
+	<event_id>事件名</event_id>
+	<comment>注释说明</comment>
+</alias>
+	
+<data_type_define kinds="hide" desc="define enum data type">
+	<type_operate_dest kinds="enum" enum_value="无,角色属性,背包,技能管理器,龙背包,武器,任务,附加属性" enum_type="text" enum_text="none,attr,package,skill,dragon,weapon,task,addition"/>
+	<type_compare_sub_entry kinds="enum" enum_value="其他,等于,小于,大于,小于等于,大于等于"/>
+	<type_data_type kinds="enum" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,time,变量,参数,上一步结果,user_define,compile_time,function_name, module_name"/>	
+	<type_netmsg_privilege kinds="enum" enum_value="不限制,连接,登录,进入游戏,GM"/>
+	<type_encode kinds="enum" enum_value="ansi,gbk,utf8"/>
+	<type_time_unit kinds="enum" enum_value="秒,分钟,小时,天,月,年,星期"/>
+	<type_time_cmd kinds="enum" enum_value="获得,增加,减少,计数间隔"/>
+	<type_week kinds="key_value" key="星期1,星期2,星期3,星期4,星期5,星期6,星期天" value="1,2,3,4,5,6,0"/>
+</data_type_define>
+
+<compile_setting kinds="hide" desc="编译设定,关键字和指令的对照表而已 instruction=1是命令 0是变量 2分支,3循环,4变量集合,5user-define,6function-info,7错误处理 100注释">
+	<list instruction="1" ins_id="0" size="8" >op_exit</list>
+	<list instruction="1" ins_id="1" size="0" >op_read</list>
+	<list instruction="1" ins_id="2" size="0" >op_write</list>
+	<list instruction="1" ins_id="3" size="0" >op_add</list>
+	<list instruction="1" ins_id="4" size="0" >op_sub</list>
+	<list instruction="1" ins_id="5" size="0" >op_clear</list>
+	<list instruction="1" ins_id="6" size="0" >op_make_var</list>
+	<list instruction="1" ins_id="7" size="0" >op_read_table</list>
+	<list instruction="1" ins_id="8" size="0" >op_comp</list>
+	<list instruction="1" ins_id="9" size="0" >op_calc</list>
+	<list instruction="1" ins_id="10" size="0" record_param_num="1">op_waitevent</list>
+	<list instruction="1" ins_id="11" size="0" >op_getobj</list>
+	<list instruction="1" ins_id="12" size="8" >op_setflag</list>
+	<list instruction="1" ins_id="13" size="0" record_param_num="1">op_call_func</list>	
+	<list instruction="1" ins_id="19" size="0" >op_save_register</list>	
+	<list instruction="1" ins_id="18" size="0" >op_set_result</list>
+	<list instruction="1" ins_id="21" size="0" record_param_num="1">op_print</list>	
+	<list instruction="1" ins_id="22" size="0" record_param_num="1">op_log</list>	
+	<list instruction="1" ins_id="23" size="12" >op_rand</list>	
+	<list instruction="1" ins_id="26" size="0" record_param_num="1">op_sendevent</list>
+	<list instruction="1" ins_id="27" size="4" >op_get_time</list>
+	<list instruction="1" ins_id="29" size="4" >op_begin_affair</list>
+	<list instruction="1" ins_id="30" size="4" >op_get_compile_time</list>
+	<list instruction="1" ins_id="31" size="0" record_param_num="1">op_time_function</list>
+	<list instruction="1" ins_id="33" size="8" >op_throw</list>
+	<list instruction="1" ins_id="34" size="0" >op_install_event</list>
+	<list instruction="1" ins_id="35" size="0" >op_remove_event</list>
+	<list instruction="1" ins_id="36" size="0" record_param_num="1">op_add_timer</list>
+	<list instruction="1" ins_id="37" size="0" >op_del_timer</list>
+	<list instruction="1" ins_id="38" size="4" >op_check_valide</list>
+	<list instruction="1" ins_id="39" size="8" >op_type_transfer</list>
+	<list instruction="1" ins_id="40" size="0" record_param_num="1" >op_build_user_data</list>
+	<list instruction="1" ins_id="41" size="0" record_param_num="1" >op_create_data_type</list>
+	<list instruction="1" ins_id="42" size="0"  >op_math_operate</list>
+	<list instruction="1" ins_id="43" size="0"  >op_assignin</list>
+	
+	<!-- list instruction="1" ins_id="24" size="0" >op_set_loops</list>	
+	<list instruction="1" ins_id="25" size="0" >op_count_jump</list -->	
+	
+	<list instruction="2" >op_bool_entry</list>
+	<list instruction="2" >op_comp_entry</list>
+	<list instruction="3" >op_loop_entry</list>
+	
+	<!-- param type description 'need_type_stream' will wirte 16 bit data type before data-value  -->
+	<!-- datatype 0 int 1 float 2 string-->
+	<list instruction="0" size="4" datatype="2" >aim</list>
+	<list instruction="0" size="4" datatype="0" >index</list>
+	<list instruction="0" size="4" datatype="1" >val</list>
+	<list instruction="0" size="4" datatype="0" >num</list>
+	<list instruction="0" size="0" datatype="2" >param</list>
+	<list instruction="0" size="0" datatype="2" >tablename</list>
+	<list instruction="0" size="0" datatype="2" need_type_stream="1">func_name</list>
+	<list instruction="0" size="0" datatype="2" need_type_stream="1" >var</list>
+	<list instruction="0" size="0" datatype="0" need_type_stream="1" >msgtype</list>
+	<list instruction="0" size="0" datatype="0" need_type_stream="1" >varInt</list>
+	<list instruction="0" size="0" datatype="1" need_type_stream="1" >varFloat</list>
+	
+	<list instruction="4" size="0">param_collect</list>
+	<list instruction="3" size="0">formula_text</list>
+	<list instruction="100" size="0">comment</list>
+	<list instruction="5" size="0">user_define_function</list>
+	<list instruction="6" size="0" datatype="2">function_info</list>	
+	<list instruction="6" size="0" datatype="2">is_open_role_affair</list>
+	<list instruction="7" size="0" >exception_catch_block</list>
+	<list instruction="8" size="0" >function_init_block</list>
+	
+	
+</compile_setting>
+
+<create_template kinds="hide" desc="新建节点的创建模板">
+	<!-- create function -->
+	<create_func name="func_node" index="2" auto_index="0" create_type="0">
+		<attribute>
+			<a1 name="name" value="new_function"/>
+			<a4 name="create_template" value="create_list1"/>
+			<a2 name="auto_index" value="0"/>
+			<a5 name="expand_list" value="comment" />
+			<a6 name="enable_drag" value="yes"/>
+		</attribute>
+		<sub_node>			
+			<!-- n1 name="op_setflag">
+				<attribute>
+					<a1 name="name" value="节点_出错退出"/>
+					<a2 name="expand" value="yes"/>
+				</attribute>
+				<sub_node>
+					<n1 name="index" value="0">
+						<attribute>
+							<a1 name="name" value="错误退出"/>
+							<a2 name="kinds" value="bool"/>
+						</attribute>
+					</n1>
+				</sub_node>
+			</n1 -->
+			<n2 name="comment" value="函数说明"></n2>
+		</sub_node>
+	</create_func>
+	
+	<create_msg_handler name="消息处理函数创建模板" create_type="1">		
+		<msg_handler_node name="message_handler" enable_drag="yes" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1">
+			<comment name="函数说明" expand="yes">
+				<desc>消息处理handle(player, message)</desc>
+				<isGlobal kinds="bool">1</isGlobal>
+			</comment>
+			<function_init_block name="block_加载时运行" create_template="create_list2" expand_list="condition" auto_index="0" >
+				<comment name="功能说明" rw_stat="read">加载时运行</comment>
+				<op_call_func name="节点_安装消息处理器" expand="yes" expand_list="comment">
+					<comment name="功能说明" rw_stat="read">function_install_msg_handler(netModuleName, scriptName,maxId, minId,privilege)</comment>
+					<func_name name="函数" kinds="hide" delete="no" >apollo_set_message_handler</func_name>
+					<var name="网络接收器" kinds="string" delete="no">listener</var>
+					<param_collect name="脚本名" kinds="hide" delete="no">
+						<type name="类型" kinds="reference" reference_type="type_data_type" delete="no">14</type>
+						<var name="值" kinds="string" delete="no" restrict="type">none</var>
+					</param_collect>			
+					<msgtype name="主消息" kinds="numeral"  delete="no">0</msgtype>	
+					<msgtype name="次消息" kinds="numeral"  delete="no">0</msgtype>					
+					<varInt name="权限" kinds="enum" enum_value="none,connect,login,ingame,hight" delete="no">2</varInt>
+				</op_call_func>
+			</function_init_block>
+			<exception_catch_block name="节点_异常处理" create_template="create_list1" expand_list="comment" auto_index="0"  >
+				<comment name="功能说明" rw_stat="read">catch{}</comment>
+			</exception_catch_block>
+		</msg_handler_node>
+	</create_msg_handler>
+	
+	<create_event_callback name="事件处理函数" create_type="1">		
+		<event_callback_node name="event_callback" enable_drag="yes" create_template="create_list2" auto_index="0" expand_list="comment,event_id" expand_stat="1">
+			<comment name="函数说明" expand="yes">
+				<desc>事件处理函数</desc>
+				<isGlobal kinds="bool">1</isGlobal>
+			</comment>
+
+			<function_init_block name="block_加载时运行" create_template="create_list2" expand_list="condition" auto_index="0" >
+				<comment name="功能说明" rw_stat="read">加载时运行</comment>
+				<op_call_func name="节点_安装事件处理器" expand="yes" expand_list="comment">
+					<comment name="功能说明" rw_stat="read">function_install_event_handler(scriptName, eventiId)</comment>
+					<func_name name="函数" kinds="hide" delete="no" >apollo_func_install_event_handler</func_name>
+					<param_collect name="脚本名" kinds="hide" delete="no">
+						<type name="参数1类型" kinds="reference" reference_type="type_data_type" delete="no">14</type>
+						<var name="参数1值" kinds="string" delete="no" restrict="type">none</var>
+					</param_collect>
+					<varInt name="处理事件" kinds="user_define" user_param="event_list" delete="no">none</varInt>
+				</op_call_func>
+			</function_init_block>
+			
+			
+			<exception_catch_block name="节点_异常处理" create_template="create_list1" expand_list="comment" auto_index="0"  >
+				<comment name="功能说明" rw_stat="read">catch{}</comment>
+			</exception_catch_block>
+		
+		</event_callback_node>
+	</create_event_callback>
+	
+	<!-- create create func argment lists -->
+	
+	<!-- create step in function -->
+	<create_step_exit name="退出节点" create_type="1" expand="yes" >
+		<op_exit name="节点_退出" expand="yes">			
+			<comment name="功能说明" rw_stat="read">op_exit(value)</comment>
+			<num name="返回结果" kinds="enum" enum_value="false,true" delete="no">0</num>
+		</op_exit>
+	</create_step_exit>
+	
+	
+	<create_step_throw name="抛出异常" create_type="1" expand="yes" >
+		<op_throw name="节点_抛出异常" expand="yes">			
+			<comment name="功能说明" rw_stat="read">op_throw(value)</comment>
+			<num name="错误编号" kinds="numeral"  delete="no">0</num>
+		</op_throw>
+	</create_step_throw>
+	
+	<create_step_error_catch_block name="捕获异常" create_type="1" >
+		<exception_catch_block name="节点_异常处理" create_template="create_list1" expand_list="comment" auto_index="0"  >
+			<comment name="功能说明" rw_stat="read">catch{}</comment>
+		</exception_catch_block>
+	</create_step_error_catch_block>
+	
+	
+	<create_step_get_time name="得到时间" create_type="1" expand="yes" >
+		<op_get_time name="节点_时间" expand="yes">
+			<comment name="功能说明" rw_stat="read">get_time()</comment>
+		</op_get_time>
+	</create_step_get_time>
+	
+	
+	<create_step_compile_time name="得到脚本编译时间" create_type="1" expand="yes" >
+		<op_get_compile_time name="节点_获得脚本编译时间" expand="yes">
+			<comment name="功能说明" rw_stat="read">get_compile_time()</comment>
+		</op_get_compile_time>
+	</create_step_compile_time>
+	
+	
+	<create_step_time_function name="时间函数" create_type="1" expand="yes">
+		<op_time_function name="节点_时间计算"  expand="yes" >
+			<comment name="功能说明" rw_stat="read">time_fun(cmd, unit, time1, val)</comment>			
+			<varInt name="操作类型"  kinds="reference" reference_type="type_time_cmd" delete="no">0</varInt>
+			<varInt name="时间单位"  kinds="reference" reference_type="type_time_unit" delete="no">0</varInt>			
+			<param_collect name="参数1" expand="yes" expand_stat="1" delete="no">
+				<type name="参数1类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="参数1值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>			
+			<param_collect name="参数2" expand="yes" expand_stat="1" delete="no">
+				<type name="参数2类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="参数2值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>			
+		</op_time_function>
+	</create_step_time_function>
+	
+	
+	<create_step_begin_affair name="出错自动恢复数据" create_type="1" expand="yes" >
+		<op_begin_affair name="节点_角色数据出错自动复原" expand="yes">
+			<comment name="功能说明" rw_stat="read">player_affair_rollback()</comment>
+		</op_begin_affair>
+	</create_step_begin_affair>
+	
+	
+	<create_set_var name="保存当前值" create_type="1" expand="yes" >
+		<op_save_register name="节点_把当前值赋给变量" expand="yes">
+			<comment name="功能说明" rw_stat="read">var=current-value</comment>
+			<type kinds="key_value" key="变量,参数" value="9,10" delete="no">9</type>
+			<var name="变量名" kinds="string" delete="no" restrict="type">none</var>
+		</op_save_register>
+	</create_set_var>
+	
+	<create_set_result name="设置上一步结果" create_type="1" expand="yes" >
+		<op_set_result name="节点_设置上一步结果" expand="yes">
+			<comment name="功能说明" rw_stat="read">set-current-value</comment>
+			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var kinds="string" delete="no" restrict="type">none</var>
+		</op_set_result>
+	</create_set_result>
+	
+	<create_step_rand name="范围随机数" create_type="1" expand="yes" >
+		<op_rand name="节点_生成随机数" expand="yes">
+			<comment name="功能说明" rw_stat="read">rand(low_limit,hight_limit)</comment>
+			<num name="下限" kinds="numeral" >0</num>
+			<index name="上限" kinds="numeral">100</index>
+		</op_rand>
+	</create_step_rand>
+	
+	<create_step_read name="读取节点" create_type="1" expand="yes" >
+		<op_read name="节点_读取" expand="yes">
+			<comment name="功能说明" rw_stat="read">op_read(aim,index_name)</comment>
+			<aim kinds="reference" reference_type="type_operate_dest">0</aim>
+			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
+				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>
+			
+		</op_read>
+	</create_step_read>
+	<create_step_write name="写入节点" create_type="1" desc="创建写入节点">
+		<op_write name="节点_写入" expand="yes">
+			<comment name="功能说明" rw_stat="read">op_write(aim,index_name,value)</comment>
+			<aim kinds="reference" reference_type="type_operate_dest">0</aim>			
+			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
+				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>			
+			<type name="结果类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var name="结果" kinds="string" delete="no" restrict="type">none</var>
+		</op_write>
+	</create_step_write>
+	<create_step_add name="增加节点" create_type="1" >
+		<op_add name="节点_增加" expand="yes">
+			<comment name="功能说明" rw_stat="read">op_add(aim,index_name,value)</comment>
+			<aim kinds="reference" reference_type="type_operate_dest">0</aim>	
+			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
+				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>			
+			<type name="结果类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var name="结果" kinds="string" delete="no" restrict="type">none</var>
+		</op_add>
+	</create_step_add>
+			
+	<create_step_sub name="减少节点" create_type="1" >
+		<op_sub name="节点_减少" expand="yes">
+			<comment name="功能说明" rw_stat="read">op_sub(aim,index_name,value)</comment>
+			<aim kinds="reference" reference_type="type_operate_dest">0</aim>	
+			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
+				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>			
+			<type name="结果类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var name="结果" kinds="string" delete="no" restrict="type">none</var>
+		</op_sub>
+	</create_step_sub>
+	<create_step_clear name="清除节点" create_type="1" >
+		<op_clear name="节点_清除" expand="yes">
+			<comment name="功能说明" rw_stat="read">op_clear(aim,index_name)</comment>
+			<aim kinds="reference" reference_type="type_operate_dest">0</aim>	
+			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
+				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>
+		</op_clear>
+	</create_step_clear>
+	<create_make_var name="创建变量" create_type="1" >
+		<op_make_var name="节点_申明变量" expand="yes">
+			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+			<param name="名字" kinds="string" delete="no">var1</param>
+			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var name="初始值" kinds="string" delete="no" restrict="type">none</var>
+		</op_make_var>
+	</create_make_var>
+	
+	<create_math_operate name="数学运算符" create_type="1" >
+		<op_math_operate name="节点_数学运算" expand="yes">
+			<comment name="功能说明" rw_stat="read">+-*/</comment>
+			<index kinds="enum" enum_value="+,-,*,/,sqrt,max,min,rand">0</index>	
+			<param_collect name="操作数1" expand="yes" expand_stat="1" delete="no">
+				<type name="操作数1类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="操作数1值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>
+			<param_collect name="操作数2" expand="yes" expand_stat="1" delete="no">
+				<type name="操作数2类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="操作数2值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>
+		</op_math_operate>
+	</create_math_operate>
+	
+	<create_assignin name="赋值操作" create_type="1" >
+		<op_assignin name="节点_数学运算" expand="yes">
+			<comment name="功能说明" rw_stat="read">var = value</comment>
+			<param name="变量名称" kinds="string" delete="no" restrict="type">none</param>			
+			<param_collect name="值" expand="yes" expand_stat="1" delete="no">
+				<type name="赋值类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>
+		</op_assignin>
+	</create_assignin>
+	<create_read_table name="读取excel节点" create_type="1" >
+		<op_read_table name="节点_读取表格" expand="yes">
+			<comment name="功能说明" rw_stat="read">function:read_excel_table(table,col, index)</comment>
+			<tablename name="excel表" kinds="user_define" user_param="dbl_excel" delete="no">none</tablename>
+			<param name="列名" kinds="user_define" user_param="dbl_excel_col" delete="no">none</param>						
+			<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
+		</op_read_table>
+	</create_read_table>
+	
+	<create_step_calc name="公式" create_type="1" >
+		<op_calc name="节点_公式" expand="yes">
+			<comment name="功能说明" rw_stat="read">run_formulate(formulate_text)</comment>
+			<param name="公式内容" kinds="string">0</param>
+		</op_calc>
+	</create_step_calc>
+	<create_step_waitevent name="等待事件节点" create_type="1" >
+		<op_waitevent name="节点_等待事件" create_template="create_input_param" auto_index="0" >
+			<comment name="功能说明" rw_stat="read">wait_event(event_id)</comment>
+			<varInt name="事件名" kinds="user_define" user_param="event_list" delete="no">none</varInt>
+		</op_waitevent>
+	</create_step_waitevent>
+	
+	<create_step_send_event name="产生事件节点" create_type="1" >
+		<op_sendevent name="节点_产生事件" create_template="create_input_param" auto_index="0" >
+			<comment name="功能说明" rw_stat="read">generate_event(event_id)</comment>
+			<varInt name="事件名" kinds="user_define" user_param="event_list" delete="no">none</varInt>
+		</op_sendevent>
+	</create_step_send_event>
+	
+	<create_install_event name="安装本地事件处理器" create_type="1" >
+		<op_install_event name="节点_安装事件处理器" expand="yes">
+			<comment name="功能说明" rw_stat="read">install_local_event_handler(event_id, function)</comment>			
+			<index name="事件名" kinds="user_define" user_param="event_list" delete="no">none</index>			
+			<param name="函数名" kinds="user_define" user_param="func_list" delete="no">none</param>			
+		</op_install_event>
+	</create_install_event>
+	<create_remove_event name="移除本地事件处理器" create_type="1" >
+		<op_remove_event name="节点_移除事件处理器" expand="yes">
+			<comment name="功能说明" rw_stat="read">install_local_event_handler(event_id, function)</comment>			
+			<index name="事件名" kinds="user_define" user_param="event_list" delete="no">none</index>			
+			<param name="函数名" kinds="user_define" user_param="func_list" delete="no">none</param>			
+		</op_remove_event>
+	</create_remove_event>
+	
+	
+	<create_add_timer name="添加定时器" create_type="1" >
+		<op_add_timer name="节点_添加定时器" create_template="create_input_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+			<comment name="功能说明" rw_stat="read">add_timer(type, tm_interval,name, function,...)</comment>			
+			<msgtype name="类型" kinds="enum" enum_value="局部,全局" delete="no">0</msgtype>					
+			<varInt name="类型" kinds="enum" enum_value="循环,一次性" delete="no">0</varInt>			
+			<varFloat name="间隔(s)" kinds="numeral" delete="no">1.0</varFloat>
+			<var name="取名" kinds="string" delete="no">none</var>
+			<func_name name="函数名" kinds="user_define" user_param="func_list" delete="no">none</func_name>
+		</op_add_timer>
+	</create_add_timer>
+	
+	<create_del_timer name="删除定时器" create_type="1" >
+		<op_del_timer name="节点_删除定时器" expand="yes">
+			<comment name="功能说明" rw_stat="read">del_timer(name)</comment>	
+			<index name="类型" kinds="enum" enum_value="局部,全局" delete="no">0</index>			
+			<param name="取名" kinds="string" delete="no">none</param>
+		</op_del_timer>
+	</create_del_timer>
+	
+	<create_build_user_data name="创建json数据" create_type="1" >
+		<op_build_user_data name="节点_创建json数据" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+			<comment name="功能说明" rw_stat="read">define  name{...}</comment>			
+			<var name="变量名" kinds="string" delete="no">none</var>
+		</op_build_user_data>
+	</create_build_user_data>
+	
+	<create_build_data_type name="创建新类型" create_type="1" >
+		<op_create_data_type name="节点_创建新数据类型" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+			<comment name="功能说明" rw_stat="read">typedef struct{...}</comment>			
+			<var name="类型名" kinds="string" delete="no">none</var>
+		</op_create_data_type>
+	</create_build_data_type>
+	
+	
+	<create_step_call_func name="调用函数" create_type="1" >
+		<op_call_func name="节点_调用函数" create_template="create_input_param"  auto_index="0" expand_list="comment,func_name">
+			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+			<func_name kinds="user_define" user_param="func_list">none</func_name>
+		</op_call_func>
+	</create_step_call_func>
+	
+	<create_step_print name="打印输出" create_type="1" >
+		<op_print name="节点_打印" create_template="create_input_param" auto_index="0"  expand_list="comment">
+			<comment name="功能说明" rw_stat="read">print(...)</comment>
+		</op_print>
+	</create_step_print>
+	<create_step_log name="写日志" create_type="1" >
+		<op_log name="节点_日志" create_template="create_input_param" auto_index="0" expand_list="comment" >
+			<comment name="功能说明" rw_stat="read">log(...)</comment>
+		</op_log>
+	</create_step_log>
+		
+	<create_step_send_msg name="发送消息" create_type="1">
+		<op_call_func name="节点_发送消息" create_template="create_input_param" auto_index="0" expand_list="comment,varInt,msgtype">
+			<comment name="功能说明" rw_stat="read">function_send_message(msg_id,...)</comment>
+			<func_name name="函数" kinds="hide" delete="no" >apollo_func_send_msg</func_name>
+			<varInt name="主消息号" kinds="numeral" delete="no" >0</varInt>
+			<msgtype name="次消息号" kinds="numeral" delete="no" >0</msgtype>
+		</op_call_func>		
+	</create_step_send_msg>
+	
+	<!-- 通过调用外部函数的方法来读取消息 参数1 -->
+	<create_step_read_msg name="读取网络消息" create_type="1">
+		<op_call_func name="节点_读取网络数据" expand="yes" expand_list="comment">
+			<comment name="功能说明" rw_stat="read">function_read_message(read_type)</comment>
+			<func_name name="函数" kinds="hide" delete="no" >apollo_func_read_msg</func_name>
+			<param_collect name="参数1_输入消息对象"  kinds="hide" delete="no">
+				<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
+				<var kinds="string" delete="no" restrict="type">2</var>			
+			</param_collect>
+			<param_collect name="读取参数" expand="yes" expand_stat="1">
+				<type kinds="hide" delete="no">0</type>
+				<msgtype name="读取数据类型" kinds="reference" reference_type="type_data_type" delete="no" restrict="type">0</msgtype>
+			</param_collect>		
+		</op_call_func>		
+	</create_step_read_msg>
+	
+	<create_step_read_datatype_msg name="根据定义类型读取消息" create_type="1">
+		<op_call_func name="节点_从定义类型读取消息" expand="yes" expand_list="comment,var">
+			<comment name="功能说明" rw_stat="read">function_read_fromat_message(data_type_name)</comment>
+			<func_name name="函数" kinds="hide" delete="no" >apollo_func_read_userData_from_msg</func_name>
+			<param_collect name="参数1_输入消息对象"  kinds="hide" delete="no">
+				<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
+				<var kinds="string" delete="no" restrict="type">2</var>			
+			</param_collect>			
+			<var name="类型名字" kinds="string" >none</var>			
+		</op_call_func>		
+	</create_step_read_datatype_msg>
+	
+	<create_step_read_excel_attr name="从excel读取属性节点" create_type="1" >
+		<op_call_func name="节点_从excel读取属性" expand="yes" expand_list="comment">
+			<comment name="功能说明" rw_stat="read">function_collect_attrs_from_excel(table,index)</comment>
+			<func_name name="函数" kinds="hide" delete="no" >gscript_table_attrs_read</func_name>
+			<var name="excel表" kinds="user_define" user_param="dbl_excel" delete="no">none</var>				
+			<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
+		</op_call_func>
+	</create_step_read_excel_attr>
+	
+	
+	<create_step_check_valid name="检测结果是否有效" create_type="1" >
+		<op_check_valide name="节点_检测结果" expand_list="comment" >			
+			<comment name="功能说明" rw_stat="read">check_last_return_value_is_valid()</comment>
+		</op_check_valide>
+	</create_step_check_valid>
+	
+	<create_step_type_transfer name="类型转换" create_type="1" >
+		<op_type_transfer name="节点_类型转换" expand_list="comment,index" >			
+			<comment name="功能说明" rw_stat="read">data.convert( type )</comment>					
+			<index name="需要转换的类型" kinds="reference" reference_type="type_data_type" delete="no">0</index>
+		</op_type_transfer>
+	</create_step_type_transfer>
+	
+	
+	
+	<!------------ login control entry ------------>
+	<create_step_bool_entry name="创建bool分支" create_type="1" >
+		<op_bool_entry name="节点_bool分支" expand_list="comment" >			
+			<comment name="功能说明" rw_stat="read">if{}</comment>
+			<op_sub_comp_entry name="正确时执行" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
+				<condition no_comp="1" kinds="hide" delete="no">1</condition>
+			</op_sub_comp_entry>
+			<op_sub_comp_entry name="错误时执行" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
+				<condition no_comp="1" kinds="hide"  delete="no">0</condition>
+			</op_sub_comp_entry>
+		</op_bool_entry>
+	</create_step_bool_entry>
+	
+	<create_step_comp_entry name="创建数值比较分支" create_type="1" >
+		<op_comp_entry name="节点_比较分支" create_template="create_sub_comp_entry" expand_list="comment" >
+			<comment name="功能说明" rw_stat="read">if{}</comment>
+			<op_sub_comp_entry name="子节点_比较分支" create_template="create_list1" expand_list="condition,var,type" comp_cond="condition" comp_value="var">
+				<condition name="执行条件" kinds="reference" reference_type="type_compare_sub_entry" delete="no" >0</condition>
+				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="比较值" kinds="string" delete="no" restrict="type">none</var>
+			</op_sub_comp_entry>
+		</op_comp_entry>
+	</create_step_comp_entry>
+	
+	<create_sub_comp_entry name="创建比较子分支" create_type="1" >	
+		<op_sub_comp_entry name="子节点_比较分支" create_template="create_list1" expand_list="condition,var,type" comp_cond="condition" comp_value="var" auto_index="0">
+			<condition name="执行条件" kinds="reference" reference_type="type_compare_sub_entry" delete="no" >0</condition>
+					
+			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var name="比较值" kinds="string" delete="no" restrict="type">none</var>
+			
+		</op_sub_comp_entry>
+	</create_sub_comp_entry>
+	
+	
+	<create_step_loop_entry name="循环分支" create_type="1" >
+		<op_loop_entry name="节点_循环" create_template="create_list2" expand_list="condition" auto_index="0"  comp_cond="condition">
+			<comment name="功能说明" rw_stat="read">loop{}</comment>
+			<condition name="loop_count" >
+				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var kinds="string" delete="no" restrict="type">none</var>	
+			</condition>
+		</op_loop_entry>
+	</create_step_loop_entry>
+	
+	<create_input_param name="消息参数" create_type="1" >
+		<param_collect name="参数" expand="yes">
+			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var kinds="string" delete="no" restrict="type">none</var>			
+		</param_collect>
+	</create_input_param>
+	
+	
+	<create_user_def_param name="自定义类型参数" create_type="1" >
+		<param_collect name="参数" expand="yes">
+			<func_name name="成员名" kinds="string" delete="no" >member1</func_name>
+			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var kinds="string" delete="no" restrict="type">none</var>			
+		</param_collect>
+	</create_user_def_param>
+	
+	<create_function_init_block name="初始化模块" create_type="1" >
+		<function_init_block name="block_加载时运行" create_template="create_list2" expand_list="condition" auto_index="0" >
+			<comment name="功能说明" rw_stat="read">脚本被加载到内存是运行这部分代码</comment>
+		</function_init_block>
+	</create_function_init_block>
+	
+	<create_list1 name="create_base_function" create_type="2">
+		<list>create_step_exit</list>
+		<list>create_step_error_catch_block</list>
+		<list>create_step_throw</list>
+		<list>create_step_read</list>
+		<list>create_step_write</list>
+		<list>create_step_add</list>
+		<list>create_step_sub</list>
+		<list>create_step_clear</list>
+		<list>create_read_table</list>
+		<list>create_step_calc</list>
+		
+		<list>create_step_send_event</list>
+		<list>create_install_event</list>
+		<list>create_remove_event</list>
+		<list>create_add_timer</list>
+		<list>create_del_timer</list>
+		<list>create_step_call_func</list>
+		<list>create_step_check_valid</list>
+		<list>create_step_bool_entry</list>
+		<list>create_step_comp_entry</list>
+		<list>create_step_loop_entry</list>	
+		
+		<list>create_make_var</list>
+		<list>create_step_type_transfer</list>
+		<list>create_set_var</list>	
+		<list>create_set_result</list>	
+		<list>create_build_user_data</list>
+		<list>create_build_data_type</list>
+		
+		<list>create_math_operate</list>
+		<list>create_assignin</list>
+		
+		<list>create_step_print</list>
+		<list>create_step_log</list>
+		<list>create_step_rand</list>
+		<list>create_step_get_time</list>
+		<list>create_step_compile_time</list>
+		<list>create_step_time_function</list>
+		
+		<list>create_step_begin_affair</list>
+		<list>create_step_read_excel_attr</list>
+		
+		<list>create_function_init_block</list>
+	</create_list1>
+		
+	
+	<create_list2 name="create_message_handler" create_type="2">
+		<list>create_step_exit</list>
+		<list>create_step_error_catch_block</list>
+		<list>create_step_throw</list>
+		<list>create_step_read</list>
+		<list>create_step_write</list>
+		<list>create_step_add</list>
+		<list>create_step_sub</list>
+		<list>create_step_clear</list>
+		
+		<list>create_read_table</list>
+		<list>create_step_calc</list>
+		<list>create_step_waitevent</list>
+		<list>create_step_send_event</list>			
+		<list>create_install_event</list>
+		<list>create_remove_event</list>
+		<list>create_add_timer</list>
+		<list>create_del_timer</list>
+		<list>create_step_call_func</list>
+		<list>create_step_check_valid</list>
+		<list>create_step_bool_entry</list>
+		<list>create_step_comp_entry</list>
+		<list>create_step_loop_entry</list>
+		
+		<list>create_make_var</list>
+		<list>create_step_type_transfer</list>
+		<list>create_set_var</list>	
+		<list>create_set_result</list>	
+		<list>create_build_user_data</list>
+		<list>create_build_data_type</list>
+		<list>create_math_operate</list>
+		<list>create_assignin</list>
+		
+		
+		<list>create_step_send_msg</list>	
+		<list>create_step_read_msg</list>	
+		<list>create_step_read_datatype_msg</list>
+		
+		<list>create_step_print</list>
+		<list>create_step_log</list>
+		<list>create_step_rand</list>
+		<list>create_step_get_time</list>
+		<list>create_step_compile_time</list>
+		<list>create_step_time_function</list>		
+		<list>create_step_begin_affair</list>
+		<list>create_step_read_excel_attr</list>
+		<list>create_function_init_block</list>
+	</create_list2>
+</create_template>
