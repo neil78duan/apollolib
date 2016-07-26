@@ -4,15 +4,15 @@
 #
 #-------------------------------------------------
 
-ndsdk_dir = ../../server/ndsdk
-game_dir = ../..//server
+ndsdk_dir = ../../../ndsdk
+game_dir = ../..
 
 macx:{
 message(BUILD MACOX)
 DEFINES += __MAC_OS__ ND_UNIX
 
 LIBS += -L$$ndsdk_dir/lib -lndclient_darwin_x86_64_d \
-    -L$$game_dir/lib/darwin_x86_64  -lnetMessage_d  \
+    -L../../../lib/darwin_x86_64  -lnetMessage_d  \
     -liconv \
     -L$$ndsdk_dir/lib/darwin_x86_64 -lnd_vm_dbg
 
@@ -28,10 +28,10 @@ message(WIN32!)
 LIBS += -L$$ndsdk_dir/lib/win64 -lndclient_s
 
 SOURCES += \
-    ../../server/src/netMessage/dataStream.cpp\
-    ../../server/src/netMessage/MessageName.cpp\
-    ../../server/src/netMessage/auto_dataType.cpp\
-    ../../server/src/netMessage/dbDataConvert.cpp
+    ../../netMessage/dataStream.cpp\
+    ../../netMessage/MessageName.cpp\
+    ../../netMessage/auto_dataType.cpp\
+    ../../netMessage/dbDataConvert.cpp
 
 }
 
@@ -39,10 +39,10 @@ DEFINES +=  ND_DEBUG _GUI_TOOL_
 
 INCLUDEPATH += $$ndsdk_dir/include \
         $$game_dir/include \
-        $$game_dir/src/cli_common \
-        $$game_dir/src/logic_compile \
-        $$game_dir/src/netMessage \
-        $$game_dir/src/attribute
+        $$game_dir/cli_common \
+        $$game_dir/logic_compile \
+        $$game_dir/netMessage \
+        $$game_dir/attribute
 
 QT       += core gui
 
@@ -82,51 +82,51 @@ FORMS    += \
 # logic compile modules
  
 SOURCES += \
-    ../../server/src/logic_compile/logicDataType.cpp \
-    ../../server/src/logic_compile/logicEngineRoot.cpp \
-    ../../server/src/logic_compile/logicParser.cpp \
-    ../../server/src/logic_compile/logic_compile.cpp \
-    ../../server/src/logic_compile/logic_editor_helper.cpp \
-    ../../server/src/logic_compile/objectBaseMgr.cpp \
-    ../../server/src/logic_compile/dbl_mgr.cpp \
-    ../../server/src/logic_compile/logic_function.cpp \
-    ../../server/src/logic_compile/dbldata2netstream.cpp \
-    ../../server/src/logic_compile/logicStruct.cpp
+    ../../logic_compile/logicDataType.cpp \
+    ../../logic_compile/logicEngineRoot.cpp \
+    ../../logic_compile/logicParser.cpp \
+    ../../logic_compile/logic_compile.cpp \
+    ../../logic_compile/logic_editor_helper.cpp \
+    ../../logic_compile/objectBaseMgr.cpp \
+    ../../logic_compile/dbl_mgr.cpp \
+    ../../logic_compile/logic_function.cpp \
+    ../../logic_compile/dbldata2netstream.cpp \
+    ../../logic_compile/logicStruct.cpp
 
-HEADERS  += ../../server/src/logic_compile/dbl_mgr.h \
-    ../../server/src/logic_compile/logicDataType.h \
-    ../../server/src/logic_compile/logicEngineRoot.h \
-    ../../server/src/logic_compile/logicParser.h \
-    ../../server/src/logic_compile/logic_compile.h \
-    ../../server/src/logic_compile/logic_editor_helper.h \
-    ../../server/src/logic_compile/objectBaseMgr.h \
-    ../../server/src/logic_compile/logic_function.h \
-    ../../server/src/logic_compile/dbldata2netstream.h \
-    ../../server/src/logic_compile/logicStruct.hpp
+HEADERS  += ../../logic_compile/dbl_mgr.h \
+    ../../logic_compile/logicDataType.h \
+    ../../logic_compile/logicEngineRoot.h \
+    ../../logic_compile/logicParser.h \
+    ../../logic_compile/logic_compile.h \
+    ../../logic_compile/logic_editor_helper.h \
+    ../../logic_compile/objectBaseMgr.h \
+    ../../logic_compile/logic_function.h \
+    ../../logic_compile/dbldata2netstream.h \
+    ../../logic_compile/logicStruct.hpp
 
 #cli-common
 SOURCES += \
-    ../../server/src/cli_common/apollo_robort.cpp\	
-    ../../server/src/cli_common/gameMessage.cpp		\
-    ../../server/src/cli_common/netui_atl.cpp \
-    ../../server/src/cli_common/dftCliMsgHandler.cpp \	
-    ../../server/src/cli_common/login_apollo.cpp 
+    ../../cli_common/apollo_robort.cpp\
+    ../../cli_common/gameMessage.cpp		\
+    ../../cli_common/netui_atl.cpp \
+    ../../cli_common/dftCliMsgHandler.cpp \
+    ../../cli_common/login_apollo.cpp
 
-HEADERS  += ../../server/src/cli_common/dftCliMsgHandler.h \	
-    ../../server/src/cli_common/login_apollo.h \
-    ../../server/src/cli_common/apollo_robort.h	\
-    ../../server/src/cli_common/gameMessage.h\		
-    ../../server/src/cli_common/netui_atl.h 
+HEADERS  += ../../cli_common/dftCliMsgHandler.h \
+    ../../cli_common/login_apollo.h \
+    ../../cli_common/apollo_robort.h	\
+    ../../cli_common/gameMessage.h\
+    ../../cli_common/netui_atl.h
 
 # attribute 
 
 SOURCES += \
-    ../../server/src/attribute/roleattr_help.cpp	\
-    ../../server/src/attribute/stat_machine.cpp \
-    ../../server/src/attribute/attr_mgr.cpp	   \
-    ../../server/src/attribute/stat_data.cpp
+    ../../attribute/roleattr_help.cpp	\
+    ../../attribute/stat_machine.cpp \
+    ../../attribute/attr_mgr.cpp	   \
+    ../../attribute/stat_data.cpp
     
-HEADERS  += ../../server/src/attribute/stat_data.h \
-    ../../server/src/attribute/stat_machine.h \
-    ../../server/src/attribute/attr_mgr.h \
-    ../../server/src/attribute/roleattr_help.h	
+HEADERS  += ../../attribute/stat_data.h \
+    ../../attribute/stat_machine.h \
+    ../../attribute/attr_mgr.h \
+    ../../attribute/roleattr_help.h

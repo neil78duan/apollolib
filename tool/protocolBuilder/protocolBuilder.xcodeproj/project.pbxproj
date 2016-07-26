@@ -529,7 +529,7 @@
 					/Users/duan/Documents/pd_apollo/server/ndsdk/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = ../../server/ndsdk/include;
+				USER_HEADER_SEARCH_PATHS = ../../../ndsdk/include;
 			};
 			name = Debug;
 		};
@@ -546,7 +546,7 @@
 					/Users/duan/Documents/pd_apollo/server/ndsdk/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = ../../server/ndsdk/include;
+				USER_HEADER_SEARCH_PATHS = ../../../ndsdk/include;
 			};
 			name = Release;
 		};
