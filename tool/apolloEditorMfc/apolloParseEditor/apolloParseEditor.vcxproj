@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E3BD7C59-A261-4F0D-9125-8FFB488B6E11}</ProjectGuid>
+    <RootNamespace>apolloParseEditor</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>../../../bin/editor</OutDir>
+    <TargetName>$(ProjectName)_d</TargetName>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>../../../bin/editor</OutDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\Visual Leak Detector\include</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);C:\Visual Leak Detector\lib\Win32</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_GUI_TOOL_;ND_DEBUG;WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>false</SDLCheck>
+      <AdditionalIncludeDirectories>../../../src/netMessage;../../../include;../../../src/cli_common;../../../src/clientDemo;../../../src/attribute;../../../src/logic_compile;../../../ndsdk/include;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../../../ndsdk/lib/Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ndclient_s_d.lib</AdditionalDependencies>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_GUI_TOOL_;WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>false</SDLCheck>
+      <AdditionalIncludeDirectories>../../../src/netMessage;../../../include;../../../src/cli_common;../../../src/clientDemo;../../../src/attribute;../../../src/logic_compile;../../../ndsdk/include;.;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>ndclient_s.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../../ndsdk/lib/Win32;</AdditionalLibraryDirectories>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\attribute\attr_mgr.h" />
+    <ClInclude Include="..\..\attribute\roleattr_help.h" />
+    <ClInclude Include="..\..\attribute\stat_data.h" />
+    <ClInclude Include="..\..\attribute\stat_machine.h" />
+    <ClInclude Include="..\..\cli_common\apollo_robort.h" />
+    <ClInclude Include="..\..\cli_common\dftCliMsgHandler.h" />
+    <ClInclude Include="..\..\cli_common\gameMessage.h" />
+    <ClInclude Include="..\..\cli_common\login_apollo.h" />
+    <ClInclude Include="..\..\cli_common\netui_atl.h" />
+    <ClInclude Include="..\..\logic_compile\dbldata2netstream.h" />
+    <ClInclude Include="..\..\logic_compile\dbl_mgr.h" />
+    <ClInclude Include="..\..\logic_compile\logicDataType.h" />
+    <ClInclude Include="..\..\logic_compile\logicEngineRoot.h" />
+    <ClInclude Include="..\..\logic_compile\logicParser.h" />
+    <ClInclude Include="..\..\logic_compile\logicStruct.hpp" />
+    <ClInclude Include="..\..\logic_compile\logic_compile.h" />
+    <ClInclude Include="..\..\logic_compile\logic_editor_helper.h" />
+    <ClInclude Include="..\..\logic_compile\logic_function.h" />
+    <ClInclude Include="..\..\logic_compile\objectBaseMgr.h" />
+    <ClInclude Include="..\..\netMessage\apollo_msg_entry.h" />
+    <ClInclude Include="..\..\netMessage\auto_dataType.h" />
+    <ClInclude Include="..\..\netMessage\auto_dataTypeDb_v1.h" />
+    <ClInclude Include="..\..\netMessage\auto_macroDefine.h" />
+    <ClInclude Include="..\..\netMessage\dataStream.h" />
+    <ClInclude Include="..\..\netMessage\dbDataConvert.h" />
+    <ClInclude Include="..\..\netMessage\MessageID.h" />
+    <ClInclude Include="..\..\netMessage\message_inc.h" />
+    <ClInclude Include="..\..\netMessage\_msgid_export.h" />
+    <ClInclude Include="apolloParseEditor.h" />
+    <ClInclude Include="apolloParseEditorDlg.h" />
+    <ClInclude Include="ctrls\DlgAccel.h" />
+    <ClInclude Include="ctrls\GradShow.h" />
+    <ClInclude Include="ctrls\GridCtrl_src\CellRange.h" />
+    <ClInclude Include="ctrls\GridCtrl_src\GridCell.h" />
+    <ClInclude Include="ctrls\GridCtrl_src\GridCellBase.h" />
+    <ClInclude Include="ctrls\GridCtrl_src\GridCtrl.h" />
+    <ClInclude Include="ctrls\GridCtrl_src\GridDropTarget.h" />
+    <ClInclude Include="ctrls\GridCtrl_src\InPlaceEdit.h" />
+    <ClInclude Include="ctrls\GridCtrl_src\MemDC.h" />
+    <ClInclude Include="ctrls\GridCtrl_src\TitleTip.h" />
+    <ClInclude Include="ctrls\mydlg.h" />
+    <ClInclude Include="ctrls\MyPopMenu.h" />
+    <ClInclude Include="ctrls\NewCellTypes\GridCellCheck.h" />
+    <ClInclude Include="ctrls\NewCellTypes\GridCellCombo.h" />
+    <ClInclude Include="ctrls\NewCellTypes\GridCellDateTime.h" />
+    <ClInclude Include="ctrls\NewCellTypes\GridCellNumeric.h" />
+    <ClInclude Include="ctrls\NewCellTypes\GridURLCell.h" />
+    <ClInclude Include="DlgFunclist.h" />
+    <ClInclude Include="DrawTreeCtrl.h" />
+    <ClInclude Include="gmToolDlg.h" />
+    <ClInclude Include="InsertNodeListDlg.h" />
+    <ClInclude Include="NewfileDlg.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="XmlCfg.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\attribute\attr_mgr.cpp" />
+    <ClCompile Include="..\..\attribute\roleattr_help.cpp" />
+    <ClCompile Include="..\..\attribute\stat_data.cpp" />
+    <ClCompile Include="..\..\attribute\stat_machine.cpp" />
+    <ClCompile Include="..\..\cli_common\apollo_robort.cpp" />
+    <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp" />
+    <ClCompile Include="..\..\cli_common\gameMessage.cpp" />
+    <ClCompile Include="..\..\cli_common\login_apollo.cpp" />
+    <ClCompile Include="..\..\cli_common\netui_atl.cpp" />
+    <ClCompile Include="..\..\logic_compile\dbldata2netstream.cpp" />
+    <ClCompile Include="..\..\logic_compile\dbl_mgr.cpp" />
+    <ClCompile Include="..\..\logic_compile\logicDataType.cpp" />
+    <ClCompile Include="..\..\logic_compile\logicEngineRoot.cpp" />
+    <ClCompile Include="..\..\logic_compile\logicParser.cpp" />
+    <ClCompile Include="..\..\logic_compile\logicStruct.cpp" />
+    <ClCompile Include="..\..\logic_compile\logic_compile.cpp" />
+    <ClCompile Include="..\..\logic_compile\logic_editor_helper.cpp" />
+    <ClCompile Include="..\..\logic_compile\logic_function.cpp" />
+    <ClCompile Include="..\..\logic_compile\objectBaseMgr.cpp" />
+    <ClCompile Include="..\..\netMessage\auto_dataType.cpp" />
+    <ClCompile Include="..\..\netMessage\auto_dataTypeDb_v1.cpp" />
+    <ClCompile Include="..\..\netMessage\dataStream.cpp" />
+    <ClCompile Include="..\..\netMessage\dbDataConvert.cpp" />
+    <ClCompile Include="..\..\netMessage\MessageName.cpp" />
+    <ClCompile Include="apolloParseEditor.cpp" />
+    <ClCompile Include="apolloParseEditorDlg.cpp" />
+    <ClCompile Include="ctrls\DlgAccel.cpp" />
+    <ClCompile Include="ctrls\GradShow.cpp" />
+    <ClCompile Include="ctrls\GridCtrl_src\GridCell.cpp" />
+    <ClCompile Include="ctrls\GridCtrl_src\GridCellBase.cpp" />
+    <ClCompile Include="ctrls\GridCtrl_src\GridCtrl.cpp" />
+    <ClCompile Include="ctrls\GridCtrl_src\GridDropTarget.cpp" />
+    <ClCompile Include="ctrls\GridCtrl_src\InPlaceEdit.cpp" />
+    <ClCompile Include="ctrls\GridCtrl_src\TitleTip.cpp" />
+    <ClCompile Include="ctrls\MyPopMenu.cpp" />
+    <ClCompile Include="ctrls\NewCellTypes\GridCellCheck.cpp" />
+    <ClCompile Include="ctrls\NewCellTypes\GridCellCombo.cpp" />
+    <ClCompile Include="ctrls\NewCellTypes\GridCellDateTime.cpp" />
+    <ClCompile Include="ctrls\NewCellTypes\GridCellNumeric.cpp" />
+    <ClCompile Include="ctrls\NewCellTypes\GridURLCell.cpp" />
+    <ClCompile Include="DlgFunclist.cpp" />
+    <ClCompile Include="DrawTreeCtrl.cpp" />
+    <ClCompile Include="gmToolDlg.cpp" />
+    <ClCompile Include="InsertNodeListDlg.cpp" />
+    <ClCompile Include="nd_winfont.cpp" />
+    <ClCompile Include="NewfileDlg.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="XmlCfg.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="apolloParseEditor.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\attribute\Makefile" />
+    <None Include="ClassDiagram.cd" />
+    <None Include="res\apolloParseEditor.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\apolloParseEditor.ico" />
+    <Image Include="res\bitmap1.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\run_config.xml" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="apolloParseEditor.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

@@ -1,0 +1,28 @@
+<?xml  version="1.0" encoding="GBK" ?>
+<baseFunction name="基本功能" delete="no" create_template="create_func" auto_index="2" expand_stat="1">
+	<func_node name="new_function1" create_template="create_list1" auto_index="0" expand_list="comment,op_setflag" expand_stat="1">
+		<op_setflag name="节点_出错退出" expand="yes">
+			<val name="错误退出" kinds="bool">0</val>
+		</op_setflag>
+		<comment>函数说明</comment>
+	</func_node>
+</baseFunction>
+<message_handler name="消息处理入口" delete="no" create_template="create_msg_handler" auto_index="4" expand_stat="1">
+	<func_node name="message_handler3" create_template="create_list2" auto_index="0" expand_list="comment,op_setflag" expand_stat="1">
+		<op_setflag name="节点_出错退出" expand="yes">
+			<val name="错误退出" kinds="bool">0</val>
+		</op_setflag>
+		<comment>消息处理函数</comment>
+		<install_msg_id name="需要处理的消息" kinds="user_define" user_param="msg_list">none</install_msg_id>
+	</func_node>
+</message_handler>
+<event_callback name="事件处理" delete="no" create_template="create_event_callback" auto_index="2" expand_stat="1"/>
+<system_initilizer name="系统初始化" delete="no" expand_stat="1">
+	<func_node name="script_system_init" create_template="create_list2" auto_index="0" expand_list="comment,op_setflag" expand_stat="1">
+		<comment>系统初始化</comment>
+		<op_setflag name="节点_出错退出" expand="yes">
+			<val name="错误退出" kinds="bool">0</val>
+		</op_setflag>
+		<user_define_function name="init_msg_func" kinds="hide" install_root="message_handler" action="apollo_msg_handler_install" desc="扫描消息处理函数并注册"/>
+	</func_node>
+</system_initilizer>

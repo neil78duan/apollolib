@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DataDesc version="1" desc="data descript" last_mod="duan"/>
+<DataType>
+	<RoleCreateInfo>
+		<data type="string" name="roleName" isArray="1" arrayMarco="ROLE_NAME_LENGTH" comment="角色名字" />
+		<data type="AttrNodeVal" name="roleAttrs" isArray="1" arrayMarco="ROLE_ATTRS_ON_CREATE" comment="创建时初始化的属性" />
+		
+	</RoleCreateInfo>
+	
+    <MsgCommonReply comment="通用处理回复">
+        <data type="uint8_t" name="result" isArray="0" comment="消息返回是否成功0 success, 1 failed" />
+        <data type="uint32_t" name="value" isArray="0" comment="服务器返回值" />
+    </MsgCommonReply>
+	
+	
+	<CommonErrorReply comment="通用错误返回,服务器发送给客户的">
+		<data type="uint8_t" name="errtType" isArray="0" comment="错误类型,参考eCommonErrorType" />
+		<data type="uint32_t" name="param" isArray="0" comment="错误参数" />
+	</CommonErrorReply>
+	
+	<MsgCommonRequest comment="通用消息请求">
+		<data type="uint8_t" name="type" isArray="0" comment="类型" />
+		<data type="uint32_t" name="value" isArray="0" comment="值" />
+	</MsgCommonRequest>
+	
+	<EquipAttrNode comment="装备的附加属性节点">
+		<data type="uint8_t" name="color" isArray="0" comment="属性原色" />
+		<data type="uint8_t" name="attr_id" isArray="0" comment="属性id" />
+		<data type="float" name="attr_val" isArray="0" comment="属性值" />
+	</EquipAttrNode>
+	
+	
+	<ItemInfo saveDB="1">
+		<data type="uint32_t" name="instantID" isArray="0" comment="物品实例id" />
+		<data type="uint32_t" name="typeID" isArray="0" comment="物品类型id" />
+		<data type="uint16_t" name="slot" isArray="0" comment="位置" />
+		<data type="uint16_t" name="number" isArray="0" comment="数量" />
+		<data type="uint8_t" name="stat" isArray="0" comment="状态" />
+	</ItemInfo>
+	
+	<EquipInfo saveDB="1">
+		<data type="uint32_t" name="instantID" isArray="0" comment="物品实例id" />
+		<data type="uint32_t" name="typeID" isArray="0" comment="物品类型id" />
+		<data type="uint16_t" name="slot" isArray="0" comment="位置" />
+		<data type="uint8_t" name="level" isArray="0" comment="进阶等级" />
+		<data type="uint8_t" name="sub_level" isArray="0" comment="强化等级" />
+		<data type="uint8_t" name="stat" isArray="0" comment="状态按位操作" />
+		<data type="EquipAttrNode" name="attrs" isArray="1" arrayMarco="EQUIP_ATTR_NUMBER"  />
+	</EquipInfo>
+	
+	<RoleEquipsData>
+		<data type="uint32_t" name="equips" isArray="1" arrayMarco="EQUIP_SLOT_NUMBER"  comment="穿身上武器和武器装备数据武器ID小于100" />
+	</RoleEquipsData>
+	
+	<RolePackageData>
+		<data type="EquipInfo" name="equips" isArray="1" arrayMarco="EQUIP_PACK_CAPACITY"  comment="装备数据" />
+		<data type="ItemInfo" name="items" isArray="1" arrayMarco="PACKAGE_CAPACITY"  comment="背包数据" />
+	</RolePackageData>
+	
+	
+	<SkillInfo saveDB="1">
+		<data type="uint16_t" name="id" isArray="0" comment="技能id" />
+		<data type="uint8_t" name="level" isArray="0" comment="技能等级" />
+	</SkillInfo>
+	
+	<RoleSkillData>
+		<data type="SkillInfo" name="datas" isArray="1" arrayMarco="SKILL_CAPACITY"  comment="技能数据" />
+	</RoleSkillData>
+	
+	
+	<AttrNodeVal>
+		<data type="uint8_t" name="id" isArray="0" comment="属性编号" />
+		<data type="float" name="val" isArray="0" comment="属性值" />
+	</AttrNodeVal>
+	
+	<AttrsBuf>
+		<data type="AttrNodeVal" name="datas" isArray="1" arrayMarco="ROLE_ATTRS_NUMBER" comment="属性值" />
+	</AttrsBuf>
+	
+	<RoleAttrsData>
+		<data type="float" name="datas" isArray="1"  arrayMarco="ROLE_ATTRS_NUMBER" comment="属性" />
+	</RoleAttrsData>
+	
+	
+	<MallBuyItem>
+		<data type="uint32_t" name="itemid" isArray="0" comment="物品编号" />
+		<data type="uint16_t" name="num" isArray="0" comment="数量" />
+	</MallBuyItem>
+	
+	
+	<MapScore saveDB="1" comment="玩家打副本的成绩" >
+		<data type="uint16_t" name="map_id" isArray="0" comment="地图编号" />
+		<data type="uint16_t" name="enter_times" isArray="0" comment="今天已经进入次数" />
+		<data type="uint8_t" name="achievements" isArray="0" comment="完成成就，按位操作，每个位代表一个成就，只能完成一次" />
+		<data type="uint16_t" name="score" isArray="0" comment="分数，0表示没有完成该副本" />
+		<data type="uint64_t" name="time" isArray="0" comment="完成时间" />
+	</MapScore>
+	
+	<SceneMonster>
+		<data type="uint16_t" name="monsterId" isArray="0" comment="怪物id" />
+		<data type="uint8_t" name="number" isArray="0" comment="怪物数量" />
+	</SceneMonster>
+	
+	<MapScoreBuf saveDB="1" comment="玩家副本成绩记录" >
+		<data type="MapScore" name="data" isArray="1" arrayMarco="MAX_MAP_INSTANCE_NUMBER" />
+	</MapScoreBuf>
+	
+	<MapFinish  comment="客户端完成副本" >
+		<data type="uint16_t" name="map_id" isArray="0" comment="地图编号" />
+		<data type="uint16_t" name="score" isArray="0" comment="分数" />
+		<data type="uint8_t" name="achievements" isArray="0" comment="本次通关完成的成就" />
+		<data type="AttrNodeVal" name="attrs" isArray="1" arrayMarco="DROP_ATTR_CAPACITY" comment="打怪收益" />	
+	</MapFinish>
+	
+	<MapAchievAwards  comment="副本成就奖励" >
+		<data type="uint16_t" name="map_id" isArray="0" comment="地图编号" />
+		<data type="uint8_t" name="isAllComplete" isArray="0" comment="是否全部完成" />
+		<data type="uint8_t" name="get_achiev" isArray="0" comment="本次新获得的奖励" />
+	</MapAchievAwards>
+	
+	
+	<DragonInfo>
+		<data type="uint16_t" name="id" isArray="0" comment="龙id" />
+		<data type="uint16_t" name="Level" isArray="0" comment="等级" />
+		<data type="uint8_t" name="starLevel" isArray="0" comment="星级" />
+		<data type="uint8_t" name="grade" isArray="0" comment="阶级" />
+		<data type="uint8_t" name="stat" isArray="0" comment="状态,参考装备状态" />
+		<data type="uint8_t" name="slot" isArray="0" comment="摆放位置" />
+		<data type="uint32_t" name="favor" isArray="0" comment="友好度" />
+		<data type="uint32_t" name="exp" isArray="0" comment="经验" />		
+		<data type="uint32_t" name="skills" isArray="1" arrayMarco="SKILLS_NUM_PER_DRAGON" comment="龙的技能-ID和等级的组合" />
+		
+	</DragonInfo>
+	
+	<DragonsBuf saveDB="1" >
+		<data type="DragonInfo" name="dragons" isArray="1" arrayMarco="DRAGON_CAPACITY" comment="龙" />
+	</DragonsBuf>
+	
+	<DragonToFragment>
+		<data type="uint16_t" name="dragonId" isArray="0" comment="龙id" />
+		<data type="DropItem" name="items" isArray="1" arrayMarco="10" comment="碎片物品" />
+	</DragonToFragment>
+	
+	<RoleDragon comment="角色养的龙的数据">
+		<data type="DragonInfo" name="baseInf" isArray="0" comment="龙基础数值" />
+		<data type="uint16_t" name="skill" isArray="0" comment="技能" />
+		<data type="uint16_t" name="rideSkill" isArray="0" comment="骑乘技能" />
+		<data type="AttrsBuf" name="attrs" isArray="0" comment="属性" />
+	</RoleDragon>
+
+
+	<DropItem>
+		<data type="uint32_t" name="itemId" isArray="0" comment="物品类型id" />
+		<data type="uint16_t" name="num" isArray="0" comment="物品数量" />
+	</DropItem>
+	
+	<DropPackage>
+		<data type="AttrNodeVal" name="attrs" isArray="1" arrayMarco="DROP_ATTR_CAPACITY" comment="掉落金钱" />		
+		<data type="DropItem" name="items" isArray="1" arrayMarco="DROP_ITEM_CAPACITY" comment="掉落物品" />
+		<data type="uint16_t" name="dragonFavor" isArray="0" comment="龙的友好度奖励，给所有装备中的龙" />
+	</DropPackage>
+	
+	<DropWeightNode>
+		<data type="uint16_t" name="dropObjId" isArray="0" comment="掉落ID" />
+		<data type="uint16_t" name="weight" isArray="0" comment="掉落权重" />
+	</DropWeightNode>
+	<DropWeightBuf saveDB="1" >
+		<data type="DropWeightNode" name="data" isArray="1" arrayMarco="DRAP_WEIGHT_CAPACIT" comment="掉落物权重" />
+	</DropWeightBuf>
+	
+	<ResetEquip comment="洗炼装备请求">
+		<data type="uint32_t" name="instId" isArray="0" comment="装备实例id" />
+		<data type="uint8_t" name="attrIndex" isArray="0" comment="洗练属性索引" />
+		<data type="uint32_t" name="stuffInstId" isArray="0" comment="洗炼消化id" />
+	</ResetEquip>
+	
+	<ResetEquipResult comment="洗炼结果">
+		<data type="uint32_t" name="instId" isArray="0" comment="装备实例id" />
+		<data type="uint32_t" name="stuffInstId" isArray="0" comment="洗炼消化id" />
+		<data type="uint8_t" name="stuffAttrIndex" isArray="0" comment="获得属性索引" />
+		<data type="EquipAttrNode" name="attrVal" isArray="0"  comment="获得洗练结果，属性值" />
+	</ResetEquipResult>
+	
+	
+	<WeaponData>
+		<data type="uint16_t" name="id" isArray="0" comment="id" />
+		<data type="uint16_t" name="skinId" isArray="0" comment="皮肤id" />
+		<data type="uint16_t" name="Level" isArray="0" comment="强化等级，初始0" />
+	</WeaponData>
+	
+	
+	<WeaponsBuf comment="武器数据">
+		<data type="WeaponData" name="data" isArray="1" arrayMarco="WEAPON_NUMBER" comment="weapon data" />
+	</WeaponsBuf>
+	
+	<formatLogInfo comment="格式化日志信息">
+		<data type="uint8_t" name="logType" isArray="0" comment=" log data type " />
+		<data type="uint8_t" name="logOp" isArray="0"  comment="op type , set , add, sub" />
+		<data type="uint32_t" name="roleId" isArray="0" comment="role id " />
+		<data type="uint32_t" name="itemId" isArray="0" comment="operate item id " />
+		<data type="uint32_t" name="number" isArray="0" comment="item number" />
+	</formatLogInfo>
+	
+	<ItemInShop comment="商店物品信息">
+		<data type="uint16_t" name="itemPackId" isArray="0" comment="商品id" />
+		<data type="uint8_t" name="packIndex" isArray="0" comment="物品在包裹中的索引" />
+		<data type="uint8_t" name="buyNumber" isArray="0" comment="可以购买次数,0不能购买" />
+	</ItemInShop>
+	
+	<ShopInfo comment="商店出售物品">
+		<data type="uint16_t" name="shopId" isArray="0" comment="id" />
+		<data type="uint16_t" name="resetTimes" isArray="0" comment="重置次数" />
+		<data type="uint64_t" name="lastResetTm" isArray="0" comment="上次重置时间time_t" />
+		<data type="ItemInShop" name="items" isArray="1" arrayMarco="SHOP_ITEMS_CAPACITY" comment="物品列表" />
+	</ShopInfo>
+	
+	<RoleShopsInfo saveDB="1" >
+		<data type="ShopInfo" name="data" isArray="1" arrayMarco="SHOPS_NUMBER" comment="商店购买信息" />
+	</RoleShopsInfo>
+	
+	
+	<TaskInfo comment="任务数据">
+		<data type="uint16_t" name="id" isArray="0" comment="id" />
+		<data type="uint16_t" name="progress" isArray="0" comment="进度" />
+		<data type="uint64_t" name="taskTM" isArray="0" comment="时间：完成时间或者领取奖励的时间" />
+	</TaskInfo>
+	
+	<TaskBuf comment="任务数组">
+		<data type="TaskInfo" name="data" isArray="1" arrayMarco="100" comment="task data" />
+	</TaskBuf>
+	
+	<TaskLog comment="已经完成的任务数据">
+		<data type="uint16_t" name="id" isArray="0" comment="id" />
+		<data type="uint16_t" name="number" isArray="0" comment="完成次数" />
+		<data type="uint64_t" name="taskTM" isArray="0" comment="时间：完成时间或者领取奖励的时间" />
+	</TaskLog>
+	<TaskLogBuf comment="任务数组">
+		<data type="TaskLog" name="data" isArray="1" arrayMarco="100" comment="task data" />
+	</TaskLogBuf>
+	
+	<TaskAwards comment="任务奖励">
+		<data type="uint16_t" name="id" isArray="0" comment="id" />
+		<data type="AttrNodeVal" name="attrs" isArray="1" arrayMarco="DROP_ATTR_CAPACITY" comment="task award attribute" />
+		<data type="DropItem" name="items" isArray="1" arrayMarco="DROP_ITEM_CAPACITY" comment="task award item" />
+	</TaskAwards>
+	
+	<MailInfo>
+		
+		<data type="uint32_t" name="from_id" isArray="0" comment="发送者id，0系统" />
+		<data type="uint64_t" name="send_tm" isArray="0" comment="发送时间" />
+		
+		<data type="string" name="title" isArray="1" arrayMarco="MAIL_TITLE_LENGTH" comment="邮件标题" />
+		<data type="string" name="context" isArray="1" arrayMarco="MAIL_BODY_LENGTH" comment="邮件内容" />
+		
+		<data type="AttrNodeVal" name="attrs" isArray="1" arrayMarco="3" comment="属性附件" />
+		<data type="DropItem" name="items" isArray="1" arrayMarco="3" comment="物品附件" />
+	</MailInfo>
+	
+	<DragonSkill comment="龙的被动技能装备信息" >
+		<data type="uint16_t" name="skillId" isArray="0" comment="id&level" />
+		<data type="uint8_t" name="slot" isArray="0" comment="skill equip pos" />
+	</DragonSkill>
+	
+	<RolePvpBaseInfo comment="pvp基础信息">
+		<data type="uint32_t" name="roleId" isArray="0" comment="id" />
+		<data type="uint16_t" name="rankIndex" isArray="0" comment="排名" />
+		<data type="string" name="name" isArray="1" arrayMarco="ROLE_NAME_LENGTH" comment="名字" />
+		<data type="AttrNodeVal" name="attrs" isArray="1" arrayMarco="ROLE_ATTRS_NUMBER" comment="属性" />
+	</RolePvpBaseInfo>
+		
+	<RolePvpDetail comment="pvp详细信息" >
+		<data type="uint32_t" name="roleId" isArray="0" comment="id" />
+		<data type="uint16_t" name="rankIndex" isArray="0" comment="排名" />
+		<data type="string" name="name" isArray="1" arrayMarco="ROLE_NAME_LENGTH" comment="名字" />
+		<data type="AttrNodeVal" name="attrs" isArray="1" arrayMarco="ROLE_ATTRS_NUMBER" comment="属性" />
+		<data type="SkillInfo" name="skills" isArray="1" arrayMarco="SKILL_CAPACITY" comment="技能" />
+		<data type="EquipInfo" name="equips" isArray="1" arrayMarco="EQUIP_ATTR_NUMBER" comment="装备" />
+		<data type="WeaponData" name="weapons" isArray="1" arrayMarco="WEAPON_NUMBER" comment="武器" />
+		<data type="DragonInfo" name="dragon" isArray="1" arrayMarco="DRAGON_EQUIP_SLOT_NUM" comment="装备的龙" />
+		<data type="DragonSkill" name="dragonSkills" isArray="1" arrayMarco="DRAGON_SKILL_SLOT_NUM" comment="装备好的龙的技能" />
+	</RolePvpDetail>
+	
+	<AttrStoreNode comment="属性商店购买次数">
+		<data type="uint16_t" name="itemId" isArray="0" comment="商品ID" />
+		<data type="uint16_t" name="buyTimes" isArray="0" comment="购买次数" />
+	</AttrStoreNode>
+	<AttrStoreInfo comment="属性购买记录">
+		<data type="AttrStoreNode" name="items" isArray="1" arrayMarco="100" comment="属性商店购买记录" />
+	</AttrStoreInfo>
+	
+	<LotteryNode comment="抽奖次数">
+		<data type="uint8_t" name="lotteryId" isArray="0" comment="宝箱ID" />
+		<data type="uint8_t" name="times" isArray="0" comment="抽奖次数" />
+	</LotteryNode>
+	
+	<LotteryLog comment="抽奖信息">
+		<data type="LotteryNode" name="lottery" isArray="1" arrayMarco="20" comment="抽奖" />
+	</LotteryLog>
+	
+</DataType>

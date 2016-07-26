@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MessageDefine>
+	<!-- 角色相关消息 -->
+	<message id="NETMSG_ROLE_GET_LIST_REQ" body="" comment="获得角色请求"  number="3"/>
+	<message id="NETMSG_ROLE_GET_LIST_ACK" body="" comment="获得角色答复" />
+	
+	<message id="NETMSG_ROLE_CREATE_REQ" body="RoleCreateInfo" comment="创建角色请求" />
+    <message id="NETMSG_ROLE_CREATE_ACK" body="" comment="创建角色答复" />
+
+	<message id="NETMSG_ROLE_CHANGE_NAME_REQ" body="" comment="修改角色名字请求" />
+	<message id="NETMSG_ROLE_CHANGE_NAME_ACK" body="" comment="修改角色名字答复" />
+	
+	<message id="NETMSG_ROLE_PACKAGE_INIT_REQ" body="" comment="向服务器请求背包数据" />
+	<message id="NETMSG_ROLE_PACKAGE_INIT_ACK" body="RolePackageData" comment="服务器返回背包数据" />
+
+	<message id="NETMSG_ROLE_ATTR_INIT_REQ" body="" comment="请求玩家属性" />
+	<message id="NETMSG_ROLE_ATTR_INIT_ACK" body="AttrsBuf" comment="服务器返回玩家属性" />
+
+	<message id="NETMSG_ROLE_EQUIP_INIT_REQ" body="" comment="请求身上装备数据" />
+	<message id="NETMSG_ROLE_EQUIP_INIT_ACK" body="RoleEquipsData" comment="服务器返回身上装备" />
+	
+	<message id="NETMSG_ROLE_ATTR_CHANGE_NTF" body="AttrsBuf" comment="玩家属性变化通知,升级增加经验" />
+	
+	<message id="NETMSG_ROLE_ENTER_SCENE_REQ" body="int32_t" comment="请求进入场景" />
+	<message id="NETMSG_ROLE_ENTER_SCENE_ACK" body="MsgCommonReply" comment="答复进入场景" />
+	
+	<message id="NETMSG_ROLE_SKILL_INIT_REQ" body="" comment="请求技能数据" />
+	<message id="NETMSG_ROLE_SKILL_INIT_ACK" body="RoleSkillData" comment="服务器返回技能数据" />
+	
+	<message id="NETMSG_ROLE_SKILL_ADD_NTF" body="SkillInfo" comment="获得技能通知" />
+	<message id="NETMSG_ROLE_SKILL_CHANGE_NTF" body="SkillInfo" comment="技能数据改变通知" />
+	<message id="NETMSG_ROLE_SKILL_DEL_NTF" body="int16_t" comment="技能删除通知" />
+	
+	
+	<message id="NETMSG_ROLE_CLIENT_SETTING_REQ" body="" comment="客户端相关的配置信息" />
+	<message id="NETMSG_ROLE_CLIENT_SETTING_ACK" body="" comment="返回推客户端给玩家，二进制包" />
+	<message id="NETMSG_ROLE_CHANGE_CLIENT_SETTING_REQ" body="" comment="客户端相关的配置信息改变通知" />
+	
+	<message id="NETMSG_ROLE_MAPS_SCORE_REQ" body="" comment="请求推图数据" />
+	<message id="NETMSG_ROLE_MAPS_SCORE_ACK" body="MapScoreBuf" comment="返回推图数据给玩家" />
+	<message id="NETMSG_ROLE_REPORT_SCORE_REQ" body="MapFinish" comment="上传副本成绩,成功时上传" />
+	<message id="NETMSG_ROLE_MAP_FAILED_REQ" body="int32_t" comment="通知服务器打副本失败" />
+	<message id="NETMSG_ROLE_DROP_PACKAGE_NTF" body="DropPackage" comment="掉落通知" />
+	<message id="NETMSG_ROLE_MAP_ACHIEV_NTF" body="MapAchievAwards" comment="本次打副本获得成就" />
+	<message id="NETMSG_ROLE_ACCEL_CD_REQ" body="MsgCommonRequest" comment="使用rmb 加速cd" />
+	<message id="NETMSG_ROLE_ACCEL_CD_ACK" body="MsgCommonReply" comment="答复使用rmb 加速cd" />
+	
+	<message id="NETMSG_ROLE_SWEEP_REQ" body="int32_t" comment="请求扫荡" />
+	<message id="NETMSG_ROLE_SWEEP_ACK" body="MsgCommonReply" comment="返回扫荡结果" />
+	
+	
+	<!-- 装备和物品相关消息 -->
+	<message id="NETMSG_ITEM_PACKAGE_ITEM_ADD_NTF" body="ItemInfo" comment="背包物品增加通知"  number="4"/>
+	<message id="NETMSG_ITEM_PACKAGE_ITEM_CHANGE_NTF" body="ItemInfo" comment="背包物品数据改变通知" />
+	<message id="NETMSG_ITEM_PACKAGE_ITEM_DEL_NTF" body="int32_t" comment="背包物品删除通知" />
+	
+	<message id="NETMSG_ITEM_PACKAGE_EQUIP_ADD_NTF" body="EquipInfo" comment="背包装备增加"  />
+	<message id="NETMSG_ITEM_PACKAGE_EQUIP_CHANGE_NTF" body="EquipInfo" comment="背包装备数据变化通知" />
+	<message id="NETMSG_ITEM_PACKAGE_EQUIP_DEL_NTF" body="int32_t" comment="背包装备删除通知" />
+	
+	<message id="NETMSG_ITEM_EQUIPSLOT_ON_NTF" body="int32_t" comment="装备穿上通知,instid" />
+	<message id="NETMSG_ITEM_EQUIPSLOT_OFF_NTF" body="int32_t" comment="装备脱下通知,instid" />
+	
+	<message id="NETMSG_ITEM_EQUIPSLOT_PUT_ON_REQ" body="int32_t" comment="请求穿装备,instid" />
+	<message id="NETMSG_ITEM_EQUIPSLOT_PUT_OFF_REQ" body="int32_t" comment="请求脱装备,instid" />
+	
+	<message id="NETMSG_ITEM_USE_ITEM_REQ" body="int16" comment="请求使用物品,typeid" />
+	
+	<message id="NETMSG_ITEM_RESET_EQUIP_REQ" body="ResetEquip" comment="请求洗练装备" />
+	<message id="NETMSG_ITEM_RESET_EQUIP_ACK" body="ResetEquipResult" comment="返回洗练结果，只有成功时才返回" />
+	
+	<message id="NETMSG_ITEM_RESET_EQUIP_AFFIRM_REQ" body="int8_t" comment="确认洗练结果，0 确认，1回退" />
+	
+	<message id="NETMSG_ITEM_BE_USED_NTF" body="int16_t:item_type_id, DropPackage:dropItems" comment="物品被使用通知" />
+	
+	<!-- 商店相关消息-->
+	
+	<message id="NETMSG_MALL_BUY_REQ" body="MallBuyItem" comment="购买单个物品请求-只用在开发阶段"  number="5"/>
+	<message id="NETMSG_MALL_BUY_ACK" body="MsgCommonReply" comment="购买通知，只有失败才会通知" />
+	
+	<message id="NETMSG_MALL_BUY_PACKAGE_REQ" body="int32_t" comment="商店购买包裹,shop_item.xlsx int32 package-id"/>
+	
+	<message id="NETMSG_MALL_SALE_INSTANT_REQ" body="int32_t" comment="出售物品，通过instant-id出售"/>
+	<message id="NETMSG_MALL_SALE_ITEM_REQ" body="MallBuyItem" comment="出售道具，通过类型和数量，非装备类型" />
+	
+	<message id="NETMSG_MALL_SALE_ACK" body="MsgCommonReply" comment="出售道具返回，param 物品实例id" />
+	
+	<message id="NETMSG_MALL_VIEW_SHOW_REQ" body="int16_t" comment="查看商店数据" />
+	
+	<message id="NETMSG_MALL_VIEW_SHOW_ACK" body="ShopInfo" comment="成功,返回商店数据" />
+	
+	<message id="NETMSG_MALL_MANUAL_RESET_REQ" body="int16_t" comment="手动重置商店" />
+	
+	<message id="NETMSG_MALL_MANUAL_RESET_ACK" body="ShopInfo" comment="成功,返回被重置的商店数据" />
+	
+	<message id="NETMSG_MALL_BUY_PACKAGE_ACK" body="MsgCommonReply" comment="购买答复" />
+	
+	<message id="NETMSG_MALL_BAT_SAIL_REQ" body="int16_t:count,[int32_t:instants_id]" comment="批量卖出" />
+	<message id="NETMSG_MALL_BAT_SAIL_ACK" body="MsgCommonReply" comment="批量卖出" />
+	
+	<message id="NETMSG_MALL_ATTR_BUY_REQ" body="int16_t:attr_item_id" comment="属性商店购买" />
+	<message id="NETMSG_MALL_ATTR_BUY_ACK" body="MsgCommonReply" comment="属性商店购买回复" />
+	
+	<message id="NETMSG_MALL_ATTR_LOGS_REQ" body="none" comment="获得属性商店的购买记录" />
+	<message id="NETMSG_MALL_ATTR_LOGS_ACK" body="AttrStoreInfo" comment="返回属性商店的购买记录" />
+	
+	<!-- 其他消息 -->
+	
+	<message id="NETMSG_MISC_SYSTEN_NOTICE_NTF" body="string" comment="系统公告"  number="6"/>
+	<message id="NETMSG_MISC_COMMON_ERROR_NTF" body="CommonErrorReply" comment="通用错误消息" />
+	<message id="NETMSG_MISC_CHAT_NTF" body="string" comment="文字聊天"  />
+	<message id="NETMSG_MISC_TIMEZONE_LANGUAGE" body="int8_t:timezone,string:language" comment="通知服务器客户端的语言和时区"  />
+	
+	<message id="NETMSG_MISC_LOTTERY_REQ" body="int16_t:lottery_type" comment="宝箱id"  />
+	<message id="NETMSG_MISC_LOTTERY_ACK" body="int16_t:packageId, DropPackage:drop_info" comment="答复抽奖,失败返回出错消息"  />
+	
+	<message id="NETMSG_MISC_GET_LOTTERY_TIME_REQ" body="NONE" comment="获得上次抽奖时间"  />
+	<message id="NETMSG_MISC_GET_LOTTERY_TIME_ACK" body="int64_t:lasttime, int32:CD" comment="答复上次抽奖"  />
+	
+	
+	<message id="NETMSG_MISC_GET_LOTTERY_LOG_REQ" body="NONE" comment="获得每个宝箱已经抽奖次数"  />
+	<message id="NETMSG_MISC_GET_LOTTERY_LOG_ACK" body="LotteryLog" comment="答复上次抽奖"  />
+	
+	
+	<message id="NETMSG_MISC_GET_SELF_INVIRE_REQ" body="NONE" comment="获得自己的邀请码"  />
+	<message id="NETMSG_MISC_GET_SELF_INVIRE_ACK" body="int8_t:be_invited, int32_t:invite_num,string:code" comment="返回自己的邀请码"  />
+	
+	<message id="NETMSG_MISC_INPUT_INVIRE_REQ" body="string:invite_code" comment="输入邀请吗"  />
+	<message id="NETMSG_MISC_INPUT_INVIRE_ACK" body="MsgCommonReply" comment="返回返回邀请结果"  />
+	
+	
+	<message id="NETMSG_MISC_MAIL_RECEIVE_REQ" body="NONE" comment="收邮件"  />
+	<message id="NETMSG_MISC_MAIL_RECEIVE_ACK" body="int16_t: number, [int32:mailid, MailInfo:mail_body]" comment="返回新邮件" />
+	<message id="NETMSG_MISC_MAIL_READ_REQ" body="int32_t: MAILID" comment="读邮件" />
+	<message id="NETMSG_MISC_MAIL_READ_ACK" body="int32_t: MAILID， DropPackage:addon_items" comment="邮件已读过" />
+	<message id="NETMSG_MISC_MAIL_NEW_NTF" body="none" comment="有新邮件通知" />
+	<message id="NETMSG_MISC_SENDTO_GM_REQ" body="string:title, string:body" comment="给gm发邮件" />
+	<message id="NETMSG_MISC_SENDTO_GM_ACK" body="MsgCommonReply" comment="回复给gm邮件" />
+	
+	
+	
+	<!-- message id="NETMSG_MISC_MONSTER_INFO_REQ" body="" comment="请求怪物信息"  />
+	<message id="NETMSG_MISC_MONSTER_INFO_ACK" body="MonstInfo" comment="返回怪物信息"  / -->
+	
+	
+	<!-- GM相关消息-->
+	
+	<message id="NETMSG_GM_BROADCAST" body="" comment="发送公告"  number="7"/>
+	<message id="NETMSG_GM_KICK_PLAYER" body="int32_t:player_id" comment="t人" />
+	<message id="NETMSG_GM_SHUTDOWN_SERVER" body="int32_t:exit_code" comment="关服" />
+	
+	<message id="NETMSG_GM_ADD_EXP_REQ" body="int32_t:exp_val" comment="GM加经验" />
+	<message id="NETMSG_GM_SET_LEVEL_REQ" body="int32_t:level" comment="改等级" />
+	<message id="NETMSG_GM_CHANGE_SERVER_TIME_REQ" body="int32_t:add_hours,int32_t:add_minutes" comment="修改服务器时间,小时,分钟" />
+	<message id="NETMSG_GM_GIVE_ITEM_REQ" body="int32_t:item_id,int32_t:number" comment="发放物品32bit:id + 32bits:number" />
+	<message id="NETMSG_GM_GIVE_DRAGON_REQ" body="int32_t:dragonId" comment="发放龙:dragonid" />
+	
+	<message id="NETMSG_GM_ADD_ATTR_REQ" body="int8_t:id,int32_t:value" comment="增加属性" />
+	<message id="NETMSG_GM_ADD_ATTR_ACK" body="int8_t:id,int32_t:current_value" comment="回复增加属性" />
+	
+	<message id="NETMSG_GM_SEND_SYSTEM_MAIL_REQ" body="string:title, string:body" comment="发送系统邮件" />
+	<message id="NETMSG_GM_SEND_MAIL_ITEM_REQ" body="int32_t:useId, MailInfo:BODY" comment="发送补偿邮件" />
+	
+	<message id="NETMSG_GM_PVP_NPC_INIT_REQ" body="none" comment="初始化pvp npc" />
+	<message id="NETMSG_GM_PVP_RANK_LIST_RESET_REQ" body="none" comment="清空排行榜" />
+	
+	
+	<!-- 新的养龙信息 -->
+	<message id="NETMSG_DRAGON_INIT_REQ" body="NONE" comment="请求龙的信息"  number="8"/>
+	<message id="NETMSG_DRAGON_INIT_ACK" body="DragonsBuf:dragonInfo" comment="龙的信息"  />
+	
+	<message id="NETMSG_DRAGON_DATA_CHANGE_NTF" body="DragonInfo:changed_dragon_info" comment="龙的数据增加／变化通知"  />
+	<message id="NETMSG_DRAGON_DEL_NTF" body="int16_t:dragonId" comment="龙消失通知"  />
+	
+	<message id="NETMSG_DRAGON_BUILD_REQ" body="int16_t" comment="合成龙请求"  />
+	<message id="NETMSG_DRAGON_BUILD_ACK" body="CommonErrorReply" comment="回复合成龙"  />
+	
+	<message id="NETMSG_DRAGON_GETDATA_REQ" body="int16_t" comment="获得玩家养的龙的数据"  />
+	<message id="NETMSG_DRAGON_GETDATA_ACK" body="RoleDragon" comment="回复龙的数据"  />
+	
+	<message id="NETMSG_DRAGON_UP_STAR_REQ" body="int16_t" comment="龙升星请求"  />
+	<message id="NETMSG_DRAGON_UP_STAR_ACK" body="CommonErrorReply" comment="回复升星"  />
+	
+	<message id="NETMSG_DRAGON_UP_GRADE_REQ" body="int16_t" comment="龙升阶"  />
+	<message id="NETMSG_DRAGON_UP_GRADE_ACK" body="CommonErrorReply" comment="回复升阶"  />
+	
+	<message id="NETMSG_DRAGON_ADD_FAVOR_REQ" body="int16_t:dragon_id,int32_t:favor" comment="客户端增加亲密度[龙id和亲密度]"  />
+	<message id="NETMSG_DRAGON_ADD_FAVOR_NTF" body="int16_t:dragon_id, int32_t:new_favor" comment="亲密度变化通知,最终结果"  />
+	
+	<message id="NETMSG_DRAGON_TAKE_OUT_REQ" body="int16_t" comment="带龙出战"  />
+	<message id="NETMSG_DRAGON_TAKE_OUT_ACK" body="CommonErrorReply" comment="答复出战"  />
+	
+	<message id="NETMSG_DRAGON_TAKE_IN_REQ" body="int16_t" comment="收回出战的龙，放回仓库"  />
+	<message id="NETMSG_DRAGON_TAKE_IN_ACK" body="CommonErrorReply" comment="返回收回出战的龙"  />
+	
+	<message id="NETMSG_DRAGON_FEED_REQ" body="int16_t, int16_t" comment="喂养龙,龙id ，物品id"  />
+	<message id="NETMSG_DRAGON_FEED_ACK" body="CommonErrorReply" comment="喂养龙"  />
+	
+	<message id="NETMSG_DRAGON_TO_FRAGMENT_NTF" body="int16_t:item_type_id" comment="龙变成碎片通知"  />
+	
+	<message id="NETMSG_DRAGON_EQUIP_REQ" body="int16_t:DRAGON_ID, int8_t:slot" comment="装备龙请求"  />
+	<message id="NETMSG_DRAGON_EQUIP_ACK" body="MsgCommonReply" comment="装备龙答复"  />
+	
+	<message id="NETMSG_DRAGON_UNEQUIP_REQ" body="int16_t:DRAGON_ID" comment="卸下龙请求"  />
+	<message id="NETMSG_DRAGON_UNEQUIP_ACK" body="MsgCommonReply" comment="卸下龙答复"  />
+	
+	<message id="NETMSG_DRAGON_GET_PASSIVE_SKILL_LIST_REQ" body="" comment="获得龙的被动技能列表"  />
+	<message id="NETMSG_DRAGON_GET_PASSIVE_SKILL_LIST_ACK" body="RoleSkillData" comment="返回龙的别动技能列表"  />
+	
+	<message id="NETMSG_DRAGON_GET_SKILL_POS_LIST_REQ" body="" comment="龙的被动技能装备位置"  />
+	<message id="NETMSG_DRAGON_GET_SKILL_POS_LIST_ACK" body="int16_t:number,[int16_t]" comment="返回龙的被动技能装备位置"  />
+	
+	<message id="NETMSG_DRAGON_EQUIP_DRAGON_SKILL_REQ" body="int8_t:off_on, int16_t:skill, int16:pos" comment="龙的被动技能装备"  />
+	<message id="NETMSG_DRAGON_EQUIP_DRAGON_SKILL_ACK" body="int16_t:number , [int16_t]" comment="返回技能装备"  />
+	
+	<!-- PVP消息 -->
+	<message id="NETMSG_PVP_GET_LIST_REQ" body="int16_t:startIndex,int16_t:numbers " comment="查看排"  number="9"/>
+	<message id="NETMSG_PVP_GET_LIST_ACK" body="int16_t:number,[RolePvpBaseInfo]" comment="返回排名列表" />
+	
+	<message id="NETMSG_PVP_GET_SELF_INDEX_REQ" body="null" comment="请求自己排名" />
+	<message id="NETMSG_PVP_GET_SELF_INDEX_ACK" body="int16_t:total_number,int16_t:current_num int16_t:selfIndex" comment="返回自己排名" />
+	
+	<message id="NETMSG_PVP_MATCH_REQ" body="null" comment="请求配对" />
+	<message id="NETMSG_PVP_MATCH_ACK" body="int16_t:number, [RolePvpDetail]" comment="返回配对" />
+	
+	
+	<message id="NETMSG_PVP_START_BATTLE_REQ" body="int32_t:aim_index,int16_t:map_id" comment="开始战斗" />
+	<message id="NETMSG_PVP_START_BATTLE_ACK" body="int32_t:errcode,int16_t:mapId, RolePvpDetail:aimInfo" comment="答复开始战斗" />
+	
+	
+	<message id="NETMSG_PVP_COMPLETED_REQ" body="int8_t:isSuccess" comment="发送战斗结果" />
+	<message id="NETMSG_PVP_COMPLETED_ACK" body="int8_t:isSuccess,int16_t:oldRankIndex,int16_t:rankIndex, DropPackage" comment="答复战斗结果,失败格式: int8_t:isSuccess,int32:errorCode" />
+	
+	<message id="NETMSG_PVP_GET_ACHIEVMENT_REQ" body="int16_t:awardIndex" comment="pvp领取排名奖励" />
+	<message id="NETMSG_PVP_GET_ACHIEVMENT_ACK" body="int16_t:awardIndex,DropPackage" comment="pvp领取排名奖励" />
+	
+	<message id="NETMSG_PVP_ADDTO_RANK_REQ" body="" comment="把自己家到排行榜，如果排行榜有空位的话" />
+	<message id="NETMSG_PVP_ADDTO_RANK_ACK" body="MsgCommonReply" comment="返回进入排行榜" />
+	
+	<message id="NETMSG_PVP_VIEW_DETAIL_REQ" body="int32_t:roleId" comment="查看玩家详细信息" />
+	<message id="NETMSG_PVP_VIEW_DETAIL_ACK" body="RolePvpDetail" comment="返回玩家详细信息" />
+	
+	
+	<message id="NETMSG_PVP_CANCEL_REQ" body="int32_t:reason" comment="取消PVP战斗" />
+	
+	
+	<!-- 武器相关信息 -->
+	<message id="NETMSG_WEAPON_INIT_WEAPON_DATA_REQ" body="" comment="请求武器数据" number="10" />
+	<message id="NETMSG_WEAPON_INIT_WEAPON_DATA_ACK" body="WeaponsBuf" comment="返回武器数据"  />
+	<message id="NETMSG_WEAPON_WEAPON_NODE_CHANGE_NTF" body="WeaponData" comment="武器数据增加／变化通知"  />
+	
+	<message id="NETMSG_WEAPON_UPLEVEL_REQ" body="int16_t" comment="武器升级请求"  />
+	<message id="NETMSG_WEAPON_UPLEVEL_ACK" body="CommonErrorReply" comment="答复武器升级"  />
+		
+	<message id="NETMSG_WEAPON_SET_SKIN_REQ" body="int16_t,skin_id" comment="更换皮肤"  />
+	<message id="NETMSG_WEAPON_SET_SKIN_ACK" body="CommonErrorReply" comment="返回更换皮肤"  />
+	
+	<!-- 任务相关 -->
+	<message id="NETMSG_TASK_INIT_CURRENT_TASK_REQ" body="" comment="获取正在执行中的任务" number="11" />
+	<message id="NETMSG_TASK_INIT_CURRENT_TASK_ACK" body="TaskBuf" comment="返回正在执行中的任务"  />
+	
+	<message id="NETMSG_TASK_INIT_COMPLTETD_TASK_REQ" body="" comment="获取完成的任务" />
+	<message id="NETMSG_TASK_INIT_COMPLTETD_TASK_ACK" body="TaskLogBuf" comment="返回完成的任务"  />
+	
+	<message id="NETMSG_TASK_GET_REQ" body="int16_t" comment="领取任务" />
+	<message id="NETMSG_TASK_GET_ACK" body="MsgCommonReply" comment="返回领取任务"  />
+	
+	<message id="NETMSG_TASK_COMPLTET_REQ" body="int16_t" comment="请求完成任务" />
+	<message id="NETMSG_TASK_COMPLTET_NTF" body="TaskAwards" comment="通知任务完成"  />
+	
+	<message id="NETMSG_TASK_GIVEUP_REQ" body="int16_t" comment="放弃任务" />
+	<message id="NETMSG_TASK_GIVEUP_ACK" body="MsgCommonReply" comment="放弃任务答复" />
+	
+	
+	<message id="NETMSG_TASK_SIGN_IN_REQ" body="" comment="每日签到" />
+	<message id="NETMSG_TASK_SIGN_IN_ACK" body="MsgCommonReply" comment="返回签到" />
+	
+	<message id="NETMSG_TASK_SIGN_IN_CHECK_REQ" body="" comment="检测今天是否已经签到" />
+	<message id="NETMSG_TASK_SIGN_IN_CHECK_ACK" body="int8_t" comment="返回是否已经签到，1，已经签到，0没有" />
+	
+	<message id="NETMSG_TASK_GET_LOGIN_AWARDS_REQ" body="" comment="获得登录奖励" />
+	<message id="NETMSG_TASK_GET_LOGIN_AWARDS_ACK" body="MsgCommonReply" comment="返回登录奖励结果" />
+	
+	<message id="NETMSG_TASK_CHECK_LOGIN_AWARDS_REQ" body="" comment="检测登录奖励是否已经领取" />
+	<message id="NETMSG_TASK_CHECK_LOGIN_AWARDS_ACK" body="int8_t" comment="返回检测结果" />
+	
+	
+	<message id="NETMSG_TASK_GET_ACHIEVEMENT_REQ" body="" comment="获得成就列表，如果没有出现就是没有完成" />
+	<message id="NETMSG_TASK_GET_ACHIEVEMENT_ACK" body="TaskBuf" comment="返回成就列表" />
+	
+	<message id="NETMSG_TASK_GET_ACHIEVEMENT_AWARDS_REQ" body="int16_t" comment="领取成就奖励" />
+	<message id="NETMSG_TASK_GET_ACHIEVEMENT_AWARDS_ACK" body="TaskAwards" comment="返回成就奖励"  />
+	<message id="NETMSG_TASK_ACHIEVEMENT_COMPLETE_NTF" body="int16_t" comment="成就达成通知"  />
+	
+	<message id="NETMSG_TASK_PROGRESS_CHANGED_NTF" body="TaskInfo" comment="任务进度变化通知"  />
+	<message id="NETMSG_TASK_BAT_COMPLTET_REQ" body="int16_t:number, [int16_t:tasks-id]" comment="请求批量完成任务" />
+	
+	
+	<message id="NETMSG_TASK_GET_ACTIVE_TASK_REQ" body="NONE" comment="获取可以接受的任务"  />
+	<message id="NETMSG_TASK_GET_ACTIVE_TASK_ACK" body="int16_t:number, [int16_t:tasks-id]" comment="返回可以接受的任务" />
+	
+	
+</MessageDefine>
+

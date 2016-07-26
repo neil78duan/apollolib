@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MarcoDefine>
+    <marco name="ROLE_NAME_LENGTH" value="40" comment="角色名字长度" />
+	<marco name="EQUIP_SLOT_NUMBER" value="10" comment="装备栏个数" />
+	<marco name="ROLE_ATTRS_NUMBER" value="200" comment="角色属性个数" />
+	<marco name="ROLE_ATTRS_ON_CREATE" value="5" comment="角色创建时，客户端发送给服务器的属性个数" />
+	<marco name="PACKAGE_CAPACITY" value="500" comment="背包容量" />
+	<marco name="EQUIP_PACK_CAPACITY" value="100" comment="武器背包容量" />
+	<marco name="SKILL_CAPACITY" value="20" comment="技能容量" />
+	<marco name="MAX_MAP_INSTANCE_NUMBER" value="200" comment="推图副本个数" />
+	<marco name="CLIENT_SETTING_SIZE" value="4096" comment="客户端配置缓冲大小" />
+	<marco name="RANK_CAPACITY" value="100" comment="排行榜容量" />
+	<marco name="PVP_TIME_LIMITED" value="180" comment="PVP时间限制s" />
+	
+	<marco name="DROP_ATTR_CAPACITY" value="8" comment="掉落属性奖励个数" />
+	<marco name="DROP_ITEM_CAPACITY" value="10" comment="一次最多掉落物品数量" />
+	
+	<marco name="PVP_MATCH_ROLE_NUM" value="3" comment="一次匹配3个" />
+	<marco name="PVP_RANK_PAGE_SIZE" value="20" comment="每一页的个数" />
+	
+	<marco name="DRAP_WEIGHT_CAPACIT" value="1024" comment="保存掉落权重的个数" />
+	<marco name="EQUIP_ATTR_NUMBER" value="6" comment="装备附加属性个数" />
+	
+	<marco name="WEAPON_NUMBER" value="2" comment="武器个数" />
+	<marco name="DRAGON_EQUIP_SLOT_NUM" value="8" comment="可以装备龙的个数" />
+	<marco name="DRAGON_SKILL_SLOT_NUM" value="5" comment="龙的被动技能槽位" />
+	<marco name="DRAGON_PASSIVE_SKILL_TYPE" value="4" comment="龙影技类型" />
+	<marco name="SKILLS_NUM_PER_DRAGON" value="4" comment="每个龙有的技术数量-主动技能" />
+	
+	
+	<marco name="WEAPON_MAX_ITEM_ID" value="1000" comment="武器个数" />
+	<marco name="TABLET_NUMBER" value="128" comment="石碑节点个数" />
+	<marco name="DRAGON_CAPACITY" value="40" comment="玩家最多可以拥有的龙的数量" />
+	<marco name="PVP_MAP_DRAGON_CAPACITY" value="5" comment="PVP地图玩家可以布置的龙的数量" />
+	<marco name="SHOP_ITEMS_CAPACITY" value="20" comment="商店中一次刷新物品的数量" />
+	<marco name="SHOPS_NUMBER" value="20" comment="游戏中商店个数" />
+	<marco name="MONSTERS_NUMBER_PER_SCENE" value="100" comment="每个场景中最多怪物数" />
+	
+	<marco name="MAIL_TITLE_LENGTH" value="40" comment="邮件标题长度" />
+	<marco name="MAIL_BODY_LENGTH" value="256" comment="邮件内容长度" />
+	
+</MarcoDefine>
+
+<EnumDefine>
+	<eCommonErrorType comment="普通错误类型">
+		<COMMON_ERROR_TYPE_SHORT_ITEM value="1" comment="缺少物品 param 物品id"/>
+		<COMMON_ERROR_TYPE_ATTR_LOW  comment="属性太低 param 属性名字"/>
+		<COMMON_ERROR_TYPE_ATTR_HIGHT  comment="属性太高 param 属性名字"/>
+		<COMMON_ERROR_TYPE_IN_CD  comment="cd中"/>
+		<COMMON_ERROR_TYPE_IN_TABLE comment="返回错误表格中定义的错误 param 错误号"/>
+		<COMMON_ERROR_TYPE_NEED_PASS_MAP comment="需要完成特定副本"/>
+	</eCommonErrorType>
+	<eEquipStatBitsType>
+		<EQUIPT_STAT_IN_DRESS value="1" comment="是否穿上"/>
+		<EQUIPT_STAT_NO_PARSE value="2" comment="禁止分解"/>
+		<EQUIPT_STAT_NO_SAIL value="4" comment="禁止出售"/>
+		<EQUIPT_STAT_IN_CALLING value="8" comment="龙召唤中"/>
+		<EQUIPT_STAT_TAKE_OUT value="16" comment="带龙出战"/>
+		
+	</eEquipStatBitsType>
+	
+	<eItemType comment="物品类型">
+		<EITEM_TYPE_UNKNOWN value="0" comment="未知类型"/>
+		<EITEM_TYPE_EQUIP value="1" comment="装备"/>
+		<EITEM_TYPE_WEAPON comment="weapon"/>
+		<EITEM_TYPE_DEFANCE comment="盾"/>
+		<EITEM_TYPE_DRAGON comment="dragon"/>
+		<EITEM_TYPE_DNA comment="dna"/>
+		<EITEM_TYPE_CONSUME  comment="消耗品"/>
+		<EITEM_TYPE_NUMBER  comment="number"/>
+	</eItemType>
+	<eAccelerateCD comment="加速完成任务类型" >
+		<EACCEL_WEAPON_TABLET value="0" comment="石碑"/>
+		<EACCEL_NUMBER  comment="加速类型数量"/>
+	</eAccelerateCD>
+	
+	
+	<eTaskCompletedType comment="任务完成类型">
+		<ETASK_COMPLTET_UNKNOW value="0" comment="未知类型"/>
+		<ETASK_COMPLTET_TIME  comment="规定时间"/>
+		<ETASK_COMPLTET_VIP comment="vip登记"/>
+		<ETASK_COMPLTET_MAKE_WISH_DRAGON comment="许愿龙池"/>
+		<ETASK_COMPLTET_MAP_TYPE comment="特定类型副本"/>
+		<ETASK_COMPLTET_MAP_ID comment="特定id副本"/>
+		<ETASK_COMPLTET_ARENA comment="竞技场"/>
+		<ETASK_COMPLTET_FEED_DRAGON  comment="喂龙"/>
+		<ETASK_COMPLTET_GOOD_FINGER  comment="使用点手"/>
+		<ETASK_COMPLTET_BUY_IN_STORE  comment="商店购买"/>
+		<ETASK_COMPLTET_BUY_IN_MALL  comment="商场购买"/>
+		<ETASK_COMPLTET_NUMBER  comment="number"/>
+	</eTaskCompletedType>
+	
+	<eAchievementCompletedType comment="成就完成类型">
+		<EACHIEV_COMPLTET_UNKNOW value="0" comment="未知类型"/>
+		<EACHIEV_COMPLTET_ATTR  comment="属性达标"/>
+		<EACHIEV_COMPLTET_ITEM_TYPE comment="收集物品"/>
+		<EACHIEV_COMPLTET_ITEM_ID comment="收集指定类型物品"/>
+		<EACHIEV_COMPLTET_MAP_TYPE comment="特定类型副本"/>
+		<EACHIEV_COMPLTET_MAP_ID comment="特定id副本"/>
+		<EACHIEV_COMPLTET_DRAGON_UPGRADE comment="升级龙"/>
+		<EACHIEV_COMPLTET_EQUIP_UPGRADE  comment="升级装备"/>
+		<EACHIEV_COMPLTET_WEAPON_UPGRADE  comment="升级武器"/>
+		<EACHIEV_COMPLTET_BUY_IN_STORE  comment="商店购买"/>
+		<EACHIEV_COMPLTET_BUY_IN_MALL  comment="商场购买"/>
+		<EACHIEV_COMPLTET_NUMBER  comment="number"/>
+	</eAchievementCompletedType>
+	
+</EnumDefine>
+
+

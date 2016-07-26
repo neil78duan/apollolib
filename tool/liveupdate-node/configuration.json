@@ -1,0 +1,34 @@
+{
+    "port":8080,
+    "liveUpdateDir":"./uploadversion",
+    
+    "openGMTool": "yes" ,
+    "gmtoolport": 8000,
+    "gm_reliable_ip":["127.0.0.1", "0.0.0.0"],
+	"my_domain_name": "http://localhost",
+
+    "downloadCfg" : {
+        "desc" : "about addition data download type 0 common,1 memecache ,2 fragment transfer . please do not change default",
+        "type" : 2,
+        "fragment_size":102400
+    },
+    
+    "logger": {
+        "desc":" enable yes/no, logtype log4/console/all , loglevel is debug, common ,warn, error ,fatal",
+        "enable": "yes",
+        "logtype" : "all",
+        "loglevel" : "debug" ,
+        "log4_config":{
+            "appenders": [
+                          {
+                          "type": "file",
+                          "filename": "./log1/sheldon.log",
+                          "maxLogSize": "1048576",
+                          "backups": "10"
+                          }
+                          ]
+        }        
+
+    }
+
+}
