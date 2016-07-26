@@ -17,7 +17,7 @@ OBJDIR = ./.objs
 include ./nd_lib_include.make
 
 
-PROJS  = ./bin/protoBuilder
+PROJS  = ../../bin/protoBuilder
 
 
 

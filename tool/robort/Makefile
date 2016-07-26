@@ -2,7 +2,7 @@
 
 SRCDIR = .
 OBJDIR = .obj
-include ../Rules.make
+include ../../Rules.make
 
 
 ##############set flag
@@ -15,10 +15,10 @@ CFLAGS += -I$(TOPDIR)/include  -I$(TOPDIR)/src/cli_common
 
 ifeq ($(DEBUG),y)
 LFLAGS +=  -lapollo_cli_common_d
-PROJS = $(WORKDIR)/$(PROJECT_NAME)_d
+PROJS = ../../bin/robort_d
 else
 LFLAGS +=  -lapollo_cli_common
-PROJS = $(WORKDIR)/$(PROJECT_NAME)_d
+PROJS = ../../bin/robort
 endif
 
 LFLAGS += -l$(CLIENT_LIB)
