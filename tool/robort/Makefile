@@ -15,10 +15,10 @@ CFLAGS += -I$(TOPDIR)/include  -I$(TOPDIR)/src/cli_common
 
 ifeq ($(DEBUG),y)
 LFLAGS +=  -lapollo_cli_common_d
-PROJS = ../../bin/robort_d
+PROJS = $(WORKDIR)/robort_d
 else
 LFLAGS +=  -lapollo_cli_common
-PROJS = ../../bin/robort
+PROJS = $(WORKDIR)/robort
 endif
 
 LFLAGS += -l$(CLIENT_LIB)

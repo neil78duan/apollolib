@@ -4,7 +4,7 @@ VPATH = .
 
 include ./Rules.make
 
-SUBDIRS = netMessage  cli_common attribute logic_compile 
+SUBDIRS = netMessage  cli_common attribute logic_compile tool
 
 
 all: debug

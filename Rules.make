@@ -38,20 +38,18 @@ ifeq ($(OS_kernel),darwin)
 	LFLAGS += -liconv
 endif
 
-TOPDIR = $(APOLLO)
+TOPDIR = $(LIBAPOLLO)
 CURDIR = .
-PROJ_SRC = $(APOLLO)/src
 
-WORKDIR = $(TOPDIR)/bin/$(AIM_NAME)
+WORKDIR = $(TOPDIR)/bin/
 LIBDIR = $(TOPDIR)/lib/$(AIM_NAME)
-LIBOUTPUT = $(TOPDIR)/lib
 
 CFLAGS += -c -w -O  -DND_UNIX
 LFLAGS +=  -lpthread  -lm
 
 #FOR NDSDK
-CFLAGS += -I$(NDHOME)/include -I$(TOPDIR)/src/logic_compile -I$(TOPDIR)/src/netMessage
-LFLAGS += -L$(NDHOME)/lib -L$(LIBDIR)
+CFLAGS += -I$(NDHOME)/include -I$(TOPDIR)
+LFLAGS += -L$(NDHOME)/lib 
 
 ifeq ($(DEBUG),y)
     CFLAGS +=  -g -DDEBUG  -DND_DEBUG

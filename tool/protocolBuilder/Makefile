@@ -5,23 +5,21 @@
 #set path of src and obj
 
 
-#debug flag
-DEBUG =y
-#profile , hot spot find
-PROFILE=n
+SRCDIR = ./protocolBuilder
+OBJDIR = .obj
+include ../../Rules.make
+
+
+PROJECT_NAME := protoBuilder
 
 SRCDIR=./protocolBuilder
-objdir := $(shell [ -d .objs ] || mkdir .objs)
-OBJDIR = ./.objs
-
-include ./nd_lib_include.make
 
 
-PROJS  = ../../bin/protoBuilder
-
-
-
-CFLAGS +=  -I$(NDHOME)/include
+ifeq ($(DEBUG),y)
+	PROJS = $(WORKDIR)/protoBuilder_d
+else
+	PROJS = $(WORKDIR)/protoBuilder_d
+endif
 
 LFLAGS +=   -L$(NDHOME)/lib -l$(CLIENT_LIB)
 
@@ -41,8 +39,4 @@ $(PROJS): $(OBJS)  $(MYLIBS)
 
 clean:
 	rm -f $(PROJS) $(PathOBJS)  $(PathOBJS:.o=.d)
-
-init:
-	cp ../../server/protocol/src/*.cpp ./roborts
-	rm ./roborts/MessageSender.cpp
 	
