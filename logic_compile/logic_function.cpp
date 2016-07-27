@@ -220,7 +220,7 @@ bool apollo_func_read_userData_from_msg(LogicParserEngine*parser, parse_arg_list
 	CHECK_DATA_TYPE(args[2], OT_STRING);
 
 	DBLDataNode datatype;
-	if (!parser->getOwner()->getOtherObject("datatype", datatype)){
+	if (!parser->getOwner()->getOtherObject("FormatMsgData", datatype)){
 		nd_logerror("not found datatype define \n");
 		return false;
 	}

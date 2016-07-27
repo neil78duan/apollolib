@@ -58,7 +58,7 @@ public:
 			val.InitSet((void*)h, OT_OBJ_NDHANDLE);
 			return true;
 		}
-		else if (ndstricmp(objName, "datatype") == 0){
+		else if (ndstricmp(objName, "FormatMsgData") == 0){
 
 			val.InitSet((void*)m_dataType);
 			return true;
@@ -248,6 +248,23 @@ static ndxml *_getMsgNode(ndxml_root *xmlFile, const char *messageName)
 	}
 	return NULL;
 }
+char *convert_msg_name(const char *inname, char *buf, int size)
+{
+	char *ret = buf;
+	while (*inname && size-->0)	{
+		if (*inname == '_')	{
+			*buf = ' ';
+		}
+		else {
+			*buf = tolower(*inname);
+		}
+		++buf;
+		++inname;
+	}
+	*buf = 0;
+	return ret;
+}
+
 int client_default_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
 {
 	userDefineDataType_map_t &m_dataTypeDef = *__myScriptOwner.m_dataType;
@@ -267,10 +284,12 @@ int client_default_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
 		return 0;
 	}
 	DBLDataNode dataFormat;
-	__myScriptOwner.m_output(NULL, "received message %s =======\n", pMsgname);
+	char namebuf[128];
+	//__myScriptOwner.m_output(NULL, "received message %s =======\n", pMsgname);
+	__myScriptOwner.m_output(NULL, "%s (%d,%d): ", convert_msg_name(pMsgname,namebuf,128), inmsg.MsgMaxid(), inmsg.MsgMinid());
 	outPutMessageFromconfig(body, inmsg);
 
-	__myScriptOwner.m_output(NULL, "\n-----END MESSAGE %s ------\n", pMsgname);
+	__myScriptOwner.m_output(NULL, "\n");
 
 	return 0;
 }

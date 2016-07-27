@@ -69,7 +69,7 @@ int LogicUserDefStruct::Print(logic_print outFunc, void *pf) const
 		ret += outFunc(pf, "\t%s:", it->m_name);
 		ret += it->m_val.Print(outFunc, pf);
 		if (i < m_members.size()){
-			ret += outFunc(pf, ",\n");
+			ret += outFunc(pf, ", ");
 		}
 	}
 	ret += outFunc(pf, "}");
