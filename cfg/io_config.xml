@@ -2,16 +2,15 @@
 <setting_config name="设置" expand="yes" delete="no">
 	<script_root name="脚本文件列表" kinds="in_file">../cfg/script_root.xml</script_root>
 	<new_template name="新建模板" kinds="in_file">../cfg/newfileTemp.xml</new_template>
-	<net_protocol name="网络协议配置文件" kinds="in_file">../tool/protocolBuilder/config/message.xml</net_protocol>
-	<net_data_def name="网络数据格式" kinds="in_file">../tool/protocolBuilder/config/datatype.xml</net_data_def>
-	<connect_script name="连接器服务器的脚本" kinds="in_file">../../data/client_script.bin</connect_script>
-	<game_data_path name="策划数据输入目录" kinds="dir" delete="no">../tool/data_export/outputData</game_data_path>
-	<game_data_listfile name="策划数据输入列表" kinds="in_file">../tool/data_export/filelist.txt</game_data_listfile>
-	<game_data_outfile name="策划数据保存文件" kinds="out_file">../../data/cehua_data.dat</game_data_outfile>
-	<game_data_export_cmd name="策划数据导出工具" kinds="in_file">D:\work\srv_apollo\server\apollolib\tool\data_export\genCode.bat</game_data_export_cmd>
-	<game_data_in_encode name="策划excel编码" kinds="reference" reference_type="type_encode">1</game_data_in_encode>
-	<game_data_out_encode name="策划数据输出编码" kinds="reference" reference_type="type_encode">1</game_data_out_encode>
-	<script_out_encode name="脚本输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
+	<net_protocol name="网络协议配置文件" kinds="in_file">../../resource/msg_config/message.xml</net_protocol>
+	<net_data_def name="网络数据格式" kinds="in_file">../../resource/msg_config/datatype.xml</net_data_def>
+	<connect_script name="客户端脚本" kinds="in_file">../../data/client_script.bin</connect_script>
+	<excel_data_in_path name="游戏数据excel输入目录" kinds="dir" delete="no">../../resource/game_data</excel_data_in_path>
+	<text_data_out_path name="游戏数据text输出目录" kinds="dir" delete="no">../../resource/text_output</text_data_out_path>
+	<game_data_listfile name="excel列表" kinds="in_file">../../resource/excel_filelist.txt</game_data_listfile>
+	<game_data_package_file name="数据打包文件" kinds="out_file">../../data/cehua_data.dat</game_data_package_file>
+	<game_data_export_cmd name="策划数据导出工具" kinds="in_file">exp_xls.bat</game_data_export_cmd>
+	<game_data_out_encode name="游戏数据输出编码" kinds="reference" reference_type="type_encode">1</game_data_out_encode>
 	<bin_data_byte_order name="输出字节顺序" kinds="enum" enum_value="big-end, little-end">1</bin_data_byte_order>
 	<role_attr_table name="角色属性表" kinds="string">role_attr_config.xlsx</role_attr_table>
 	<gm_send_msg name="gm消息配置表" kinds="in_file">../cfg/gm_msg.xml</gm_send_msg>

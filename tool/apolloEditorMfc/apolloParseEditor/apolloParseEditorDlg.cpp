@@ -309,9 +309,6 @@ void CapolloParseEditorDlg::OnBnClickedBtLoaderTest()
 //导出策划数据
 void CapolloParseEditorDlg::OnBnClickedBtExpData()
 {
-	//char org_dir[1024];
-	//char path[1024];
-
 	clearLog();
 	
 	if (false == expExcel()) {
@@ -471,30 +468,26 @@ bool CapolloParseEditorDlg::compileScript(const char *scriptFile)
 
 bool CapolloParseEditorDlg::expExcel()
 {
-	char org_dir[1024];
 	char path[1024];
 
 	LogText("==============开始导出excel===============\n");
 
 	const char *exp_cmd = _getFromIocfg("game_data_export_cmd");
-	if (!exp_cmd){
+	const char *excel_path = _getFromIocfg("excel_data_in_path");
+	const char *text_path = _getFromIocfg("text_data_out_path");
+	const char *package_file = _getFromIocfg("game_data_package_file");
+	const char *excel_list = _getFromIocfg("game_data_listfile");
+
+	if (!exp_cmd || !excel_path || !text_path || !package_file ){
 		LogText("导出excel错误:配置文件错误\n");
 		return false ;
 	}
+	
 	const char *cur_dir = nd_getcwd();
-	strncpy(org_dir, cur_dir, sizeof(org_dir));
+	const char *encodeName = getGameDateEncodeType();
 
-	nd_getpath(exp_cmd, path, sizeof(path));
-	if (0 != nd_chdir(path)) {
-		nd_logerror("不能找到导出工具目录. change dir to %s error :%s\n", nd_last_error());
-		return false ;
-	}
-	const char *encodeName = getExcelExportEncodeType();
-
-	snprintf(path, sizeof(path), "cmd.exe /c %s %s ", exp_cmd, encodeName);
+	snprintf(path, sizeof(path), "cmd.exe /c %s/%s %s %s %s %s ", cur_dir, exp_cmd, excel_list, excel_path, text_path,  encodeName);
 	int ret = system(path);
-	//int ret = 0;
-	nd_chdir(org_dir);
 
 	if (0 != ret)	{
 		nd_logerror("导出策划数据失败，请手动导出\n");
@@ -511,11 +504,11 @@ bool CapolloParseEditorDlg::expExcel()
 	}
 
 	DBLDatabase dbtmp;
-	if (0 != dbtmp.LoadFromText(getGameDataInPath(), getGameDataList(), getExcelExportEncodeType(), getGameDateEncodeType())) {
+	if (0 != dbtmp.LoadFromText(text_path, excel_list, encodeName, encodeName)) {
 		nd_logerror("打包数据错误:不能从txt文件中读取数据\n");
 		return false;
 	}
-	if (0 == dbtmp.Dump(getGameDataOutfile(), "gamedatadb", orderType)) {
+	if (0 == dbtmp.Dump(package_file, "gamedatadb", orderType)) {
 		nd_logmsg("package game data SUCCESS!!\n");
 		LogText("==========导出策划数据成功===========\n");
 	}
@@ -526,7 +519,7 @@ bool CapolloParseEditorDlg::expExcel()
 	//before run test need load dbl 
 	DBLDatabase *pdbl = DBLDatabase::get_Instant();
 	if (pdbl){
-		if (0 != pdbl->LoadBinStream(getGameDataOutfile())) {
+		if (0 != pdbl->LoadBinStream(package_file)) {
 			nd_logmsg("加载二进制策划数据错误!\n");
 			dbtmp.Destroy();
 			DBLDatabase::destroy_Instant();
@@ -542,8 +535,9 @@ bool CapolloParseEditorDlg::expExcel()
 	
 	dbtmp.Destroy();
 
-	std::string strOutTextPath = getGameDataInPath();
+	std::string strOutTextPath = text_path;
 	strOutTextPath  += "/test_outputData";
+	nd_mkdir(strOutTextPath.c_str());
 	if (0 != pdbl->TestOutput(strOutTextPath.c_str())) {
 		nd_logmsg("从data输出text文件失败!");
 		DBLDatabase::destroy_Instant();
@@ -567,17 +561,16 @@ bool CapolloParseEditorDlg::runTest()
 	}
 
 	bool ret = true;
-	
-	if (0!= DBLDatabase::get_Instant()->LoadBinStream(getGameDataOutfile())) {
+
+	const char *package_file = _getFromIocfg("game_data_package_file");
+
+	if (0 != DBLDatabase::get_Instant()->LoadBinStream(package_file)) {
 		LogText("加载二进制策划数据错误!\n");
 		return false;;
 	}
 
 	do 	{
 		const char*attr_table = _getFromIocfg("role_attr_table");
-		//const char*state_table = _getFromIocfg("role_state_table");
-		//const char*forbid_table = _getFromIocfg("role_forbid_table");
-		//const char*operate_table = _getFromIocfg("role_operate_check_table");
 		NDSingleton<RoleAttrHelper>::Destroy();
 		//StatMachine::Destroy();
 
@@ -653,11 +646,11 @@ void CapolloParseEditorDlg::_beginEdit(const char *script_file)
 	xmlDlg.loadUserdefDisplayList(xml_events_id, LOGIC_EVENT_LIST_NAME);
 
 
-	DBLDatabase::get_Instant()->LoadBinStream(getGameDataOutfile());
+	const char *package_file = _getFromIocfg("game_data_package_file");
+	DBLDatabase::get_Instant()->LoadBinStream(package_file);
 
 	if (IDOK == xmlDlg.DoModal()) {
 		nd_chdir(nd_getcwd());
-		//ndxml_save(&xml_script, script_file);
 
 		ndxml_save_encode(&xml_script, script_file, E_SRC_CODE_GBK, E_SRC_CODE_UTF_8);
 		LogText("编辑完成\n");
@@ -713,24 +706,7 @@ const char *CapolloParseEditorDlg::getNetProtocol()
 {
 	return _getFromIocfg("net_protocol");
 }
-const char *CapolloParseEditorDlg::getGameDataInPath()
-{
-	return _getFromIocfg("game_data_path");
-}
-const char *CapolloParseEditorDlg::getGameDataList()
-{
-	return _getFromIocfg("game_data_listfile");
-}
-const char *CapolloParseEditorDlg::getGameDataOutfile()
-{
-	return _getFromIocfg("game_data_outfile");
-}
 
-const char *CapolloParseEditorDlg::getExcelExportEncodeType()
-{
-	int codeType = atoi(_getFromIocfg("game_data_in_encode"));
-	return nd_get_encode_name(codeType);
-}
 const char *CapolloParseEditorDlg::getGameDateEncodeType()
 {
 	int codeType = atoi(_getFromIocfg("game_data_out_encode"));
