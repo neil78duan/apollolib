@@ -18,6 +18,7 @@ public:
 
     QString &getWorkingPath() {return m_workPaht;}
     QString &getSetting() {return m_setting;}
+    QString &getEditorCfg() { return m_scriptEditorCfg;}
 private slots:
     void on_okPushButton_clicked();
 
@@ -27,12 +28,15 @@ private slots:
 
     void on_ExitButton_clicked();
 
+    void on_btEditorFileSel_clicked();
+
 private:
     Ui::workDirDialog *ui;
     QString m_workPaht ;
     QString m_setting ;
+    QString m_scriptEditorCfg ;
 };
 
-bool trytoGetSetting(QString &workPath,QString &cfgSetting,QWidget *parent=NULL) ;
-bool inputSetting(QString &workPath,QString &cfgSetting,QWidget *parent=NULL);
+bool trytoGetSetting(QString &workPath,QString &cfgSetting,QString &editorCfg, QWidget *parent=NULL) ;
+bool inputSetting(QString &workPath,QString &cfgSetting,QString &editorCfg,QWidget *parent=NULL);
 #endif // WORKDIRDIALOG_H

@@ -6,18 +6,19 @@
 #include <QSettings>
 
 
-bool trytoGetSetting(QString &workPath,QString &cfgSetting,QWidget *parent)
+bool trytoGetSetting(QString &workPath,QString &cfgSetting,QString &editorCfg,QWidget *parent)
 {
     QSettings settings("duanxiuyun", "ApolloEditor");
     workPath = settings.value("workdir_path").toString();
     cfgSetting =settings.value("setting_config").toString() ;
+    editorCfg = settings.value("editor_config").toString() ;
     if(workPath.isEmpty() || cfgSetting.isEmpty()) {
-        return inputSetting(workPath, cfgSetting, parent) ;
+		return inputSetting(workPath, cfgSetting, editorCfg, parent);
     }
     return true ;
 }
 
-bool inputSetting(QString &workPath,QString &cfgSetting,QWidget *parent)
+bool inputSetting(QString &workPath,QString &cfgSetting,QString &editorCfg,QWidget *parent)
 {
     workDirDialog dlg(parent) ;
     int ret = dlg.exec() ;
@@ -26,10 +27,13 @@ bool inputSetting(QString &workPath,QString &cfgSetting,QWidget *parent)
     }
     workPath = dlg.getWorkingPath() ;
     cfgSetting = dlg.getSetting() ;
+	editorCfg = dlg.getEditorCfg();
 
     QSettings settings("duanxiuyun", "ApolloEditor");
     settings.setValue("workdir_path", workPath);
     settings.setValue("setting_config",cfgSetting) ;
+    settings.setValue("editor_config",editorCfg) ;
+
     return true ;
 }
 
@@ -87,4 +91,12 @@ void workDirDialog::on_selWorkdirButton_clicked()
 void workDirDialog::on_ExitButton_clicked()
 {
     QDialog::reject() ;
+}
+
+void workDirDialog::on_btEditorFileSel_clicked()
+{
+    m_scriptEditorCfg = QFileDialog::getOpenFileName(this, tr("open file"), ".",  tr("Allfile(*.*);;xmlfile(*.xml)"));
+    if(!m_scriptEditorCfg.isEmpty()) {
+        ui->editorCfg->setText(m_scriptEditorCfg);
+    }
 }

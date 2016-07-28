@@ -82,10 +82,10 @@ private:
     //const char *getEventList();
     const char *getNetProtocol();
 
-    const char *getGameDataInPath();
-    const char *getGameDataList();
-    const char *getGameDataOutfile();
-    const char *getExcelExportEncodeType();
+    //const char *getGameDataInPath();
+    //const char *getGameDataList();
+    //const char *getGameDataOutfile();
+    //const char *getExcelExportEncodeType();
     const char *getGameDateEncodeType();
 
     const char *_getFromIocfg(const char *cfgName);

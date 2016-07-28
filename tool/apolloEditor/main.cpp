@@ -17,8 +17,8 @@ int main(int argc, char *argv[])
 #endif 
     //QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
-    QString workDir, ioCfgFile ;
-    if(!trytoGetSetting(workDir, ioCfgFile)) {
+    QString workDir, ioCfgFile , editorCfg;
+	if (!trytoGetSetting(workDir, ioCfgFile, editorCfg)) {
         return 1 ;
     }
     startDialog dlg ;
@@ -26,9 +26,9 @@ int main(int argc, char *argv[])
 re_initd:
 
     nd_chdir(workDir.toStdString().c_str()) ;
-    if(!dlg.initXmlSetting("editor_setting.xml", ioCfgFile.toStdString().c_str()) ) {
+	if (!dlg.initXmlSetting(editorCfg.toStdString().c_str(), ioCfgFile.toStdString().c_str())) {
         QMessageBox::warning(NULL, "Error","load config file error, Please Reload",QMessageBox::Yes);
-        if(!inputSetting(workDir, ioCfgFile)) {
+        if(!inputSetting(workDir, ioCfgFile,editorCfg)) {
             exit(1) ;
         }
         goto re_initd;

@@ -113,24 +113,24 @@ const char *startDialog::getNetProtocol()
 {
     return _getFromIocfg("net_protocol");
 }
-const char *startDialog::getGameDataInPath()
-{
-    return _getFromIocfg("game_data_path");
-}
-const char *startDialog::getGameDataList()
-{
-    return _getFromIocfg("game_data_listfile");
-}
-const char *startDialog::getGameDataOutfile()
-{
-    return _getFromIocfg("game_data_outfile");
-}
-
-const char *startDialog::getExcelExportEncodeType()
-{
-    int codeType = atoi( _getFromIocfg("game_data_in_encode") );
-    return nd_get_encode_name(codeType);
-}
+// const char *startDialog::getGameDataInPath()
+// {
+//     return _getFromIocfg("game_data_path");
+// }
+// const char *startDialog::getGameDataList()
+// {
+//     return _getFromIocfg("game_data_listfile");
+// }
+// const char *startDialog::getGameDataOutfile()
+// {
+//     return _getFromIocfg("game_data_outfile");
+// }
+// 
+// const char *startDialog::getExcelExportEncodeType()
+// {
+//     int codeType = atoi( _getFromIocfg("game_data_in_encode") );
+//     return nd_get_encode_name(codeType);
+// }
 const char *startDialog::getGameDateEncodeType()
 {
     int codeType = atoi(_getFromIocfg("game_data_out_encode"));
@@ -192,7 +192,10 @@ void startDialog::_beginEdit(const char *script_file, const char *title)
 	xmlDlg.loadUserdefDisplayList(xml_cpp_func, LOGIC_FUNCTION_LIST_NAME);
 	xmlDlg.loadUserdefDisplayList(xml_events_id, LOGIC_EVENT_LIST_NAME);
 
-	DBLDatabase::get_Instant()->LoadBinStream(getGameDataOutfile());
+
+	const char *package_file = _getFromIocfg("game_data_package_file");
+	DBLDatabase::get_Instant()->LoadBinStream(package_file);
+	//DBLDatabase::get_Instant()->LoadBinStream(getGameDataOutfile());
 
 	if (xmlDlg.exec() == QDialog::Accepted) {
 		nd_chdir(nd_getcwd());
@@ -353,117 +356,67 @@ bool startDialog::compileScript(const char *scriptFile)
 	WriteLog("!!!!!!!!!!!!!!!!!!!SCRIPT COMPILE SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	return true;
 }
-// bool startDialog::compileScript()
-// {
-//     LogicCompiler lgcompile;
-// 
-//     int outEncode = E_SRC_CODE_UTF_8;
-//     bool withDebug = false;
-//     const char *p = _getFromIocfg("script_with_debug");
-//     if (p && *p != '0'){
-//         withDebug = true;
-//     }
-// 
-//     p = _getFromIocfg("script_out_encode");
-//     if (p && *p){
-//         outEncode = atoi(p);
-//     }
-// 
-//     lgcompile.setConfigFile(editorConfigFile);
-//     if (!lgcompile.compileXml(getGameScript(), getGameScriptOut(), outEncode, withDebug)) {
-// 
-//         const char *pFunc = lgcompile.m_cur_function.c_str();
-//         const char *pStep = lgcompile.m_cur_step.c_str();
-// 
-//         nd_logerror("compile error file %s, function %s, step %s , stepindex %d\n",
-//             lgcompile.m_cur_file.c_str(), pFunc, pStep, lgcompile.m_cur_node_index);
-// 
-//         return false ;
-//     }
-// 
-//     WriteLog("!!!!!!!!!!COMPILE script success !!!!!!!!!!!\n begining run script...\n");
-// 
-//     LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
-//     nd_assert(scriptRoot);
-// 
-//     scriptRoot->setPrint(out_print, NULL);
-// 
-//     if (0 != scriptRoot->LoadScript(getGameScriptOut())){
-//         WriteLog("load script error n");
-//         LogicEngineRoot::destroy_Instant();
-//         return false;
-//     }
-// 
-//     WriteLog("start run script...\n");
-//     if (0 != scriptRoot->test()){
-//         WriteLog("run script error\n");
-//         LogicEngineRoot::destroy_Instant();
-//         return false;
-//     }
-// 
-//     LogicEngineRoot::destroy_Instant();
-//     WriteLog("!!!!!!!!!!!!!!!!!!!SCRIPT COMPILE SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-//     return true;
-// }
 
-#include <QProcess>
+
+//#include <QProcess>
 bool startDialog::expExcel()
 {
-    char org_dir[1024];
     char path[1024];
 
     WriteLog("==============Begin export excel===============");
 
-    const char *exp_cmd = _getFromIocfg("game_data_export_cmd");
-    if (!exp_cmd){
-        WriteLog("get export shell error");
-        return false ;
-    }
-    const char *cur_dir = nd_getcwd();
-    strncpy(org_dir, cur_dir, sizeof(org_dir));
+	const char *exp_cmd = _getFromIocfg("game_data_export_cmd");
+	const char *excel_path = _getFromIocfg("excel_data_in_path");
+	const char *text_path = _getFromIocfg("text_data_out_path");
+	const char *package_file = _getFromIocfg("game_data_package_file");
+	const char *excel_list = _getFromIocfg("game_data_listfile");
 
-    nd_getpath(exp_cmd, path, sizeof(path));
-    if (0 != nd_chdir(path)) {
-        nd_logerror("change workding path error: %s", nd_last_error());
-        return false ;
-    }
-    const char *encodeName = getExcelExportEncodeType();
+	if (!exp_cmd || !excel_path || !text_path || !package_file){
+		WriteLog("export excel error : on read config file\n");
+		return false;
+	}
 
+	const char *encodeName = getGameDateEncodeType();
+	
 #ifdef WIN32
-	snprintf(path, sizeof(path), "cmd.exe /c %s %s", exp_cmd, encodeName);
-#else 
-	snprintf(path, sizeof(path), "sh  %s %s", exp_cmd, encodeName);
+	snprintf(path, sizeof(path), " %s %s %s %s %s ",  exp_cmd, excel_list, excel_path, text_path, encodeName);	
+#else
+	const char *cur_dir = nd_getcwd();
+	snprintf(path, sizeof(path), "sh ./%s %s %s %s %s ",  exp_cmd, excel_list, excel_path, text_path, encodeName);
 #endif
-
 	int ret = system(path);
-
-
+	
     if (0 != ret)	{
 		nd_logerror("run export shell %s\nerror: %s \n", path,nd_last_error());
-		nd_chdir(org_dir);
         return false;
 	}
-	nd_chdir(org_dir);
 
     WriteLog("===============export excel to text file  success =========");
 
-    DBLDatabase dbtmp;
-    if (0 != dbtmp.LoadFromText(getGameDataInPath(), getGameDataList(), getExcelExportEncodeType(), getGameDateEncodeType())) {
-        nd_logerror("load data from text file error");
-        return false;
-    }
-    if (0 == dbtmp.Dump(getGameDataOutfile(), "gamedatadb")) {
-        nd_logmsg("package game data SUCCESS!!\n");
-        WriteLog("==========write excel to bin-stream success ===========\n");
-    }
-    else{
-        nd_logerror("write excel to bin-stream FAILED");
-    }
+	//get byte order  
+	int orderType = ND_L_ENDIAN;
+	const char *orderName = _getFromIocfg("bin_data_byte_order");
+	if (orderName) {
+		orderType = atoi(orderName);
+	}
 
-    //before run test need load dbl
+	DBLDatabase dbtmp;
+	if (0 != dbtmp.LoadFromText(text_path, excel_list, encodeName, encodeName)) {
+		nd_logerror("load data from text file error");
+		return false;
+	}
+	if (0 == dbtmp.Dump(package_file, "gamedatadb", orderType)) {
+		nd_logmsg("package game data SUCCESS!!\n");
+		WriteLog("==========write excel to bin-stream success ===========\n");
+	}
+	else{
+		nd_logerror("write excel to bin-stream FAILED");
+	}
+
+	//before run test need load dbl
     DBLDatabase *pdbl = DBLDatabase::get_Instant();
     if (pdbl){
-        if (0 != pdbl->LoadBinStream(getGameDataOutfile())) {
+        if (0 != pdbl->LoadBinStream(package_file)) {
             WriteLog("load data from bin-stream error ");
             dbtmp.Destroy();
             DBLDatabase::destroy_Instant();
@@ -479,8 +432,9 @@ bool startDialog::expExcel()
 
     dbtmp.Destroy();
 
-    std::string strOutTextPath = getGameDataInPath();
-    strOutTextPath  += "/test_outputData";
+	std::string strOutTextPath = text_path;
+	strOutTextPath += "/test_outputData";
+	nd_mkdir(strOutTextPath.c_str());
     if (0 != pdbl->TestOutput(strOutTextPath.c_str())) {
         nd_logmsg("dump from bin-stream to text file error\n");
         DBLDatabase::destroy_Instant();
@@ -506,7 +460,9 @@ bool startDialog::runTest()
 
     bool ret = true;
 
-    if (0!= DBLDatabase::get_Instant()->LoadBinStream(getGameDataOutfile())) {
+	const char *package_file = _getFromIocfg("game_data_package_file");
+
+	if (0 != DBLDatabase::get_Instant()->LoadBinStream(package_file)) {
         WriteLog("load script from bin-stream file error");
         return false;;
     }
@@ -607,74 +563,6 @@ void startDialog::on_ScriptEdit_clicked()
 		WriteLog("script unedited\n");
 	}
 
-// 	dlg.InitFileRoot(scriptRoot, newTmplFile);
-// 	if (IDOK == dlg.DoModal()){
-// 		const char *file = dlg.getSelectFile();
-// 		if (file && *file)	{
-// 			_beginEdit(file);
-// 		}
-// 		else {
-// 			AfxMessageBox(_T("请选择要编辑的文件!"));
-// 		}
-// 	
-	/*
-    dialogCloseHelper _helperClose(this) ;
-    const char *filename;
-    const char *script_file;
-    ClearLog();
-
-    WriteLog("Begin edit script...");
-    filename = getGameScript();
-    script_file = filename;
-    _LOAD_XML(xml_script, filename,"utf8",1);
-
-    filename = getCppFuncList();
-    _LOAD_XML(xml_cpp_func, filename, "utf8",0);
-
-    filename = getNetProtocol();
-    _LOAD_XML(xml_net_protocol, filename, "utf8",0);
-
-    filename = getEventList();
-    _LOAD_XML(xml_events_id, filename, "utf8",0);
-
-
-    XMLDialog xmlDlg(this);
-    xmlDlg.SetXML(&m_editor_setting, &xml_script);
-    //xmlDlg.SetMessageID(&xml_net_protocol);
-    //xmlDlg.SetEventsID(&xml_events_id);
-
-	ndxml *funcroot = ndxml_getnode(&xml_net_protocol, "MessageDefine");
-	if (funcroot) {
-		char buf[256];
-		text_list_t messageList;
-		for (int i = 0; i < ndxml_num(funcroot); i++){
-			ndxml *fnode = ndxml_getnodei(funcroot, i);
-			const char *pDispname = ndxml_getattr_val(fnode, "comment");
-			const char *pRealVal = ndxml_getattr_val(fnode, "id");
-			const char *p = buildDisplaNameValStr(pRealVal, pDispname, buf, sizeof(buf));
-			messageList.push_back(QString(p));
-		}
-		xmlDlg.addDisplayNameList("msg_list", messageList);
-	}
-	xmlDlg.loadUserdefDisplayList(xml_cpp_func, LOGIC_FUNCTION_LIST_NAME);
-	xmlDlg.loadUserdefDisplayList(xml_events_id, LOGIC_EVENT_LIST_NAME);
-
-    DBLDatabase::get_Instant()->LoadBinStream(getGameDataOutfile());
-
-    if (xmlDlg.exec() == QDialog::Accepted) {
-        nd_chdir(nd_getcwd());
-        ndxml_save(&xml_script, script_file);
-        WriteLog("save script ok\n");
-    }
-    else {
-        WriteLog("script unedited\n");
-    }
-    ndxml_destroy(&xml_script);
-    ndxml_destroy(&xml_cpp_func);
-    ndxml_destroy(&xml_net_protocol);
-    ndxml_destroy(&xml_events_id);
-    DBLDatabase::destroy_Instant();
-	*/
 }
 
 void startDialog::on_Compile_clicked()
