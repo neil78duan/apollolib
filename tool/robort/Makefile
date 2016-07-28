@@ -7,11 +7,8 @@ include ../../Rules.make
 
 ##############set flag
 
-PROJECT_NAME := apollo_robort
-
-
-CFLAGS += -I$(TOPDIR)/include  -I$(TOPDIR)/src/cli_common
-
+CFLAGS += -I$(TOPDIR)/include -I$(TOPDIR)/cli_common
+LFLAGS += -L$(LIBDIR)
 
 ifeq ($(DEBUG),y)
 LFLAGS +=  -lapollo_cli_common_d
@@ -24,16 +21,11 @@ endif
 LFLAGS += -l$(CLIENT_LIB)
 
 
-
-##########make 
-##############################################################
-
-
-CFLAGS += -I$(TOPDIR)/include  -I$(PROJ_SRC)/common \
-	-I$(PROJ_SRC)/attribute -I$(PROJ_SRC)/logic_compile
-
 LFLAGS += -l$(SRV_LIB)
 MYLIBS := $(ND_SRV_LIB)
+
+
+##########make 
 
 all: $(PROJS) 
 			

@@ -8,7 +8,7 @@ include ../Rules.make
 
 ##############set flag
 
-#CFLAGS += -I$(TOPDIR)/include -I../common
+#CFLAGS += -I$(TOPDIR)/netMessage
 
 ifeq ($(DEBUG),y)
     PROJS = $(LIBDIR)/libatls_logic_d.a

@@ -13,7 +13,7 @@
 #include "logic_function.h"
 #include "dbldata2netstream.h"
 #include "dbl_mgr.h"
-#include "message_inc.h"
+//#include "message_inc.h"
 #include <stdarg.h>
 
 
@@ -30,20 +30,20 @@ static bool apollo_func_read_userData_from_msg(LogicParserEngine*parser, parse_a
 
 static bool apollo_load_script_file(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 static bool apollo_export_cpp_api(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-
-static NDUINT32 _getMsgid(DBLDataNode &data , nd_handle hListen)
-{
-	NDUINT32 msgID = -1;
-
-	msgID = nd_msgentry_get_id(hListen, data.GetText());
-	if ((NDUINT32)-1 == msgID) {
-		msgID = NetMessage::getIDByName(data.GetText()) ;
-		if((NDUINT32)-1 == msgID) {
-			nd_logerror("get message id %s msg not found \n", data.GetText());
-		}
-	}
-	return msgID;
-}
+//
+//static NDUINT32 _getMsgid(DBLDataNode &data , nd_handle hListen)
+//{
+//	NDUINT32 msgID = -1;
+//
+//	msgID = nd_msgentry_get_id(hListen, data.GetText());
+//	if ((NDUINT32)-1 == msgID) {
+//		msgID = NetMessage::getIDByName(data.GetText()) ;
+//		if((NDUINT32)-1 == msgID) {
+//			nd_logerror("get message id %s msg not found \n", data.GetText());
+//		}
+//	}
+//	return msgID;
+//}
 
 
 

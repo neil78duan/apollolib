@@ -4,7 +4,6 @@ VPATH = .
 
 SUBDIRS =  robort protocolBuilder
 
-
 all: debug
 
 debug:

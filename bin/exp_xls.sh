@@ -7,7 +7,7 @@
 #
 
 if [ $# -lt 4 ]; then 
-	echo usage: exp_xls.sh file-list.txt input-excel-path output-text-path [encode-type(gbk|utf8)] [is-auto-svn-up 0|1]
+	echo "usage: exp_xls.sh file-list.txt input-excel-path output-text-path [encode-type(gbk|utf8)] [is-auto-svn-up 0|1]"
 	exit 1 
 fi
 

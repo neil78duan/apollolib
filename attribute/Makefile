@@ -8,7 +8,7 @@ include ../Rules.make
 
 ##############set flag
 
-CFLAGS += -I$(TOPDIR)/include 
+CFLAGS += -I$(TOPDIR)/include -I$(TOPDIR)/logic_compile
 
 ifeq ($(DEBUG),y)
     PROJS = $(LIBDIR)/librole_attribute_d.a
