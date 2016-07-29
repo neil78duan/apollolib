@@ -40,7 +40,7 @@ DEFINES +=  ND_DEBUG _GUI_TOOL_
 INCLUDEPATH += $$ndsdk_dir/include \
         $$game_dir/include \
         $$game_dir/cli_common \
-        $$game_dir/logic_compile \
+        $$game_dir/logic_parser \
         $$game_dir/netMessage \
         $$game_dir/attribute
 
@@ -82,27 +82,27 @@ FORMS    += \
 # logic compile modules
  
 SOURCES += \
-    ../../logic_compile/logicDataType.cpp \
-    ../../logic_compile/logicEngineRoot.cpp \
-    ../../logic_compile/logicParser.cpp \
-    ../../logic_compile/logic_compile.cpp \
-    ../../logic_compile/logic_editor_helper.cpp \
-    ../../logic_compile/objectBaseMgr.cpp \
-    ../../logic_compile/dbl_mgr.cpp \
-    ../../logic_compile/logic_function.cpp \
-    ../../logic_compile/dbldata2netstream.cpp \
-    ../../logic_compile/logicStruct.cpp
+    ../../logic_parser/logicDataType.cpp \
+    ../../logic_parser/logicEngineRoot.cpp \
+    ../../logic_parser/logicParser.cpp \
+    ../../logic_parser/logic_compile.cpp \
+    ../../logic_parser/logic_editor_helper.cpp \
+    ../../logic_parser/objectBaseMgr.cpp \
+    ../../logic_parser/dbl_mgr.cpp \
+    ../../logic_parser/logic_function.cpp \
+    ../../logic_parser/dbldata2netstream.cpp \
+    ../../logic_parser/logicStruct.cpp
 
-HEADERS  += ../../logic_compile/dbl_mgr.h \
-    ../../logic_compile/logicDataType.h \
-    ../../logic_compile/logicEngineRoot.h \
-    ../../logic_compile/logicParser.h \
-    ../../logic_compile/logic_compile.h \
-    ../../logic_compile/logic_editor_helper.h \
-    ../../logic_compile/objectBaseMgr.h \
-    ../../logic_compile/logic_function.h \
-    ../../logic_compile/dbldata2netstream.h \
-    ../../logic_compile/logicStruct.hpp
+HEADERS  += ../../logic_parser/dbl_mgr.h \
+    ../../logic_parser/logicDataType.h \
+    ../../logic_parser/logicEngineRoot.h \
+    ../../logic_parser/logicParser.h \
+    ../../logic_parser/logic_compile.h \
+    ../../logic_parser/logic_editor_helper.h \
+    ../../logic_parser/objectBaseMgr.h \
+    ../../logic_parser/logic_function.h \
+    ../../logic_parser/dbldata2netstream.h \
+    ../../logic_parser/logicStruct.hpp
 
 #cli-common
 SOURCES += \

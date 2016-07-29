@@ -61,7 +61,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_GUI_TOOL_;ND_DEBUG;WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>../../../netMessage;../../../include;../../../../ndsdk/include;../../../cli_common;../../../attribute;../../../logic_compile;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../netMessage;../../../include;../../../../ndsdk/include;../../../cli_common;../../../attribute;../../../logic_parser;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -89,7 +89,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_GUI_TOOL_;WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>../../../netMessage;../../../include;../../../../ndsdk/include;../../../cli_common;../../../attribute;../../../logic_compile;.;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../netMessage;../../../include;../../../../ndsdk/include;../../../cli_common;../../../attribute;../../../logic_parser;.;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -123,16 +123,16 @@
     <ClInclude Include="..\..\..\cli_common\gameMessage.h" />
     <ClInclude Include="..\..\..\cli_common\login_apollo.h" />
     <ClInclude Include="..\..\..\cli_common\netui_atl.h" />
-    <ClInclude Include="..\..\..\logic_compile\dbldata2netstream.h" />
-    <ClInclude Include="..\..\..\logic_compile\dbl_mgr.h" />
-    <ClInclude Include="..\..\..\logic_compile\logicDataType.h" />
-    <ClInclude Include="..\..\..\logic_compile\logicEngineRoot.h" />
-    <ClInclude Include="..\..\..\logic_compile\logicParser.h" />
-    <ClInclude Include="..\..\..\logic_compile\logicStruct.hpp" />
-    <ClInclude Include="..\..\..\logic_compile\logic_compile.h" />
-    <ClInclude Include="..\..\..\logic_compile\logic_editor_helper.h" />
-    <ClInclude Include="..\..\..\logic_compile\logic_function.h" />
-    <ClInclude Include="..\..\..\logic_compile\objectBaseMgr.h" />
+    <ClInclude Include="..\..\..\logic_parser\dbldata2netstream.h" />
+    <ClInclude Include="..\..\..\logic_parser\dbl_mgr.h" />
+    <ClInclude Include="..\..\..\logic_parser\logicDataType.h" />
+    <ClInclude Include="..\..\..\logic_parser\logicEngineRoot.h" />
+    <ClInclude Include="..\..\..\logic_parser\logicParser.h" />
+    <ClInclude Include="..\..\..\logic_parser\logicStruct.hpp" />
+    <ClInclude Include="..\..\..\logic_parser\logic_compile.h" />
+    <ClInclude Include="..\..\..\logic_parser\logic_editor_helper.h" />
+    <ClInclude Include="..\..\..\logic_parser\logic_function.h" />
+    <ClInclude Include="..\..\..\logic_parser\objectBaseMgr.h" />
     <ClInclude Include="..\..\..\netMessage\apollo_msg_entry.h" />
     <ClInclude Include="..\..\..\netMessage\auto_dataType.h" />
     <ClInclude Include="..\..\..\netMessage\auto_dataTypeDb_v1.h" />
@@ -181,16 +181,16 @@
     <ClCompile Include="..\..\..\cli_common\gameMessage.cpp" />
     <ClCompile Include="..\..\..\cli_common\login_apollo.cpp" />
     <ClCompile Include="..\..\..\cli_common\netui_atl.cpp" />
-    <ClCompile Include="..\..\..\logic_compile\dbldata2netstream.cpp" />
-    <ClCompile Include="..\..\..\logic_compile\dbl_mgr.cpp" />
-    <ClCompile Include="..\..\..\logic_compile\logicDataType.cpp" />
-    <ClCompile Include="..\..\..\logic_compile\logicEngineRoot.cpp" />
-    <ClCompile Include="..\..\..\logic_compile\logicParser.cpp" />
-    <ClCompile Include="..\..\..\logic_compile\logicStruct.cpp" />
-    <ClCompile Include="..\..\..\logic_compile\logic_compile.cpp" />
-    <ClCompile Include="..\..\..\logic_compile\logic_editor_helper.cpp" />
-    <ClCompile Include="..\..\..\logic_compile\logic_function.cpp" />
-    <ClCompile Include="..\..\..\logic_compile\objectBaseMgr.cpp" />
+    <ClCompile Include="..\..\..\logic_parser\dbldata2netstream.cpp" />
+    <ClCompile Include="..\..\..\logic_parser\dbl_mgr.cpp" />
+    <ClCompile Include="..\..\..\logic_parser\logicDataType.cpp" />
+    <ClCompile Include="..\..\..\logic_parser\logicEngineRoot.cpp" />
+    <ClCompile Include="..\..\..\logic_parser\logicParser.cpp" />
+    <ClCompile Include="..\..\..\logic_parser\logicStruct.cpp" />
+    <ClCompile Include="..\..\..\logic_parser\logic_compile.cpp" />
+    <ClCompile Include="..\..\..\logic_parser\logic_editor_helper.cpp" />
+    <ClCompile Include="..\..\..\logic_parser\logic_function.cpp" />
+    <ClCompile Include="..\..\..\logic_parser\objectBaseMgr.cpp" />
     <ClCompile Include="..\..\..\netMessage\auto_dataType.cpp" />
     <ClCompile Include="..\..\..\netMessage\auto_dataTypeDb_v1.cpp" />
     <ClCompile Include="..\..\..\netMessage\dataStream.cpp" />
@@ -230,7 +230,7 @@
   <ItemGroup>
     <None Include="..\..\..\attribute\Makefile" />
     <None Include="..\..\..\cli_common\Makefile" />
-    <None Include="..\..\..\logic_compile\Makefile" />
+    <None Include="..\..\..\logic_parser\Makefile" />
     <None Include="..\..\..\netMessage\Makefile" />
     <None Include="ClassDiagram.cd" />
     <None Include="res\apolloParseEditor.rc2" />

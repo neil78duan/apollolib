@@ -22,9 +22,6 @@
     <Filter Include="ctrl\cell">
       <UniqueIdentifier>{cc3a5df8-0334-4ba1-bcfe-da67f730a85b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="logictool">
-      <UniqueIdentifier>{9f1e1fc0-0d86-465e-a510-113ef6339856}</UniqueIdentifier>
-    </Filter>
     <Filter Include="attribute">
       <UniqueIdentifier>{4f7ee597-f4f3-4358-8499-de6cacb29350}</UniqueIdentifier>
     </Filter>
@@ -33,6 +30,9 @@
     </Filter>
     <Filter Include="cli_common">
       <UniqueIdentifier>{8031d898-2175-4d5c-8dad-2bfa80bca38b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="logicParser">
+      <UniqueIdentifier>{79e16878-606e-47e7-bce7-b62b74bfef44}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -150,36 +150,6 @@
     <ClInclude Include="..\..\..\attribute\stat_machine.h">
       <Filter>attribute</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\logic_compile\dbl_mgr.h">
-      <Filter>logictool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\logic_compile\dbldata2netstream.h">
-      <Filter>logictool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\logic_compile\logic_compile.h">
-      <Filter>logictool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\logic_compile\logic_editor_helper.h">
-      <Filter>logictool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\logic_compile\logic_function.h">
-      <Filter>logictool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\logic_compile\logicDataType.h">
-      <Filter>logictool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\logic_compile\logicEngineRoot.h">
-      <Filter>logictool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\logic_compile\logicParser.h">
-      <Filter>logictool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\logic_compile\logicStruct.hpp">
-      <Filter>logictool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\logic_compile\objectBaseMgr.h">
-      <Filter>logictool</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\netMessage\_msgid_export.h">
       <Filter>netMessage</Filter>
     </ClInclude>
@@ -206,6 +176,36 @@
     </ClInclude>
     <ClInclude Include="..\..\..\netMessage\MessageID.h">
       <Filter>netMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_parser\dbl_mgr.h">
+      <Filter>logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_parser\dbldata2netstream.h">
+      <Filter>logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_parser\logic_compile.h">
+      <Filter>logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_parser\logic_editor_helper.h">
+      <Filter>logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_parser\logic_function.h">
+      <Filter>logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_parser\logicDataType.h">
+      <Filter>logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_parser\logicEngineRoot.h">
+      <Filter>logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_parser\logicParser.h">
+      <Filter>logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_parser\logicStruct.hpp">
+      <Filter>logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_parser\objectBaseMgr.h">
+      <Filter>logicParser</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -308,36 +308,6 @@
     <ClCompile Include="..\..\..\attribute\stat_machine.cpp">
       <Filter>attribute</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\logic_compile\dbl_mgr.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\logic_compile\dbldata2netstream.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\logic_compile\logic_compile.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\logic_compile\logic_editor_helper.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\logic_compile\logic_function.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\logic_compile\logicDataType.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\logic_compile\logicEngineRoot.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\logic_compile\logicParser.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\logic_compile\logicStruct.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\logic_compile\objectBaseMgr.cpp">
-      <Filter>logictool</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\netMessage\auto_dataType.cpp">
       <Filter>netMessage</Filter>
     </ClCompile>
@@ -352,6 +322,36 @@
     </ClCompile>
     <ClCompile Include="..\..\..\netMessage\MessageName.cpp">
       <Filter>netMessage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_parser\dbl_mgr.cpp">
+      <Filter>logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_parser\dbldata2netstream.cpp">
+      <Filter>logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_parser\logic_compile.cpp">
+      <Filter>logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_parser\logic_editor_helper.cpp">
+      <Filter>logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_parser\logic_function.cpp">
+      <Filter>logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_parser\logicDataType.cpp">
+      <Filter>logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_parser\logicEngineRoot.cpp">
+      <Filter>logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_parser\logicParser.cpp">
+      <Filter>logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_parser\logicStruct.cpp">
+      <Filter>logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\logic_parser\objectBaseMgr.cpp">
+      <Filter>logicParser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -370,11 +370,11 @@
     <None Include="..\..\..\attribute\Makefile">
       <Filter>attribute</Filter>
     </None>
-    <None Include="..\..\..\logic_compile\Makefile">
-      <Filter>logictool</Filter>
-    </None>
     <None Include="..\..\..\netMessage\Makefile">
       <Filter>netMessage</Filter>
+    </None>
+    <None Include="..\..\..\logic_parser\Makefile">
+      <Filter>logicParser</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

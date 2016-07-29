@@ -11,9 +11,9 @@ include ../Rules.make
 #CFLAGS += -I$(TOPDIR)/netMessage
 
 ifeq ($(DEBUG),y)
-    PROJS = $(LIBDIR)/libatls_logic_d.a
+    PROJS = $(LIBDIR)/liblogic_parser_d.a
 else 
-    PROJS = $(LIBDIR)/libatls_logic.a
+    PROJS = $(LIBDIR)/liblogic_parser.a
 endif
 
 ##########make 
