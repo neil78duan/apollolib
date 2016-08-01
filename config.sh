@@ -13,10 +13,10 @@ create_apohome() {
     cd $HOME
     if [ -f .bash_profile ]; then
         echo "export LIBAPOLLO=\"$workDir\"" >> .bash_profile
-        source .bash_profile
+        source $HOME/.bash_profile
     elif [ -f .profile ]; then
         echo "export LIBAPOLLO=\"$workDir\"" >> .profile
-        source .profile
+        source $HOME/.profile
     else
         echo "could not create LIBAPOLLO "
         echo "PLEASE set evn $LIBAPOLLO "
