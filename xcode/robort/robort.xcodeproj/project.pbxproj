@@ -1,0 +1,315 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		07EC87971D546A8200C32925 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC878F1D546A8200C32925 /* main.cpp */; };
+		07EC87981D546A8200C32925 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87901D546A8200C32925 /* Makefile */; };
+		07EC87991D546A8200C32925 /* replayNetStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87921D546A8200C32925 /* replayNetStream.cpp */; };
+		07EC879A1D546A8200C32925 /* testConnector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87951D546A8200C32925 /* testConnector.cpp */; };
+		07EC87A71D546A9B00C32925 /* apollo_robort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC879C1D546A9B00C32925 /* apollo_robort.cpp */; };
+		07EC87AA1D546A9B00C32925 /* login_apollo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87A21D546A9B00C32925 /* login_apollo.cpp */; };
+		07EC87AB1D546A9B00C32925 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87A41D546A9B00C32925 /* Makefile */; };
+		07EC87AC1D546A9B00C32925 /* netui_atl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87A51D546A9B00C32925 /* netui_atl.cpp */; };
+		07EC87AE1D546ABA00C32925 /* libndclient_mac.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 07EC87AD1D546ABA00C32925 /* libndclient_mac.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		07EC876F1D5468F200C32925 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		07EC87711D5468F200C32925 /* robort */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = robort; sourceTree = BUILT_PRODUCTS_DIR; };
+		07EC878F1D546A8200C32925 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		07EC87901D546A8200C32925 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		07EC87911D546A8200C32925 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
+		07EC87921D546A8200C32925 /* replayNetStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = replayNetStream.cpp; sourceTree = "<group>"; };
+		07EC87931D546A8200C32925 /* replayNetStream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = replayNetStream.hpp; sourceTree = "<group>"; };
+		07EC87941D546A8200C32925 /* test_robort.data */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_robort.data; sourceTree = "<group>"; };
+		07EC87951D546A8200C32925 /* testConnector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testConnector.cpp; sourceTree = "<group>"; };
+		07EC87961D546A8200C32925 /* testConnector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testConnector.h; sourceTree = "<group>"; };
+		07EC879C1D546A9B00C32925 /* apollo_robort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apollo_robort.cpp; sourceTree = "<group>"; };
+		07EC879D1D546A9B00C32925 /* apollo_robort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apollo_robort.h; sourceTree = "<group>"; };
+		07EC87A21D546A9B00C32925 /* login_apollo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = login_apollo.cpp; sourceTree = "<group>"; };
+		07EC87A31D546A9B00C32925 /* login_apollo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = login_apollo.h; sourceTree = "<group>"; };
+		07EC87A41D546A9B00C32925 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		07EC87A51D546A9B00C32925 /* netui_atl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = netui_atl.cpp; sourceTree = "<group>"; };
+		07EC87A61D546A9B00C32925 /* netui_atl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = netui_atl.h; sourceTree = "<group>"; };
+		07EC87AD1D546ABA00C32925 /* libndclient_mac.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libndclient_mac.dylib; path = "../../../../../../../xCodeBuild/DerivedData/apollo-grwebjbmwsyfujajiaspxbhvxtrc/Build/Products/Debug/libndclient_mac.dylib"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		07EC876E1D5468F200C32925 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07EC87AE1D546ABA00C32925 /* libndclient_mac.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		07EC87681D5468F200C32925 = {
+			isa = PBXGroup;
+			children = (
+				07EC87AD1D546ABA00C32925 /* libndclient_mac.dylib */,
+				07EC879B1D546A9B00C32925 /* cli_common */,
+				07EC878E1D546A8200C32925 /* robort */,
+				07EC87721D5468F200C32925 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		07EC87721D5468F200C32925 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				07EC87711D5468F200C32925 /* robort */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		07EC878E1D546A8200C32925 /* robort */ = {
+			isa = PBXGroup;
+			children = (
+				07EC878F1D546A8200C32925 /* main.cpp */,
+				07EC87901D546A8200C32925 /* Makefile */,
+				07EC87911D546A8200C32925 /* readme.txt */,
+				07EC87921D546A8200C32925 /* replayNetStream.cpp */,
+				07EC87931D546A8200C32925 /* replayNetStream.hpp */,
+				07EC87941D546A8200C32925 /* test_robort.data */,
+				07EC87951D546A8200C32925 /* testConnector.cpp */,
+				07EC87961D546A8200C32925 /* testConnector.h */,
+			);
+			name = robort;
+			path = ../../tool/robort;
+			sourceTree = "<group>";
+		};
+		07EC879B1D546A9B00C32925 /* cli_common */ = {
+			isa = PBXGroup;
+			children = (
+				07EC879C1D546A9B00C32925 /* apollo_robort.cpp */,
+				07EC879D1D546A9B00C32925 /* apollo_robort.h */,
+				07EC87A21D546A9B00C32925 /* login_apollo.cpp */,
+				07EC87A31D546A9B00C32925 /* login_apollo.h */,
+				07EC87A41D546A9B00C32925 /* Makefile */,
+				07EC87A51D546A9B00C32925 /* netui_atl.cpp */,
+				07EC87A61D546A9B00C32925 /* netui_atl.h */,
+			);
+			name = cli_common;
+			path = ../../cli_common;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		07EC87701D5468F200C32925 /* robort */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07EC87781D5468F200C32925 /* Build configuration list for PBXNativeTarget "robort" */;
+			buildPhases = (
+				07EC876D1D5468F200C32925 /* Sources */,
+				07EC876E1D5468F200C32925 /* Frameworks */,
+				07EC876F1D5468F200C32925 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = robort;
+			productName = robort;
+			productReference = 07EC87711D5468F200C32925 /* robort */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		07EC87691D5468F200C32925 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = duanxiuyun;
+				TargetAttributes = {
+					07EC87701D5468F200C32925 = {
+						CreatedOnToolsVersion = 7.3;
+					};
+				};
+			};
+			buildConfigurationList = 07EC876C1D5468F200C32925 /* Build configuration list for PBXProject "robort" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 07EC87681D5468F200C32925;
+			productRefGroup = 07EC87721D5468F200C32925 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				07EC87701D5468F200C32925 /* robort */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		07EC876D1D5468F200C32925 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07EC87AB1D546A9B00C32925 /* Makefile in Sources */,
+				07EC87AA1D546A9B00C32925 /* login_apollo.cpp in Sources */,
+				07EC87991D546A8200C32925 /* replayNetStream.cpp in Sources */,
+				07EC879A1D546A8200C32925 /* testConnector.cpp in Sources */,
+				07EC87AC1D546A9B00C32925 /* netui_atl.cpp in Sources */,
+				07EC87A71D546A9B00C32925 /* apollo_robort.cpp in Sources */,
+				07EC87981D546A8200C32925 /* Makefile in Sources */,
+				07EC87971D546A8200C32925 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		07EC87761D5468F200C32925 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		07EC87771D5468F200C32925 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		07EC87791D5468F200C32925 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					__MAC_OS__,
+					ND_UNIX,
+					ND_DEBUG,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "../../../ndsdk/include ../../include ../../cli_common";
+			};
+			name = Debug;
+		};
+		07EC877A1D5468F200C32925 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					__MAC_OS__,
+					ND_UNIX,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "../../../ndsdk/include ../../include ../../cli_common";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		07EC876C1D5468F200C32925 /* Build configuration list for PBXProject "robort" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07EC87761D5468F200C32925 /* Debug */,
+				07EC87771D5468F200C32925 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		07EC87781D5468F200C32925 /* Build configuration list for PBXNativeTarget "robort" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07EC87791D5468F200C32925 /* Debug */,
+				07EC877A1D5468F200C32925 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 07EC87691D5468F200C32925 /* Project object */;
+}
