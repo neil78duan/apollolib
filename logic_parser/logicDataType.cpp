@@ -5,6 +5,7 @@
  *
  */
 
+#include "logicEndian.h"
 #include "logicDataType.h"
 #include "objectBaseMgr.h"
 #include "logicStruct.hpp"
@@ -618,21 +619,34 @@ const LogicUserDefStruct *DBLDataNode::getUserDef() const
 	return m_data->_userDef ;	
 }
 
-int DBLDataNode::ReadStream(const char *streamBuf)
+int DBLDataNode::ReadStream(const char *streamBuf, int streamByteOrder)
 {
 	Destroy();
 	int read_len = 2;
 	m_dataOwn.isInit = false;
-	NDUINT16 type = *((*(NDUINT16**)&streamBuf)++);
+	//NDUINT16 type = *((*(NDUINT16**)&streamBuf)++);
+	NDUINT16 type;
+	streamBuf = lp_read_stream((lp_stream_t)streamBuf, type);
+	if (ND_L_ENDIAN != streamByteOrder) {
+		type = nd_order_change_short(type);
+	}
+	
+
 	if (type == OT_ARRAY ) {
-		//m_sub_type = OT_INT;
-		m_sub_type =(NDUINT8) *((*(NDUINT16**)&streamBuf)++); 
+		//m_sub_type =(NDUINT8) *((*(NDUINT16**)&streamBuf)++); 
+
+		NDUINT16 subtype;
+		streamBuf = lp_read_stream((lp_stream_t)streamBuf, subtype);
+		if (ND_L_ENDIAN != streamByteOrder) {
+			subtype = nd_order_change_short(subtype);
+		}
+		m_sub_type = subtype;
 		read_len += 2;
 
 	}
 	m_ele_type = (NDUINT8) type;
 
-	int ret = dbl_read_buffer(&m_dataOwn, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type, (char *)streamBuf);
+	int ret = dbl_read_buffer(&m_dataOwn, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type, (char *)streamBuf, nd_byte_order() != streamByteOrder);
 	if (ret > 0){
 		m_data = &m_dataOwn;
 		m_dataOwner = true;
@@ -1830,21 +1844,21 @@ static int _writebuf(void *data, size_t size, int count, char *&buf)
 	return count;
 }
 
-int dbl_read_buffer(dbl_element_base *data, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, char *buf)
+int dbl_read_buffer(dbl_element_base *data, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, char *buf, bool changeByteOrder)
 {
 	char *p = buf;
-	int ret = dbl_read_from_binStream(data, etype, sub_etype, p, _readbuf,false);
+	int ret = dbl_read_from_binStream(data, etype, sub_etype, p, _readbuf, changeByteOrder);
 	if (ret == 0) {
 		return  (int)(p - buf);
 	}
 	return 0;
 }
 
-int dbl_write_buffer(dbl_element_base *data, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, char *buf)
+int dbl_write_buffer(dbl_element_base *data, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, char *buf, bool changeByteOrder)
 {
 
 	char *p = buf;
-	int ret = _dbl_data_2binStream(data, etype, sub_etype, p, _writebuf,false);
+	int ret = _dbl_data_2binStream(data, etype, sub_etype, p, _writebuf, changeByteOrder);
 	if (ret == 0) {
 		return  (int)(p - buf);
 	}

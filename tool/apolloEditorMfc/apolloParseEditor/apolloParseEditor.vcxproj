@@ -126,6 +126,7 @@
     <ClInclude Include="..\..\..\logic_parser\dbldata2netstream.h" />
     <ClInclude Include="..\..\..\logic_parser\dbl_mgr.h" />
     <ClInclude Include="..\..\..\logic_parser\logicDataType.h" />
+    <ClInclude Include="..\..\..\logic_parser\logicEndian.h" />
     <ClInclude Include="..\..\..\logic_parser\logicEngineRoot.h" />
     <ClInclude Include="..\..\..\logic_parser\logicParser.h" />
     <ClInclude Include="..\..\..\logic_parser\logicStruct.hpp" />

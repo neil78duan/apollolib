@@ -195,7 +195,7 @@ public:
 	void InitFromTxt(const char *valText);
 	
 
-	int ReadStream(const char *streamBuf);
+	int ReadStream(const char *streamBuf, int streamByteOrder=1);
 	int WriteStream(char *streamBuf)const ;
 	int GetInt() const;
 	NDUINT64 GetInt64() const;
@@ -270,8 +270,8 @@ CPPAPI int dbl_data_copy(dbl_element_base *input, dbl_element_base *output, DBL_
 
 CPPAPI int dbl_data_2streamfile(dbl_element_base *buf, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, FILE*pf,bool changeByteOrder=false);
 CPPAPI int dbl_read_streamfile(dbl_element_base *indata, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, FILE*pf, bool changeByteOrder = false);
-CPPAPI int dbl_read_buffer(dbl_element_base *data, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, char *buf);
-CPPAPI int dbl_write_buffer(dbl_element_base *data, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, char *buf);
+CPPAPI int dbl_read_buffer(dbl_element_base *data, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, char *buf, bool changeByteOrder=false);
+CPPAPI int dbl_write_buffer(dbl_element_base *data, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, char *buf, bool changeByteOrder = false);
 
 
 #endif

@@ -6,6 +6,7 @@
  * 2015-5-12
  */
 
+#include "logicEndian.h"
 #include "logicEngineRoot.h"
 #include <stdarg.h>
 #include "nd_net/byte_order.h"
@@ -58,7 +59,8 @@ void LogicEngineRoot::update(ndtime_t tminterval)
 int LogicEngineRoot::LoadScript(const char *scriptStream, LogicParserEngine *loader )
 {
 	//script come from file , must be utf8
-	NDUINT16 byteOrder = -1, encodeType=-1, moduleSize = 0;
+	NDUINT8 byteOrder = -1, encodeType = -1;
+	NDUINT16 moduleSize = 0;
 	NDUINT32 size;
 	NDUINT64 compileTm;
 	char moudleName[128] ;
@@ -73,7 +75,7 @@ int LogicEngineRoot::LoadScript(const char *scriptStream, LogicParserEngine *loa
 
 
 	fread(&byteOrder, sizeof(byteOrder), 1, pf);
-	if (byteOrder != nd_byte_order())	{
+	if (byteOrder != ND_L_ENDIAN)	{
 		nd_logerror(" read file error byte-order error the file is %s current cup is %s\n", byteOrder ? "little-end" : "big-end", nd_byte_order() ? "little-end" : "big-end");
 		fclose(pf);
 		return -1;
@@ -83,10 +85,13 @@ int LogicEngineRoot::LoadScript(const char *scriptStream, LogicParserEngine *loa
 	m_scriptEncodeType = (int)encodeType;
 
 	fread(&compileTm, sizeof(compileTm), 1, pf);
-	m_compileTm = compileTm;
+	
+	m_compileTm = lp_little_2cur(compileTm);;
 	
 	
 	fread(&moduleSize, sizeof(moduleSize), 1, pf);
+	moduleSize = lp_little_2cur(moduleSize);
+
 	if (moduleSize > sizeof(moudleName)) {
 		nd_logerror("module name is too much, maybe file is demaged!\n") ;
 		fclose(pf) ;
@@ -109,6 +114,8 @@ int LogicEngineRoot::LoadScript(const char *scriptStream, LogicParserEngine *loa
 	std::string lastFuncName;
 	while (fread(&isGlobal, 1, 1, pf) > 0) {
 		int readSzie = fread(&size, 1, sizeof(size), pf);
+		size = lp_little_2cur(size);
+
 		nd_assert(size < fileSize);
 
 		if (readSzie == sizeof(size) && size < fileSize) {

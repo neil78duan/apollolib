@@ -255,7 +255,7 @@ bool LogicCompiler::compileXml(const char *xmlFile, const char *outStreamFile, i
 		return false;
 	}
 
-	NDUINT16 val1;
+	NDUINT8 val1;
 	//byte order
 	val1 = nd_byte_order();
 	fwrite(&val1, sizeof(val1), 1, pf);

@@ -207,6 +207,9 @@
     <ClInclude Include="..\..\..\logic_parser\objectBaseMgr.h">
       <Filter>logicParser</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\logic_parser\logicEndian.h">
+      <Filter>logicParser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="apolloParseEditor.cpp">
