@@ -74,7 +74,7 @@ class LogicCompiler
 public:
 	LogicCompiler();
 	~LogicCompiler();
-	bool compileXml(const char *xmlFile, const char *outStreamFile, int outEncodeType = 0, bool withDgbInfo = false);
+	bool compileXml(const char *xmlFile, const char *outStreamFile, int outEncodeType = 0, bool withDgbInfo = false, int byteOrder=1);
 	bool setConfigFile(const char *config);
 private:
 	
@@ -95,8 +95,8 @@ private:
 	int step_function_info(compile_setting *setting, ndxml *stepNode, char *buf, size_t bufsize);
 	//user define step
 	int user_define_step(compile_setting *setting, ndxml *stepNode, char *buf, size_t bufsize);
-	int user_define_msg_init( ndxml *stepNode, char *buf, size_t bufsize);
-	int user_define_event_init(ndxml *stepNode, char *buf, size_t bufsize);
+	//int user_define_msg_init( ndxml *stepNode, char *buf, size_t bufsize);
+	//int user_define_event_init(ndxml *stepNode, char *buf, size_t bufsize);
 
 	int param2Stream(ndxml *paramNode, ndxml *parent, char *buf, size_t bufsize, NDUINT32 *param_num = NULL);//return stream size ;
 
@@ -125,6 +125,7 @@ private:
 
 	bool m_bDebugInfo;
 	int m_compileStep;
+	int m_aimByteOrder;
 
 	ndxml_root *m_curRoot;
 

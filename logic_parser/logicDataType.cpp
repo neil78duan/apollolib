@@ -626,20 +626,18 @@ int DBLDataNode::ReadStream(const char *streamBuf, int streamByteOrder)
 	m_dataOwn.isInit = false;
 	//NDUINT16 type = *((*(NDUINT16**)&streamBuf)++);
 	NDUINT16 type;
-	streamBuf = lp_read_stream((lp_stream_t)streamBuf, type);
-	if (ND_L_ENDIAN != streamByteOrder) {
-		type = nd_order_change_short(type);
-	}
+	streamBuf = lp_read_stream((lp_stream_t)streamBuf, type , streamByteOrder);
+	//if (ND_L_ENDIAN != streamByteOrder) {
+	//	type = nd_order_change_short(type);
+	//}
 	
 
 	if (type == OT_ARRAY ) {
 		//m_sub_type =(NDUINT8) *((*(NDUINT16**)&streamBuf)++); 
 
 		NDUINT16 subtype;
-		streamBuf = lp_read_stream((lp_stream_t)streamBuf, subtype);
-		if (ND_L_ENDIAN != streamByteOrder) {
-			subtype = nd_order_change_short(subtype);
-		}
+		streamBuf = lp_read_stream((lp_stream_t)streamBuf, subtype, streamByteOrder);
+
 		m_sub_type = subtype;
 		read_len += 2;
 
@@ -655,19 +653,21 @@ int DBLDataNode::ReadStream(const char *streamBuf, int streamByteOrder)
 	}
 	return 0;
 }
-int DBLDataNode::WriteStream(char *streamBuf)const 
+int DBLDataNode::WriteStream(char *streamBuf, int streamByteOrder)const
 {
 	int write_len = 2;
-	*((*(NDUINT16**)&streamBuf)++) = m_ele_type;
+	//*((*(NDUINT16**)&streamBuf)++) = m_ele_type;
+	streamBuf = lp_write_stream(streamBuf, (NDUINT16)m_ele_type, streamByteOrder);
 	
 	if (m_ele_type == OT_ARRAY ) {
 		//m_sub_type = OT_INT;
-		*((*(NDUINT16**)&streamBuf)++) = m_sub_type;
+		//*((*(NDUINT16**)&streamBuf)++) = m_sub_type;
+		streamBuf = lp_write_stream(streamBuf, (NDUINT16)m_sub_type, streamByteOrder);
 		write_len += 2;
 	}
 
 
-	int len = dbl_write_buffer(m_data, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type, (char *)streamBuf);
+	int len = dbl_write_buffer(m_data, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type, (char *)streamBuf, nd_byte_order() != streamByteOrder);
 	if (len > 0){
 		return len + write_len;
 	}

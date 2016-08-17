@@ -18,17 +18,17 @@
 typedef char *lp_stream_t;
 
 //read data from little-endian-stream
-static inline lp_stream_t lp_read_stream(lp_stream_t addr, NDUINT8 &val )
+static inline lp_stream_t lp_read_stream(lp_stream_t addr, NDUINT8 &val, int streamOrder = ND_L_ENDIAN)
 {
 	val = (NDUINT8) (*addr);
 	return addr + 1;
 }
 
-static inline lp_stream_t lp_read_stream(lp_stream_t addr, NDUINT16 &val)
+static inline lp_stream_t lp_read_stream(lp_stream_t addr, NDUINT16 &val, int streamOrder = ND_L_ENDIAN)
 {
 	unsigned char *p = (unsigned char*)&val;
 
-	if (nd_byte_order() == ND_L_ENDIAN) {
+	if (nd_byte_order() == streamOrder) {
 		*p++ = *addr++;
 		*p++ = *addr++;
 	}
@@ -40,11 +40,11 @@ static inline lp_stream_t lp_read_stream(lp_stream_t addr, NDUINT16 &val)
 	return addr;
 }
 
-static inline lp_stream_t lp_read_stream(lp_stream_t addr, NDUINT32 &val)
+static inline lp_stream_t lp_read_stream(lp_stream_t addr, NDUINT32 &val, int streamOrder = ND_L_ENDIAN)
 {
 	unsigned char *p = (unsigned char*)&val;
 
-	if (nd_byte_order() == ND_L_ENDIAN) {
+	if (nd_byte_order() == streamOrder) {
 		*p++ = *addr++;
 		*p++ = *addr++;
 		*p++ = *addr++;
@@ -60,11 +60,11 @@ static inline lp_stream_t lp_read_stream(lp_stream_t addr, NDUINT32 &val)
 	return addr;
 }
 
-static inline lp_stream_t lp_read_stream(lp_stream_t addr, int &val)
+static inline lp_stream_t lp_read_stream(lp_stream_t addr, int &val, int streamOrder = ND_L_ENDIAN)
 {
 	unsigned char *p = (unsigned char*)&val;
 
-	if (nd_byte_order() == ND_L_ENDIAN) {
+	if (nd_byte_order() == streamOrder) {
 		*p++ = *addr++;
 		*p++ = *addr++;
 		*p++ = *addr++;
@@ -80,11 +80,11 @@ static inline lp_stream_t lp_read_stream(lp_stream_t addr, int &val)
 	return addr;
 }
 
-static inline lp_stream_t lp_read_stream(lp_stream_t addr, NDUINT64 &val)
+static inline lp_stream_t lp_read_stream(lp_stream_t addr, NDUINT64 &val, int streamOrder = ND_L_ENDIAN)
 {
 	unsigned char *p = (unsigned char*)&val;
 
-	if (nd_byte_order() == ND_L_ENDIAN) {
+	if (nd_byte_order() == streamOrder) {
 		*p++ = *addr++;
 		*p++ = *addr++;
 		*p++ = *addr++;
@@ -108,7 +108,7 @@ static inline lp_stream_t lp_read_stream(lp_stream_t addr, NDUINT64 &val)
 	return addr;
 }
 
-static inline lp_stream_t lp_read_stream(lp_stream_t addr, float &val)
+static inline lp_stream_t lp_read_stream(lp_stream_t addr, float &val, int streamOrder = ND_L_ENDIAN)
 {
 	unsigned char *p = (unsigned char*)&val;
 
@@ -118,7 +118,7 @@ static inline lp_stream_t lp_read_stream(lp_stream_t addr, float &val)
 	*p++ = *addr++;
 	return addr;
 }
-static inline lp_stream_t lp_read_stream(lp_stream_t addr, double &val)
+static inline lp_stream_t lp_read_stream(lp_stream_t addr, double &val, int streamOrder = ND_L_ENDIAN)
 {
 	unsigned char *p = (unsigned char*)&val;
 
@@ -310,33 +310,38 @@ static inline NDUINT64 lp_big_2cur(NDUINT64 val)
 
 
 /// host->stream
-static inline int lp_host2stream(int val, int outOrder)
+static inline int lp_order_2aim(int val, int outOrder)
 {
 	if (nd_byte_order() == outOrder) {
 		return val;
 	}
 	return nd_order_change_long(val);
 }
-static inline NDUINT16 lp_host2stream(NDUINT16 val, int outOrder)
+static inline NDUINT16 lp_order_2aim(NDUINT16 val, int outOrder)
 {
 	if (nd_byte_order() == outOrder) {
 		return val;
 	}
 	return nd_order_change_short(val);
 }
-static inline NDUINT32 lp_host2stream(NDUINT32 val, int outOrder)
+static inline NDUINT32 lp_order_2aim(NDUINT32 val, int outOrder)
 {
 	if (nd_byte_order() == outOrder) {
 		return val;
 	}
 	return nd_order_change_long(val);
 }
-static inline NDUINT64 lp_host2stream(NDUINT64 val, int outOrder)
+static inline NDUINT64 lp_order_2aim(NDUINT64 val, int outOrder)
 {
 	if (nd_byte_order() == outOrder) {
 		return val;
 	}
 	return nd_order_change_longlong(val);
 }
+
+#define lp_host2stream lp_order_2aim 
+
+#define lp_stream2host lp_order_2aim 
+
 #endif
  

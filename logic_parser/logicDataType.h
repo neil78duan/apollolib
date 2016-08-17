@@ -196,7 +196,7 @@ public:
 	
 
 	int ReadStream(const char *streamBuf, int streamByteOrder=1);
-	int WriteStream(char *streamBuf)const ;
+	int WriteStream(char *streamBuf, int streamByteOrder=1)const;
 	int GetInt() const;
 	NDUINT64 GetInt64() const;
 	bool GetBool() const;

@@ -75,22 +75,22 @@ int LogicEngineRoot::LoadScript(const char *scriptStream, LogicParserEngine *loa
 
 
 	fread(&byteOrder, sizeof(byteOrder), 1, pf);
-	if (byteOrder != ND_L_ENDIAN)	{
+	/*if (byteOrder != ND_L_ENDIAN)	{
 		nd_logerror(" read file error byte-order error the file is %s current cup is %s\n", byteOrder ? "little-end" : "big-end", nd_byte_order() ? "little-end" : "big-end");
 		fclose(pf);
 		return -1;
-	}
+	}*/
 
 	fread(&encodeType, sizeof(encodeType), 1, pf);
 	m_scriptEncodeType = (int)encodeType;
 
 	fread(&compileTm, sizeof(compileTm), 1, pf);
 	
-	m_compileTm = lp_little_2cur(compileTm);;
+	m_compileTm = lp_stream2host(compileTm, byteOrder);
 	
 	
 	fread(&moduleSize, sizeof(moduleSize), 1, pf);
-	moduleSize = lp_little_2cur(moduleSize);
+	moduleSize = lp_stream2host(moduleSize, byteOrder);
 
 	if (moduleSize > sizeof(moudleName)) {
 		nd_logerror("module name is too much, maybe file is demaged!\n") ;
@@ -114,7 +114,7 @@ int LogicEngineRoot::LoadScript(const char *scriptStream, LogicParserEngine *loa
 	std::string lastFuncName;
 	while (fread(&isGlobal, 1, 1, pf) > 0) {
 		int readSzie = fread(&size, 1, sizeof(size), pf);
-		size = lp_little_2cur(size);
+		size = lp_stream2host(size, byteOrder);
 
 		nd_assert(size < fileSize);
 
@@ -128,6 +128,7 @@ int LogicEngineRoot::LoadScript(const char *scriptStream, LogicParserEngine *loa
 				size_t namesize = strlen(p) + 1;
 				pcmdbuf->buf = p + namesize;
 				pcmdbuf->size = (int)(size - namesize);
+				pcmdbuf->byteOrder = (int)byteOrder;
 
 				lastFuncName = pcmdbuf->cmdname;
 

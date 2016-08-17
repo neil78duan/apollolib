@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0764F6991D631C1600E91673 /* nd_asm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6941D631C1600E91673 /* nd_asm.c */; };
+		0764F69A1D631C1600E91673 /* nd_formula.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6951D631C1600E91673 /* nd_formula.c */; };
+		0764F69B1D631C1600E91673 /* nd_vm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6961D631C1600E91673 /* nd_vm.c */; };
+		0764F69C1D631C1600E91673 /* nd_vmdbg.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6971D631C1600E91673 /* nd_vmdbg.c */; };
+		0764F69D1D631C1600E91673 /* nd_vmmain.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6981D631C1600E91673 /* nd_vmmain.c */; };
+		0764F69E1D631C7F00E91673 /* nd_asm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6941D631C1600E91673 /* nd_asm.c */; };
+		0764F69F1D631C7F00E91673 /* nd_formula.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6951D631C1600E91673 /* nd_formula.c */; };
+		0764F6A01D631C7F00E91673 /* nd_vm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6961D631C1600E91673 /* nd_vm.c */; };
+		0764F6A11D631C7F00E91673 /* nd_vmdbg.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6971D631C1600E91673 /* nd_vmdbg.c */; };
+		0764F6A21D631C7F00E91673 /* nd_vmmain.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6981D631C1600E91673 /* nd_vmmain.c */; };
 		07EC85F01D54400400C32925 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07EC851E1D54400300C32925 /* Makefile */; };
 		07EC85F11D54400400C32925 /* bintree.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85201D54400300C32925 /* bintree.c */; };
 		07EC85F21D54400400C32925 /* callstack.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85211D54400300C32925 /* callstack.c */; };
@@ -145,6 +155,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0764F6941D631C1600E91673 /* nd_asm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_asm.c; path = nd_vm/src/nd_asm.c; sourceTree = "<group>"; };
+		0764F6951D631C1600E91673 /* nd_formula.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_formula.c; path = nd_vm/src/nd_formula.c; sourceTree = "<group>"; };
+		0764F6961D631C1600E91673 /* nd_vm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_vm.c; path = nd_vm/src/nd_vm.c; sourceTree = "<group>"; };
+		0764F6971D631C1600E91673 /* nd_vmdbg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_vmdbg.c; path = nd_vm/src/nd_vmdbg.c; sourceTree = "<group>"; };
+		0764F6981D631C1600E91673 /* nd_vmmain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_vmmain.c; path = nd_vm/src/nd_vmmain.c; sourceTree = "<group>"; };
 		07EC848A1D543B8400C32925 /* libapollo_client_ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libapollo_client_ios.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		07EC84A81D543E6200C32925 /* libapollo_client_mac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libapollo_client_mac.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		07EC84AF1D54400300C32925 /* _nderr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _nderr.h; sourceTree = "<group>"; };
@@ -309,6 +324,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0764F6931D631BD900E91673 /* vm */ = {
+			isa = PBXGroup;
+			children = (
+				0764F6941D631C1600E91673 /* nd_asm.c */,
+				0764F6951D631C1600E91673 /* nd_formula.c */,
+				0764F6961D631C1600E91673 /* nd_vm.c */,
+				0764F6971D631C1600E91673 /* nd_vmdbg.c */,
+				0764F6981D631C1600E91673 /* nd_vmmain.c */,
+			);
+			name = vm;
+			sourceTree = "<group>";
+		};
 		07EC84811D543B8400C32925 = {
 			isa = PBXGroup;
 			children = (
@@ -483,6 +510,7 @@
 		07EC85191D54400300C32925 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				0764F6931D631BD900E91673 /* vm */,
 				07EC86541D5440A100C32925 /* nd_datatransfer.cpp */,
 				07EC86551D5440A100C32925 /* nd_msgpack.cpp */,
 				07EC851C1D54400300C32925 /* nd_common */,
@@ -727,6 +755,7 @@
 				07EC861D1D54400400C32925 /* nd_socket.c in Sources */,
 				07EC860C1D54400400C32925 /* r_encode.c in Sources */,
 				07EC86211D54400400C32925 /* proxy_cli.c in Sources */,
+				0764F6991D631C1600E91673 /* nd_asm.c in Sources */,
 				07EC86531D54400400C32925 /* Makefile in Sources */,
 				07EC85F51D54400400C32925 /* nd_handle.c in Sources */,
 				07EC85FB1D54400400C32925 /* nd_timer.c in Sources */,
@@ -745,6 +774,7 @@
 				07EC85FA1D54400400C32925 /* nd_str.c in Sources */,
 				07EC86121D54400400C32925 /* nd_cryptfile.c in Sources */,
 				07EC860E1D54400400C32925 /* r_keygen.c in Sources */,
+				0764F69B1D631C1600E91673 /* nd_vm.c in Sources */,
 				07EC86241D54400400C32925 /* udt_socket.c in Sources */,
 				07EC86501D54400400C32925 /* nd_connector.c in Sources */,
 				07EC86071D54400400C32925 /* md2c.c in Sources */,
@@ -778,7 +808,10 @@
 				07EC86051D54400400C32925 /* desc.c in Sources */,
 				07EC86231D54400400C32925 /* udt_net.c in Sources */,
 				07EC85FD1D54400400C32925 /* nd_unix.c in Sources */,
+				0764F69C1D631C1600E91673 /* nd_vmdbg.c in Sources */,
+				0764F69D1D631C1600E91673 /* nd_vmmain.c in Sources */,
 				07EC86161D54400400C32925 /* tea.c in Sources */,
+				0764F69A1D631C1600E91673 /* nd_formula.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -786,6 +819,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0764F69E1D631C7F00E91673 /* nd_asm.c in Sources */,
+				0764F69F1D631C7F00E91673 /* nd_formula.c in Sources */,
+				0764F6A01D631C7F00E91673 /* nd_vm.c in Sources */,
+				0764F6A11D631C7F00E91673 /* nd_vmdbg.c in Sources */,
+				0764F6A21D631C7F00E91673 /* nd_vmmain.c in Sources */,
 				07EC865E1D54433700C32925 /* nd_datatransfer.cpp in Sources */,
 				07EC865F1D54433700C32925 /* nd_msgpack.cpp in Sources */,
 				07EC86611D54433700C32925 /* bintree.c in Sources */,
@@ -938,12 +976,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
 					ND_DEBUG,
 					__MAC_OS__,
 					ND_UNIX,
 					ND_IOS,
+					WITHOUT_ICONV,
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -959,6 +997,7 @@
 					__MAC_OS__,
 					ND_UNIX,
 					ND_IOS,
+					WITHOUT_ICONV,
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1030,6 +1069,7 @@
 				07EC84AB1D543E6200C32925 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

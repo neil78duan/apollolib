@@ -1,8 +1,12 @@
 #ifndef STARTDIALOG_H
 #define STARTDIALOG_H
 
-#define CONFIG_FILE_PATH "editor_setting.xml"
-#define CONFIG_IO_SETTING "io_config.xml"
+#define CONFIG_FILE_PATH "../cfg/editor_setting.xml"
+#ifdef __MAC_OS__
+#define CONFIG_IO_SETTING "../cfg/io_config_mac.xml"
+#else
+#define CONFIG_IO_SETTING "../cfg/io_config.xml"
+#endif
 
 #include <QDialog>
 #include <string>

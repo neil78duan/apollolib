@@ -138,7 +138,7 @@ BOOL CapolloParseEditorDlg::OnInitDialog()
 
 	// TODO:  在此添加额外的初始化代码
 
-	if (0 != ndxml_load(CONFIG_FILE_PATH, &m_editor_setting)){
+	if (0 != ndxml_load_ex(CONFIG_FILE_PATH, &m_editor_setting,"gbk")){
 		AfxMessageBox("加载配置文件错误");
 		return false;
 	}
@@ -422,10 +422,19 @@ bool CapolloParseEditorDlg::compileScript(const char *scriptFile)
 	bool withDebug = getScriptExpDebugInfo(&xmlScript);
 	ndxml_destroy(&xmlScript);
 
+
+	int orderType = ND_L_ENDIAN;
+	const char *orderName = _getFromIocfg("bin_data_byte_order");
+	if (orderName) {
+		orderType = atoi(orderName);
+	}
+
 	LogicCompiler lgcompile;
 
-	lgcompile.setConfigFile(CONFIG_FILE_PATH);
-	if (!lgcompile.compileXml(inFile, outFile.c_str(), outEncode, withDebug)) {
+	if (!lgcompile.setConfigFile(CONFIG_FILE_PATH)) {
+		return false;
+	}
+	if (!lgcompile.compileXml(inFile, outFile.c_str(), outEncode, withDebug, orderType)) {
 
 		const char *pFunc = lgcompile.m_cur_function.c_str();
 		const char *pStep = lgcompile.m_cur_step.c_str();

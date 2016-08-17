@@ -26,12 +26,12 @@
 //
 //LogicParserEngine::script_func_map LogicParserEngine::s_func_table;
 
-LogicParserEngine::LogicParserEngine() :m_registorFlag(false), m_simulate(false), m_owner(NULL)
+LogicParserEngine::LogicParserEngine() :m_registorFlag(false), m_simulate(false), m_owner(NULL), m_cmdByteOrder(0)
 {
 	m_curStack = NULL;
 }
 
-LogicParserEngine::LogicParserEngine(LogicObjectBase *owner) : m_registorFlag(false), m_simulate(false), m_owner(owner)
+LogicParserEngine::LogicParserEngine(LogicObjectBase *owner) : m_registorFlag(false), m_simulate(false), m_owner(owner), m_cmdByteOrder(0)
 {
 	m_curStack = NULL;
 
@@ -296,6 +296,9 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 	
 	LogicObjectBase* objAim = NULL ;
 	DBLDataNode tmpInputVal, tmpIndexVal;
+
+	m_cmdByteOrder = stack->cmd->byteOrder;
+
 #define CHECK_INSTRUCTION_OVER_FLOW() \
 	if (p < stack->cmd->buf || p >(stack->cmd->buf + stack->cmd->size)) {	\
 		m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;	break;		\
@@ -329,7 +332,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 	
 
 #define BEGIN_GET_FUNC_ARGS(_stack, _pstream) \
-	_pstream = lp_read_stream(_pstream, num);\
+	_pstream = lp_read_stream(_pstream, num,m_cmdByteOrder);\
 	if (num > 0) {							\
 		DBLDataNode tmval1;					\
 		parse_arg_list_t args;				\
@@ -356,12 +359,12 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 		isdebug_step = false;
 		ResetStep() ;
 		//opCmd = *((*(NDUINT32**)&p)++) ;
-		p = lp_read_stream(p, opCmd);
+		p = lp_read_stream(p, opCmd, m_cmdByteOrder);
 		
 		switch (opCmd) {
 			case E_OP_EXIT:
 				//index = *((*(operator_index_t**)&p)++);
-				p = lp_read_stream(p, (NDUINT32&)index) ;
+				p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
 
 				m_registorFlag= index ? true: false ;
 				p = (char*) (stack->cmd->buf + stack->cmd->size);
@@ -370,7 +373,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 			{
 				//NDUINT16 len = *((*(NDUINT16**)&p)++);
 				NDUINT16 len;
-				p = lp_read_stream(p,len);
+				p = lp_read_stream(p, len, m_cmdByteOrder);
 
 				if (0 == exception_addr) {
 					exception_addr = p;
@@ -382,7 +385,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				break;
 			case E_OP_THROW:
 				//index = *((*(NDUINT32**)&p)++);
-				p = lp_read_stream(p, (NDUINT32&)index);
+				p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
 
 				if (!inException) {
 					m_registorFlag = false;
@@ -392,7 +395,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 			case E_OP_DEBUG_INFO:
 				isdebug_step = true;
 				//stack->dbg_cur_node_index = *((*(NDUINT16**)&p)++);
-				p = lp_read_stream(p, stack->dbg_cur_node_index);
+				p = lp_read_stream(p, stack->dbg_cur_node_index, m_cmdByteOrder);
 
 				readlen = _read_string(p, stack->dbg_node, sizeof(stack->dbg_node));				
 				if (readlen >= 0){
@@ -400,7 +403,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 					p += readlen;
 
 					//cur_step_size = *((*(NDUINT32**)&p)++);
-					p = lp_read_stream(p, cur_step_size);
+					p = lp_read_stream(p, cur_step_size, m_cmdByteOrder);
 					step_start = p;
 					CHECK_INSTRUCTION_OVER_FLOW();
 					apollo_script_printf("logic_script %s: %s %d\n",stack->cmd->cmdname, stack->dbg_node, stack->dbg_cur_node_index) ;
@@ -414,9 +417,9 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				//opAim = *((*(NDUINT16**)&p)++); //string type
 				//readlen = *((*(NDUINT16**)&p)++); //string len
 				NDUINT16 a;
-				p = lp_read_stream(p, a);
+				p = lp_read_stream(p, a, m_cmdByteOrder);
 				opAim = a;
-				p = lp_read_stream(p, a);
+				p = lp_read_stream(p, a, m_cmdByteOrder);
 				readlen = a;
 
 				p += readlen;
@@ -430,10 +433,10 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 			
 			case E_OP_RAND:
 				//opAim = *((*(NDUINT32**)&p)++);
-				p = lp_read_stream(p, opAim);
+				p = lp_read_stream(p, opAim, m_cmdByteOrder);
 
 				//index = *((*(operator_index_t**)&p)++);
-				p = lp_read_stream(p, (NDUINT32&)index);
+				p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
 
 				val = (operator_value_t)logic_rand(opAim, index);
 				m_registorFlag = true;
@@ -521,7 +524,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 			case E_OP_DEL_TIMER:
 			{
 				//opAim = *((*(NDUINT32**)&p)++);
-				p = lp_read_stream(p, opAim);
+				p = lp_read_stream(p, opAim, m_cmdByteOrder);
 
 				readlen = _read_string(p, name, sizeof(name));
 				if (readlen <= 0){
@@ -537,7 +540,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 			case E_OP_EVENT_INSTALL:
 			{
 				//index = *((*(operator_index_t**)&p)++);
-				p = lp_read_stream(p, (NDUINT32&)index);
+				p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
 
 				int readlne = _read_string(p, name, sizeof(name ));
 				if (readlne <= 0){
@@ -595,7 +598,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				break ;
 			case E_OP_MATH_OPERATE:
 				//opAim = *((*(NDUINT32**)&p)++);
-				p = lp_read_stream(p, opAim);
+				p = lp_read_stream(p, opAim, m_cmdByteOrder);
 				
 				GET_VAR_FROM_STREAM(stack, p, tmpIndexVal);
 				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);
@@ -611,7 +614,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				
 			case E_OP_DATATYPE_TRANSFER:
 				//opAim = *((*(NDUINT32**)&p)++);
-				p = lp_read_stream(p, opAim);
+				p = lp_read_stream(p, opAim, m_cmdByteOrder);
 				m_registorFlag =m_registerVal.TransferType((DBL_ELEMENT_TYPE)opAim);
 				break;
 			case E_OP_MAKE_USER_DATA:
@@ -638,7 +641,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				break ;
 			case E_OP_COMP:	 		//	比较 eOperatorDest + eParserCompare  + operator_value_t				
 				//opAim = *((*(NDUINT32**)&p)++) ;
-				p = lp_read_stream(p, opAim);
+				p = lp_read_stream(p, opAim, m_cmdByteOrder);
 				readlen = _getValue(stack, p, tmpInputVal);
 				if (readlen > 0)	{
 					p += readlen;
@@ -670,7 +673,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				break ;							
 			case E_OP_EXIT_ON_ERROR:
 				//opAim = *((*(NDUINT32**)&p)++) ;
-				p = lp_read_stream(p, opAim);
+				p = lp_read_stream(p, opAim, m_cmdByteOrder);
 
 				//m_OnErrorExit = opAim ? true:false;
 				m_registorFlag = true ;
@@ -744,7 +747,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 			{
 				//int offset = *((*(NDUINT32**)&p)++);
 				int offset;
-				p = lp_read_stream(p, offset);
+				p = lp_read_stream(p, offset, m_cmdByteOrder);
 
 				SHORT_JUMP(p, offset);
 				CHECK_INSTRUCTION_OVER_FLOW();
@@ -755,7 +758,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 			{
 				//NDUINT32 offset = *((*(NDUINT32**)&p)++);
 				NDUINT32 offset;
-				p = lp_read_stream(p, offset);
+				p = lp_read_stream(p, offset, m_cmdByteOrder);
 
 				p = (char*)stack->cmd->buf + offset;
 
@@ -767,7 +770,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 			{
 				//int offset = *((*(int**)&p)++);
 				int offset;
-				p = lp_read_stream(p, offset);
+				p = lp_read_stream(p, offset, m_cmdByteOrder);
 
 				if (m_registorCtrl==false)	{
 					//p += offset;
@@ -782,7 +785,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 			{
 				//NDUINT32 offset = *((*(NDUINT32**)&p)++);
 				NDUINT32 offset;
-				p = lp_read_stream(p, offset);
+				p = lp_read_stream(p, offset, m_cmdByteOrder);
 				if (m_registorCtrl==false)	{
 					p = (char*)stack->cmd->buf + offset;
 
@@ -797,7 +800,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 			{
 				//int offset = *((*(int**)&p)++);
 				int offset;
-				p = lp_read_stream(p, offset);
+				p = lp_read_stream(p, offset, m_cmdByteOrder);
 
 				if (m_registerCount-- > 1)	{//this block only jump ahead. so count end at 1
 					SHORT_JUMP(p, offset);
@@ -940,7 +943,7 @@ DBLDataNode* LogicParserEngine::_refVariant(runningStack *stack, char *&pCmdStre
 	//NDUINT16 type = *(NDUINT16*)pCmdStream;
 	//pCmdStream += sizeof(NDUINT16);
 	NDUINT16 type;
-	pCmdStream =lp_read_stream(pCmdStream, type);
+	pCmdStream = lp_read_stream(pCmdStream, type, m_cmdByteOrder);
 
 	if (OT_VARIABLE == (DBL_ELEMENT_TYPE)type){
 		//get data from local vars 
@@ -968,7 +971,7 @@ DBLDataNode* LogicParserEngine::_refVariant(runningStack *stack, char *&pCmdStre
 		//int index = *(int*)pCmdStream;
 		//pCmdStream += sizeof(index);
 		NDUINT32 index;
-		pCmdStream = lp_read_stream(pCmdStream, index);
+		pCmdStream = lp_read_stream(pCmdStream, index, m_cmdByteOrder);
 
 		if (index >0 && index < stack->params.size()){
 			return &stack->params[index];
@@ -985,7 +988,7 @@ int LogicParserEngine::_getValue(runningStack *stack, char *pCmdStream, DBLDataN
 	//NDUINT16 type = *(NDUINT16*)pCmdStream;
 	//char *p = pCmdStream + sizeof(NDUINT16); 
 	NDUINT16 type;
-	char*p = lp_read_stream(pCmdStream, type);
+	char*p = lp_read_stream(pCmdStream, type, m_cmdByteOrder);
 
 	if (OT_VARIABLE == (DBL_ELEMENT_TYPE)type){
 		//get data from local vars 
@@ -1065,7 +1068,7 @@ int LogicParserEngine::_getValue(runningStack *stack, char *pCmdStream, DBLDataN
 	else if (OT_PARAM == (DBL_ELEMENT_TYPE)type) {
 		//int index = *((*(int**)&p)++);
 		NDUINT32 index;
-		p = lp_read_stream(p, index);
+		p = lp_read_stream(p, index, m_cmdByteOrder);
 
 		if (_getArg(stack, index, outValue) ) {
 			return (int)(p - pCmdStream);
@@ -1096,7 +1099,7 @@ int LogicParserEngine::_getValue(runningStack *stack, char *pCmdStream, DBLDataN
 		return (int)(p - pCmdStream);
 	}
 	else {
-		return outValue.ReadStream(pCmdStream);
+		return outValue.ReadStream(pCmdStream, m_cmdByteOrder);
 	}
 
 	m_sys_errno = LOGIC_ERR_VARIANT_NOT_EXIST;
@@ -1172,7 +1175,7 @@ int LogicParserEngine::_read_string(char *pCmdStream, char *outbuf, size_t size)
 	NDUINT16 size16 = 0;
 	char *p = pCmdStream ;
 	//size16 = *((*(NDUINT16**)&p)++); 
-	p = lp_read_stream(p, size16);
+	p = lp_read_stream(p, size16, m_cmdByteOrder);
 	if (size16 >= size){
 		//input data is too long
 		m_sys_errno = LOGIC_ERR_PARSE_STRING;

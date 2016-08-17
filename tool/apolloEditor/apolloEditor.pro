@@ -12,7 +12,7 @@ message(BUILD MACOX)
 DEFINES += __MAC_OS__ ND_UNIX
 
 LIBS += -L$$ndsdk_dir/lib -lndclient_darwin_x86_64_d \
-    -L../../../lib/darwin_x86_64  -lnetMessage_d  \
+    -L../../lib/darwin_x86_64  -lnetMessage_d  \
     -liconv \
     -L$$ndsdk_dir/lib/darwin_x86_64 -lnd_vm_dbg
 
@@ -35,7 +35,7 @@ SOURCES += \
 
 }
 
-DEFINES +=  ND_DEBUG _GUI_TOOL_
+DEFINES +=  ND_DEBUG
 
 INCLUDEPATH += $$ndsdk_dir/include \
         $$game_dir/include \

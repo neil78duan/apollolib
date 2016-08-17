@@ -162,11 +162,11 @@ typedef std::vector<DBLDataNode> parse_arg_list_t;
 
 struct scriptCmdBuf
 {
-	scriptCmdBuf() :size(0) ,cmdname(0),buf(0)
+	scriptCmdBuf() :size(0), cmdname(0), buf(0), byteOrder(1)
 	{
 		
 	}
-	
+	int byteOrder;
 	int size ;
 	const char *cmdname ;
 	const char *buf ;
@@ -346,6 +346,7 @@ protected:
 	bool m_simulate;					//run simulate or test
 	int m_sys_errno;
 	int m_registerCount;
+	int m_cmdByteOrder;
 
 	DBLDataNode m_registerVal; //this is common register 
 

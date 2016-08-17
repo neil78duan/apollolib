@@ -6,6 +6,8 @@
  *
  * 2015-4-30
  */
+
+#include "logicEndian.h"
 #include "logic_compile.h"
 #include "logicParser.h"
 #include "logicEngineRoot.h"
@@ -21,7 +23,7 @@ using namespace LogicEditorHelper;
 
 /////////////////////////////
 
-LogicCompiler::LogicCompiler() :m_bDebugInfo(false), m_compileStep(0), m_curRoot(0)
+LogicCompiler::LogicCompiler() :m_bDebugInfo(false), m_compileStep(0), m_curRoot(0), m_aimByteOrder(ND_L_ENDIAN)
 {
 }
 
@@ -35,7 +37,9 @@ LogicCompiler::~LogicCompiler()
 bool LogicCompiler::setConfigFile(const char *config)
 {
 	ndxml_initroot(&m_configRoot);
-	if (ndxml_load(config, &m_configRoot)) {
+	
+	if (ndxml_load_ex(config, &m_configRoot, nd_get_encode_name(ND_ENCODE_TYPE))) {
+		nd_logerror("open compile setting %s file error please check file exist\n", config);
 		return false;
 	}
 	ndxml *node = ndxml_getnode(&m_configRoot, "compile_setting");
@@ -160,7 +164,9 @@ int LogicCompiler::_writeFileInfo(ndxml *module, FILE *pf)
 		const char *p = ndxml_getval(node) ;
 		if (p) {
 			NDUINT16 size = (NDUINT16) strlen(p) ;
-			fwrite(&size, sizeof(size), 1, pf) ;
+			NDUINT16 outval = lp_host2stream(size, m_aimByteOrder);
+
+			fwrite(&outval, sizeof(outval), 1, pf);
 			fwrite(p, size, 1, pf) ;
 			m_moduleName = p;
 			return  size;
@@ -225,7 +231,7 @@ const char* LogicCompiler::_getNodeText(ndxml *paramNode, char *buf, size_t bufs
 	return getRealValFromStr(ndxml_getval(paramNode), buf, bufsize);
 }
 
-bool LogicCompiler::compileXml(const char *xmlFile, const char *outStreamFile, int outEncodeType,bool withDgbInfo)
+bool LogicCompiler::compileXml(const char *xmlFile, const char *outStreamFile, int outEncodeType, bool withDgbInfo, int byteOrder)
 {
 // 	const char *pOutType = "gbk";
 // 	if (encodeType == E_SRC_CODE_UTF_8) {
@@ -235,6 +241,8 @@ bool LogicCompiler::compileXml(const char *xmlFile, const char *outStreamFile, i
 	ndxml_root xmlroot;
 	char buf[1024*64];
 	char init_buf[1024*64];
+
+	m_aimByteOrder = byteOrder;
 
 	m_initBlockSize = sizeof(init_buf);
 	m_pInitBlock = init_buf;
@@ -255,16 +263,19 @@ bool LogicCompiler::compileXml(const char *xmlFile, const char *outStreamFile, i
 		return false;
 	}
 
-	NDUINT8 val1;
+	NDUINT8 valbit1;
 	//byte order
-	val1 = nd_byte_order();
-	fwrite(&val1, sizeof(val1), 1, pf);
+	//valbit1 = nd_byte_order();
+	valbit1 = m_aimByteOrder;
+	fwrite(&valbit1, sizeof(valbit1), 1, pf);
 	//encode type
-	val1 = (NDUINT16) outEncodeType;
-	fwrite(&val1, sizeof(val1), 1, pf);
+	valbit1 = (NDUINT8)outEncodeType;
+	fwrite(&valbit1, sizeof(valbit1), 1, pf);
 
 	//write compile time 
 	NDUINT64 compile_t64 = (NDUINT64)time(NULL);
+	compile_t64 = lp_host2stream(compile_t64, m_aimByteOrder);
+
 	fwrite(&compile_t64, sizeof(compile_t64), 1, pf);
 
 	_writeFileInfo(&xmlroot, pf);	
@@ -286,7 +297,9 @@ bool LogicCompiler::compileXml(const char *xmlFile, const char *outStreamFile, i
 			}
 			NDUINT8 isGlobal = _isGlobalFunc(node) ? 1 : 0; 
 			fwrite(&isGlobal, 1, 1, pf);
-			fwrite(&ret, 1, sizeof(ret), pf);
+
+			int outval =  lp_host2stream(ret, m_aimByteOrder);
+			fwrite(&outval, 1, sizeof(outval), pf);
 			if (fwrite(buf, 1, ret, pf) <= 0)	{
 				return false;
 			}
@@ -300,7 +313,8 @@ bool LogicCompiler::compileXml(const char *xmlFile, const char *outStreamFile, i
 		NDUINT8 isglobal = 0;
 		fwrite(&isglobal, 1, 1, pf);
 
-		fwrite(&size, 1, sizeof(size), pf);
+		NDUINT32 outval = lp_host2stream(size, m_aimByteOrder);
+		fwrite(&outval, 1, sizeof(outval), pf);
 		fwrite(initBlocName, 1, namesize, pf);
 		if (fwrite(init_buf, 1, size-namesize, pf) <= 0)	{
 			return false;
@@ -393,8 +407,12 @@ int LogicCompiler::subEntry2Stream(compile_setting *stepSetting, ndxml *subEntry
 				}
 				node.cmp_val = ndxml_getval(cmpvalXml);
 				//add test instruction
-				*((*(NDUINT32**)&p)++) = (NDUINT32)E_OP_COMP;
-				*((*(NDUINT32**)&p)++) = (NDUINT32)node.cmp_instruct;
+				//*((*(NDUINT32**)&p)++) = (NDUINT32)E_OP_COMP;
+				//*((*(NDUINT32**)&p)++) = (NDUINT32)node.cmp_instruct;
+
+				p = lp_write_stream(p, (NDUINT32)E_OP_COMP, m_aimByteOrder);
+				p = lp_write_stream(p, (NDUINT32)(NDUINT32)node.cmp_instruct, m_aimByteOrder);
+
 				int len = param2Stream(cmpvalXml, blockXml, p, bufsize);
 				if (len == -1)	{
 					return -1;
@@ -404,9 +422,12 @@ int LogicCompiler::subEntry2Stream(compile_setting *stepSetting, ndxml *subEntry
 			}
 
 			//test false and jump next block
-			*((*(NDUINT32**)&p)++) = (NDUINT32)E_OP_TEST_FALSE_SHORT_JUMP;
+			//*((*(NDUINT32**)&p)++) = (NDUINT32)E_OP_TEST_FALSE_SHORT_JUMP;
+			p = lp_write_stream(p, (NDUINT32)E_OP_TEST_FALSE_SHORT_JUMP, m_aimByteOrder);
+
 			pLocalJumpOffset = (NDUINT32*) p;
-			*((*(NDUINT32**)&p)++) = (NDUINT32)REVERT_INSTRUCT; //jump the if{..} end
+			//*((*(NDUINT32**)&p)++) = (NDUINT32)REVERT_INSTRUCT; //jump the if{..} end
+			p = lp_write_stream(p, (NDUINT32)REVERT_INSTRUCT, m_aimByteOrder);
 		}
 
 
@@ -418,11 +439,15 @@ int LogicCompiler::subEntry2Stream(compile_setting *stepSetting, ndxml *subEntry
 		p += len;
 		if (node.cmp_instruct){
 			//this is not last end block ,need to jump to end 
-			*((*(NDUINT32**)&p)++) = E_OP_SHORT_JUMP;
-			node.jump_end_offset = (NDUINT32 ) (p - node.block_buf);
-			*((*(NDUINT32**)&p)++) = REVERT_INSTRUCT;
+			//*((*(NDUINT32**)&p)++) = E_OP_SHORT_JUMP;
+			p = lp_write_stream(p, (NDUINT32)E_OP_SHORT_JUMP, m_aimByteOrder);
 
-			*pLocalJumpOffset = (NDUINT32)(len + 8);
+			node.jump_end_offset = (NDUINT32 ) (p - node.block_buf);
+			//*((*(NDUINT32**)&p)++) = REVERT_INSTRUCT;
+			p = lp_write_stream(p, (NDUINT32)REVERT_INSTRUCT, m_aimByteOrder);
+
+			//*pLocalJumpOffset = (NDUINT32)(len + 8);
+			lp_write_stream((lp_stream_t)pLocalJumpOffset, (NDUINT32)(len + 8), m_aimByteOrder);
 		}
 
 		node.size = (int)(p - node.block_buf);
@@ -442,8 +467,10 @@ int LogicCompiler::subEntry2Stream(compile_setting *stepSetting, ndxml *subEntry
 			return -1;
 		}
 		if (node.jump_end_offset){
-			NDUINT32*jump_offset_val = (NDUINT32*)(node.block_buf + node.jump_end_offset);
-			*jump_offset_val = (NDUINT32)(taotl_size - node.size);
+			lp_stream_t jump_offset_val = (node.block_buf + node.jump_end_offset);
+			//*jump_offset_val = (NDUINT32)(taotl_size - node.size);
+			lp_write_stream(jump_offset_val, (NDUINT32)(taotl_size - node.size), m_aimByteOrder);
+
 			taotl_size -= node.size;
 		}
 		memcpy(p, node.block_buf, node.size);
@@ -495,8 +522,10 @@ int LogicCompiler::subLoop2Stream(compile_setting *setting, ndxml *loopSteps, ch
 
 	int offset = ret + 8;
 	//add loop jump instruction 
-	*((*(NDUINT32**)&p)++) = (NDUINT32)E_OP_TEST_COUNT_JUMP;
-	*((*(NDUINT32**)&p)++) = (NDUINT32)(-offset); //jump offset 
+	//*((*(NDUINT32**)&p)++) = (NDUINT32)E_OP_TEST_COUNT_JUMP;
+	//*((*(NDUINT32**)&p)++) = (NDUINT32)(-offset); //jump offset 
+	p = lp_write_stream(p, (NDUINT32)E_OP_TEST_COUNT_JUMP, m_aimByteOrder);
+	p = lp_write_stream(p, (NDUINT32)(-offset), m_aimByteOrder);
 
 	return (int) (p - buf);
 }
@@ -522,25 +551,34 @@ int LogicCompiler::trytoCompileExceptionHandler(ndxml *funcNode, char *buf, size
 
 		if (it->second.ins_type == E_INSTRUCT_TYPE_EXCEPTION_CATCH) {
 			char *p = buf;
-			*((*(NDUINT32**)&p)++) = E_OP_EXCEPTION_BLOCK;
+			//*((*(NDUINT32**)&p)++) = E_OP_EXCEPTION_BLOCK;
+			p = lp_write_stream(p, (NDUINT32)E_OP_EXCEPTION_BLOCK, m_aimByteOrder);
 
 			NDUINT16 *size_addr = (NDUINT16 *)p;
-			*((*(NDUINT16**)&p)++) = 0;
+			//*((*(NDUINT16**)&p)++) = 0;
+			p = lp_write_stream(p, (NDUINT16)0, m_aimByteOrder);
 
 			int len = blockSteps2Stream(xmlStep, p, bufsize);
 			p += len;
 			bufsize -= len;
 			//write exit instant
-			*((*(NDUINT32**)&p)++) = (NDUINT32)E_OP_EXIT;
-			*((*(NDUINT32**)&p)++) = (NDUINT32)0; //return false 
+			//*((*(NDUINT32**)&p)++) = (NDUINT32)E_OP_EXIT;
+			//*((*(NDUINT32**)&p)++) = (NDUINT32)0; //return false 
+			p = lp_write_stream(p, (NDUINT32)E_OP_EXIT, m_aimByteOrder);
+			p = lp_write_stream(p, (NDUINT32)0, m_aimByteOrder);
 			
 			ret = p - buf;
 			*size_addr = (NDUINT16)(p - (char*)size_addr) - sizeof(NDUINT16);
-#ifdef ND_DEBUG
+#if 0
 			char *p1 = buf;
-			*((*(NDUINT32**)&p1)++);
-			NDUINT16 jump_len = *((*(NDUINT16**)&p1)++);
-			nd_assert(*size_addr == jump_len);
+			//*((*(NDUINT32**)&p1)++);
+			p1 += sizeof(NDUINT32);
+
+			//NDUINT16 jump_len = *((*(NDUINT16**)&p1)++);
+			NDUINT16 jump_len;
+			p1 = lp_read_stream(p1, jump_len, m_aimByteOrder);
+
+			//nd_assert(*size_addr == jump_len);
 			p1 += jump_len;
 			nd_assert(p1 == p);
 #endif
@@ -650,7 +688,7 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 {
 	char *p = buf;
 	int len = (int)bufsize;
-	NDUINT32 *cur_step_size = 0; //record this step size in debug block 
+	lp_stream_t cur_step_size = 0; //record this step size in debug block 
 	NDUINT32 _reverd = 0;
 
 	//get current step name 
@@ -669,8 +707,10 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 		if (ret > 0){
 			len -= ret;
 			p += ret;
-			cur_step_size = (NDUINT32*) p;
-			*((*(NDUINT32**)&p)++) = 0;
+			cur_step_size = p;
+			//*((*(NDUINT32**)&p)++) = 0;
+			p = lp_write_stream(p, (NDUINT32)0, m_aimByteOrder);
+
 			len -= sizeof(NDUINT32);
 
 		}
@@ -679,17 +719,15 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 		}
 	}
 
-	*((*(NDUINT32**)&p)++) = (NDUINT32) stepSetting->ins_id;
+	//*((*(NDUINT32**)&p)++) = (NDUINT32)stepSetting->ins_id;
+	p = lp_write_stream(p, (NDUINT32)stepSetting->ins_id, m_aimByteOrder);
 
-	NDUINT32 *pArgNum;
+	lp_stream_t pArgNum = NULL;
+	NDUINT32 args_num = 0;
 	if (stepSetting->record_param_num){
-		pArgNum = (NDUINT32*)p;
+		pArgNum = p;
 		p += sizeof(NDUINT32);
 		len -= sizeof(NDUINT32);
-		*pArgNum = 0;
-	}
-	else {
-		pArgNum = &_reverd;
 	}
 
 	for (int i = 0; i < ndxml_getsub_num(stepNode); i++) {
@@ -697,21 +735,25 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 		if (!xmlParam) {
 			continue;
 		}
-		int ret = param2Stream(xmlParam, stepNode, p, len, pArgNum);
+		int ret = param2Stream(xmlParam, stepNode, p, len, &args_num);
 		if (-1==ret)	{
 			return -1;
 		}
 		p += ret;
 		len -= ret;
-
-		//++*pArgNum;
+	}
+	if (pArgNum) {
+		lp_write_stream(pArgNum, args_num, m_aimByteOrder);
 	}
 
+
 	if (cur_step_size) {
-		*cur_step_size = (NDUINT32)(p - (char*)cur_step_size) - 4;
+		//*cur_step_size = (NDUINT32)(p - (char*)cur_step_size) - 4;
+		lp_write_stream((lp_stream_t)cur_step_size , (NDUINT32)((p - (char*)cur_step_size) - 4), m_aimByteOrder);
 	}
 	return (int)(p - buf);
 }
+
 #define WRITE_STRING_TOSTREAM(_p,_text)  do {\
 	if (!_text || !_text[0]) {					\
 		nd_logerror("text is  none or null\n");	\
@@ -721,12 +763,13 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 		nd_logerror("text is  none or null\n");	\
 		return -1;	\
 	}				\
-	NDUINT16 size =(NDUINT16) strlen(_text);			\
-	*((*(NDUINT16**)&_p)++) = size;			\
-	if (size > 0)							\
-		memcpy(_p, _text, size );			\
-	_p += size ;							\
+	NDUINT16 _size =(NDUINT16) strlen(_text);			\
+	_p = lp_write_stream(_p, _size, m_aimByteOrder);		\
+	if (_size > 0)							\
+		memcpy(_p, _text, _size );			\
+	_p += _size ;							\
 }while (0)
+
 //user define step
 int LogicCompiler::user_define_step(compile_setting *setting, ndxml *stepNode, char *buf, size_t bufsize)
 {
@@ -769,14 +812,18 @@ int LogicCompiler::step_function_info(compile_setting *setting, ndxml *stepNode,
 
 	snprintf(tmpbuf, sizeof(tmpbuf), "%s=%s;", pStepName, pVal);
 
-	*((*(NDUINT32**)&p)++) = E_OP_HEADER_INFO;
+	//*((*(NDUINT32**)&p)++) = E_OP_HEADER_INFO;
+	p = lp_write_stream(p, (NDUINT32)E_OP_HEADER_INFO, m_aimByteOrder);
 
-	*((*(NDUINT16**)&p)++) = OT_STRING;
+	//*((*(NDUINT16**)&p)++) = OT_STRING;
+	p = lp_write_stream(p, (NDUINT16)OT_STRING, m_aimByteOrder);
+
 	WRITE_STRING_TOSTREAM(p, tmpbuf); //function name 
 
 	return (int)(p - buf);
 }
 
+/*
 int LogicCompiler::user_define_msg_init(ndxml *stepNode, char *buf, size_t bufsize)
 {
 	char *p = buf;
@@ -885,28 +932,17 @@ int LogicCompiler::user_define_event_init(ndxml *stepNode, char *buf, size_t buf
 	}
 	return (int)(p - buf);
 }
-
+*/
 int LogicCompiler::writeDebugInfo(ndxml *stepNode, const char*stepName, char *buf, size_t bufsize)
 {
 	char *p = buf;
-// 	const char *pName = ndxml_getattr_val(stepNode, "name");
-// 	if (!pName) {
-// 		pName = ndxml_getname(stepNode);
-// 		if (!pName)	{
-// 			return	-1;
-// 		}
-// 	}
-	*((*(NDUINT32**)&p)++) = E_OP_DEBUG_INFO ;
-	*((*(NDUINT16**)&p)++) = m_compileStep++;
+	//*((*(NDUINT32**)&p)++) = E_OP_DEBUG_INFO ;
+	//*((*(NDUINT16**)&p)++) = m_compileStep++;
 
+	p = lp_write_stream(p, (NDUINT32)E_OP_DEBUG_INFO, m_aimByteOrder);
+	p = lp_write_stream(p, (NDUINT16)m_compileStep, m_aimByteOrder);
+	++m_compileStep;
 	WRITE_STRING_TOSTREAM(p, stepName);
-// 	int _tmpsize = strlen(pName) ;
-// 	if (_tmpsize > (bufsize - 8))	{
-// 		return -1;
-// 	}
-// 	*((*(NDUINT16**)&p)++) = (NDUINT16)_tmpsize ;
-// 	memcpy(p, pName, _tmpsize);
-// 	p += _tmpsize;
 
 	return (int)(p - buf);
 }
@@ -914,7 +950,7 @@ int LogicCompiler::writeDebugInfo(ndxml *stepNode, const char*stepName, char *bu
 int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_t bufsize, NDUINT32 *param_num)
 {
 	char *p = buf;
-	NDUINT16 *paramType = NULL;
+	lp_stream_t paramType = NULL;
 	int len = (int)bufsize;
 
 	const char *paramName = ndxml_getname(xmlParam);
@@ -980,15 +1016,17 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 	}
 
 	if (paramSetting->need_type_stream){
-		paramType = (NDUINT16*)p;
-		*((*(NDUINT16**)&p)++) = type;
+		paramType = p;
+		//*((*(NDUINT16**)&p)++) = type;
+		p = lp_write_stream(p, (NDUINT16) type, m_aimByteOrder);
 	}
 	switch (type)
 	{
 	case  OT_INT :
 	case OT_BOOL :
 	case  OT_PARAM:
-		*((*(NDUINT32**)&p)++) = pVal ? atoi(pVal) : 0;
+		//*((*(NDUINT32**)&p)++) = pVal ? atoi(pVal) : 0;
+		p = lp_write_stream(p, (int) (pVal ? atoi(pVal) : 0), m_aimByteOrder);
 		break;
 	case OT_FLOAT: {
 		float fv = pVal ? (float)atof(pVal) : 0;
@@ -999,10 +1037,13 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 		*((*(NDUINT8**)&p)++) = (NDUINT8)(pVal ? atoi(pVal) : 0);
 		break;
 	case OT_INT16:
-		*((*(NDUINT16**)&p)++) = (NDUINT16)(pVal ? atoi(pVal) : 0);
+		//*((*(NDUINT16**)&p)++) = (NDUINT16)(pVal ? atoi(pVal) : 0);
+		p = lp_write_stream(p, (NDUINT16)(pVal ? atoi(pVal) : 0), m_aimByteOrder);
 		break;
 	case OT_INT64:
-		*((*(NDUINT64**)&p)++) = (NDUINT64)(pVal ? nd_atoi64(pVal) : 0);
+		//*((*(NDUINT64**)&p)++) = (NDUINT64)(pVal ? nd_atoi64(pVal) : 0);
+		p = lp_write_stream(p, (NDUINT64)(pVal ? nd_atoi64(pVal) : 0), m_aimByteOrder);
+
 		break; 
 
 	case OT_TIME:
@@ -1012,14 +1053,16 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 			nd_logerror("time %s format error in %s\n", pVal, paramName);
 			return -1;
 		}
-		*((*(NDUINT64**)&p)++) = timval;
+		//*((*(NDUINT64**)&p)++) = timval;
+		p = lp_write_stream(p, (NDUINT64)timval, m_aimByteOrder);
 	}	
 		break;
 	case OT_USER_DEFINED:
 	case OT_STRING:
 	case OT_VARIABLE:
 		if (!pVal || !pVal[0]){
-			*((*(NDUINT16**)&p)++) = (NDUINT16)0;
+			//*((*(NDUINT16**)&p)++) = (NDUINT16)0;
+			p = lp_write_stream(p, (NDUINT16)0, m_aimByteOrder);
 		}
 		else {
 			WRITE_STRING_TOSTREAM(p, pVal);
@@ -1031,14 +1074,17 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 		break;
 	case OT_COMPILE_TIME:
 		if (paramType)	{
-			*paramType = OT_TIME;
+			//*paramType = OT_TIME;
+			lp_write_stream(paramType, (NDUINT16)OT_TIME, m_aimByteOrder);
 		}
-		*((*(NDUINT64**)&p)++) = (NDUINT64) time(NULL);
+		//*((*(NDUINT64**)&p)++) = (NDUINT64) time(NULL);
+		p = lp_write_stream(p, (NDUINT64)time(NULL), m_aimByteOrder);
 		break;
 	case OT_FUNCTION_NAME:
 	{
 		if (paramType)	{
-			*paramType = OT_STRING;
+			//*paramType = OT_STRING;
+			lp_write_stream((lp_stream_t)paramType, (NDUINT16)OT_STRING, m_aimByteOrder);
 		}
 		const char *Name = m_cur_function.c_str();
 		WRITE_STRING_TOSTREAM(p, Name);
@@ -1047,7 +1093,8 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 	case OT_SCRIPT_MODULE_NAME:
 	{
 		if (paramType)	{
-			*paramType = OT_STRING;
+			//*paramType = OT_STRING;
+			lp_write_stream((lp_stream_t)paramType, (NDUINT16)OT_STRING, m_aimByteOrder);
 		}
 		const char *Name = m_moduleName.c_str();
 		WRITE_STRING_TOSTREAM(p, Name);
@@ -1061,7 +1108,7 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 				if (paramType){
 					p -= sizeof(NDUINT16);
 				}
-				int size = convertData.WriteStream(p) ;
+				int size = convertData.WriteStream(p, m_aimByteOrder);
 				//////////////////////////////////////////////////////////////////////////
 				//DBLDataNode test1;
 				//int size1 = test1.ReadStream(p);
@@ -1070,31 +1117,14 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 				p += size ;
 			}
 			else {
-				*((*(NDUINT16**)&p)++) = (NDUINT16)0;
+				//*((*(NDUINT16**)&p)++) = (NDUINT16)0;
+				p = lp_write_stream(p, (NDUINT16)0, m_aimByteOrder);
 			}
-			/*int arr_size = 0;
-			int input_array[100];
 			
-			char *text =(char*) ndstr_first_valid(pVal);
-			while (text && *text){
-				input_array[arr_size] = strtol(text, &text, 0);
-				if (text && *text) {
-					text = strchr(text, ',');
-					if (text && *text == ',') {
-						++text;
-					}
-				}
-			}
-
-			*((*(NDUINT16**)&p)++) = (NDUINT16)arr_size;
-			if (arr_size){
-				for (int x = 0; x < arr_size; x++) {
-					*((*(NDUINT32**)&p)++) = input_array[x];
-				}
-			}*/
 		}
 		else {
-			*((*(NDUINT16**)&p)++) = (NDUINT16)0;
+			//*((*(NDUINT16**)&p)++) = (NDUINT16)0;
+			p = lp_write_stream(p, (NDUINT16)0, m_aimByteOrder);
 		}
 		break;
 	default:

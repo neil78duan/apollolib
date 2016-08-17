@@ -1,28 +1,28 @@
-<?xml version="1.0" encoding="gbk"?>
+<?xml version="1.0" encoding="utf-8"?>
 <alias kinds="hide">
-	<aim>Ä¿±ê</aim>
-	<index>±àºÅ</index>
-	<val>ÊıÖµ</val>
-	<var>³õÊ¼Öµ</var>
-	<type>ÀàĞÍ</type>
-	<num>ÊıÁ¿</num>
-	<func_name>º¯ÊıÃû</func_name>
-	<event_id>ÊÂ¼şÃû</event_id>
-	<comment>×¢ÊÍËµÃ÷</comment>
+	<aim>ç›®æ ‡</aim>
+	<index>ç¼–å·</index>
+	<val>æ•°å€¼</val>
+	<var>åˆå§‹å€¼</var>
+	<type>ç±»å‹</type>
+	<num>æ•°é‡</num>
+	<func_name>å‡½æ•°å</func_name>
+	<event_id>äº‹ä»¶å</event_id>
+	<comment>æ³¨é‡Šè¯´æ˜</comment>
 </alias>
 	
 <data_type_define kinds="hide" desc="define enum data type">
-	<type_operate_dest kinds="enum" enum_value="ÎŞ,½ÇÉ«ÊôĞÔ,±³°ü,¼¼ÄÜ¹ÜÀíÆ÷,Áú±³°ü,ÎäÆ÷,ÈÎÎñ,¸½¼ÓÊôĞÔ" enum_type="text" enum_text="none,attr,package,skill,dragon,weapon,task,addition"/>
-	<type_compare_sub_entry kinds="enum" enum_value="ÆäËû,µÈÓÚ,Ğ¡ÓÚ,´óÓÚ,Ğ¡ÓÚµÈÓÚ,´óÓÚµÈÓÚ"/>
-	<type_data_type kinds="enum" enum_value="ÕûÊı,¸¡µã,ÎÄ±¾,8bits,16bits,64bits,bool,Êı×é,time,±äÁ¿,²ÎÊı,ÉÏÒ»²½½á¹û,user_define,compile_time,function_name, module_name"/>	
-	<type_netmsg_privilege kinds="enum" enum_value="²»ÏŞÖÆ,Á¬½Ó,µÇÂ¼,½øÈëÓÎÏ·,GM"/>
+	<type_operate_dest kinds="enum" enum_value="æ— ,è§’è‰²å±æ€§,èƒŒåŒ…,æŠ€èƒ½ç®¡ç†å™¨,é¾™èƒŒåŒ…,æ­¦å™¨,ä»»åŠ¡,é™„åŠ å±æ€§" enum_type="text" enum_text="none,attr,package,skill,dragon,weapon,task,addition"/>
+	<type_compare_sub_entry kinds="enum" enum_value="å…¶ä»–,ç­‰äº,å°äº,å¤§äº,å°äºç­‰äº,å¤§äºç­‰äº"/>
+	<type_data_type kinds="enum" enum_value="æ•´æ•°,æµ®ç‚¹,æ–‡æœ¬,8bits,16bits,64bits,bool,æ•°ç»„,time,å˜é‡,å‚æ•°,ä¸Šä¸€æ­¥ç»“æœ,user_define,compile_time,function_name, module_name"/>	
+	<type_netmsg_privilege kinds="enum" enum_value="ä¸é™åˆ¶,è¿æ¥,ç™»å½•,è¿›å…¥æ¸¸æˆ,GM"/>
 	<type_encode kinds="enum" enum_value="ansi,gbk,utf8"/>
-	<type_time_unit kinds="enum" enum_value="Ãë,·ÖÖÓ,Ğ¡Ê±,Ìì,ÔÂ,Äê,ĞÇÆÚ"/>
-	<type_time_cmd kinds="enum" enum_value="»ñµÃ,Ôö¼Ó,¼õÉÙ,¼ÆÊı¼ä¸ô"/>
-	<type_week kinds="key_value" key="ĞÇÆÚ1,ĞÇÆÚ2,ĞÇÆÚ3,ĞÇÆÚ4,ĞÇÆÚ5,ĞÇÆÚ6,ĞÇÆÚÌì" value="1,2,3,4,5,6,0"/>
+	<type_time_unit kinds="enum" enum_value="ç§’,åˆ†é’Ÿ,å°æ—¶,å¤©,æœˆ,å¹´,æ˜ŸæœŸ"/>
+	<type_time_cmd kinds="enum" enum_value="è·å¾—,å¢åŠ ,å‡å°‘,è®¡æ•°é—´éš”"/>
+	<type_week kinds="key_value" key="æ˜ŸæœŸ1,æ˜ŸæœŸ2,æ˜ŸæœŸ3,æ˜ŸæœŸ4,æ˜ŸæœŸ5,æ˜ŸæœŸ6,æ˜ŸæœŸå¤©" value="1,2,3,4,5,6,0"/>
 </data_type_define>
 
-<compile_setting kinds="hide" desc="±àÒëÉè¶¨,¹Ø¼ü×ÖºÍÖ¸ÁîµÄ¶ÔÕÕ±í¶øÒÑ instruction=1ÊÇÃüÁî 0ÊÇ±äÁ¿ 2·ÖÖ§,3Ñ­»·,4±äÁ¿¼¯ºÏ,5user-define,6function-info,7´íÎó´¦Àí 100×¢ÊÍ">
+<compile_setting kinds="hide" desc="ç¼–è¯‘è®¾å®š,å…³é”®å­—å’ŒæŒ‡ä»¤çš„å¯¹ç…§è¡¨è€Œå·² instruction=1æ˜¯å‘½ä»¤ 0æ˜¯å˜é‡ 2åˆ†æ”¯,3å¾ªç¯,4å˜é‡é›†åˆ,5user-define,6function-info,7é”™è¯¯å¤„ç† 100æ³¨é‡Š">
 	<list instruction="1" ins_id="0" size="8" >op_exit</list>
 	<list instruction="1" ins_id="1" size="0" >op_read</list>
 	<list instruction="1" ins_id="2" size="0" >op_write</list>
@@ -92,7 +92,7 @@
 	
 </compile_setting>
 
-<create_template kinds="hide" desc="ĞÂ½¨½ÚµãµÄ´´½¨Ä£°å">
+<create_template kinds="hide" desc="æ–°å»ºèŠ‚ç‚¹çš„åˆ›å»ºæ¨¡æ¿">
 	<!-- create function -->
 	<create_func name="func_node" index="2" auto_index="0" create_type="0">
 		<attribute>
@@ -105,72 +105,72 @@
 		<sub_node>			
 			<!-- n1 name="op_setflag">
 				<attribute>
-					<a1 name="name" value="½Úµã_³ö´íÍË³ö"/>
+					<a1 name="name" value="èŠ‚ç‚¹_å‡ºé”™é€€å‡º"/>
 					<a2 name="expand" value="yes"/>
 				</attribute>
 				<sub_node>
 					<n1 name="index" value="0">
 						<attribute>
-							<a1 name="name" value="´íÎóÍË³ö"/>
+							<a1 name="name" value="é”™è¯¯é€€å‡º"/>
 							<a2 name="kinds" value="bool"/>
 						</attribute>
 					</n1>
 				</sub_node>
 			</n1 -->
-			<n2 name="comment" value="º¯ÊıËµÃ÷"></n2>
+			<n2 name="comment" value="å‡½æ•°è¯´æ˜"></n2>
 		</sub_node>
 	</create_func>
 	
-	<create_msg_handler name="ÏûÏ¢´¦Àíº¯Êı´´½¨Ä£°å" create_type="1">		
+	<create_msg_handler name="æ¶ˆæ¯å¤„ç†å‡½æ•°åˆ›å»ºæ¨¡æ¿" create_type="1">		
 		<msg_handler_node name="message_handler" enable_drag="yes" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1">
-			<comment name="º¯ÊıËµÃ÷" expand="yes">
-				<desc>ÏûÏ¢´¦Àíhandle(player, message)</desc>
+			<comment name="å‡½æ•°è¯´æ˜" expand="yes">
+				<desc>æ¶ˆæ¯å¤„ç†handle(player, message)</desc>
 				<isGlobal kinds="bool">1</isGlobal>
 			</comment>
-			<function_init_block name="block_¼ÓÔØÊ±ÔËĞĞ" create_template="create_list2" expand_list="condition" auto_index="0" >
-				<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">¼ÓÔØÊ±ÔËĞĞ</comment>
-				<op_call_func name="½Úµã_°²×°ÏûÏ¢´¦ÀíÆ÷" expand="yes" expand_list="comment">
-					<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">function_install_msg_handler(netModuleName, scriptName,maxId, minId,privilege)</comment>
-					<func_name name="º¯Êı" kinds="hide" delete="no" >apollo_set_message_handler</func_name>
-					<var name="ÍøÂç½ÓÊÕÆ÷" kinds="string" delete="no">listener</var>
-					<param_collect name="½Å±¾Ãû" kinds="hide" delete="no">
-						<type name="ÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">14</type>
-						<var name="Öµ" kinds="string" delete="no" restrict="type">none</var>
+			<function_init_block name="block_åŠ è½½æ—¶è¿è¡Œ" create_template="create_list2" expand_list="condition" auto_index="0" >
+				<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">åŠ è½½æ—¶è¿è¡Œ</comment>
+				<op_call_func name="èŠ‚ç‚¹_å®‰è£…æ¶ˆæ¯å¤„ç†å™¨" expand="yes" expand_list="comment">
+					<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">function_install_msg_handler(netModuleName, scriptName,maxId, minId,privilege)</comment>
+					<func_name name="å‡½æ•°" kinds="hide" delete="no" >apollo_set_message_handler</func_name>
+					<var name="ç½‘ç»œæ¥æ”¶å™¨" kinds="string" delete="no">listener</var>
+					<param_collect name="è„šæœ¬å" kinds="hide" delete="no">
+						<type name="ç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">14</type>
+						<var name="å€¼" kinds="string" delete="no" restrict="type">none</var>
 					</param_collect>			
-					<msgtype name="Ö÷ÏûÏ¢" kinds="numeral"  delete="no">0</msgtype>	
-					<msgtype name="´ÎÏûÏ¢" kinds="numeral"  delete="no">0</msgtype>					
-					<varInt name="È¨ÏŞ" kinds="enum" enum_value="none,connect,login,ingame,hight" delete="no">2</varInt>
+					<msgtype name="ä¸»æ¶ˆæ¯" kinds="numeral"  delete="no">0</msgtype>	
+					<msgtype name="æ¬¡æ¶ˆæ¯" kinds="numeral"  delete="no">0</msgtype>					
+					<varInt name="æƒé™" kinds="enum" enum_value="none,connect,login,ingame,hight" delete="no">2</varInt>
 				</op_call_func>
 			</function_init_block>
-			<exception_catch_block name="½Úµã_Òì³£´¦Àí" create_template="create_list1" expand_list="comment" auto_index="0"  >
-				<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">catch{}</comment>
+			<exception_catch_block name="èŠ‚ç‚¹_å¼‚å¸¸å¤„ç†" create_template="create_list1" expand_list="comment" auto_index="0"  >
+				<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">catch{}</comment>
 			</exception_catch_block>
 		</msg_handler_node>
 	</create_msg_handler>
 	
-	<create_event_callback name="ÊÂ¼ş´¦Àíº¯Êı" create_type="1">		
+	<create_event_callback name="äº‹ä»¶å¤„ç†å‡½æ•°" create_type="1">		
 		<event_callback_node name="event_callback" enable_drag="yes" create_template="create_list2" auto_index="0" expand_list="comment,event_id" expand_stat="1">
-			<comment name="º¯ÊıËµÃ÷" expand="yes">
-				<desc>ÊÂ¼ş´¦Àíº¯Êı</desc>
+			<comment name="å‡½æ•°è¯´æ˜" expand="yes">
+				<desc>äº‹ä»¶å¤„ç†å‡½æ•°</desc>
 				<isGlobal kinds="bool">1</isGlobal>
 			</comment>
 
-			<function_init_block name="block_¼ÓÔØÊ±ÔËĞĞ" create_template="create_list2" expand_list="condition" auto_index="0" >
-				<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">¼ÓÔØÊ±ÔËĞĞ</comment>
-				<op_call_func name="½Úµã_°²×°ÊÂ¼ş´¦ÀíÆ÷" expand="yes" expand_list="comment">
-					<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">function_install_event_handler(scriptName, eventiId)</comment>
-					<func_name name="º¯Êı" kinds="hide" delete="no" >apollo_func_install_event_handler</func_name>
-					<param_collect name="½Å±¾Ãû" kinds="hide" delete="no">
-						<type name="²ÎÊı1ÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">14</type>
-						<var name="²ÎÊı1Öµ" kinds="string" delete="no" restrict="type">none</var>
+			<function_init_block name="block_åŠ è½½æ—¶è¿è¡Œ" create_template="create_list2" expand_list="condition" auto_index="0" >
+				<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">åŠ è½½æ—¶è¿è¡Œ</comment>
+				<op_call_func name="èŠ‚ç‚¹_å®‰è£…äº‹ä»¶å¤„ç†å™¨" expand="yes" expand_list="comment">
+					<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">function_install_event_handler(scriptName, eventiId)</comment>
+					<func_name name="å‡½æ•°" kinds="hide" delete="no" >apollo_func_install_event_handler</func_name>
+					<param_collect name="è„šæœ¬å" kinds="hide" delete="no">
+						<type name="å‚æ•°1ç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">14</type>
+						<var name="å‚æ•°1å€¼" kinds="string" delete="no" restrict="type">none</var>
 					</param_collect>
-					<varInt name="´¦ÀíÊÂ¼ş" kinds="user_define" user_param="event_list" delete="no">none</varInt>
+					<varInt name="å¤„ç†äº‹ä»¶" kinds="user_define" user_param="event_list" delete="no">none</varInt>
 				</op_call_func>
 			</function_init_block>
 			
 			
-			<exception_catch_block name="½Úµã_Òì³£´¦Àí" create_template="create_list1" expand_list="comment" auto_index="0"  >
-				<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">catch{}</comment>
+			<exception_catch_block name="èŠ‚ç‚¹_å¼‚å¸¸å¤„ç†" create_template="create_list1" expand_list="comment" auto_index="0"  >
+				<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">catch{}</comment>
 			</exception_catch_block>
 		
 		</event_callback_node>
@@ -179,381 +179,381 @@
 	<!-- create create func argment lists -->
 	
 	<!-- create step in function -->
-	<create_step_exit name="ÍË³ö½Úµã" create_type="1" expand="yes" >
-		<op_exit name="½Úµã_ÍË³ö" expand="yes">			
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">op_exit(value)</comment>
-			<num name="·µ»Ø½á¹û" kinds="enum" enum_value="false,true" delete="no">0</num>
+	<create_step_exit name="é€€å‡ºèŠ‚ç‚¹" create_type="1" expand="yes" >
+		<op_exit name="èŠ‚ç‚¹_é€€å‡º" expand="yes">			
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">op_exit(value)</comment>
+			<num name="è¿”å›ç»“æœ" kinds="enum" enum_value="false,true" delete="no">0</num>
 		</op_exit>
 	</create_step_exit>
 	
 	
-	<create_step_throw name="Å×³öÒì³£" create_type="1" expand="yes" >
-		<op_throw name="½Úµã_Å×³öÒì³£" expand="yes">			
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">op_throw(value)</comment>
-			<num name="´íÎó±àºÅ" kinds="numeral"  delete="no">0</num>
+	<create_step_throw name="æŠ›å‡ºå¼‚å¸¸" create_type="1" expand="yes" >
+		<op_throw name="èŠ‚ç‚¹_æŠ›å‡ºå¼‚å¸¸" expand="yes">			
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">op_throw(value)</comment>
+			<num name="é”™è¯¯ç¼–å·" kinds="numeral"  delete="no">0</num>
 		</op_throw>
 	</create_step_throw>
 	
-	<create_step_error_catch_block name="²¶»ñÒì³£" create_type="1" >
-		<exception_catch_block name="½Úµã_Òì³£´¦Àí" create_template="create_list1" expand_list="comment" auto_index="0"  >
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">catch{}</comment>
+	<create_step_error_catch_block name="æ•è·å¼‚å¸¸" create_type="1" >
+		<exception_catch_block name="èŠ‚ç‚¹_å¼‚å¸¸å¤„ç†" create_template="create_list1" expand_list="comment" auto_index="0"  >
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">catch{}</comment>
 		</exception_catch_block>
 	</create_step_error_catch_block>
 	
 	
-	<create_step_get_time name="µÃµ½Ê±¼ä" create_type="1" expand="yes" >
-		<op_get_time name="½Úµã_Ê±¼ä" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">get_time()</comment>
+	<create_step_get_time name="å¾—åˆ°æ—¶é—´" create_type="1" expand="yes" >
+		<op_get_time name="èŠ‚ç‚¹_æ—¶é—´" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">get_time()</comment>
 		</op_get_time>
 	</create_step_get_time>
 	
 	
-	<create_step_compile_time name="µÃµ½½Å±¾±àÒëÊ±¼ä" create_type="1" expand="yes" >
-		<op_get_compile_time name="½Úµã_»ñµÃ½Å±¾±àÒëÊ±¼ä" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">get_compile_time()</comment>
+	<create_step_compile_time name="å¾—åˆ°è„šæœ¬ç¼–è¯‘æ—¶é—´" create_type="1" expand="yes" >
+		<op_get_compile_time name="èŠ‚ç‚¹_è·å¾—è„šæœ¬ç¼–è¯‘æ—¶é—´" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">get_compile_time()</comment>
 		</op_get_compile_time>
 	</create_step_compile_time>
 	
 	
-	<create_step_time_function name="Ê±¼äº¯Êı" create_type="1" expand="yes">
-		<op_time_function name="½Úµã_Ê±¼ä¼ÆËã"  expand="yes" >
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">time_fun(cmd, unit, time1, val)</comment>			
-			<varInt name="²Ù×÷ÀàĞÍ"  kinds="reference" reference_type="type_time_cmd" delete="no">0</varInt>
-			<varInt name="Ê±¼äµ¥Î»"  kinds="reference" reference_type="type_time_unit" delete="no">0</varInt>			
-			<param_collect name="²ÎÊı1" expand="yes" expand_stat="1" delete="no">
-				<type name="²ÎÊı1ÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="²ÎÊı1Öµ" kinds="string" delete="no" restrict="type">none</var>
+	<create_step_time_function name="æ—¶é—´å‡½æ•°" create_type="1" expand="yes">
+		<op_time_function name="èŠ‚ç‚¹_æ—¶é—´è®¡ç®—"  expand="yes" >
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">time_fun(cmd, unit, time1, val)</comment>			
+			<varInt name="æ“ä½œç±»å‹"  kinds="reference" reference_type="type_time_cmd" delete="no">0</varInt>
+			<varInt name="æ—¶é—´å•ä½"  kinds="reference" reference_type="type_time_unit" delete="no">0</varInt>			
+			<param_collect name="å‚æ•°1" expand="yes" expand_stat="1" delete="no">
+				<type name="å‚æ•°1ç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="å‚æ•°1å€¼" kinds="string" delete="no" restrict="type">none</var>
 			</param_collect>			
-			<param_collect name="²ÎÊı2" expand="yes" expand_stat="1" delete="no">
-				<type name="²ÎÊı2ÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="²ÎÊı2Öµ" kinds="string" delete="no" restrict="type">none</var>
+			<param_collect name="å‚æ•°2" expand="yes" expand_stat="1" delete="no">
+				<type name="å‚æ•°2ç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="å‚æ•°2å€¼" kinds="string" delete="no" restrict="type">none</var>
 			</param_collect>			
 		</op_time_function>
 	</create_step_time_function>
 	
 	
-	<create_step_begin_affair name="³ö´í×Ô¶¯»Ö¸´Êı¾İ" create_type="1" expand="yes" >
-		<op_begin_affair name="½Úµã_½ÇÉ«Êı¾İ³ö´í×Ô¶¯¸´Ô­" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">player_affair_rollback()</comment>
+	<create_step_begin_affair name="å‡ºé”™è‡ªåŠ¨æ¢å¤æ•°æ®" create_type="1" expand="yes" >
+		<op_begin_affair name="èŠ‚ç‚¹_è§’è‰²æ•°æ®å‡ºé”™è‡ªåŠ¨å¤åŸ" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">player_affair_rollback()</comment>
 		</op_begin_affair>
 	</create_step_begin_affair>
 	
 	
-	<create_set_var name="±£´æµ±Ç°Öµ" create_type="1" expand="yes" >
-		<op_save_register name="½Úµã_°Ñµ±Ç°Öµ¸³¸ø±äÁ¿" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">var=current-value</comment>
-			<type kinds="key_value" key="±äÁ¿,²ÎÊı" value="9,10" delete="no">9</type>
-			<var name="±äÁ¿Ãû" kinds="string" delete="no" restrict="type">none</var>
+	<create_set_var name="ä¿å­˜å½“å‰å€¼" create_type="1" expand="yes" >
+		<op_save_register name="èŠ‚ç‚¹_æŠŠå½“å‰å€¼èµ‹ç»™å˜é‡" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">var=current-value</comment>
+			<type kinds="key_value" key="å˜é‡,å‚æ•°" value="9,10" delete="no">9</type>
+			<var name="å˜é‡å" kinds="string" delete="no" restrict="type">none</var>
 		</op_save_register>
 	</create_set_var>
 	
-	<create_set_result name="ÉèÖÃÉÏÒ»²½½á¹û" create_type="1" expand="yes" >
-		<op_set_result name="½Úµã_ÉèÖÃÉÏÒ»²½½á¹û" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">set-current-value</comment>
+	<create_set_result name="è®¾ç½®ä¸Šä¸€æ­¥ç»“æœ" create_type="1" expand="yes" >
+		<op_set_result name="èŠ‚ç‚¹_è®¾ç½®ä¸Šä¸€æ­¥ç»“æœ" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">set-current-value</comment>
 			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 			<var kinds="string" delete="no" restrict="type">none</var>
 		</op_set_result>
 	</create_set_result>
 	
-	<create_step_rand name="·¶Î§Ëæ»úÊı" create_type="1" expand="yes" >
-		<op_rand name="½Úµã_Éú³ÉËæ»úÊı" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">rand(low_limit,hight_limit)</comment>
-			<num name="ÏÂÏŞ" kinds="numeral" >0</num>
-			<index name="ÉÏÏŞ" kinds="numeral">100</index>
+	<create_step_rand name="èŒƒå›´éšæœºæ•°" create_type="1" expand="yes" >
+		<op_rand name="èŠ‚ç‚¹_ç”Ÿæˆéšæœºæ•°" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">rand(low_limit,hight_limit)</comment>
+			<num name="ä¸‹é™" kinds="numeral" >0</num>
+			<index name="ä¸Šé™" kinds="numeral">100</index>
 		</op_rand>
 	</create_step_rand>
 	
-	<create_step_read name="¶ÁÈ¡½Úµã" create_type="1" expand="yes" >
-		<op_read name="½Úµã_¶ÁÈ¡" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">op_read(aim,index_name)</comment>
+	<create_step_read name="è¯»å–èŠ‚ç‚¹" create_type="1" expand="yes" >
+		<op_read name="èŠ‚ç‚¹_è¯»å–" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">op_read(aim,index_name)</comment>
 			<aim kinds="reference" reference_type="type_operate_dest">0</aim>
-			<param_collect name="Ë÷Òı" expand="yes" expand_stat="1" delete="no">
-				<type name="Ë÷ÒıÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="Ë÷ÒıÖµ" kinds="string" delete="no" restrict="type">none</var>
+			<param_collect name="ç´¢å¼•" expand="yes" expand_stat="1" delete="no">
+				<type name="ç´¢å¼•ç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="ç´¢å¼•å€¼" kinds="string" delete="no" restrict="type">none</var>
 			</param_collect>
 			
 		</op_read>
 	</create_step_read>
-	<create_step_write name="Ğ´Èë½Úµã" create_type="1" desc="´´½¨Ğ´Èë½Úµã">
-		<op_write name="½Úµã_Ğ´Èë" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">op_write(aim,index_name,value)</comment>
+	<create_step_write name="å†™å…¥èŠ‚ç‚¹" create_type="1" desc="åˆ›å»ºå†™å…¥èŠ‚ç‚¹">
+		<op_write name="èŠ‚ç‚¹_å†™å…¥" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">op_write(aim,index_name,value)</comment>
 			<aim kinds="reference" reference_type="type_operate_dest">0</aim>			
-			<param_collect name="Ë÷Òı" expand="yes" expand_stat="1" delete="no">
-				<type name="Ë÷ÒıÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="Ë÷ÒıÖµ" kinds="string" delete="no" restrict="type">none</var>
+			<param_collect name="ç´¢å¼•" expand="yes" expand_stat="1" delete="no">
+				<type name="ç´¢å¼•ç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="ç´¢å¼•å€¼" kinds="string" delete="no" restrict="type">none</var>
 			</param_collect>			
-			<type name="½á¹ûÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-			<var name="½á¹û" kinds="string" delete="no" restrict="type">none</var>
+			<type name="ç»“æœç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var name="ç»“æœ" kinds="string" delete="no" restrict="type">none</var>
 		</op_write>
 	</create_step_write>
-	<create_step_add name="Ôö¼Ó½Úµã" create_type="1" >
-		<op_add name="½Úµã_Ôö¼Ó" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">op_add(aim,index_name,value)</comment>
+	<create_step_add name="å¢åŠ èŠ‚ç‚¹" create_type="1" >
+		<op_add name="èŠ‚ç‚¹_å¢åŠ " expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">op_add(aim,index_name,value)</comment>
 			<aim kinds="reference" reference_type="type_operate_dest">0</aim>	
-			<param_collect name="Ë÷Òı" expand="yes" expand_stat="1" delete="no">
-				<type name="Ë÷ÒıÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="Ë÷ÒıÖµ" kinds="string" delete="no" restrict="type">none</var>
+			<param_collect name="ç´¢å¼•" expand="yes" expand_stat="1" delete="no">
+				<type name="ç´¢å¼•ç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="ç´¢å¼•å€¼" kinds="string" delete="no" restrict="type">none</var>
 			</param_collect>			
-			<type name="½á¹ûÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-			<var name="½á¹û" kinds="string" delete="no" restrict="type">none</var>
+			<type name="ç»“æœç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var name="ç»“æœ" kinds="string" delete="no" restrict="type">none</var>
 		</op_add>
 	</create_step_add>
 			
-	<create_step_sub name="¼õÉÙ½Úµã" create_type="1" >
-		<op_sub name="½Úµã_¼õÉÙ" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">op_sub(aim,index_name,value)</comment>
+	<create_step_sub name="å‡å°‘èŠ‚ç‚¹" create_type="1" >
+		<op_sub name="èŠ‚ç‚¹_å‡å°‘" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">op_sub(aim,index_name,value)</comment>
 			<aim kinds="reference" reference_type="type_operate_dest">0</aim>	
-			<param_collect name="Ë÷Òı" expand="yes" expand_stat="1" delete="no">
-				<type name="Ë÷ÒıÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="Ë÷ÒıÖµ" kinds="string" delete="no" restrict="type">none</var>
+			<param_collect name="ç´¢å¼•" expand="yes" expand_stat="1" delete="no">
+				<type name="ç´¢å¼•ç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="ç´¢å¼•å€¼" kinds="string" delete="no" restrict="type">none</var>
 			</param_collect>			
-			<type name="½á¹ûÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-			<var name="½á¹û" kinds="string" delete="no" restrict="type">none</var>
+			<type name="ç»“æœç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var name="ç»“æœ" kinds="string" delete="no" restrict="type">none</var>
 		</op_sub>
 	</create_step_sub>
-	<create_step_clear name="Çå³ı½Úµã" create_type="1" >
-		<op_clear name="½Úµã_Çå³ı" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">op_clear(aim,index_name)</comment>
+	<create_step_clear name="æ¸…é™¤èŠ‚ç‚¹" create_type="1" >
+		<op_clear name="èŠ‚ç‚¹_æ¸…é™¤" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">op_clear(aim,index_name)</comment>
 			<aim kinds="reference" reference_type="type_operate_dest">0</aim>	
-			<param_collect name="Ë÷Òı" expand="yes" expand_stat="1" delete="no">
-				<type name="Ë÷ÒıÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="Ë÷ÒıÖµ" kinds="string" delete="no" restrict="type">none</var>
+			<param_collect name="ç´¢å¼•" expand="yes" expand_stat="1" delete="no">
+				<type name="ç´¢å¼•ç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="ç´¢å¼•å€¼" kinds="string" delete="no" restrict="type">none</var>
 			</param_collect>
 		</op_clear>
 	</create_step_clear>
-	<create_make_var name="´´½¨±äÁ¿" create_type="1" >
-		<op_make_var name="½Úµã_ÉêÃ÷±äÁ¿" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">create_variant(name,value)</comment>
-			<param name="Ãû×Ö" kinds="string" delete="no">var1</param>
+	<create_make_var name="åˆ›å»ºå˜é‡" create_type="1" >
+		<op_make_var name="èŠ‚ç‚¹_ç”³æ˜å˜é‡" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">create_variant(name,value)</comment>
+			<param name="åå­—" kinds="string" delete="no">var1</param>
 			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-			<var name="³õÊ¼Öµ" kinds="string" delete="no" restrict="type">none</var>
+			<var name="åˆå§‹å€¼" kinds="string" delete="no" restrict="type">none</var>
 		</op_make_var>
 	</create_make_var>
 	
-	<create_math_operate name="ÊıÑ§ÔËËã·û" create_type="1" >
-		<op_math_operate name="½Úµã_ÊıÑ§ÔËËã" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">+-*/</comment>
+	<create_math_operate name="æ•°å­¦è¿ç®—ç¬¦" create_type="1" >
+		<op_math_operate name="èŠ‚ç‚¹_æ•°å­¦è¿ç®—" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">+-*/</comment>
 			<index kinds="enum" enum_value="+,-,*,/,sqrt,max,min,rand">0</index>	
-			<param_collect name="²Ù×÷Êı1" expand="yes" expand_stat="1" delete="no">
-				<type name="²Ù×÷Êı1ÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="²Ù×÷Êı1Öµ" kinds="string" delete="no" restrict="type">none</var>
+			<param_collect name="æ“ä½œæ•°1" expand="yes" expand_stat="1" delete="no">
+				<type name="æ“ä½œæ•°1ç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="æ“ä½œæ•°1å€¼" kinds="string" delete="no" restrict="type">none</var>
 			</param_collect>
-			<param_collect name="²Ù×÷Êı2" expand="yes" expand_stat="1" delete="no">
-				<type name="²Ù×÷Êı2ÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="²Ù×÷Êı2Öµ" kinds="string" delete="no" restrict="type">none</var>
+			<param_collect name="æ“ä½œæ•°2" expand="yes" expand_stat="1" delete="no">
+				<type name="æ“ä½œæ•°2ç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="æ“ä½œæ•°2å€¼" kinds="string" delete="no" restrict="type">none</var>
 			</param_collect>
 		</op_math_operate>
 	</create_math_operate>
 	
-	<create_assignin name="¸³Öµ²Ù×÷" create_type="1" >
-		<op_assignin name="½Úµã_ÊıÑ§ÔËËã" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">var = value</comment>
-			<param name="±äÁ¿Ãû³Æ" kinds="string" delete="no" restrict="type">none</param>			
-			<param_collect name="Öµ" expand="yes" expand_stat="1" delete="no">
-				<type name="¸³ÖµÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="Öµ" kinds="string" delete="no" restrict="type">none</var>
+	<create_assignin name="èµ‹å€¼æ“ä½œ" create_type="1" >
+		<op_assignin name="èŠ‚ç‚¹_æ•°å­¦è¿ç®—" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">var = value</comment>
+			<param name="å˜é‡åç§°" kinds="string" delete="no" restrict="type">none</param>			
+			<param_collect name="å€¼" expand="yes" expand_stat="1" delete="no">
+				<type name="èµ‹å€¼ç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="å€¼" kinds="string" delete="no" restrict="type">none</var>
 			</param_collect>
 		</op_assignin>
 	</create_assignin>
-	<create_read_table name="¶ÁÈ¡excel½Úµã" create_type="1" >
-		<op_read_table name="½Úµã_¶ÁÈ¡±í¸ñ" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">function:read_excel_table(table,col, index)</comment>
-			<tablename name="excel±í" kinds="user_define" user_param="dbl_excel" delete="no">none</tablename>
-			<param name="ÁĞÃû" kinds="user_define" user_param="dbl_excel_col" delete="no">none</param>						
-			<type name="Ë÷ÒıÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-			<var name="Ë÷ÒıÖµ" kinds="string" delete="no" restrict="type">none</var>
+	<create_read_table name="è¯»å–excelèŠ‚ç‚¹" create_type="1" >
+		<op_read_table name="èŠ‚ç‚¹_è¯»å–è¡¨æ ¼" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">function:read_excel_table(table,col, index)</comment>
+			<tablename name="excelè¡¨" kinds="user_define" user_param="dbl_excel" delete="no">none</tablename>
+			<param name="åˆ—å" kinds="user_define" user_param="dbl_excel_col" delete="no">none</param>						
+			<type name="ç´¢å¼•ç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var name="ç´¢å¼•å€¼" kinds="string" delete="no" restrict="type">none</var>
 		</op_read_table>
 	</create_read_table>
 	
-	<create_step_calc name="¹«Ê½" create_type="1" >
-		<op_calc name="½Úµã_¹«Ê½" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">run_formulate(formulate_text)</comment>
-			<param name="¹«Ê½ÄÚÈİ" kinds="string">0</param>
+	<create_step_calc name="å…¬å¼" create_type="1" >
+		<op_calc name="èŠ‚ç‚¹_å…¬å¼" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">run_formulate(formulate_text)</comment>
+			<param name="å…¬å¼å†…å®¹" kinds="string">0</param>
 		</op_calc>
 	</create_step_calc>
-	<create_step_waitevent name="µÈ´ıÊÂ¼ş½Úµã" create_type="1" >
-		<op_waitevent name="½Úµã_µÈ´ıÊÂ¼ş" create_template="create_input_param" auto_index="0" >
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">wait_event(event_id)</comment>
-			<varInt name="ÊÂ¼şÃû" kinds="user_define" user_param="event_list" delete="no">none</varInt>
+	<create_step_waitevent name="ç­‰å¾…äº‹ä»¶èŠ‚ç‚¹" create_type="1" >
+		<op_waitevent name="èŠ‚ç‚¹_ç­‰å¾…äº‹ä»¶" create_template="create_input_param" auto_index="0" >
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">wait_event(event_id)</comment>
+			<varInt name="äº‹ä»¶å" kinds="user_define" user_param="event_list" delete="no">none</varInt>
 		</op_waitevent>
 	</create_step_waitevent>
 	
-	<create_step_send_event name="²úÉúÊÂ¼ş½Úµã" create_type="1" >
-		<op_sendevent name="½Úµã_²úÉúÊÂ¼ş" create_template="create_input_param" auto_index="0" >
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">generate_event(event_id)</comment>
-			<varInt name="ÊÂ¼şÃû" kinds="user_define" user_param="event_list" delete="no">none</varInt>
+	<create_step_send_event name="äº§ç”Ÿäº‹ä»¶èŠ‚ç‚¹" create_type="1" >
+		<op_sendevent name="èŠ‚ç‚¹_äº§ç”Ÿäº‹ä»¶" create_template="create_input_param" auto_index="0" >
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">generate_event(event_id)</comment>
+			<varInt name="äº‹ä»¶å" kinds="user_define" user_param="event_list" delete="no">none</varInt>
 		</op_sendevent>
 	</create_step_send_event>
 	
-	<create_install_event name="°²×°±¾µØÊÂ¼ş´¦ÀíÆ÷" create_type="1" >
-		<op_install_event name="½Úµã_°²×°ÊÂ¼ş´¦ÀíÆ÷" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">install_local_event_handler(event_id, function)</comment>			
-			<index name="ÊÂ¼şÃû" kinds="user_define" user_param="event_list" delete="no">none</index>			
-			<param name="º¯ÊıÃû" kinds="user_define" user_param="func_list" delete="no">none</param>			
+	<create_install_event name="å®‰è£…æœ¬åœ°äº‹ä»¶å¤„ç†å™¨" create_type="1" >
+		<op_install_event name="èŠ‚ç‚¹_å®‰è£…äº‹ä»¶å¤„ç†å™¨" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">install_local_event_handler(event_id, function)</comment>			
+			<index name="äº‹ä»¶å" kinds="user_define" user_param="event_list" delete="no">none</index>			
+			<param name="å‡½æ•°å" kinds="user_define" user_param="func_list" delete="no">none</param>			
 		</op_install_event>
 	</create_install_event>
-	<create_remove_event name="ÒÆ³ı±¾µØÊÂ¼ş´¦ÀíÆ÷" create_type="1" >
-		<op_remove_event name="½Úµã_ÒÆ³ıÊÂ¼ş´¦ÀíÆ÷" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">install_local_event_handler(event_id, function)</comment>			
-			<index name="ÊÂ¼şÃû" kinds="user_define" user_param="event_list" delete="no">none</index>			
-			<param name="º¯ÊıÃû" kinds="user_define" user_param="func_list" delete="no">none</param>			
+	<create_remove_event name="ç§»é™¤æœ¬åœ°äº‹ä»¶å¤„ç†å™¨" create_type="1" >
+		<op_remove_event name="èŠ‚ç‚¹_ç§»é™¤äº‹ä»¶å¤„ç†å™¨" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">install_local_event_handler(event_id, function)</comment>			
+			<index name="äº‹ä»¶å" kinds="user_define" user_param="event_list" delete="no">none</index>			
+			<param name="å‡½æ•°å" kinds="user_define" user_param="func_list" delete="no">none</param>			
 		</op_remove_event>
 	</create_remove_event>
 	
 	
-	<create_add_timer name="Ìí¼Ó¶¨Ê±Æ÷" create_type="1" >
-		<op_add_timer name="½Úµã_Ìí¼Ó¶¨Ê±Æ÷" create_template="create_input_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">add_timer(type, tm_interval,name, function,...)</comment>			
-			<msgtype name="ÀàĞÍ" kinds="enum" enum_value="¾Ö²¿,È«¾Ö" delete="no">0</msgtype>					
-			<varInt name="ÀàĞÍ" kinds="enum" enum_value="Ñ­»·,Ò»´ÎĞÔ" delete="no">0</varInt>			
-			<varFloat name="¼ä¸ô(s)" kinds="numeral" delete="no">1.0</varFloat>
-			<var name="È¡Ãû" kinds="string" delete="no">none</var>
-			<func_name name="º¯ÊıÃû" kinds="user_define" user_param="func_list" delete="no">none</func_name>
+	<create_add_timer name="æ·»åŠ å®šæ—¶å™¨" create_type="1" >
+		<op_add_timer name="èŠ‚ç‚¹_æ·»åŠ å®šæ—¶å™¨" create_template="create_input_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">add_timer(type, tm_interval,name, function,...)</comment>			
+			<msgtype name="ç±»å‹" kinds="enum" enum_value="å±€éƒ¨,å…¨å±€" delete="no">0</msgtype>					
+			<varInt name="ç±»å‹" kinds="enum" enum_value="å¾ªç¯,ä¸€æ¬¡æ€§" delete="no">0</varInt>			
+			<varFloat name="é—´éš”(s)" kinds="numeral" delete="no">1.0</varFloat>
+			<var name="å–å" kinds="string" delete="no">none</var>
+			<func_name name="å‡½æ•°å" kinds="user_define" user_param="func_list" delete="no">none</func_name>
 		</op_add_timer>
 	</create_add_timer>
 	
-	<create_del_timer name="É¾³ı¶¨Ê±Æ÷" create_type="1" >
-		<op_del_timer name="½Úµã_É¾³ı¶¨Ê±Æ÷" expand="yes">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">del_timer(name)</comment>	
-			<index name="ÀàĞÍ" kinds="enum" enum_value="¾Ö²¿,È«¾Ö" delete="no">0</index>			
-			<param name="È¡Ãû" kinds="string" delete="no">none</param>
+	<create_del_timer name="åˆ é™¤å®šæ—¶å™¨" create_type="1" >
+		<op_del_timer name="èŠ‚ç‚¹_åˆ é™¤å®šæ—¶å™¨" expand="yes">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">del_timer(name)</comment>	
+			<index name="ç±»å‹" kinds="enum" enum_value="å±€éƒ¨,å…¨å±€" delete="no">0</index>			
+			<param name="å–å" kinds="string" delete="no">none</param>
 		</op_del_timer>
 	</create_del_timer>
 	
-	<create_build_user_data name="´´½¨jsonÊı¾İ" create_type="1" >
-		<op_build_user_data name="½Úµã_´´½¨jsonÊı¾İ" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">define  name{...}</comment>			
-			<var name="±äÁ¿Ãû" kinds="string" delete="no">none</var>
+	<create_build_user_data name="åˆ›å»ºjsonæ•°æ®" create_type="1" >
+		<op_build_user_data name="èŠ‚ç‚¹_åˆ›å»ºjsonæ•°æ®" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">define  name{...}</comment>			
+			<var name="å˜é‡å" kinds="string" delete="no">none</var>
 		</op_build_user_data>
 	</create_build_user_data>
 	
-	<create_build_data_type name="´´½¨ĞÂÀàĞÍ" create_type="1" >
-		<op_create_data_type name="½Úµã_´´½¨ĞÂÊı¾İÀàĞÍ" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">typedef struct{...}</comment>			
-			<var name="ÀàĞÍÃû" kinds="string" delete="no">none</var>
+	<create_build_data_type name="åˆ›å»ºæ–°ç±»å‹" create_type="1" >
+		<op_create_data_type name="èŠ‚ç‚¹_åˆ›å»ºæ–°æ•°æ®ç±»å‹" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">typedef struct{...}</comment>			
+			<var name="ç±»å‹å" kinds="string" delete="no">none</var>
 		</op_create_data_type>
 	</create_build_data_type>
 	
 	
-	<create_step_call_func name="µ÷ÓÃº¯Êı" create_type="1" >
-		<op_call_func name="½Úµã_µ÷ÓÃº¯Êı" create_template="create_input_param"  auto_index="0" expand_list="comment,func_name">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">call_function(name,...)</comment>
+	<create_step_call_func name="è°ƒç”¨å‡½æ•°" create_type="1" >
+		<op_call_func name="èŠ‚ç‚¹_è°ƒç”¨å‡½æ•°" create_template="create_input_param"  auto_index="0" expand_list="comment,func_name">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">call_function(name,...)</comment>
 			<func_name kinds="user_define" user_param="func_list">none</func_name>
 		</op_call_func>
 	</create_step_call_func>
 	
-	<create_step_print name="´òÓ¡Êä³ö" create_type="1" >
-		<op_print name="½Úµã_´òÓ¡" create_template="create_input_param" auto_index="0"  expand_list="comment">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">print(...)</comment>
+	<create_step_print name="æ‰“å°è¾“å‡º" create_type="1" >
+		<op_print name="èŠ‚ç‚¹_æ‰“å°" create_template="create_input_param" auto_index="0"  expand_list="comment">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">print(...)</comment>
 		</op_print>
 	</create_step_print>
-	<create_step_log name="Ğ´ÈÕÖ¾" create_type="1" >
-		<op_log name="½Úµã_ÈÕÖ¾" create_template="create_input_param" auto_index="0" expand_list="comment" >
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">log(...)</comment>
+	<create_step_log name="å†™æ—¥å¿—" create_type="1" >
+		<op_log name="èŠ‚ç‚¹_æ—¥å¿—" create_template="create_input_param" auto_index="0" expand_list="comment" >
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">log(...)</comment>
 		</op_log>
 	</create_step_log>
 		
-	<create_step_send_msg name="·¢ËÍÏûÏ¢" create_type="1">
-		<op_call_func name="½Úµã_·¢ËÍÏûÏ¢" create_template="create_input_param" auto_index="0" expand_list="comment,varInt,msgtype">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">function_send_message(msg_id,...)</comment>
-			<func_name name="º¯Êı" kinds="hide" delete="no" >apollo_func_send_msg</func_name>
-			<varInt name="Ö÷ÏûÏ¢ºÅ" kinds="numeral" delete="no" >0</varInt>
-			<msgtype name="´ÎÏûÏ¢ºÅ" kinds="numeral" delete="no" >0</msgtype>
+	<create_step_send_msg name="å‘é€æ¶ˆæ¯" create_type="1">
+		<op_call_func name="èŠ‚ç‚¹_å‘é€æ¶ˆæ¯" create_template="create_input_param" auto_index="0" expand_list="comment,varInt,msgtype">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">function_send_message(msg_id,...)</comment>
+			<func_name name="å‡½æ•°" kinds="hide" delete="no" >apollo_func_send_msg</func_name>
+			<varInt name="ä¸»æ¶ˆæ¯å·" kinds="numeral" delete="no" >0</varInt>
+			<msgtype name="æ¬¡æ¶ˆæ¯å·" kinds="numeral" delete="no" >0</msgtype>
 		</op_call_func>		
 	</create_step_send_msg>
 	
-	<!-- Í¨¹ıµ÷ÓÃÍâ²¿º¯ÊıµÄ·½·¨À´¶ÁÈ¡ÏûÏ¢ ²ÎÊı1 -->
-	<create_step_read_msg name="¶ÁÈ¡ÍøÂçÏûÏ¢" create_type="1">
-		<op_call_func name="½Úµã_¶ÁÈ¡ÍøÂçÊı¾İ" expand="yes" expand_list="comment">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">function_read_message(read_type)</comment>
-			<func_name name="º¯Êı" kinds="hide" delete="no" >apollo_func_read_msg</func_name>
-			<param_collect name="²ÎÊı1_ÊäÈëÏûÏ¢¶ÔÏó"  kinds="hide" delete="no">
+	<!-- é€šè¿‡è°ƒç”¨å¤–éƒ¨å‡½æ•°çš„æ–¹æ³•æ¥è¯»å–æ¶ˆæ¯ å‚æ•°1 -->
+	<create_step_read_msg name="è¯»å–ç½‘ç»œæ¶ˆæ¯" create_type="1">
+		<op_call_func name="èŠ‚ç‚¹_è¯»å–ç½‘ç»œæ•°æ®" expand="yes" expand_list="comment">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">function_read_message(read_type)</comment>
+			<func_name name="å‡½æ•°" kinds="hide" delete="no" >apollo_func_read_msg</func_name>
+			<param_collect name="å‚æ•°1_è¾“å…¥æ¶ˆæ¯å¯¹è±¡"  kinds="hide" delete="no">
 				<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
 				<var kinds="string" delete="no" restrict="type">2</var>			
 			</param_collect>
-			<param_collect name="¶ÁÈ¡²ÎÊı" expand="yes" expand_stat="1">
+			<param_collect name="è¯»å–å‚æ•°" expand="yes" expand_stat="1">
 				<type kinds="hide" delete="no">0</type>
-				<msgtype name="¶ÁÈ¡Êı¾İÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no" restrict="type">0</msgtype>
+				<msgtype name="è¯»å–æ•°æ®ç±»å‹" kinds="reference" reference_type="type_data_type" delete="no" restrict="type">0</msgtype>
 			</param_collect>		
 		</op_call_func>		
 	</create_step_read_msg>
 	
-	<create_step_read_datatype_msg name="¸ù¾İ¶¨ÒåÀàĞÍ¶ÁÈ¡ÏûÏ¢" create_type="1">
-		<op_call_func name="½Úµã_´Ó¶¨ÒåÀàĞÍ¶ÁÈ¡ÏûÏ¢" expand="yes" expand_list="comment,var">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">function_read_fromat_message(data_type_name)</comment>
-			<func_name name="º¯Êı" kinds="hide" delete="no" >apollo_func_read_userData_from_msg</func_name>
-			<param_collect name="²ÎÊı1_ÊäÈëÏûÏ¢¶ÔÏó"  kinds="hide" delete="no">
+	<create_step_read_datatype_msg name="æ ¹æ®å®šä¹‰ç±»å‹è¯»å–æ¶ˆæ¯" create_type="1">
+		<op_call_func name="èŠ‚ç‚¹_ä»å®šä¹‰ç±»å‹è¯»å–æ¶ˆæ¯" expand="yes" expand_list="comment,var">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">function_read_fromat_message(data_type_name)</comment>
+			<func_name name="å‡½æ•°" kinds="hide" delete="no" >apollo_func_read_userData_from_msg</func_name>
+			<param_collect name="å‚æ•°1_è¾“å…¥æ¶ˆæ¯å¯¹è±¡"  kinds="hide" delete="no">
 				<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
 				<var kinds="string" delete="no" restrict="type">2</var>			
 			</param_collect>			
-			<var name="ÀàĞÍÃû×Ö" kinds="string" >none</var>			
+			<var name="ç±»å‹åå­—" kinds="string" >none</var>			
 		</op_call_func>		
 	</create_step_read_datatype_msg>
 	
-	<create_step_read_excel_attr name="´Óexcel¶ÁÈ¡ÊôĞÔ½Úµã" create_type="1" >
-		<op_call_func name="½Úµã_´Óexcel¶ÁÈ¡ÊôĞÔ" expand="yes" expand_list="comment">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">function_collect_attrs_from_excel(table,index)</comment>
-			<func_name name="º¯Êı" kinds="hide" delete="no" >gscript_table_attrs_read</func_name>
-			<var name="excel±í" kinds="user_define" user_param="dbl_excel" delete="no">none</var>				
-			<type name="Ë÷ÒıÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-			<var name="Ë÷ÒıÖµ" kinds="string" delete="no" restrict="type">none</var>
+	<create_step_read_excel_attr name="ä»excelè¯»å–å±æ€§èŠ‚ç‚¹" create_type="1" >
+		<op_call_func name="èŠ‚ç‚¹_ä»excelè¯»å–å±æ€§" expand="yes" expand_list="comment">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">function_collect_attrs_from_excel(table,index)</comment>
+			<func_name name="å‡½æ•°" kinds="hide" delete="no" >gscript_table_attrs_read</func_name>
+			<var name="excelè¡¨" kinds="user_define" user_param="dbl_excel" delete="no">none</var>				
+			<type name="ç´¢å¼•ç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var name="ç´¢å¼•å€¼" kinds="string" delete="no" restrict="type">none</var>
 		</op_call_func>
 	</create_step_read_excel_attr>
 	
 	
-	<create_step_check_valid name="¼ì²â½á¹ûÊÇ·ñÓĞĞ§" create_type="1" >
-		<op_check_valide name="½Úµã_¼ì²â½á¹û" expand_list="comment" >			
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">check_last_return_value_is_valid()</comment>
+	<create_step_check_valid name="æ£€æµ‹ç»“æœæ˜¯å¦æœ‰æ•ˆ" create_type="1" >
+		<op_check_valide name="èŠ‚ç‚¹_æ£€æµ‹ç»“æœ" expand_list="comment" >			
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">check_last_return_value_is_valid()</comment>
 		</op_check_valide>
 	</create_step_check_valid>
 	
-	<create_step_type_transfer name="ÀàĞÍ×ª»»" create_type="1" >
-		<op_type_transfer name="½Úµã_ÀàĞÍ×ª»»" expand_list="comment,index" >			
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">data.convert( type )</comment>					
-			<index name="ĞèÒª×ª»»µÄÀàĞÍ" kinds="reference" reference_type="type_data_type" delete="no">0</index>
+	<create_step_type_transfer name="ç±»å‹è½¬æ¢" create_type="1" >
+		<op_type_transfer name="èŠ‚ç‚¹_ç±»å‹è½¬æ¢" expand_list="comment,index" >			
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">data.convert( type )</comment>					
+			<index name="éœ€è¦è½¬æ¢çš„ç±»å‹" kinds="reference" reference_type="type_data_type" delete="no">0</index>
 		</op_type_transfer>
 	</create_step_type_transfer>
 	
 	
 	
 	<!------------ login control entry ------------>
-	<create_step_bool_entry name="´´½¨bool·ÖÖ§" create_type="1" >
-		<op_bool_entry name="½Úµã_bool·ÖÖ§" expand_list="comment" >			
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">if{}</comment>
-			<op_sub_comp_entry name="ÕıÈ·Ê±Ö´ĞĞ" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
+	<create_step_bool_entry name="åˆ›å»ºboolåˆ†æ”¯" create_type="1" >
+		<op_bool_entry name="èŠ‚ç‚¹_boolåˆ†æ”¯" expand_list="comment" >			
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">if{}</comment>
+			<op_sub_comp_entry name="æ­£ç¡®æ—¶æ‰§è¡Œ" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
 				<condition no_comp="1" kinds="hide" delete="no">1</condition>
 			</op_sub_comp_entry>
-			<op_sub_comp_entry name="´íÎóÊ±Ö´ĞĞ" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
+			<op_sub_comp_entry name="é”™è¯¯æ—¶æ‰§è¡Œ" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
 				<condition no_comp="1" kinds="hide"  delete="no">0</condition>
 			</op_sub_comp_entry>
 		</op_bool_entry>
 	</create_step_bool_entry>
 	
-	<create_step_comp_entry name="´´½¨ÊıÖµ±È½Ï·ÖÖ§" create_type="1" >
-		<op_comp_entry name="½Úµã_±È½Ï·ÖÖ§" create_template="create_sub_comp_entry" expand_list="comment" >
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">if{}</comment>
-			<op_sub_comp_entry name="×Ó½Úµã_±È½Ï·ÖÖ§" create_template="create_list1" expand_list="condition,var,type" comp_cond="condition" comp_value="var">
-				<condition name="Ö´ĞĞÌõ¼ş" kinds="reference" reference_type="type_compare_sub_entry" delete="no" >0</condition>
+	<create_step_comp_entry name="åˆ›å»ºæ•°å€¼æ¯”è¾ƒåˆ†æ”¯" create_type="1" >
+		<op_comp_entry name="èŠ‚ç‚¹_æ¯”è¾ƒåˆ†æ”¯" create_template="create_sub_comp_entry" expand_list="comment" >
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">if{}</comment>
+			<op_sub_comp_entry name="å­èŠ‚ç‚¹_æ¯”è¾ƒåˆ†æ”¯" create_template="create_list1" expand_list="condition,var,type" comp_cond="condition" comp_value="var">
+				<condition name="æ‰§è¡Œæ¡ä»¶" kinds="reference" reference_type="type_compare_sub_entry" delete="no" >0</condition>
 				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="±È½ÏÖµ" kinds="string" delete="no" restrict="type">none</var>
+				<var name="æ¯”è¾ƒå€¼" kinds="string" delete="no" restrict="type">none</var>
 			</op_sub_comp_entry>
 		</op_comp_entry>
 	</create_step_comp_entry>
 	
-	<create_sub_comp_entry name="´´½¨±È½Ï×Ó·ÖÖ§" create_type="1" >	
-		<op_sub_comp_entry name="×Ó½Úµã_±È½Ï·ÖÖ§" create_template="create_list1" expand_list="condition,var,type" comp_cond="condition" comp_value="var" auto_index="0">
-			<condition name="Ö´ĞĞÌõ¼ş" kinds="reference" reference_type="type_compare_sub_entry" delete="no" >0</condition>
+	<create_sub_comp_entry name="åˆ›å»ºæ¯”è¾ƒå­åˆ†æ”¯" create_type="1" >	
+		<op_sub_comp_entry name="å­èŠ‚ç‚¹_æ¯”è¾ƒåˆ†æ”¯" create_template="create_list1" expand_list="condition,var,type" comp_cond="condition" comp_value="var" auto_index="0">
+			<condition name="æ‰§è¡Œæ¡ä»¶" kinds="reference" reference_type="type_compare_sub_entry" delete="no" >0</condition>
 					
 			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-			<var name="±È½ÏÖµ" kinds="string" delete="no" restrict="type">none</var>
+			<var name="æ¯”è¾ƒå€¼" kinds="string" delete="no" restrict="type">none</var>
 			
 		</op_sub_comp_entry>
 	</create_sub_comp_entry>
 	
 	
-	<create_step_loop_entry name="Ñ­»··ÖÖ§" create_type="1" >
-		<op_loop_entry name="½Úµã_Ñ­»·" create_template="create_list2" expand_list="condition" auto_index="0"  comp_cond="condition">
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">loop{}</comment>
+	<create_step_loop_entry name="å¾ªç¯åˆ†æ”¯" create_type="1" >
+		<op_loop_entry name="èŠ‚ç‚¹_å¾ªç¯" create_template="create_list2" expand_list="condition" auto_index="0"  comp_cond="condition">
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">loop{}</comment>
 			<condition name="loop_count" >
 				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var kinds="string" delete="no" restrict="type">none</var>	
@@ -561,25 +561,25 @@
 		</op_loop_entry>
 	</create_step_loop_entry>
 	
-	<create_input_param name="ÏûÏ¢²ÎÊı" create_type="1" >
-		<param_collect name="²ÎÊı" expand="yes">
+	<create_input_param name="æ¶ˆæ¯å‚æ•°" create_type="1" >
+		<param_collect name="å‚æ•°" expand="yes">
 			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 			<var kinds="string" delete="no" restrict="type">none</var>			
 		</param_collect>
 	</create_input_param>
 	
 	
-	<create_user_def_param name="×Ô¶¨ÒåÀàĞÍ²ÎÊı" create_type="1" >
-		<param_collect name="²ÎÊı" expand="yes">
-			<func_name name="³ÉÔ±Ãû" kinds="string" delete="no" >member1</func_name>
+	<create_user_def_param name="è‡ªå®šä¹‰ç±»å‹å‚æ•°" create_type="1" >
+		<param_collect name="å‚æ•°" expand="yes">
+			<func_name name="æˆå‘˜å" kinds="string" delete="no" >member1</func_name>
 			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 			<var kinds="string" delete="no" restrict="type">none</var>			
 		</param_collect>
 	</create_user_def_param>
 	
-	<create_function_init_block name="³õÊ¼»¯Ä£¿é" create_type="1" >
-		<function_init_block name="block_¼ÓÔØÊ±ÔËĞĞ" create_template="create_list2" expand_list="condition" auto_index="0" >
-			<comment name="¹¦ÄÜËµÃ÷" rw_stat="read">½Å±¾±»¼ÓÔØµ½ÄÚ´æÊÇÔËĞĞÕâ²¿·Ö´úÂë</comment>
+	<create_function_init_block name="åˆå§‹åŒ–æ¨¡å—" create_type="1" >
+		<function_init_block name="block_åŠ è½½æ—¶è¿è¡Œ" create_template="create_list2" expand_list="condition" auto_index="0" >
+			<comment name="åŠŸèƒ½è¯´æ˜" rw_stat="read">è„šæœ¬è¢«åŠ è½½åˆ°å†…å­˜æ˜¯è¿è¡Œè¿™éƒ¨åˆ†ä»£ç </comment>
 		</function_init_block>
 	</create_function_init_block>
 	
