@@ -13,8 +13,8 @@
 //#include "ndapplib/applib.h"
 #include "nd_common/nd_common.h"
 #include "ndapplib/nd_msgpacket.h"
-#include "logicDataType.h"
-#include "logicStruct.hpp"
+#include "logic_parser/logicDataType.h"
+#include "logic_parser/logicStruct.hpp"
 
 #include <map>
 #include <string>

@@ -6,18 +6,18 @@
 #include <QSettings>
 
 #include "ndlib.h"
-#include "login_apollo.h"
-#include "netui_atl.h"
+#include "cli_common/login_apollo.h"
+#include "cli_common/netui_atl.h"
+#include "cli_common/gameMessage.h"
+#include "cli_common/login_apollo.h"
+#include "cli_common/dftCliMsgHandler.h"
 
-#include "dbldata2netstream.h"
-#include "logicEngineRoot.h"
+#include "logic_parser/dbldata2netstream.h"
+#include "logic_parser/logicEngineRoot.h"
+#include "logic_parser/logicDataType.h"
 
-#include "gameMessage.h"
-#include "login_apollo.h"
 #include "apollo_errors.h"
-#include "message_inc.h"
-#include "dftCliMsgHandler.h"
-#include "logicDataType.h"
+#include "netMessage/message_inc.h"
 
 #include <string>
 

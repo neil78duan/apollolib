@@ -6,7 +6,7 @@
  *
  * 2015-5-29
  */
-#include "attr_mgr.h"
+#include "attribute/attr_mgr.h"
 #include <math.h>
 
 RoleAttrAsset::RoleAttrAsset(role_attr_data *data) : m_data(data), m_EnableRecalc(false)

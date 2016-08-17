@@ -7,7 +7,7 @@
  * 2012/3/12 14:57:34
  */
 
-#include "ndrand.h"
+#include "srv_common/ndrand.h"
 
 
 bool ProbSampling1(int rate)

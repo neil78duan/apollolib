@@ -5,8 +5,8 @@
  * create by duan 
  * 2015-5-13
  */
-#include "objectBaseMgr.h"
-#include "logicParser.h"
+#include "logic_parser/objectBaseMgr.h"
+#include "logic_parser/logicParser.h"
 
 LogicObjectBase::LogicObjectBase() :m_count(0)
 {

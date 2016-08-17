@@ -9,7 +9,7 @@
 #ifndef _STAT_DATA_H_
 #define _STAT_DATA_H_
 
-#include "stat_machine.h"
+#include "attribute/stat_machine.h"
 // class StateDataHeaper
 // {
 // public:

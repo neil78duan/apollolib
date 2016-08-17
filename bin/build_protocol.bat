@@ -1,5 +1,5 @@
 
-protocolBuilderVS.exe -d ../../resource/msg_config
+protocolBuilderVS.exe -d ../../resource/msg_config -encode gbk
 @if %errorlevel% NEQ 0  goto error
 
 copy /y cpp\* ..\netMessage

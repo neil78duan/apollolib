@@ -7,8 +7,8 @@
 //
 
 #include "common_inc.h"
-#include "comm_msghandler.h"
-#include "playerMgr.h"
+#include "srv_common/comm_msghandler.h"
+#include "srv_common/playerMgr.h"
 
 //#include "msghandler.h"
 //#include "gameInstant.h"

@@ -10,10 +10,10 @@
 #ifndef _NET_MESSAGE_INC_H_
 #define _NET_MESSAGE_INC_H_
 
-#include "dataStream.h"
-#include "MessageID.h"
-#include "auto_macroDefine.h"
-#include "auto_dataType.h"
+#include "netMessage/dataStream.h"
+#include "netMessage/MessageID.h"
+#include "netMessage/auto_macroDefine.h"
+#include "netMessage/auto_dataType.h"
 
 #endif
  

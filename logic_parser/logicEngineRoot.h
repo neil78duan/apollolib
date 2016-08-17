@@ -9,8 +9,8 @@
 #ifndef _LOGIC_ENGINE_ROOT_H_ 
 #define _LOGIC_ENGINE_ROOT_H_
 
-#include "logicParser.h"
-#include "logic_function.h"
+#include "logic_parser/logicParser.h"
+#include "logic_parser/logic_function.h"
 
 
 #define  DEFAULT_LOAD_INITILIZER_FUNC "_module_init_entry" 

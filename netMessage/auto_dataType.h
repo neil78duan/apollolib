@@ -1,19 +1,19 @@
 /* please do not change this file ,
  * auto create by program 
- * create time 2016-7-28 12:18:12 
+ * create time 2016-8-17 16:11:1 
  */
 
 #ifndef _AUTO_DATA_TYPE_DEFINE_H_
 #define _AUTO_DATA_TYPE_DEFINE_H_
-#include "auto_macroDefine.h"
+#include "netMessage/auto_macroDefine.h"
 
-#include "dataStream.h"
+#include "netMessage/dataStream.h"
 
 #define DATA_IN_DB_VERSION 1 
 
 namespace NetMessage 
 {
-// é€šç”¨å¤„ç†å›å¤
+// Í¨ÓÃ´¦Àí»Ø¸´
 struct MsgCommonReply 
 {
  	MsgCommonReply() 
@@ -21,15 +21,15 @@ struct MsgCommonReply
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT8  result; 	//æ¶ˆæ¯è¿”å›æ˜¯å¦æˆåŠŸ0 success, 1 failed 
-	NDUINT32  value; 	//æœåŠ¡å™¨è¿”å›å€¼ 
+	NDUINT8  result; 	//ÏûÏ¢·µ»ØÊÇ·ñ³É¹¦0 success, 1 failed 
+	NDUINT32  value; 	//·şÎñÆ÷·µ»ØÖµ 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::MsgCommonReply &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::MsgCommonReply &data);
 
 
 
-// é€šç”¨é”™è¯¯è¿”å›,æœåŠ¡å™¨å‘é€ç»™å®¢æˆ·çš„
+// Í¨ÓÃ´íÎó·µ»Ø,·şÎñÆ÷·¢ËÍ¸ø¿Í»§µÄ
 struct CommonErrorReply 
 {
  	CommonErrorReply() 
@@ -37,15 +37,15 @@ struct CommonErrorReply
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT8  errtType; 	//é”™è¯¯ç±»å‹,å‚è€ƒeCommonErrorType 
-	NDUINT32  param; 	//é”™è¯¯å‚æ•° 
+	NDUINT8  errtType; 	//´íÎóÀàĞÍ,²Î¿¼eCommonErrorType 
+	NDUINT32  param; 	//´íÎó²ÎÊı 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::CommonErrorReply &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::CommonErrorReply &data);
 
 
 
-// é€šç”¨æ¶ˆæ¯è¯·æ±‚
+// Í¨ÓÃÏûÏ¢ÇëÇó
 struct MsgCommonRequest 
 {
  	MsgCommonRequest() 
@@ -53,15 +53,15 @@ struct MsgCommonRequest
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT8  type; 	//ç±»å‹ 
-	NDUINT32  value; 	//å€¼ 
+	NDUINT8  type; 	//ÀàĞÍ 
+	NDUINT32  value; 	//Öµ 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::MsgCommonRequest &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::MsgCommonRequest &data);
 
 
 
-// è£…å¤‡çš„é™„åŠ å±æ€§èŠ‚ç‚¹
+// ×°±¸µÄ¸½¼ÓÊôĞÔ½Úµã
 struct EquipAttrNode 
 {
  	EquipAttrNode() 
@@ -69,9 +69,9 @@ struct EquipAttrNode
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT8  color; 	//å±æ€§åŸè‰² 
-	NDUINT8  attr_id; 	//å±æ€§id 
-	float  attr_val; 	//å±æ€§å€¼ 
+	NDUINT8  color; 	//ÊôĞÔÔ­É« 
+	NDUINT8  attr_id; 	//ÊôĞÔid 
+	float  attr_val; 	//ÊôĞÔÖµ 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::EquipAttrNode &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::EquipAttrNode &data);
@@ -85,11 +85,11 @@ struct ItemInfo
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT32  instantID; 	//ç‰©å“å®ä¾‹id 
-	NDUINT32  typeID; 	//ç‰©å“ç±»å‹id 
-	NDUINT16  slot; 	//ä½ç½® 
-	NDUINT16  number; 	//æ•°é‡ 
-	NDUINT8  stat; 	//çŠ¶æ€ 
+	NDUINT32  instantID; 	//ÎïÆ·ÊµÀıid 
+	NDUINT32  typeID; 	//ÎïÆ·ÀàĞÍid 
+	NDUINT16  slot; 	//Î»ÖÃ 
+	NDUINT16  number; 	//ÊıÁ¿ 
+	NDUINT8  stat; 	//×´Ì¬ 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::ItemInfo &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::ItemInfo &data);
@@ -103,12 +103,12 @@ struct EquipInfo
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT32  instantID; 	//ç‰©å“å®ä¾‹id 
-	NDUINT32  typeID; 	//ç‰©å“ç±»å‹id 
-	NDUINT16  slot; 	//ä½ç½® 
-	NDUINT8  level; 	//è¿›é˜¶ç­‰çº§ 
-	NDUINT8  sub_level; 	//å¼ºåŒ–ç­‰çº§ 
-	NDUINT8  stat; 	//çŠ¶æ€æŒ‰ä½æ“ä½œ 
+	NDUINT32  instantID; 	//ÎïÆ·ÊµÀıid 
+	NDUINT32  typeID; 	//ÎïÆ·ÀàĞÍid 
+	NDUINT16  slot; 	//Î»ÖÃ 
+	NDUINT8  level; 	//½ø½×µÈ¼¶ 
+	NDUINT8  sub_level; 	//Ç¿»¯µÈ¼¶ 
+	NDUINT8  stat; 	//×´Ì¬°´Î»²Ù×÷ 
 	NDUINT16  attrsCount; 	 
 	EquipAttrNode  attrs[EQUIP_ATTR_NUMBER]; 	//(null) 
 	bool push_attrs(const EquipAttrNode &val)
@@ -134,7 +134,7 @@ struct RoleEquipsData
 	}
 
 	NDUINT16  equipsCount; 	 
-	NDUINT32  equips[EQUIP_SLOT_NUMBER]; 	//ç©¿èº«ä¸Šæ­¦å™¨å’Œæ­¦å™¨è£…å¤‡æ•°æ®æ­¦å™¨IDå°äº100 
+	NDUINT32  equips[EQUIP_SLOT_NUMBER]; 	//´©ÉíÉÏÎäÆ÷ºÍÎäÆ÷×°±¸Êı¾İÎäÆ÷IDĞ¡ÓÚ100 
 	bool push_equips(const NDUINT32 &val)
 	{
 		if (equipsCount < EQUIP_SLOT_NUMBER)	{
@@ -158,7 +158,7 @@ struct RolePackageData
 	}
 
 	NDUINT16  equipsCount; 	 
-	EquipInfo  equips[EQUIP_PACK_CAPACITY]; 	//è£…å¤‡æ•°æ® 
+	EquipInfo  equips[EQUIP_PACK_CAPACITY]; 	//×°±¸Êı¾İ 
 	bool push_equips(const EquipInfo &val)
 	{
 		if (equipsCount < EQUIP_PACK_CAPACITY)	{
@@ -169,7 +169,7 @@ struct RolePackageData
 	}
 
 	NDUINT16  itemsCount; 	 
-	ItemInfo  items[PACKAGE_CAPACITY]; 	//èƒŒåŒ…æ•°æ® 
+	ItemInfo  items[PACKAGE_CAPACITY]; 	//±³°üÊı¾İ 
 	bool push_items(const ItemInfo &val)
 	{
 		if (itemsCount < PACKAGE_CAPACITY)	{
@@ -192,8 +192,8 @@ struct SkillInfo
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT16  id; 	//æŠ€èƒ½id 
-	NDUINT8  level; 	//æŠ€èƒ½ç­‰çº§ 
+	NDUINT16  id; 	//¼¼ÄÜid 
+	NDUINT8  level; 	//¼¼ÄÜµÈ¼¶ 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::SkillInfo &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::SkillInfo &data);
@@ -208,7 +208,7 @@ struct RoleSkillData
 	}
 
 	NDUINT16  datasCount; 	 
-	SkillInfo  datas[SKILL_CAPACITY]; 	//æŠ€èƒ½æ•°æ® 
+	SkillInfo  datas[SKILL_CAPACITY]; 	//¼¼ÄÜÊı¾İ 
 	bool push_datas(const SkillInfo &val)
 	{
 		if (datasCount < SKILL_CAPACITY)	{
@@ -231,8 +231,8 @@ struct AttrNodeVal
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT8  id; 	//å±æ€§ç¼–å· 
-	float  val; 	//å±æ€§å€¼ 
+	NDUINT8  id; 	//ÊôĞÔ±àºÅ 
+	float  val; 	//ÊôĞÔÖµ 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::AttrNodeVal &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::AttrNodeVal &data);
@@ -247,7 +247,7 @@ struct AttrsBuf
 	}
 
 	NDUINT16  datasCount; 	 
-	AttrNodeVal  datas[ROLE_ATTRS_NUMBER]; 	//å±æ€§å€¼ 
+	AttrNodeVal  datas[ROLE_ATTRS_NUMBER]; 	//ÊôĞÔÖµ 
 	bool push_datas(const AttrNodeVal &val)
 	{
 		if (datasCount < ROLE_ATTRS_NUMBER)	{
@@ -271,7 +271,7 @@ struct RoleAttrsData
 	}
 
 	NDUINT16  datasCount; 	 
-	float  datas[ROLE_ATTRS_NUMBER]; 	//å±æ€§ 
+	float  datas[ROLE_ATTRS_NUMBER]; 	//ÊôĞÔ 
 	bool push_datas(const float &val)
 	{
 		if (datasCount < ROLE_ATTRS_NUMBER)	{
@@ -294,15 +294,15 @@ struct MallBuyItem
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT32  itemid; 	//ç‰©å“ç¼–å· 
-	NDUINT16  num; 	//æ•°é‡ 
+	NDUINT32  itemid; 	//ÎïÆ·±àºÅ 
+	NDUINT16  num; 	//ÊıÁ¿ 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::MallBuyItem &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::MallBuyItem &data);
 
 
 
-// ç©å®¶æ‰“å‰¯æœ¬çš„æˆç»©
+// Íæ¼Ò´ò¸±±¾µÄ³É¼¨
 struct MapScore 
 {
  	MapScore() 
@@ -310,11 +310,11 @@ struct MapScore
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT16  map_id; 	//åœ°å›¾ç¼–å· 
-	NDUINT16  enter_times; 	//ä»Šå¤©å·²ç»è¿›å…¥æ¬¡æ•° 
-	NDUINT8  achievements; 	//å®Œæˆæˆå°±ï¼ŒæŒ‰ä½æ“ä½œï¼Œæ¯ä¸ªä½ä»£è¡¨ä¸€ä¸ªæˆå°±ï¼Œåªèƒ½å®Œæˆä¸€æ¬¡ 
-	NDUINT16  score; 	//åˆ†æ•°ï¼Œ0è¡¨ç¤ºæ²¡æœ‰å®Œæˆè¯¥å‰¯æœ¬ 
-	NDUINT64  time; 	//å®Œæˆæ—¶é—´ 
+	NDUINT16  map_id; 	//µØÍ¼±àºÅ 
+	NDUINT16  enter_times; 	//½ñÌìÒÑ¾­½øÈë´ÎÊı 
+	NDUINT8  achievements; 	//Íê³É³É¾Í£¬°´Î»²Ù×÷£¬Ã¿¸öÎ»´ú±íÒ»¸ö³É¾Í£¬Ö»ÄÜÍê³ÉÒ»´Î 
+	NDUINT16  score; 	//·ÖÊı£¬0±íÊ¾Ã»ÓĞÍê³É¸Ã¸±±¾ 
+	NDUINT64  time; 	//Íê³ÉÊ±¼ä 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::MapScore &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::MapScore &data);
@@ -328,15 +328,15 @@ struct SceneMonster
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT16  monsterId; 	//æ€ªç‰©id 
-	NDUINT8  number; 	//æ€ªç‰©æ•°é‡ 
+	NDUINT16  monsterId; 	//¹ÖÎïid 
+	NDUINT8  number; 	//¹ÖÎïÊıÁ¿ 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::SceneMonster &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::SceneMonster &data);
 
 
 
-// ç©å®¶å‰¯æœ¬æˆç»©è®°å½•
+// Íæ¼Ò¸±±¾³É¼¨¼ÇÂ¼
 struct MapScoreBuf 
 {
  	MapScoreBuf() 
@@ -361,7 +361,7 @@ int WriteStream(NDOStreamMsg &omsg,const NetMessage::MapScoreBuf &data);
 
 
 
-// å®¢æˆ·ç«¯å®Œæˆå‰¯æœ¬
+// ¿Í»§¶ËÍê³É¸±±¾
 struct MapFinish 
 {
  	MapFinish() 
@@ -369,11 +369,11 @@ struct MapFinish
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT16  map_id; 	//åœ°å›¾ç¼–å· 
-	NDUINT16  score; 	//åˆ†æ•° 
-	NDUINT8  achievements; 	//æœ¬æ¬¡é€šå…³å®Œæˆçš„æˆå°± 
+	NDUINT16  map_id; 	//µØÍ¼±àºÅ 
+	NDUINT16  score; 	//·ÖÊı 
+	NDUINT8  achievements; 	//±¾´ÎÍ¨¹ØÍê³ÉµÄ³É¾Í 
 	NDUINT16  attrsCount; 	 
-	AttrNodeVal  attrs[DROP_ATTR_CAPACITY]; 	//æ‰“æ€ªæ”¶ç›Š 
+	AttrNodeVal  attrs[DROP_ATTR_CAPACITY]; 	//´ò¹ÖÊÕÒæ 
 	bool push_attrs(const AttrNodeVal &val)
 	{
 		if (attrsCount < DROP_ATTR_CAPACITY)	{
@@ -389,7 +389,7 @@ int WriteStream(NDOStreamMsg &omsg,const NetMessage::MapFinish &data);
 
 
 
-// å‰¯æœ¬æˆå°±å¥–åŠ±
+// ¸±±¾³É¾Í½±Àø
 struct MapAchievAwards 
 {
  	MapAchievAwards() 
@@ -397,9 +397,9 @@ struct MapAchievAwards
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT16  map_id; 	//åœ°å›¾ç¼–å· 
-	NDUINT8  isAllComplete; 	//æ˜¯å¦å…¨éƒ¨å®Œæˆ 
-	NDUINT8  get_achiev; 	//æœ¬æ¬¡æ–°è·å¾—çš„å¥–åŠ± 
+	NDUINT16  map_id; 	//µØÍ¼±àºÅ 
+	NDUINT8  isAllComplete; 	//ÊÇ·ñÈ«²¿Íê³É 
+	NDUINT8  get_achiev; 	//±¾´ÎĞÂ»ñµÃµÄ½±Àø 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::MapAchievAwards &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::MapAchievAwards &data);
@@ -413,16 +413,16 @@ struct DragonInfo
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT16  id; 	//é¾™id 
-	NDUINT16  Level; 	//ç­‰çº§ 
-	NDUINT8  starLevel; 	//æ˜Ÿçº§ 
-	NDUINT8  grade; 	//é˜¶çº§ 
-	NDUINT8  stat; 	//çŠ¶æ€,å‚è€ƒè£…å¤‡çŠ¶æ€ 
-	NDUINT8  slot; 	//æ‘†æ”¾ä½ç½® 
-	NDUINT32  favor; 	//å‹å¥½åº¦ 
-	NDUINT32  exp; 	//ç»éªŒ 
+	NDUINT16  id; 	//Áúid 
+	NDUINT16  Level; 	//µÈ¼¶ 
+	NDUINT8  starLevel; 	//ĞÇ¼¶ 
+	NDUINT8  grade; 	//½×¼¶ 
+	NDUINT8  stat; 	//×´Ì¬,²Î¿¼×°±¸×´Ì¬ 
+	NDUINT8  slot; 	//°Ú·ÅÎ»ÖÃ 
+	NDUINT32  favor; 	//ÓÑºÃ¶È 
+	NDUINT32  exp; 	//¾­Ñé 
 	NDUINT16  skillsCount; 	 
-	NDUINT32  skills[SKILLS_NUM_PER_DRAGON]; 	//é¾™çš„æŠ€èƒ½-IDå’Œç­‰çº§çš„ç»„åˆ 
+	NDUINT32  skills[SKILLS_NUM_PER_DRAGON]; 	//ÁúµÄ¼¼ÄÜ-IDºÍµÈ¼¶µÄ×éºÏ 
 	bool push_skills(const NDUINT32 &val)
 	{
 		if (skillsCount < SKILLS_NUM_PER_DRAGON)	{
@@ -446,7 +446,7 @@ struct DragonsBuf
 	}
 
 	NDUINT16  dragonsCount; 	 
-	DragonInfo  dragons[DRAGON_CAPACITY]; 	//é¾™ 
+	DragonInfo  dragons[DRAGON_CAPACITY]; 	//Áú 
 	bool push_dragons(const DragonInfo &val)
 	{
 		if (dragonsCount < DRAGON_CAPACITY)	{
@@ -462,7 +462,7 @@ int WriteStream(NDOStreamMsg &omsg,const NetMessage::DragonsBuf &data);
 
 
 
-// è§’è‰²å…»çš„é¾™çš„æ•°æ®
+// ½ÇÉ«ÑøµÄÁúµÄÊı¾İ
 struct RoleDragon 
 {
  	RoleDragon() 
@@ -470,10 +470,10 @@ struct RoleDragon
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	DragonInfo  baseInf; 	//é¾™åŸºç¡€æ•°å€¼ 
-	NDUINT16  skill; 	//æŠ€èƒ½ 
-	NDUINT16  rideSkill; 	//éª‘ä¹˜æŠ€èƒ½ 
-	AttrsBuf  attrs; 	//å±æ€§ 
+	DragonInfo  baseInf; 	//Áú»ù´¡ÊıÖµ 
+	NDUINT16  skill; 	//¼¼ÄÜ 
+	NDUINT16  rideSkill; 	//Æï³Ë¼¼ÄÜ 
+	AttrsBuf  attrs; 	//ÊôĞÔ 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::RoleDragon &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::RoleDragon &data);
@@ -487,8 +487,8 @@ struct DropItem
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT32  itemId; 	//ç‰©å“ç±»å‹id 
-	NDUINT16  num; 	//ç‰©å“æ•°é‡ 
+	NDUINT32  itemId; 	//ÎïÆ·ÀàĞÍid 
+	NDUINT16  num; 	//ÎïÆ·ÊıÁ¿ 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::DropItem &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::DropItem &data);
@@ -503,7 +503,7 @@ struct DropPackage
 	}
 
 	NDUINT16  attrsCount; 	 
-	AttrNodeVal  attrs[DROP_ATTR_CAPACITY]; 	//æ‰è½é‡‘é’± 
+	AttrNodeVal  attrs[DROP_ATTR_CAPACITY]; 	//µôÂä½ğÇ® 
 	bool push_attrs(const AttrNodeVal &val)
 	{
 		if (attrsCount < DROP_ATTR_CAPACITY)	{
@@ -514,7 +514,7 @@ struct DropPackage
 	}
 
 	NDUINT16  itemsCount; 	 
-	DropItem  items[DROP_ITEM_CAPACITY]; 	//æ‰è½ç‰©å“ 
+	DropItem  items[DROP_ITEM_CAPACITY]; 	//µôÂäÎïÆ· 
 	bool push_items(const DropItem &val)
 	{
 		if (itemsCount < DROP_ITEM_CAPACITY)	{
@@ -524,7 +524,7 @@ struct DropPackage
 		return false;
 	}
 
-	NDUINT16  dragonFavor; 	//é¾™çš„å‹å¥½åº¦å¥–åŠ±ï¼Œç»™æ‰€æœ‰è£…å¤‡ä¸­çš„é¾™ 
+	NDUINT16  dragonFavor; 	//ÁúµÄÓÑºÃ¶È½±Àø£¬¸øËùÓĞ×°±¸ÖĞµÄÁú 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::DropPackage &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::DropPackage &data);
@@ -538,8 +538,8 @@ struct DropWeightNode
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT16  dropObjId; 	//æ‰è½ID 
-	NDUINT16  weight; 	//æ‰è½æƒé‡ 
+	NDUINT16  dropObjId; 	//µôÂäID 
+	NDUINT16  weight; 	//µôÂäÈ¨ÖØ 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::DropWeightNode &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::DropWeightNode &data);
@@ -554,7 +554,7 @@ struct DropWeightBuf
 	}
 
 	NDUINT16  dataCount; 	 
-	DropWeightNode  data[DRAP_WEIGHT_CAPACIT]; 	//æ‰è½ç‰©æƒé‡ 
+	DropWeightNode  data[DRAP_WEIGHT_CAPACIT]; 	//µôÂäÎïÈ¨ÖØ 
 	bool push_data(const DropWeightNode &val)
 	{
 		if (dataCount < DRAP_WEIGHT_CAPACIT)	{
@@ -570,7 +570,7 @@ int WriteStream(NDOStreamMsg &omsg,const NetMessage::DropWeightBuf &data);
 
 
 
-// æ´—ç‚¼è£…å¤‡è¯·æ±‚
+// Ï´Á¶×°±¸ÇëÇó
 struct ResetEquip 
 {
  	ResetEquip() 
@@ -578,16 +578,16 @@ struct ResetEquip
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT32  instId; 	//è£…å¤‡å®ä¾‹id 
-	NDUINT8  attrIndex; 	//æ´—ç»ƒå±æ€§ç´¢å¼• 
-	NDUINT32  stuffInstId; 	//æ´—ç‚¼æ¶ˆåŒ–id 
+	NDUINT32  instId; 	//×°±¸ÊµÀıid 
+	NDUINT8  attrIndex; 	//Ï´Á·ÊôĞÔË÷Òı 
+	NDUINT32  stuffInstId; 	//Ï´Á¶Ïû»¯id 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::ResetEquip &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::ResetEquip &data);
 
 
 
-// æ´—ç‚¼ç»“æœ
+// Ï´Á¶½á¹û
 struct ResetEquipResult 
 {
  	ResetEquipResult() 
@@ -595,10 +595,10 @@ struct ResetEquipResult
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT32  instId; 	//è£…å¤‡å®ä¾‹id 
-	NDUINT32  stuffInstId; 	//æ´—ç‚¼æ¶ˆåŒ–id 
-	NDUINT8  stuffAttrIndex; 	//è·å¾—å±æ€§ç´¢å¼• 
-	EquipAttrNode  attrVal; 	//è·å¾—æ´—ç»ƒç»“æœï¼Œå±æ€§å€¼ 
+	NDUINT32  instId; 	//×°±¸ÊµÀıid 
+	NDUINT32  stuffInstId; 	//Ï´Á¶Ïû»¯id 
+	NDUINT8  stuffAttrIndex; 	//»ñµÃÊôĞÔË÷Òı 
+	EquipAttrNode  attrVal; 	//»ñµÃÏ´Á·½á¹û£¬ÊôĞÔÖµ 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::ResetEquipResult &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::ResetEquipResult &data);
@@ -613,15 +613,15 @@ struct WeaponData
 	}
 
 	NDUINT16  id; 	//id 
-	NDUINT16  skinId; 	//çš®è‚¤id 
-	NDUINT16  Level; 	//å¼ºåŒ–ç­‰çº§ï¼Œåˆå§‹0 
+	NDUINT16  skinId; 	//Æ¤·ôid 
+	NDUINT16  Level; 	//Ç¿»¯µÈ¼¶£¬³õÊ¼0 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::WeaponData &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::WeaponData &data);
 
 
 
-// æ­¦å™¨æ•°æ®
+// ÎäÆ÷Êı¾İ
 struct WeaponsBuf 
 {
  	WeaponsBuf() 
@@ -646,7 +646,7 @@ int WriteStream(NDOStreamMsg &omsg,const NetMessage::WeaponsBuf &data);
 
 
 
-// æ ¼å¼åŒ–æ—¥å¿—ä¿¡æ¯
+// ¸ñÊ½»¯ÈÕÖ¾ĞÅÏ¢
 struct formatLogInfo 
 {
  	formatLogInfo() 
@@ -665,7 +665,7 @@ int WriteStream(NDOStreamMsg &omsg,const NetMessage::formatLogInfo &data);
 
 
 
-// å•†åº—ç‰©å“ä¿¡æ¯
+// ÉÌµêÎïÆ·ĞÅÏ¢
 struct ItemInShop 
 {
  	ItemInShop() 
@@ -673,16 +673,16 @@ struct ItemInShop
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT16  itemPackId; 	//å•†å“id 
-	NDUINT8  packIndex; 	//ç‰©å“åœ¨åŒ…è£¹ä¸­çš„ç´¢å¼• 
-	NDUINT8  buyNumber; 	//å¯ä»¥è´­ä¹°æ¬¡æ•°,0ä¸èƒ½è´­ä¹° 
+	NDUINT16  itemPackId; 	//ÉÌÆ·id 
+	NDUINT8  packIndex; 	//ÎïÆ·ÔÚ°ü¹üÖĞµÄË÷Òı 
+	NDUINT8  buyNumber; 	//¿ÉÒÔ¹ºÂò´ÎÊı,0²»ÄÜ¹ºÂò 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::ItemInShop &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::ItemInShop &data);
 
 
 
-// å•†åº—å‡ºå”®ç‰©å“
+// ÉÌµê³öÊÛÎïÆ·
 struct ShopInfo 
 {
  	ShopInfo() 
@@ -691,10 +691,10 @@ struct ShopInfo
 	}
 
 	NDUINT16  shopId; 	//id 
-	NDUINT16  resetTimes; 	//é‡ç½®æ¬¡æ•° 
-	NDUINT64  lastResetTm; 	//ä¸Šæ¬¡é‡ç½®æ—¶é—´time_t 
+	NDUINT16  resetTimes; 	//ÖØÖÃ´ÎÊı 
+	NDUINT64  lastResetTm; 	//ÉÏ´ÎÖØÖÃÊ±¼ätime_t 
 	NDUINT16  itemsCount; 	 
-	ItemInShop  items[SHOP_ITEMS_CAPACITY]; 	//ç‰©å“åˆ—è¡¨ 
+	ItemInShop  items[SHOP_ITEMS_CAPACITY]; 	//ÎïÆ·ÁĞ±í 
 	bool push_items(const ItemInShop &val)
 	{
 		if (itemsCount < SHOP_ITEMS_CAPACITY)	{
@@ -718,7 +718,7 @@ struct RoleShopsInfo
 	}
 
 	NDUINT16  dataCount; 	 
-	ShopInfo  data[SHOPS_NUMBER]; 	//å•†åº—è´­ä¹°ä¿¡æ¯ 
+	ShopInfo  data[SHOPS_NUMBER]; 	//ÉÌµê¹ºÂòĞÅÏ¢ 
 	bool push_data(const ShopInfo &val)
 	{
 		if (dataCount < SHOPS_NUMBER)	{
@@ -734,7 +734,7 @@ int WriteStream(NDOStreamMsg &omsg,const NetMessage::RoleShopsInfo &data);
 
 
 
-// ä»»åŠ¡æ•°æ®
+// ÈÎÎñÊı¾İ
 struct TaskInfo 
 {
  	TaskInfo() 
@@ -743,15 +743,15 @@ struct TaskInfo
 	}
 
 	NDUINT16  id; 	//id 
-	NDUINT16  progress; 	//è¿›åº¦ 
-	NDUINT64  taskTM; 	//æ—¶é—´ï¼šå®Œæˆæ—¶é—´æˆ–è€…é¢†å–å¥–åŠ±çš„æ—¶é—´ 
+	NDUINT16  progress; 	//½ø¶È 
+	NDUINT64  taskTM; 	//Ê±¼ä£ºÍê³ÉÊ±¼ä»òÕßÁìÈ¡½±ÀøµÄÊ±¼ä 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::TaskInfo &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::TaskInfo &data);
 
 
 
-// ä»»åŠ¡æ•°ç»„
+// ÈÎÎñÊı×é
 struct TaskBuf 
 {
  	TaskBuf() 
@@ -776,7 +776,7 @@ int WriteStream(NDOStreamMsg &omsg,const NetMessage::TaskBuf &data);
 
 
 
-// å·²ç»å®Œæˆçš„ä»»åŠ¡æ•°æ®
+// ÒÑ¾­Íê³ÉµÄÈÎÎñÊı¾İ
 struct TaskLog 
 {
  	TaskLog() 
@@ -785,15 +785,15 @@ struct TaskLog
 	}
 
 	NDUINT16  id; 	//id 
-	NDUINT16  number; 	//å®Œæˆæ¬¡æ•° 
-	NDUINT64  taskTM; 	//æ—¶é—´ï¼šå®Œæˆæ—¶é—´æˆ–è€…é¢†å–å¥–åŠ±çš„æ—¶é—´ 
+	NDUINT16  number; 	//Íê³É´ÎÊı 
+	NDUINT64  taskTM; 	//Ê±¼ä£ºÍê³ÉÊ±¼ä»òÕßÁìÈ¡½±ÀøµÄÊ±¼ä 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::TaskLog &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::TaskLog &data);
 
 
 
-// ä»»åŠ¡æ•°ç»„
+// ÈÎÎñÊı×é
 struct TaskLogBuf 
 {
  	TaskLogBuf() 
@@ -818,7 +818,7 @@ int WriteStream(NDOStreamMsg &omsg,const NetMessage::TaskLogBuf &data);
 
 
 
-// ä»»åŠ¡å¥–åŠ±
+// ÈÎÎñ½±Àø
 struct TaskAwards 
 {
  	TaskAwards() 
@@ -862,12 +862,12 @@ struct MailInfo
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT32  from_id; 	//å‘é€è€…idï¼Œ0ç³»ç»Ÿ 
-	NDUINT64  send_tm; 	//å‘é€æ—¶é—´ 
-	char  title[MAIL_TITLE_LENGTH]; 	//é‚®ä»¶æ ‡é¢˜ 
-	char  context[MAIL_BODY_LENGTH]; 	//é‚®ä»¶å†…å®¹ 
+	NDUINT32  from_id; 	//·¢ËÍÕßid£¬0ÏµÍ³ 
+	NDUINT64  send_tm; 	//·¢ËÍÊ±¼ä 
+	char  title[MAIL_TITLE_LENGTH]; 	//ÓÊ¼ş±êÌâ 
+	char  context[MAIL_BODY_LENGTH]; 	//ÓÊ¼şÄÚÈİ 
 	NDUINT16  attrsCount; 	 
-	AttrNodeVal  attrs[3]; 	//å±æ€§é™„ä»¶ 
+	AttrNodeVal  attrs[3]; 	//ÊôĞÔ¸½¼ş 
 	bool push_attrs(const AttrNodeVal &val)
 	{
 		if (attrsCount < 3)	{
@@ -878,7 +878,7 @@ struct MailInfo
 	}
 
 	NDUINT16  itemsCount; 	 
-	DropItem  items[3]; 	//ç‰©å“é™„ä»¶ 
+	DropItem  items[3]; 	//ÎïÆ·¸½¼ş 
 	bool push_items(const DropItem &val)
 	{
 		if (itemsCount < 3)	{
@@ -894,7 +894,7 @@ int WriteStream(NDOStreamMsg &omsg,const NetMessage::MailInfo &data);
 
 
 
-// é¾™çš„è¢«åŠ¨æŠ€èƒ½è£…å¤‡ä¿¡æ¯
+// ÁúµÄ±»¶¯¼¼ÄÜ×°±¸ĞÅÏ¢
 struct DragonSkill 
 {
  	DragonSkill() 
@@ -910,7 +910,7 @@ int WriteStream(NDOStreamMsg &omsg,const NetMessage::DragonSkill &data);
 
 
 
-// pvpåŸºç¡€ä¿¡æ¯
+// pvp»ù´¡ĞÅÏ¢
 struct RolePvpBaseInfo 
 {
  	RolePvpBaseInfo() 
@@ -919,10 +919,10 @@ struct RolePvpBaseInfo
 	}
 
 	NDUINT32  roleId; 	//id 
-	NDUINT16  rankIndex; 	//æ’å 
-	char  name[ROLE_NAME_LENGTH]; 	//åå­— 
+	NDUINT16  rankIndex; 	//ÅÅÃû 
+	char  name[ROLE_NAME_LENGTH]; 	//Ãû×Ö 
 	NDUINT16  attrsCount; 	 
-	AttrNodeVal  attrs[ROLE_ATTRS_NUMBER]; 	//å±æ€§ 
+	AttrNodeVal  attrs[ROLE_ATTRS_NUMBER]; 	//ÊôĞÔ 
 	bool push_attrs(const AttrNodeVal &val)
 	{
 		if (attrsCount < ROLE_ATTRS_NUMBER)	{
@@ -938,7 +938,7 @@ int WriteStream(NDOStreamMsg &omsg,const NetMessage::RolePvpBaseInfo &data);
 
 
 
-// pvpè¯¦ç»†ä¿¡æ¯
+// pvpÏêÏ¸ĞÅÏ¢
 struct RolePvpDetail 
 {
  	RolePvpDetail() 
@@ -947,10 +947,10 @@ struct RolePvpDetail
 	}
 
 	NDUINT32  roleId; 	//id 
-	NDUINT16  rankIndex; 	//æ’å 
-	char  name[ROLE_NAME_LENGTH]; 	//åå­— 
+	NDUINT16  rankIndex; 	//ÅÅÃû 
+	char  name[ROLE_NAME_LENGTH]; 	//Ãû×Ö 
 	NDUINT16  attrsCount; 	 
-	AttrNodeVal  attrs[ROLE_ATTRS_NUMBER]; 	//å±æ€§ 
+	AttrNodeVal  attrs[ROLE_ATTRS_NUMBER]; 	//ÊôĞÔ 
 	bool push_attrs(const AttrNodeVal &val)
 	{
 		if (attrsCount < ROLE_ATTRS_NUMBER)	{
@@ -961,7 +961,7 @@ struct RolePvpDetail
 	}
 
 	NDUINT16  skillsCount; 	 
-	SkillInfo  skills[SKILL_CAPACITY]; 	//æŠ€èƒ½ 
+	SkillInfo  skills[SKILL_CAPACITY]; 	//¼¼ÄÜ 
 	bool push_skills(const SkillInfo &val)
 	{
 		if (skillsCount < SKILL_CAPACITY)	{
@@ -972,7 +972,7 @@ struct RolePvpDetail
 	}
 
 	NDUINT16  equipsCount; 	 
-	EquipInfo  equips[EQUIP_ATTR_NUMBER]; 	//è£…å¤‡ 
+	EquipInfo  equips[EQUIP_ATTR_NUMBER]; 	//×°±¸ 
 	bool push_equips(const EquipInfo &val)
 	{
 		if (equipsCount < EQUIP_ATTR_NUMBER)	{
@@ -983,7 +983,7 @@ struct RolePvpDetail
 	}
 
 	NDUINT16  weaponsCount; 	 
-	WeaponData  weapons[WEAPON_NUMBER]; 	//æ­¦å™¨ 
+	WeaponData  weapons[WEAPON_NUMBER]; 	//ÎäÆ÷ 
 	bool push_weapons(const WeaponData &val)
 	{
 		if (weaponsCount < WEAPON_NUMBER)	{
@@ -994,7 +994,7 @@ struct RolePvpDetail
 	}
 
 	NDUINT16  dragonCount; 	 
-	DragonInfo  dragon[DRAGON_EQUIP_SLOT_NUM]; 	//è£…å¤‡çš„é¾™ 
+	DragonInfo  dragon[DRAGON_EQUIP_SLOT_NUM]; 	//×°±¸µÄÁú 
 	bool push_dragon(const DragonInfo &val)
 	{
 		if (dragonCount < DRAGON_EQUIP_SLOT_NUM)	{
@@ -1005,7 +1005,7 @@ struct RolePvpDetail
 	}
 
 	NDUINT16  dragonSkillsCount; 	 
-	DragonSkill  dragonSkills[DRAGON_SKILL_SLOT_NUM]; 	//è£…å¤‡å¥½çš„é¾™çš„æŠ€èƒ½ 
+	DragonSkill  dragonSkills[DRAGON_SKILL_SLOT_NUM]; 	//×°±¸ºÃµÄÁúµÄ¼¼ÄÜ 
 	bool push_dragonSkills(const DragonSkill &val)
 	{
 		if (dragonSkillsCount < DRAGON_SKILL_SLOT_NUM)	{
@@ -1021,7 +1021,7 @@ int WriteStream(NDOStreamMsg &omsg,const NetMessage::RolePvpDetail &data);
 
 
 
-// å±æ€§å•†åº—è´­ä¹°æ¬¡æ•°
+// ÊôĞÔÉÌµê¹ºÂò´ÎÊı
 struct AttrStoreNode 
 {
  	AttrStoreNode() 
@@ -1029,15 +1029,15 @@ struct AttrStoreNode
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT16  itemId; 	//å•†å“ID 
-	NDUINT16  buyTimes; 	//è´­ä¹°æ¬¡æ•° 
+	NDUINT16  itemId; 	//ÉÌÆ·ID 
+	NDUINT16  buyTimes; 	//¹ºÂò´ÎÊı 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::AttrStoreNode &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::AttrStoreNode &data);
 
 
 
-// å±æ€§è´­ä¹°è®°å½•
+// ÊôĞÔ¹ºÂò¼ÇÂ¼
 struct AttrStoreInfo 
 {
  	AttrStoreInfo() 
@@ -1046,7 +1046,7 @@ struct AttrStoreInfo
 	}
 
 	NDUINT16  itemsCount; 	 
-	AttrStoreNode  items[100]; 	//å±æ€§å•†åº—è´­ä¹°è®°å½• 
+	AttrStoreNode  items[100]; 	//ÊôĞÔÉÌµê¹ºÂò¼ÇÂ¼ 
 	bool push_items(const AttrStoreNode &val)
 	{
 		if (itemsCount < 100)	{
@@ -1062,7 +1062,7 @@ int WriteStream(NDOStreamMsg &omsg,const NetMessage::AttrStoreInfo &data);
 
 
 
-// æŠ½å¥–æ¬¡æ•°
+// ³é½±´ÎÊı
 struct LotteryNode 
 {
  	LotteryNode() 
@@ -1070,15 +1070,15 @@ struct LotteryNode
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT8  lotteryId; 	//å®ç®±ID 
-	NDUINT8  times; 	//æŠ½å¥–æ¬¡æ•° 
+	NDUINT8  lotteryId; 	//±¦ÏäID 
+	NDUINT8  times; 	//³é½±´ÎÊı 
 };
 int ReadStream(NDIStreamMsg &inmsg,NetMessage::LotteryNode &data);
 int WriteStream(NDOStreamMsg &omsg,const NetMessage::LotteryNode &data);
 
 
 
-// æŠ½å¥–ä¿¡æ¯
+// ³é½±ĞÅÏ¢
 struct LotteryLog 
 {
  	LotteryLog() 
@@ -1087,7 +1087,7 @@ struct LotteryLog
 	}
 
 	NDUINT16  lotteryCount; 	 
-	LotteryNode  lottery[20]; 	//æŠ½å¥– 
+	LotteryNode  lottery[20]; 	//³é½± 
 	bool push_lottery(const LotteryNode &val)
 	{
 		if (lotteryCount < 20)	{
@@ -1110,9 +1110,9 @@ struct RoleCreateInfo
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	char  roleName[ROLE_NAME_LENGTH]; 	//è§’è‰²åå­— 
+	char  roleName[ROLE_NAME_LENGTH]; 	//½ÇÉ«Ãû×Ö 
 	NDUINT16  roleAttrsCount; 	 
-	AttrNodeVal  roleAttrs[ROLE_ATTRS_ON_CREATE]; 	//åˆ›å»ºæ—¶åˆå§‹åŒ–çš„å±æ€§ 
+	AttrNodeVal  roleAttrs[ROLE_ATTRS_ON_CREATE]; 	//´´½¨Ê±³õÊ¼»¯µÄÊôĞÔ 
 	bool push_roleAttrs(const AttrNodeVal &val)
 	{
 		if (roleAttrsCount < ROLE_ATTRS_ON_CREATE)	{
@@ -1135,9 +1135,9 @@ struct DragonToFragment
 		memset(this, 0, sizeof(*this) ); 
 	}
 
-	NDUINT16  dragonId; 	//é¾™id 
+	NDUINT16  dragonId; 	//Áúid 
 	NDUINT16  itemsCount; 	 
-	DropItem  items[10]; 	//ç¢ç‰‡ç‰©å“ 
+	DropItem  items[10]; 	//ËéÆ¬ÎïÆ· 
 	bool push_items(const DropItem &val)
 	{
 		if (itemsCount < 10)	{

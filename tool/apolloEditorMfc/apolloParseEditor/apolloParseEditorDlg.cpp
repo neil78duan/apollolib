@@ -14,12 +14,12 @@
 #include "apolloParseEditor.h"
 #include "nd_common/nd_common.h"
 #include "nd_net/byte_order.h"
-#include "logic_compile.h"
-#include "logicParser.h"
-#include "logicEngineRoot.h"
-#include "roleattr_help.h"
-#include "stat_machine.h"
-#include "dbl_mgr.h"
+#include "logic_parser/logic_compile.h"
+#include "logic_parser/logicParser.h"
+#include "logic_parser/logicEngineRoot.h"
+#include "attribute/roleattr_help.h"
+#include "attribute/stat_machine.h"
+#include "logic_parser/dbl_mgr.h"
 #include "ndapplib/ndsingleton.h"
 
 #ifdef _DEBUG

@@ -18,7 +18,7 @@
 #endif
 
 #ifndef BUILD_AS_THIRD_PARTY
-#include "MessageID.h"
+#include "netMessage/MessageID.h"
 namespace NetMessage
 #endif
 {

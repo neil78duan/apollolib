@@ -1,11 +1,11 @@
 /* please do not change this file ,
  * auto create by program 
- * create time 2016-7-28 12:18:12 
+ * create time 2016-8-17 16:11:1 
  */
 
 
 
-#include "auto_dataType.h"
+#include "netMessage/auto_dataType.h"
 namespace NetMessage 
 {
 

@@ -9,12 +9,12 @@
 #include <stdarg.h>
 #include <math.h>
 
-#include "logicEndian.h"
-#include "logicParser.h"
-#include "dbl_mgr.h"
-#include "logic_compile.h"
-#include "logicEngineRoot.h"
-#include "logicStruct.hpp"
+#include "logic_parser/logicEndian.h"
+#include "logic_parser/logicParser.h"
+#include "logic_parser/dbl_mgr.h"
+#include "logic_parser/logic_compile.h"
+#include "logic_parser/logicEngineRoot.h"
+#include "logic_parser/logicStruct.hpp"
 
 
 

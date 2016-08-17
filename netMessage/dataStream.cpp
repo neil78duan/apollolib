@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 duanxiuyun. All rights reserved.
 //
 
-#include "dataStream.h"
+#include "netMessage/dataStream.h"
 
 #ifndef BUILD_AS_THIRD_PARTY
 namespace NetMessage

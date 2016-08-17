@@ -6,12 +6,12 @@
  * 2011/2/21 17:43:08
  */
 
-#include "stat_machine.h"
+#include "attribute/stat_machine.h"
 #include <stdlib.h>
-#include "stat_data.h"
+#include "attribute/stat_data.h"
 
 #include "ndapplib/applib.h"
-#include "dbl_mgr.h"
+#include "logic_parser/dbl_mgr.h"
 
 
 int StatMachine::s_forbid_num = 0 ;	//策划填的禁止列表个数

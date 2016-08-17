@@ -6,8 +6,8 @@
 //  Copyright (c) 2014年 duanxiuyun. All rights reserved.
 //
 
-#include "playerMgr.h"
-#include "gameRole.h"
+#include "srv_common/playerMgr.h"
+#include "srv_common/gameRole.h"
 
 #include <vector>
 

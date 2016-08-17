@@ -5,10 +5,10 @@
  *
  */
 
-#include "logicEndian.h"
-#include "logicDataType.h"
-#include "objectBaseMgr.h"
-#include "logicStruct.hpp"
+#include "logic_parser/logicEndian.h"
+#include "logic_parser/logicDataType.h"
+#include "logic_parser/objectBaseMgr.h"
+#include "logic_parser/logicStruct.hpp"
 #include <math.h>
 #include <stdarg.h>
 

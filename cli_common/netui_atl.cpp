@@ -7,9 +7,9 @@
 //
 
 #include "nd_common/nd_common.h"
-#include "login_apollo.h"
+#include "cli_common/login_apollo.h"
 #include "apollo_errors.h"
-#include "netui_atl.h"
+#include "cli_common/netui_atl.h"
 #include "ndcli/nd_api_c.h"
 #include "msg_def.h"
 

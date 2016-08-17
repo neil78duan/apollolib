@@ -6,9 +6,9 @@
 #include "DlgFunclist.h"
 #include "afxdialogex.h"
 
-#include "logic_compile.h"
+#include "logic_parser/logic_compile.h"
 
-#include "logic_editor_helper.h"
+#include "logic_parser/logic_editor_helper.h"
 using namespace LogicEditorHelper;
 // CDlgFunclist ¶Ô»°¿ò
 

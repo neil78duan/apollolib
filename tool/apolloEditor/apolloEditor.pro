@@ -39,10 +39,7 @@ DEFINES +=  ND_DEBUG
 
 INCLUDEPATH += $$ndsdk_dir/include \
         $$game_dir/include \
-        $$game_dir/cli_common \
-        $$game_dir/logic_parser \
-        $$game_dir/netMessage \
-        $$game_dir/attribute
+        $$game_dir
 
 QT       += core gui
 

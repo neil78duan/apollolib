@@ -6,7 +6,7 @@
  * 2011/2/21 10:33:56
  */
 
-#include "stat_machine.h"
+#include "attribute/stat_machine.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>

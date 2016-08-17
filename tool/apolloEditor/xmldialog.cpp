@@ -1,6 +1,6 @@
 #include "xmldialog.h"
 #include "ui_xmldialog.h"
-#include "dbl_mgr.h"
+#include "logic_parser/dbl_mgr.h"
 
 #include "listdialog.h"
 #include <QFileDialog>

@@ -7,7 +7,7 @@
  * 2011/2/24 13:30:52
  */
 
-#include "ndmath.h"
+#include "srv_common/ndmath.h"
 #include <memory.h>
 
 const vector2f nd_cossin_buff[] = 

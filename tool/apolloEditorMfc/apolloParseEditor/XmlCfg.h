@@ -6,7 +6,7 @@
 #include "ctrls/GradShow.h"
 #include "resource.h"
 #include "DrawTreeCtrl.h"
-#include "logic_editor_helper.h"
+#include "logic_parser/logic_editor_helper.h"
 
 BOOL ND_SetChildrenFont(HWND hwnd,bool bRedraw,int nSize, LPCTSTR lpszName)  ;
 
@@ -15,7 +15,6 @@ BOOL ND_SetChildrenFont(HWND hwnd,bool bRedraw,int nSize, LPCTSTR lpszName)  ;
 #include <map>
 using namespace std ;
 
-#include "logic_editor_helper.h"
 using namespace LogicEditorHelper;
 
 // CXMLParserWnd window

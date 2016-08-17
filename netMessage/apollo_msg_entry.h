@@ -9,7 +9,7 @@
 #ifndef gameHall_apollo_msg_entry_h
 #define gameHall_apollo_msg_entry_h
 
-#include "dataStream.h"
+#include "netMessage/dataStream.h"
 
 /*
 CPPAPI const char *protocol_getNameByID(NDUINT32 id);

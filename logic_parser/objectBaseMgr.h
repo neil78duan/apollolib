@@ -9,7 +9,7 @@
  #ifndef _OBJECT_BASE_MGR_H_
  #define _OBJECT_BASE_MGR_H_
 
-#include "logicDataType.h"
+#include "logic_parser/logicDataType.h"
 
 
 typedef NDUINT32 operator_index_t;

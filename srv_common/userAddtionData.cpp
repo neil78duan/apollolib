@@ -7,7 +7,7 @@
  * 2015-5-22
  */
 
-#include "userAddtionData.h"
+#include "srv_common/userAddtionData.h"
 #include "nd_net/nd_netbyte.h"
 #include <string>
 

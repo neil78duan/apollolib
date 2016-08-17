@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 duanxiuyun. All rights reserved.
 //
 
-#include "gameRole.h"
+#include "srv_common/gameRole.h"
 
 
 Role::Role () 

@@ -7,7 +7,7 @@
  * 2016-1-14
  */
 
-#include "logic_editor_helper.h"
+#include "logic_parser/logic_editor_helper.h"
 
 namespace LogicEditorHelper
 {

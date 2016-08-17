@@ -6,10 +6,10 @@
  * 2011/3/14 17:21:26
  */
 
-#include "roleattr_help.h"
+#include "attribute/roleattr_help.h"
 #include "nd_vm/nd_vm.h"
 #include "nd_common/nd_common.h"
-#include "dbl_mgr.h"
+#include "logic_parser/dbl_mgr.h"
 #include "ndapplib/ndsingleton.h"
 
 #include <math.h>

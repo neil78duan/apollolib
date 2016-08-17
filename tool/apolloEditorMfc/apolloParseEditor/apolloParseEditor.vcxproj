@@ -61,7 +61,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_GUI_TOOL_;ND_DEBUG;WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>../../../netMessage;../../../include;../../../../ndsdk/include;../../../cli_common;../../../attribute;../../../logic_parser;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../include;../../../../ndsdk/include;../../../;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -89,7 +89,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_GUI_TOOL_;WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>../../../netMessage;../../../include;../../../../ndsdk/include;../../../cli_common;../../../attribute;../../../logic_parser;.;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../include;../../../../ndsdk/include;../../../;.</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

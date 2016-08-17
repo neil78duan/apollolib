@@ -3,16 +3,16 @@
 #include "connectdialog.h"
 #include "nd_common/nd_common.h"
 #include "xmldialog.h"
-#include "dbl_mgr.h"
 #include "newfiledialog.h"
 #include "ndlib.h"
 
-#include "logic_compile.h"
-#include "logicParser.h"
-#include "logicEngineRoot.h"
-#include "roleattr_help.h"
-#include "stat_machine.h"
-#include "dbl_mgr.h"
+#include "logic_parser/dbl_mgr.h"
+#include "logic_parser/logic_compile.h"
+#include "logic_parser/logicParser.h"
+#include "logic_parser/logicEngineRoot.h"
+#include "logic_parser/dbl_mgr.h"
+#include "attribute/roleattr_help.h"
+#include "attribute/stat_machine.h"
 #include "ndapplib/ndsingleton.h"
 
 #include <QMessageBox>

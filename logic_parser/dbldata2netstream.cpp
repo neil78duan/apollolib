@@ -7,8 +7,8 @@
  *
  */
 
-#include "dbldata2netstream.h"
-#include "logicStruct.hpp"
+#include "logic_parser/dbldata2netstream.h"
+#include "logic_parser/logicStruct.hpp"
 
 static int _writeMsgToUserDef(const DBLDataNode &data, NDOStreamMsg &omsg)
 {

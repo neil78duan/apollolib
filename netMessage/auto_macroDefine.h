@@ -1,144 +1,144 @@
 /* please do not change this file ,
  * auto create by program 
- * create time 2016-7-28 12:18:12 
+ * create time 2016-8-17 16:11:1 
  */
 
 #ifndef _AUTO_MACRO_DEFINE_H_
 #define _AUTO_MACRO_DEFINE_H_
 namespace NetMessage 
 {
-#define 	 ROLE_NAME_LENGTH  		40 		//è§’è‰²åå­—é•¿åº¦ 
+#define 	 ROLE_NAME_LENGTH  		40 		//½ÇÉ«Ãû×Ö³¤¶È 
 
-#define 	 EQUIP_SLOT_NUMBER  		10 		//è£…å¤‡æ ä¸ªæ•° 
+#define 	 EQUIP_SLOT_NUMBER  		10 		//×°±¸À¸¸öÊý 
 
-#define 	 ROLE_ATTRS_NUMBER  		200 		//è§’è‰²å±žæ€§ä¸ªæ•° 
+#define 	 ROLE_ATTRS_NUMBER  		200 		//½ÇÉ«ÊôÐÔ¸öÊý 
 
-#define 	 ROLE_ATTRS_ON_CREATE  		5 		//è§’è‰²åˆ›å»ºæ—¶ï¼Œå®¢æˆ·ç«¯å‘é€ç»™æœåŠ¡å™¨çš„å±žæ€§ä¸ªæ•° 
+#define 	 ROLE_ATTRS_ON_CREATE  		5 		//½ÇÉ«´´½¨Ê±£¬¿Í»§¶Ë·¢ËÍ¸ø·þÎñÆ÷µÄÊôÐÔ¸öÊý 
 
-#define 	 PACKAGE_CAPACITY  		500 		//èƒŒåŒ…å®¹é‡ 
+#define 	 PACKAGE_CAPACITY  		500 		//±³°üÈÝÁ¿ 
 
-#define 	 EQUIP_PACK_CAPACITY  		100 		//æ­¦å™¨èƒŒåŒ…å®¹é‡ 
+#define 	 EQUIP_PACK_CAPACITY  		100 		//ÎäÆ÷±³°üÈÝÁ¿ 
 
-#define 	 SKILL_CAPACITY  		20 		//æŠ€èƒ½å®¹é‡ 
+#define 	 SKILL_CAPACITY  		20 		//¼¼ÄÜÈÝÁ¿ 
 
-#define 	 MAX_MAP_INSTANCE_NUMBER  		200 		//æŽ¨å›¾å‰¯æœ¬ä¸ªæ•° 
+#define 	 MAX_MAP_INSTANCE_NUMBER  		200 		//ÍÆÍ¼¸±±¾¸öÊý 
 
-#define 	 CLIENT_SETTING_SIZE  		4096 		//å®¢æˆ·ç«¯é…ç½®ç¼“å†²å¤§å° 
+#define 	 CLIENT_SETTING_SIZE  		4096 		//¿Í»§¶ËÅäÖÃ»º³å´óÐ¡ 
 
-#define 	 RANK_CAPACITY  		100 		//æŽ’è¡Œæ¦œå®¹é‡ 
+#define 	 RANK_CAPACITY  		100 		//ÅÅÐÐ°ñÈÝÁ¿ 
 
-#define 	 PVP_TIME_LIMITED  		180 		//PVPæ—¶é—´é™åˆ¶s 
+#define 	 PVP_TIME_LIMITED  		180 		//PVPÊ±¼äÏÞÖÆs 
 
-#define 	 DROP_ATTR_CAPACITY  		8 		//æŽ‰è½å±žæ€§å¥–åŠ±ä¸ªæ•° 
+#define 	 DROP_ATTR_CAPACITY  		8 		//µôÂäÊôÐÔ½±Àø¸öÊý 
 
-#define 	 DROP_ITEM_CAPACITY  		10 		//ä¸€æ¬¡æœ€å¤šæŽ‰è½ç‰©å“æ•°é‡ 
+#define 	 DROP_ITEM_CAPACITY  		10 		//Ò»´Î×î¶àµôÂäÎïÆ·ÊýÁ¿ 
 
-#define 	 PVP_MATCH_ROLE_NUM  		3 		//ä¸€æ¬¡åŒ¹é…3ä¸ª 
+#define 	 PVP_MATCH_ROLE_NUM  		3 		//Ò»´ÎÆ¥Åä3¸ö 
 
-#define 	 PVP_RANK_PAGE_SIZE  		20 		//æ¯ä¸€é¡µçš„ä¸ªæ•° 
+#define 	 PVP_RANK_PAGE_SIZE  		20 		//Ã¿Ò»Ò³µÄ¸öÊý 
 
-#define 	 DRAP_WEIGHT_CAPACIT  		1024 		//ä¿å­˜æŽ‰è½æƒé‡çš„ä¸ªæ•° 
+#define 	 DRAP_WEIGHT_CAPACIT  		1024 		//±£´æµôÂäÈ¨ÖØµÄ¸öÊý 
 
-#define 	 EQUIP_ATTR_NUMBER  		6 		//è£…å¤‡é™„åŠ å±žæ€§ä¸ªæ•° 
+#define 	 EQUIP_ATTR_NUMBER  		6 		//×°±¸¸½¼ÓÊôÐÔ¸öÊý 
 
-#define 	 WEAPON_NUMBER  		2 		//æ­¦å™¨ä¸ªæ•° 
+#define 	 WEAPON_NUMBER  		2 		//ÎäÆ÷¸öÊý 
 
-#define 	 DRAGON_EQUIP_SLOT_NUM  		8 		//å¯ä»¥è£…å¤‡é¾™çš„ä¸ªæ•° 
+#define 	 DRAGON_EQUIP_SLOT_NUM  		8 		//¿ÉÒÔ×°±¸ÁúµÄ¸öÊý 
 
-#define 	 DRAGON_SKILL_SLOT_NUM  		5 		//é¾™çš„è¢«åŠ¨æŠ€èƒ½æ§½ä½ 
+#define 	 DRAGON_SKILL_SLOT_NUM  		5 		//ÁúµÄ±»¶¯¼¼ÄÜ²ÛÎ» 
 
-#define 	 DRAGON_PASSIVE_SKILL_TYPE  		4 		//é¾™å½±æŠ€ç±»åž‹ 
+#define 	 DRAGON_PASSIVE_SKILL_TYPE  		4 		//ÁúÓ°¼¼ÀàÐÍ 
 
-#define 	 SKILLS_NUM_PER_DRAGON  		4 		//æ¯ä¸ªé¾™æœ‰çš„æŠ€æœ¯æ•°é‡-ä¸»åŠ¨æŠ€èƒ½ 
+#define 	 SKILLS_NUM_PER_DRAGON  		4 		//Ã¿¸öÁúÓÐµÄ¼¼ÊõÊýÁ¿-Ö÷¶¯¼¼ÄÜ 
 
-#define 	 WEAPON_MAX_ITEM_ID  		1000 		//æ­¦å™¨ä¸ªæ•° 
+#define 	 WEAPON_MAX_ITEM_ID  		1000 		//ÎäÆ÷¸öÊý 
 
-#define 	 TABLET_NUMBER  		128 		//çŸ³ç¢‘èŠ‚ç‚¹ä¸ªæ•° 
+#define 	 TABLET_NUMBER  		128 		//Ê¯±®½Úµã¸öÊý 
 
-#define 	 DRAGON_CAPACITY  		40 		//çŽ©å®¶æœ€å¤šå¯ä»¥æ‹¥æœ‰çš„é¾™çš„æ•°é‡ 
+#define 	 DRAGON_CAPACITY  		40 		//Íæ¼Ò×î¶à¿ÉÒÔÓµÓÐµÄÁúµÄÊýÁ¿ 
 
-#define 	 PVP_MAP_DRAGON_CAPACITY  		5 		//PVPåœ°å›¾çŽ©å®¶å¯ä»¥å¸ƒç½®çš„é¾™çš„æ•°é‡ 
+#define 	 PVP_MAP_DRAGON_CAPACITY  		5 		//PVPµØÍ¼Íæ¼Ò¿ÉÒÔ²¼ÖÃµÄÁúµÄÊýÁ¿ 
 
-#define 	 SHOP_ITEMS_CAPACITY  		20 		//å•†åº—ä¸­ä¸€æ¬¡åˆ·æ–°ç‰©å“çš„æ•°é‡ 
+#define 	 SHOP_ITEMS_CAPACITY  		20 		//ÉÌµêÖÐÒ»´ÎË¢ÐÂÎïÆ·µÄÊýÁ¿ 
 
-#define 	 SHOPS_NUMBER  		20 		//æ¸¸æˆä¸­å•†åº—ä¸ªæ•° 
+#define 	 SHOPS_NUMBER  		20 		//ÓÎÏ·ÖÐÉÌµê¸öÊý 
 
-#define 	 MONSTERS_NUMBER_PER_SCENE  		100 		//æ¯ä¸ªåœºæ™¯ä¸­æœ€å¤šæ€ªç‰©æ•° 
+#define 	 MONSTERS_NUMBER_PER_SCENE  		100 		//Ã¿¸ö³¡¾°ÖÐ×î¶à¹ÖÎïÊý 
 
-#define 	 MAIL_TITLE_LENGTH  		40 		//é‚®ä»¶æ ‡é¢˜é•¿åº¦ 
+#define 	 MAIL_TITLE_LENGTH  		40 		//ÓÊ¼þ±êÌâ³¤¶È 
 
-#define 	 MAIL_BODY_LENGTH  		256 		//é‚®ä»¶å†…å®¹é•¿åº¦ 
+#define 	 MAIL_BODY_LENGTH  		256 		//ÓÊ¼þÄÚÈÝ³¤¶È 
 
-// æ™®é€šé”™è¯¯ç±»åž‹ 
+// ÆÕÍ¨´íÎóÀàÐÍ 
 enum eCommonErrorType { 
-	COMMON_ERROR_TYPE_SHORT_ITEM =1,//ç¼ºå°‘ç‰©å“ param ç‰©å“id
-	COMMON_ERROR_TYPE_ATTR_LOW,//å±žæ€§å¤ªä½Ž param å±žæ€§åå­—
-	COMMON_ERROR_TYPE_ATTR_HIGHT,//å±žæ€§å¤ªé«˜ param å±žæ€§åå­—
-	COMMON_ERROR_TYPE_IN_CD,//cdä¸­
-	COMMON_ERROR_TYPE_IN_TABLE,//è¿”å›žé”™è¯¯è¡¨æ ¼ä¸­å®šä¹‰çš„é”™è¯¯ param é”™è¯¯å·
-	COMMON_ERROR_TYPE_NEED_PASS_MAP,//éœ€è¦å®Œæˆç‰¹å®šå‰¯æœ¬
+	COMMON_ERROR_TYPE_SHORT_ITEM =1,//È±ÉÙÎïÆ· param ÎïÆ·id
+	COMMON_ERROR_TYPE_ATTR_LOW,//ÊôÐÔÌ«µÍ param ÊôÐÔÃû×Ö
+	COMMON_ERROR_TYPE_ATTR_HIGHT,//ÊôÐÔÌ«¸ß param ÊôÐÔÃû×Ö
+	COMMON_ERROR_TYPE_IN_CD,//cdÖÐ
+	COMMON_ERROR_TYPE_IN_TABLE,//·µ»Ø´íÎó±í¸ñÖÐ¶¨ÒåµÄ´íÎó param ´íÎóºÅ
+	COMMON_ERROR_TYPE_NEED_PASS_MAP,//ÐèÒªÍê³ÉÌØ¶¨¸±±¾
 };
 
 
 enum eEquipStatBitsType { 
-	EQUIPT_STAT_IN_DRESS =1,//æ˜¯å¦ç©¿ä¸Š
-	EQUIPT_STAT_NO_PARSE =2,//ç¦æ­¢åˆ†è§£
-	EQUIPT_STAT_NO_SAIL =4,//ç¦æ­¢å‡ºå”®
-	EQUIPT_STAT_IN_CALLING =8,//é¾™å¬å”¤ä¸­
-	EQUIPT_STAT_TAKE_OUT =16,//å¸¦é¾™å‡ºæˆ˜
+	EQUIPT_STAT_IN_DRESS =1,//ÊÇ·ñ´©ÉÏ
+	EQUIPT_STAT_NO_PARSE =2,//½ûÖ¹·Ö½â
+	EQUIPT_STAT_NO_SAIL =4,//½ûÖ¹³öÊÛ
+	EQUIPT_STAT_IN_CALLING =8,//ÁúÕÙ»½ÖÐ
+	EQUIPT_STAT_TAKE_OUT =16,//´øÁú³öÕ½
 };
 
 
-// ç‰©å“ç±»åž‹ 
+// ÎïÆ·ÀàÐÍ 
 enum eItemType { 
-	EITEM_TYPE_UNKNOWN =0,//æœªçŸ¥ç±»åž‹
-	EITEM_TYPE_EQUIP =1,//è£…å¤‡
+	EITEM_TYPE_UNKNOWN =0,//Î´ÖªÀàÐÍ
+	EITEM_TYPE_EQUIP =1,//×°±¸
 	EITEM_TYPE_WEAPON,//weapon
-	EITEM_TYPE_DEFANCE,//ç›¾
+	EITEM_TYPE_DEFANCE,//¶Ü
 	EITEM_TYPE_DRAGON,//dragon
 	EITEM_TYPE_DNA,//dna
-	EITEM_TYPE_CONSUME,//æ¶ˆè€—å“
+	EITEM_TYPE_CONSUME,//ÏûºÄÆ·
 	EITEM_TYPE_NUMBER,//number
 };
 
 
-// åŠ é€Ÿå®Œæˆä»»åŠ¡ç±»åž‹ 
+// ¼ÓËÙÍê³ÉÈÎÎñÀàÐÍ 
 enum eAccelerateCD { 
-	EACCEL_WEAPON_TABLET =0,//çŸ³ç¢‘
-	EACCEL_NUMBER,//åŠ é€Ÿç±»åž‹æ•°é‡
+	EACCEL_WEAPON_TABLET =0,//Ê¯±®
+	EACCEL_NUMBER,//¼ÓËÙÀàÐÍÊýÁ¿
 };
 
 
-// ä»»åŠ¡å®Œæˆç±»åž‹ 
+// ÈÎÎñÍê³ÉÀàÐÍ 
 enum eTaskCompletedType { 
-	ETASK_COMPLTET_UNKNOW =0,//æœªçŸ¥ç±»åž‹
-	ETASK_COMPLTET_TIME,//è§„å®šæ—¶é—´
-	ETASK_COMPLTET_VIP,//vipç™»è®°
-	ETASK_COMPLTET_MAKE_WISH_DRAGON,//è®¸æ„¿é¾™æ± 
-	ETASK_COMPLTET_MAP_TYPE,//ç‰¹å®šç±»åž‹å‰¯æœ¬
-	ETASK_COMPLTET_MAP_ID,//ç‰¹å®šidå‰¯æœ¬
-	ETASK_COMPLTET_ARENA,//ç«žæŠ€åœº
-	ETASK_COMPLTET_FEED_DRAGON,//å–‚é¾™
-	ETASK_COMPLTET_GOOD_FINGER,//ä½¿ç”¨ç‚¹æ‰‹
-	ETASK_COMPLTET_BUY_IN_STORE,//å•†åº—è´­ä¹°
-	ETASK_COMPLTET_BUY_IN_MALL,//å•†åœºè´­ä¹°
+	ETASK_COMPLTET_UNKNOW =0,//Î´ÖªÀàÐÍ
+	ETASK_COMPLTET_TIME,//¹æ¶¨Ê±¼ä
+	ETASK_COMPLTET_VIP,//vipµÇ¼Ç
+	ETASK_COMPLTET_MAKE_WISH_DRAGON,//ÐíÔ¸Áú³Ø
+	ETASK_COMPLTET_MAP_TYPE,//ÌØ¶¨ÀàÐÍ¸±±¾
+	ETASK_COMPLTET_MAP_ID,//ÌØ¶¨id¸±±¾
+	ETASK_COMPLTET_ARENA,//¾º¼¼³¡
+	ETASK_COMPLTET_FEED_DRAGON,//Î¹Áú
+	ETASK_COMPLTET_GOOD_FINGER,//Ê¹ÓÃµãÊÖ
+	ETASK_COMPLTET_BUY_IN_STORE,//ÉÌµê¹ºÂò
+	ETASK_COMPLTET_BUY_IN_MALL,//ÉÌ³¡¹ºÂò
 	ETASK_COMPLTET_NUMBER,//number
 };
 
 
-// æˆå°±å®Œæˆç±»åž‹ 
+// ³É¾ÍÍê³ÉÀàÐÍ 
 enum eAchievementCompletedType { 
-	EACHIEV_COMPLTET_UNKNOW =0,//æœªçŸ¥ç±»åž‹
-	EACHIEV_COMPLTET_ATTR,//å±žæ€§è¾¾æ ‡
-	EACHIEV_COMPLTET_ITEM_TYPE,//æ”¶é›†ç‰©å“
-	EACHIEV_COMPLTET_ITEM_ID,//æ”¶é›†æŒ‡å®šç±»åž‹ç‰©å“
-	EACHIEV_COMPLTET_MAP_TYPE,//ç‰¹å®šç±»åž‹å‰¯æœ¬
-	EACHIEV_COMPLTET_MAP_ID,//ç‰¹å®šidå‰¯æœ¬
-	EACHIEV_COMPLTET_DRAGON_UPGRADE,//å‡çº§é¾™
-	EACHIEV_COMPLTET_EQUIP_UPGRADE,//å‡çº§è£…å¤‡
-	EACHIEV_COMPLTET_WEAPON_UPGRADE,//å‡çº§æ­¦å™¨
-	EACHIEV_COMPLTET_BUY_IN_STORE,//å•†åº—è´­ä¹°
-	EACHIEV_COMPLTET_BUY_IN_MALL,//å•†åœºè´­ä¹°
+	EACHIEV_COMPLTET_UNKNOW =0,//Î´ÖªÀàÐÍ
+	EACHIEV_COMPLTET_ATTR,//ÊôÐÔ´ï±ê
+	EACHIEV_COMPLTET_ITEM_TYPE,//ÊÕ¼¯ÎïÆ·
+	EACHIEV_COMPLTET_ITEM_ID,//ÊÕ¼¯Ö¸¶¨ÀàÐÍÎïÆ·
+	EACHIEV_COMPLTET_MAP_TYPE,//ÌØ¶¨ÀàÐÍ¸±±¾
+	EACHIEV_COMPLTET_MAP_ID,//ÌØ¶¨id¸±±¾
+	EACHIEV_COMPLTET_DRAGON_UPGRADE,//Éý¼¶Áú
+	EACHIEV_COMPLTET_EQUIP_UPGRADE,//Éý¼¶×°±¸
+	EACHIEV_COMPLTET_WEAPON_UPGRADE,//Éý¼¶ÎäÆ÷
+	EACHIEV_COMPLTET_BUY_IN_STORE,//ÉÌµê¹ºÂò
+	EACHIEV_COMPLTET_BUY_IN_MALL,//ÉÌ³¡¹ºÂò
 	EACHIEV_COMPLTET_NUMBER,//number
 };
 

@@ -18,7 +18,7 @@ namespace NetMessage
 #define _APOLLO_MSG_ID_DEFINE(_aName, _aVal) {_aVal, #_aName},
 	
 	MessageNameInfo _nameBuf[] = {
-#include "_msgid_export.h"
+#include "netMessage/_msgid_export.h"
 	};
 #undef _APOLLO_MSG_ID_DEFINE
 

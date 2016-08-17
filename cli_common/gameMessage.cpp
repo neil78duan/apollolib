@@ -8,13 +8,13 @@
 
 //#include "commonTest.h"
 #include "apollo_errors.h"
-#include "gameMessage.h"
-#include "netui_atl.h"
+#include "cli_common/gameMessage.h"
+#include "cli_common/netui_atl.h"
 
 #include "nd_msg.h"
 #include "msg_def.h"
 #include "srv_define.h"
-#include "message_inc.h"
+#include "netMessage/message_inc.h"
 
 #include <time.h>
 

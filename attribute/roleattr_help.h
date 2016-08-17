@@ -170,8 +170,8 @@ public:
 
 extern RoleAttrHelper *get_attr_helper();
 
-#include "dbl_mgr.h"
-#include "logicDataType.h"
+#include "logic_parser/dbl_mgr.h"
+#include "logic_parser/logicDataType.h"
 
 //通过表查询战斗属性ID和列名 return value ,number of attributes , return -1 on error
 int DBL_GetAttrIDName(const char *table, attrid_t ids[], const char *[], int bufsize) ;

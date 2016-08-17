@@ -10,14 +10,14 @@
 
 
 #include "nd_common/nd_common.h"
-#include "netui_atl.h"
+#include "cli_common/netui_atl.h"
 //#include "commonTest.h"
-#include "gameMessage.h"
-#include "login_apollo.h"
+#include "cli_common/gameMessage.h"
+#include "cli_common/login_apollo.h"
 #include "apollo_errors.h"
 //#include "message_inc.h"
 
-#include "apollo_robort.h"
+#include "cli_common/apollo_robort.h"
 
 #define _robort_SEND_AND_WAIT(_conn, _omsg, _rmsg_buf,_wait_maxid, _wait_minid,_sendflag) \
 	if(0!=ndSendAndWaitMessage(_conn,_omsg.GetMsgAddr(),_rmsg_buf,_wait_maxid, _wait_minid,_sendflag) ) {	\

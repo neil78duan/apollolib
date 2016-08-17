@@ -7,7 +7,7 @@
 //
 
 //#include <stdio.h>
-#include "dataStream.h"
+#include "netMessage/dataStream.h"
 
 /*
 int UserProfessionToCurVersion(char *buf, long size, Protocol::UserProfessionData &roledata)

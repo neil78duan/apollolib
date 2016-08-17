@@ -10,7 +10,7 @@
 #undef _APOLLO_MSG_ID_DEFINE
 #define _APOLLO_MSG_ID_DEFINE(_aName, _aVal) _aName = _aVal, //_aMark
 	enum MsgIDDefine {
-#include "_msgid_export.h"
+#include "netMessage/_msgid_export.h"
 	};
 
 #undef _APOLLO_MSG_ID_DEFINE

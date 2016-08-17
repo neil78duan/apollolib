@@ -6,8 +6,8 @@
  * 2015-5-12
  */
 
-#include "logicEndian.h"
-#include "logicEngineRoot.h"
+#include "logic_parser/logicEndian.h"
+#include "logic_parser/logicEngineRoot.h"
 #include <stdarg.h>
 #include "nd_net/byte_order.h"
 #include "ndapplib/ndsingleton.h"

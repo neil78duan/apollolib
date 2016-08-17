@@ -10,12 +10,12 @@
 #ifndef _USER_ADDTION_DATA_H_
 #define _USER_ADDTION_DATA_H_
 
-#include "logicDataType.h"
+#include "logic_parser/logicDataType.h"
 #include "srv_define.h"
 #include "ndapplib/nd_affair.h"
 #include <map>
 #include <string>
-#include "objectBaseMgr.h"
+#include "logic_parser/objectBaseMgr.h"
 
 
 typedef std::map<std::string, DBLDataNode> user_addition_map;

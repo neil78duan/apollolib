@@ -13,9 +13,9 @@
 #include "ndapplib/applib.h"
 #include "ndapplib/nd_affair.h"
 //#include "protocol_def.h"
-#include "logicEngineRoot.h"
+#include "logic_parser/logicEngineRoot.h"
 
-#include "roleattr_help.h"
+#include "attribute/roleattr_help.h"
 #include <vector>
 //#include "message_inc.h"
 

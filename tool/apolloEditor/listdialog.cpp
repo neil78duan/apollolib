@@ -1,7 +1,7 @@
 #include "listdialog.h"
 #include "ui_listdialog.h"
 #include <string>
-#include "logic_editor_helper.h"
+#include "logic_parser/logic_editor_helper.h"
 
 ListDialog::ListDialog(QWidget *parent) :
     QDialog(parent),

@@ -6,7 +6,7 @@
 //  Copyright 2016 duanxiuyun. All rights reserved.
 //
 
-#include "logicStruct.hpp"
+#include "logic_parser/logicStruct.hpp"
 
 LogicUserDefStruct::LogicUserDefStruct(const LogicUserDefStruct &orgData) 
 {

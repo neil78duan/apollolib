@@ -9,7 +9,7 @@
 
 #include "nd_common/nd_common.h"
 
-#include "logic_editor_helper.h"
+#include "logic_parser/logic_editor_helper.h"
 #include "myqtitemctrl.h"
 
 using namespace LogicEditorHelper;

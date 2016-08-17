@@ -16,8 +16,8 @@
 #include <vector>
 #include <list>
 #include <map>
-#include "logicDataType.h"
-#include "objectBaseMgr.h"
+#include "logic_parser/logicDataType.h"
+#include "logic_parser/objectBaseMgr.h"
 
 #define PARSE_TRACE nd_logdebug
 

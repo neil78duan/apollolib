@@ -13,7 +13,7 @@
 #ifndef logicStruct_hpp
 #define logicStruct_hpp
 
-#include "logicDataType.h"
+#include "logic_parser/logicDataType.h"
 #include <vector>
 
 #define USER_DEF_VAR_NAME_SIZE 32

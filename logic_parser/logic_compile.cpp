@@ -7,11 +7,11 @@
  * 2015-4-30
  */
 
-#include "logicEndian.h"
-#include "logic_compile.h"
-#include "logicParser.h"
-#include "logicEngineRoot.h"
-#include "logicDataType.h"
+#include "logic_parser/logicEndian.h"
+#include "logic_parser/logic_compile.h"
+#include "logic_parser/logicParser.h"
+#include "logic_parser/logicEngineRoot.h"
+#include "logic_parser/logicDataType.h"
 #include "nd_net/byte_order.h"
 #include <vector>
 #include <time.h>

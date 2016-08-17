@@ -8,8 +8,8 @@
 #include "resource.h"
 #include "InsertNodeListDlg.h"
 #include "DlgFunclist.h"
-#include "logic_compile.h"
-#include "dbl_mgr.h"
+#include "logic_parser/logic_compile.h"
+#include "logic_parser/dbl_mgr.h"
 
 #include "ctrls/NewCellTypes/GridURLCell.h"
 #include "ctrls/NewCellTypes/GridCellCombo.h"
@@ -17,7 +17,7 @@
 #include "ctrls/NewCellTypes/GridCellNumeric.h"
 #include "ctrls/NewCellTypes/GridCellDateTime.h"
 
-#include "logic_editor_helper.h"
+#include "logic_parser/logic_editor_helper.h"
 using namespace LogicEditorHelper;
 
 // 得到文件名

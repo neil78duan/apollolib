@@ -17,7 +17,7 @@
 #define _DBL_MGR_H_
 
 
-#include "logicDataType.h"
+#include "logic_parser/logicDataType.h"
 
 #define EXCEL_SECOND_LINE_AS_NAME  //excel second line is realname , first line is alias name 
 

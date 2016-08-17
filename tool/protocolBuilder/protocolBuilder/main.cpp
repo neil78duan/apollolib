@@ -407,16 +407,16 @@ int build_dataType(ndxml_root *xmlfile, const char *out_file,bool saveDB)
 		}
 		
 		_OUT_PUT_TIME(pfCpp) ;
-		fprintf(pfCpp, "\n\n#include \"dataStream.h\"\n" );
-		fprintf(pfCpp, "\n\n#include \"auto_dataTypeDb_v%s.h\"\n", version );
+		fprintf(pfCpp, "\n\n#include \"netMessage/dataStream.h\"\n" );
+		fprintf(pfCpp, "\n\n#include \"netMessage/auto_dataTypeDb_v%s.h\"\n", version );
 		fprintf(pfCpp, "namespace NetMessage \n{\n" );
 
 		
 		_OUT_PUT_TIME(pf) ;
 		fprintf(pf, "#ifndef _AUTO_DATA_TYPE_DEFINE_DB_%s_H_\n",version );
 		fprintf(pf, "#define _AUTO_DATA_TYPE_DEFINE_DB_%s_H_\n",version );
-		fprintf(pf, "#include \"auto_macroDefine.h\"\n\n") ;
-		fprintf(pf, "#include \"dataStream.h\"\n\n") ;
+		fprintf(pf, "#include \"netMessage/auto_macroDefine.h\"\n\n") ;
+		fprintf(pf, "#include \"netMessage/dataStream.h\"\n\n") ;
 		fprintf(pf, "namespace NetMessage \n{\n" );
 		
 		name_list_t save_list;
@@ -452,14 +452,14 @@ int build_dataType(ndxml_root *xmlfile, const char *out_file,bool saveDB)
 		}
 
 		_OUT_PUT_TIME(pfCpp) ;
-		fprintf(pfCpp, "\n\n#include \"auto_dataType.h\"\n" );
+		fprintf(pfCpp, "\n\n#include \"netMessage/auto_dataType.h\"\n" );
 		fprintf(pfCpp, "namespace NetMessage \n{\n" );
 		
 		_OUT_PUT_TIME(pf) ;
 		fprintf(pf, "#ifndef _AUTO_DATA_TYPE_DEFINE_H_\n" );
 		fprintf(pf, "#define _AUTO_DATA_TYPE_DEFINE_H_\n" );;
-		fprintf(pf, "#include \"auto_macroDefine.h\"\n\n") ;
-		fprintf(pf, "#include \"dataStream.h\"\n\n") ;
+		fprintf(pf, "#include \"netMessage/auto_macroDefine.h\"\n\n") ;
+		fprintf(pf, "#include \"netMessage/dataStream.h\"\n\n") ;
 		
 		fprintf(pf, "#define DATA_IN_DB_VERSION %s \n\n", version );
 		
@@ -672,8 +672,8 @@ int build_dataTypeForUE4(ndxml_root *xmlfile, const char *out_file)
 	}
 	
 	_OUT_PUT_TIME(pfCpp) ;
-	fprintf(pfCpp, "\n\n#include \"dataStream.h\"\n" );
-	fprintf(pfCpp, "#include \"netStreamAutoDefine.h\"\n\n\n" );
+	fprintf(pfCpp, "\n\n#include \"netMessage/dataStream.h\"\n" );
+	fprintf(pfCpp, "#include \"netMessage/netStreamAutoDefine.h\"\n\n\n" );
 	//fprintf(pfCpp, "namespace NetMessage \n{\n" );
 	
 	_OUT_PUT_TIME(pf) ;

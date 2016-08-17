@@ -10,8 +10,8 @@
 #define worldManager_dbDataConvert_h
 
 //#include "UserDataSaveDB.h"
-#include "UserDefineData.h"
-#include "UserDataSaveDB_v1.h"
+//#include "UserDefineData.h"
+//#include "UserDataSaveDB_v1.h"
 
 #include "ndapplib/applib.h"
 

@@ -8,17 +8,17 @@
 
 
 #include "nd_common/nd_common.h"
-#include "netui_atl.h"
+#include "cli_common/netui_atl.h"
 //#include "commonTest.h"
-#include "login_apollo.h"
+#include "cli_common/login_apollo.h"
 #include "apollo_errors.h"
-#include "message_inc.h"
-#include "logicDataType.h"
+#include "netMessage/message_inc.h"
+#include "logic_parser/logicDataType.h"
 // gmToolDlg dialog
-#include "dbldata2netstream.h"
-#include "logicEngineRoot.h"
-#include "dftCliMsgHandler.h"
-#include "gameMessage.h"
+#include "logic_parser/dbldata2netstream.h"
+#include "logic_parser/logicEngineRoot.h"
+#include "cli_common/dftCliMsgHandler.h"
+#include "cli_common/gameMessage.h"
 
 static gmToolDlg *__pMyDlg;
 static void*  __oldFunc;

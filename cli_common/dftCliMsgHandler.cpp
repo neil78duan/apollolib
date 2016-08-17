@@ -13,14 +13,14 @@
 #include "srv_define.h"
 
 #ifndef WITHOUT_LOGIC_PARSER
-#include "message_inc.h"
-#include "dbl_mgr.h"
+#include "netMessage/message_inc.h"
+#include "logic_parser/dbl_mgr.h"
 
-#include "logicEngineRoot.h"
-#include "dbldata2netstream.h"
+#include "logic_parser/logicEngineRoot.h"
+#include "logic_parser/dbldata2netstream.h"
 #endif 
 
-#include "dftCliMsgHandler.h"
+#include "cli_common/dftCliMsgHandler.h"
 
 namespace ClientMsgHandler
 {
