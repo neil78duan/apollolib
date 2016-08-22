@@ -132,6 +132,17 @@
     <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_udthdr.h" />
     <ClInclude Include="..\..\cli_common\login_apollo.h" />
     <ClInclude Include="..\..\cli_common\netui_atl.h" />
+    <ClInclude Include="..\..\logic_parser\dbldata2netstream.h" />
+    <ClInclude Include="..\..\logic_parser\dbl_mgr.h" />
+    <ClInclude Include="..\..\logic_parser\logicDataType.h" />
+    <ClInclude Include="..\..\logic_parser\logicEndian.h" />
+    <ClInclude Include="..\..\logic_parser\logicEngineRoot.h" />
+    <ClInclude Include="..\..\logic_parser\logicParser.h" />
+    <ClInclude Include="..\..\logic_parser\logicStruct.hpp" />
+    <ClInclude Include="..\..\logic_parser\logic_compile.h" />
+    <ClInclude Include="..\..\logic_parser\logic_editor_helper.h" />
+    <ClInclude Include="..\..\logic_parser\logic_function.h" />
+    <ClInclude Include="..\..\logic_parser\objectBaseMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_datatransfer.cpp" />
@@ -198,6 +209,19 @@
     <ClCompile Include="..\..\..\ndsdk\src\nd_vm\src\nd_vmmain.c" />
     <ClCompile Include="..\..\cli_common\login_apollo.cpp" />
     <ClCompile Include="..\..\cli_common\netui_atl.cpp" />
+    <ClCompile Include="..\..\logic_parser\dbldata2netstream.cpp" />
+    <ClCompile Include="..\..\logic_parser\dbl_mgr.cpp" />
+    <ClCompile Include="..\..\logic_parser\logicDataType.cpp" />
+    <ClCompile Include="..\..\logic_parser\logicEngineRoot.cpp" />
+    <ClCompile Include="..\..\logic_parser\logicParser.cpp" />
+    <ClCompile Include="..\..\logic_parser\logicStruct.cpp" />
+    <ClCompile Include="..\..\logic_parser\logic_compile.cpp" />
+    <ClCompile Include="..\..\logic_parser\logic_editor_helper.cpp" />
+    <ClCompile Include="..\..\logic_parser\logic_function.cpp" />
+    <ClCompile Include="..\..\logic_parser\objectBaseMgr.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\logic_parser\Makefile" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

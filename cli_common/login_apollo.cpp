@@ -428,7 +428,7 @@ int LoginApollo::CreateAccount(account_base_info *acc_info)
 	return 0;
 }
 
-int LoginApollo::GetServerList(host_list_node *buf, int size)
+int LoginApollo::GetServerList(ApolloServerInfo *buf, int size)
 {
 	
 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_HOST_LIST) ;
@@ -444,14 +444,16 @@ int LoginApollo::GetServerList(host_list_node *buf, int size)
 		
 		for (int i=0; i< num; i++) {
 			
-			host_list_node *it = & buf[i] ;
-			inmsg.Read((NDUINT32&)it->ip) ;
+			host_list_node *it = & (buf[i].host) ;
+			//inmsg.Read((NDUINT32&)it->ip) ;
+			inmsg.Read(buf[i].ip_addr,sizeof(buf[i].ip_addr) ) ;
 			inmsg.Read(it->port) ;
 			
 			inmsg.Read(it->max_number) ;
 			inmsg.Read(it->cur_number) ;
 			inmsg.Read(it->version_id) ;
 			inmsg.Read(it->name,sizeof(it->name)) ;
+			it->ip = nd_inet_aton(buf[i].ip_addr);
 		}
 		return (int) num ;
 	}
@@ -490,6 +492,11 @@ int LoginApollo::GetLastError() {return ndGetLastError(m_conn) ;}
 int LoginApollo::EnterServer(ndip_t ip, NDUINT16 port)
 {
 	return switchServer( ip,  port,LOGIN_MSG_SELECT_SERVER_REQ, LOGIN_MSG_SELECT_SERVER_ACK) ;
+}
+
+int LoginApollo::EnterServer(const char *host_name, NDUINT16 port)
+{
+	return switchServer( host_name,  port,LOGIN_MSG_SELECT_SERVER_REQ, LOGIN_MSG_SELECT_SERVER_ACK) ;
 }
 
 int LoginApollo::EnterServer(const char *host_name, NDUINT16 port,const char *session_file)
@@ -583,6 +590,32 @@ int LoginApollo::switchServer(ndip_t ip, NDUINT16 port,int sendMsg, int waitMsg)
 	}
 	else {
 		nd_logmsg("SWITCH server ERROR\n") ;		
+	}
+	
+	nd_logmsg("SWITCH server SUCCESS\n") ;
+	return 0;
+}
+
+int LoginApollo::switchServer(const char *host, NDUINT16 port,int sendMsg, int waitMsg)
+{
+	login_session_load session_saved = {0};
+	if(-1==getReloginSessionInfo( &session_saved) ) {
+		return -1 ;
+	}
+	
+	
+	if(0!=nd_reconnectex(m_conn,  host,  port, NULL)  ) {
+		nd_object_seterror(m_conn, ESERVER_ERR_HOST_UNAVAILABLE) ;
+		return -1;
+	}
+	
+	//SEND session info to server and check
+	if(0==LoginApollo::relogin(&session_saved, sendMsg, waitMsg) ) {
+		nd_logmsg("SWITCH server SUCCESS\n") ;
+		return 0 ;
+	}
+	else {
+		nd_logmsg("SWITCH server ERROR\n") ;
 	}
 	
 	nd_logmsg("SWITCH server SUCCESS\n") ;

@@ -273,7 +273,7 @@
 					ND_DEBUG,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "../../../ndsdk/include ../../include ../../cli_common";
+				USER_HEADER_SEARCH_PATHS = "../../../ndsdk/include ../../include ../..";
 			};
 			name = Debug;
 		};
@@ -285,7 +285,7 @@
 					ND_UNIX,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "../../../ndsdk/include ../../include ../../cli_common";
+				USER_HEADER_SEARCH_PATHS = "../../../ndsdk/include ../../include ../..";
 			};
 			name = Release;
 		};
@@ -308,6 +308,7 @@
 				07EC877A1D5468F200C32925 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -196,13 +196,13 @@ int ApolloRobort::_login(const char *accName, const char *passwd)
 
 int ApolloRobort::_selOrCreateRole(const char *roleName)
 {
-	host_list_node bufs[20];
+	ApolloServerInfo bufs[20];
 	int num = m_login->GetServerList(bufs, ND_ELEMENTS_NUM(bufs));
 	if (num == 0) {
 		nd_logerror("get host list number=0\n");
 		return -1;
 	}
-	int ret = m_login->EnterServer(bufs[0].ip, bufs[0].port);
+	int ret = m_login->EnterServer((const char*)bufs[0].ip_addr, bufs[0].host.port);
 	if (ret == 0) {
 		nd_logmsg("redirect server success\n");
 	}

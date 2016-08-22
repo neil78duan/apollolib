@@ -20,6 +20,12 @@
 #include "apollo_data.h"
 //#include "srv_define.h"
 
+struct ApolloServerInfo
+{
+	host_list_node host ;
+	char ip_addr[20] ;
+};
+
 class  LoginBase
 {
 public:
@@ -34,10 +40,11 @@ public:
 	virtual int Logout() = 0;
 	//int RedirectTo(const char *inet_addr, int port) ;
 	virtual int EnterServer(ndip_t ip, NDUINT16 port) = 0;
+	virtual int EnterServer(const char *host_name, NDUINT16 port) = 0 ;
 	virtual int EnterServer(const char *host_name, NDUINT16 port, const char *session_file) = 0;
 
 	virtual int CreateAccount(account_base_info *acc_info) = 0;
-	virtual int GetServerList(host_list_node *buf, int size) = 0;
+	virtual int GetServerList(ApolloServerInfo *buf, int size) = 0;
 
 	virtual size_t GetSessionSize() = 0;
 	virtual size_t GetSessionData(void *session_buf, size_t buf_size) = 0;
@@ -74,10 +81,11 @@ public:
 	int Logout() ;
 	//int RedirectTo(const char *inet_addr, int port) ;
 	int EnterServer(ndip_t ip, NDUINT16 port) ;
+	int EnterServer(const char *host_name, NDUINT16 port) ;
 	int EnterServer(const char *host_name, NDUINT16 port,const char *session_file) ;
 	
 	int CreateAccount(account_base_info *acc_info) ;
-	int GetServerList(host_list_node *buf, int size) ;
+	int GetServerList(ApolloServerInfo *buf, int size) ;
 
 	size_t GetSessionSize() ;
 	size_t GetSessionData(void *session_buf, size_t buf_size) ;
@@ -94,6 +102,7 @@ protected:
 	int onLogin(NDIStreamMsg &inmsg) ;
 	int checkCryptVersion(char *savedVersion) ;
 	int switchServer(ndip_t ip, NDUINT16 port,int sendMsg, int waitMsg) ;
+	int switchServer(const char *host, NDUINT16 port,int sendMsg, int waitMsg) ;
 	int jumptoGame(NDUINT64 serverid) ;
 	int relogin(void *tokenBuf, int sendMsgID, int waitMsgID) ;
 	int getReloginSessionInfo(void *tokenBuf) ;

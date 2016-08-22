@@ -1,6 +1,6 @@
 /* please do not change this file ,
  * auto create by program 
- * create time 2016-8-17 16:11:1 
+ * create time 2016-8-18 10:42:51 
  */
 
 #ifndef _AUTO_MACRO_DEFINE_H_

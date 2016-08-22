@@ -153,9 +153,6 @@
     <ClInclude Include="..\..\..\netMessage\_msgid_export.h">
       <Filter>netMessage</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\netMessage\apollo_msg_entry.h">
-      <Filter>netMessage</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\netMessage\auto_dataType.h">
       <Filter>netMessage</Filter>
     </ClInclude>
@@ -166,9 +163,6 @@
       <Filter>netMessage</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\netMessage\dataStream.h">
-      <Filter>netMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\netMessage\dbDataConvert.h">
       <Filter>netMessage</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\netMessage\message_inc.h">
@@ -318,9 +312,6 @@
       <Filter>netMessage</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\netMessage\dataStream.cpp">
-      <Filter>netMessage</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\netMessage\dbDataConvert.cpp">
       <Filter>netMessage</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\netMessage\MessageName.cpp">

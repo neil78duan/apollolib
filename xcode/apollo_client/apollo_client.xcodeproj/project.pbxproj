@@ -7,6 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		074C8F9E1D66A88500590A34 /* dbl_mgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F7E1D66A88500590A34 /* dbl_mgr.cpp */; };
+		074C8F9F1D66A88500590A34 /* dbldata2netstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F801D66A88500590A34 /* dbldata2netstream.cpp */; };
+		074C8FA01D66A88500590A34 /* logic_compile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F821D66A88500590A34 /* logic_compile.cpp */; };
+		074C8FA11D66A88500590A34 /* logic_editor_helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F841D66A88500590A34 /* logic_editor_helper.cpp */; };
+		074C8FA21D66A88500590A34 /* logic_function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F861D66A88500590A34 /* logic_function.cpp */; };
+		074C8FA31D66A88500590A34 /* logicDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F881D66A88500590A34 /* logicDataType.cpp */; };
+		074C8FA41D66A88500590A34 /* logicEngineRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F8B1D66A88500590A34 /* logicEngineRoot.cpp */; };
+		074C8FA51D66A88500590A34 /* logicParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F8D1D66A88500590A34 /* logicParser.cpp */; };
+		074C8FA61D66A88500590A34 /* logicStruct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F8F1D66A88500590A34 /* logicStruct.cpp */; };
+		074C8FA71D66A88500590A34 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F911D66A88500590A34 /* Makefile */; };
+		074C8FA81D66A88500590A34 /* objectBaseMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F921D66A88500590A34 /* objectBaseMgr.cpp */; };
+		074C8FA91D66A8BB00590A34 /* dbl_mgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F7E1D66A88500590A34 /* dbl_mgr.cpp */; };
+		074C8FAB1D66A8BB00590A34 /* dbldata2netstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F801D66A88500590A34 /* dbldata2netstream.cpp */; };
+		074C8FAD1D66A8BB00590A34 /* logic_compile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F821D66A88500590A34 /* logic_compile.cpp */; };
+		074C8FAF1D66A8BB00590A34 /* logic_editor_helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F841D66A88500590A34 /* logic_editor_helper.cpp */; };
+		074C8FB11D66A8BB00590A34 /* logic_function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F861D66A88500590A34 /* logic_function.cpp */; };
+		074C8FB31D66A8BB00590A34 /* logicDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F881D66A88500590A34 /* logicDataType.cpp */; };
+		074C8FB61D66A8BB00590A34 /* logicEngineRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F8B1D66A88500590A34 /* logicEngineRoot.cpp */; };
+		074C8FB81D66A8BB00590A34 /* logicParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F8D1D66A88500590A34 /* logicParser.cpp */; };
+		074C8FBA1D66A8BB00590A34 /* logicStruct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F8F1D66A88500590A34 /* logicStruct.cpp */; };
+		074C8FBD1D66A8BB00590A34 /* objectBaseMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F921D66A88500590A34 /* objectBaseMgr.cpp */; };
 		0764F6991D631C1600E91673 /* nd_asm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6941D631C1600E91673 /* nd_asm.c */; };
 		0764F69A1D631C1600E91673 /* nd_formula.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6951D631C1600E91673 /* nd_formula.c */; };
 		0764F69B1D631C1600E91673 /* nd_vm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6961D631C1600E91673 /* nd_vm.c */; };
@@ -119,7 +140,6 @@
 		07EC86831D54433700C32925 /* ndcrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85461D54400300C32925 /* ndcrypt.c */; };
 		07EC86841D54433700C32925 /* ndrsa.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85471D54400300C32925 /* ndrsa.c */; };
 		07EC86851D54433700C32925 /* tea.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85481D54400300C32925 /* tea.c */; };
-		07EC86861D54433700C32925 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07EC854A1D54400300C32925 /* Makefile */; };
 		07EC86871D54433700C32925 /* ipraw.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC854C1D54400300C32925 /* ipraw.c */; };
 		07EC86881D54433700C32925 /* nd_msgentry.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC854D1D54400300C32925 /* nd_msgentry.c */; };
 		07EC86891D54433700C32925 /* nd_net.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC854E1D54400300C32925 /* nd_net.c */; };
@@ -155,6 +175,28 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		074C8F7E1D66A88500590A34 /* dbl_mgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dbl_mgr.cpp; sourceTree = "<group>"; };
+		074C8F7F1D66A88500590A34 /* dbl_mgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dbl_mgr.h; sourceTree = "<group>"; };
+		074C8F801D66A88500590A34 /* dbldata2netstream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dbldata2netstream.cpp; sourceTree = "<group>"; };
+		074C8F811D66A88500590A34 /* dbldata2netstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dbldata2netstream.h; sourceTree = "<group>"; };
+		074C8F821D66A88500590A34 /* logic_compile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logic_compile.cpp; sourceTree = "<group>"; };
+		074C8F831D66A88500590A34 /* logic_compile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logic_compile.h; sourceTree = "<group>"; };
+		074C8F841D66A88500590A34 /* logic_editor_helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logic_editor_helper.cpp; sourceTree = "<group>"; };
+		074C8F851D66A88500590A34 /* logic_editor_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logic_editor_helper.h; sourceTree = "<group>"; };
+		074C8F861D66A88500590A34 /* logic_function.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logic_function.cpp; sourceTree = "<group>"; };
+		074C8F871D66A88500590A34 /* logic_function.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logic_function.h; sourceTree = "<group>"; };
+		074C8F881D66A88500590A34 /* logicDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logicDataType.cpp; sourceTree = "<group>"; };
+		074C8F891D66A88500590A34 /* logicDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logicDataType.h; sourceTree = "<group>"; };
+		074C8F8A1D66A88500590A34 /* logicEndian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logicEndian.h; sourceTree = "<group>"; };
+		074C8F8B1D66A88500590A34 /* logicEngineRoot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logicEngineRoot.cpp; sourceTree = "<group>"; };
+		074C8F8C1D66A88500590A34 /* logicEngineRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logicEngineRoot.h; sourceTree = "<group>"; };
+		074C8F8D1D66A88500590A34 /* logicParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logicParser.cpp; sourceTree = "<group>"; };
+		074C8F8E1D66A88500590A34 /* logicParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logicParser.h; sourceTree = "<group>"; };
+		074C8F8F1D66A88500590A34 /* logicStruct.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logicStruct.cpp; sourceTree = "<group>"; };
+		074C8F901D66A88500590A34 /* logicStruct.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = logicStruct.hpp; sourceTree = "<group>"; };
+		074C8F911D66A88500590A34 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		074C8F921D66A88500590A34 /* objectBaseMgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objectBaseMgr.cpp; sourceTree = "<group>"; };
+		074C8F931D66A88500590A34 /* objectBaseMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objectBaseMgr.h; sourceTree = "<group>"; };
 		0764F6941D631C1600E91673 /* nd_asm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_asm.c; path = nd_vm/src/nd_asm.c; sourceTree = "<group>"; };
 		0764F6951D631C1600E91673 /* nd_formula.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_formula.c; path = nd_vm/src/nd_formula.c; sourceTree = "<group>"; };
 		0764F6961D631C1600E91673 /* nd_vm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_vm.c; path = nd_vm/src/nd_vm.c; sourceTree = "<group>"; };
@@ -324,6 +366,47 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		074C8F711D66A85000590A34 /* login */ = {
+			isa = PBXGroup;
+			children = (
+				07EC86581D54411E00C32925 /* login_apollo.cpp */,
+				07EC86591D54411E00C32925 /* login_apollo.h */,
+				07EC865A1D54411E00C32925 /* netui_atl.cpp */,
+				07EC865B1D54411E00C32925 /* netui_atl.h */,
+			);
+			name = login;
+			sourceTree = "<group>";
+		};
+		074C8F721D66A88500590A34 /* logic_parser */ = {
+			isa = PBXGroup;
+			children = (
+				074C8F7E1D66A88500590A34 /* dbl_mgr.cpp */,
+				074C8F7F1D66A88500590A34 /* dbl_mgr.h */,
+				074C8F801D66A88500590A34 /* dbldata2netstream.cpp */,
+				074C8F811D66A88500590A34 /* dbldata2netstream.h */,
+				074C8F821D66A88500590A34 /* logic_compile.cpp */,
+				074C8F831D66A88500590A34 /* logic_compile.h */,
+				074C8F841D66A88500590A34 /* logic_editor_helper.cpp */,
+				074C8F851D66A88500590A34 /* logic_editor_helper.h */,
+				074C8F861D66A88500590A34 /* logic_function.cpp */,
+				074C8F871D66A88500590A34 /* logic_function.h */,
+				074C8F881D66A88500590A34 /* logicDataType.cpp */,
+				074C8F891D66A88500590A34 /* logicDataType.h */,
+				074C8F8A1D66A88500590A34 /* logicEndian.h */,
+				074C8F8B1D66A88500590A34 /* logicEngineRoot.cpp */,
+				074C8F8C1D66A88500590A34 /* logicEngineRoot.h */,
+				074C8F8D1D66A88500590A34 /* logicParser.cpp */,
+				074C8F8E1D66A88500590A34 /* logicParser.h */,
+				074C8F8F1D66A88500590A34 /* logicStruct.cpp */,
+				074C8F901D66A88500590A34 /* logicStruct.hpp */,
+				074C8F911D66A88500590A34 /* Makefile */,
+				074C8F921D66A88500590A34 /* objectBaseMgr.cpp */,
+				074C8F931D66A88500590A34 /* objectBaseMgr.h */,
+			);
+			name = logic_parser;
+			path = ../../../logic_parser;
+			sourceTree = "<group>";
+		};
 		0764F6931D631BD900E91673 /* vm */ = {
 			isa = PBXGroup;
 			children = (
@@ -357,10 +440,8 @@
 		07EC848C1D543B8400C32925 /* apollo_client */ = {
 			isa = PBXGroup;
 			children = (
-				07EC86581D54411E00C32925 /* login_apollo.cpp */,
-				07EC86591D54411E00C32925 /* login_apollo.h */,
-				07EC865A1D54411E00C32925 /* netui_atl.cpp */,
-				07EC865B1D54411E00C32925 /* netui_atl.h */,
+				074C8F721D66A88500590A34 /* logic_parser */,
+				074C8F711D66A85000590A34 /* login */,
 			);
 			path = apollo_client;
 			sourceTree = "<group>";
@@ -746,14 +827,18 @@
 			files = (
 				07EC86181D54400400C32925 /* ipraw.c in Sources */,
 				07EC861F1D54400400C32925 /* nd_udp.c in Sources */,
+				074C8FA81D66A88500590A34 /* objectBaseMgr.cpp in Sources */,
 				07EC86041D54400400C32925 /* Makefile in Sources */,
 				07EC865D1D54411E00C32925 /* netui_atl.cpp in Sources */,
 				07EC85F31D54400400C32925 /* common.c in Sources */,
 				07EC86061D54400400C32925 /* digit.c in Sources */,
+				074C8FA41D66A88500590A34 /* logicEngineRoot.cpp in Sources */,
+				074C8FA31D66A88500590A34 /* logicDataType.cpp in Sources */,
 				07EC85F71D54400400C32925 /* nd_mempool.c in Sources */,
 				07EC86011D54400400C32925 /* node_mgr.c in Sources */,
 				07EC861D1D54400400C32925 /* nd_socket.c in Sources */,
 				07EC860C1D54400400C32925 /* r_encode.c in Sources */,
+				074C8FA21D66A88500590A34 /* logic_function.cpp in Sources */,
 				07EC86211D54400400C32925 /* proxy_cli.c in Sources */,
 				0764F6991D631C1600E91673 /* nd_asm.c in Sources */,
 				07EC86531D54400400C32925 /* Makefile in Sources */,
@@ -767,7 +852,9 @@
 				07EC864F1D54400400C32925 /* msg_format.cpp in Sources */,
 				07EC85F01D54400400C32925 /* Makefile in Sources */,
 				07EC860B1D54400400C32925 /* r_dh.c in Sources */,
+				074C8F9E1D66A88500590A34 /* dbl_mgr.cpp in Sources */,
 				07EC86171D54400400C32925 /* Makefile in Sources */,
+				074C8F9F1D66A88500590A34 /* dbldata2netstream.cpp in Sources */,
 				07EC86111D54400400C32925 /* rsa.c in Sources */,
 				07EC86131D54400400C32925 /* nd_pubkey.c in Sources */,
 				07EC85F91D54400400C32925 /* nd_static_alloc.c in Sources */,
@@ -775,8 +862,10 @@
 				07EC86121D54400400C32925 /* nd_cryptfile.c in Sources */,
 				07EC860E1D54400400C32925 /* r_keygen.c in Sources */,
 				0764F69B1D631C1600E91673 /* nd_vm.c in Sources */,
+				074C8FA71D66A88500590A34 /* Makefile in Sources */,
 				07EC86241D54400400C32925 /* udt_socket.c in Sources */,
 				07EC86501D54400400C32925 /* nd_connector.c in Sources */,
+				074C8FA11D66A88500590A34 /* logic_editor_helper.cpp in Sources */,
 				07EC86071D54400400C32925 /* md2c.c in Sources */,
 				07EC85F61D54400400C32925 /* nd_iconv.c in Sources */,
 				07EC86141D54400400C32925 /* ndcrypt.c in Sources */,
@@ -785,6 +874,7 @@
 				07EC85F21D54400400C32925 /* callstack.c in Sources */,
 				07EC86201D54400400C32925 /* net_srv.c in Sources */,
 				07EC86571D5440A100C32925 /* nd_msgpack.cpp in Sources */,
+				074C8FA51D66A88500590A34 /* logicParser.cpp in Sources */,
 				07EC85FE1D54400400C32925 /* nd_win.c in Sources */,
 				07EC86221D54400400C32925 /* udt_icmp.c in Sources */,
 				07EC861A1D54400400C32925 /* nd_net.c in Sources */,
@@ -793,6 +883,7 @@
 				07EC86031D54400400C32925 /* source_log.c in Sources */,
 				07EC86091D54400400C32925 /* nn.c in Sources */,
 				07EC86191D54400400C32925 /* nd_msgentry.c in Sources */,
+				074C8FA61D66A88500590A34 /* logicStruct.cpp in Sources */,
 				07EC861E1D54400400C32925 /* nd_tcp.c in Sources */,
 				07EC860D1D54400400C32925 /* r_enhanc.c in Sources */,
 				07EC85FF1D54400400C32925 /* nd_xml.c in Sources */,
@@ -808,6 +899,7 @@
 				07EC86051D54400400C32925 /* desc.c in Sources */,
 				07EC86231D54400400C32925 /* udt_net.c in Sources */,
 				07EC85FD1D54400400C32925 /* nd_unix.c in Sources */,
+				074C8FA01D66A88500590A34 /* logic_compile.cpp in Sources */,
 				0764F69C1D631C1600E91673 /* nd_vmdbg.c in Sources */,
 				0764F69D1D631C1600E91673 /* nd_vmmain.c in Sources */,
 				07EC86161D54400400C32925 /* tea.c in Sources */,
@@ -819,6 +911,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				074C8FA91D66A8BB00590A34 /* dbl_mgr.cpp in Sources */,
+				074C8FAB1D66A8BB00590A34 /* dbldata2netstream.cpp in Sources */,
+				074C8FAD1D66A8BB00590A34 /* logic_compile.cpp in Sources */,
+				074C8FAF1D66A8BB00590A34 /* logic_editor_helper.cpp in Sources */,
+				074C8FB11D66A8BB00590A34 /* logic_function.cpp in Sources */,
+				074C8FB31D66A8BB00590A34 /* logicDataType.cpp in Sources */,
+				074C8FB61D66A8BB00590A34 /* logicEngineRoot.cpp in Sources */,
+				074C8FB81D66A8BB00590A34 /* logicParser.cpp in Sources */,
+				074C8FBA1D66A8BB00590A34 /* logicStruct.cpp in Sources */,
+				074C8FBD1D66A8BB00590A34 /* objectBaseMgr.cpp in Sources */,
 				0764F69E1D631C7F00E91673 /* nd_asm.c in Sources */,
 				0764F69F1D631C7F00E91673 /* nd_formula.c in Sources */,
 				0764F6A01D631C7F00E91673 /* nd_vm.c in Sources */,
@@ -863,7 +965,6 @@
 				07EC86831D54433700C32925 /* ndcrypt.c in Sources */,
 				07EC86841D54433700C32925 /* ndrsa.c in Sources */,
 				07EC86851D54433700C32925 /* tea.c in Sources */,
-				07EC86861D54433700C32925 /* Makefile in Sources */,
 				07EC86871D54433700C32925 /* ipraw.c in Sources */,
 				07EC86881D54433700C32925 /* nd_msgentry.c in Sources */,
 				07EC86891D54433700C32925 /* nd_net.c in Sources */,
@@ -986,7 +1087,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "../../../ndsdk/include ../../include ../../cli_common";
+				USER_HEADER_SEARCH_PATHS = "../../../ndsdk/include ../../include ../..";
 			};
 			name = Debug;
 		};
@@ -1002,7 +1103,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "../../../ndsdk/include ../../include ../../cli_common";
+				USER_HEADER_SEARCH_PATHS = "../../../ndsdk/include ../../include ../..";
 			};
 			name = Release;
 		};
@@ -1021,7 +1122,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "../../../ndsdk/include ../../include ../../cli_common";
+				USER_HEADER_SEARCH_PATHS = "../../../ndsdk/include ../../include ../..";
 			};
 			name = Debug;
 		};
@@ -1037,7 +1138,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "../../../ndsdk/include ../../include ../../cli_common";
+				USER_HEADER_SEARCH_PATHS = "../../../ndsdk/include ../../include ../..";
 			};
 			name = Release;
 		};

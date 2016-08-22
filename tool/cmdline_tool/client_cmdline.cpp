@@ -235,7 +235,7 @@ ND_CMDLINE_FUNC_INSTANCE(redirect_to_server)
 			return ret ;
 		}
 		else {
-			host_list_node bufs[20] ;
+			ApolloServerInfo bufs[20] ;
 			LoginApollo login(__g_conn->GetHandle(), false) ;
 			int num = login.GetServerList(bufs, ND_ELEMENTS_NUM(bufs)) ;
 			
@@ -243,7 +243,7 @@ ND_CMDLINE_FUNC_INSTANCE(redirect_to_server)
 				fprintf(stdout, "get host list number=0\n") ;
 				return -1 ;
 			}
-			int ret = redirectServer(__g_conn->GetHandle(),nd_inet_ntoa(bufs[0].ip, NULL),bufs[0].port,_DFT_SESSION_FILE)  ;
+			int ret = redirectServer(__g_conn->GetHandle(), bufs[0].ip_addr,bufs[0].host.port,_DFT_SESSION_FILE)  ;
 			if (ret == 0) {
 				fprintf(stdout, "redirect server success\n" ) ;
 			}
@@ -264,11 +264,11 @@ ND_CMDLINE_FUNC_INSTANCE(get_server_list)
 	
 	
 	if (__g_conn) {
-		host_list_node host_buf[20] ;
+		ApolloServerInfo host_buf[20] ;
 		LoginApollo login(__g_conn->GetHandle(), false) ;
 		int num = login.GetServerList(host_buf, ND_ELEMENTS_NUM(host_buf)) ;
 		for (int i=0; i<num; ++i) {
-			fprintf(stdout, "server : %s : %d [%s]\n", nd_inet_ntoa(host_buf[i].ip, NULL),host_buf[i].port, host_buf[i].name) ;
+			fprintf(stdout, "server : %s : %d [%s]\n", host_buf[i].ip_addr,host_buf[i].host.port, host_buf[i].host.name) ;
 		}
 		if (num == 0) {
 			fprintf(stdout, "get host list number=0\n") ;

@@ -16,12 +16,12 @@
 #endif 
 
 #include "ndlib.h"
-#include "login_apollo.h"
+#include "cli_common/login_apollo.h"
+#include "cli_common/netui_atl.h"
 #include "apollo_data.h"
 #include "nd_msg.h"
 #include "msg_def.h"
 #include "apollo_errors.h"
-#include "netui_atl.h"
 
 #ifdef NDCLIENT_FOR_UE4 
 #include "HideWindowsPlatformTypes.h"
@@ -30,12 +30,12 @@
 #else 
 
 #include "ndlib.h"
-#include "login_apollo.h"
+#include "cli_common/login_apollo.h"
+#include "cli_common/netui_atl.h"
 #include "apollo_data.h"
 #include "nd_msg.h"
 #include "msg_def.h"
 #include "apollo_errors.h"
-#include "netui_atl.h"
 	
 #endif
 

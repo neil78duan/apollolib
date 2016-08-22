@@ -1,14 +1,15 @@
 #!/bin/sh
 
+
 #  genCodeData.sh
 #  data_tool
 #
 #  Created by duanxiuyun on 15-3-6.
 #
 
-if [ $# -lt 4 ]; then 
+if [ $# -lt 4 ]; then
 	echo "usage: exp_xls.sh file-list.txt input-excel-path output-text-path [encode-type(gbk|utf8)] [is-auto-svn-up 0|1]"
-	exit 1 
+	exit 1
 fi
 
 workDir=`pwd`
@@ -21,16 +22,16 @@ ENCODE_TYPE="utf8"
 [ "x$4" == "x" ] || ENCODE_TYPE=$4
 
 if [ $# -ge 6 ]; then
-	if [ "x$5" == "x0" ]; then 
-		cd $inputPath 
-		svn up 
+	if [ "x$5" == "x0" ]; then
+		cd $inputPath
+		svn up
 		cd $workDir
-	fi 
+	fi
 fi
 
 [ -d $outputPath ] || mkdir $outputPath
 
-[ -d  $inputPath ] ||  echo "input path not exist" 
+[ -d  $inputPath ] ||  echo "input path not exist"
 [ -d  $inputPath ] || exit ;
 
 #check out svn
@@ -83,7 +84,7 @@ run_export()
 	echo "coever $1 SUCCESS !!! "
 }
 
-while read line  
+while read line
 do
 	echo "begin export $line"
 	if [ "${line:0:1}" != "#" ]; then

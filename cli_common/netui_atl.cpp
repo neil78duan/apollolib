@@ -192,7 +192,7 @@ int TryReLogin(nd_handle h, const char *save_session_file)
 }
 
 
-int getServerList(nd_handle h, host_list_node *buf, int size)
+int getServerList(nd_handle h, ApolloServerInfo *buf, int size)
 {
 	
 	LoginApollo login((nd_handle)h,false, NULL) ;

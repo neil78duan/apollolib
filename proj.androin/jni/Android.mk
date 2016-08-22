@@ -65,15 +65,25 @@ LOCAL_SRC_FILES := ../../../ndsdk/src/nd_common/src/bintree.c \
 ../../../ndsdk/src/ndapplib/nd_msgpack.cpp \
 ../../../ndsdk/src/ndapplib/nd_datatransfer.cpp \
 ../../cli_common/login_apollo.cpp \
-../../cli_common/netui_atl.cpp
+../../cli_common/netui_atl.cpp	\
+../../logic_parser/dbl_mgr.cpp	\
+../../logic_parser/logicParser.cpp	\
+../../logic_parser/logic_function.cpp	\
+../../logic_parser/dbldata2netstream.cpp	\
+../../logic_parser/logicStruct.cpp	\
+../../logic_parser/objectBaseMgr.cpp	\
+../../logic_parser/logicDataType.cpp	\
+../../logic_parser/logic_compile.cpp	\
+../../logic_parser/logicEngineRoot.cpp	\
+../../logic_parser/logic_editor_helper.cpp
 
 
 LOCAL_CFLAGS := --debug -DDEBUG -DND_DEBUG -D__LINUX__ -DND_UNIX -DND_ANDROID
-LOCAL_CPPFLAGS:= --debug -DDEBUG -DND_DEBUG -D__LINUX__ -DND_UNIX -DND_ANDROID -frtti
+LOCAL_CPPFLAGS:= --debug -DDEBUG -DND_DEBUG -D__LINUX__ -DND_UNIX -DND_ANDROID
 LOCAL_LDLIBS += -L$(SYSROOT)/usr/lib -llog
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../include \
 	$(LOCAL_PATH)/../../../ndsdk/include \
-	$(LOCAL_PATH)/../../cli_common
+	$(LOCAL_PATH)/../..
 
 include $(BUILD_STATIC_LIBRARY)

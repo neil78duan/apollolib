@@ -14,6 +14,7 @@
 #endif
 #include "ndcli/nd_api_c.h"
 #include "apollo_data.h"
+#include "login_apollo.h"
 
 ND_CONNCLI_API void initAccCreateInfo(account_base_info &acc, int accType, const char *userName, const char *passwd);
 ND_CONNCLI_API int RloginTrylogin(const char*udid, nd_handle h, int accType, const char *userName, const char *passwd, const char *session_file = NULL, NDUINT32 *accID = NULL);
@@ -31,7 +32,7 @@ ND_CONNCLI_API int TryLogout(nd_handle h);
 ND_CONNCLI_API int TryReLogin(nd_handle h, const char *save_session_file = NULL);
 
 //get host list when login success
-ND_CONNCLI_API int getServerList(nd_handle h, host_list_node *buf, int size);
+ND_CONNCLI_API int getServerList(nd_handle h, ApolloServerInfo *buf, int size);
 
 
 #endif /* defined(__clientDemo__netui_atl__) */

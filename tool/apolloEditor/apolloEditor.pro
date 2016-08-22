@@ -30,8 +30,7 @@ LIBS += -L$$ndsdk_dir/lib/win64 -lndclient_s
 SOURCES += \
     ../../netMessage/dataStream.cpp\
     ../../netMessage/MessageName.cpp\
-    ../../netMessage/auto_dataType.cpp\
-    ../../netMessage/dbDataConvert.cpp
+    ../../netMessage/auto_dataType.cpp
 
 }
 
