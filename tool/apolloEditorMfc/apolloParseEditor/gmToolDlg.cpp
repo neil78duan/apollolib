@@ -437,7 +437,7 @@ int gmToolDlg::_login(const char *user, const char *passwd)
 int gmToolDlg::SelOrCreateRole()
 {
 	//JUMP TO server 
-	host_list_node bufs[20];
+	ApolloServerInfo bufs[20];
 	//LoginApollo login(m_pConn->GetHandle(), false);
 	int num = m_login->GetServerList(bufs, ND_ELEMENTS_NUM(bufs));
 
@@ -445,7 +445,7 @@ int gmToolDlg::SelOrCreateRole()
 		out_log("get host list number=0\n");
 		return -1 ;
 	}
-	int ret = m_login->EnterServer(bufs[0].ip, bufs[0].port);
+	int ret = m_login->EnterServer(bufs[0].ip_addr, bufs[0].host.port);
 	//int ret = redirectServer(m_pConn->GetHandle(), nd_inet_ntoa(bufs[0].ip, NULL), bufs[0].port, _SESSION_FILE);
 	if (ret == 0) {
 		out_log("redirect server success\n");

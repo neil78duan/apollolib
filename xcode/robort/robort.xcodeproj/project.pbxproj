@@ -266,10 +266,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
-					__MAC_OS__,
-					ND_UNIX,
+					__ND_MAC__,
 					ND_DEBUG,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -280,10 +278,7 @@
 		07EC877A1D5468F200C32925 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					__MAC_OS__,
-					ND_UNIX,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = __ND_MAC__;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "../../../ndsdk/include ../../include ../..";
 			};

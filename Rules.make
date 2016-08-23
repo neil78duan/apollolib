@@ -29,12 +29,12 @@ OS_kernel = $(shell uname -s | tr '[A-Z]' '[a-z]')
 AIM_NAME = $(OS_kernel)_$(ARCH_MACHINE)
 
 ifeq ($(OS_kernel),linux)
-	CFLAGS += -D__LINUX__
+	CFLAGS += -D__ND_LINUX__
 	LFLAGS += -lrt -ldl -L/usr/lib64/mysql
 endif
 
 ifeq ($(OS_kernel),darwin)
-    CFLAGS += -D__MAC_OS__
+    CFLAGS += -D__ND_MAC__
 	LFLAGS += -liconv
 endif
 
@@ -44,7 +44,7 @@ CURDIR = .
 WORKDIR = $(TOPDIR)/bin/
 LIBDIR = $(TOPDIR)/lib/$(AIM_NAME)
 
-CFLAGS += -c -w -O  -DND_UNIX
+CFLAGS += -c -w -O 
 LFLAGS +=  -lpthread  -lm
 
 #FOR NDSDK

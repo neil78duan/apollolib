@@ -187,7 +187,7 @@ namespace LogicEditorHelper
 		//需要获得别名
 		const char *name = ndxml_getattr_val(xml, _szReserved[ERT_NAME]);
 		if (!name) {
-			name = (char*)ndxml_getname(xml);
+			name = ndxml_getname(xml);
 			const char *alia_name = alias->GetAlia(name);
 			if (alia_name)	{
 				return alia_name;
@@ -198,9 +198,9 @@ namespace LogicEditorHelper
 
 	const char *_GetXmlDesc(ndxml *xml)
 	{
-		char *name = (char*)ndxml_getattr_val(xml, _szReserved[ERT_DESC]);
+		const char *name = ndxml_getattr_val(xml, _szReserved[ERT_DESC]);
 		if (!name) {
-			name = "NULL";
+			name =  "NULL";
 		}
 		return name;
 	}

@@ -453,6 +453,9 @@
     <ClCompile Include="..\..\logic_parser\objectBaseMgr.cpp">
       <Filter>apollo\logicParser</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_time.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\logic_parser\Makefile">

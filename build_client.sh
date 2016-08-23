@@ -12,8 +12,12 @@ workDir=`pwd`
 #build android
 cd proj.androin
 ndk-build clean
+ndk-build apo_debug=1
+[ $? == 0 ] || exit 1
+
 ndk-build
 [ $? == 0 ] || exit 1
+
 
 cd $workDir
 

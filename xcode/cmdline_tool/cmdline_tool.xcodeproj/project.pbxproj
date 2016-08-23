@@ -270,8 +270,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					__MAC_OS__,
-					ND_UNIX,
+					__ND_MAC__,
 					ND_DEBUG,
 					WITHOUT_LOGIC_PARSER,
 				);
@@ -284,8 +283,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					__MAC_OS__,
-					ND_UNIX,
+					__ND_MAC__,
 					WITHOUT_LOGIC_PARSER,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";

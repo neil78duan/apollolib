@@ -162,6 +162,7 @@
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_mutex.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_static_alloc.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_str.c" />
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_time.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_timer.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_trace.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_unix.c" />

@@ -28,16 +28,16 @@
 		074C8FB81D66A8BB00590A34 /* logicParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F8D1D66A88500590A34 /* logicParser.cpp */; };
 		074C8FBA1D66A8BB00590A34 /* logicStruct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F8F1D66A88500590A34 /* logicStruct.cpp */; };
 		074C8FBD1D66A8BB00590A34 /* objectBaseMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F921D66A88500590A34 /* objectBaseMgr.cpp */; };
+		074D850E1D6C2C2A00201121 /* nd_time.c in Sources */ = {isa = PBXBuildFile; fileRef = 074D850D1D6C2C2A00201121 /* nd_time.c */; };
+		074D85101D6C2DE600201121 /* nd_time.c in Sources */ = {isa = PBXBuildFile; fileRef = 074D850D1D6C2C2A00201121 /* nd_time.c */; };
 		0764F6991D631C1600E91673 /* nd_asm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6941D631C1600E91673 /* nd_asm.c */; };
 		0764F69A1D631C1600E91673 /* nd_formula.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6951D631C1600E91673 /* nd_formula.c */; };
 		0764F69B1D631C1600E91673 /* nd_vm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6961D631C1600E91673 /* nd_vm.c */; };
 		0764F69C1D631C1600E91673 /* nd_vmdbg.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6971D631C1600E91673 /* nd_vmdbg.c */; };
-		0764F69D1D631C1600E91673 /* nd_vmmain.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6981D631C1600E91673 /* nd_vmmain.c */; };
 		0764F69E1D631C7F00E91673 /* nd_asm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6941D631C1600E91673 /* nd_asm.c */; };
 		0764F69F1D631C7F00E91673 /* nd_formula.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6951D631C1600E91673 /* nd_formula.c */; };
 		0764F6A01D631C7F00E91673 /* nd_vm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6961D631C1600E91673 /* nd_vm.c */; };
 		0764F6A11D631C7F00E91673 /* nd_vmdbg.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6971D631C1600E91673 /* nd_vmdbg.c */; };
-		0764F6A21D631C7F00E91673 /* nd_vmmain.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6981D631C1600E91673 /* nd_vmmain.c */; };
 		07EC85F01D54400400C32925 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07EC851E1D54400300C32925 /* Makefile */; };
 		07EC85F11D54400400C32925 /* bintree.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85201D54400300C32925 /* bintree.c */; };
 		07EC85F21D54400400C32925 /* callstack.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85211D54400300C32925 /* callstack.c */; };
@@ -197,11 +197,12 @@
 		074C8F911D66A88500590A34 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		074C8F921D66A88500590A34 /* objectBaseMgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objectBaseMgr.cpp; sourceTree = "<group>"; };
 		074C8F931D66A88500590A34 /* objectBaseMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objectBaseMgr.h; sourceTree = "<group>"; };
+		074D850D1D6C2C2A00201121 /* nd_time.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = nd_time.c; sourceTree = "<group>"; };
+		074D850F1D6C2C3500201121 /* nd_time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nd_time.h; sourceTree = "<group>"; };
 		0764F6941D631C1600E91673 /* nd_asm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_asm.c; path = nd_vm/src/nd_asm.c; sourceTree = "<group>"; };
 		0764F6951D631C1600E91673 /* nd_formula.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_formula.c; path = nd_vm/src/nd_formula.c; sourceTree = "<group>"; };
 		0764F6961D631C1600E91673 /* nd_vm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_vm.c; path = nd_vm/src/nd_vm.c; sourceTree = "<group>"; };
 		0764F6971D631C1600E91673 /* nd_vmdbg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_vmdbg.c; path = nd_vm/src/nd_vmdbg.c; sourceTree = "<group>"; };
-		0764F6981D631C1600E91673 /* nd_vmmain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_vmmain.c; path = nd_vm/src/nd_vmmain.c; sourceTree = "<group>"; };
 		07EC848A1D543B8400C32925 /* libapollo_client_ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libapollo_client_ios.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		07EC84A81D543E6200C32925 /* libapollo_client_mac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libapollo_client_mac.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		07EC84AF1D54400300C32925 /* _nderr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _nderr.h; sourceTree = "<group>"; };
@@ -414,7 +415,6 @@
 				0764F6951D631C1600E91673 /* nd_formula.c */,
 				0764F6961D631C1600E91673 /* nd_vm.c */,
 				0764F6971D631C1600E91673 /* nd_vmdbg.c */,
-				0764F6981D631C1600E91673 /* nd_vmmain.c */,
 			);
 			name = vm;
 			sourceTree = "<group>";
@@ -473,6 +473,7 @@
 		07EC84AE1D54400300C32925 /* nd_common */ = {
 			isa = PBXGroup;
 			children = (
+				074D850F1D6C2C3500201121 /* nd_time.h */,
 				07EC84AF1D54400300C32925 /* _nderr.h */,
 				07EC84B01D54400300C32925 /* list.h */,
 				07EC84B11D54400300C32925 /* nd_alloc.h */,
@@ -615,6 +616,7 @@
 		07EC851F1D54400300C32925 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				074D850D1D6C2C2A00201121 /* nd_time.c */,
 				07EC85201D54400300C32925 /* bintree.c */,
 				07EC85211D54400300C32925 /* callstack.c */,
 				07EC85221D54400300C32925 /* common.c */,
@@ -875,6 +877,7 @@
 				07EC86201D54400400C32925 /* net_srv.c in Sources */,
 				07EC86571D5440A100C32925 /* nd_msgpack.cpp in Sources */,
 				074C8FA51D66A88500590A34 /* logicParser.cpp in Sources */,
+				074D850E1D6C2C2A00201121 /* nd_time.c in Sources */,
 				07EC85FE1D54400400C32925 /* nd_win.c in Sources */,
 				07EC86221D54400400C32925 /* udt_icmp.c in Sources */,
 				07EC861A1D54400400C32925 /* nd_net.c in Sources */,
@@ -901,7 +904,6 @@
 				07EC85FD1D54400400C32925 /* nd_unix.c in Sources */,
 				074C8FA01D66A88500590A34 /* logic_compile.cpp in Sources */,
 				0764F69C1D631C1600E91673 /* nd_vmdbg.c in Sources */,
-				0764F69D1D631C1600E91673 /* nd_vmmain.c in Sources */,
 				07EC86161D54400400C32925 /* tea.c in Sources */,
 				0764F69A1D631C1600E91673 /* nd_formula.c in Sources */,
 			);
@@ -911,6 +913,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				074D85101D6C2DE600201121 /* nd_time.c in Sources */,
 				074C8FA91D66A8BB00590A34 /* dbl_mgr.cpp in Sources */,
 				074C8FAB1D66A8BB00590A34 /* dbldata2netstream.cpp in Sources */,
 				074C8FAD1D66A8BB00590A34 /* logic_compile.cpp in Sources */,
@@ -925,7 +928,6 @@
 				0764F69F1D631C7F00E91673 /* nd_formula.c in Sources */,
 				0764F6A01D631C7F00E91673 /* nd_vm.c in Sources */,
 				0764F6A11D631C7F00E91673 /* nd_vmdbg.c in Sources */,
-				0764F6A21D631C7F00E91673 /* nd_vmmain.c in Sources */,
 				07EC865E1D54433700C32925 /* nd_datatransfer.cpp in Sources */,
 				07EC865F1D54433700C32925 /* nd_msgpack.cpp in Sources */,
 				07EC86611D54433700C32925 /* bintree.c in Sources */,
@@ -1079,10 +1081,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					ND_DEBUG,
-					__MAC_OS__,
-					ND_UNIX,
-					ND_IOS,
-					WITHOUT_ICONV,
+					__ND_IOS__,
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1094,12 +1093,7 @@
 		07EC84951D543B8400C32925 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					__MAC_OS__,
-					ND_UNIX,
-					ND_IOS,
-					WITHOUT_ICONV,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = __ND_IOS__;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1113,11 +1107,9 @@
 				CODE_SIGN_IDENTITY = "-";
 				EXECUTABLE_PREFIX = lib;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
 					ND_DEBUG,
-					__MAC_OS__,
-					ND_UNIX,
+					__ND_MAC__,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1131,10 +1123,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				EXECUTABLE_PREFIX = lib;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					__MAC_OS__,
-					ND_UNIX,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = __ND_MAC__;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
