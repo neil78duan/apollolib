@@ -4,4 +4,4 @@
 
 [ $? == 0 ] || exit 1
 
-cp ./cpp/* ../netMessage
+cp ./cpp/* ../../src/netMessage

@@ -17,7 +17,7 @@
 #include "logic_parser/logicDataType.h"
 
 #include "apollo_errors.h"
-#include "netMessage/message_inc.h"
+//#include "netMessage/message_inc.h"
 
 #include <string>
 
@@ -49,72 +49,41 @@ static int out_print(void *pf, const char *stm, ...)
 
 /////////////////////////////////////
 
-class ConnectScriptOwner : public TestLogicObject
+class ConnectScriptOwner :public  ClientMsgHandler::ApoConnectScriptOwner
 {
 public:
     bool getOtherObject(const char*objName, DBLDataNode &val)
     {
-        if (ndstricmp(objName, "connector") == 0){
-            nd_handle h = m_conn->GetHandle();
-            val.InitSet((void*)h, OT_OBJ_NDHANDLE);
-            return true;
+        bool ret = ClientMsgHandler::ApoConnectScriptOwner::getOtherObject(objName, val);
+        if (ret) {
+            return ret;
         }
-        else if (ndstricmp(objName, "FormatMsgData") == 0){
-
-            val.InitSet((void*)m_dataType);
-            return true;
-        }
-        else if (0==ndstricmp(objName, "LogFunction")) {
+        else if (0 == ndstricmp(objName, "LogFunction")) {
             val.InitSet((void*)out_print);
             return true;
         }
-        else if (0==ndstricmp(objName, "LogFile")) {
-            val.InitSet((void*)NULL);
+        else if (0 == ndstricmp(objName, "LogFile")) {
+            val.InitSet("ndlog.log");
             return true;
         }
-
-        else if (0==ndstricmp(objName, "LogPath")) {
+        else if (0 == ndstricmp(objName, "LogPath")) {
             val.InitSet("../../log");
             return true;
         }
-        else if (0==ndstricmp(objName, "WritablePath")) {
+        else if (0 == ndstricmp(objName, "WritablePath")) {
             val.InitSet("../../log");
             return true;
         }
         return false;
     }
-
-    NDIConn *m_conn;
-    userDefineDataType_map_t *m_dataType;
 };
 static ConnectScriptOwner  __myScriptOwner;
 
 
-
-int get_data_format_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
-{
-    NDIStreamMsg inmsg(msg);
-
-    __myScriptOwner.m_dataType = new userDefineDataType_map_t;
-    if (-1 == UserDefFormatFromMessage(*__myScriptOwner.m_dataType, inmsg)) {
-        delete __myScriptOwner.m_dataType;
-        __myScriptOwner.m_dataType = NULL;
-        return 0;
-    }
-#ifdef ND_DEBUG
-    dumpMessageData(*__myScriptOwner.m_dataType, "./client_msg_foramt.txt");
-#endif
-    return 0;
-}
-
 void destroy_apollo_object(NDIConn *pConn)
 {
 
-    __myScriptOwner.m_conn = 0;
-    //__myScriptOwner.m_message_define = 0;
-    delete __myScriptOwner.m_dataType;
-    __myScriptOwner.m_dataType = 0;
-
+    __myScriptOwner.Destroy();
     LogicEngineRoot::destroy_Instant();
 }
 
@@ -122,7 +91,7 @@ static bool init_apollo_object(NDIConn *pConn, const char*script_file)
 {
     destroy_apollo_object(pConn);
 
-    __myScriptOwner.m_conn = pConn;
+    __myScriptOwner.setConn( pConn);
 
     // init script
     LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
@@ -142,7 +111,7 @@ static bool init_apollo_object(NDIConn *pConn, const char*script_file)
     ClientMsgHandler::InstallDftClientHandler(pConn);
     pConn->SetDftMsgHandler(ClientMsgHandler::apollo_dft_message_handler);
 
-    pConn->InstallMsgFunc(get_data_format_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
+    //pConn->InstallMsgFunc(get_data_format_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
     return true;
 }
 //////////////////////////////////////
@@ -613,6 +582,7 @@ int ConnectDialog::getRoleData()
 {
 #define SEND_MSG16(msgid) m_pConn->Send(ND_HIBYTE(msgid), ND_LOBYTE(msgid), 0, 0)
 
+    /*
     SEND_MSG16(NETMSG_ROLE_PACKAGE_INIT_REQ);
     SEND_MSG16(NETMSG_ROLE_ATTR_INIT_REQ);
     SEND_MSG16(NETMSG_ROLE_EQUIP_INIT_REQ);
@@ -621,7 +591,7 @@ int ConnectDialog::getRoleData()
     SEND_MSG16(NETMSG_ROLE_MAPS_SCORE_REQ);
 
     SEND_MSG16(NETMSG_DRAGON_INIT_REQ);
-
+*/
     return 0;
 }
 

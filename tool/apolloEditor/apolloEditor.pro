@@ -12,7 +12,7 @@ message(BUILD MACOX)
 DEFINES += __ND_MAC__
 
 LIBS += -L$$ndsdk_dir/lib -lndclient_darwin_x86_64_d \
-    -L../../lib/darwin_x86_64  -lnetMessage_d  \
+    -L../../lib/darwin_x86_64    \
     -liconv \
     -L$$ndsdk_dir/lib/darwin_x86_64 -lnd_vm_dbg
 
@@ -26,11 +26,6 @@ win32{
 message(WIN32!)
 
 LIBS += -L$$ndsdk_dir/lib/win64 -lndclient_s
-
-SOURCES += \
-    ../../netMessage/dataStream.cpp\
-    ../../netMessage/MessageName.cpp\
-    ../../netMessage/auto_dataType.cpp
 
 }
 
@@ -103,7 +98,6 @@ HEADERS  += ../../logic_parser/dbl_mgr.h \
 #cli-common
 SOURCES += \
     ../../cli_common/apollo_robort.cpp\
-    ../../cli_common/gameMessage.cpp		\
     ../../cli_common/netui_atl.cpp \
     ../../cli_common/dftCliMsgHandler.cpp \
     ../../cli_common/login_apollo.cpp
@@ -111,7 +105,6 @@ SOURCES += \
 HEADERS  += ../../cli_common/dftCliMsgHandler.h \
     ../../cli_common/login_apollo.h \
     ../../cli_common/apollo_robort.h	\
-    ../../cli_common/gameMessage.h\
     ../../cli_common/netui_atl.h
 
 # attribute 

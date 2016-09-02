@@ -10,9 +10,10 @@
 #ifndef _DFT_CLI_MSG_HANDLER_H_
 #define _DFT_CLI_MSG_HANDLER_H_
 
-//#ifndef WITHOUT_LOGIC_PARSER
 #include "logic_parser/dbldata2netstream.h"
-//#endif 
+#ifndef WITHOUT_LOGIC_PARSER
+#include "logic_parser/objectBaseMgr.h"
+#endif
 
 namespace ClientMsgHandler
 {
