@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <type_data_type name="数据类型" kinds="hide" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,2维数组,变量,参数,上一步结果,time"/>
 <send_msg_list name="发送消息" delete="no" expand_stat="0">
-	<msg_enter_map name="进入副本" expand="yes" delete="no">
+	<msg_enter_map name="进入副本" expand="yes" delete="no" expand_stat="1">
 		<msgid kinds="hide">781</msgid>
 		<data name="场景编号" kinds="numeral" param="0" desc="param参考type_data_type">10101</data>
 	</msg_enter_map>
@@ -173,5 +173,10 @@
 	</message>
 	<message name="GM_pvp-npc初始化" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="12">0</msgid>
+	</message>
+	<message name="GM_获取玩家日志" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="0" minId="22">0</msgid>
+		<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">11</data>
+		<data name="文件名" kinds="string" param="2" desc="文件名">apoclient.log</data>
 	</message>
 </send_msg_list>

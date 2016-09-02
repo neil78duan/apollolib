@@ -236,7 +236,7 @@ ND_CMDLINE_FUNC_INSTANCE(redirect_to_server)
 		}
 		else {
 			ApolloServerInfo bufs[20] ;
-			LoginApollo login(__g_conn->GetHandle(), false) ;
+			LoginApollo login(__g_conn->GetHandle()) ;
 			int num = login.GetServerList(bufs, ND_ELEMENTS_NUM(bufs)) ;
 			
 			if (num == 0) {
@@ -265,7 +265,7 @@ ND_CMDLINE_FUNC_INSTANCE(get_server_list)
 	
 	if (__g_conn) {
 		ApolloServerInfo host_buf[20] ;
-		LoginApollo login(__g_conn->GetHandle(), false) ;
+		LoginApollo login(__g_conn->GetHandle()) ;
 		int num = login.GetServerList(host_buf, ND_ELEMENTS_NUM(host_buf)) ;
 		for (int i=0; i<num; ++i) {
 			fprintf(stdout, "server : %s : %d [%s]\n", host_buf[i].ip_addr,host_buf[i].host.port, host_buf[i].host.name) ;

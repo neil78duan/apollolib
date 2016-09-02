@@ -104,14 +104,14 @@ static inline void _tryto_change_order_short(NDUINT16 &val)
 	}
 }
 
-static inline void _tryto_change_order_long(NDUINT16 &val)
+static inline void _tryto_change_order_long(NDUINT32 &val)
 {
 	if (DBL_CHECK_CHANGE_BYTE_ORDER()) {
 		val = nd_order_change_long(val);
 	}
 }
 
-static inline void _tryto_change_order_long64(NDUINT16 &val)
+static inline void _tryto_change_order_long64(NDUINT64 &val)
 {
 	if (DBL_CHECK_CHANGE_BYTE_ORDER()) {
 		val = nd_order_change_longlong(val);

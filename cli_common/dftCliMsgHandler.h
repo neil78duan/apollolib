@@ -10,19 +10,20 @@
 #ifndef _DFT_CLI_MSG_HANDLER_H_
 #define _DFT_CLI_MSG_HANDLER_H_
 
-#ifndef WITHOUT_LOGIC_PARSER
+//#ifndef WITHOUT_LOGIC_PARSER
 #include "logic_parser/dbldata2netstream.h"
-#endif 
+//#endif 
 
 namespace ClientMsgHandler
 {
-void defaultCliMsgHandlerInit(NDIConn *pconn) ;	
-
-#ifndef WITHOUT_LOGIC_PARSER
-void destroyDftClientMsgHandler(NDIConn *pConn);
-bool initDftClientMsgHandler(NDIConn *pConn, const char*script_file, userDefineDataType_map_t &dataConfig, ndxml *msg_def, logic_print outfunc);
-#endif
-
+void InstallDftClientHandler(NDIConn *pconn) ;	
+int apollo_dft_message_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
+int apollo_cli_msg_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t *msg, const char *script);
+// 
+// #ifndef WITHOUT_LOGIC_PARSER
+// void destroyDftClientMsgHandler(NDIConn *pConn);
+// bool initDftClientMsgHandler(NDIConn *pConn, const char*script_file, logic_print outfunc);
+// #endif
 	
 	int msg_get_version_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
 	int msg_get_rlimit_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
@@ -30,6 +31,45 @@ bool initDftClientMsgHandler(NDIConn *pConn, const char*script_file, userDefineD
 	int msg_show_server_time_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
 	int msg_show_game_time_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
 	int msg_broadcast_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
+
+	
+
+#ifndef WITHOUT_LOGIC_PARSER
+
+	struct msgIDNameFormat
+	{
+		NDUINT16 id;
+		std::string name;
+		std::string format;
+	};
+	typedef::std::vector<msgIDNameFormat> msgIdNameFormat_vct;
+
+	class ApoConnectScriptOwner : public TestLogicObject
+	{
+	public:
+		ApoConnectScriptOwner();
+		virtual ~ApoConnectScriptOwner();
+		void Destroy();
+		void setConn(NDIConn *conn);
+		bool getOtherObject(const char*objName, DBLDataNode &val);
+		virtual const char *getMsgName(int msgId);
+		virtual const char *getMsgBody(int msgId);
+
+	protected:
+		NDIConn *m_conn;
+		userDefineDataType_map_t m_dataType;
+		msgIdNameFormat_vct m_msgIdName;
+	};
+	
+	userDefineDataType_map_t *getDataFormat(NDIConn *pconn);
+	logic_print getLogFunction(NDIConn *pconn);
+	std::string getWritablePath(NDIConn *pconn);
+	std::string getLogPath(NDIConn *pconn);
+	void* getLogFile(NDIConn *pconn);
+	msgIdNameFormat_vct* getMsgIdNameFormat(NDIConn *pconn);
+
+#endif
+
 
 };
 #endif 

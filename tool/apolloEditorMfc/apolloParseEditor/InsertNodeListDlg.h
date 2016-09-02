@@ -12,7 +12,7 @@ public:
 	
 	InsertNodeListDlg(CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~InsertNodeListDlg();
-	enum {MAX_CREATE_LIST = 45};
+	enum {MAX_CREATE_LIST = 60};
 // 对话框数据
 	enum { IDD = IDD_DIALOG_INSERT_LIST };
 

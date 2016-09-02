@@ -23,6 +23,8 @@ bool apollo_printf(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode
 bool apollo_log(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 bool apollo_time_func(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 int apollo_logic_out_put(const char *text);
+bool apollo_load_file_data(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+bool apollo_write_file(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 
 #ifdef ND_OUT_LOG_2CTRL
 

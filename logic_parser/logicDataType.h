@@ -41,13 +41,14 @@ enum DBL_ELEMENT_TYPE
 	OT_COMPILE_TIME=0xd, //compile time 
 	OT_FUNCTION_NAME = 0xe, //function name 
 	OT_SCRIPT_MODULE_NAME = 0xf, //function name
+	OT_BINARY_DATA = 0x10,		//binary-data
 
 	OT_OBJECT_VOID = 0x20,		//game object , c_address of object
 	OT_OBJ_MSGSTREAM =0x21,
 	OT_OBJ_BASE_OBJ= 0x22,
 	OT_OBJ_NDHANDLE = 0x23,
 	OT_OBJ_NDOBJECT = 0x24,
-	OT_BINARY_DATA = 0x25,
+	//OT_BINARY_DATA = 0x25,
 	OT_ATTR_DATA = 0x26 , //role attribute data
 };
 
@@ -195,8 +196,8 @@ public:
 	void InitFromTxt(const char *valText);
 	
 
-	int ReadStream(const char *streamBuf, int streamByteOrder=1);
-	int WriteStream(char *streamBuf, int streamByteOrder=1)const;
+	int ReadStream(const char *streamBuf, size_t data_len, int streamByteOrder);
+	int WriteStream(char *streamBuf, size_t buf_size, int streamByteOrder )const;
 	int GetInt() const;
 	NDUINT64 GetInt64() const;
 	bool GetBool() const;
@@ -207,7 +208,7 @@ public:
 	void *GetBinary() const;
 	size_t GetBinarySize() const;
 
-	DBLDataNode GetArray(int index);
+	DBLDataNode GetArray(int index)const;
 	int GetarrayInt(int index) const;
 	bool GetarrayBool(int index) const;
 	float GetarrayFloat(int index) const;
@@ -256,6 +257,7 @@ protected:
 	void Destroy();
 	void init() ;
 	void _copy(const DBLDataNode &r);
+	int _writeEmptyStream(char *streamBuf, int streamByteOrder)const;
 	bool m_dataOwner; // false needn't release data 
 	NDUINT8 m_ele_type;
 	NDUINT8 m_sub_type;

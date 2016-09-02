@@ -8,7 +8,7 @@ include ../Rules.make
 
 ##############set flag
 
-CFLAGS += -I$(TOPDIR)/include -I$(TOPDIR)/netMessage  -DWITHOUT_LOGIC_PARSER
+CFLAGS += -I$(TOPDIR)/include -I$(TOPDIR) -DWITHOUT_LOGIC_PARSER
 
 ifeq ($(DEBUG),y)
     PROJS = $(LIBDIR)/libapollo_cli_common_d.a

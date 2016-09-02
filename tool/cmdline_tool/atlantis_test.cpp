@@ -241,7 +241,7 @@ ND_CMDLINE_FUNC_INSTANCE(createRole)
 				}
 			}
 			
-			LoginApollo login(h, false) ;
+			LoginApollo login(h) ;
 			login.ReadyGame() ;
 		}
 
@@ -303,7 +303,7 @@ ND_CMDLINE_FUNC_INSTANCE(getRoleList)
 					fprintf(stderr, "load role attribute id = %d val =%f \n", aid, val) ;
 				}
 			}
-			LoginApollo login(h, false) ;
+			LoginApollo login(h) ;
 			login.ReadyGame() ;
 		}
 	}

@@ -25,9 +25,6 @@
     <Filter Include="attribute">
       <UniqueIdentifier>{4f7ee597-f4f3-4358-8499-de6cacb29350}</UniqueIdentifier>
     </Filter>
-    <Filter Include="netMessage">
-      <UniqueIdentifier>{9c8def1f-58ed-4dd8-8315-224f9176a3de}</UniqueIdentifier>
-    </Filter>
     <Filter Include="cli_common">
       <UniqueIdentifier>{8031d898-2175-4d5c-8dad-2bfa80bca38b}</UniqueIdentifier>
     </Filter>
@@ -129,9 +126,6 @@
     <ClInclude Include="..\..\..\cli_common\dftCliMsgHandler.h">
       <Filter>cli_common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\cli_common\gameMessage.h">
-      <Filter>cli_common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\cli_common\login_apollo.h">
       <Filter>cli_common</Filter>
     </ClInclude>
@@ -149,27 +143,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\attribute\stat_machine.h">
       <Filter>attribute</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\netMessage\_msgid_export.h">
-      <Filter>netMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\netMessage\auto_dataType.h">
-      <Filter>netMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\netMessage\auto_dataTypeDb_v1.h">
-      <Filter>netMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\netMessage\auto_macroDefine.h">
-      <Filter>netMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\netMessage\dataStream.h">
-      <Filter>netMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\netMessage\message_inc.h">
-      <Filter>netMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\netMessage\MessageID.h">
-      <Filter>netMessage</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\logic_parser\dbl_mgr.h">
       <Filter>logicParser</Filter>
@@ -284,9 +257,6 @@
     <ClCompile Include="..\..\..\cli_common\dftCliMsgHandler.cpp">
       <Filter>cli_common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\cli_common\gameMessage.cpp">
-      <Filter>cli_common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\cli_common\login_apollo.cpp">
       <Filter>cli_common</Filter>
     </ClCompile>
@@ -304,18 +274,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\attribute\stat_machine.cpp">
       <Filter>attribute</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\netMessage\auto_dataType.cpp">
-      <Filter>netMessage</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\netMessage\auto_dataTypeDb_v1.cpp">
-      <Filter>netMessage</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\netMessage\dataStream.cpp">
-      <Filter>netMessage</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\netMessage\MessageName.cpp">
-      <Filter>netMessage</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\logic_parser\dbl_mgr.cpp">
       <Filter>logicParser</Filter>
@@ -363,9 +321,6 @@
     </None>
     <None Include="..\..\..\attribute\Makefile">
       <Filter>attribute</Filter>
-    </None>
-    <None Include="..\..\..\netMessage\Makefile">
-      <Filter>netMessage</Filter>
     </None>
     <None Include="..\..\..\logic_parser\Makefile">
       <Filter>logicParser</Filter>

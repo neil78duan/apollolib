@@ -53,13 +53,15 @@ int UserAdditionData::FromStream(void *data, size_t size)
 			return -1;
 		}
 		p += len;
+		size -= len;
 
 		DBLDataNode val;
-		len = val.ReadStream(p);
+		len = val.ReadStream(p,size,1);
 		if (-1== len){
 			return -1;
 		}
 		p += len;
+		size -= len;
 		m_data_map[std::string(name)] = val;
 		
 	}
@@ -86,7 +88,7 @@ int UserAdditionData::ToStream(void *buf, size_t bufsize) const
 		strncpy(p, it->first.c_str(), bufsize - 2);
 		bufsize -= len+2;
 		p += len;
-		len = it->second.WriteStream(p);
+		len = it->second.WriteStream(p,bufsize,1);
 		if (-1 == len){
 			return -1;				 
 		}

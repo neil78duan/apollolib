@@ -568,7 +568,9 @@ int LogicCompiler::trytoCompileExceptionHandler(ndxml *funcNode, char *buf, size
 			p = lp_write_stream(p, (NDUINT32)0, m_aimByteOrder);
 			
 			ret = p - buf;
-			*size_addr = (NDUINT16)(p - (char*)size_addr) - sizeof(NDUINT16);
+			//*size_addr = (NDUINT16)(p - (char*)size_addr) - sizeof(NDUINT16);
+			NDUINT16 blockSize =(NDUINT16)(p - (char*)size_addr) - sizeof(NDUINT16) ;
+			lp_write_stream((lp_stream_t)size_addr, blockSize,m_aimByteOrder) ;
 #if 0
 			char *p1 = buf;
 			//*((*(NDUINT32**)&p1)++);
@@ -1019,6 +1021,7 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 		paramType = p;
 		//*((*(NDUINT16**)&p)++) = type;
 		p = lp_write_stream(p, (NDUINT16) type, m_aimByteOrder);
+		len -= 2;
 	}
 	switch (type)
 	{
@@ -1108,7 +1111,7 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 				if (paramType){
 					p -= sizeof(NDUINT16);
 				}
-				int size = convertData.WriteStream(p, m_aimByteOrder);
+				int size = convertData.WriteStream(p,len, m_aimByteOrder);
 				//////////////////////////////////////////////////////////////////////////
 				//DBLDataNode test1;
 				//int size1 = test1.ReadStream(p);

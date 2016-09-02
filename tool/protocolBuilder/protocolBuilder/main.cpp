@@ -737,8 +737,8 @@ int build_messageID(ndxml_root *xmlfile, const char *out_file)
 		if (!dataInfo || !*dataInfo) {
 			dataInfo = "none" ;
 		}
-		fprintf(pf,"_APOLLO_MSG_ID_DEFINE(%s, 0x%x) //%s,data-format:%s\n", ndxml_getattr_val(sub, "id"),
-				ND_MAKE_WORD(maxID, minID),	ndxml_getattr_val(sub, "comment"),dataInfo ) ;
+		fprintf(pf,"_APOLLO_MSG_ID_DEFINE(%s, 0x%x , \"%s\") //%s,data-format:%s\n", ndxml_getattr_val(sub, "id"),
+			ND_MAKE_WORD(maxID, minID), dataInfo,ndxml_getattr_val(sub, "comment"), dataInfo);
 		++minID ;
 	}
 	//fprintf(pf,"};\n#endif\n") ;

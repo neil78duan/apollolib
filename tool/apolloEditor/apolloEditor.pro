@@ -9,7 +9,7 @@ game_dir = ../..
 
 macx:{
 message(BUILD MACOX)
-DEFINES += __MAC_OS__ ND_UNIX
+DEFINES += __ND_MAC__
 
 LIBS += -L$$ndsdk_dir/lib -lndclient_darwin_x86_64_d \
     -L../../lib/darwin_x86_64  -lnetMessage_d  \
@@ -20,7 +20,7 @@ LIBS += -L$$ndsdk_dir/lib -lndclient_darwin_x86_64_d \
 }
 unix:!macx{
 message(BUILD LINUX!)
-DEFINES += __LINUX__ ND_UNIX
+DEFINES += __ND_LINUX__
 }
 win32{
 message(WIN32!)

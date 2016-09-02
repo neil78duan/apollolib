@@ -5,7 +5,7 @@
 #include "nd_common/nd_common.h"
 
 class NDIConn;
-class LoginBase;
+class LoginApollo;
 class QTimer ;
 
 namespace Ui {
@@ -40,7 +40,7 @@ public:
 
     ndxml *m_editor_setting;
     ndxml *m_gmCfg ;
-	ndxml_root m_message_define;
+    //ndxml_root m_message_define;
 private slots:
     void on_loginButton_clicked();
 
@@ -57,7 +57,7 @@ private:
     QTimer *timer ;
 
     NDIConn *m_pConn;
-    LoginBase *m_login;
+    LoginApollo *m_login;
 };
 
 #endif // CONNECTDIALOG_H

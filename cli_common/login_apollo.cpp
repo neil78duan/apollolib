@@ -50,48 +50,11 @@ static int stream_to_session(char *stream_buf, size_t size, login_session_load *
 
 
 #define SEND_AND_WAIT(_conn, _omsg, _rmsg_buf,_wait_maxid, _wait_minid,_sendflag) \
-if (0 != ndSendAndWaitMessage(_conn, _omsg.GetMsgAddr(), _rmsg_buf, _wait_maxid, _wait_minid, _sendflag)) {	\
+if (0 != ndSendAndWaitMessage(_conn, _omsg.GetMsgAddr(), _rmsg_buf, _wait_maxid, _wait_minid, _sendflag,NET_MSG_TIMEOUT)) {	\
 		nd_logerror("send and wait data error code =%d\n", nd_object_lasterror(_conn)); \
 		return -1;		\
 }
 
-
-int ndSendAndWaitMessage(nd_handle nethandle, nd_usermsgbuf_t *sendBuf, nd_usermsgbuf_t* recvBuf, ndmsgid_t waitMaxid, ndmsgid_t waitMinid, int sendFlag)
-{
-	if (nd_connector_send(nethandle, (nd_packhdr_t*)sendBuf, sendFlag) <= 0) {
-		nd_object_seterror(nethandle, NDERR_WRITE);
-		nd_logerror("send data error\n");
-		return -1;
-	}
-	ndtime_t start_tm = nd_time();
-RE_RECV:
-
-	if (-1 == nd_connector_waitmsg(nethandle, (nd_packetbuf_t *)recvBuf, WAITMSG_TIMEOUT)) {
-		nd_object_seterror(nethandle, NDERR_TIMEOUT);
-		nd_logerror("wait message timeout\n");
-		return -1;
-	}
-	else if (nd_checkErrorMsg(nethandle, (ndMsgData*)recvBuf)) {
-		nd_logerror("receive error message \n");
-		return -1;
-	}
-	else if (ND_USERMSG_MAXID(recvBuf) != waitMaxid || ND_USERMSG_MINID(recvBuf) != waitMinid) {
-		if ((nd_time() - start_tm) >= WAITMSG_TIMEOUT) {
-			nd_object_seterror(nethandle, NDERR_TIMEOUT);
-			nd_logerror("wait message(%d,%d) timeout\n",waitMaxid,  waitMinid);
-			return -1;
-		}
-		if (((nd_netui_handle)nethandle)->msg_handle) {
-			int ret = nd_translate_message(nethandle, (nd_packhdr_t*)recvBuf, NULL);
-			if (ret == -1){
-				nd_logerror("wait message(%d,%d) error ,recvd(%d,%d)\n", waitMaxid, waitMinid, ND_USERMSG_MAXID(recvBuf),ND_USERMSG_MINID(recvBuf));
-				return ret;
-			}
-		}		
-		goto RE_RECV;
-	}
-	return 0;
-}
 
 //show error
 const char *atlantis_error(int errcode)
@@ -116,6 +79,7 @@ const char *atlantis_error(int errcode)
 }
 
 
+#ifdef BUILD_AS_THIRD_PARTY
 LoginBase *ApolloCreateLoginInst()
 {
 	nd_register_error_convert(atlantis_error);
@@ -125,6 +89,18 @@ void ApolloDestroyLoginInst(LoginBase *pLogin)
 {
 	delete pLogin;
 }
+#else 
+LoginApollo *ApolloCreateLoginInst()
+{
+	nd_register_error_convert(atlantis_error);
+	return new LoginApollo();
+}
+void ApolloDestroyLoginInst(LoginApollo *pLogin)
+{
+	delete pLogin;
+}
+
+#endif
 
 NDUINT32 LoginApollo::getAccountID() 
 {
@@ -137,7 +113,7 @@ const char *LoginApollo::getAccountName()
 	return (const char*)m_accName ;
 }
 
-LoginApollo::LoginApollo(nd_handle hConn, bool saveSession, const char * session_filename, const char*udid ) : m_conn(hConn), m_saveSession(saveSession)
+LoginApollo::LoginApollo(nd_handle hConn, const char * session_filename, const char*udid ) : m_conn(hConn)
 {
 	m_accIndex = 0 ;
 	m_sessionID = 0 ;
@@ -148,22 +124,7 @@ LoginApollo::LoginApollo(nd_handle hConn, bool saveSession, const char * session
 	memset(&m_srv_key, 0, sizeof(m_srv_key)) ;
 	m_session_file = 0 ;
 	
-	if (saveSession) {
-		size_t size = strlen(session_filename) + 1 ;
-		if (size > 1024) {
-			size = 1024 ;
-		}		
-		m_session_file =(char*) malloc(size+1) ;
-		strncpy(m_session_file, session_filename, size) ;
-	}
-
-	if (udid == NULL || udid[0] == 0){
-		strncpy((char*)m_udid, "unknow", sizeof(m_udid));
-	}
-	else {
-		strncpy((char*)m_udid, udid, sizeof(m_udid));
-	}
-	
+	ReInit( hConn, session_filename, udid);	
 	
 }
 
@@ -179,7 +140,6 @@ LoginApollo::LoginApollo()
 	//m_nickName[0]=0 ;
 	memset(&m_srv_key, 0, sizeof(m_srv_key));
 	m_session_file = 0;
-	m_saveSession = false;
 
 
 	strncpy((char*)m_udid, "unknown", sizeof(m_udid));
@@ -194,7 +154,8 @@ LoginApollo::~LoginApollo()
 	}
 }
 
-void LoginApollo::InitUdid(const char *udid)
+
+void LoginApollo::SetUdid(const char *udid)
 {
 	if (udid && udid[0]) {
 		strncpy((char*)m_udid, udid, sizeof(m_udid))  ;
@@ -203,16 +164,18 @@ void LoginApollo::InitUdid(const char *udid)
 		m_udid[0] = 0;
 	}
 }
-void LoginApollo::ReInit(nd_handle hConn, const char * session_filename)
+
+void LoginApollo::ReInit(nd_handle hConn, const char * session_filename, const char*udid )
 {
 	Destroy();
 
-	m_conn = hConn;
-	
-	InitSessionFile(session_filename);
+	m_conn = hConn;		
+	SetSessionFile(session_filename);
+	SetUdid(udid);
+
 }
 
-void LoginApollo::InitSessionFile(const char *session_filepath)
+void LoginApollo::SetSessionFile(const char *session_filepath)
 {
 	if (session_filepath && *session_filepath){
 		size_t size = strlen(session_filepath) + 1;
@@ -221,10 +184,8 @@ void LoginApollo::InitSessionFile(const char *session_filepath)
 		}
 		m_session_file = (char*)malloc(size + 1);
 		strncpy(m_session_file, session_filepath, size);
-		m_saveSession = true;
 	}
 	else {
-		m_saveSession = false;
 		m_session_file = NULL;
 	}
 }
@@ -294,7 +255,6 @@ void LoginApollo::Destroy()
 {
 	m_conn = 0;
 	m_accIndex =0 ;
-	m_saveSession = false ;
 	m_sessionID = 0;
 	
 	m_accType = 0;
@@ -310,12 +270,11 @@ void LoginApollo::Destroy()
 
 int LoginApollo::Login(const char *userName, const char *passwd, ACCOUNT_TYPE type)
 {
-	if (!nd_connector_check_crypt(m_conn) ) {
-		if (-1== nd_exchange_key((netObject)m_conn, (void*)m_srv_key)) {
-			nd_logmsg("echange session info error %s \n", nd_object_errordesc(m_conn)) ;
-			return  1 ;
-		}
+
+	if (TrytoGetCryptKey() == -1) {
+		return -1;
 	}
+
 	// send login message
 	NDOStreamMsg omsg(ND_MAIN_ID_LOGIN,LOGIN_MSG_LOGIN_REQ) ;
 	omsg.Write(m_udid) ;
@@ -380,24 +339,26 @@ int LoginApollo::Relogin()
 int LoginApollo::Logout() 
 {
 	if (nd_connect_level_get(m_conn) < EPL_LOGIN)  {
-		nd_object_seterror(m_conn, ESERVER_ERR_NEED_LOGIN) ;
+		nd_object_seterror(m_conn, ESERVER_ERR_NEED_LOGIN);
+		nd_connector_set_crypt(m_conn, NULL, 0);
 		return -1;
 	}
-	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_LOGOUT_REQ) ;
-	if (nd_connector_send(m_conn,(nd_packhdr_t*) omsg.GetMsgAddr(), ESF_URGENCY)<=0) {
-		nd_object_seterror(m_conn,NDERR_WRITE) ;	
-		return -1 ;	
+	
+	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_LOGOUT_REQ);	
+	nd_usermsgbuf_t recv_msg;
+	if (0 != ndSendAndWaitMessage(m_conn, omsg.GetMsgAddr(), &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_LOGOUT_NTF, ESF_URGENCY, 2000)) {
+		nd_object_seterror(m_conn, NDERR_IO);
 	}
-		
+	nd_connect_level_set(m_conn, EPL_CONNECT) ;	
+
+	nd_connector_set_crypt(m_conn, NULL, 0);
 	return 0;
 }
 
 int LoginApollo::CreateAccount(account_base_info *acc_info)
 {
-	if (!nd_connector_check_crypt(m_conn) ) {
-		if (-1== nd_exchange_key((netObject)m_conn, (void*) &m_srv_key)) {
-			return  1 ;
-		}
+	if (TrytoGetCryptKey() ==-1) {
+		return -1;
 	}
 
 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_REQ) ;
@@ -749,7 +710,7 @@ int LoginApollo::onLogin(NDIStreamMsg &inmsg)
 	
 	nd_logdebug("login ack accound-id=%d session_id =%d  connector=%p \n" AND m_accIndex  AND  m_sessionID AND  m_conn);
 
-	if (m_saveSession && m_session_file && m_session_file[0]) {		
+	if ( m_session_file && m_session_file[0]) {		
 		login_token_info sessionifo ;
 		sessionifo.acc_index = m_accIndex ;
 		sessionifo.session_key = m_sessionID ;
@@ -798,6 +759,18 @@ int LoginApollo::onLogin(NDIStreamMsg &inmsg)
 	}
 	
 	return  0 ;
+}
+
+int LoginApollo::TrytoGetCryptKey()
+{
+	if (!nd_connector_check_crypt(m_conn)) {
+		int ret = nd_exchange_key((netObject)m_conn, (void*)&m_srv_key);
+		if (-1 == ret) {
+			nd_logerror("exchange key error %s\n", ndGetLastErrorDesc(m_conn));
+		}
+		return ret;
+	}
+	return 0;
 }
 
 int LoginApollo::checkCryptVersion(char *savedVersion) 

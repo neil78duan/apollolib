@@ -20,7 +20,7 @@
 #include "cli_common/apollo_robort.h"
 
 #define _robort_SEND_AND_WAIT(_conn, _omsg, _rmsg_buf,_wait_maxid, _wait_minid,_sendflag) \
-	if(0!=ndSendAndWaitMessage(_conn,_omsg.GetMsgAddr(),_rmsg_buf,_wait_maxid, _wait_minid,_sendflag) ) {	\
+	if(0!=ndSendAndWaitMessage(_conn,_omsg.GetMsgAddr(),_rmsg_buf,_wait_maxid, _wait_minid,_sendflag,WAITMSG_TIMEOUT) ) {	\
 		nd_logerror( "send and wait data error code =%d\n", nd_object_lasterror(_conn)); \
 		return -1;		\
 			}
@@ -105,7 +105,8 @@ int ApolloRobort::Close(int flag)
 	
 
 	if (m_login){
-		ApolloDestroyLoginInst(m_login);
+		//ApolloDestroyLoginInst(m_login);
+		delete m_login;
 		m_login = 0;
 	}
 
@@ -159,16 +160,14 @@ int ApolloRobort::_login(const char *accName, const char *passwd)
 {
 	int ret = 0;
 	if (m_login){
-		ApolloDestroyLoginInst(m_login);
-
+		//ApolloDestroyLoginInst(m_login);
+		delete m_login;
 	}
 	
-	m_login = ApolloCreateLoginInst();
+	m_login = new LoginApollo(m_pConn->GetHandle(), NULL, "unknow-udid-robort-test");
 	if (!m_login){
 		return -1;
 	}
-	m_login->ReInit(m_pConn->GetHandle(), NULL) ;
-	m_login->InitUdid("unknow-udid-robort-test");
 	
 	
 	ret = m_login->Login(accName, passwd, ACC_APOLLO);

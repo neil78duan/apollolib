@@ -521,6 +521,28 @@ int LogicParserEngine::_runCmd(runningStack *stack)
  					m_sys_errno = LOGIC_ERR_AIM_OBJECT_NOT_FOUND;
  				}
  				break;
+
+			case E_OP_CHANGE_DIR: //change current working direct  format: string:new_direct
+				GET_TEXT_FROM_STREAM(name, sizeof(name), p);
+				m_registorFlag = _chdir(name);
+				if (!m_registorFlag) {
+					m_sys_errno = LOGCI_ERR_FILE_NOT_EXIST;
+				}
+				break;
+			case E_OP_REMOVE_FILE: //remove file or direct format :string:path_name
+				GET_TEXT_FROM_STREAM(name, sizeof(name), p);
+				m_registorFlag = _rmfile(name);
+				if (!m_registorFlag) {
+					m_sys_errno = LOGCI_ERR_FILE_NOT_EXIST;
+				}
+				break;
+			case E_OP_MAKE_DIR:		//create direct : foramt : string 
+				GET_TEXT_FROM_STREAM(name, sizeof(name), p);
+				m_registorFlag = _mkdir(name);
+				if (!m_registorFlag) {
+					m_sys_errno = LOGCI_ERR_FILE_NOT_EXIST;
+				}
+				break;
 			case E_OP_DEL_TIMER:
 			{
 				//opAim = *((*(NDUINT32**)&p)++);
@@ -938,6 +960,29 @@ DBLDataNode* LogicParserEngine::_getLocalVar(runningStack *stack, const char *va
 	}
 	return NULL;
 }
+
+
+bool LogicParserEngine::_chdir(const char *curDir)
+{
+	if (m_curStack->workingPath.empty()) {
+		m_curStack->workingPath = nd_getcwd();
+	}
+	return 0==nd_chdir(curDir);
+}
+
+bool LogicParserEngine::_rmfile(const char *filename)
+{
+	if (nd_existfile(filename)) {
+		return 0 == nd_rmfile(filename);
+	}
+	return 0 == nd_rmdir(filename);
+}
+
+bool LogicParserEngine::_mkdir(const char *curDir)
+{
+	return 0 == nd_mkdir(curDir);
+}
+
 DBLDataNode* LogicParserEngine::_refVariant(runningStack *stack, char *&pCmdStream)
 {
 	//NDUINT16 type = *(NDUINT16*)pCmdStream;
@@ -1099,7 +1144,8 @@ int LogicParserEngine::_getValue(runningStack *stack, char *pCmdStream, DBLDataN
 		return (int)(p - pCmdStream);
 	}
 	else {
-		return outValue.ReadStream(pCmdStream, m_cmdByteOrder);
+		size_t size = stack->cmd->buf + stack->cmd->size - pCmdStream;
+		return outValue.ReadStream(pCmdStream,size, m_cmdByteOrder);
 	}
 
 	m_sys_errno = LOGIC_ERR_VARIANT_NOT_EXIST;

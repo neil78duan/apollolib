@@ -30,6 +30,8 @@
 		074C8FBD1D66A8BB00590A34 /* objectBaseMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 074C8F921D66A88500590A34 /* objectBaseMgr.cpp */; };
 		074D850E1D6C2C2A00201121 /* nd_time.c in Sources */ = {isa = PBXBuildFile; fileRef = 074D850D1D6C2C2A00201121 /* nd_time.c */; };
 		074D85101D6C2DE600201121 /* nd_time.c in Sources */ = {isa = PBXBuildFile; fileRef = 074D850D1D6C2C2A00201121 /* nd_time.c */; };
+		07533A2C1D6EF0B9004DD290 /* dftCliMsgHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07533A2A1D6EF0B9004DD290 /* dftCliMsgHandler.cpp */; };
+		07533A2D1D6EF0F2004DD290 /* dftCliMsgHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07533A2A1D6EF0B9004DD290 /* dftCliMsgHandler.cpp */; };
 		0764F6991D631C1600E91673 /* nd_asm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6941D631C1600E91673 /* nd_asm.c */; };
 		0764F69A1D631C1600E91673 /* nd_formula.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6951D631C1600E91673 /* nd_formula.c */; };
 		0764F69B1D631C1600E91673 /* nd_vm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6961D631C1600E91673 /* nd_vm.c */; };
@@ -199,6 +201,8 @@
 		074C8F931D66A88500590A34 /* objectBaseMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objectBaseMgr.h; sourceTree = "<group>"; };
 		074D850D1D6C2C2A00201121 /* nd_time.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = nd_time.c; sourceTree = "<group>"; };
 		074D850F1D6C2C3500201121 /* nd_time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nd_time.h; sourceTree = "<group>"; };
+		07533A2A1D6EF0B9004DD290 /* dftCliMsgHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dftCliMsgHandler.cpp; path = ../../../cli_common/dftCliMsgHandler.cpp; sourceTree = "<group>"; };
+		07533A2B1D6EF0B9004DD290 /* dftCliMsgHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dftCliMsgHandler.h; path = ../../../cli_common/dftCliMsgHandler.h; sourceTree = "<group>"; };
 		0764F6941D631C1600E91673 /* nd_asm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_asm.c; path = nd_vm/src/nd_asm.c; sourceTree = "<group>"; };
 		0764F6951D631C1600E91673 /* nd_formula.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_formula.c; path = nd_vm/src/nd_formula.c; sourceTree = "<group>"; };
 		0764F6961D631C1600E91673 /* nd_vm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_vm.c; path = nd_vm/src/nd_vm.c; sourceTree = "<group>"; };
@@ -370,6 +374,8 @@
 		074C8F711D66A85000590A34 /* login */ = {
 			isa = PBXGroup;
 			children = (
+				07533A2A1D6EF0B9004DD290 /* dftCliMsgHandler.cpp */,
+				07533A2B1D6EF0B9004DD290 /* dftCliMsgHandler.h */,
 				07EC86581D54411E00C32925 /* login_apollo.cpp */,
 				07EC86591D54411E00C32925 /* login_apollo.h */,
 				07EC865A1D54411E00C32925 /* netui_atl.cpp */,
@@ -827,6 +833,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07533A2C1D6EF0B9004DD290 /* dftCliMsgHandler.cpp in Sources */,
 				07EC86181D54400400C32925 /* ipraw.c in Sources */,
 				07EC861F1D54400400C32925 /* nd_udp.c in Sources */,
 				074C8FA81D66A88500590A34 /* objectBaseMgr.cpp in Sources */,
@@ -913,6 +920,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07533A2D1D6EF0F2004DD290 /* dftCliMsgHandler.cpp in Sources */,
 				074D85101D6C2DE600201121 /* nd_time.c in Sources */,
 				074C8FA91D66A8BB00590A34 /* dbl_mgr.cpp in Sources */,
 				074C8FAB1D66A8BB00590A34 /* dbldata2netstream.cpp in Sources */,

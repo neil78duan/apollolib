@@ -26,18 +26,22 @@ struct ApolloServerInfo
 	char ip_addr[20] ;
 };
 
+#ifdef BUILD_AS_THIRD_PARTY
 class  LoginBase
 {
 public:
 
-	virtual void InitUdid(const char *udid) = 0;
-	virtual void ReInit(nd_handle hConn, const char * session_filename) = 0;
-	virtual void InitSessionFile(const char *session_filepath) = 0;
+	virtual void ReInit(nd_handle hConn, const char * session_filename, const char*udid = NULL) = 0;
+	virtual void SetUdid(const char *udid)  =0 ;
+	virtual void SetSessionFile(const char *session_filepath)  =0 ;
+	virtual void SetConnector(nd_handle hConn) =0;
+
 	virtual void Destroy() = 0;
 	//return 0 success ,else return error code
 	virtual int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type) = 0;
 	virtual int Relogin() = 0;
 	virtual int Logout() = 0;
+	virtual int TrytoGetCryptKey() =0;
 	//int RedirectTo(const char *inet_addr, int port) ;
 	virtual int EnterServer(ndip_t ip, NDUINT16 port) = 0;
 	virtual int EnterServer(const char *host_name, NDUINT16 port) = 0 ;
@@ -63,22 +67,36 @@ public:
 protected:
 };
 
+ND_CONNCLI_API LoginBase *ApolloCreateLoginInst();
+ND_CONNCLI_API void ApolloDestroyLoginInst(LoginBase *pLogin);
 
 class  LoginApollo : public LoginBase
+#else 
+
+class  LoginApollo;
+ND_CONNCLI_API LoginApollo *ApolloCreateLoginInst();
+ND_CONNCLI_API void ApolloDestroyLoginInst(LoginApollo *pLogin);
+//typedef LoginApollo LoginBase;
+#define LoginBase LoginApollo
+class  LoginApollo 
+#endif 
 {
 public:
-	LoginApollo(nd_handle hConn, bool saveSession = true, const char * session_filename = NULL,const char*udid=NULL);
+	LoginApollo(nd_handle hConn, const char * session_filename = NULL,const char*udid=NULL);
 	LoginApollo();
 	virtual ~LoginApollo() ;
 
-	void InitUdid(const char *udid) ;
-	void ReInit(nd_handle hConn, const char * session_filename);
-	void InitSessionFile(const char *session_filepath) ;
+	void ReInit(nd_handle hConn, const char * session_filename, const char*udid = NULL);
+	void SetUdid(const char *udid) ;
+	void SetSessionFile(const char *session_filepath) ;
+	void SetConnector(nd_handle hConn);
+
 	void Destroy();
 	//return 0 success ,else return error code
-	int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type) ;
+	int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type) ;//return -1 if error ESERVER_ERR_NOUSER
 	int Relogin() ;
 	int Logout() ;
+	int TrytoGetCryptKey();
 	//int RedirectTo(const char *inet_addr, int port) ;
 	int EnterServer(ndip_t ip, NDUINT16 port) ;
 	int EnterServer(const char *host_name, NDUINT16 port) ;
@@ -110,7 +128,6 @@ protected:
 	
 	nd_handle  m_conn ;
 	account_index_t m_accIndex;
-	bool m_saveSession ;
 	NDUINT16 m_sessionID ;
 	char *m_session_file ;
 	
@@ -127,9 +144,8 @@ protected:
 	char m_srv_key[4096] ;
 };
 
-ND_CONNCLI_API LoginBase *ApolloCreateLoginInst();
-ND_CONNCLI_API void ApolloDestroyLoginInst(LoginBase *pLogin);
 
 ND_CONNCLI_API const char *atlantis_error(int errcode);
-CPPAPI int ndSendAndWaitMessage(nd_handle nethandle, nd_usermsgbuf_t *sendBuf, nd_usermsgbuf_t* recvBuf, ndmsgid_t waitMaxid, ndmsgid_t waitMinid, int sendFlag = 0);
+//CPPAPI int ndSendAndWaitMessage(nd_handle nethandle, nd_usermsgbuf_t *sendBuf, nd_usermsgbuf_t* recvBuf, ndmsgid_t waitMaxid, ndmsgid_t waitMinid, int sendFlag = 0);
+//CPPAPI int ndSendAndWaitMessage(NDIConn *conn, NDOStreamMsg &omsg, nd_usermsgbuf_t* recvBuf, ndmsgid_t waitMaxid, ndmsgid_t waitMinid, int sendFlag = 0);
 #endif /* defined(__clientDemo__login_atlantis__) */

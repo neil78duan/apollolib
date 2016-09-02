@@ -68,7 +68,7 @@ enum eParserOperator{
 	E_OP_COMP,	 		//	 eParserCompare  + DBLDataNode-stream
 	E_OP_CALC,	 		//	NDUINT32 + string
 	E_OP_WAIT_EVENT,	//  eParserEventId + int(argc) + operator_value_t[...]
-	E_OP_GET_OTHER_OBJECT, 	//   eOperatorObjType + DBLDataNode-stream
+	E_OP_GET_OTHER_OBJECT, 	//    DBLDataNode-stream
 	E_OP_EXIT_ON_ERROR,	//   NDUINT32(0 NOT EXIT, 1 exit)
 	E_OP_CALL_FUNC,		//  	int(argc) + string(function_name \0)  + string1\0 + string2\0
 	E_OP_SHORT_JUMP, 	//  NDUINT32( offset )
@@ -101,6 +101,9 @@ enum eParserOperator{
 	E_OP_CREATE_TYPE, //create user define data type , like c-struct global
 	E_OP_MATH_OPERATE, // RUN + - * / ** sqrt max, min rand() format: int-op-type, DBLNodeData-stream1, DBLNodeData-stream2
 	E_OP_ASSIGNIN ,  // run = . format: string-var-name, DBLNodeData-stream
+	E_OP_CHANGE_DIR, //change current working direct  format: string:new_direct
+	E_OP_REMOVE_FILE, //remove file or direct format :string:path_name
+	E_OP_MAKE_DIR ,		//create direct : foramt : string 
 };
 
 //compare operate
@@ -139,6 +142,7 @@ enum eLogicSystemError
 	LOGIC_ERR_FUNCTION_NAME,
 	LOGIC_ERR_FUNCTION_NOT_FOUND,
 	LOGIC_ERR_WOULD_BLOCK,		//WAIT EVENT 
+	LOGCI_ERR_FILE_NOT_EXIST,
 
 	LOGIC_ERR_UNKNOW ,
 	LOGIC_ERR_USER_DEFINE_ERROR,
@@ -191,12 +195,12 @@ struct runningStack
 	parse_arg_list_t params ;
 	LogicData_vct local_vars;
 	LogicObjAffairHelper *affairHelper;
-	//m_affairHelper
 
 	NDUINT16 dbg_cur_node_index;
 	char dbg_node[128];
 	
 	std::string curModuleName ;		//current script file name
+	std::string workingPath;		//the host work direct
 };
 
 //script wait event and continue run
@@ -320,6 +324,9 @@ protected:
 	int _readGameDataTable(runningStack *stack, char *pCmdStream, DBLDataNode &outValue);
 	int _read_string(char *pCmdStream, char *outbuf, size_t size);
 	DBLDataNode* _getLocalVar(runningStack *stack, const char *varname);
+	bool _chdir(const char *curDir);
+	bool _rmfile(const char *filename); 
+	bool _mkdir(const char *curDir);
 
 	virtual LogicObjectBase *getLogicObjectMgr(const char *objName);
 

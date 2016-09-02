@@ -115,6 +115,7 @@
     <ClInclude Include="..\..\..\ndsdk\include\nd_crypt\nd_cryptfile.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_crypt\nd_pubkey.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_crypt\tea.h" />
+    <ClInclude Include="..\..\..\ndsdk\include\nd_msg.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_net\byte_order.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_iphdr.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_msgentry.h" />
@@ -130,6 +131,7 @@
     <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_udp.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_udt.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_udthdr.h" />
+    <ClInclude Include="..\..\cli_common\dftCliMsgHandler.h" />
     <ClInclude Include="..\..\cli_common\login_apollo.h" />
     <ClInclude Include="..\..\cli_common\netui_atl.h" />
     <ClInclude Include="..\..\logic_parser\dbldata2netstream.h" />
@@ -208,6 +210,7 @@
     <ClCompile Include="..\..\..\ndsdk\src\nd_vm\src\nd_vm.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_vm\src\nd_vmdbg.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_vm\src\nd_vmmain.c" />
+    <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp" />
     <ClCompile Include="..\..\cli_common\login_apollo.cpp" />
     <ClCompile Include="..\..\cli_common\netui_atl.cpp" />
     <ClCompile Include="..\..\logic_parser\dbldata2netstream.cpp" />

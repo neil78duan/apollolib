@@ -24,12 +24,13 @@ static bool apollo_func_install_event_handler(LogicParserEngine*parser, parse_ar
 static bool apollo_func_send_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 static bool apollo_func_read_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 static bool apollo_func_change_time(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-static bool apollo_func_exit(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+//static bool apollo_func_exit(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 
 static bool apollo_func_read_userData_from_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 
 static bool apollo_load_script_file(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 static bool apollo_export_cpp_api(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+static bool apollo_make_full_path(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 //
 //static NDUINT32 _getMsgid(DBLDataNode &data , nd_handle hListen)
 //{
@@ -60,6 +61,11 @@ int init_sys_functions(LogicEngineRoot *root)
 	
 	root->installFunc(apollo_load_script_file, "apollo_load_script_file", "加载脚本(scriptn_name)");
 	root->installFunc(apollo_export_cpp_api, "apollo_export_cpp_api", "导出c函数(filename)");
+
+	root->installFunc(apollo_load_file_data, "apollo_load_file_data", "读取整个文件(filename)");
+	root->installFunc(apollo_write_file, "apollo_write_file", "写入文件(filename,var1,var2...)");
+	root->installFunc(apollo_make_full_path, "apollo_make_full_path", "合成文件名(path,filename)");
+	
 
 	return 0;
 }
@@ -146,6 +152,7 @@ bool apollo_func_install_event_handler(LogicParserEngine*parser, parse_arg_list_
 	logicEngine->installEvent(args[2].GetInt(), args[1].GetText());
 	return true;
 }
+
 //send message api apollo_func_send_msg
 bool apollo_func_send_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
@@ -218,6 +225,22 @@ bool apollo_func_read_userData_from_msg(LogicParserEngine*parser, parse_arg_list
 	NDIStreamMsg *pInmsg = (NDIStreamMsg *)args[1].GetObject();
 
 	CHECK_DATA_TYPE(args[2], OT_STRING);
+	if (!args[2].CheckValid()) {
+		nd_logerror("data type name is NULL\n");
+		return false;
+	}
+
+	DBL_ELEMENT_TYPE t = (DBL_ELEMENT_TYPE) get_type_from_alias(args[2].GetText());
+	if (t != OT_USER_DEFINED) {
+
+		DBLDataNode valTmp(NULL, t, (DBL_ELEMENT_TYPE)0);
+		if (0 != logicDataRead(valTmp, *pInmsg)) {
+			nd_logerror("read message error, stream not match\n");
+			return false;
+		}
+		result = valTmp;
+		return true;
+	}
 
 	DBLDataNode datatype;
 	if (!parser->getOwner()->getOtherObject("FormatMsgData", datatype)){
@@ -263,19 +286,81 @@ bool apollo_func_change_time(LogicParserEngine*parser, parse_arg_list_t &args, D
 	return true;
 }
 
-// houst eixt
-bool apollo_func_exit(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+bool apollo_load_file_data(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
-	NDInstanceBase *pInst= getbase_inst();
-	if (pInst){
-		nd_logmsg("the host shutdown now\n");
-		nd_host_eixt();
-		//pInst->Destroy(0);
-		//nd_instance_exit(0);
+	CHECK_ARGS_NUM(args, 2);
+
+	size_t size = 0;
+	const char *fileName = args[1].GetText();
+	if (!fileName || !*fileName) {
+		nd_logmsg("input file name error\n");
+		return false;
 	}
-	//inst.End(0);
+	void *pdata = nd_load_file(fileName, &size);
+	if (!pdata) {
+		nd_logmsg("file %s not open\n", fileName);
+		return false;
+	}
+	result.InitSet(pdata, size, OT_BINARY_DATA);
+	nd_unload_file(pdata);
 	return true;
 }
+
+//send message api apollo_write_file(filename,var1,var2...
+bool apollo_write_file(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+{
+	CHECK_ARGS_NUM(args, 2);
+
+	//CHECK_DATA_TYPE(args[2], OT_STRING);
+	const char *filename = args[1].GetText();
+	if (!filename || !*filename) {
+		return false;
+	}
+	FILE *pf = fopen(filename, "w");
+	if (!pf) {
+		return false;
+	}
+
+	for (size_t i = 2; i < args.size(); i++) {
+		if (args[i].GetDataType() == OT_BINARY_DATA) {
+			fwrite(args[i].GetBinary(), 1, args[i].GetBinarySize(), pf);
+		}
+		else{
+			args[i].Print((logic_print)fprintf, pf);
+		}
+	}
+	fclose(pf);
+	return true;
+}
+
+bool apollo_make_full_path(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+{
+	char buf[ND_FILE_PATH_SIZE];
+	CHECK_ARGS_NUM(args, 3);
+
+	const char *path = args[1].GetText();
+	const char *file = args[2].GetText();
+	if (!path || !file) {
+		nd_logerror("input file or path is null\n");
+		return false;
+	}
+	result.InitSet(nd_full_path(path, file, buf, sizeof(buf)));
+	return true;
+}
+
+//// houst eixt
+//bool apollo_func_exit(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//{
+//	NDInstanceBase *pInst= getbase_inst();
+//	if (pInst){
+//		nd_logmsg("the host shutdown now\n");
+//		nd_host_eixt();
+//		//pInst->Destroy(0);
+//		//nd_instance_exit(0);
+//	}
+//	//inst.End(0);
+//	return true;
+//}
 
 
 

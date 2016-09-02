@@ -285,7 +285,9 @@ void DBLDataNode::_copy(const DBLDataNode &r)
 	if (r.m_dataOwner) {
 		m_dataOwner = true;
 		m_data = &m_dataOwn;
-		dbl_data_copy(r.m_data, m_data, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type);
+		if (r.CheckValid()) {
+			dbl_data_copy(r.m_data, m_data, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type);
+		}
 	}
 	else {
 		m_data = (r.m_data);
@@ -619,59 +621,151 @@ const LogicUserDefStruct *DBLDataNode::getUserDef() const
 	return m_data->_userDef ;	
 }
 
-int DBLDataNode::ReadStream(const char *streamBuf, int streamByteOrder)
+int DBLDataNode::ReadStream(const char *streamBuf, size_t data_size, int streamByteOrder)
 {
 	Destroy();
 	int read_len = 2;
 	m_dataOwn.isInit = false;
-	//NDUINT16 type = *((*(NDUINT16**)&streamBuf)++);
 	NDUINT16 type;
+	data_size -= 2;
 	streamBuf = lp_read_stream((lp_stream_t)streamBuf, type , streamByteOrder);
-	//if (ND_L_ENDIAN != streamByteOrder) {
-	//	type = nd_order_change_short(type);
-	//}
-	
+	m_ele_type = (NDUINT8)type;
 
 	if (type == OT_ARRAY ) {
-		//m_sub_type =(NDUINT8) *((*(NDUINT16**)&streamBuf)++); 
-
 		NDUINT16 subtype;
 		streamBuf = lp_read_stream((lp_stream_t)streamBuf, subtype, streamByteOrder);
 
-		m_sub_type = subtype;
+		m_sub_type = (NDUINT8) subtype;
 		read_len += 2;
+		data_size -= 2;
 
+		NDUINT16 sub_num = 0;
+		lp_read_stream((lp_stream_t)streamBuf, sub_num, streamByteOrder);
+		if (0 == sub_num) {
+			return read_len + 2;
+		}
+		if (m_sub_type == OT_USER_DEFINED) {
+			streamBuf += 2;
+			data_size -= 2;
+			read_len += 2;
+			InitReservedArray(sub_num, OT_USER_DEFINED);
+			for (NDUINT16 i = 0; i < sub_num; i++)	{
+				LogicUserDefStruct mystruct;
+				int ret = mystruct.FromStream((void*)streamBuf, data_size, streamByteOrder);
+				if (ret == -1) {
+					return -1;
+				}
+				read_len += ret;
+				data_size -= ret;
+				streamBuf += ret;
+				SetArray(DBLDataNode(mystruct), i);
+			}
+			return read_len;
+		}
 	}
-	m_ele_type = (NDUINT8) type;
+	if (type == OT_USER_DEFINED){
+		LogicUserDefStruct mystruct;
+		int ret = mystruct.FromStream((void*)streamBuf, data_size, streamByteOrder);
+		if (ret == -1) {
+			return -1;
+		}
+		read_len += ret;
+		data_size -= ret;
+		streamBuf += ret;
+		InitSet(mystruct);
+	}
+	else {
 
-	int ret = dbl_read_buffer(&m_dataOwn, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type, (char *)streamBuf, nd_byte_order() != streamByteOrder);
-	if (ret > 0){
-		m_data = &m_dataOwn;
-		m_dataOwner = true;
-		m_dataOwn.isInit = true;
-		return ret + read_len;
+		int ret = dbl_read_buffer(&m_dataOwn, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type, (char *)streamBuf, nd_byte_order() != streamByteOrder);
+		if (ret > 0){
+			m_data = &m_dataOwn;
+			m_dataOwner = true;
+			m_dataOwn.isInit = true;
+			read_len += ret;
+		}
 	}
-	return 0;
+	return read_len;
 }
-int DBLDataNode::WriteStream(char *streamBuf, int streamByteOrder)const
+int DBLDataNode::_writeEmptyStream(char *streamBuf,  int streamByteOrder)const
+{
+	lp_stream_t p = (lp_stream_t)streamBuf;
+	switch (m_ele_type){
+	case OT_BOOL:
+	case OT_INT:
+		p = lp_write_stream(p, (NDUINT32)0, streamByteOrder);
+		break;
+	case OT_FLOAT:
+		p = lp_write_stream(p, (float)0, streamByteOrder);
+		break;
+	case OT_INT8:
+		p = lp_write_stream(p, (NDUINT8)0, streamByteOrder);
+	break;
+	case OT_INT16:
+		p = lp_write_stream(p, (NDUINT16)0, streamByteOrder);
+	break;
+	case OT_INT64:
+	case OT_TIME:
+		p = lp_write_stream(p, (NDUINT64)0, streamByteOrder);
+		break;
+	default:
+		p = lp_write_stream(p, (NDUINT16)0, streamByteOrder);
+		break;
+	}
+	
+	return (int)(p - streamBuf);
+}
+int DBLDataNode::WriteStream(char *streamBuf, size_t buf_size, int streamByteOrder)const
 {
 	int write_len = 2;
-	//*((*(NDUINT16**)&streamBuf)++) = m_ele_type;
 	streamBuf = lp_write_stream(streamBuf, (NDUINT16)m_ele_type, streamByteOrder);
+	buf_size -= 2;
 	
 	if (m_ele_type == OT_ARRAY ) {
-		//m_sub_type = OT_INT;
-		//*((*(NDUINT16**)&streamBuf)++) = m_sub_type;
 		streamBuf = lp_write_stream(streamBuf, (NDUINT16)m_sub_type, streamByteOrder);
 		write_len += 2;
+		buf_size -= 2;
+
+		if (m_sub_type == OT_USER_DEFINED) {
+			NDUINT16	 num = (NDUINT16)m_data->_i_arr->number;
+			streamBuf = lp_write_stream(streamBuf,num, streamByteOrder);
+			write_len += 2;
+			buf_size -= 2;
+			for (NDUINT16 i = 0; i < num; i++)	{
+				//const LogicUserDefStruct * logicdata = GetArray(i).getUserDef(); //this way leader error getArray() ruturn a temp var
+				const LogicUserDefStruct *logicdata = GetarrayUser(i);
+				if (logicdata) {
+					int size = logicdata->ToStream(streamBuf, buf_size, streamByteOrder);
+					if (size == -1) {
+						return -1;
+					}
+					write_len += size;
+					streamBuf += size;
+					buf_size -= size;
+				}
+			}
+			return write_len;
+		}
+	}
+	
+	int len = 0;
+	if (m_data) {
+		if (m_ele_type == OT_USER_DEFINED) {
+			const LogicUserDefStruct * logicdata = getUserDef();
+			if (logicdata) {
+				int size = logicdata->ToStream(streamBuf, buf_size, streamByteOrder);
+				write_len += size;
+			}
+			return write_len;
+		}
+		else {
+			len = dbl_write_buffer(m_data, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type, (char *)streamBuf, nd_byte_order() != streamByteOrder);
+		}
+	}
+	else {
+		len = _writeEmptyStream(streamBuf, streamByteOrder);
 	}
 
-
-	int len = dbl_write_buffer(m_data, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type, (char *)streamBuf, nd_byte_order() != streamByteOrder);
-	if (len > 0){
-		return len + write_len;
-	}
-	return 0;
+	return write_len + len;
 }
 
 int DBLDataNode::GetInt() const
@@ -835,7 +929,7 @@ size_t DBLDataNode::GetBinarySize() const
 	return 0;
 }
 
-DBLDataNode DBLDataNode::GetArray(int index)
+DBLDataNode DBLDataNode::GetArray(int index)const
 {
 	if (m_ele_type != OT_ARRAY){
 		return *this;
@@ -1659,6 +1753,9 @@ int _dbl_data_2binStream(dbl_element_base *indata, DBL_ELEMENT_TYPE etype, DBL_E
 		}
 		else if (sub_etype == OT_FLOAT) {
 			_stream_func(indata->_f_arr->data, 1, sizeof(float)*length, pf);
+		}
+		else if (sub_etype == OT_USER_DEFINED) {
+
 		}
 		else {
 			for (size_t i = 0; i < length; i++)	{

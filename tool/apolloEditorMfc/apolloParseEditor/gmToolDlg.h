@@ -2,7 +2,7 @@
 
 
 class NDIConn;
-class LoginBase;
+class LoginApollo;
 #include "nd_common/nd_common.h"
 // gmToolDlg dialog
 
@@ -30,7 +30,7 @@ public:
 protected:
 	bool m_newLine;
 	NDIConn *m_pConn;
-	LoginBase *m_login;
+	LoginApollo *m_login;
 	const char* m_scriptFile;
 
 	int _connectHost(const char *host, int port);

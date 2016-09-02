@@ -24,20 +24,6 @@
 static ConnectDialog *__g_loginDlg ;
 static void *__oldFunc ;
 NDOStreamMsg __sendMsg;
-#define _SESSION_FILE "./gmtoolSession.ses"
-
-static char _s_session_buf[4096];
-static size_t _s_session_size = 0;
-
-static userDefineDataType_map_t m_dataTypeDef;
-
-
-
-#define _SEND_AND_WAIT(_conn, _omsg, _rmsg_buf,_wait_maxid, _wait_minid,_sendflag) \
-    if(0!=ndSendAndWaitMessage(_conn,_omsg.GetMsgAddr(),_rmsg_buf,_wait_maxid, _wait_minid,_sendflag) ) {	\
-        nd_logerror( "send and wait data error code =%d\n", nd_object_lasterror(_conn)); \
-        return -1;		\
-    }
 
 static void out_log(const char *text)
 {
@@ -60,6 +46,120 @@ static int out_print(void *pf, const char *stm, ...)
     out_log(buf);
     return done;
 }
+
+/////////////////////////////////////
+
+class ConnectScriptOwner : public TestLogicObject
+{
+public:
+    bool getOtherObject(const char*objName, DBLDataNode &val)
+    {
+        if (ndstricmp(objName, "connector") == 0){
+            nd_handle h = m_conn->GetHandle();
+            val.InitSet((void*)h, OT_OBJ_NDHANDLE);
+            return true;
+        }
+        else if (ndstricmp(objName, "FormatMsgData") == 0){
+
+            val.InitSet((void*)m_dataType);
+            return true;
+        }
+        else if (0==ndstricmp(objName, "LogFunction")) {
+            val.InitSet((void*)out_print);
+            return true;
+        }
+        else if (0==ndstricmp(objName, "LogFile")) {
+            val.InitSet((void*)NULL);
+            return true;
+        }
+
+        else if (0==ndstricmp(objName, "LogPath")) {
+            val.InitSet("../../log");
+            return true;
+        }
+        else if (0==ndstricmp(objName, "WritablePath")) {
+            val.InitSet("../../log");
+            return true;
+        }
+        return false;
+    }
+
+    NDIConn *m_conn;
+    userDefineDataType_map_t *m_dataType;
+};
+static ConnectScriptOwner  __myScriptOwner;
+
+
+
+int get_data_format_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
+{
+    NDIStreamMsg inmsg(msg);
+
+    __myScriptOwner.m_dataType = new userDefineDataType_map_t;
+    if (-1 == UserDefFormatFromMessage(*__myScriptOwner.m_dataType, inmsg)) {
+        delete __myScriptOwner.m_dataType;
+        __myScriptOwner.m_dataType = NULL;
+        return 0;
+    }
+#ifdef ND_DEBUG
+    dumpMessageData(*__myScriptOwner.m_dataType, "./client_msg_foramt.txt");
+#endif
+    return 0;
+}
+
+void destroy_apollo_object(NDIConn *pConn)
+{
+
+    __myScriptOwner.m_conn = 0;
+    //__myScriptOwner.m_message_define = 0;
+    delete __myScriptOwner.m_dataType;
+    __myScriptOwner.m_dataType = 0;
+
+    LogicEngineRoot::destroy_Instant();
+}
+
+static bool init_apollo_object(NDIConn *pConn, const char*script_file)
+{
+    destroy_apollo_object(pConn);
+
+    __myScriptOwner.m_conn = pConn;
+
+    // init script
+    LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
+    nd_assert(scriptRoot);
+    LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
+    nd_message_set_script_engine(pConn->GetHandle(), (void*)&parser, ClientMsgHandler::apollo_cli_msg_script_entry);
+    parser.setOwner(&__myScriptOwner);
+
+    scriptRoot->setPrint(out_print, NULL);
+    scriptRoot->getGlobalParser().setSimulate(false);
+    pConn->SetUserData(&parser);
+
+    if (0 != scriptRoot->LoadScript(script_file)){
+        nd_logerror("加载脚本出错！\n");
+        return false;
+    }
+    ClientMsgHandler::InstallDftClientHandler(pConn);
+    pConn->SetDftMsgHandler(ClientMsgHandler::apollo_dft_message_handler);
+
+    pConn->InstallMsgFunc(get_data_format_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
+    return true;
+}
+//////////////////////////////////////
+#define _SESSION_FILE "./gmtoolSession.ses"
+
+static char _s_session_buf[4096];
+static size_t _s_session_size = 0;
+
+//static userDefineDataType_map_t m_dataTypeDef;
+
+
+
+#define _SEND_AND_WAIT(_conn, _omsg, _rmsg_buf,_wait_maxid, _wait_minid,_sendflag) \
+    if(0!=ndSendAndWaitMessage(_conn,_omsg.GetMsgAddr(),_rmsg_buf,_wait_maxid, _wait_minid,_sendflag,WAITMSG_TIMEOUT) ) {	\
+        nd_logerror( "send and wait data error code =%d\n", nd_object_lasterror(_conn)); \
+        return -1;		\
+    }
 
 ConnectDialog::ConnectDialog(QWidget *parent) :
     QDialog(parent),
@@ -85,7 +185,7 @@ ConnectDialog::ConnectDialog(QWidget *parent) :
     __g_loginDlg = this ;
     InitNet();
     __oldFunc = ndSetLogoutFunc((void*)out_log);
-	ndxml_initroot(&m_message_define);
+    //ndxml_initroot(&m_message_define);
 
     //get init setting
     QSettings settings("duanxiuyun", "ApolloEditor");
@@ -113,13 +213,13 @@ ConnectDialog::~ConnectDialog()
     if(timer)
         delete timer ;
 	
-	ClientMsgHandler::destroyDftClientMsgHandler(m_pConn);
+    destroy_apollo_object(m_pConn);
+    //ClientMsgHandler::destroyDftClientMsgHandler(m_pConn);
 
     ndSetLogoutFunc((void*)__oldFunc);
-    DeinitNet();
     __g_loginDlg = NULL;
 
-	destroyUserDefData(m_dataTypeDef);
+    //destroyUserDefData(m_dataTypeDef);
 
 	if (m_pConn){
 		DestroyConnectorObj(m_pConn);
@@ -128,8 +228,9 @@ ConnectDialog::~ConnectDialog()
 	if (m_login){
 		ApolloDestroyLoginInst(m_login);
 	}
-	
-	ndxml_destroy(&m_message_define);
+    DeinitNet();
+
+    //ndxml_destroy(&m_message_define);
 }
 
 
@@ -160,15 +261,15 @@ void ConnectDialog::WriteLog(const char *logText)
 
 bool ConnectDialog::LoadDataDef(const char *file, const char *script, const char *message_def)
 {
-	if (-1 == loadUserDefFromMsgCfg(file, m_dataTypeDef))	{
-		nd_logerror("load message datatype error from %s\n", file);
-		return false;
-	}
+    //if (-1 == loadUserDefFromMsgCfg(file, m_dataTypeDef))	{
+    //	nd_logerror("load message datatype error from %s\n", file);
+    //	return false;
+    //}
 
 	m_scriptFile = script;
-	if (message_def){
-		ndxml_load_ex(message_def, &m_message_define, nd_get_encode_name(ND_ENCODE_TYPE));
-	}
+    //if (message_def){
+    //	ndxml_load_ex(message_def, &m_message_define, nd_get_encode_name(ND_ENCODE_TYPE));
+    //}
 
 	return true;
 }
@@ -236,6 +337,10 @@ void ConnectDialog::on_loginButton_clicked()
 //        }
 
         //get and init role data
+
+        NDOStreamMsg omsg(ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
+        m_pConn->SendMsg(omsg);
+
         getRoleData();
 
         ui->loginButton->setText(tr("Logout"));
@@ -330,8 +435,11 @@ int ConnectDialog::_connectHost(const char *host, int port)
     out_print(NULL,"connect %s:%d success \n", host, port);
     m_pConn = pConn;
 
+
+    initApolloGameMessage(m_pConn);
+    init_apollo_object(m_pConn, m_scriptFile);
 	//initApolloGameMessage(m_pConn);
-	ClientMsgHandler::initDftClientMsgHandler(m_pConn, m_scriptFile, m_dataTypeDef, &m_message_define, out_print);
+    //ClientMsgHandler::initDftClientMsgHandler(m_pConn, m_scriptFile, m_dataTypeDef, &m_message_define, out_print);
     return 0;
 }
 
@@ -346,8 +454,8 @@ int ConnectDialog::_login(const char *user, const char *passwd)
     if (!m_login){
         return -1;
     }
-    m_login->ReInit(m_pConn->GetHandle(), _SESSION_FILE);
-    m_login->InitUdid("unknow-udid-this-mfc-test");
+    m_login->ReInit(m_pConn->GetHandle(), _SESSION_FILE,"unknow-udid-this-qt-test");
+
     /*
     if (_s_session_size && _s_session_buf[0]){
         ret = m_login->ReloginEx((void*)_s_session_buf, _s_session_size);
@@ -389,14 +497,14 @@ int ConnectDialog::_relogin(void *sessionData, size_t session_size)
 int ConnectDialog::SelOrCreateRole(const char *accountName)
 {
     //JUMP TO server
-    host_list_node bufs[20];
+    ApolloServerInfo bufs[20];
     int num = m_login->GetServerList(bufs, ND_ELEMENTS_NUM(bufs));
 
     if (num == 0) {
         out_log("get host list number=0\n");
         return -1 ;
     }
-    int ret = m_login->EnterServer(bufs[0].ip, bufs[0].port);
+    int ret = m_login->EnterServer(bufs[0].ip_addr, bufs[0].host.port);
     if (ret == 0) {
         out_log("redirect server success\n");
         _s_session_size = m_login->GetSessionData(_s_session_buf, sizeof(_s_session_buf));

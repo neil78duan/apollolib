@@ -69,6 +69,7 @@ LOCAL_SRC_FILES := ../../../ndsdk/src/nd_common/src/bintree.c \
 ../../../ndsdk/src/ndapplib/nd_datatransfer.cpp \
 ../../cli_common/login_apollo.cpp \
 ../../cli_common/netui_atl.cpp	\
+../../cli_common/dftCliMsgHandler.cpp \
 ../../logic_parser/dbl_mgr.cpp	\
 ../../logic_parser/logicParser.cpp	\
 ../../logic_parser/logic_function.cpp	\

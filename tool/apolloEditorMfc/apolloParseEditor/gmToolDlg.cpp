@@ -12,7 +12,7 @@
 //#include "commonTest.h"
 #include "cli_common/login_apollo.h"
 #include "apollo_errors.h"
-#include "netMessage/message_inc.h"
+//#include "netMessage/message_inc.h"
 #include "logic_parser/logicDataType.h"
 // gmToolDlg dialog
 #include "logic_parser/dbldata2netstream.h"
@@ -23,8 +23,8 @@
 static gmToolDlg *__pMyDlg;
 static void*  __oldFunc;
 NDOStreamMsg __sendMsg;
-static userDefineDataType_map_t m_dataTypeDef;
-static ndxml_root m_message_define;
+//static userDefineDataType_map_t m_dataTypeDef;
+//static ndxml_root m_message_define;
 
 extern void gmtoolMsgHandlerInit(NDIConn *pconn);
 //show error 
@@ -51,13 +51,81 @@ static int out_print(void *pf, const char *stm, ...)
 	return done;
 }
 
+/////////////////////////////////////
+
+class ConnectScriptOwner :public  ClientMsgHandler::ApoConnectScriptOwner
+{
+public:
+	bool getOtherObject(const char*objName, DBLDataNode &val)
+	{
+		bool ret = ClientMsgHandler::ApoConnectScriptOwner::getOtherObject(objName, val);
+		if (ret) {
+			return ret;
+		}
+		else if (0 == ndstricmp(objName, "LogFunction")) {
+			val.InitSet((void*)out_print);
+			return true;
+		}
+		else if (0 == ndstricmp(objName, "LogFile")) {
+			val.InitSet("ndlog.log");
+			return true;
+		}
+		else if (0 == ndstricmp(objName, "LogPath")) {
+			val.InitSet("../../log");
+			return true;
+		}
+		else if (0 == ndstricmp(objName, "WritablePath")) {
+			val.InitSet("../../log");
+			return true;
+		}
+		return false;
+	}
+};
+
+static ConnectScriptOwner  __myScriptOwner;
+
+void destroy_apollo_object(NDIConn *pConn)
+{
+	__myScriptOwner.Destroy();
+
+	LogicEngineRoot::destroy_Instant();
+}
+
+static bool init_apollo_object(NDIConn *pConn, const char*script_file)
+{
+	destroy_apollo_object(pConn);
+
+	__myScriptOwner.setConn( pConn);
+
+	// init script 
+	LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
+	nd_assert(scriptRoot);
+	LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
+	nd_message_set_script_engine(pConn->GetHandle(), (void*)&parser, ClientMsgHandler::apollo_cli_msg_script_entry);
+	parser.setOwner(&__myScriptOwner);
+
+	scriptRoot->setPrint(out_print, NULL);
+	scriptRoot->getGlobalParser().setSimulate(false);
+	pConn->SetUserData(&parser);
+
+	if (0 != scriptRoot->LoadScript(script_file)){
+		nd_logerror("加载脚本出错！\n");
+		return false;
+	}
+	ClientMsgHandler::InstallDftClientHandler(pConn);
+	pConn->SetDftMsgHandler(ClientMsgHandler::apollo_dft_message_handler);
+
+	//pConn->InstallMsgFunc(get_data_format_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
+	return true;
+}
+//////////////////////////////////////
 #define _SESSION_FILE "gmtoolSession.ses"
 //nd_setlog_func(out_log);
 static char _s_session_buf[4096];
 static size_t _s_session_size = 0;
 
 #define _SEND_AND_WAIT(_conn, _omsg, _rmsg_buf,_wait_maxid, _wait_minid,_sendflag) \
-	if(0!=ndSendAndWaitMessage(_conn,_omsg.GetMsgAddr(),_rmsg_buf,_wait_maxid, _wait_minid,_sendflag) ) {	\
+	if(0!=ndSendAndWaitMessage(_conn,_omsg.GetMsgAddr(),_rmsg_buf,_wait_maxid, _wait_minid,_sendflag,WAITMSG_TIMEOUT) ) {	\
 		nd_logerror( "send and wait data error code =%d\n", nd_object_lasterror(_conn)); \
 		return -1;		\
 	}
@@ -81,7 +149,7 @@ gmToolDlg::gmToolDlg(CWnd* pParent /*=NULL*/)
 	m_strHost = theApp.getDefaultSetting(_T("host"), _T("192.168.8.55"));
 	m_strUserName = theApp.getDefaultSetting(_T("user"), _T("test1"));
 	
-	ndxml_initroot(&m_message_define);
+	//ndxml_initroot(&m_message_define);
 }
 
 gmToolDlg::~gmToolDlg()
@@ -89,19 +157,22 @@ gmToolDlg::~gmToolDlg()
 
 	ndSetLogoutFunc((void*)__oldFunc);
 	__pMyDlg = NULL;
-	ClientMsgHandler::destroyDftClientMsgHandler(m_pConn);
+	destroy_apollo_object(m_pConn);
 	
-	DeinitNet();
-	destroyUserDefData(m_dataTypeDef);
 
 	if (m_pConn){
 		DestroyConnectorObj(m_pConn);
 	}
 	if (m_login){
-		ApolloDestroyLoginInst(m_login);
+		delete m_login;
+		m_login = NULL;
+		//ApolloDestroyLoginInst(m_login);
 	}
 	//LogicEngineRoot::destroy_Instant();
-	ndxml_destroy(&m_message_define);
+	//ndxml_destroy(&m_message_define);
+
+	DeinitNet();
+	//destroyUserDefData(m_dataTypeDef);
 }
 
 void gmToolDlg::DoDataExchange(CDataExchange* pDX)
@@ -171,7 +242,8 @@ void gmToolDlg::OnBnClickedButtonLogin()
 		m_pConn = NULL;
 		
 		if (m_login){
-			ApolloDestroyLoginInst(m_login);
+			//ApolloDestroyLoginInst(m_login);
+			delete m_login;
 			m_login = 0;
 		}
 
@@ -231,8 +303,6 @@ void gmToolDlg::OnBnClickedButtonLogin()
 			nd_logmsg("log net message bin-data errror\n");
 		}
 
-		//get and init role data
-		getRoleData();
 		
 		SetTimer(1, 100, 0);
 		pBt->SetWindowText(_T("登出"));
@@ -242,6 +312,14 @@ void gmToolDlg::OnBnClickedButtonLogin()
 		theApp.setDefaultSetting(_T("host"), (LPCTSTR)m_strHost);
 		theApp.setDefaultSetting(_T("user"), (LPCTSTR)m_strUserName);
 
+		NDOStreamMsg omsg(ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
+		m_pConn->SendMsg(omsg);
+
+		omsg.Init(ND_MAIN_ID_SYS, ND_MSG_SYS_GET_MESSAGE_FORMAT_LIST);
+		m_pConn->SendMsg(omsg);
+
+		//get and init role data
+		getRoleData();
 	}
 }
 
@@ -347,15 +425,15 @@ int gmToolDlg::createRole(const char *roleName)
 
 bool gmToolDlg::LoadDataDef(const char *file, const char *script, const char *message_def)
 {
-	if (-1 == loadUserDefFromMsgCfg(file, m_dataTypeDef))	{
+	/*if (-1 == loadUserDefFromMsgCfg(file, m_dataTypeDef))	{
 		nd_logerror("load message datatype error from %s\n", file);
 		return false;
-	}
+	}*/
 
 	m_scriptFile = script ;
-	if (message_def){
+	/*if (message_def){
 		ndxml_load_ex(message_def, &m_message_define, nd_get_encode_name(ND_ENCODE_TYPE));
-	}
+	}*/
 
 	//testFormatMsgRead(m_dataTypeDef);
 	
@@ -381,8 +459,9 @@ int gmToolDlg::_connectHost(const char *host, int port)
 	out_print("connect %s:%d success \n", host, port);
 	m_pConn = pConn;
 
-	initApolloGameMessage(m_pConn);	
-	ClientMsgHandler::initDftClientMsgHandler(m_pConn, m_scriptFile, m_dataTypeDef, &m_message_define, out_print);
+	//initApolloGameMessage(m_pConn);	
+	init_apollo_object(m_pConn, m_scriptFile);
+	//ClientMsgHandler::initDftClientMsgHandler(m_pConn, m_scriptFile, out_print);
 
 
 	return 0;
@@ -391,15 +470,13 @@ int gmToolDlg::_login(const char *user, const char *passwd)
 {
 	int ret = 0;
 	if (m_login){
-		ApolloDestroyLoginInst(m_login);
-
+		//ApolloDestroyLoginInst(m_login);
+		delete m_login;
 	}
-	m_login = ApolloCreateLoginInst();
+	m_login = new LoginApollo(m_pConn->GetHandle(), _SESSION_FILE, "unknow-udid-this-mfc-test");
 	if (!m_login){
 		return -1;
 	}
-	m_login->ReInit(m_pConn->GetHandle(), _SESSION_FILE);
-	m_login->InitUdid("unknow-udid-this-mfc-test");
 	/*
 	if (_s_session_size && _s_session_buf[0]){
 		ret = m_login->ReloginEx((void*)_s_session_buf, _s_session_size);
@@ -510,21 +587,21 @@ int gmToolDlg::SelOrCreateRole()
 int gmToolDlg::getRoleData()
 {
 #define SEND_MSG16(msgid) m_pConn->Send(ND_HIBYTE(msgid), ND_LOBYTE(msgid), 0, 0)
-	
-	SEND_MSG16(NETMSG_ROLE_PACKAGE_INIT_REQ);
-	SEND_MSG16(NETMSG_ROLE_ATTR_INIT_REQ);
-	SEND_MSG16(NETMSG_ROLE_EQUIP_INIT_REQ);
-	SEND_MSG16(NETMSG_ROLE_SKILL_INIT_REQ);
-	SEND_MSG16(NETMSG_ROLE_CLIENT_SETTING_REQ);
-	SEND_MSG16(NETMSG_ROLE_MAPS_SCORE_REQ);
-
-	SEND_MSG16(NETMSG_DRAGON_INIT_REQ);
-	SEND_MSG16(NETMSG_TASK_GET_ACHIEVEMENT_REQ);
-	SEND_MSG16(NETMSG_TASK_CHECK_LOGIN_AWARDS_REQ);
-	SEND_MSG16(NETMSG_TASK_INIT_CURRENT_TASK_REQ);
-	SEND_MSG16(NETMSG_TASK_GET_LOGIN_AWARDS_REQ);
-	SEND_MSG16(NETMSG_TASK_SIGN_IN_CHECK_REQ);
-	SEND_MSG16(NETMSG_TASK_INIT_COMPLTETD_TASK_REQ);
+// 	
+// 	SEND_MSG16(NETMSG_ROLE_PACKAGE_INIT_REQ);
+// 	SEND_MSG16(NETMSG_ROLE_ATTR_INIT_REQ);
+// 	SEND_MSG16(NETMSG_ROLE_EQUIP_INIT_REQ);
+// 	SEND_MSG16(NETMSG_ROLE_SKILL_INIT_REQ);
+// 	SEND_MSG16(NETMSG_ROLE_CLIENT_SETTING_REQ);
+// 	SEND_MSG16(NETMSG_ROLE_MAPS_SCORE_REQ);
+// 
+// 	SEND_MSG16(NETMSG_DRAGON_INIT_REQ);
+// 	SEND_MSG16(NETMSG_TASK_GET_ACHIEVEMENT_REQ);
+// 	SEND_MSG16(NETMSG_TASK_CHECK_LOGIN_AWARDS_REQ);
+// 	SEND_MSG16(NETMSG_TASK_INIT_CURRENT_TASK_REQ);
+// 	SEND_MSG16(NETMSG_TASK_GET_LOGIN_AWARDS_REQ);
+// 	SEND_MSG16(NETMSG_TASK_SIGN_IN_CHECK_REQ);
+// 	SEND_MSG16(NETMSG_TASK_INIT_COMPLTETD_TASK_REQ);
 	return 0; 
 }
 

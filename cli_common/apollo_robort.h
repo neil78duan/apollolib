@@ -13,7 +13,7 @@
 
 
 class NDIConn;
-class LoginBase;
+class LoginApollo;
 
 class ApolloRobort
 {
@@ -27,14 +27,14 @@ public:
 	bool CheckValid() ;
 	
 	NDIConn *getConn() { return m_pConn; }
-	LoginBase *getLogin() { return m_login; };
+	LoginApollo *getLogin() { return m_login; };
 protected:
 	int _connectHost(const char *host, int port);
 	int _login(const char *acc, const char *passwd);
 	int _selOrCreateRole(const char *roleName);
 	int _createRole(const char *roleName);
 	NDIConn *m_pConn;
-	LoginBase *m_login;
+	LoginApollo *m_login;
 	char m_account[100];
 };
 #endif

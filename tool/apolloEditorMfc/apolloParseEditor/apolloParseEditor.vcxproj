@@ -120,7 +120,6 @@
     <ClInclude Include="..\..\..\attribute\stat_machine.h" />
     <ClInclude Include="..\..\..\cli_common\apollo_robort.h" />
     <ClInclude Include="..\..\..\cli_common\dftCliMsgHandler.h" />
-    <ClInclude Include="..\..\..\cli_common\gameMessage.h" />
     <ClInclude Include="..\..\..\cli_common\login_apollo.h" />
     <ClInclude Include="..\..\..\cli_common\netui_atl.h" />
     <ClInclude Include="..\..\..\logic_parser\dbldata2netstream.h" />
@@ -134,13 +133,6 @@
     <ClInclude Include="..\..\..\logic_parser\logic_editor_helper.h" />
     <ClInclude Include="..\..\..\logic_parser\logic_function.h" />
     <ClInclude Include="..\..\..\logic_parser\objectBaseMgr.h" />
-    <ClInclude Include="..\..\..\netMessage\auto_dataType.h" />
-    <ClInclude Include="..\..\..\netMessage\auto_dataTypeDb_v1.h" />
-    <ClInclude Include="..\..\..\netMessage\auto_macroDefine.h" />
-    <ClInclude Include="..\..\..\netMessage\dataStream.h" />
-    <ClInclude Include="..\..\..\netMessage\MessageID.h" />
-    <ClInclude Include="..\..\..\netMessage\message_inc.h" />
-    <ClInclude Include="..\..\..\netMessage\_msgid_export.h" />
     <ClInclude Include="apolloParseEditor.h" />
     <ClInclude Include="apolloParseEditorDlg.h" />
     <ClInclude Include="ctrls\DlgAccel.h" />
@@ -177,7 +169,6 @@
     <ClCompile Include="..\..\..\attribute\stat_machine.cpp" />
     <ClCompile Include="..\..\..\cli_common\apollo_robort.cpp" />
     <ClCompile Include="..\..\..\cli_common\dftCliMsgHandler.cpp" />
-    <ClCompile Include="..\..\..\cli_common\gameMessage.cpp" />
     <ClCompile Include="..\..\..\cli_common\login_apollo.cpp" />
     <ClCompile Include="..\..\..\cli_common\netui_atl.cpp" />
     <ClCompile Include="..\..\..\logic_parser\dbldata2netstream.cpp" />
@@ -190,10 +181,6 @@
     <ClCompile Include="..\..\..\logic_parser\logic_editor_helper.cpp" />
     <ClCompile Include="..\..\..\logic_parser\logic_function.cpp" />
     <ClCompile Include="..\..\..\logic_parser\objectBaseMgr.cpp" />
-    <ClCompile Include="..\..\..\netMessage\auto_dataType.cpp" />
-    <ClCompile Include="..\..\..\netMessage\auto_dataTypeDb_v1.cpp" />
-    <ClCompile Include="..\..\..\netMessage\dataStream.cpp" />
-    <ClCompile Include="..\..\..\netMessage\MessageName.cpp" />
     <ClCompile Include="apolloParseEditor.cpp" />
     <ClCompile Include="apolloParseEditorDlg.cpp" />
     <ClCompile Include="ctrls\DlgAccel.cpp" />
@@ -229,7 +216,6 @@
     <None Include="..\..\..\attribute\Makefile" />
     <None Include="..\..\..\cli_common\Makefile" />
     <None Include="..\..\..\logic_parser\Makefile" />
-    <None Include="..\..\..\netMessage\Makefile" />
     <None Include="ClassDiagram.cd" />
     <None Include="res\apolloParseEditor.rc2" />
   </ItemGroup>

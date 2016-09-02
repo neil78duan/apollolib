@@ -78,6 +78,8 @@ int logicDataWrite(DBLDataNode &data, NDOStreamMsg &omsg)
 			ret += logicDataWrite(subdata, omsg);
 		}
 		break;
+	case OT_BINARY_DATA:
+		return omsg.WriteBin(data.GetBinary(), data.GetBinarySize());
 	default:
 		ret = -1;
 		break;
@@ -94,14 +96,15 @@ int logicDataRead(DBLDataNode &data, NDIStreamMsg &inmsg)
 #define _READ_FROM_STREAM(_read_type, _msg, _data,_writeType) do { \
 	_read_type a = 0;					\
 	if (0 == _msg.Read(a))					\
-		_data.InitSet((_writeType)a);		\
+		_data.InitSet(_writeType(a));		\
 	else return -1;						\
 }while (0)
 
 	switch (type)
 	{
 	case  OT_BOOL:
-		_READ_FROM_STREAM(NDUINT8, inmsg, data, bool);
+#define _get_bool(a) (a?true:false )
+		_READ_FROM_STREAM(NDUINT8, inmsg, data, _get_bool);
 		break;
 		
 	case OT_INT8:
@@ -133,6 +136,17 @@ int logicDataRead(DBLDataNode &data, NDIStreamMsg &inmsg)
 		data.InitSet((char*)buf);
 	}
 		break;
+	case OT_BINARY_DATA:
+	{
+		NDUINT8 buf[0x10000];
+		buf[0] = 0;
+		size_t len = inmsg.ReadBin((void*)buf, size_t(buf));
+		if (len > sizeof(buf))   {
+			return -1;
+		}
+		data.InitSet((void*)buf, len,OT_BINARY_DATA);
+	}
+	break;
 	case  OT_ARRAY:
 		sub_type = data.GetArrayType();
 		if (0 != inmsg.Read(count)) {
@@ -182,7 +196,13 @@ static type_name_info alias_type[] = {
 	{ "uint16_t", OT_INT16 },
 	{ "uint32_t", OT_INT  },
 	{ "uint64_t", OT_INT64 },
-	{ "float", OT_FLOAT }
+	{ "float", OT_FLOAT },
+
+	{ "int8", OT_INT8 },
+	{ "int16", OT_INT16 },
+	{ "int32", OT_INT },
+	{ "int64", OT_INT64 },
+	{ "text", OT_STRING }
 };
 
 
@@ -327,16 +347,77 @@ void destroyUserDefData(userDefineDataType_map_t &userDataRoot)
 	userDataRoot.clear();
 }
 
-void dumpMessageData(userDefineDataType_map_t &userDataRoot)
+void dumpMessageData(userDefineDataType_map_t &userDataRoot, const char *outFile )
 {
-	FILE *pf = fopen("./dumpData.txt", "w");
+	FILE *pf;
+	if (outFile == NULL) {
+		pf = fopen("./dumpData.txt", "w");
+	}
+	else {
+		pf = fopen(outFile, "w");
+	}
+
 	if (pf)	{
 		userDefineDataType_map_t::const_iterator it;
 		for (it = userDataRoot.begin(); it != userDataRoot.end(); it++) {
+			fprintf(pf, "%s : ", it->first.c_str());
 			it->second.Print((logic_print)fprintf, pf);
+			fprintf(pf, "\n");
+		}
+		fclose(pf);
+	}
+}
+
+
+int UserDefFormatToMessage(userDefineDataType_map_t &userDataRoot, NDOStreamMsg &omsg)
+{
+	int size = 0;
+	int num = 0;
+
+	int len=0;
+	char buf[0x10000];
+
+	userDefineDataType_map_t::const_iterator it;
+	for (it = userDataRoot.begin(); it != userDataRoot.end(); it++) {
+		if (it->first.empty())
+			continue;
+		len = it->second.ToStream(buf, sizeof(buf));
+		if (len == -1) {
+			nd_logerror("write user define error\n");
+			return -1;
+		}
+		omsg.Write(it->first.c_str());
+		omsg.WriteBin(buf, len);
+		num++;
+		size += len;
+		//nd_logmsg("format index =%d len =%d\n", num, size);
+	}
+	return num;
+}
+
+int UserDefFormatFromMessage(userDefineDataType_map_t &userDataRoot, NDIStreamMsg &inmsg)
+{
+	int len;
+	char name[USER_DEF_VAR_NAME_SIZE];
+	char buf[0x10000];
+	while (inmsg.LeftData() > 0){
+		size_t s = inmsg.Read(name, sizeof(name));
+		if (s == 0) {
+			break;
+		}
+		len = inmsg.ReadBin(buf, sizeof(buf));
+		if (len > 0) {
+			LogicUserDefStruct val;
+			if (-1 == val.FromStream(buf, len)) {
+				return -1;
+			}
+			std::pair<userDefineDataType_map_t::iterator, bool> ret = userDataRoot.insert(std::make_pair(name, val));
+			if (!ret.second)	{
+				return -1;
+			}		
 		}
 	}
-	fclose(pf);
+	return 0;
 }
 
 /*

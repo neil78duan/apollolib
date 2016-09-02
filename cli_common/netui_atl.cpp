@@ -32,9 +32,7 @@ void initAccCreateInfo(account_base_info &acc,int accType,const char *userName, 
 int RloginTrylogin(const char*udid,nd_handle h,int accType, const char *userName, const char *passwd,const char *save_session_file, NDUINT32 *accID)
 {
 	int ret = 0;
-	LoginApollo login((nd_handle)h,true, save_session_file) ;
-	
-	login.InitUdid(udid) ;
+	LoginApollo login((nd_handle)h, save_session_file,udid) ;
 	
 	ret = login.Relogin() ;
 
@@ -80,10 +78,8 @@ int loginAndCreate(const char*udid,nd_handle h,int accType, const char *userName
 {
 	int ret = 0;
 	bool bSaveSession = (save_session_file && save_session_file[0]) ? true : false;
-	LoginApollo login((nd_handle)h, bSaveSession, save_session_file); //for debug tool ,maybe it would open too many connectors
-	
-	login.InitUdid(udid) ;
-	
+	LoginApollo login((nd_handle)h,  save_session_file,udid); //for debug tool ,maybe it would open too many connectors
+		
 	ret = login.Login(userName, passwd, (ACCOUNT_TYPE)accType) ;
 	if (-1==ret ) {
 		//Create account
@@ -132,9 +128,8 @@ int redirectServer(nd_handle h,const char *host, int port,const char*session_fil
 int TryLogin(const char*udid,nd_handle h,int accType, const char *userName, const char *passwd,const char *save_session_file)
 {
     int ret = -1;
-    LoginApollo login((nd_handle)h,true, save_session_file) ;
+    LoginApollo login((nd_handle)h, save_session_file,udid) ;
 	
-	login.InitUdid(udid) ;
 	
     //need input use-name and password
     ret = login.Login(userName, passwd, (ACCOUNT_TYPE)accType) ;
@@ -151,9 +146,7 @@ int TryLogin(const char*udid,nd_handle h,int accType, const char *userName, cons
 int TryRegister(const char*udid,nd_handle h,int accType, const char *userName, const char *passwd,const char *save_session_file)
 {
     int ret = -1;
-    LoginApollo login((nd_handle)h,true, save_session_file) ;
-	
-	login.InitUdid(udid) ;
+    LoginApollo login((nd_handle)h, save_session_file,udid) ;
 	
     account_base_info acc ;
 	
@@ -172,7 +165,7 @@ int TryRegister(const char*udid,nd_handle h,int accType, const char *userName, c
 int TryLogout(nd_handle h)
 {
     int ret = -1;
-    LoginApollo login((nd_handle)h,false, NULL) ;
+    LoginApollo login((nd_handle)h, NULL) ;
     ret = login.Logout();
     return ret;
 }
@@ -180,7 +173,7 @@ int TryLogout(nd_handle h)
 int TryReLogin(nd_handle h, const char *save_session_file)
 {
     int ret = -1;
-    LoginApollo login((nd_handle)h,true, save_session_file) ;
+    LoginApollo login((nd_handle)h, save_session_file) ;
     ret = login.Relogin() ;
     
     if (0==ret) {
@@ -195,7 +188,7 @@ int TryReLogin(nd_handle h, const char *save_session_file)
 int getServerList(nd_handle h, ApolloServerInfo *buf, int size)
 {
 	
-	LoginApollo login((nd_handle)h,false, NULL) ;
+	LoginApollo login((nd_handle)h, NULL) ;
 	
 	return login.GetServerList(buf, size) ;
 }

@@ -14,7 +14,7 @@
 <data_type_define kinds="hide" desc="define enum data type">
 	<type_operate_dest kinds="enum" enum_value="无,角色属性,背包,技能管理器,龙背包,武器,任务,附加属性" enum_type="text" enum_text="none,attr,package,skill,dragon,weapon,task,addition"/>
 	<type_compare_sub_entry kinds="enum" enum_value="其他,等于,小于,大于,小于等于,大于等于"/>
-	<type_data_type kinds="enum" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,time,变量,参数,上一步结果,user_define,compile_time,function_name, module_name"/>	
+	<type_data_type kinds="enum" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,time,变量,参数,上一步结果,user_define,compile_time,function_name, module_name,binary_data"/>	
 	<type_netmsg_privilege kinds="enum" enum_value="不限制,连接,登录,进入游戏,GM"/>
 	<type_encode kinds="enum" enum_value="ansi,gbk,utf8"/>
 	<type_time_unit kinds="enum" enum_value="秒,分钟,小时,天,月,年,星期"/>
@@ -57,7 +57,11 @@
 	<list instruction="1" ins_id="40" size="0" record_param_num="1" >op_build_user_data</list>
 	<list instruction="1" ins_id="41" size="0" record_param_num="1" >op_create_data_type</list>
 	<list instruction="1" ins_id="42" size="0"  >op_math_operate</list>
-	<list instruction="1" ins_id="43" size="0"  >op_assignin</list>
+	<list instruction="1" ins_id="43" size="0" desc="赋值操作" >op_assignin</list>	
+	<list instruction="1" ins_id="44" size="0"  >op_chdir</list>
+	<list instruction="1" ins_id="45" size="0"  >op_rmfile</list>
+	<list instruction="1" ins_id="46" size="0"  >op_mkdir</list>
+	
 	
 	<!-- list instruction="1" ins_id="24" size="0" >op_set_loops</list>	
 	<list instruction="1" ins_id="25" size="0" >op_count_jump</list -->	
@@ -371,6 +375,37 @@
 			<param name="公式内容" kinds="string">0</param>
 		</op_calc>
 	</create_step_calc>
+	
+	
+	<create_step_getother_object name="获得其他对象" create_type="1" >
+		<op_getobj name="节点_获得其他对象" expand="yes">
+			<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
+			<param name="对象名" kinds="string">0</param>
+		</op_getobj>
+	</create_step_getother_object>
+	
+	<create_step_chdir name="更改目录" create_type="1" >
+		<op_chdir name="节点_更改目录" expand="yes">
+			<comment name="功能说明" rw_stat="read">cd(path_name)</comment>
+			<param name="目录名" kinds="string">0</param>
+		</op_chdir>
+	</create_step_chdir>
+	
+	<create_step_rmfile name="删除文件" create_type="1" >
+		<op_rmfile name="节点_删除文件" expand="yes">
+			<comment name="功能说明" rw_stat="read">rm(filename)</comment>
+			<param name="文件名" kinds="string">0</param>
+		</op_rmfile>
+	</create_step_rmfile>
+	
+	<create_step_mkdir name="创建目录" create_type="1" >
+		<op_mkdir name="节点_公式" expand="yes">
+			<comment name="创建目录" rw_stat="read">mkdir(newpath)</comment>
+			<param name="新目录" kinds="string">0</param>
+		</op_mkdir>
+	</create_step_mkdir>
+	
+	
 	<create_step_waitevent name="等待事件节点" create_type="1" >
 		<op_waitevent name="节点_等待事件" create_template="create_input_param" auto_index="0" >
 			<comment name="功能说明" rw_stat="read">wait_event(event_id)</comment>
@@ -594,6 +629,8 @@
 		<list>create_step_clear</list>
 		<list>create_read_table</list>
 		<list>create_step_calc</list>
+		<list>create_step_getother_object</list>
+		
 		
 		<list>create_step_send_event</list>
 		<list>create_install_event</list>
@@ -626,7 +663,10 @@
 		<list>create_step_begin_affair</list>
 		<list>create_step_read_excel_attr</list>
 		
-		<list>create_function_init_block</list>
+		<list>create_function_init_block</list>	
+		<list>create_step_chdir</list>		
+		<list>create_step_rmfile</list>		
+		<list>create_step_mkdir</list>				
 	</create_list1>
 		
 	
@@ -638,10 +678,12 @@
 		<list>create_step_write</list>
 		<list>create_step_add</list>
 		<list>create_step_sub</list>
-		<list>create_step_clear</list>
-		
+		<list>create_step_clear</list>		
 		<list>create_read_table</list>
 		<list>create_step_calc</list>
+		
+		<list>create_step_getother_object</list>
+		
 		<list>create_step_waitevent</list>
 		<list>create_step_send_event</list>			
 		<list>create_install_event</list>
@@ -677,5 +719,8 @@
 		<list>create_step_begin_affair</list>
 		<list>create_step_read_excel_attr</list>
 		<list>create_function_init_block</list>
+		<list>create_step_chdir</list>		
+		<list>create_step_rmfile</list>		
+		<list>create_step_mkdir</list>
 	</create_list2>
 </create_template>

@@ -229,6 +229,12 @@
     <ClInclude Include="..\..\logic_parser\objectBaseMgr.h">
       <Filter>apollo\logicParser</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\cli_common\dftCliMsgHandler.h">
+      <Filter>apollo\login</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_msg.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_datatransfer.cpp">
@@ -455,6 +461,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_time.c">
       <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp">
+      <Filter>apollo\login</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
