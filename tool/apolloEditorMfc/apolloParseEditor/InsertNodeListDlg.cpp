@@ -38,7 +38,7 @@ BOOL InsertNodeListDlg::OnInitDialog()
 	CDialogEx::OnInitDialog();
 	CButton *pBT = NULL;
 	int total = 0;
-	for (int i = 0; i < m_selList.size() && i< MAX_CREATE_LIST; i++)
+	for (int i = 0; i < (int) m_selList.size() && i< MAX_CREATE_LIST; i++)
 	{
 		pBT = (CButton *)GetDlgItem(IDC_RADIO1 + i);
 		if (pBT){

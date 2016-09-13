@@ -330,15 +330,15 @@ int DBLTable::GetColIndex(const char *col_name, int encodeType)
 const char *DBLTable::GetColName(int index )
 {
 	if (index>=0 && index<m_cols){
-		return m_pcols[index].col_alias ;
+		return m_pcols[index].col_name ;
 	}
 	return NULL;
 }
 
-const char *DBLTable::GetColRealName(int index )
+const char *DBLTable::GetColAliaName(int index)
 {
 	if (index>=0 && index<m_cols){
-		return  m_pcols[index].col_name;
+		return  m_pcols[index].col_alias;
 	}
 	return NULL;
 }
@@ -576,11 +576,11 @@ int DBLTable::parseTableTypeInfo(FILE *pf, int encodeType)
 	}
 	nd_assert(m_cols < DBL_MAX_COLS_NUM);
 	for (int i = 0; i < m_cols; i++) {
-		strncpy(m_pcols[i].col_alias, line1[i].c_str(), DBL_NAME_SIZE);
+		strncpy(m_pcols[i].col_name, line1[i].c_str(), DBL_NAME_SIZE);
 
 #ifdef EXCEL_SECOND_LINE_AS_NAME
 		if (line1.size() ==line2.size() && line2[i].size() > 0)
-			strncpy(m_pcols[i].col_name, line2[i].c_str(), DBL_NAME_SIZE);
+			strncpy(m_pcols[i].col_alias, line2[i].c_str(), DBL_NAME_SIZE);
 #endif 
 		// force empty is string		
 		if (is_setbuf[i] == 0)	{
@@ -704,7 +704,7 @@ int DBLTable::Dump(void *pfile )
 
 		//write real-name
 #ifdef EXCEL_SECOND_LINE_AS_NAME
-		size = (NDUINT16)strlen(m_pcols[i].col_name);
+		size = (NDUINT16)strlen(m_pcols[i].col_alias);
 		if (size > 0) {
 			type = 1;
 			fwrite(&type, sizeof(type), 1, pf);
@@ -714,7 +714,7 @@ int DBLTable::Dump(void *pfile )
 			ret = (int)fwrite(&size, sizeof(size), 1, pf);
 			nd_assert(ret);
 
-			ret = (int)fwrite(m_pcols[i].col_name, length, 1, pf);
+			ret = (int)fwrite(m_pcols[i].col_alias, length, 1, pf);
 			nd_assert(ret);
 
 		}
@@ -729,14 +729,14 @@ int DBLTable::Dump(void *pfile )
 #endif 
 		
 
-		size =(NDUINT16) strlen(m_pcols[i].col_alias) ;
+		size =(NDUINT16) strlen(m_pcols[i].col_name) ;
 
 		length = size;
 		_tryto_change_order_short(size);
 		ret = (int) fwrite(&size, sizeof(size), 1, pf) ;
 		nd_assert(ret ) ;
 		//col name
-		ret =  (int)fwrite(m_pcols[i].col_alias, length, 1, pf) ;
+		ret = (int)fwrite(m_pcols[i].col_name, length, 1, pf);
 		nd_assert(ret ) ;
 
 
@@ -804,9 +804,9 @@ int DBLTable::LoadBinStream(void *pfile)
 
 			_tryto_change_order_short(size);
 			//col name
-			ret = (int)fread(m_pcols[i].col_name, size, 1, pf);
+			ret = (int)fread(m_pcols[i].col_alias, size, 1, pf);
 			nd_assert(ret);
-			m_pcols[i].col_name[size] = 0;
+			m_pcols[i].col_alias[size] = 0;
 		}
 #endif 
 
@@ -815,9 +815,9 @@ int DBLTable::LoadBinStream(void *pfile)
 
 		_tryto_change_order_short(size);
 		//col name
-		ret = (int) fread(m_pcols[i].col_alias, size, 1, pf) ;
+		ret = (int)fread(m_pcols[i].col_name, size, 1, pf);
 		nd_assert(ret ) ;
-		m_pcols[i].col_alias[size] = 0;
+		m_pcols[i].col_name[size] = 0;
 	}
 	//read row number 
 	ret = (int) fread(&size, sizeof(size), 1, pf) ;

@@ -5,10 +5,12 @@
 #include <QString>
 #include <QSettings>
 
+#include "listdialog.h"
+
 #include "ndlib.h"
 #include "cli_common/login_apollo.h"
 #include "cli_common/netui_atl.h"
-#include "cli_common/gameMessage.h"
+//#include "cli_common/gameMessage.h"
 #include "cli_common/login_apollo.h"
 #include "cli_common/dftCliMsgHandler.h"
 
@@ -405,7 +407,7 @@ int ConnectDialog::_connectHost(const char *host, int port)
     m_pConn = pConn;
 
 
-    initApolloGameMessage(m_pConn);
+    //initApolloGameMessage(m_pConn);
     init_apollo_object(m_pConn, m_scriptFile);
 	//initApolloGameMessage(m_pConn);
     //ClientMsgHandler::initDftClientMsgHandler(m_pConn, m_scriptFile, m_dataTypeDef, &m_message_define, out_print);
@@ -473,7 +475,31 @@ int ConnectDialog::SelOrCreateRole(const char *accountName)
         out_log("get host list number=0\n");
         return -1 ;
     }
-    int ret = m_login->EnterServer(bufs[0].ip_addr, bufs[0].host.port);
+
+
+    int selected = 0;
+    do //show server list
+    {
+        //dialogCloseHelper _helperClose(this) ;
+        ListDialog dlg(this);
+        for (int i = 0; i < num; i++)	{
+            dlg.m_selList.push_back(QString((const char*)bufs[i].host.name));
+        }
+
+        dlg.InitList();
+        if (dlg.exec() == QDialog::Accepted) {
+            out_log("selected success \n");
+        }
+        else {
+            out_log("user cancel\n");
+            return -1 ;
+        }
+        selected = dlg.GetSelect();
+        nd_assert(selected < num);
+    } while (0);
+
+
+    int ret = m_login->EnterServer(bufs[selected].ip_addr, bufs[selected].host.port);
     if (ret == 0) {
         out_log("redirect server success\n");
         _s_session_size = m_login->GetSessionData(_s_session_buf, sizeof(_s_session_buf));

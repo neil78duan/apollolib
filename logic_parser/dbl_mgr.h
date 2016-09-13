@@ -89,7 +89,7 @@ public:
 	int GetCols() ;
 
 	const char *GetColName(int index ) ;
-	const char *GetColRealName(int index) ;	//the second line name 
+	const char *GetColAliaName(int index) ;	//the second line name 
 	const char *GetColTypeName(int index);
 	int loadFromText(const char *tablename, int codeType) ;
 

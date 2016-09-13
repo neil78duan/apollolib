@@ -78,20 +78,21 @@ struct attr_node_buf
 		}
 	}
 };
-
-struct base_attr_t
-{
-	attrid_t wa_id ;
-	NDUINT8 m_is_sync :1;
-	NDUINT8 m_is_set_byclient:1;
-	NDUINT8 m_is_create_role_set:1;
-	char attrname[ATTR_NAME_SIZE];
-};
+// 
+// struct base_attr_t
+// {
+// 	attrid_t wa_id ;
+// 	NDUINT8 m_is_sync :1;
+// 	NDUINT8 m_is_set_byclient:1;
+// 	NDUINT8 m_is_create_role_set:1;
+// 	char attrname[ATTR_NAME_SIZE];
+// };
 //属性计算公式
 //计算每个属性的公式和相关的优先顺序
 struct role_attr_description{
 	attrid_t wa_id ;
-	unsigned char issave, issync,isChangeByclient,iscallEvent ;	//是否存档，是否同步
+	unsigned char issave, issync,isChangeByclient,iscallEvent ;	//是否存档，是否同步  
+	unsigned char isSyncBuilding, forRole, forBuilding; //玩家属性是否影响的是建筑物， 玩家属性，建筑物属性
 	int infection_num ;				//受当前属性影响的属性
 	int need_num ;					//当前属性计算需要的属性个数
 	attr_name_t name;
@@ -162,9 +163,7 @@ public:
 
 	int m_maxLevel;
 	NDUINT32 m_upLevelExp[MAX_PLAYER_LEVEL]; //the cost exp that update next level 
-	NDUINT32 m_maxEnergy[MAX_PLAYER_LEVEL]; //the cost exp that update next level 
-
-
+	
 
 };
 
@@ -173,7 +172,7 @@ extern RoleAttrHelper *get_attr_helper();
 #include "logic_parser/dbl_mgr.h"
 #include "logic_parser/logicDataType.h"
 
-//通过表查询战斗属性ID和列名 return value ,number of attributes , return -1 on error
+//通过表查询属性ID和列名 return value ,number of attributes , return -1 on error
 int DBL_GetAttrIDName(const char *table, attrid_t ids[], const char *[], int bufsize) ;
 
 

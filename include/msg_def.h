@@ -17,14 +17,8 @@ enum APOLLO_MAX_MSG {
     
     NETMSG_MAX_SERVER,                          //服务器之间通信
 	
-	NETMSG_MAX_ROLE ,							//create role message ...
+	//NETMSG_MAX_ROLE ,							//create role message ...
 	
-	//NETMSG_MAX_SOCIAL ,							//社交 chat, friend ...
-	
-	//NETMSG_MAX_ROOM ,							//对战房间消息-send to gameHall
-	
-	//NETMSG_MAX_BATTLE ,							//对战消息 - send to battleServer
-    
     NETMSG_MAX_NUMBER
 };
 
@@ -58,6 +52,15 @@ enum APOLLO_LOGIN_MSG {
 	LOGIN_MSG_DEL_ACCOUNT_ACK,		//删除游客账号 32bits:accountid + 32bits:(0 success :error_code)
 
 	LOGIN_MSG_CLIENT_LANGUAGE_INFO, //发送客户的端的时区和语言信息 8bits:timezone + text:language 
+	
+
+	LOGIN_MSG_GET_ROLE_LIST_REQ,//Get role list request : format :numll
+	LOGIN_MSG_GET_ROLE_LIST_ACK, // format : (role id,role1: name + attribte + package)
+
+	LOGIN_MSG_CREATE_ROLE_REQ, //forma: string: rolename
+	LOGIN_MSG_CREATE_ROLE_ACK, //format : 32bit:role-id + string:name + bin:attribute + package
+
+
     LOGIN_MSG_NUMBER 
 };
 
@@ -90,85 +93,16 @@ enum ATLANTIS_SERVER_MSG {
 	SERVER_MSG_UPDATE_PVP_DATA, //NetMessage::RolePvpDetail 
 	SERVER_MSG_NUMBER 
 };
-
-//role message
-enum APOLLO_ROLE_MSG {
-	ROLE_MSG_GET_ROLE_LIST_REQ,
-	ROLE_MSG_GET_ROLE_LIST_ACK, // format : (role id,role1: name + attribte + package)
-	
-	ROLE_MSG_CREATE_ROLE_REQ, //forma: string: rolename
-	ROLE_MSG_CREATE_ROLE_ACK , //format : 32bit:role-id + string:name + bin:attribute + package
-	
-};
-
-//enum ATLANTIS_SOCIAL_MSG {
-//	SOCIAL_MSG_PLAYERS_LIST_REQ,
-//	SOCIAL_MSG_PLAYERS_LIST_ACK,// format : 16bits:number + friends1 (id + gender+level+birth_year/month/day + name) + friends2...
-//	
-//	SOCIAL_MSG_CHAT_REQ , // message format : 8bits:type +32BITS  aim-playerID + bin: chat data
-//	SOCIAL_MSG_CHAT_NTF , // message format : 8bits:type +32BITS : speaker_id + text:speaker_name + bin: chat data
-//	
-//	SOCIAL_MSG_GET_FRIENDS_REQ ,	// format : 32bits: friends-id (0 get all friends)
-//	SOCIAL_MSG_GET_FRIENDS_ACK , // format : 16bits:number + friends1 (id + gender+level+birth_year/month/day + name) + friends2...
-//	
-//	SOCIAL_MSG_ADD_FRIENDS_REQ , // message format :32BITS:playerid  + text:request-desc
-//	SOCIAL_MSG_REQUEST_FRIEND_NTF , // message format :32BITS: request-player-id +32bit:request-key + text:player-name + text: request-desc
-//	SOCIAL_MSG_ADD_FRIEND_REPLY , // message format : 8BITS:YES/NO + 32BITS: request-player-id + 32bit: key
-//	SOCIAL_MSG_ADD_FRIEND_ACK , // message format : 8BITS:YES/NO + 32BITS: + text:not agree reason
-//	
-//	SOCIAL_MSG_MAKE_FRIEND_NTF , // message format :  32BITS: New friend id
-//	
-//	SOCIAL_MSG_DEL_FRIEND_REQ,	//format : 32bits:player_id
-//	SOCIAL_MSG_DEL_FRIEND_ACK, // format : 32bits:player_id + 8bits: yes/no
-//	
-//	SOCIAL_MSG_BRAODCAST_REQ, 	// Only for test
-//	SOCIAL_MSG_BRAODCAST_NTF ,
-//	
-//	SOCIAL_MSG_NUMBER
-//};
-//
-//
-////NETMSG_MAX_ROOM ,							//对战房间消息 
-//enum ATLANTIS_ROOM_MSG {
-//	ROOM_MSG_CREATE_REQ ,	// format :32bits:mapID + 16bits:player-number +8bits:is-open ＋[text:name+text:password]
-//	ROOM_MSG_CREATE_ACK ,	// format :32bits:errorcode + roominfo[32bit:host-ip +16bits:port + 32bits:roomid + 32bit:key +mapid]
-//	ROOM_MSG_INVITE_REQ ,	//invite friend ,format :playerid + roomid + key
-//	ROOM_MSG_INVITED_NTF ,	//notified aim-player format: 32bits:requestPlayer + text:name+ roominfo[32bit:host-ip +16bits:port + 32bits:roomid + 32bit:key +mapid]
-//	ROOM_MSG_INVITED_REPLY,// format: 8bits:yes/no + 32bits:requestPlayer  + roomid
-//	ROOM_MSG_INVITED_ACK,// format: 8bits:yes/no + 32bits:aimPlayer  + roomid
-//	
-//	ROOM_MSG_GET_LIST_REQ,
-//	
-//	
-//	//only send to worldserver
-//	ROOM_MSG_READY,
-//	ROOM_MSG_START_GAME,
-//	ROOM_MSG_REQUEST_ROOM_INFO,
-//	ROOM_MSG_GAME_OVER ,	
-//	
-//	ROOM_MSG_NUMBER
-//};
-//
-////NETMSG_MAX_BATTLE ,							//对战消息
-//enum ATLANTIS_BATTLE_MSG {
-//
-//	BATTLE_MSG_ENTER_REQ ,					// wrapped by BATTLE_MSG_ENTER_REQ :format : userid+ 16bits:session-key + 32bits:room + 32bits:key [+ text:password]
-//	BATTLE_MSG_ENTER_ACK,					// format : 32bits:errorcode [ 32bits:roomID + 32bits: mapID + roomName]
-//
-//	
-//	BATTLE_MSG_PLAYER_ENTER_NTF ,			// format : roomID + playerID + text: playername
-//	BATTLE_MSG_PLAYER_LEAVE_NTF ,			// format : roomID + playerID 
-//	
-//	BATTLE_MSG_GET_CUR_ROOM_REQ ,			//get Current RoomInfo
-//	BATTLE_MSG_GET_CUR_ROOM_ACK ,			//Back roominfo :errorcode + roomid+ mapid+  16bits:player_num[ player1(id +name) + player2() ]
-//	
-//	BATTLE_MSG_START_GAME_REQ ,				//start 
-//	BATTLE_MSG_START_GAME_NTF ,				// notify game start : roomid
-//	
-//	BATTLE_MSG_BROAD_NTF , 					//broad cast message to all users in current room
-//	
-//	BATTLE_MSG_NUMBER
-//};
+// 
+// //role message
+// enum APOLLO_ROLE_MSG {
+// 	ROLE_MSG_GET_ROLE_LIST_REQ,
+// 	ROLE_MSG_GET_ROLE_LIST_ACK, // format : (role id,role1: name + attribte + package)
+// 	
+// 	ROLE_MSG_CREATE_ROLE_REQ, //forma: string: rolename
+// 	ROLE_MSG_CREATE_ROLE_ACK , //format : 32bit:role-id + string:name + bin:attribute + package
+// 	
+// };
 
 
 #endif

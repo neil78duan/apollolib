@@ -73,7 +73,7 @@ int RoleAttrHelper::Init()
 
 int RoleAttrHelper::loadUplevelExp(const char *file)
 {
-	const char *pfields[] = { "id", "UplevelExp", "EnergyRecoverMax"};
+	const char *pfields[] = { "id", "UplevelExp"};
 
 	m_maxLevel = 0;
 	memset(m_upLevelExp, 0, sizeof(m_upLevelExp));
@@ -86,7 +86,6 @@ int RoleAttrHelper::loadUplevelExp(const char *file)
 		NDUINT32 level = cursor[0].GetInt();
 		NDUINT32 exp = cursor[1].GetInt();
 		if (level && exp && level < MAX_PLAYER_LEVEL){
-			m_maxEnergy[level] = cursor[2].GetInt();
 			m_upLevelExp[level] = exp;
 			m_maxLevel = NDMAX(level, m_maxLevel);
 		}
@@ -104,7 +103,9 @@ int RoleAttrHelper::loadUplevelExp(const char *file)
 int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 {
 	const char *attrmax[ROLE_ATTR_CAPACITY][2] = { 0 };
-	const char *pfields[] = { "id", "name", "formula", "save_db", "sync", "min_val", "max_val", "client_change", "client_name", "is_gen_event"};
+	const char *pfields[] = { "id", "name", "formula", "save_db", "sync", "min_val", "max_val", 
+		"client_change", "client_name", "is_gen_event", "affect_buildings", "forRole", "forBuilding"
+};
 	
 	m_wa_num = 0 ;
 	role_attr_description *pwa_desc ;
@@ -134,6 +135,7 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 		else {
 			pwa_desc->real_name.attrname[0] = 0;
 		}
+		
 
 		if ( cursor[2].CheckValid() )
 			strncpy(pwa_desc->input_for, cursor[2].GetText(),NDVM_CMD_SIZE );
@@ -141,8 +143,11 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 		pwa_desc->issave = cursor[3].GetInt();
 		pwa_desc->issync = cursor[4].GetInt();
 		pwa_desc->iscallEvent = cursor[9].GetInt();
-		
 		pwa_desc->isChangeByclient = cursor[7].GetInt();
+
+		pwa_desc->isSyncBuilding = cursor[10].GetInt();
+		pwa_desc->forRole = cursor[11].GetInt(); 
+		pwa_desc->forBuilding = cursor[12].GetInt();
 		//pwa_desc->issyncai = cursor[7].GetInt();
 
 		pwa_desc->wa_id = (attrid_t ) aid ;
@@ -297,7 +302,7 @@ int place_name_runtime(char *input, char *buf, int size,void *user_data)
 		if (pwa->wa_id == INVALID_ATTR_ID)	{
 			continue;
 		}
-		if(0==strcmp(input,pwa->name.attrname)) {
+		if(0==strcmp(input,pwa->name.attrname) || 0==ndstricmp(input, pwa->real_name.attrname) ) {
 			snprintf(buf,size,"[%d]", pwa->wa_id) ;			
 			return 0 ;
 		}

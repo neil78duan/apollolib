@@ -10,7 +10,7 @@
 #include "cli_common/login_apollo.h"
 #include "msg_def.h"
 //#include "apollo_data.h"
-#include "srv_define.h"
+//#include "srv_define.h"
 #include "ndcli/nd_api_c.h"
 #include "apollo_errors.h"
 

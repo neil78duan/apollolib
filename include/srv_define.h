@@ -16,39 +16,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define HOST_ID_MAKE(_ip, _port, session_id)  	ND_MAKE_QWORD(_ip, ND_MAKE_DWORD(_port, session_id) )
-#define HOST_ID_GET_IP(_host_id) 				ND_HIDWORD(_host_id)
-#define HOST_ID_GET_PORT(_host_id) 				((_host_id)>>16 & 0xffff)
-#define HOST_ID_GET_SESSION(_host_id) 			((_host_id) & 0xffff)
-
 typedef NDUINT32 thread_msg_id ;
 
 #define RAND_DATA_SIZE_IN_DB 0x20000
 //save session info after user login success
 //#pragma pack(push , 1)
-struct login_token_info
-{
-	login_token_info() :acc_index(0), session_key(0),create_tm(0),_reserved(0)
-	{}
-	account_index_t acc_index;
-	NDUINT16 session_key;
-	NDUINT16 _reserved ;
-	time_t create_tm ;
-	tea_k sym_key;
-
-};
-//struct of transfer when relogin
-struct transfer_session_key
-{
-	transfer_session_key() : acc_index(0), size(0)
-	{
-		
-	}
-	account_index_t acc_index ;
-	tea_k new_key;
-	NDUINT32 size ;
-	char session_buf[1024] ;
-};
 //#pragma pack(pop)
 
 
@@ -307,6 +279,7 @@ enum eSaveRoleBlockDataField
 #define ROLE_DATA_TASK "task"
 #define ROLE_DATA_TASK_LOG "task_log"
 #define ROLE_DATA_ACHIEVEMENT "achiev"
+#define ROLE_DATA_HOME "home"
 
 #define ROLE_WEAPON_NAME "weapon"
 // addition data

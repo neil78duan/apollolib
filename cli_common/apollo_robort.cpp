@@ -12,7 +12,7 @@
 #include "nd_common/nd_common.h"
 #include "cli_common/netui_atl.h"
 //#include "commonTest.h"
-#include "cli_common/gameMessage.h"
+//#include "cli_common/gameMessage.h"
 #include "cli_common/login_apollo.h"
 #include "apollo_errors.h"
 //#include "message_inc.h"
@@ -211,11 +211,11 @@ int ApolloRobort::_selOrCreateRole(const char *roleName)
 	}
 	//get role list
 
-	NDOStreamMsg omsg(NETMSG_MAX_ROLE, ROLE_MSG_GET_ROLE_LIST_REQ);
+	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ);
 	nd_handle h = m_pConn->GetHandle();
 	nd_usermsgbuf_t recv_msg;
 
-	_robort_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_ROLE, ROLE_MSG_GET_ROLE_LIST_ACK, 0)
+	_robort_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0)
 	else {
 		NDUINT32 roleid = 0;
 		NDUINT32 error_code = 0;
@@ -257,7 +257,7 @@ int ApolloRobort::_selOrCreateRole(const char *roleName)
 
 int ApolloRobort::_createRole(const char *roleName)
 {
-	NDOStreamMsg omsg(NETMSG_MAX_ROLE, ROLE_MSG_CREATE_ROLE_REQ);
+	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_REQ);
 	omsg.Write((NDUINT8*)roleName);
 
 	omsg.Write((NDUINT16)1);
@@ -266,7 +266,7 @@ int ApolloRobort::_createRole(const char *roleName)
 
 	nd_handle h = m_pConn->GetHandle();
 	nd_usermsgbuf_t recv_msg;
-	_robort_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_ROLE, ROLE_MSG_CREATE_ROLE_ACK, 0)
+	_robort_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_ACK, 0)
 	else {
 		NDUINT32 roleid = 0;
 		NDUINT32 error_code = 0;

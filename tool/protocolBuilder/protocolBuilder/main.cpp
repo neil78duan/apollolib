@@ -955,7 +955,7 @@ int main(int argc, char *argv[])
 		exit(-1) ;
 	}
 	
-	int ret ;
+	//int ret ;
 	ndxml_root xmlMarco , xmlDatatype , xmlMessage ;
 	
 	LOAD_XML_FROM_FILE(&xmlMarco, _input_dir ,"/marco.xml",encode) ;

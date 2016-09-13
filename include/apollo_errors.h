@@ -17,8 +17,14 @@
 
 enum eApollo_errors {
 	ESERVER_ERR_SUCCESS = 0,
-	ESERVER_ERR_UNKNOWN = NDERR_USERDEFINE,
-    
+
+#undef ErrorElement 
+#define ErrorElement(a) ESERVER_##a
+#include "nd_common/_nderr.h"
+#undef ErrorElement
+
+
+	ESERVER_ERR_UNKNOWN = NDERR_USERDEFINE,    
 	AtlantisError_Start = NDERR_USERDEFINE,
 	
 #undef ErrorElement 

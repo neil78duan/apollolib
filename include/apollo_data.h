@@ -78,6 +78,11 @@ typedef NDUINT16 weaponId_t;
 typedef NDUINT16 dragonId_t;
 typedef NDUINT16 taskId_t;
 
+#define HOST_ID_MAKE(_ip, _port, session_id)  	ND_MAKE_QWORD(_ip, ND_MAKE_DWORD(_port, session_id) )
+#define HOST_ID_GET_IP(_host_id) 				ND_HIDWORD(_host_id)
+#define HOST_ID_GET_PORT(_host_id) 				((_host_id)>>16 & 0xffff)
+#define HOST_ID_GET_SESSION(_host_id) 			((_host_id) & 0xffff)
+
 
 enum ACCOUNT_TYPE{
 	ACC_FACEBOOK = 0,
@@ -96,6 +101,29 @@ enum eChatType {
 	ECHAT_SYSTEM
 };
 
+struct login_token_info
+{
+	login_token_info() :acc_index(0), session_key(0), create_tm(0), _reserved(0)
+	{}
+	account_index_t acc_index;
+	NDUINT16 session_key;
+	NDUINT16 _reserved;
+	time_t create_tm;
+	tea_k sym_key;
+
+};
+//struct of transfer when relogin
+struct transfer_session_key
+{
+	transfer_session_key() : acc_index(0), size(0)
+	{
+
+	}
+	account_index_t acc_index;
+	tea_k new_key;
+	NDUINT32 size;
+	char session_buf[1024];
+};
 
 struct account_base_info
 {

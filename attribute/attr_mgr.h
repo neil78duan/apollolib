@@ -137,5 +137,24 @@ private:
 	bool m_recordChange;
 	attrValVct_t m_changed;
 };
+// 
+// //for test
+// class RoleAttrsTest :public RoleAttrAsset
+// {
+// public:
+// 	RoleAttrsTest();
+// 	virtual ~RoleAttrsTest();
+// 
+// private:
+// 	role_attr_data m_data;
+// };
+// 
+// RoleAttrsTest::RoleAttrsTest() : RoleAttrAsset(&m_data)
+// {
+// }
+// 
+// RoleAttrsTest::~RoleAttrsTest()
+// {
+// }
 
 #endif

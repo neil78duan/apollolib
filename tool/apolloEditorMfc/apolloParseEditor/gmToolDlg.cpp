@@ -5,7 +5,7 @@
 #include "apolloParseEditor.h"
 #include "gmToolDlg.h"
 #include "afxdialogex.h"
-
+#include "InsertNodeListDlg.h"
 
 #include "nd_common/nd_common.h"
 #include "cli_common/netui_atl.h"
@@ -18,7 +18,7 @@
 #include "logic_parser/dbldata2netstream.h"
 #include "logic_parser/logicEngineRoot.h"
 #include "cli_common/dftCliMsgHandler.h"
-#include "cli_common/gameMessage.h"
+//#include "cli_common/gameMessage.h"
 
 static gmToolDlg *__pMyDlg;
 static void*  __oldFunc;
@@ -375,7 +375,7 @@ void gmToolDlg::OnBnClickedButtonSend()
 int gmToolDlg::createRole(const char *roleName) 
 {
 
-	NDOStreamMsg omsg(NETMSG_MAX_ROLE, ROLE_MSG_CREATE_ROLE_REQ);
+	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_REQ);
 	omsg.Write((NDUINT8*)roleName);
 
 	omsg.Write((NDUINT16)1);
@@ -384,7 +384,7 @@ int gmToolDlg::createRole(const char *roleName)
 
 	nd_handle h = m_pConn->GetHandle();
 	nd_usermsgbuf_t recv_msg;
-	_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_ROLE, ROLE_MSG_CREATE_ROLE_ACK, 0)
+	_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_ACK, 0)
 	else {
 		NDUINT32 roleid = 0;
 		NDUINT32 error_code = 0;
@@ -406,7 +406,7 @@ int gmToolDlg::createRole(const char *roleName)
 			char roleName[128];
 			nd_utf8_to_gbk((const char*)name, roleName, sizeof(roleName));
 
-			nd_logerror("create role %s success \n", roleName);
+			nd_logmsg("create role %s success \n", roleName);
 			//read attribute
 			NDUINT16 num = 0;
 			if (0 == inmsg.Read(num)) {
@@ -522,7 +522,23 @@ int gmToolDlg::SelOrCreateRole()
 		out_log("get host list number=0\n");
 		return -1 ;
 	}
-	int ret = m_login->EnterServer(bufs[0].ip_addr, bufs[0].host.port);
+
+	int selected = 0;
+	if (num > 1) {
+		InsertNodeListDlg dlg;
+		for (int i = 0; i < num; i++)	{
+			dlg.m_selList.push_back(CString((LPCTSTR)bufs[i].host.name));
+		}
+		if (IDOK != dlg.DoModal())  {
+
+			out_log("you cancel login\n");
+			return -1;
+		}
+		selected = dlg.GetSelect();
+		nd_assert(selected < num);
+	}
+
+	int ret = m_login->EnterServer(bufs[selected].ip_addr, bufs[selected].host.port);
 	//int ret = redirectServer(m_pConn->GetHandle(), nd_inet_ntoa(bufs[0].ip, NULL), bufs[0].port, _SESSION_FILE);
 	if (ret == 0) {
 		out_log("redirect server success\n");
@@ -534,11 +550,11 @@ int gmToolDlg::SelOrCreateRole()
 	}
 	//get role list
 
-	NDOStreamMsg omsg(NETMSG_MAX_ROLE, ROLE_MSG_GET_ROLE_LIST_REQ);
+	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ);
 	nd_handle h = m_pConn->GetHandle();
 	nd_usermsgbuf_t recv_msg;
 
-	_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_ROLE, ROLE_MSG_GET_ROLE_LIST_ACK, 0)
+	_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0)
 	else {
 		NDUINT32 roleid = 0;
 		NDUINT32 error_code = 0;
