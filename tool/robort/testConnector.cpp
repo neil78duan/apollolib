@@ -28,9 +28,6 @@ int SendHelper::Send(void *data , int size )
 	if (pMsg->msg_hdr.maxid == NETMSG_MAX_LOGIN) {
 		return 0;
 	}
-	if (pMsg->msg_hdr.maxid == NETMSG_MAX_ROLE && pMsg->msg_hdr.minid <= ROLE_MSG_CREATE_ROLE_ACK) {
-		return 0;
-	}
 	
 	NDUINT8 isCrypt = pMsg->msg_hdr.packet_hdr.encrypt ;
 	pMsg->msg_hdr.packet_hdr.encrypt = 0 ;

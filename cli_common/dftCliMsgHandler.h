@@ -10,6 +10,7 @@
 #ifndef _DFT_CLI_MSG_HANDLER_H_
 #define _DFT_CLI_MSG_HANDLER_H_
 
+#include "ndcli/nd_iconn.h"
 #include "logic_parser/dbldata2netstream.h"
 #ifndef WITHOUT_LOGIC_PARSER
 #include "logic_parser/objectBaseMgr.h"
@@ -55,7 +56,8 @@ int apollo_cli_msg_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t
 		bool getOtherObject(const char*objName, DBLDataNode &val);
 		virtual const char *getMsgName(int msgId);
 		virtual const char *getMsgBody(int msgId);
-
+		bool loadDataType(const char *file);
+		void LoadMsgDataTypeFromServer();
 	protected:
 		NDIConn *m_conn;
 		userDefineDataType_map_t m_dataType;
@@ -69,6 +71,13 @@ int apollo_cli_msg_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t
 	void* getLogFile(NDIConn *pconn);
 	msgIdNameFormat_vct* getMsgIdNameFormat(NDIConn *pconn);
 
+	//read message from file, the message first file is 64bits time,
+	// if time newer than @gentime pass the message to @func else send to server 
+	//return true read from file ,else send to server
+	bool handleMsgFirstFromFileBeforTime(NDIConn *pconn, const char *file,NDUINT64 genTime, NDUINT16 msgId, nd_iconn_func func);
+
+	int OutputMessage2File(NDIConn *pconn, const char *file, const NDIStreamMsg &inmsg);
+	int ReadMessageFromFile(NDIConn *pconn, const char *file, NDOStreamMsg &omsg);
 #endif
 
 

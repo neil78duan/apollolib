@@ -18,6 +18,7 @@
 #include "logic_parser/dbldata2netstream.h"
 #include "logic_parser/logicEngineRoot.h"
 #include "cli_common/dftCliMsgHandler.h"
+#include "logic_parser/script_event_id.h"
 //#include "cli_common/gameMessage.h"
 
 static gmToolDlg *__pMyDlg;
@@ -114,6 +115,9 @@ static bool init_apollo_object(NDIConn *pConn, const char*script_file)
 	}
 	ClientMsgHandler::InstallDftClientHandler(pConn);
 	pConn->SetDftMsgHandler(ClientMsgHandler::apollo_dft_message_handler);
+
+	//ntf server start
+	parser.eventNtf(APOLLO_EVENT_SERVER_START, 0);
 
 	//pConn->InstallMsgFunc(get_data_format_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
 	return true;
@@ -312,14 +316,16 @@ void gmToolDlg::OnBnClickedButtonLogin()
 		theApp.setDefaultSetting(_T("host"), (LPCTSTR)m_strHost);
 		theApp.setDefaultSetting(_T("user"), (LPCTSTR)m_strUserName);
 
-		NDOStreamMsg omsg(ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
-		m_pConn->SendMsg(omsg);
+		__myScriptOwner.LoadMsgDataTypeFromServer();
 
-		omsg.Init(ND_MAIN_ID_SYS, ND_MSG_SYS_GET_MESSAGE_FORMAT_LIST);
-		m_pConn->SendMsg(omsg);
-
+		LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
+		if (scriptRoot ) {
+			parse_arg_list_t arg;
+			arg.push_back(DBLDataNode(m_pConn, OT_OBJ_NDOBJECT));
+			scriptRoot->getGlobalParser().eventNtf(APOLLO_EVENT_LOGIN, arg);
+		}
 		//get and init role data
-		getRoleData();
+		//getRoleData();
 	}
 }
 
@@ -451,6 +457,8 @@ int gmToolDlg::_connectHost(const char *host, int port)
 		return 0;
 	}
 
+	init_apollo_object(pConn, m_scriptFile);
+
 	if (-1 == pConn->Open(host, port, "tcp-connector", NULL)) {
 		out_print( "connect %s:%d ERROR \n", host, port);
 		DestroyConnectorObj(pConn);
@@ -460,7 +468,6 @@ int gmToolDlg::_connectHost(const char *host, int port)
 	m_pConn = pConn;
 
 	//initApolloGameMessage(m_pConn);	
-	init_apollo_object(m_pConn, m_scriptFile);
 	//ClientMsgHandler::initDftClientMsgHandler(m_pConn, m_scriptFile, out_print);
 
 

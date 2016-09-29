@@ -11,7 +11,7 @@
 #define _USER_ADDTION_DATA_H_
 
 #include "logic_parser/logicDataType.h"
-#include "srv_define.h"
+#include "apollo_data.h"
 #include "ndapplib/nd_affair.h"
 #include <map>
 #include <string>
@@ -57,7 +57,7 @@ public:
 	bool opWrite(const DBLDataNode& id, const DBLDataNode &val);
 	bool opAdd(const DBLDataNode& id, const  DBLDataNode &val);
 	bool opSub(const DBLDataNode& id, const DBLDataNode &val);
-	bool opClear(const DBLDataNode& id);
+	bool opClear(const DBLDataNode& id, const DBLDataNode &val);
 	
 	bool CheckInAffair();
 	bool BeginAffair();

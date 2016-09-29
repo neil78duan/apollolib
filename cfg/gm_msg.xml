@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <type_data_type name="数据类型" kinds="hide" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,2维数组,变量,参数,上一步结果,time"/>
-<send_msg_list name="发送消息" delete="no" expand_stat="0">
-	<msg_enter_map name="进入副本" expand="yes" delete="no" expand_stat="1">
-		<msgid kinds="hide">781</msgid>
-		<data name="场景编号" kinds="numeral" param="0" desc="param参考type_data_type">10101</data>
-	</msg_enter_map>
-	<msg_leave_map name="完成副本" expand="yes" delete="no">
-		<msgid kinds="hide">793</msgid>
-		<data name="场景编号" kinds="numeral" param="4" desc="param参考type_data_type">10101</data>
-		<data name="分数" kinds="numeral" param="4" desc="param参考type_data_type">100</data>
-		<data name="成就:8bits位操作" kinds="numeral" param="3" desc="param参考type_data_type">7</data>
-		<data name="杀怪收益个数" kinds="hide" param="4" desc="param参考type_data_type">2</data>
-		<data name="游戏币收益id" kinds="hide" param="3" desc="param参考type_data_type">3</data>
-		<data name="游戏币收益val" kinds="hide" param="1" desc="param参考type_data_type">1000.0</data>
-		<data name="上古id" kinds="hide" param="3" desc="param参考type_data_type">6</data>
-		<data name="上古val" kinds="hide" param="1" desc="param参考type_data_type">100.0</data>
-	</msg_leave_map>
-	<message name="扫荡" expand="yes" delete="no">
-		<msgid kinds="hide">799</msgid>
-		<data name="场景编号" kinds="numeral" param="0" desc="param参考type_data_type">10102</data>
+<send_msg_list name="发送消息" delete="no" expand_stat="1">
+	<message name="新建建筑" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="5" minId="0">0</msgid>
+		<data name="建筑类型ID" kinds="numeral" param="0">1002</data>
+		<data name="坐标X" kinds="numeral" param="4">100</data>
+		<data name="坐标X" kinds="numeral" param="4">100</data>
+	</message>
+	<message name="移动建筑" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="5" minId="2">0</msgid>
+		<data name="number" kinds="numeral" param="4">2</data>
+		<data name="建筑类型ID" kinds="numeral" param="0">197609</data>
+		<data name="坐标X" kinds="numeral" param="4">119</data>
+		<data name="坐标X" kinds="numeral" param="4">108</data>
+		<data name="建筑类型ID" kinds="numeral" param="0">132073</data>
+		<data name="坐标X" kinds="numeral" param="4">100</data>
+		<data name="坐标X" kinds="numeral" param="4">100</data>
 	</message>
 	<message name="领任务" expand="yes" delete="no">
 		<msgid kinds="hide">2820</msgid>
@@ -59,26 +56,9 @@
 		<msgid kinds="hide">1282</msgid>
 		<data name="包裹编号" kinds="numeral" param="0">101</data>
 	</message>
-	<message name="龙进阶" expand="yes" delete="no">
-		<msgid kinds="hide">2058</msgid>
-		<data name="龙编号" kinds="numeral" param="4">1001</data>
-	</message>
-	<message name="装备龙" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="8" minId="21">0</msgid>
-		<data name="龙编号" kinds="numeral" param="4">1001</data>
-		<data name="位置" kinds="numeral" param="3">3</data>
-	</message>
-	<message name="卸载龙" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="8" minId="23">0</msgid>
-		<data name="龙编号" kinds="numeral" param="4">1001</data>
-	</message>
 	<message name="开宝箱" expand="yes" delete="no">
 		<msgid kinds="hide">1540</msgid>
 		<data name="宝箱编号" kinds="numeral" param="4">2</data>
-	</message>
-	<message name="武器升星" expand="yes" delete="no">
-		<msgid kinds="hide">2563</msgid>
-		<data name="武器编号" kinds="numeral" param="4">1</data>
 	</message>
 	<message name="使用物品" expand="yes" delete="no">
 		<msgid kinds="hide">1034</msgid>
@@ -139,10 +119,6 @@
 	<message name="GM_改等级" expand="yes" delete="no">
 		<msgid kinds="hide">1796</msgid>
 		<data name="新等级" kinds="numeral" param="0">5</data>
-	</message>
-	<message name="GM_增加龙" expand="yes" delete="no">
-		<msgid kinds="hide">1799</msgid>
-		<data name="龙的ID" kinds="numeral" param="0">1001</data>
 	</message>
 	<message name="GM_增加属性" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="8">0</msgid>

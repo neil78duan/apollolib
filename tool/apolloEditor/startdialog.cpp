@@ -15,6 +15,8 @@
 #include "attribute/stat_machine.h"
 #include "ndapplib/ndsingleton.h"
 
+#include "cli_common/dftCliMsgHandler.h"
+
 #include <QMessageBox>
 static startDialog *__g_loginDlg ;
 static void *__oldFunc ;
@@ -341,11 +343,17 @@ bool startDialog::compileScript(const char *scriptFile)
 
 	WriteLog("!!!!!!!!!!COMPILE script success !!!!!!!!!!!\n begining run script...\n");
 
+	ClientMsgHandler::ApoConnectScriptOwner apoOwner;
+	if (!apoOwner.loadDataType(_getFromIocfg("net_data_def"))) {
+		WriteLog("load data type error\n");
+		return false;
+	}
+	
 	LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
 	nd_assert(scriptRoot);
 
 	scriptRoot->setPrint(out_print, NULL);
-	scriptRoot->getGlobalParser().setSimulate(true);
+	scriptRoot->getGlobalParser().setSimulate(true,&apoOwner);
 
 	if (0 != scriptRoot->LoadScript(outFile.c_str())){
 		WriteLog("load script error n");
@@ -581,6 +589,19 @@ void startDialog::on_Compile_clicked()
         return;
     }
     WriteLog("=========compile script success===========\n");
+
+    const char *packaged_cmd = _getFromIocfg("compiled_rum_cmd");
+
+    if (packaged_cmd && *packaged_cmd)	{
+        int ret = system(packaged_cmd);
+
+        if (0 != ret)	{
+            nd_logerror("run command error %s %d\n", packaged_cmd, ret);
+        }
+
+    }
+
+
 }
 
 void startDialog::on_ExportExcel_clicked()
@@ -592,6 +613,16 @@ void startDialog::on_ExportExcel_clicked()
         return;
     }
     WriteLog("==========excel export success==========\n");
+
+    const char *packaged_cmd = _getFromIocfg("packeaged_rum_cmd");
+    if (packaged_cmd && *packaged_cmd)	{
+        //snprintf(path, sizeof(path), "cmd.exe /c %s ", packaged_cmd);
+        int ret = system(packaged_cmd);
+
+        if (0 != ret)	{
+            nd_logerror("run command error %s %d\n",packaged_cmd, ret);
+        }
+    }
 }
 
 void startDialog::on_CompleteAll_clicked()

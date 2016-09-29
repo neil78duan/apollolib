@@ -18,7 +18,7 @@ SRCDIR=./protocolBuilder
 ifeq ($(DEBUG),y)
 	PROJS = $(WORKDIR)/protoBuilder_d
 else
-	PROJS = $(WORKDIR)/protoBuilder_d
+	PROJS = $(WORKDIR)/protoBuilder
 endif
 
 LFLAGS +=   -L$(NDHOME)/lib -l$(CLIENT_LIB)

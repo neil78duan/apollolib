@@ -131,9 +131,9 @@ void LogicUserDefStruct::set(const char *name, const DBLDataNode &val)
 		m_members.push_back(ParamNode(name, val)) ;
 	}
 }
-DBLDataNode LogicUserDefStruct::get(const char *name)
+DBLDataNode LogicUserDefStruct::get(const char *name)const
 {
-	DBLDataNode* pdata = fetch(name) ;
+	DBLDataNode* pdata = ((LogicUserDefStruct*)this)->fetch(name);
 	if (!pdata) {
 		return DBLDataNode() ;
 	}

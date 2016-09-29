@@ -95,6 +95,7 @@ public:
 
 	int Dump(void *pfile) ;
 	int LoadBinStream(void *pfile);
+
 protected:
 	int parseColType(const char *colText);
 	int parseTableTypeInfo(FILE *pf, int encodeType);
@@ -167,10 +168,13 @@ public:
 	int Dump(const char *file, const char *dbname, int orderType =1) ;//save 2 file 
 	int LoadBinStream(const char *file) ;			//load from bin file
 	
+
+	int Test(const char *outPath); //test database is ok 
 	int TestOutput(const char *path);
 	int GetEncodeType() {
 		return s_data_encodeType;
 	}
+	const char *getDatabaseName() { return m_dbName.c_str() ;}
 
 	typedef std::map<dbl_name, DBLTable*> table_vct_t;
 	table_vct_t m_tables ;
@@ -186,6 +190,7 @@ public:
 protected:
 	int _loadText(const char *datapath, const char *list_file, int encodeType);
 	bool m_bLoaded;
+	std::string m_dbName ;
 };
 
 DBLDataNode DBL_FindDataObject_ex(const char *table, const int RowID, const char *ColName, int inputEncodeType, int outputEncode);

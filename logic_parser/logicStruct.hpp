@@ -73,7 +73,7 @@ public:
 	
 	bool push_back(const char *name,const DBLDataNode &val) ; //add member ,if the name is exist return false
 	void set(const char *name, const DBLDataNode &val) ;// add member if name is exist replace it .
-	DBLDataNode get(const char *name) ;
+	DBLDataNode get(const char *name) const;
 	bool pop_back() { m_members.pop_back(); return true; }
 	
 	

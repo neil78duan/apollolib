@@ -174,6 +174,7 @@ int logicDataRead(DBLDataNode &data, NDIStreamMsg &inmsg)
 		break;
 	}
 	return ret;
+#undef  _READ_FROM_STREAM
 }
 
 //////////////////////////////////////////////////////////////////////////

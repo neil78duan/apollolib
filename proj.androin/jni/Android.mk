@@ -79,7 +79,9 @@ LOCAL_SRC_FILES := ../../../ndsdk/src/nd_common/src/bintree.c \
 ../../logic_parser/logicDataType.cpp	\
 ../../logic_parser/logic_compile.cpp	\
 ../../logic_parser/logicEngineRoot.cpp	\
-../../logic_parser/logic_editor_helper.cpp
+../../logic_parser/logic_editor_helper.cpp \
+../../attribute/attr_mgr.cpp \
+../../attribute/roleattr_help.cpp 
 
 LOCAL_CFLAGS := -D__ND_ADNROID__
 LOCAL_CPPFLAGS := -D__ND_ANDROID__

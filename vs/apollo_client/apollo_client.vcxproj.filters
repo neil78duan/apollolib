@@ -41,6 +41,9 @@
     <Filter Include="apollo\logicParser">
       <UniqueIdentifier>{9f49f218-d978-4bf2-88bd-6a135c265921}</UniqueIdentifier>
     </Filter>
+    <Filter Include="apollo\attribute">
+      <UniqueIdentifier>{4a919c48-b281-4868-9bad-ae9fd8463301}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -234,6 +237,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\ndsdk\include\nd_msg.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\attribute\attr_mgr.h">
+      <Filter>apollo\attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\attribute\roleattr_help.h">
+      <Filter>apollo\attribute</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -464,6 +473,12 @@
     </ClCompile>
     <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp">
       <Filter>apollo\login</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\attribute\attr_mgr.cpp">
+      <Filter>apollo\attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\attribute\roleattr_help.cpp">
+      <Filter>apollo\attribute</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

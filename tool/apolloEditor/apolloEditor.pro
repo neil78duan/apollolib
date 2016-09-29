@@ -9,6 +9,9 @@ game_dir = ../..
 
 macx:{
 message(BUILD MACOX)
+
+QMAKE_MAC_SDK = macosx10.12
+
 DEFINES += __ND_MAC__
 
 LIBS += -L$$ndsdk_dir/lib -lndclient_darwin_x86_64_d \

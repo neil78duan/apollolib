@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     //QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
     QString workDir, ioCfgFile , editorCfg;
-	if (!trytoGetSetting(workDir, ioCfgFile, editorCfg)) {
+    if (!trytoGetSetting(workDir, ioCfgFile, editorCfg)) {
         return 1 ;
     }
     startDialog dlg ;

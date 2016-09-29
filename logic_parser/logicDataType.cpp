@@ -590,6 +590,82 @@ void DBLDataNode::InitFromTxt(const char *valText)
 	m_data = &m_dataOwn;
 }
 
+
+bool DBLDataNode::GetVal(NDUINT64 &a) const
+{
+	a = this->GetInt64();
+	return true;
+}
+bool DBLDataNode::GetVal(NDUINT16 &a)const
+{
+	a = GetInt();
+	return true;
+}
+bool DBLDataNode::GetVal(NDUINT8 &a)const
+{
+	a = GetInt();
+	return true;
+}
+bool DBLDataNode::GetVal(time_t &a)const
+{
+	a = this->GetInt64();
+	return true;
+}
+bool DBLDataNode::GetVal(float &a)const
+{
+	a = this->GetFloat();
+	return true;
+}
+bool DBLDataNode::GetVal(int &a)const
+{
+	a = GetInt();
+	return true;
+}
+
+bool DBLDataNode::GetVal(bool &a)const
+{
+	a = GetBool();
+	return true;
+}
+bool DBLDataNode::GetVal(char *buf, size_t size)const
+{
+	const char *p = GetText();
+
+	if ( p && *p){
+		strncpy(buf, p, size);
+		return true;
+	}
+	return false;
+	
+}
+bool DBLDataNode::GetVal(int *arr, size_t &size)const
+{
+	if (OT_ARRAY == m_ele_type)	{
+		size_t len = NDMIN(this->GetArraySize(), size);
+		for (size_t i = 0; i < len; i++){
+			arr[i] = this->GetarrayInt(i);
+			++size;
+		}
+		return true;
+	}
+	return false;
+	
+}
+
+bool DBLDataNode::GetVal(float *arr, size_t &size)const
+{
+	if (OT_ARRAY == m_ele_type)	{
+		size_t len = NDMIN(this->GetArraySize(), size);
+		for (size_t i = 0; i < len; i++){
+			arr[i] = this->GetarrayFloat(i);
+			++size;
+		}
+		return true;
+	}
+	return false;
+
+}
+
 DBLDataNode DBLDataNode::getUserDefMember(const char *name)
 {
 	if (m_ele_type != OT_USER_DEFINED || !m_data->_data) {
@@ -1233,6 +1309,9 @@ DBLDataNode DBLDataNode::operator[](int n)
 int DBLDataNode::GetArraySize() const
 {
 	if (!m_data || !m_data->_data){
+		return 0;
+	}
+	if (m_ele_type != OT_ARRAY) {
 		return 0;
 	}
 	return (int)m_data->_i_arr->number;

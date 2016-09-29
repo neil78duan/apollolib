@@ -65,11 +65,11 @@ enum eParserOperator{
 	E_OP_CLEAR,			//   eOperatorDest + DBLDataNode:index
 	E_OP_MAKE_VAR ,		//  make local variant	 name + DBLDataNode-stream
 	E_OP_READ_TABLE, 	//	read game-static-data  string(tablename)  + col-name + id
-	E_OP_COMP,	 		//	 eParserCompare  + DBLDataNode-stream
+	E_OP_COMP,	 		//	 eParserCompare  + DBLDataNode-stream1 + DBLDataNode-stream1
 	E_OP_CALC,	 		//	NDUINT32 + string
 	E_OP_WAIT_EVENT,	//  eParserEventId + int(argc) + operator_value_t[...]
 	E_OP_GET_OTHER_OBJECT, 	//    DBLDataNode-stream
-	E_OP_EXIT_ON_ERROR,	//   NDUINT32(0 NOT EXIT, 1 exit)
+	E_OP_ON_ERROR_CONTINUE,	//set flag continue next instruct when error 
 	E_OP_CALL_FUNC,		//  	int(argc) + string(function_name \0)  + string1\0 + string2\0
 	E_OP_SHORT_JUMP, 	//  NDUINT32( offset )
 	E_OP_LONG_JUMP,		//  jump abs addr
@@ -104,6 +104,12 @@ enum eParserOperator{
 	E_OP_CHANGE_DIR, //change current working direct  format: string:new_direct
 	E_OP_REMOVE_FILE, //remove file or direct format :string:path_name
 	E_OP_MAKE_DIR ,		//create direct : foramt : string 
+	E_OP_TEST,			//like op_read /write
+	E_OP_SKIP_ERROR,	//Skip some error
+	E_OP_GET_ARRAY_SIZE,	//get array size 
+	E_OP_SET_LOOP_INDEX, // set loop index, used in list_for_each
+	
+
 };
 
 //compare operate
@@ -130,22 +136,41 @@ enum eMathOperate
 
 enum eLogicSystemError
 {
-	LOGIC_ERR_SUCCESS,
-	LOGIC_ERR_INPUT_INSTRUCT , //input instruction 
-	LOGIC_ERR_AIM_OBJECT_NOT_FOUND,
-	LOGIC_ERR_EVENT_ERROR,
-	LOGIC_ERR_VARIANT_NOT_EXIST, 
-	LOGIC_ERR_PARSE_STRING ,
-	LOGIC_ERR_READ_STREAM,
-	LOGIC_ERR_PARAM_NOT_EXIST,
-	LOGIC_ERR_PARAM_NUMBER_ZERO,
-	LOGIC_ERR_FUNCTION_NAME,
-	LOGIC_ERR_FUNCTION_NOT_FOUND,
-	LOGIC_ERR_WOULD_BLOCK,		//WAIT EVENT 
-	LOGCI_ERR_FILE_NOT_EXIST,
+	LOGIC_ERR_SUCCESS = 0,
+	LOGIC_ERR_INPUT_INSTRUCT = NDERR_SCRIPT_INSTRUCT, //instruction error
+	LOGIC_ERR_AIM_OBJECT_NOT_FOUND = NDERR_PROGRAM_OBJ_NOT_FOUND,	// game object not found
+	LOGIC_ERR_EVENT_ERROR = NDERR_EVENT_ERROR,			//evnet error
+	LOGIC_ERR_VARIANT_NOT_EXIST = NDERR_VARIANT_NOT_EXIST,	//variant not found 
+	LOGIC_ERR_PARSE_STRING = NDERR_PARSE_STRING,		// parse input string error
+	LOGIC_ERR_READ_STREAM = NDERR_READ_STREAM,			//read stream error 
+	LOGIC_ERR_PARAM_NOT_EXIST = NDERR_PARAM_NOT_EXIST,		//param not found
+	LOGIC_ERR_PARAM_NUMBER_ZERO = NDERR_PARAM_NUMBER_ZERO,
+	LOGIC_ERR_FUNCTION_NAME = NDERR_FUNCTION_NAME,
+	LOGIC_ERR_FUNCTION_NOT_FOUND = NDERR_FUNCTION_NOT_FOUND,
+	LOGIC_ERR_WOULD_BLOCK = NDERR_WOULD_BLOCK,		//WAIT EVENT 
+	LOGIC_ERR_FILE_NOT_EXIST = NDERR_FILE_NOT_EXIST,
+	LOGIC_ERR_NOT_INIT = NDERR_NOT_INIT,
 
-	LOGIC_ERR_UNKNOW ,
-	LOGIC_ERR_USER_DEFINE_ERROR,
+	LOGIC_ERR_UNKNOWN = NDERR_UNKNOWN,
+	LOGIC_ERR_USER_DEFINE_ERROR = NDERR_USER_DEFINE_ERROR,
+
+	LOGIC_ERR_NUMBER = 20
+
+// 	LOGIC_ERR_INPUT_INSTRUCT , //instruction error
+// 	LOGIC_ERR_AIM_OBJECT_NOT_FOUND,	// game object not found
+// 	LOGIC_ERR_EVENT_ERROR,			//evnet error
+// 	LOGIC_ERR_VARIANT_NOT_EXIST,	//variant not found 
+// 	LOGIC_ERR_PARSE_STRING ,		// parse input string error
+// 	LOGIC_ERR_READ_STREAM,			//read stream error 
+// 	LOGIC_ERR_PARAM_NOT_EXIST,		//param not found
+// 	LOGIC_ERR_PARAM_NUMBER_ZERO,
+// 	LOGIC_ERR_FUNCTION_NAME,
+// 	LOGIC_ERR_FUNCTION_NOT_FOUND,
+// 	LOGIC_ERR_WOULD_BLOCK,		//WAIT EVENT 
+// 	LOGCI_ERR_FILE_NOT_EXIST,
+// 
+// 	LOGIC_ERR_UNKNOW ,
+// 	LOGIC_ERR_USER_DEFINE_ERROR,
 };
 
 
@@ -187,8 +212,17 @@ struct runningStack
 	{
 		dbg_node[0] = 0;
 		affairHelper = 0;
+		for (int i = 0; i < LOGIC_ERR_NUMBER; i++)	{
+			skipErrors[i] = 0;
+		}
+		skipErrors[0] = LOGIC_ERR_AIM_OBJECT_NOT_FOUND;
+		skipErrors[1] = LOGIC_ERR_FUNCTION_NOT_FOUND;
+		//skipErrors[2] = LOGIC_ERR_VARIANT_NOT_EXIST;
+		//skipErrors[3] = LOGIC_ERR_VARIANT_NOT_EXIST;
+		loopIndex = 0;
+		error_continue = false;
 	}
-	
+	bool error_continue;
 	const scriptCmdBuf *cmd ;
 	const char *cur_point ;
 	const char *exception_addr;
@@ -201,6 +235,9 @@ struct runningStack
 	
 	std::string curModuleName ;		//current script file name
 	std::string workingPath;		//the host work direct
+
+	int loopIndex;
+	int skipErrors[LOGIC_ERR_NUMBER];
 };
 
 //script wait event and continue run
@@ -277,7 +314,8 @@ public:
 	void Reset() ;
 	void setErrno(int errcode);
 	int getErrno() { return m_sys_errno; }
-	void setSimulate(bool flag = false);
+	void setSimulate(bool flag = false, LogicObjectBase *owner=NULL);
+	bool checkSimulate() { return m_simulate; }
 	DBLDataNode &getValue() { return m_registerVal; }
 	LogicObjectBase *getOwner() { return m_owner; }
 	void setOwner(LogicObjectBase *owner) { m_owner = owner; }
@@ -335,7 +373,7 @@ protected:
 	// call external function in running script
 	bool _call( parse_arg_list_t &args, DBLDataNode &result);
 	
-	bool _opCmp(DBLDataNode& cmpval, eParserCompare op);
+	bool _opCmp(DBLDataNode& compVal, DBLDataNode& inval, eParserCompare op);
 	
 	void ResetStep() ;
 	bool checkEventOk(int event, parse_arg_list_t &params, int waited_id, parse_arg_list_t &waited_params);
@@ -346,8 +384,13 @@ protected:
 	bool _beginHelper();
 	void _commitAffair();
 	void _rollbacAffair();
+
+	void _pushSKipError(int err);
+	bool _checkIsSkip(int err);
+	bool _checkIsSystemError(int err) { return ( err < NDERR_USERDEFINE && err > 0); }
 	
-	bool m_registorFlag;				// result of step or function return value
+	bool m_ownerIsNew;
+	bool m_registorFlag;				// result of step or function return value,false exit
 	bool m_registorCtrl;				// compare and jump registor
 	bool m_OnErrorExit;
 	bool m_simulate;					//run simulate or test
@@ -374,6 +417,8 @@ protected:
 	LogicObjectBase *m_owner;
 	vm_cpu	m_vmFormula;
 
+
+	int m_skipErrors[LOGIC_ERR_NUMBER];
 };
 
 int logic_rand(NDUINT32 val1, NDUINT32 val2);

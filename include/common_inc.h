@@ -12,7 +12,7 @@
 #include "ndapplib/applib.h"
 #include "apollo_data.h"
 #include "nd_msg.h"
-#include "srv_define.h"
+//#include "srv_define.h"
 #include "msg_def.h"
 #include "apollo_errors.h"
 

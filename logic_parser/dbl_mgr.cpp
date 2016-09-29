@@ -661,6 +661,7 @@ int DBLTable::loadFromText(const char *tablename, int codeType)
 						delete pRecord;
 						
 						nd_logerror("create cell (%d,%d) error in %s  \n", rowIndex,i, tablename);
+						fclose(pf);
 						return -1;
 					}
 					pbase->isInit = true;
@@ -672,12 +673,13 @@ int DBLTable::loadFromText(const char *tablename, int codeType)
 				pRecord->Destroy();
 				delete pRecord;
 				nd_logerror("read table %s error on %d line : maybe the table index is dup id=%d\n", tablename, rowIndex, uid);
-
+				fclose(pf);
 				return -1;
 			}
 		}
 	}
 
+	fclose(pf);
 	return 0;
 }
 
@@ -1066,11 +1068,13 @@ int DBLDatabase::_loadText(const char *datapath, const char *list_file, int enco
 
 			DBLTable *ptable = new DBLTable(DBLDatabase::m_pool, tmpf);
 			if (!ptable) {
+				fclose(pf) ;
 				return -1;
 			}
 			if (-1 == ptable->loadFromText(filepath,encodeType)){
 				ptable->Destroy();
 				delete ptable;
+				fclose(pf) ;
 				return -1;
 			}
 
@@ -1087,7 +1091,8 @@ int DBLDatabase::_loadText(const char *datapath, const char *list_file, int enco
 	}
 	NDTRAC("!!!!!!!!!!!!LOAD database complete!\n");
 	m_bLoaded = true;
-
+	
+	fclose(pf) ;
 	return 0;
 }
 
@@ -1243,6 +1248,10 @@ int DBLDatabase::LoadBinStream(const char *file)
 		nd_assert(ret) ;
 
 		dbname[size]= 0 ;
+		m_dbName = dbname ;
+	}
+	else {
+		m_dbName = "unknow-db" ;
 	}
 
 
@@ -1376,13 +1385,54 @@ DBLTable * DBL_FindTable(const char *table)
 	return pdbl->FindTable(table) ;
 }
 
+
+int DBLDatabase::Test(const char *outPath)
+{
+
+	std::string outPathText = outPath;
+	outPathText += "/_testdb_tmp1.dat";
+	
+	if (0!= this->Dump(outPathText.c_str(), this->getDatabaseName())) {
+		nd_logerror("export database  error : %s\n", outPathText.c_str());
+		return -1;
+	}
+	
+	
+	//load from text 
+	int type = DBLDatabase::GetEncodeType();
+	const char *encode = nd_get_encode_name(type);
+
+	DBLDatabase dbtmp;
+	
+	if (-1== dbtmp.LoadBinStream(outPathText.c_str())) {
+		nd_logerror("load from data stream error\n");
+		return -1;
+	}
+	
+	if (!(*this == dbtmp)){
+		nd_logerror("comp data error \n");
+		return -1;
+	}
+
+	dbtmp.Destroy();
+	return 0;
+
+
+}
 int DBLDatabase::TestOutput(const char *path)
 {
 	char filename[1024];
+	std::string listFile = path;
+	listFile += "/_listfile.txt";
+	FILE *plistFile = fopen(listFile.c_str(), "w");
+	if (!plistFile) {
+		return -1;
+	}
 	for (table_vct_t::iterator it = m_tables.begin(); it != m_tables.end(); it++) {
 		snprintf(filename, sizeof(filename), "%s/%s.txt", path, it->first.c_str());
 		FILE *pf = fopen(filename, "w");
 		if (!pf)	{
+			fclose(plistFile);
 			return -1;
 		}
 
@@ -1402,7 +1452,11 @@ int DBLDatabase::TestOutput(const char *path)
 		}
 		cursor.Close();
 		fclose(pf);
+
+		fprintf(plistFile, "%s\n", it->first.c_str());
 	}
+
+	fclose(plistFile);
 	return 0;
 }
 

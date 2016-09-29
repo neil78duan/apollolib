@@ -177,6 +177,12 @@
     <ClInclude Include="..\..\..\logic_parser\logicEndian.h">
       <Filter>logicParser</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\logic_parser\_event_def.h">
+      <Filter>logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\logic_parser\script_event_id.h">
+      <Filter>logicParser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="apolloParseEditor.cpp">

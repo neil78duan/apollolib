@@ -23,31 +23,37 @@ void LogicObjectBase::Destroy()
 }
 bool LogicObjectBase::opRead(const DBLDataNode& id, DBLDataNode &val)
 {
+	m_error = NDERR_NOT_SURPORT;
 	return false;
 }
 
 bool LogicObjectBase::opWrite(const DBLDataNode& id, const  DBLDataNode &val)
 {
+	m_error = NDERR_NOT_SURPORT;
 	return false;
 }
 
 bool LogicObjectBase::opAdd(const DBLDataNode& id, const DBLDataNode &val)
 {
+	m_error = NDERR_NOT_SURPORT;
 	return false;
 }
 
 bool LogicObjectBase::opSub(const DBLDataNode& id, const DBLDataNode &val)
 {
+	m_error = NDERR_NOT_SURPORT;
 	return false;
 }
 
-bool LogicObjectBase::opClear(const DBLDataNode& id)
+bool LogicObjectBase::opClear(const DBLDataNode& id, const DBLDataNode &val)
 {
+	m_error = NDERR_NOT_SURPORT;
 	return false;
 }
 
 bool LogicObjectBase::opCheck(const DBLDataNode& id, const  DBLDataNode &val)
 {
+	m_error = NDERR_NOT_SURPORT;
 	return false;
 }
 
@@ -58,11 +64,13 @@ bool LogicObjectBase::opCheck(const DBLDataNode& id, const  DBLDataNode &val)
 
 bool LogicObjectBase::getOtherObject(const char*objName, DBLDataNode &val)
 {
+	m_error = NDERR_NOT_SURPORT;
 	return false ;
 }
 
 LogicObjectBase *LogicObjectBase::getObjectMgr(const char* destName)
 {
+	m_error = NDERR_NOT_SURPORT;
 	return NULL;
 }
 int LogicObjectBase::Print(logic_print f, void *pf)
@@ -96,6 +104,14 @@ NDUINT32 LogicObjectBase::getErrParam()
 	m_errParam = 0 ;
 	return  ret ;
 	
+}
+
+int LogicObjectBase::getError()
+{
+	NDUINT32 ret = m_error;
+	m_error = 0;
+	return  ret;
+
 }
 
 // 
@@ -148,19 +164,31 @@ bool TestLogicObject::opSub(const DBLDataNode& id, const  DBLDataNode &val)
 	return true;
 }
 
-bool TestLogicObject::opClear(const DBLDataNode& id)
+bool TestLogicObject::opClear(const DBLDataNode& id, const  DBLDataNode &val)
 {
 	PARSE_TRACE("logic_engine_test: opClear(%d) \n", id.GetInt());
 	return true;
 }
 
-// 
-// bool TestLogicObject::getObject(eOperatorObjType type, const DBLDataNode& id, DBLDataNode &val)
-// {
-// 	//PARSE_TRACE("logic_engine_test: getObject(%d, %d) \n",type);
-// 	_setval(val);
-// 	return true;
-// }
+
+bool TestLogicObject::opCheck(const DBLDataNode& id, const  DBLDataNode &val)
+{
+	if (val.GetDataType()==OT_STRING){
+		const char *pText = val.GetText();
+		if (pText && *pText){
+			if (0==ndstricmp(pText,"test-error"))	{
+				m_error = NDERR_SUCCESS;
+				return false;
+			}
+// 			else if (0 == ndstricmp(pText, "test-success"))	{
+// 				m_error = NDERR_SUCCESS;
+// 				return true;
+// 			}
+		}
+	}
+	//m_error = NDERR_NOT_SURPORT;
+	return true;
+}
 
 
 bool TestLogicObject::getOtherObject(const char*objName, DBLDataNode &val)

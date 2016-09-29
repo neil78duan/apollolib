@@ -191,10 +191,20 @@ public:
 	void InitSet(time_t t);
 	void InitSet(const LogicUserDefStruct &u);
 	bool InitReservedArray(size_t size, int attay_type = OT_INT);
-	bool SetArray(const DBLDataNode &data, int index);
-	
+	bool SetArray(const DBLDataNode &data, int index);	
 	void InitFromTxt(const char *valText);
 	
+
+	bool GetVal(NDUINT64 &a) const ;
+	bool GetVal(NDUINT16 &a)const;
+	bool GetVal(NDUINT8 &a)const;
+	bool GetVal(time_t &t)const;
+	bool GetVal(float &a)const;
+	bool GetVal(int &a)const;
+	bool GetVal(bool &a)const;
+	bool GetVal(char *buf, size_t size)const;
+	bool GetVal(int *arr, size_t &size)const;
+	bool GetVal(float *arr, size_t &size)const;
 
 	int ReadStream(const char *streamBuf, size_t data_len, int streamByteOrder);
 	int WriteStream(char *streamBuf, size_t buf_size, int streamByteOrder )const;

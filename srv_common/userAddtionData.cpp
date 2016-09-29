@@ -206,7 +206,7 @@ bool UserAdditionData::opSub(const DBLDataNode& id, const DBLDataNode &val)
 	}
 	return removeData(name);
 }
-bool UserAdditionData::opClear(const DBLDataNode& id)
+bool UserAdditionData::opClear(const DBLDataNode& id, const DBLDataNode &val)
 {
 	const char *name = id.GetText();
 	if (!name || !*name) {

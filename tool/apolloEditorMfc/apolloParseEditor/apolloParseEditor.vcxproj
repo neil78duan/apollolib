@@ -133,6 +133,8 @@
     <ClInclude Include="..\..\..\logic_parser\logic_editor_helper.h" />
     <ClInclude Include="..\..\..\logic_parser\logic_function.h" />
     <ClInclude Include="..\..\..\logic_parser\objectBaseMgr.h" />
+    <ClInclude Include="..\..\..\logic_parser\script_event_id.h" />
+    <ClInclude Include="..\..\..\logic_parser\_event_def.h" />
     <ClInclude Include="apolloParseEditor.h" />
     <ClInclude Include="apolloParseEditorDlg.h" />
     <ClInclude Include="ctrls\DlgAccel.h" />

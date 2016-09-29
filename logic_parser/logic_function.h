@@ -19,6 +19,8 @@ int init_sys_functions(LogicEngineRoot *root);
 
 int common_export_c_api_descript(const char *outfile);
 
+int common_export_event_id_descript(const char *outfile);
+
 bool apollo_printf(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 bool apollo_log(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 bool apollo_time_func(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);

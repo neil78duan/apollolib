@@ -487,10 +487,6 @@ int LogicCompiler::subLoop2Stream(compile_setting *setting, ndxml *loopSteps, ch
 	char *p = buf;
 	int len = (int)bufsize;
 
-	//compile loop count
-	compile_setting loop_setting;
-	loop_setting.ins_id = E_OP_SET_COUNT_REG;
-	loop_setting.ins_type = E_INSTRUCT_TYPE_CMD;
 
 	const char *pCompCondName = ndxml_getattr_val(loopSteps, "comp_cond");
 	if (!pCompCondName)	{
@@ -503,7 +499,18 @@ int LogicCompiler::subLoop2Stream(compile_setting *setting, ndxml *loopSteps, ch
 		nd_logerror("loop need loop times xmlnode short\n");
 		return -1;
 	}
+	//write index count
+	p = lp_write_stream(p, (NDUINT32)E_OP_SET_LOOP_INDEX, m_aimByteOrder);
+	len -= sizeof(NDUINT32);
+	p = lp_write_stream(p, (NDUINT32)0, m_aimByteOrder);
+	len -= sizeof(NDUINT32);
 
+	////
+
+	//compile loop count
+	compile_setting loop_setting;
+	loop_setting.ins_id = E_OP_SET_COUNT_REG;
+	loop_setting.ins_type = E_INSTRUCT_TYPE_CMD;
 	ret = step2Strem(&loop_setting, cmpNode, p, len);
 	if (ret == -1) 	{
 		nd_logerror(" compile loop times xmlnode error\n");

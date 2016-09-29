@@ -40,6 +40,9 @@
 		0764F69F1D631C7F00E91673 /* nd_formula.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6951D631C1600E91673 /* nd_formula.c */; };
 		0764F6A01D631C7F00E91673 /* nd_vm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6961D631C1600E91673 /* nd_vm.c */; };
 		0764F6A11D631C7F00E91673 /* nd_vmdbg.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6971D631C1600E91673 /* nd_vmdbg.c */; };
+		0774B91A1D991E1F00C6401F /* attr_mgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0774B90D1D991E1F00C6401F /* attr_mgr.cpp */; };
+		0774B91B1D991E1F00C6401F /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 0774B90F1D991E1F00C6401F /* Makefile */; };
+		0774B91C1D991E1F00C6401F /* roleattr_help.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0774B9101D991E1F00C6401F /* roleattr_help.cpp */; };
 		07EC85F01D54400400C32925 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07EC851E1D54400300C32925 /* Makefile */; };
 		07EC85F11D54400400C32925 /* bintree.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85201D54400300C32925 /* bintree.c */; };
 		07EC85F21D54400400C32925 /* callstack.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85211D54400300C32925 /* callstack.c */; };
@@ -207,6 +210,11 @@
 		0764F6951D631C1600E91673 /* nd_formula.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_formula.c; path = nd_vm/src/nd_formula.c; sourceTree = "<group>"; };
 		0764F6961D631C1600E91673 /* nd_vm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_vm.c; path = nd_vm/src/nd_vm.c; sourceTree = "<group>"; };
 		0764F6971D631C1600E91673 /* nd_vmdbg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_vmdbg.c; path = nd_vm/src/nd_vmdbg.c; sourceTree = "<group>"; };
+		0774B90D1D991E1F00C6401F /* attr_mgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = attr_mgr.cpp; sourceTree = "<group>"; };
+		0774B90E1D991E1F00C6401F /* attr_mgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = attr_mgr.h; sourceTree = "<group>"; };
+		0774B90F1D991E1F00C6401F /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		0774B9101D991E1F00C6401F /* roleattr_help.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = roleattr_help.cpp; sourceTree = "<group>"; };
+		0774B9111D991E1F00C6401F /* roleattr_help.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = roleattr_help.h; sourceTree = "<group>"; };
 		07EC848A1D543B8400C32925 /* libapollo_client_ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libapollo_client_ios.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		07EC84A81D543E6200C32925 /* libapollo_client_mac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libapollo_client_mac.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		07EC84AF1D54400300C32925 /* _nderr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _nderr.h; sourceTree = "<group>"; };
@@ -425,6 +433,19 @@
 			name = vm;
 			sourceTree = "<group>";
 		};
+		0774B9071D991E1F00C6401F /* attribute */ = {
+			isa = PBXGroup;
+			children = (
+				0774B90D1D991E1F00C6401F /* attr_mgr.cpp */,
+				0774B90E1D991E1F00C6401F /* attr_mgr.h */,
+				0774B90F1D991E1F00C6401F /* Makefile */,
+				0774B9101D991E1F00C6401F /* roleattr_help.cpp */,
+				0774B9111D991E1F00C6401F /* roleattr_help.h */,
+			);
+			name = attribute;
+			path = ../../../attribute;
+			sourceTree = "<group>";
+		};
 		07EC84811D543B8400C32925 = {
 			isa = PBXGroup;
 			children = (
@@ -446,6 +467,7 @@
 		07EC848C1D543B8400C32925 /* apollo_client */ = {
 			isa = PBXGroup;
 			children = (
+				0774B9071D991E1F00C6401F /* attribute */,
 				074C8F721D66A88500590A34 /* logic_parser */,
 				074C8F711D66A85000590A34 /* login */,
 			);
@@ -835,9 +857,11 @@
 			files = (
 				07533A2C1D6EF0B9004DD290 /* dftCliMsgHandler.cpp in Sources */,
 				07EC86181D54400400C32925 /* ipraw.c in Sources */,
+				0774B91A1D991E1F00C6401F /* attr_mgr.cpp in Sources */,
 				07EC861F1D54400400C32925 /* nd_udp.c in Sources */,
 				074C8FA81D66A88500590A34 /* objectBaseMgr.cpp in Sources */,
 				07EC86041D54400400C32925 /* Makefile in Sources */,
+				0774B91B1D991E1F00C6401F /* Makefile in Sources */,
 				07EC865D1D54411E00C32925 /* netui_atl.cpp in Sources */,
 				07EC85F31D54400400C32925 /* common.c in Sources */,
 				07EC86061D54400400C32925 /* digit.c in Sources */,
@@ -880,6 +904,7 @@
 				07EC86141D54400400C32925 /* ndcrypt.c in Sources */,
 				07EC85F41D54400400C32925 /* nd_cmdline.c in Sources */,
 				07EC85FC1D54400400C32925 /* nd_trace.c in Sources */,
+				0774B91C1D991E1F00C6401F /* roleattr_help.cpp in Sources */,
 				07EC85F21D54400400C32925 /* callstack.c in Sources */,
 				07EC86201D54400400C32925 /* net_srv.c in Sources */,
 				07EC86571D5440A100C32925 /* nd_msgpack.cpp in Sources */,

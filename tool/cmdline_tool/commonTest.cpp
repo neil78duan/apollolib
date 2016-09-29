@@ -13,7 +13,7 @@
 
 #include "nd_msg.h"
 #include "msg_def.h"
-#include "srv_define.h"
+//#include "apollo_data.h"
 #include "login_apollo.h"
 
 #include "dftCliMsgHandler.h"

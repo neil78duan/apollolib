@@ -15,7 +15,7 @@
 #endif 
 #define _APOLLO_DEFINE_EVENT(_id, _comment) _id,
 enum eApolloEventID{
-	#include "srv_common/_event_def.h"
+	#include "logic_parser/_event_def.h"
 	APOLLO_EVENT_NUMBER
 } ;
 

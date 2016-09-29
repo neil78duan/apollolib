@@ -20,6 +20,7 @@
 
 #include "apollo_errors.h"
 //#include "netMessage/message_inc.h"
+#include "logic_parser/script_event_id.h"
 
 #include <string>
 
@@ -309,10 +310,21 @@ void ConnectDialog::on_loginButton_clicked()
 
         //get and init role data
 
-        NDOStreamMsg omsg(ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
-        m_pConn->SendMsg(omsg);
+        //NDOStreamMsg omsg(ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
+        //m_pConn->SendMsg(omsg);
 
-        getRoleData();
+        //omsg.Init(ND_MAIN_ID_SYS,ND_MSG_SYS_GET_MESSAGE_FORMAT_LIST);
+        //m_pConn->SendMsg(omsg);
+
+        __myScriptOwner.LoadMsgDataTypeFromServer();
+		LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
+		if (scriptRoot) {
+			parse_arg_list_t arg;
+			arg.push_back(DBLDataNode(m_pConn, OT_OBJ_NDOBJECT));
+			scriptRoot->getGlobalParser().eventNtf(APOLLO_EVENT_LOGIN, arg);
+		}
+
+        //getRoleData();
 
         ui->loginButton->setText(tr("Logout"));
         ui->gmMsgButton->setEnabled(true);
@@ -478,8 +490,7 @@ int ConnectDialog::SelOrCreateRole(const char *accountName)
 
 
     int selected = 0;
-    do //show server list
-    {
+    if(num > 1){
         //dialogCloseHelper _helperClose(this) ;
         ListDialog dlg(this);
         for (int i = 0; i < num; i++)	{
@@ -496,7 +507,7 @@ int ConnectDialog::SelOrCreateRole(const char *accountName)
         }
         selected = dlg.GetSelect();
         nd_assert(selected < num);
-    } while (0);
+    }
 
 
     int ret = m_login->EnterServer(bufs[selected].ip_addr, bufs[selected].host.port);
@@ -510,11 +521,11 @@ int ConnectDialog::SelOrCreateRole(const char *accountName)
     }
 
     //get role list
-    NDOStreamMsg omsg(NETMSG_MAX_ROLE, ROLE_MSG_GET_ROLE_LIST_REQ);
+    NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ);
     nd_handle h = m_pConn->GetHandle();
     nd_usermsgbuf_t recv_msg;
 
-    _SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_ROLE, ROLE_MSG_GET_ROLE_LIST_ACK, 0)
+    _SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0)
     else {
         NDUINT32 roleid = 0;
         NDUINT32 error_code = 0;
@@ -557,7 +568,7 @@ int ConnectDialog::SelOrCreateRole(const char *accountName)
 
 int ConnectDialog::createRole(const char *roleName)
 {
-    NDOStreamMsg omsg(NETMSG_MAX_ROLE, ROLE_MSG_CREATE_ROLE_REQ);
+    NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_REQ);
     omsg.Write((NDUINT8*)roleName);
 
     omsg.Write((NDUINT16)1);
@@ -566,7 +577,7 @@ int ConnectDialog::createRole(const char *roleName)
 
     nd_handle h = m_pConn->GetHandle();
     nd_usermsgbuf_t recv_msg;
-    _SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_ROLE, ROLE_MSG_CREATE_ROLE_ACK, 0)
+    _SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_ACK, 0)
     else {
         NDUINT32 roleid = 0;
         NDUINT32 error_code = 0;
@@ -588,7 +599,7 @@ int ConnectDialog::createRole(const char *roleName)
             char roleName[128];
             nd_utf8_to_gbk((const char*)name, roleName, sizeof(roleName));
 
-            nd_logerror("create role %s success \n", roleName);
+            nd_logmsg("create role %s success \n", roleName);
             //read attribute
             NDUINT16 num = 0;
             if (0 == inmsg.Read(num)) {

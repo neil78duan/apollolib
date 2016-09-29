@@ -6,13 +6,14 @@
 	<var>初始值</var>
 	<type>类型</type>
 	<num>数量</num>
+	<comp_type>比较类型</comp_type>
 	<func_name>函数名</func_name>
 	<event_id>事件名</event_id>
 	<comment>注释说明</comment>
 </alias>
 	
 <data_type_define kinds="hide" desc="define enum data type">
-	<type_operate_dest kinds="enum" enum_value="无,角色属性,背包,技能管理器,龙背包,武器,任务,附加属性" enum_type="text" enum_text="none,attr,package,skill,dragon,weapon,task,addition"/>
+	<type_operate_dest kinds="enum" enum_value="无,角色属性,背包,任务,基地,附加属性" enum_type="text" enum_text="none,attr,package,task,home,addition"/>
 	<type_compare_sub_entry kinds="enum" enum_value="其他,等于,小于,大于,小于等于,大于等于"/>
 	<type_data_type kinds="enum" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,time,变量,参数,上一步结果,user_define,compile_time,function_name, module_name,binary_data"/>	
 	<type_netmsg_privilege kinds="enum" enum_value="不限制,连接,登录,进入游戏,GM"/>
@@ -35,7 +36,7 @@
 	<list instruction="1" ins_id="9" size="0" >op_calc</list>
 	<list instruction="1" ins_id="10" size="0" record_param_num="1">op_waitevent</list>
 	<list instruction="1" ins_id="11" size="0" >op_getobj</list>
-	<list instruction="1" ins_id="12" size="8" >op_setflag</list>
+	<list instruction="1" ins_id="12" size="8" >op_set_error_continue</list>
 	<list instruction="1" ins_id="13" size="0" record_param_num="1">op_call_func</list>	
 	<list instruction="1" ins_id="19" size="0" >op_save_register</list>	
 	<list instruction="1" ins_id="18" size="0" >op_set_result</list>
@@ -61,6 +62,10 @@
 	<list instruction="1" ins_id="44" size="0"  >op_chdir</list>
 	<list instruction="1" ins_id="45" size="0"  >op_rmfile</list>
 	<list instruction="1" ins_id="46" size="0"  >op_mkdir</list>
+	<list instruction="1" ins_id="47" size="0" >op_test</list>
+	<list instruction="1" ins_id="48" size="8" >op_skip_error</list>
+	<list instruction="1" ins_id="49" size="0" >op_get_arrsize</list>
+	<list instruction="1" ins_id="50" size="8" >op_set_loop_index</list>
 	
 	
 	<!-- list instruction="1" ins_id="24" size="0" >op_set_loops</list>	
@@ -191,6 +196,30 @@
 	</create_step_exit>
 	
 	
+	<create_set_loop_index name="设置循环索引" create_type="1" expand="yes" >
+		<op_set_loop_index name="节点_设置循环索引" expand="yes">			
+			<comment name="功能说明" rw_stat="read">set-count-index</comment>
+			<num name="设置循环索引" kinds="numeral" delete="no">0</num>
+		</op_set_loop_index>
+	</create_set_loop_index>
+	
+	<create_error_continue name="出错继续执行" create_type="1" expand="yes" >
+		<op_set_error_continue name="节点_出错继续" expand="yes">			
+			<comment name="功能说明" rw_stat="read">on_error_continue</comment>
+			<index name="设置出错后继续执行" kinds="enum" enum_value="false,true" delete="no">0</index>
+		</op_set_error_continue>
+	</create_error_continue>
+	
+	
+	
+	<create_skip_error name="节点忽略错误" create_type="1" expand="yes" >
+		<op_skip_error name="节点_忽略错误" expand="yes">			
+			<comment name="功能说明" rw_stat="read">op_exit(value)</comment>
+			<num name="错误类型" kinds="numeral"  delete="no">0</num>
+		</op_skip_error>
+	</create_skip_error>
+	
+	
 	<create_step_throw name="抛出异常" create_type="1" expand="yes" >
 		<op_throw name="节点_抛出异常" expand="yes">			
 			<comment name="功能说明" rw_stat="read">op_throw(value)</comment>
@@ -267,7 +296,7 @@
 		</op_rand>
 	</create_step_rand>
 	
-	<create_step_read name="读取节点" create_type="1" expand="yes" >
+	<create_step_read name="对象读取节点" create_type="1" expand="yes" >
 		<op_read name="节点_读取" expand="yes">
 			<comment name="功能说明" rw_stat="read">op_read(aim,index_name)</comment>
 			<aim kinds="reference" reference_type="type_operate_dest">0</aim>
@@ -278,7 +307,7 @@
 			
 		</op_read>
 	</create_step_read>
-	<create_step_write name="写入节点" create_type="1" desc="创建写入节点">
+	<create_step_write name="对象写入节点" create_type="1" desc="创建写入节点">
 		<op_write name="节点_写入" expand="yes">
 			<comment name="功能说明" rw_stat="read">op_write(aim,index_name,value)</comment>
 			<aim kinds="reference" reference_type="type_operate_dest">0</aim>			
@@ -290,7 +319,7 @@
 			<var name="结果" kinds="string" delete="no" restrict="type">none</var>
 		</op_write>
 	</create_step_write>
-	<create_step_add name="增加节点" create_type="1" >
+	<create_step_add name="对象增加节点" create_type="1" >
 		<op_add name="节点_增加" expand="yes">
 			<comment name="功能说明" rw_stat="read">op_add(aim,index_name,value)</comment>
 			<aim kinds="reference" reference_type="type_operate_dest">0</aim>	
@@ -303,7 +332,7 @@
 		</op_add>
 	</create_step_add>
 			
-	<create_step_sub name="减少节点" create_type="1" >
+	<create_step_sub name="对象减少节点" create_type="1" >
 		<op_sub name="节点_减少" expand="yes">
 			<comment name="功能说明" rw_stat="read">op_sub(aim,index_name,value)</comment>
 			<aim kinds="reference" reference_type="type_operate_dest">0</aim>	
@@ -315,7 +344,7 @@
 			<var name="结果" kinds="string" delete="no" restrict="type">none</var>
 		</op_sub>
 	</create_step_sub>
-	<create_step_clear name="清除节点" create_type="1" >
+	<create_step_clear name="对象清除节点" create_type="1" >
 		<op_clear name="节点_清除" expand="yes">
 			<comment name="功能说明" rw_stat="read">op_clear(aim,index_name)</comment>
 			<aim kinds="reference" reference_type="type_operate_dest">0</aim>	
@@ -323,8 +352,24 @@
 				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
 			</param_collect>
+			<type name="青春类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var name="结果" kinds="string" delete="no" restrict="type">none</var>
 		</op_clear>
 	</create_step_clear>
+	
+	<create_step_test name="对象检测节点" create_type="1" >
+		<op_test name="节点_检测" expand="yes">
+			<comment name="功能说明" rw_stat="read">op_test(aim,index_name,value)</comment>
+			<aim kinds="reference" reference_type="type_operate_dest">0</aim>	
+			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
+				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>			
+			<type name="结果类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var name="结果" kinds="string" delete="no" restrict="type">none</var>
+		</op_test>
+	</create_step_test>
+	
 	<create_make_var name="创建变量" create_type="1" >
 		<op_make_var name="节点_申明变量" expand="yes">
 			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
@@ -333,6 +378,15 @@
 			<var name="初始值" kinds="string" delete="no" restrict="type">none</var>
 		</op_make_var>
 	</create_make_var>
+	
+	<create_get_arrsize name="获得数组长度" create_type="1" >
+		<op_get_arrsize name="节点_数组长度" expand="yes">
+			<comment name="功能说明" rw_stat="read">size()</comment>
+			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var name="数组名" kinds="string" delete="no" restrict="type">none</var>
+		</op_get_arrsize>
+	</create_get_arrsize>
+		
 	
 	<create_math_operate name="数学运算符" create_type="1" >
 		<op_math_operate name="节点_数学运算" expand="yes">
@@ -350,7 +404,7 @@
 	</create_math_operate>
 	
 	<create_assignin name="赋值操作" create_type="1" >
-		<op_assignin name="节点_数学运算" expand="yes">
+		<op_assignin name="节点_赋值" expand="yes">
 			<comment name="功能说明" rw_stat="read">var = value</comment>
 			<param name="变量名称" kinds="string" delete="no" restrict="type">none</param>			
 			<param_collect name="值" expand="yes" expand_stat="1" delete="no">
@@ -513,8 +567,8 @@
 		</op_call_func>		
 	</create_step_read_msg>
 	
-	<create_step_read_datatype_msg name="根据定义类型读取消息" create_type="1">
-		<op_call_func name="节点_从定义类型读取消息" expand="yes" expand_list="comment,var">
+	<create_step_read_datatype_msg name="从dataType定义读取消息" create_type="1">
+		<op_call_func name="节点_从dataType定义读取消息" expand="yes" expand_list="comment,var">
 			<comment name="功能说明" rw_stat="read">function_read_fromat_message(data_type_name)</comment>
 			<func_name name="函数" kinds="hide" delete="no" >apollo_func_read_userData_from_msg</func_name>
 			<param_collect name="参数1_输入消息对象"  kinds="hide" delete="no">
@@ -551,14 +605,29 @@
 	
 	
 	
+	<create_op_comp name="逻辑比较" create_type="1" >
+		<op_comp name="节点_逻辑运算" expand="yes">
+			<comment name="功能说明" rw_stat="read"> 大于小于等级 </comment>
+			<index  name="逻辑运算" kinds="reference" reference_type="type_compare_sub_entry" delete="no">0</index>	
+			<param_collect name="操作数1" expand="yes" expand_stat="1" delete="no">
+				<type name="操作数1类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="操作数1值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>
+			<param_collect name="操作数2" expand="yes" expand_stat="1" delete="no">
+				<type name="操作数2类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="操作数2值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>
+		</op_comp>
+	</create_op_comp>
+	
 	<!------------ login control entry ------------>
-	<create_step_bool_entry name="创建bool分支" create_type="1" >
-		<op_bool_entry name="节点_bool分支" expand_list="comment" >			
+	<create_step_bool_entry name="bool分支" create_type="1" >
+		<op_bool_entry name="节点_bool上一步结果分支" expand_list="comment" >			
 			<comment name="功能说明" rw_stat="read">if{}</comment>
-			<op_sub_comp_entry name="正确时执行" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
+			<op_sub_comp_entry name="上一步true时执行" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
 				<condition no_comp="1" kinds="hide" delete="no">1</condition>
 			</op_sub_comp_entry>
-			<op_sub_comp_entry name="错误时执行" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
+			<op_sub_comp_entry name="上一步false时执行" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
 				<condition no_comp="1" kinds="hide"  delete="no">0</condition>
 			</op_sub_comp_entry>
 		</op_bool_entry>
@@ -567,21 +636,31 @@
 	<create_step_comp_entry name="创建数值比较分支" create_type="1" >
 		<op_comp_entry name="节点_比较分支" create_template="create_sub_comp_entry" expand_list="comment" >
 			<comment name="功能说明" rw_stat="read">if{}</comment>
-			<op_sub_comp_entry name="子节点_比较分支" create_template="create_list1" expand_list="condition,var,type" comp_cond="condition" comp_value="var">
+			<op_sub_comp_entry name="子节点_比较分支" create_template="create_list1" expand_list="condition,type,var" comp_cond="condition" comp_value="var">
 				<condition name="执行条件" kinds="reference" reference_type="type_compare_sub_entry" delete="no" >0</condition>
-				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="比较值" kinds="string" delete="no" restrict="type">none</var>
+				<param_collect name="操作数1" expand="yes" expand_stat="1" delete="no">
+					<type name="操作数1类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+					<var name="操作数1值" kinds="string" delete="no" restrict="type">none</var>
+				</param_collect>
+				<param_collect name="操作数2" expand="yes" expand_stat="1" delete="no">
+					<type name="操作数2类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+					<var name="操作数2值" kinds="string" delete="no" restrict="type">none</var>
+				</param_collect>
 			</op_sub_comp_entry>
 		</op_comp_entry>
 	</create_step_comp_entry>
 	
 	<create_sub_comp_entry name="创建比较子分支" create_type="1" >	
-		<op_sub_comp_entry name="子节点_比较分支" create_template="create_list1" expand_list="condition,var,type" comp_cond="condition" comp_value="var" auto_index="0">
+		<op_sub_comp_entry name="子节点_比较分支" create_template="create_list1" expand_list="condition,type,var" comp_cond="condition" comp_value="var" auto_index="0">
 			<condition name="执行条件" kinds="reference" reference_type="type_compare_sub_entry" delete="no" >0</condition>
-					
-			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-			<var name="比较值" kinds="string" delete="no" restrict="type">none</var>
-			
+			<param_collect name="操作数1" expand="yes" expand_stat="1" delete="no">
+				<type name="操作数1类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="操作数1值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>
+			<param_collect name="操作数2" expand="yes" expand_stat="1" delete="no">
+				<type name="操作数2类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="操作数2值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>
 		</op_sub_comp_entry>
 	</create_sub_comp_entry>
 	
@@ -620,13 +699,18 @@
 	
 	<create_list1 name="create_base_function" create_type="2">
 		<list>create_step_exit</list>
+		<list>create_skip_error</list>
 		<list>create_step_error_catch_block</list>
+		<list>create_error_continue</list>
+		
 		<list>create_step_throw</list>
 		<list>create_step_read</list>
 		<list>create_step_write</list>
 		<list>create_step_add</list>
 		<list>create_step_sub</list>
 		<list>create_step_clear</list>
+		<list>create_step_test</list>	
+		
 		<list>create_read_table</list>
 		<list>create_step_calc</list>
 		<list>create_step_getother_object</list>
@@ -638,10 +722,12 @@
 		<list>create_add_timer</list>
 		<list>create_del_timer</list>
 		<list>create_step_call_func</list>
+		<list>create_op_comp</list>
 		<list>create_step_check_valid</list>
 		<list>create_step_bool_entry</list>
 		<list>create_step_comp_entry</list>
 		<list>create_step_loop_entry</list>	
+		<list>create_get_arrsize</list>
 		
 		<list>create_make_var</list>
 		<list>create_step_type_transfer</list>
@@ -672,13 +758,18 @@
 	
 	<create_list2 name="create_message_handler" create_type="2">
 		<list>create_step_exit</list>
+		<list>create_skip_error</list>
+		
 		<list>create_step_error_catch_block</list>
+		<list>create_error_continue</list>
 		<list>create_step_throw</list>
 		<list>create_step_read</list>
 		<list>create_step_write</list>
 		<list>create_step_add</list>
 		<list>create_step_sub</list>
-		<list>create_step_clear</list>		
+		<list>create_step_clear</list>	
+		<list>create_step_test</list>	
+		
 		<list>create_read_table</list>
 		<list>create_step_calc</list>
 		
@@ -691,10 +782,14 @@
 		<list>create_add_timer</list>
 		<list>create_del_timer</list>
 		<list>create_step_call_func</list>
+		<list>create_op_comp</list>
+		
 		<list>create_step_check_valid</list>
 		<list>create_step_bool_entry</list>
 		<list>create_step_comp_entry</list>
 		<list>create_step_loop_entry</list>
+		<list>create_get_arrsize</list>
+		
 		
 		<list>create_make_var</list>
 		<list>create_step_type_transfer</list>

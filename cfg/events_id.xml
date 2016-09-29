@@ -7,16 +7,15 @@
 	<node desc="角色退出(player)">4</node>
 	<node desc="角色创建(player)">5</node>
 	<node desc="角色删除(player)">6</node>
-	<node desc="角色进入地图(player, mapid)">7</node>
-	<node desc="属性变化(player,a_id, a_val)">8</node>
+	<node desc="连接服务器成功(connector)">7</node>
+	<node desc="连接断开(connector)">8</node>
 	<node desc="升级(player, newlevel)">9</node>
 	<node desc="获得物品(player, itemid)">10</node>
-	<node desc="杀死怪物(player,monster_id)">11</node>
-	<node desc="获得技能(player,skill_id)">12</node>
-	<node desc="角色离开地图(player, mapid)">13</node>
-	<node desc="角色死亡(player)">14</node>
-	<node desc="接受任务(player,taskid)">15</node>
-	<node desc="完成任务(player,taskid)">16</node>
-	<node desc="每日更新(player)">17</node>
-	<node desc="成功输入邀请码(player)">18</node>
+	<node desc="角色死亡(player)">11</node>
+	<node desc="接受任务(player,taskid)">12</node>
+	<node desc="完成任务(player,taskid)">13</node>
+	<node desc="每日更新(player)">14</node>
+	<node desc="成功输入邀请码(player)">15</node>
+	<node desc="完成地图(mapId, isSuccess)">16</node>
+	<node desc="摧毁建筑(buildingId)">17</node>
 </event_list>

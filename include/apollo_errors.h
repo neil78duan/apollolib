@@ -22,9 +22,7 @@ enum eApollo_errors {
 #define ErrorElement(a) ESERVER_##a
 #include "nd_common/_nderr.h"
 #undef ErrorElement
-
-
-	ESERVER_ERR_UNKNOWN = NDERR_USERDEFINE,    
+    
 	AtlantisError_Start = NDERR_USERDEFINE,
 	
 #undef ErrorElement 

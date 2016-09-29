@@ -17,6 +17,7 @@ typedef NDUINT32 operator_index_t;
 
 #define CHECK_ID_INVALID(_id) \
 	if (!id.CheckValid())	{	\
+		m_error = NDERR_SCRIPT_INSTRUCT; \
 		return false;			\
 	}
 
@@ -38,7 +39,7 @@ public:
 
 	virtual bool opSub(const DBLDataNode& id, const  DBLDataNode &val) = 0;
 
-	virtual bool opClear(const DBLDataNode& id) = 0;
+	virtual bool opClear(const DBLDataNode& id, const  DBLDataNode &val) = 0;
 
 	virtual bool opCheck(const DBLDataNode& id, const DBLDataNode &val) ;
 
@@ -58,11 +59,12 @@ public:
 	virtual bool RollbackAffair();
 	
 	NDUINT32 getErrParam() ;
-
+	int getError();
 
 protected:
 	int m_count;
 
+	int m_error;
 	NDUINT32 m_errParam ;
 
 };
@@ -102,7 +104,8 @@ public:
 	bool opWrite(const DBLDataNode& id, const DBLDataNode &val);
 	bool opAdd(const DBLDataNode& id, const DBLDataNode &val);
 	bool opSub(const DBLDataNode& id, const  DBLDataNode &val);
-	bool opClear(const DBLDataNode& id);
+	bool opClear(const DBLDataNode& id, const  DBLDataNode &val);
+	bool opCheck(const DBLDataNode& id, const  DBLDataNode &val);
 	//bool getObject(eOperatorObjType type, const DBLDataNode &id, DBLDataNode &val);
 	//LogicObjectBase *getObjectMgr(eOperatorDestMgr destID);
 	

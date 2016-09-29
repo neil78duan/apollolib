@@ -12,7 +12,7 @@
 
 #include "ndcli/nd_iconn.h"
 #include "nd_msg.h"
-#include "srv_define.h"
+#include "apollo_data.h"
 #include "ndcli/nd_api_c.h"
 
 

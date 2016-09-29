@@ -11,7 +11,7 @@
 
 #include "ndapplib/applib.h"
 #include "common_inc.h"
-#include "srv_define.h"
+//#include "srv_define.h"
 #include "logic_parser/logicEngineRoot.h"
 
 //class NDSession ;

@@ -21,6 +21,7 @@
 #include "attribute/stat_machine.h"
 #include "logic_parser/dbl_mgr.h"
 #include "ndapplib/ndsingleton.h"
+#include "cli_common/dftCliMsgHandler.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -294,6 +295,17 @@ void CapolloParseEditorDlg::OnBnClickedBtCompile()
 	}
 	LogText("==========编译脚本成功===========\n");
 
+	const char *packaged_cmd = _getFromIocfg("compiled_rum_cmd");
+
+	if (packaged_cmd && *packaged_cmd)	{
+		int ret = system(packaged_cmd);
+
+		if (0 != ret)	{
+			nd_logerror("运行命令 %s %d\n", packaged_cmd, ret);
+		}
+
+	}
+
 }
 
 //测试所有数据导出加载和相关功能
@@ -316,6 +328,18 @@ void CapolloParseEditorDlg::OnBnClickedBtExpData()
 		return;
 	}
 	LogText("==========EXCEL打包成功===========\n");
+
+	const char *packaged_cmd = _getFromIocfg("packeaged_rum_cmd");
+
+	if (packaged_cmd && *packaged_cmd)	{
+		//snprintf(path, sizeof(path), "cmd.exe /c %s ", packaged_cmd);
+		int ret = system(packaged_cmd);
+
+		if (0 != ret)	{
+			nd_logerror("运行命令 %s %d\n",packaged_cmd, ret);
+		}
+
+	}	
 
 }
 
@@ -452,11 +476,17 @@ bool CapolloParseEditorDlg::compileScript(const char *scriptFile)
 
 	LogText("!!!!!!!!!!编译脚本成功!!!!!!!!!!!\n运行测试程序...\n");
 
+	ClientMsgHandler::ApoConnectScriptOwner apoOwner;
+	if (!apoOwner.loadDataType(_getFromIocfg("net_data_def"))) {
+		LogText("加载数据格式错误\n");
+		return false;
+	}
+
 	LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
 	nd_assert(scriptRoot);
 
 	scriptRoot->setPrint(out_print, NULL);
-	scriptRoot->getGlobalParser().setSimulate(true);
+	scriptRoot->getGlobalParser().setSimulate(true, &apoOwner);
 	if (0 != scriptRoot->LoadScript(outFile.c_str())){
 		LogText("加载脚本出错！\n");
 		LogicEngineRoot::destroy_Instant();

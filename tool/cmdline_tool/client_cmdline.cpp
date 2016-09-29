@@ -15,7 +15,7 @@
 #include "ndapplib/nd_datatransfer.h"
 #include "login_apollo.h"
 
-#include "srv_define.h"
+#include "apollo_data.h"
 
 #include "atlantis_test.h"
 #include "apollo_errors.h"

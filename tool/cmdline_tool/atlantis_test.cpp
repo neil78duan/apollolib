@@ -11,7 +11,7 @@
 #include "nd_msg.h"
 #include "msg_def.h"
 #include "ndcli/nd_api_c.h"
-#include "srv_define.h"
+#include "apollo_data.h"
 #include "commonTest.h"
 
 #include "apollo_errors.h"
@@ -202,7 +202,7 @@ ND_CMDLINE_FUNC_INSTANCE(createRole)
 		return -1;
 	}
 	
-	NDOStreamMsg omsg(NETMSG_MAX_ROLE, ROLE_MSG_CREATE_ROLE_REQ ) ;
+	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_REQ ) ;
 	omsg.Write((NDUINT8*)argv[1]) ;
 	
 	omsg.Write((NDUINT16)1) ;
@@ -211,7 +211,7 @@ ND_CMDLINE_FUNC_INSTANCE(createRole)
 	
 	nd_handle h = pconn->GetHandle() ;
 	nd_usermsgbuf_t recv_msg ;
-	TEST_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_ROLE,ROLE_MSG_CREATE_ROLE_ACK,0)
+	TEST_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_ACK,0)
 	else {
 		NDUINT32 roleid = 0;
 		NDUINT32 error_code = 0;
@@ -255,12 +255,12 @@ ND_CMDLINE_FUNC_INSTANCE(getRoleList)
 	ND_CMDLINE_CHECK_SHOW_HELP(argc, argv,"role_list [ create_role_name_if_list_is_emt]") ;
 	CHECK_LOGIN() ;
 	
-	NDOStreamMsg omsg(NETMSG_MAX_ROLE, ROLE_MSG_GET_ROLE_LIST_REQ ) ;
+	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ ) ;
 	
 	nd_handle h = pconn->GetHandle() ;
 	nd_usermsgbuf_t recv_msg ;
 	
-	TEST_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_ROLE,ROLE_MSG_GET_ROLE_LIST_ACK,0)
+	TEST_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK,0)
 	else {
 		NDUINT32 roleid = 0;
 		NDUINT32 error_code = 0;

@@ -57,6 +57,15 @@ static const char *get_type_from_alias(const char *in_alias,type_name_info *info
 	return NULL;
 	
 }
+static bool is_base_type(const char *name)
+{
+	const char *ret = get_type_from_alias(name, alias_type, sizeof(alias_type) / sizeof(alias_type[0]));
+	if (ret) {
+		return true;
+	}
+	return false;
+}
+
 const char* getTypeForUE4(const char *in_type)
 {
 	const char *ret = get_type_from_alias(in_type,alias_type, sizeof(alias_type)/sizeof(alias_type[0]) ) ;
@@ -259,12 +268,21 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 		fprintf(pf, "\t%s() \n\t{\n\t\tmemset(this, 0, sizeof(*this) ); \n\t}\n\n",pName) ;
 	}
 	char buf_read_func[4096] ;
-	char buf_write_func[4096] ;
+	char buf_write_func[4096];
+	char buf_toUser_func[4096];
+	char buf_fromUser_func[4096];
+
 	char *pReadStream = buf_read_func;
 	char *pWriteStream = buf_write_func ;
+	char *pTouserStream = buf_toUser_func;
+	char *pFromuserStream = buf_fromUser_func;
+
 	size_t read_size = sizeof(buf_read_func);
 	size_t write_size = sizeof(buf_write_func);
-	
+
+	size_t toUser_size = sizeof(buf_toUser_func);
+	size_t fromUser_size = sizeof(buf_fromUser_func);
+
 	int subNodes = ndxml_getsub_num(sub) ;
 	for (int n=0; n<subNodes; ++n) {
 		ndxml *node1 = ndxml_refsubi(sub,n) ;
@@ -293,6 +311,14 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 				pWriteStream += size ;
 				write_size -= size;
 				
+				//write to userdefine function
+				size = snprintf(pTouserStream, toUser_size, "\t\tTO_USER_DEF_TEXT(paramUserData, %s, paramInputData);\n", pValName);
+				pTouserStream += size;
+				toUser_size -= size;
+
+				size = snprintf(pFromuserStream, fromUser_size, "\t\tFROM_USER_DEF_TEXT(paramUserData, %s, paramInputData, %s);\n", pValName, ndxml_getattr_val(node1, "arrayMarco"));
+				pFromuserStream += size;
+				fromUser_size -= size;
 			}
 			else {
 				
@@ -338,6 +364,25 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 				pWriteStream += size ;
 				write_size -= size;
 				
+				//usef define function 
+				if (is_base_type(pType)) {
+					size = snprintf(pTouserStream, toUser_size, "\t\tTO_USER_DEF_BASE_ARR(paramUserData, %s, paramInputData);\n", pValName);
+					pTouserStream += size;
+					toUser_size -= size;
+
+					size = snprintf(pFromuserStream, fromUser_size, "\t\tFROM_USER_DEF_BASE_ARR(paramUserData, %s, paramInputData, %s);\n", pValName, ndxml_getattr_val(node1, "arrayMarco"));
+					pFromuserStream += size;
+					fromUser_size -= size;
+				}
+				else {
+					size = snprintf(pTouserStream, toUser_size, "\t\tTO_USER_DEF_NODE_ARR(paramUserData, %s, paramInputData);\n", pValName);
+					pTouserStream += size;
+					toUser_size -= size;
+
+					size = snprintf(pFromuserStream, fromUser_size, "\t\tFROM_USER_DEF_NODE_ARR(paramUserData, %s, paramInputData, %s);\n", pValName, ndxml_getattr_val(node1, "arrayMarco"));
+					pFromuserStream += size;
+					fromUser_size -= size;
+				}
 			}
 		}
 		else {
@@ -353,6 +398,25 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 			size = snprintf(pWriteStream, write_size, "\t\tWRITE_STREAM(omsg,data.%s);\n", pValName);
 			pWriteStream += size ;
 			write_size -= size;
+
+			if (is_base_type(pType)) {
+				size = snprintf(pTouserStream, toUser_size, "\t\tTO_USER_DEF_ELE(paramUserData, %s, paramInputData);\n", pValName);
+				pTouserStream += size;
+				toUser_size -= size;
+
+				size = snprintf(pFromuserStream, fromUser_size, "\t\tFROM_USER_DEF_ELE(paramUserData, %s, paramInputData);\n", pValName);
+				pFromuserStream += size;
+				fromUser_size -= size;
+			}
+			else {
+				size = snprintf(pTouserStream, toUser_size, "\t\tTO_USER_DEF_NODE(paramUserData, %s, paramInputData);\n", pValName);
+				pTouserStream += size;
+				toUser_size -= size;
+
+				size = snprintf(pFromuserStream, fromUser_size, "\t\tFROM_USER_DEF_NODE(paramUserData, %s, paramInputData);\n", pValName);
+				pFromuserStream += size;
+				fromUser_size -= size;
+			}
 		}
 		
 	}
@@ -366,8 +430,23 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 	fprintf(pfCpp, "%s\n\t\treturn 0; \n\t}\n", buf_write_func) ;
 	
 	fprintf(pf, "int ReadStream(NDIStreamMsg &inmsg,NetMessage::%s &data);\n", pName) ;
-	fprintf(pf, "int WriteStream(NDOStreamMsg &omsg,const NetMessage::%s &data);\n\n\n", pName) ;
+	fprintf(pf, "int WriteStream(NDOStreamMsg &omsg,const NetMessage::%s &data);\n", pName) ;
 	
+	//write to user-define data paramUserData, %s, paramInputData
+	fprintf(pfCpp, "#ifndef WITHOUT_LOGIC_PARSER\n");
+	fprintf(pfCpp, "\n\tint ToUserDef(LogicUserDefStruct &paramUserData,const NetMessage::%s &paramInputData)\n\t{\n", pName);
+	fprintf(pfCpp, "%s\n\t\treturn 0; \n\t}\n", buf_toUser_func);
+
+	fprintf(pfCpp, "\tint  FromUserDef(const LogicUserDefStruct &paramUserData, NetMessage::%s &paramInputData)\n\t{\n", pName);
+	fprintf(pfCpp, "%s\n\t\treturn 0; \n\t}\n", buf_fromUser_func);
+	fprintf(pfCpp, "#endif\n\n");
+
+
+	fprintf(pf, "#ifndef WITHOUT_LOGIC_PARSER\n");
+	fprintf(pf, "int ToUserDef(LogicUserDefStruct &userData,const NetMessage::%s &data);\n", pName);
+	fprintf(pf, "int FromUserDef(const LogicUserDefStruct &userData, NetMessage::%s &data);\n", pName);
+	fprintf(pf, "#endif\n\n\n");
+
 	return 0;
 }
 //build datatype
@@ -390,6 +469,7 @@ int build_dataType(ndxml_root *xmlfile, const char *out_file,bool saveDB)
 	name_list_t res_list ;
 	get_name_sort(xmlfile, res_list);
 
+	NDUINT64 nowTime = (NDUINT64) time(NULL);
 	if (saveDB) {
 		
 		char buf[128] ;
@@ -417,7 +497,9 @@ int build_dataType(ndxml_root *xmlfile, const char *out_file,bool saveDB)
 		fprintf(pf, "#define _AUTO_DATA_TYPE_DEFINE_DB_%s_H_\n",version );
 		fprintf(pf, "#include \"netMessage/auto_macroDefine.h\"\n\n") ;
 		fprintf(pf, "#include \"netMessage/dataStream.h\"\n\n") ;
+
 		fprintf(pf, "namespace NetMessage \n{\n" );
+		
 		
 		name_list_t save_list;
 		get_saveDB_sort(xmlfile,res_list,save_list);
@@ -461,7 +543,8 @@ int build_dataType(ndxml_root *xmlfile, const char *out_file,bool saveDB)
 		fprintf(pf, "#include \"netMessage/auto_macroDefine.h\"\n\n") ;
 		fprintf(pf, "#include \"netMessage/dataStream.h\"\n\n") ;
 		
-		fprintf(pf, "#define DATA_IN_DB_VERSION %s \n\n", version );
+		fprintf(pf, "#define DATA_IN_DB_VERSION %s \n\n", version);
+		fprintf(pf, "#define NET_MESSAGE_EXPORT_TM %lld \n", nowTime);
 		
 		fprintf(pf, "namespace NetMessage \n{\n" );
 		
