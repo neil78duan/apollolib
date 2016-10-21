@@ -71,7 +71,7 @@ static bool _check_array(const char *src);
 DBLDataNode::DBLDataNode(dbl_element_base *data, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype) :
 m_ele_type(etype), m_sub_type(sub_etype), m_data(data), m_dataOwner(false)
 {
-
+	m_dataOwn.isInit = true;
 }
 DBLDataNode::DBLDataNode(const DBLDataNode &r) 
 {
@@ -282,12 +282,15 @@ void DBLDataNode::_copy(const DBLDataNode &r)
 	m_ele_type = (r.m_ele_type);
 	m_sub_type = (r.m_sub_type);
 
+	if (!r.CheckValid()) {
+		m_dataOwn.isInit = r.m_dataOwn.isInit;
+		return;
+	}
+
 	if (r.m_dataOwner) {
 		m_dataOwner = true;
 		m_data = &m_dataOwn;
-		if (r.CheckValid()) {
-			dbl_data_copy(r.m_data, m_data, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type);
-		}
+		dbl_data_copy(r.m_data, m_data, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type);
 	}
 	else {
 		m_data = (r.m_data);
@@ -974,11 +977,30 @@ const char *DBLDataNode::GetText() const
 
 std::string DBLDataNode::GetString() const
 {
-	const char *p = GetText();
-	if (!p) {
+	if (!CheckValid() ) {
 		return std::string("");
 	}
-	return std::string(p);
+
+	if (OT_STRING == m_ele_type){
+		const char *p = GetText();
+		if (p) {
+			return std::string(p);
+		}
+		else {
+			return std::string("");
+		}
+	}
+	else {
+		char buf[4096];
+		int size = Sprint(buf, sizeof(buf));
+		if (size > 0) {
+			return std::string(buf);
+		}
+		else {
+			return std::string("");
+		}
+	}
+
 }
 
 void *DBLDataNode::GetObject() const
@@ -1493,7 +1515,7 @@ bool DBLDataNode::CheckValid() const
 	if (m_ele_type == OT_STRING || m_ele_type == OT_ARRAY 
 		|| m_ele_type >= OT_OBJECT_VOID)	{
 		return m_data->_data ? true : false;
-	}
+ 	}
 	return true;
 }
 
@@ -1994,14 +2016,13 @@ int dbl_read_from_binStream(dbl_element_base *indata, DBL_ELEMENT_TYPE etype, DB
 	return 0;
 }
 
-
-int dbl_data_2streamfile(dbl_element_base *buf, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, FILE*pf, bool changeByteOrder )
+int dbl_data_2streamfile(dbl_element_base *buf, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, FILE*pf, dbl_stream_fwrite writefunc, bool changeByteOrder)
 {
-	return  _dbl_data_2binStream(buf, etype, sub_etype, pf, fwrite,changeByteOrder);
+	return  _dbl_data_2binStream(buf, etype, sub_etype, pf, writefunc,changeByteOrder);
 }
-int dbl_read_streamfile(dbl_element_base *indata, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, FILE*pf, bool changeByteOrder )
+int dbl_read_streamfile(dbl_element_base *indata, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, FILE*pf, dbl_stream_fread readfunc, bool changeByteOrder)
 {
-	return dbl_read_from_binStream(indata, etype, sub_etype, pf, fread,changeByteOrder);
+	return dbl_read_from_binStream(indata, etype, sub_etype, pf, readfunc,changeByteOrder);
 }
 
 static int _readbuf(void *data, size_t size, int count, char *&buf)
@@ -2089,6 +2110,9 @@ int dbl_data_copy(dbl_element_base *input, dbl_element_base *output, DBL_ELEMENT
 	
 	case OT_STRING:
 	{
+		if (!input->str_val || !*(input->str_val)) {
+			break;
+		}
 		size_t size = strlen(input->str_val);
 		output->str_val = (char*)malloc(size + 2);
 		strncpy(output->str_val, input->str_val, size + 1);

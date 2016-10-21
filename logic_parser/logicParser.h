@@ -108,7 +108,7 @@ enum eParserOperator{
 	E_OP_SKIP_ERROR,	//Skip some error
 	E_OP_GET_ARRAY_SIZE,	//get array size 
 	E_OP_SET_LOOP_INDEX, // set loop index, used in list_for_each
-	
+	E_OP_GET_LAST_ERROR,	//get last error before exception
 
 };
 

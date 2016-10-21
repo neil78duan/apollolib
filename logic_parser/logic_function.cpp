@@ -33,6 +33,8 @@ static bool apollo_export_cpp_api(LogicParserEngine*parser, parse_arg_list_t &ar
 static bool apollo_make_full_path(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 static bool apollo_export_events_list(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 static bool apollo_run_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+
+static bool apollo_get_dbl_name(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 //
 //static NDUINT32 _getMsgid(DBLDataNode &data , nd_handle hListen)
 //{
@@ -71,9 +73,20 @@ int init_sys_functions(LogicEngineRoot *root)
 	root->installFunc(apollo_load_file_data, "apollo_load_file_data", "读取整个文件(filename)");
 	root->installFunc(apollo_write_file, "apollo_write_file", "写入文件(filename,var1,var2...)");
 	root->installFunc(apollo_make_full_path, "apollo_make_full_path", "合成文件名(path,filename)");
+	root->installFunc(apollo_get_dbl_name, "apollo_get_dbl_name", "获得dbl信息()");
 	
 
 	return 0;
+}
+bool apollo_get_dbl_name(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+{
+	DBLDatabase *pdbl = DBLDatabase::get_Instant();
+	if (!pdbl) {
+		nd_logerror("load database library error\n");
+		return false;
+	}
+	result.InitSet(pdbl->getDatabaseName()) ;
+	return true;
 }
 
 bool apollo_run_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
@@ -91,6 +104,7 @@ bool apollo_run_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNo
 		nd_logerror("TEST database library error\n");
 		return false;
 	}
+	//DBLDatabase::destroy_Instant();
 // 
 // 	LogicEngineRoot *root = LogicEngineRoot::get_Instant();
 // 	if (!root)	{
@@ -196,6 +210,50 @@ bool apollo_export_events_list(LogicParserEngine*parser, parse_arg_list_t &args,
 	}
 
 	return  true;
+}
+
+#include "apollo_errors.h"
+
+int common_export_error_list(const char *outfile)
+{
+	ndxml_root xmlroot;
+	ndxml_initroot(&xmlroot);
+	ndxml_addattrib(&xmlroot, "version", "1.0");
+	ndxml_addattrib(&xmlroot, "encoding", "utf8");
+	ndxml *xml_funcs = ndxml_addnode(&xmlroot, LOGIC_ERROR_LIST_NAME, NULL);
+	nd_assert(xml_funcs);
+	if (!xml_funcs)	{
+		return -1;
+	}
+
+	for (int i = 0; i < NDERR_UNKNOWN; i++) {
+		char buf[16];
+		snprintf(buf, 16, "%d", i);
+		ndxml *xmlsub = ndxml_addnode(xml_funcs, "node", buf);
+		if (xmlsub)	{
+			const char *pDesc = nd_error_desc(i);
+#ifdef _MSC_VER
+			char desc_buf[256];
+			pDesc = nd_gbk_to_utf8(pDesc, desc_buf, sizeof(desc_buf));
+#endif
+			ndxml_addattrib(xmlsub, "desc", pDesc);
+		}
+	}
+
+	for (int i = ApolloError_Start +1; i < ESERVER_ERR_NUMBER; i++) {
+		char buf[16];
+		snprintf(buf, 16, "%d", i);
+		ndxml *xmlsub = ndxml_addnode(xml_funcs, "node", buf);
+		if (xmlsub)	{
+			const char *pDesc = nd_error_desc(i);
+#ifdef _MSC_VER
+			char desc_buf[256];
+			pDesc = nd_gbk_to_utf8(pDesc, desc_buf, sizeof(desc_buf));
+#endif
+			ndxml_addattrib(xmlsub, "desc", pDesc);
+		}
+	}
+	return ndxml_save(&xmlroot, outfile);
 }
 //////////////////////////////////
 bool apollo_set_message_handler(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)

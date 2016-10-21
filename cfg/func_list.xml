@@ -8,6 +8,7 @@
 	<node desc="从消息中读取类型(输入消息, 类型名字)">CPP.apollo_func_read_userData_from_msg</node>
 	<node desc="重新载入策划数据()">CPP.apollo_func_reload_data_table</node>
 	<node desc="发送消息(int:maxID,int:minId, msg_varlist...)">CPP.apollo_func_send_msg</node>
+	<node desc="获得资源包名称()">CPP.apollo_get_dbl_name</node>
 	<node desc="读取整个文件(filename)">CPP.apollo_load_file_data</node>
 	<node desc="加载脚本(scriptn_name)">CPP.apollo_load_script_file</node>
 	<node desc="合成文件名(path,filename)">CPP.apollo_make_full_path</node>
@@ -19,9 +20,8 @@
 	<node desc="创建建筑(type, x,y)">CPP.gscript_create_building</node>
 	<node desc="获得角色附加数据(str:name)">CPP.gscript_get_addition</node>
 	<node desc="获得角色自己名字()">CPP.gscript_get_self_name</node>
-	<node desc="PVP_NPC_初始化()">CPP.gscript_init_pvp_NPC</node>
 	<node desc="属性重算()">CPP.gscript_recalc_attribues</node>
-	<node desc="发送游戏错误(error_type, param)">CPP.gscript_reply_common_error</node>
+	<node desc="发送错误通知(errorId)">CPP.gscript_send_client_error</node>
 	<node desc="发公告给当前用户(arg1, ...)">CPP.gscript_send_player_notice</node>
 	<node desc="修改角色附加数据(str:name, var)">CPP.gscript_set_addition</node>
 	<node desc="设置名字名字()">CPP.gscript_set_self_name</node>

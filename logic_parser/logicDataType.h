@@ -280,8 +280,12 @@ CPPAPI int dbl_destroy_data(dbl_element_base *buf, DBL_ELEMENT_TYPE etype, DBL_E
 CPPAPI int dbl_build_from_text(dbl_element_base *buf, const char *in_data, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype);
 CPPAPI int dbl_data_copy(dbl_element_base *input, dbl_element_base *output, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype);
 
-CPPAPI int dbl_data_2streamfile(dbl_element_base *buf, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, FILE*pf,bool changeByteOrder=false);
-CPPAPI int dbl_read_streamfile(dbl_element_base *indata, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, FILE*pf, bool changeByteOrder = false);
+typedef size_t (*dbl_stream_fread)( void * _DstBuf,  size_t _ElementSize,  size_t _Count,  FILE * _File);
+typedef size_t(*dbl_stream_fwrite)(const void * _DstBuf, size_t _ElementSize, size_t _Count, FILE * _File);
+
+CPPAPI int dbl_data_2streamfile(dbl_element_base *buf, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, FILE*pf, dbl_stream_fwrite writefunc,  bool changeByteOrder = false);
+CPPAPI int dbl_read_streamfile(dbl_element_base *indata, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, FILE*pf, dbl_stream_fread readfunc, bool changeByteOrder = false);
+
 CPPAPI int dbl_read_buffer(dbl_element_base *data, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, char *buf, bool changeByteOrder=false);
 CPPAPI int dbl_write_buffer(dbl_element_base *data, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype, char *buf, bool changeByteOrder = false);
 

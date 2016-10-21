@@ -170,7 +170,7 @@ namespace ClientMsgHandler
 		char mypath[1024];		
 		std::string mywritePath = getWritablePath(pconn);
 		int ret = omsg.FromFile(nd_full_path(mywritePath.c_str(),file, mypath, sizeof(mypath)) );
-		nd_logmsg("write message to file %s %s\n", file, ret == 0 ? "success" : "false");
+		nd_logmsg("read message to file %s %s\n", file, ret == 0 ? "success" : "false");
 		return ret;
 	}
 
@@ -196,7 +196,7 @@ namespace ClientMsgHandler
 		if (!isOK) {
 			NDOStreamMsg msg_send(msgId);
 			pconn->SendMsg(msg_send);
-			nd_logdebug("send %d message\n", msgId);
+			nd_logdebug("load message %x error from %s send to server \n", msgId, file);
 			return false;
 		}
 		return true;
@@ -385,6 +385,11 @@ namespace ClientMsgHandler
 			return false;
 		}
 
+		logic_print print_func = getLogFunction(pconn);
+		void*log_file = getLogFile(pconn);
+
+		print_func(log_file, "{");
+
 		int array_size = 0;
 		do {
 			char memberName[128];
@@ -396,6 +401,7 @@ namespace ClientMsgHandler
 				if (p && *p == ']') {
 					++p;
 				}
+				isArray = true;
 			}
 			else {
 				p = ndstr_nstr_end(p, name, ',', sizeof(name));
@@ -439,11 +445,16 @@ namespace ClientMsgHandler
 
 				if (-1 != logicDataRead(dataFormat, inmsg)){
 
-					dataFormat.Print(getLogFunction(pconn), getLogFile(pconn));
 					if (0 == ndstricmp(memberName, "number") || 0 == ndstricmp(memberName, "count")){
 						if (dataFormat.GetDataType() == OT_INT16)	{
 							array_size = dataFormat.GetInt();
 						}
+					}
+					else {
+
+						print_func(log_file, "%s=", pmember);
+						dataFormat.Print(print_func, log_file);
+						print_func(log_file, ", ");
 					}
 				}
 				else {
@@ -456,6 +467,7 @@ namespace ClientMsgHandler
 			}
 			++index;
 		} while (p && *p);
+		print_func(log_file, "}\n");
 
 		return true;
 	}

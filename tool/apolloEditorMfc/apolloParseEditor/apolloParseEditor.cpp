@@ -6,8 +6,9 @@
 #include "apolloParseEditor.h"
 #include "apolloParseEditorDlg.h"
 #include "nd_common/nd_common.h"
+#include "cli_common/login_apollo.h"
 
-//#include <vld/vld.h>
+//#include <vld.h>
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -105,6 +106,7 @@ BOOL CapolloParseEditorApp::InitInstance()
 	m_pMainWnd = &dlg;
 
 	nd_setlog_func(out_log);
+	nd_register_error_convert(apollo_error);
 
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)

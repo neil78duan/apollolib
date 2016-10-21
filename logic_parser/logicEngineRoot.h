@@ -17,6 +17,7 @@
 #define GLOBAL_MODULE_NAME "_global"
 #define LOGIC_FUNCTION_LIST_NAME "func_list"
 #define LOGIC_EVENT_LIST_NAME "event_list"
+#define LOGIC_ERROR_LIST_NAME "error_list"
 
 typedef bool(*logicParser_func)(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 struct func_cpp_info

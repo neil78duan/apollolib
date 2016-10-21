@@ -66,6 +66,7 @@
 	<list instruction="1" ins_id="48" size="8" >op_skip_error</list>
 	<list instruction="1" ins_id="49" size="0" >op_get_arrsize</list>
 	<list instruction="1" ins_id="50" size="8" >op_set_loop_index</list>
+	<list instruction="1" ins_id="51" size="4" >op_get_last_error</list>
 	
 	
 	<!-- list instruction="1" ins_id="24" size="0" >op_set_loops</list>	
@@ -195,6 +196,11 @@
 		</op_exit>
 	</create_step_exit>
 	
+	<create_get_last_error name="获得错误id" create_type="1" expand="yes" >
+		<op_get_last_error name="节点_获得错误号" expand="yes">			
+			<comment name="功能说明" rw_stat="read">get_last_error()</comment>
+		</op_get_last_error>
+	</create_get_last_error>
 	
 	<create_set_loop_index name="设置循环索引" create_type="1" expand="yes" >
 		<op_set_loop_index name="节点_设置循环索引" expand="yes">			
@@ -214,8 +220,8 @@
 	
 	<create_skip_error name="节点忽略错误" create_type="1" expand="yes" >
 		<op_skip_error name="节点_忽略错误" expand="yes">			
-			<comment name="功能说明" rw_stat="read">op_exit(value)</comment>
-			<num name="错误类型" kinds="numeral"  delete="no">0</num>
+			<comment name="功能说明" rw_stat="read">skip_error(value)</comment>
+			<num name="错误类型" kinds="user_define" user_param="error_list" delete="no">0</num>
 		</op_skip_error>
 	</create_skip_error>
 	
@@ -699,6 +705,7 @@
 	
 	<create_list1 name="create_base_function" create_type="2">
 		<list>create_step_exit</list>
+		<list>create_get_last_error</list>		
 		<list>create_skip_error</list>
 		<list>create_step_error_catch_block</list>
 		<list>create_error_continue</list>
@@ -758,6 +765,7 @@
 	
 	<create_list2 name="create_message_handler" create_type="2">
 		<list>create_step_exit</list>
+		<list>create_get_last_error</list>
 		<list>create_skip_error</list>
 		
 		<list>create_step_error_catch_block</list>

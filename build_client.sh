@@ -12,6 +12,8 @@ workDir=`pwd`
 #build android
 cd proj.androin
 ndk-build clean
+ndk-build clean apo_debug=1
+
 ndk-build apo_debug=1
 [ $? == 0 ] || exit 1
 
@@ -21,16 +23,16 @@ ndk-build
 
 cd $workDir
 
-cd xcode/apollo_client
-xcodebuild clean -target apollo_client_ios
-xcodebuild clean -target apollo_client_mac
+# cd xcode/apollo_client
+#xcodebuild clean -target apollo_client_ios
+#xcodebuild clean -target apollo_client_mac
 
-xcodebuild -project apollo_client.xcodeproj -target apollo_client_ios
-[ $? == 0 ] || exit 1
+#xcodebuild -project apollo_client.xcodeproj -target apollo_client_ios
+#[ $? == 0 ] || exit 1
 
 
-xcodebuild -project apollo_client.xcodeproj -target apollo_client_mac
-[ $? == 0 ] || exit 1
+#xcodebuild -project apollo_client.xcodeproj -target apollo_client_mac
+#[ $? == 0 ] || exit 1
 
-cd $workDir
+#cd $workDir
 

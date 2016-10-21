@@ -495,7 +495,7 @@ int gmToolDlg::_login(const char *user, const char *passwd)
 
 	ret =m_login->Login(user, passwd, ACC_APOLLO);
 	if (-1==ret) {
-		if (m_login->GetLastError() == ESERVER_ERR_NOUSER) {
+		if (m_login->GetLastError() == NDSYS_ERR_NOUSER) {
 			account_base_info acc;
 			initAccCreateInfo(acc, ACC_APOLLO, user, passwd);
 

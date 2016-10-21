@@ -383,7 +383,11 @@ int LogicEngineRoot::dumbCPPfunc(const char *outXmlfile)
 		}
 	}
 	 
-	return ndxml_save(&xmlroot, outXmlfile);
+	int ret = ndxml_save(&xmlroot, outXmlfile);
+
+	ndxml_destroy(&xmlroot);
+
+	return ret;
 }
 // int LogicEngineRoot::run_init_script( )
 // {

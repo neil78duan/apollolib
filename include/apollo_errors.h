@@ -19,14 +19,14 @@ enum eApollo_errors {
 	ESERVER_ERR_SUCCESS = 0,
 
 #undef ErrorElement 
-#define ErrorElement(a) ESERVER_##a
+#define ErrorElement(a,_err_desc) NDSYS_##a
 #include "nd_common/_nderr.h"
 #undef ErrorElement
     
-	AtlantisError_Start = NDERR_USERDEFINE,
+	ApolloError_Start = NDERR_USERDEFINE,
 	
 #undef ErrorElement 
-#define ErrorElement(a) a
+#define ErrorElement(a,_err_desc) a
 #include "_error_def.h"		
 #undef ErrorElement     
 };

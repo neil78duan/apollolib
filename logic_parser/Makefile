@@ -8,7 +8,7 @@ include ../Rules.make
 
 ##############set flag
 
-#CFLAGS += -I$(TOPDIR)/netMessage
+#CFLAGS += -I$(TOPDIR)/netMessage -I$(TOPDIR)/include
 
 ifeq ($(DEBUG),y)
     PROJS = $(LIBDIR)/liblogic_parser_d.a
@@ -16,6 +16,7 @@ else
     PROJS = $(LIBDIR)/liblogic_parser.a
 endif
 
+CFLAGS += -I$(TOPDIR)/include
 ##########make 
 ##############################################################
 

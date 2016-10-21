@@ -145,7 +145,7 @@ protected:
 };
 
 
-ND_CONNCLI_API const char *atlantis_error(int errcode);
+ND_CONNCLI_API const char *apollo_error(int errcode);
 //CPPAPI int ndSendAndWaitMessage(nd_handle nethandle, nd_usermsgbuf_t *sendBuf, nd_usermsgbuf_t* recvBuf, ndmsgid_t waitMaxid, ndmsgid_t waitMinid, int sendFlag = 0);
 //CPPAPI int ndSendAndWaitMessage(NDIConn *conn, NDOStreamMsg &omsg, nd_usermsgbuf_t* recvBuf, ndmsgid_t waitMaxid, ndmsgid_t waitMinid, int sendFlag = 0);
 #endif /* defined(__clientDemo__login_atlantis__) */

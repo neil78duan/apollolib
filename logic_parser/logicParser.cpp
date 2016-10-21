@@ -419,6 +419,15 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 					m_sys_errno = index + LOGIC_ERR_USER_DEFINE_ERROR;
 				}
 				break;
+			case E_OP_GET_LAST_ERROR:
+				if (inException) {
+					m_registerVal.InitSet((int)errorBeforeException);
+				}
+				else {
+					m_registerVal.InitSet(m_sys_errno);
+				}
+				m_registorFlag = true;
+				break;
 			case E_OP_DEBUG_INFO:
 				isdebug_step = true;
 				p = lp_read_stream(p, stack->dbg_cur_node_index, m_cmdByteOrder);
@@ -428,20 +437,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				step_start = p;
 				CHECK_INSTRUCTION_OVER_FLOW();
 				apollo_script_printf("logic_script %s: %s %d\n", stack->cmd->cmdname, stack->dbg_node, stack->dbg_cur_node_index);
-
-// 				readlen = _read_string(p, stack->dbg_node, sizeof(stack->dbg_node));				
-// 				if (readlen >= 0){
-// 					m_registorFlag = true;
-// 					p += readlen;
-// 
-// 					p = lp_read_stream(p, cur_step_size, m_cmdByteOrder);
-// 					step_start = p;
-// 					CHECK_INSTRUCTION_OVER_FLOW();
-// 					apollo_script_printf("logic_script %s: %s %d\n",stack->cmd->cmdname, stack->dbg_node, stack->dbg_cur_node_index) ;
-// 				}
-// 				else {
-// 					m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
-// 				}				
+				
 				break;
 			case E_OP_HEADER_INFO:
 			{
@@ -495,81 +491,21 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				break ;
 			case E_OP_WRITE:			//	写 eOperatorDest + operator_index_t + operator_value_t
 				OBJ_OP_FUNC(opWrite);
-// 				GET_TEXT_FROM_STREAM(name, sizeof(name), p);
-// 				GET_VAR_FROM_STREAM(stack, p, tmpIndexVal);
-// 				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);				
-// 				objAim = getLogicObjectMgr(name);
-// 				if (objAim) {
-// 					m_registorFlag = objAim->opWrite(tmpIndexVal, tmpInputVal);
-// 					
-// 				}
-// 				else {
-// 					m_sys_errno = LOGIC_ERR_AIM_OBJECT_NOT_FOUND;
-// 				}				
 				break ;
 
 			case E_OP_ADD :			//	增加 eOperatorDest + operator_index_t + operator_value_t + int
-
 				OBJ_OP_FUNC(opAdd);
-// 				GET_TEXT_FROM_STREAM(name, sizeof(name), p);
-// 				GET_VAR_FROM_STREAM(stack, p, tmpIndexVal);
-// 				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);
-// 				objAim = getLogicObjectMgr(name);
-// 				if (objAim) {
-// 					objAim->opAdd(tmpIndexVal, tmpInputVal);
-// 					m_registorFlag = true;
-// 				}
-// 				else {
-// 					m_sys_errno = LOGIC_ERR_AIM_OBJECT_NOT_FOUND;
-// 				}				
 				break ;
 			case E_OP_SUB :			//	减少 eOperatorDest + operator_index_t + operator_value_t + int
 				OBJ_OP_FUNC(opSub);
-// 				GET_TEXT_FROM_STREAM(name, sizeof(name), p);
-// 				GET_VAR_FROM_STREAM(stack, p, tmpIndexVal);
-// 				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);
-// 				objAim = getLogicObjectMgr(name);
-// 				if (objAim) {
-// 					objAim->opSub(tmpIndexVal, tmpInputVal);
-// 					m_registorFlag = true;
-// 				}
-// 				else {
-// 					m_sys_errno = LOGIC_ERR_AIM_OBJECT_NOT_FOUND;
-// 				}
 				break ;
-
 			case E_OP_CLEAR:			//  清除 eOperatorDest + operator_index_t	
-
 				OBJ_OP_FUNC(opClear);
-// 				GET_TEXT_FROM_STREAM(name, sizeof(name), p);
-// 				GET_VAR_FROM_STREAM(stack, p, tmpIndexVal);
-// 				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);
-// 
-// 				objAim = getLogicObjectMgr(name);
-// 				if (objAim) {
-// 					m_registorFlag = objAim->opClear(tmpIndexVal, tmpInputVal);
-// 				}
-// 				else {
-// 					m_sys_errno = LOGIC_ERR_AIM_OBJECT_NOT_FOUND;
-// 				}				
 				break ;
-
 			case E_OP_TEST:
-
 				OBJ_OP_FUNC(opCheck);
-// 				GET_TEXT_FROM_STREAM(name, sizeof(name), p);
-// 				GET_VAR_FROM_STREAM(stack, p, tmpIndexVal);
-// 				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);
-// 				objAim = getLogicObjectMgr(name);
-// 				if (objAim) {
-// 					m_registorFlag = objAim->opCheck(tmpIndexVal, tmpInputVal);
-// 				}
-// 				else {
-// 					m_sys_errno = LOGIC_ERR_AIM_OBJECT_NOT_FOUND;
-// 				}
 				break;
- 			case  E_OP_GET_OTHER_OBJECT:
-				
+ 			case  E_OP_GET_OTHER_OBJECT:				
 				GET_TEXT_FROM_STREAM(name, sizeof(name), p);
 				if (m_owner){
 					m_registorFlag = m_owner->getOtherObject(name,m_registerVal);
@@ -736,9 +672,14 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				if (readlen>0){
 					p += readlen;
 					m_registorFlag = true;
+// 					if (m_registerVal.CheckValid())	{						
+// 					}
+// 					else {
+// 						m_sys_errno = LOGIC_ERR_AIM_OBJECT_NOT_FOUND;
+// 					}
 				}
 				else {
-					m_sys_errno = LOGIC_ERR_AIM_OBJECT_NOT_FOUND;
+					m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
 				}
 				break ;
 			case E_OP_COMP:	 		//	比较 eOperatorDest + eParserCompare  + operator_value_t				
@@ -966,6 +907,8 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				p = (char*)exception_addr;
 				inException = true;
 				errorBeforeException = m_sys_errno;
+				m_registorFlag = true;
+				nd_logerror("run %s script error : %s \n", stack->cmd->cmdname, nd_error_desc(m_sys_errno)) ;
 			}
 			else {
 				return -1;
@@ -1884,7 +1827,7 @@ void LogicParserEngine::ResetStep()
 	
 	//m_registorA =0 ;//计算结果
 	m_registorFlag = false ;				//比较结果
-	m_sys_errno = 0;
+	//m_sys_errno = 0;
 	//m_registorCtrl = false ;
 
 }

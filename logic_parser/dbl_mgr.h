@@ -161,7 +161,7 @@ public:
 	bool operator == (const DBLDatabase &r);
 
 	//load from text file
-	int LoadFromText(const char *datapath, const char *list_file, const char *inputType, const char*outType);
+	int LoadFromText(const char *datapath, const char *list_file, const char *textEncode, const char*toEncode);
 	int ReloadTable(const char *table) ;
 	DBLTable * FindTable(const char *tablename) ;
 
@@ -212,7 +212,7 @@ DBLTable * DBL_FindTable(const char *table) ;
 #define GET_DBL_TABLE(_tablename)	\
 	DBLTable * pTable = DBL_FindTable(_tablename) ;	\
 	if (!pTable){									\
-		nd_logfatal("打开数据表%s失败\n" AND _tablename) ;	\
+		nd_logfatal("open table %serror\n" AND _tablename) ;	\
 		return -1;									\
 		}
 

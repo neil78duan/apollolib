@@ -522,6 +522,13 @@ bool CapolloParseEditorDlg::expExcel()
 		return false ;
 	}
 	
+	//get byte order  
+	int orderType = ND_L_ENDIAN;
+	const char *orderName = _getFromIocfg("bin_data_byte_order");
+	if (orderName) {
+		orderType = atoi(orderName);
+	}
+
 	const char *cur_dir = nd_getcwd();
 	const char *encodeName = getGameDateEncodeType();
 
@@ -532,15 +539,56 @@ bool CapolloParseEditorDlg::expExcel()
 		nd_logerror("导出策划数据失败，请手动导出\n");
 		return false;
 	}
-
 	LogText("excel 导出完成!!!!!!!\n==================开始打包======================\n");
 
-	//get byte order  
-	int orderType = ND_L_ENDIAN;
-	const char *orderName = _getFromIocfg("bin_data_byte_order");
-	if (orderName) {
-		orderType = atoi(orderName);
-	}
+	//DUMP FOR WINDOWS only
+	do 	{		
+		std::string strWinPack = package_file;
+		strWinPack += ".gbk";
+
+		DBLDatabase dbwin;
+		if (0 != dbwin.LoadFromText(text_path, excel_list, encodeName, "gbk")) {
+			nd_logerror("打包数据错误:不能从txt文件中读取数据\n");
+			return false;
+		}
+
+		if (0 != dbwin.Dump(strWinPack.c_str(), "gamedbGBK", orderType)) {
+			nd_logmsg("EXPORT game data for windows error\n");
+		}
+		dbwin.Destroy();
+	} while (0);
+
+// 	do 	{
+// 		std::string strTextGBKPath = text_path;
+// 		strTextGBKPath += "_gbk";
+// 		nd_mkdir(strTextGBKPath.c_str());
+// 
+// 		snprintf(path, sizeof(path), "cmd.exe /c %s/%s %s %s %s gbk ", cur_dir, exp_cmd, excel_list, excel_path, strTextGBKPath.c_str());
+// 		ret = system(path);
+// 		if (0 != ret)	{
+// 			nd_logerror("导出windows版数据错误\n");
+// 			return false;
+// 		}
+// 
+// 		LogText("excel 导出完成!!!!!!!\n==================开始打包======================\n");
+// 
+// 
+// 		std::string strWinPack = package_file;
+// 		strWinPack += ".gbk";
+// 		
+// 		DBLDatabase dbwin;
+// 		if (0 != dbwin.LoadFromText(strTextGBKPath.c_str(), excel_list, "gbk", "gbk")) {
+// 			nd_logerror("打包数据错误:不能从txt文件中读取数据\n");
+// 			return false;
+// 		}
+// 
+// 		if (0 != dbwin.Dump(strWinPack.c_str(), "gamedbGBK", orderType)) {
+// 			nd_logmsg("EXPORT game data for windows error\n");
+// 		}		
+// 		dbwin.Destroy();
+// 	} while (0);
+	
+
 
 	DBLDatabase dbtmp;
 	if (0 != dbtmp.LoadFromText(text_path, excel_list, encodeName, encodeName)) {
@@ -554,7 +602,7 @@ bool CapolloParseEditorDlg::expExcel()
 	else{
 		nd_logerror("excel导出二进制文件错误\n");
 	}
-	
+		
 	//before run test need load dbl 
 	DBLDatabase *pdbl = DBLDatabase::get_Instant();
 	if (pdbl){
@@ -684,6 +732,12 @@ void CapolloParseEditorDlg::_beginEdit(const char *script_file)
 	xmlDlg.loadUserdefDisplayList(xml_cpp_func, LOGIC_FUNCTION_LIST_NAME);
 	xmlDlg.loadUserdefDisplayList(xml_events_id, LOGIC_EVENT_LIST_NAME);
 
+	if (0 == common_export_error_list("./.error_list.xml")) {
+		_LOAD_XML(xml_error, "./.error_list.xml", "gbk", 0);
+		xmlDlg.loadUserdefDisplayList(xml_error, LOGIC_ERROR_LIST_NAME);
+
+		ndxml_destroy(&xml_error);
+	}
 
 	const char *package_file = _getFromIocfg("game_data_package_file");
 	DBLDatabase::get_Instant()->LoadBinStream(package_file);

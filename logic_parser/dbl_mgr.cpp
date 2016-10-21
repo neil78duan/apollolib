@@ -25,37 +25,75 @@
 // 	return 0;
 // }
 
-#if 0
+#if 1 //use file crtyp
 
 #include "nd_crypt/nd_cryptfile.h"
-#undef FILE
-#define FILE NDC_FILE
+#undef CRYPT_FILE
+#define CRYPT_FILE NDC_FILE
 
-#undef fread
-#define fread ndc_fread
+#undef crypt_fread
+#define crypt_fread ndc_fread
 
-#undef fwrite
-#define fwrite ndc_fwrite
+#undef crypt_fwrite
+#define crypt_fwrite ndc_fwrite
 
-#undef fclose
-#define fclose ndc_fclose
+#undef crypt_fclose
+#define crypt_fclose ndc_fclose
 
-#undef fseek
-#define fseek ndc_fseek
+#undef crypt_fseek
+#define crypt_fseek ndc_fseek
 
-#undef ftell
-#define ftell ndc_ftell
+#undef crypt_ftell
+#define crypt_ftell ndc_ftell
 
-#undef fflush
-#define fflush ndc_fflush
+#undef crypt_fflush
+#define crypt_fflush ndc_fflush
+
+#undef crypt_fopen_r
+#define crypt_fopen_r(_name, _mode) ndc_fopen_r(_name, "apollo123")
+
+#undef crypt_fopen_w
+#define crypt_fopen_w(_name, _mode) ndc_fopen_w(_name, "apollo123")
+
+#else 
+
+#undef CRYPT_FILE
+#define CRYPT_FILE FILE
+
+#undef crypt_fread
+#define crypt_fread fread
+
+#undef crypt_fwrite
+#define crypt_fwrite fwrite
+
+#undef crypt_fclose
+#define crypt_fclose fclose
+
+#undef crypt_fseek
+#define crypt_fseek fseek
+
+#undef crypt_ftell
+#define crypt_ftell ftell
+
+#undef crypt_fflush
+#define crypt_fflush fflush
+
+#undef crypt_fopen_r
+#define crypt_fopen_r(_name, _mode) fopen(_name, _mode)
+
+#undef crypt_fopen_w
+#define crypt_fopen_w(_name, _mode) fopen(_name, _mode)
 
 #endif 
 
 #define DBL_MAX_COLS_NUM 1024
 //#define USE_MYSQL_CHARACTER_CONVERT 
-char* DBL_UTF8_To_ANSI(const char *input_text, char* output_buf, int size_buf) ;
-char *DBL_UTF8_To_ANSI_ex(const char *input_text) ;
-char *DBL_ANSI_To_UTF8_ex(const char *input_text) ;
+
+const char *dbl_resource_type_to_host(const char *inputText, int encodeType);
+// 
+// char* DBL_UTF8_To_ANSI(const char *input_text, char* output_buf, int size_buf) ;
+// char *DBL_UTF8_To_ANSI_ex(const char *input_text) ;
+// char *DBL_ANSI_To_UTF8_ex(const char *input_text) ;
 //static int get_pwd_text(char *buf, int size);
 int create_db_header(FILE *pf);
 int check_db_header(FILE *pf, int with_inc) ;
@@ -421,30 +459,10 @@ int getCellType(const char *celltext, int &subType)
 			nd_logwarn("parse data error ( and ) not match: %s\n", celltext);
 		}
 		return OT_ARRAY;
-		/*
-		const char *endText = strchr(p, _ARRAR_END_MARK);
-		if (!endText) {
-			return -1;
-		}
-		//check is number
-		while (++p < endText) {
-			
-			if (IS_NUMERALS(*p) || *p == ' ' || *p == ',' || *p == '.' || *p == '-') {
-				++p;
-				if (*p == '.') {
-					isFloat = true;
-				}
-				continue;
-			}
-			else {
-				return -1;
-			}
-		}
-		if (isFloat) {
-			subType = OT_FLOAT;
-		}
-		return OT_ARRAY;
-		*/
+		
+	}
+	else if (*p=='0' && p[1] && p[1] != '.' ) {
+		return OT_STRING;
 	}
 	else if (IS_NUMERALS(*p) || *p == '-') {
 		//check is number
@@ -579,8 +597,13 @@ int DBLTable::parseTableTypeInfo(FILE *pf, int encodeType)
 		strncpy(m_pcols[i].col_name, line1[i].c_str(), DBL_NAME_SIZE);
 
 #ifdef EXCEL_SECOND_LINE_AS_NAME
-		if (line1.size() ==line2.size() && line2[i].size() > 0)
+		if (line1.size() == line2.size() && line2[i].size() > 0) {
 			strncpy(m_pcols[i].col_alias, line2[i].c_str(), DBL_NAME_SIZE);
+		}
+		else {
+			nd_logerror("first line and second line is not size\n");
+			return -1;
+		}
 #endif 
 		// force empty is string		
 		if (is_setbuf[i] == 0)	{
@@ -688,20 +711,20 @@ int DBLTable::Dump(void *pfile )
 	int ret ;
 	NDUINT16 size ;
 	size_t length;
-	FILE *pf = (FILE*)pfile ;
+	CRYPT_FILE *pf = (CRYPT_FILE*)pfile ;
 	//write table header | 16bits col number, + col infos
 	size = m_cols ;
 	_tryto_change_order_short(size);
-	ret = (int)fwrite(&size, sizeof(size), 1, pf) ;
+	ret = (int)crypt_fwrite(&size, sizeof(size), 1, pf);
 	nd_assert(ret ) ;
 
 	for(int i=0; i<m_cols; i++) {
 		NDUINT8 type = m_pcols[i].type ;
-		ret = (int) fwrite(&type, sizeof(type), 1, pf) ;
+		ret = (int)crypt_fwrite(&type, sizeof(type), 1, pf);
 		nd_assert(ret ) ;
 
 		type = m_pcols[i].sub_type ;
-		ret = (int) fwrite(&type, sizeof(type), 1, pf) ;
+		ret = (int)crypt_fwrite(&type, sizeof(type), 1, pf);
 		nd_assert(ret ) ;
 
 		//write real-name
@@ -709,25 +732,25 @@ int DBLTable::Dump(void *pfile )
 		size = (NDUINT16)strlen(m_pcols[i].col_alias);
 		if (size > 0) {
 			type = 1;
-			fwrite(&type, sizeof(type), 1, pf);
+			crypt_fwrite(&type, sizeof(type), 1, pf);
 
 			length = size;
 			_tryto_change_order_short(size);
-			ret = (int)fwrite(&size, sizeof(size), 1, pf);
+			ret = (int)crypt_fwrite(&size, sizeof(size), 1, pf);
 			nd_assert(ret);
 
-			ret = (int)fwrite(m_pcols[i].col_alias, length, 1, pf);
+			ret = (int)crypt_fwrite(m_pcols[i].col_alias, length, 1, pf);
 			nd_assert(ret);
 
 		}
 		else {
 			type = 0; 
-			fwrite(&type, sizeof(type), 1, pf);
+			crypt_fwrite(&type, sizeof(type), 1, pf);
 		}
 		
 #else 
 		type = 0; 
-		fwrite(&type, sizeof(type), 1, pf);
+		crypt_fwrite(&type, sizeof(type), 1, pf);
 #endif 
 		
 
@@ -735,10 +758,10 @@ int DBLTable::Dump(void *pfile )
 
 		length = size;
 		_tryto_change_order_short(size);
-		ret = (int) fwrite(&size, sizeof(size), 1, pf) ;
+		ret = (int)crypt_fwrite(&size, sizeof(size), 1, pf);
 		nd_assert(ret ) ;
 		//col name
-		ret = (int)fwrite(m_pcols[i].col_name, length, 1, pf);
+		ret = (int)crypt_fwrite(m_pcols[i].col_name, length, 1, pf);
 		nd_assert(ret ) ;
 
 
@@ -748,7 +771,7 @@ int DBLTable::Dump(void *pfile )
 
 	length = size;
 	_tryto_change_order_short(size);
-	ret =  (int)fwrite(&size, sizeof(size), 1, pf) ;
+	ret = (int)crypt_fwrite(&size, sizeof(size), 1, pf);
 	nd_assert(ret ) ;
 	//write data 
 	
@@ -758,10 +781,10 @@ int DBLTable::Dump(void *pfile )
 		//write this line valid flag 
 		for(int i=0; i<m_cols; i++) {
 			NDUINT8 isInit = pRecord->m_data_buf[i].isInit ? 1 : 0; 
-			ret = fwrite(&isInit, 1, 1, pf);
+			ret = crypt_fwrite(&isInit, 1, 1, pf);
 			nd_assert(ret);
 			if (isInit)	{
-				ret = dbl_data_2streamfile(&pRecord->m_data_buf[i], m_pcols[i].type, m_pcols[i].sub_type, pf, DBLDatabase::s_data_needChangeOrder);
+				ret = dbl_data_2streamfile(&pRecord->m_data_buf[i], m_pcols[i].type, m_pcols[i].sub_type, (FILE*)pf, (dbl_stream_fwrite)crypt_fwrite, DBLDatabase::s_data_needChangeOrder);
 				nd_assert(ret == 0);
 			}
 		}
@@ -773,8 +796,8 @@ int DBLTable::LoadBinStream(void *pfile)
 {
 	int ret ;
 	NDUINT16 size ;
-	FILE *pf = (FILE*)pfile ;
-	ret =  (int)fread(&size, sizeof(size), 1, pf) ;
+	CRYPT_FILE *pf = (CRYPT_FILE*)pfile ;
+	ret = (int)crypt_fread(&size, sizeof(size), 1, pf);
 	if(ret<=0 )
 		return -1;
 
@@ -788,41 +811,41 @@ int DBLTable::LoadBinStream(void *pfile)
 
 	for(int i=0; i<m_cols; i++) {
 		NDUINT8 type ;
-		ret = (int) fread(&type, sizeof(type), 1, pf) ;
+		ret = (int)crypt_fread(&type, sizeof(type), 1, pf);
 		nd_assert(ret ) ;
 		m_pcols[i].type = (DBL_ELEMENT_TYPE) type ;
 
-		ret = (int) fread(&type, sizeof(type), 1, pf) ;
+		ret = (int)crypt_fread(&type, sizeof(type), 1, pf);
 		nd_assert(ret ) ;
 		m_pcols[i].sub_type = (DBL_ELEMENT_TYPE)type ;
 
 		//write real-name
 		type = 0;
-		fread(&type, sizeof(type), 1, pf);
+		crypt_fread(&type, sizeof(type), 1, pf);
 #ifdef EXCEL_SECOND_LINE_AS_NAME
 		if (type ==1) {
-			ret = (int)fread(&size, sizeof(size), 1, pf);
+			ret = (int)crypt_fread(&size, sizeof(size), 1, pf);
 			nd_assert(ret);
 
 			_tryto_change_order_short(size);
 			//col name
-			ret = (int)fread(m_pcols[i].col_alias, size, 1, pf);
+			ret = (int)crypt_fread(m_pcols[i].col_alias, size, 1, pf);
 			nd_assert(ret);
 			m_pcols[i].col_alias[size] = 0;
 		}
 #endif 
 
-		ret = (int) fread(&size, sizeof(size), 1, pf) ;
+		ret = (int)crypt_fread(&size, sizeof(size), 1, pf);
 		nd_assert(ret ) ;
 
 		_tryto_change_order_short(size);
 		//col name
-		ret = (int)fread(m_pcols[i].col_name, size, 1, pf);
+		ret = (int)crypt_fread(m_pcols[i].col_name, size, 1, pf);
 		nd_assert(ret ) ;
 		m_pcols[i].col_name[size] = 0;
 	}
 	//read row number 
-	ret = (int) fread(&size, sizeof(size), 1, pf) ;
+	ret = (int)crypt_fread(&size, sizeof(size), 1, pf);
 	nd_assert(ret ) ;
 	_tryto_change_order_short(size);
 
@@ -835,10 +858,10 @@ int DBLTable::LoadBinStream(void *pfile)
 
 		for(int i=0; i<m_cols; i++) {
 			NDUINT8 isInit = 0;
-			ret = fread(&isInit, 1, 1, pf);
+			ret = crypt_fread(&isInit, 1, 1, pf);
 			nd_assert(ret);
 			if (isInit){
-				if (-1 == dbl_read_streamfile(pRecord->GetOrgVal(i), m_pcols[i].type, m_pcols[i].sub_type, pf,DBLDatabase::s_data_needChangeOrder)) {
+				if (-1 == dbl_read_streamfile(pRecord->GetOrgVal(i), m_pcols[i].type, m_pcols[i].sub_type, (FILE*)pf, (dbl_stream_fread)crypt_fread, DBLDatabase::s_data_needChangeOrder)) {
 					delete pRecord;
 					return -1;
 				}
@@ -1014,21 +1037,16 @@ DBLDatabase::~DBLDatabase()
 {
 
 }
-int DBLDatabase::LoadFromText(const char *datapath, const char *list_file, const char *inTypeName, const char*outType)
+int DBLDatabase::LoadFromText(const char *datapath, const char *list_file, const char *textEncode, const char*toEncode)
 {
-// 	if (!DBLDatabase::m_pool){
-// 		DBLDatabase::m_pool = nd_pool_create(EMEMPOOL_UNLIMIT,"DBLOADER") ;
-// 		nd_pool_set_trace(DBLDatabase::m_pool,0);
-// 		m_tables._set_pool(DBLDatabase::m_pool) ;
-// 	}
 	if (m_bLoaded) {
 		return 0;
 	}
-	int inputEncodeType = nd_get_encode_val(inTypeName);
-	int outputEnhcodeType = nd_get_encode_val(outType);
-	s_data_encodeType = outputEnhcodeType;
+	int inputEncodeType = nd_get_encode_val(textEncode);
+	int toEnhcodeType = nd_get_encode_val(toEncode);
+	s_data_encodeType = toEnhcodeType;
 
-	int org_code = ndstr_set_code(inputEncodeType);
+	int org_code = ndstr_set_code(toEnhcodeType);
 	int ret = _loadText(datapath, list_file, inputEncodeType);
 	ndstr_set_code(org_code);
 	return ret;
@@ -1047,6 +1065,7 @@ int DBLDatabase::_loadText(const char *datapath, const char *list_file, int enco
 	FILE *pf = fopen(list_file, "r");
 	if (!pf){
 		DBLDatabase::s_convert_buf = 0;
+		nd_logerror("load from test, open file-list %s error %s\n" AND list_file AND nd_last_error());
 		return -1;
 	}
 	filename[0] = 0;
@@ -1101,10 +1120,10 @@ int DBLDatabase::Dump(const char *file, const char *dbname, int orderType )
 	int ret ;
 	NDUINT16 size;
 	size_t length ;
-	FILE *pf = fopen(file, "wb") ;
+	CRYPT_FILE *pf = crypt_fopen_w(file, "wb");
 
 	if(!pf) {
-		nd_logerror("open file %s error \n" AND file) ;
+		nd_logerror("dump database, open file %s error %s\n" AND file AND nd_last_error()) ;
 		return -1 ;
 	}
 	//write file name  | 16bits size + string
@@ -1117,42 +1136,39 @@ int DBLDatabase::Dump(const char *file, const char *dbname, int orderType )
 		val1 = orderType;
 	}
 
-	fwrite(&val1, sizeof(val1), 1, pf);
+	crypt_fwrite(&val1, sizeof(val1), 1, pf);
 
 	val1 = DBL_DATE_ENCODE_TYPE;
-	fwrite(&val1, sizeof(val1), 1, pf);
+	crypt_fwrite(&val1, sizeof(val1), 1, pf);
 
-	if (dbname && dbname[0]){
-		size =(NDUINT16) strlen(dbname) ;
-		length = size ;
+	//write package user name and time
+	char dbname_buf[1024] ;
+	size = snprintf(dbname_buf, sizeof(dbname_buf), "%s.%s-%s",dbname?dbname:"dbl",nd_get_sys_username(), nd_get_datetimestr()) ;
+	
+	length = size ;
+	
+	_tryto_change_order_short(size);
+	ret = (int)crypt_fwrite(&size, sizeof(size), 1, pf);
+	nd_assert(ret) ;
+	
+    ret = (int)crypt_fwrite(dbname_buf, length, 1, pf);
+	nd_assert(ret) ;
 
-		_tryto_change_order_short(size);
-		ret = (int)fwrite(&size, sizeof(size),1, pf) ;
-		nd_assert(ret) ;
-
-		ret = (int)fwrite(dbname, length, 1, pf);
-		nd_assert(ret) ;
-	}
-	else {
-		size = 0 ;
-		ret = (int)fwrite(&size, sizeof(size),1, pf) ;
-		nd_assert(ret) ;
-	}
 	
 	NDTRAC("==========begin DUMP database from bin-stream ....\n");
 	//write table numbers 16bits
 	size =(NDUINT16) m_tables.size() ;
 	_tryto_change_order_short(size);
-	fwrite(&size, sizeof(size),1, pf) ;
+	crypt_fwrite(&size, sizeof(size), 1, pf);
 
 	for(table_vct_t::iterator it = m_tables.begin(); it!= m_tables.end() ;++it) {
 		size = (int)it->first.size() ;
 		length = size;
 
 		_tryto_change_order_short(size);
-		ret = (int)fwrite(&size, sizeof(size),1, pf) ;
+		ret = (int)crypt_fwrite(&size, sizeof(size), 1, pf);
 		nd_assert(ret) ;
-		ret = (int)fwrite(it->first.c_str(), length, 1, pf);
+		ret = (int)crypt_fwrite(it->first.c_str(), length, 1, pf);
 		nd_assert(ret) ;
 
 		NDTRAC("DUMPing %s....\n", it->first.c_str());
@@ -1160,7 +1176,7 @@ int DBLDatabase::Dump(const char *file, const char *dbname, int orderType )
 			nd_logdebug("save %s file to stream success\n", it->first.c_str());
 		}
 	}
-	fclose(pf) ;
+	crypt_fclose(pf);
 
 	DBL_CLEAR_CHANGE_BYTE_ORDER();
 	return 0 ;
@@ -1211,16 +1227,16 @@ int DBLDatabase::LoadBinStream(const char *file)
 
 	int ret ;
 	NDUINT16 size ;
-	char dbname[128] ;
-	FILE *pf = fopen(file, "rb") ;
+	char dbname[1024] ;
+	CRYPT_FILE *pf = crypt_fopen_r(file, "rb") ;
 
 	NDUINT8 byteOrder = -1, encodeType = -1;
 	if(!pf) {
-		nd_logerror("open file %s error \n" AND file) ;
+		nd_logerror("open file %s error %s \n" AND file AND nd_last_error())  ;
 		return -1 ;
 	}
 	
-	fread(&byteOrder, sizeof(byteOrder), 1, pf);
+	crypt_fread(&byteOrder, sizeof(byteOrder), 1, pf);
 	if (byteOrder != nd_byte_order())	{
 		//nd_logerror(" read file error byte-order error the file is %s current cup is %s\n", byteOrder ? "little-end" : "big-end", nd_byte_order() ? "little-end" : "big-end");
 		//fclose(pf);
@@ -1229,35 +1245,38 @@ int DBLDatabase::LoadBinStream(const char *file)
 	}
 	DBLDatabase::s_data_endianOrder = byteOrder;
 
-	fread(&encodeType, sizeof(encodeType), 1, pf);
+	crypt_fread(&encodeType, sizeof(encodeType), 1, pf);
 	s_data_encodeType = (int)encodeType;
 	
 	
-	ret = (int)fread(&size, sizeof(size),1, pf) ;
+	ret = (int)crypt_fread(&size, sizeof(size), 1, pf);
 	_tryto_change_order_short(size);
 
-	if (ret <= 0 || size > 128){
-		fclose(pf);
+	if (ret <= 0 || size > 1024){
+		crypt_fclose(pf);
 
 		DBL_CLEAR_CHANGE_BYTE_ORDER();
+
+		nd_logerror("database name size is too long\n");
 		return -1;
 	}
 
 	if (size > 0){
-		ret =(int) fread(dbname,size, 1, pf) ;
+		ret = (int)crypt_fread(dbname, size, 1, pf);
 		nd_assert(ret) ;
 
 		dbname[size]= 0 ;
 		m_dbName = dbname ;
 	}
 	else {
-		m_dbName = "unknow-db" ;
+		m_dbName = "dbl-database" ;
 	}
 
+	nd_logmsg("begin load %s from %s ....\n", m_dbName.c_str(), file) ;
 
-	NDTRAC("==========begin READing database from bin-stream ....\n");
+	//NDTRAC("==========begin READing database from bin-stream ....\n");
 	//write table numbers 16bits
-	ret = (int)fread(&size, sizeof(size),1, pf) ;
+	ret = (int)crypt_fread(&size, sizeof(size), 1, pf);
 	nd_assert(ret) ;
 	_tryto_change_order_short(size);
 
@@ -1265,12 +1284,12 @@ int DBLDatabase::LoadBinStream(const char *file)
 		NDUINT16 name_len = 0 ;
 		char tablename[128] ;
 		tablename[0] = 0;
-		ret = (int)fread(&name_len, sizeof(name_len),1, pf) ;
+		ret = (int)crypt_fread(&name_len, sizeof(name_len), 1, pf);
 		nd_assert(ret) ;
 		_tryto_change_order_short(name_len);
 
 		if (name_len){
-			ret = (int) fread(tablename, name_len,1, pf) ;
+			ret = (int)crypt_fread(tablename, name_len, 1, pf);
 			nd_assert(ret) ;
 			tablename[name_len] = 0 ;
 		}
@@ -1283,6 +1302,7 @@ int DBLDatabase::LoadBinStream(const char *file)
 		}
 		if (-1 == ptable->LoadBinStream((void*)pf)){
 			delete ptable ;
+			nd_logerror("load table %s error\n", tablename);
 			return -1;
 		}
 
@@ -1290,9 +1310,12 @@ int DBLDatabase::LoadBinStream(const char *file)
 
 		nd_logdebug("Load %s file from stream success\n", tablename);
 	}
-	fclose(pf) ;
+	crypt_fclose(pf);
 	m_bLoaded = true;
 	DBL_CLEAR_CHANGE_BYTE_ORDER();
+	
+	
+	nd_logmsg("load %s from %s SUCCESS!!!\n", m_dbName.c_str(), file) ;
 	return 0 ;
 }
 
@@ -1494,17 +1517,36 @@ void DBLDatabase::Destroy()
 }
 
 
-//#include "nd_iconv.h"
-char *DBL_ANSI_To_UTF8_ex(const char *input_text)
+const char *dbl_resource_type_to_host(const char *inputText, int encodeType)
 {
 	static char s_buf[4096];
-	return nd_gbk_to_utf8(input_text, s_buf, (int)sizeof(s_buf)) ;
+#ifdef WIN32 
+	if (encodeType == E_SRC_CODE_UTF_8)	{
+		return nd_utf8_to_gbk(inputText, s_buf,  sizeof(s_buf) );
+	}
+	else {
+		return inputText;
+	}
+#else
+	if (encodeType != E_SRC_CODE_UTF_8)	{
+		return nd_gbk_to_utf8(inputText, s_buf, sizeof(s_buf));
+	}
+	else {
+		return inputText;
+	}
+#endif
 }
-
-char * DBL_UTF8_To_ANSI(const char *input_text, char *output_buf, int size_buf)
-{
-	return nd_utf8_to_gbk(input_text, output_buf,  size_buf);
-}
+// #include "nd_iconv.h"
+// char *DBL_ANSI_To_UTF8_ex(const char *input_text)
+// {
+// 	static char s_buf[4096];
+// 	return nd_gbk_to_utf8(input_text, s_buf, (int)sizeof(s_buf)) ;
+// }
+// 
+// char * DBL_UTF8_To_ANSI(const char *input_text, char *output_buf, int size_buf)
+// {
+// 	return nd_utf8_to_gbk(input_text, output_buf,  size_buf);
+// }
 
 //////////////////////////////////////////////////////////////////////////
 

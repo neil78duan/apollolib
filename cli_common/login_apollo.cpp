@@ -57,20 +57,27 @@ if (0 != ndSendAndWaitMessage(_conn, _omsg.GetMsgAddr(), _rmsg_buf, _wait_maxid,
 
 
 //show error
-const char *atlantis_error(int errcode)
+const char *apollo_error(int errcode)
 {
 	static char errdesc[128] ;
 	
-	const char *perr[] = {
-		"unknow_error"
-#undef ErrorElement
-#define ErrorElement(a) #a
+	const char *nd_err[] = {
+		"UNKNOW_ERROR"
+#undef ErrorElement 
+#define ErrorElement(a,_err_desc) "game(ESERVER_"#a "):" _err_desc
 #include "_error_def.h"
-#undef ErrorElement
+#undef ErrorElement 
 	} ;
-	
-	if( errcode >=AtlantisError_Start && errcode < ESERVER_ERR_NUMBER){
-		return perr[errcode - AtlantisError_Start] ;
+			
+	if (errcode <= NDERR_UNKNOWN) {
+		
+		nd_error_convert  oldFunc = nd_register_error_convert(NULL);
+		const char *perr = nd_error_desc(errcode);
+		nd_register_error_convert(oldFunc);
+		return perr;
+	}
+	else if (errcode >= ApolloError_Start && errcode < ESERVER_ERR_NUMBER){
+		return nd_err[errcode - ApolloError_Start];
 	}
 	else {
 		snprintf(errdesc, sizeof(errdesc), "Error code =%d",errcode) ;
@@ -82,7 +89,7 @@ const char *atlantis_error(int errcode)
 #ifdef BUILD_AS_THIRD_PARTY
 LoginBase *ApolloCreateLoginInst()
 {
-	nd_register_error_convert(atlantis_error);
+	nd_register_error_convert(apollo_error);
 	return new LoginApollo();
 }
 void ApolloDestroyLoginInst(LoginBase *pLogin)
@@ -92,7 +99,7 @@ void ApolloDestroyLoginInst(LoginBase *pLogin)
 #else 
 LoginApollo *ApolloCreateLoginInst()
 {
-	nd_register_error_convert(atlantis_error);
+	nd_register_error_convert(apollo_error);
 	return new LoginApollo();
 }
 void ApolloDestroyLoginInst(LoginApollo *pLogin)
@@ -242,7 +249,7 @@ int LoginApollo::ReloginEx(void *session_data, size_t size)
 	}
 	else {
 		nd_logmsg("RE-login ERROR\n");
-		if (ndGetLastError(m_conn) == ESERVER_ERR_USERNAME) {
+		if (ndGetLastError(m_conn) == NDSYS_ERR_USERNAME) {
 			return 1;
 		}
 	}
@@ -327,7 +334,7 @@ int LoginApollo::Relogin()
 	}
 	else {		
 		nd_logmsg("RE-login ERROR\n") ;	
-		if (ndGetLastError(m_conn) == ESERVER_ERR_USERNAME) {
+		if (ndGetLastError(m_conn) == NDSYS_ERR_USERNAME) {
 			nd_rmfile(m_session_file) ;
 			return 1;
 		}
@@ -339,7 +346,7 @@ int LoginApollo::Relogin()
 int LoginApollo::Logout() 
 {
 	if (nd_connect_level_get(m_conn) < EPL_LOGIN)  {
-		nd_object_seterror(m_conn, ESERVER_ERR_NEED_LOGIN);
+		nd_object_seterror(m_conn, NDSYS_ERR_NEED_LOGIN);
 		nd_connector_set_crypt(m_conn, NULL, 0);
 		return -1;
 	}
@@ -426,7 +433,7 @@ int LoginApollo::GetServerList(ApolloServerInfo *buf, int size)
 int LoginApollo::ReadyGame() 
 {
 	if (nd_connect_level_get(m_conn) < EPL_LOGIN)  {
-		nd_object_seterror(m_conn, ESERVER_ERR_NEED_LOGIN) ;
+		nd_object_seterror(m_conn, NDSYS_ERR_NEED_LOGIN) ;
 		return -1;
 	}
 	nd_connect_level_set(m_conn, EPL_READY) ;
@@ -473,7 +480,7 @@ int LoginApollo::EnterServer(const char *host_name, NDUINT16 port,const char *se
 	
 	//connect to new server
 	if(0!=nd_reconnectex(m_conn, host_name,  port, NULL)  ) {
-		nd_object_seterror(m_conn, ESERVER_ERR_HOST_UNAVAILABLE) ;
+		nd_object_seterror(m_conn, NDSYS_ERR_HOST_UNAVAILABLE) ;
 		nd_logmsg("connect server %s:%d error  \n", host_name,  port) ;
 		return -1;
 	}
@@ -500,7 +507,7 @@ int LoginApollo::jumptoGame(NDUINT64 serverid)
 	nd_connector_send(m_conn, (nd_packhdr_t*) (msgClose.GetMsgAddr()), ESF_URGENCY) ;
 	
 	if(0!=nd_reconnect(m_conn, HOST_ID_GET_IP(serverid), HOST_ID_GET_PORT(serverid), NULL)  ) {
-		nd_object_seterror(m_conn, ESERVER_ERR_HOST_UNAVAILABLE) ;
+		nd_object_seterror(m_conn, NDSYS_ERR_HOST_UNAVAILABLE) ;
 		
 		nd_logerror("re-connect to %s : %d error\n",nd_inet_ntoa( HOST_ID_GET_IP(serverid),buf), HOST_ID_GET_PORT(serverid));
 		return -1;
@@ -540,7 +547,7 @@ int LoginApollo::switchServer(ndip_t ip, NDUINT16 port,int sendMsg, int waitMsg)
 	
 	
 	if(0!=nd_reconnect(m_conn,  ip,  port, NULL)  ) {		
-		nd_object_seterror(m_conn, ESERVER_ERR_HOST_UNAVAILABLE) ;
+		nd_object_seterror(m_conn, NDSYS_ERR_HOST_UNAVAILABLE) ;
 		return -1;
 	}
 	
@@ -566,7 +573,7 @@ int LoginApollo::switchServer(const char *host, NDUINT16 port,int sendMsg, int w
 	
 	
 	if(0!=nd_reconnectex(m_conn,  host,  port, NULL)  ) {
-		nd_object_seterror(m_conn, ESERVER_ERR_HOST_UNAVAILABLE) ;
+		nd_object_seterror(m_conn, NDSYS_ERR_HOST_UNAVAILABLE) ;
 		return -1;
 	}
 	
@@ -677,7 +684,7 @@ int LoginApollo::onLogin(NDIStreamMsg &inmsg)
 	}
 	if (-1==inmsg.Read((NDUINT32&)m_accIndex) || m_accIndex==0) {
 		
-		nd_object_seterror(m_conn, ESERVER_ERR_USERNAME) ;
+		nd_object_seterror(m_conn, NDSYS_ERR_USERNAME) ;
 		return -1 ;
 	}
 	inmsg.Read(m_accType) ;

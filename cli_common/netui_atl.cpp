@@ -48,7 +48,7 @@ int RloginTrylogin(const char*udid,nd_handle h,int accType, const char *userName
 	ret = login.Login(userName, passwd, (ACCOUNT_TYPE)accType) ;
 	if (-1==ret ) {
 		//Create account
-		if ( ndGetLastError(h)==ESERVER_ERR_NOUSER) {
+		if ( ndGetLastError(h)==NDSYS_ERR_NOUSER) {
 			account_base_info acc ;
 			initAccCreateInfo(acc, accType,userName, passwd);
 
@@ -83,7 +83,7 @@ int loginAndCreate(const char*udid,nd_handle h,int accType, const char *userName
 	ret = login.Login(userName, passwd, (ACCOUNT_TYPE)accType) ;
 	if (-1==ret ) {
 		//Create account
-		if ( ndGetLastError(h)==ESERVER_ERR_NOUSER) {
+		if ( ndGetLastError(h)==NDSYS_ERR_NOUSER) {
 			account_base_info acc ;
 			
 			initAccCreateInfo(acc, accType,userName, passwd);

@@ -1,4 +1,4 @@
-//
+﻿//
 //  _error_def.h
 //  worldManager
 //
@@ -6,56 +6,49 @@
 //  Copyright (c) 2014 duanxiuyun. All rights reserved.
 //
 
-// define game error 
-ErrorElement(ESERVER_ERR_IN_CD),
-ErrorElement(ESERVER_ERR_SHORT_ITEM),
-ErrorElement(ESERVER_ERR_SIGNED_IN),
-ErrorElement(ESERVER_ERR_LEVEL_LOW),
-ErrorElement(ESERVER_ERR_SHORT_MONEY),
+// define game error
+ErrorElement(ESERVER_ERR_GAME_CONFIG,"策划数据配错了"),
+ErrorElement(ESERVER_ERR_IN_CD,"CD中"),
+ErrorElement(ESERVER_ERR_SHORT_ITEM, "物品不足"),
+ErrorElement(ESERVER_ERR_NO_ITEM, "沒有需要的物品"),
+ErrorElement(ESERVER_ERR_ATTR_NOT_ENOUGH, "属性不足"),
+ErrorElement(ESERVER_ERR_ATTR_TOO_MUCH, "属性太高"),
+ErrorElement(ESERVER_ERR_LEVEL_LOW, "等级太低"),
+ErrorElement(ESERVER_ERR_SHORT_MONEY, "游戏币不足"),
+ErrorElement(ESERVER_ERR_MAX_LEVEL, "已经是最高级"),
 
-ErrorElement(ESERVER_ERR_ATTR_NOT_ENOUGH),
-ErrorElement(ESERVER_ERR_ATTR_TOOL_MUCH),
-
-
-ErrorElement(ESERVER_ERR_INVITE_CODE_INVALID),
-ErrorElement(ESERVER_ERR_INVITE_BE_INVITED),
-ErrorElement(ESERVER_ERR_INVITE_NOT_BE_INVITED),
-
-
-ErrorElement( ESERVER_ERR_NOT_IN_MAP),
-ErrorElement(ESERVER_ERR_TOO_ROLES),
-ErrorElement(ESERVER_ERR_PACKAGE_FULL),
-ErrorElement(ESERVER_ERR_NO_ITEM),
-ErrorElement(ESERVER_ERR_FREE_TIME_OVER),
-ErrorElement(ESERVER_ERR_VIP_LOWER),
-
-ErrorElement(ESERVER_ERR_ITEM_STACK_LIMIT),
+ErrorElement(ESERVER_ERR_NO_BUILDING, "沒有建筑物"),
+ErrorElement(ESERVER_ERR_BUILDING_LEVEL_LOW, "建筑物等级不够"),
 
 
-ErrorElement(ESERVER_ERR_MAX_LEVEL),
-ErrorElement(ESERVER_ERR_NO_SKILL),
-ErrorElement(ESERVER_ERR_NO_WEAPON),
-ErrorElement(ESERVER_ERR_SHOP_NOT_EXIST),
-ErrorElement(ESERVER_ERR_AWARDS_GOT),
-ErrorElement(ESERVER_ERR_CANNOT_GET_THIS_TASK),
+ErrorElement(ESERVER_ERR_PACKAGE_FULL, "背包已满"),
+ErrorElement(ESERVER_ERR_SHOP_NOT_EXIST, "商店不存在"),
+ErrorElement(ESERVER_ERR_ITEM_OUT_SALE, "物品售完"),
 
 
-ErrorElement(ESERVER_ERR_NO_THIS_TASK),
-ErrorElement(ESERVER_ERR_NEED_PASS_MAP),
-
-ErrorElement(ESERVER_ERR_TASK_NOT_COMPLETED),
-
-ErrorElement(ESERVER_ERR_ACHIEVMENT_NOT_COMPLETED),
+ErrorElement(ESERVER_ERR_SIGNED_IN, "已经签到"),
+ErrorElement(ESERVER_ERR_TOO_ROLES, "角色过多不能创建"),
 
 
-ErrorElement(ESERVER_ERR_ITEM_OUT_SALE),
-ErrorElement(ESERVER_ERR_TASK_IN_RUNNING),
+ErrorElement(ESERVER_ERR_INVITE_CODE_INVALID, "无效的邀请码"),
+ErrorElement(ESERVER_ERR_INVITE_BE_INVITED, "已经被邀请过"),
+ErrorElement(ESERVER_ERR_INVITE_NOT_BE_INVITED, "不能被邀请"),
 
-ErrorElement(ESERVER_ERR_STATE_ERROR),
-ErrorElement(ESERVER_ERR_PVP_AIM_IN_BATTLE),
-ErrorElement(ESERVER_ERR_PVP_ALREADY_TOP1),
 
-ErrorElement(ESERVER_ERR_NO_SPACE),
-ErrorElement(ESERVER_ERR_AIM_ROLE_NOT_EXIST),
+ErrorElement(ESERVER_ERR_FREE_TIME_OVER, "免费次数用完"),
+ErrorElement(ESERVER_ERR_AWARDS_GOT, "奖励已经领取"),
+ErrorElement(ESERVER_ERR_CANNOT_GET_THIS_TASK, "不能领取该任务"),
+ErrorElement(ESERVER_ERR_NO_THIS_TASK, "任务不存在"),
 
-ErrorElement(ESERVER_ERR_NUMBER),
+ErrorElement(ESERVER_ERR_TASK_NOT_COMPLETED, "任务没有完成"),
+ErrorElement(ESERVER_ERR_ACHIEVMENT_NOT_COMPLETED, "成就没有达成"),
+
+
+ErrorElement(ESERVER_ERR_TASK_IN_RUNNING, "任务执行中"),
+ErrorElement(ESERVER_ERR_AIM_ROLE_NOT_EXIST, "目标用户不存在"),
+
+ErrorElement(ESERVER_ERR_NEED_PASS_MAP, "需要先通关地图"),
+
+ErrorElement(ESERVER_ERR_POS_ERROR, "位置错误"),
+
+ErrorElement(ESERVER_ERR_NUMBER, "error number"),

@@ -607,6 +607,7 @@ bool XMLDialog::_beginEdit(int nRow, int nCol)
     if (type == EDT_IN_FILE || type == EDT_OUT_FILE) {
 
         if (_GetFileName(type == EDT_IN_FILE, str1, GetXmlParam(xml))) {
+			cell->setText(str1);
             if (0 == ndxml_setval(xml, str1.toStdString().c_str())) {
                 ret = true;
             }
@@ -615,6 +616,7 @@ bool XMLDialog::_beginEdit(int nRow, int nCol)
     else if (EDT_DIR == type) {
         if (_OpenFilter(str1, tr("select direct"))){
             str1 += '/' ;
+			cell->setText(str1);
             if (0 == ndxml_setval(xml, str1.toStdString().c_str()) ){
                 ret = true;
             }
@@ -626,12 +628,12 @@ bool XMLDialog::_beginEdit(int nRow, int nCol)
         const char *pUserparam = ndxml_getattr_val(xml, _GetReverdWord(ERT_USER_DEFINE_PARAM));
         if (_GetUserDefinData(pUserparam, str2)) {
             std::string stdText = str2.toStdString() ;
-            if (0 == ndxml_setval(xml, stdText.c_str())) {
-                char realval[256];
-                const char *p = getDisplayNameFromStr(stdText.c_str(), realval, sizeof(realval));
-                str1 = p;
-                ret = true;
-            }
+			
+			char realval[256];
+			str1 = getDisplayNameFromStr(stdText.c_str(), realval, sizeof(realval));
+			ret = true;
+			cell->setText(str1);
+			ndxml_setval(xml, stdText.c_str());
         }
     }
     else if(EDT_BOOL == type) {
@@ -642,6 +644,8 @@ bool XMLDialog::_beginEdit(int nRow, int nCol)
         if (dlg.exec() == QDialog::Accepted) {
             dlg.GetSelectText(str1) ;
             int selval = dlg.GetSelect() ;
+
+			cell->setText(str1);
             ndxml_setval(xml,selval ? "1":"0");
             ret = true ;
         }
@@ -661,6 +665,8 @@ bool XMLDialog::_beginEdit(int nRow, int nCol)
                 if (-1 != sel) {
                     QString str3;
                     str3.sprintf("%d", sel);
+
+					cell->setText(str1);
                     ndxml_setval(xml,str3.toStdString().c_str());
                     ret = true;
                 }
@@ -684,22 +690,21 @@ bool XMLDialog::_beginEdit(int nRow, int nCol)
                     text_list_t value_texts;
                     getKeyValueList(xml, m_config, value_texts);
                     if (sel < value_texts.size()){
+
+						cell->setText(str1);
                         ndxml_setval(xml, value_texts[sel].toStdString().c_str() );
                         ret = true;
                     }
-                    //else {
-                       // AfxMessageBox("≈‰÷√Œƒº˛¥ÌŒÛ,key∫Õvalue≥§∂»≤ª“ª÷¬");
-                    //}
                 }
             }
         }
     }
 
-    if (ret) {
-
-        cell->setText(str1) ;
-        //CfgChanged();
-    }
+//     if (ret) {
+// 
+//         cell->setText(str1) ;
+//         //CfgChanged();
+//     }
     return ret;
 
 }
@@ -908,9 +913,6 @@ void XMLDialog::on_xmlTable_itemChanged(QTableWidgetItem *item)
                     ndxml_setval(xml, value_texts[sel].toStdString().c_str());
                     ret = true;
                 }
-                //else {
-                //    AfxMessageBox("≈‰÷√Œƒº˛¥ÌŒÛ,key∫Õvalue≥§∂»≤ª“ª÷¬");
-                //}
             }
 
         }

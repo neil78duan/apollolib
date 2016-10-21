@@ -8,17 +8,15 @@ ndsdk_dir = ../../../ndsdk
 game_dir = ../..
 
 macx:{
-message(BUILD MACOX)
 
 QMAKE_MAC_SDK = macosx10.12
 
 DEFINES += __ND_MAC__
 
-LIBS += -L$$ndsdk_dir/lib -lndclient_darwin_x86_64_d \
-    -L../../lib/darwin_x86_64    \
-    -liconv \
-    -L$$ndsdk_dir/lib/darwin_x86_64 -lnd_vm_dbg
+LIBS += -L$$ndsdk_dir/lib -L../../lib/darwin_x86_64  -liconv -L$$ndsdk_dir/lib/darwin_x86_64
 
+LIBS += -lnd_vm_dbg -lndclient_darwin_x86_64_d
+#Release:LIBS += -lnd_vm -llndclient_darwin_x86_64
 
 }
 unix:!macx{
@@ -30,9 +28,21 @@ message(WIN32!)
 
 LIBS += -L$$ndsdk_dir/lib/win64 -lndclient_s
 
+
+CONFIG(debug, debug|release) {
+    message(BUILD win32 -debug)
+    LIBS += -lndclient_s_d
+    DEFINES +=  ND_DEBUG
+} else {
+    message(BUILD win32 -release)
+    LIBS += -lndclient_s_d
 }
 
-DEFINES +=  ND_DEBUG
+DEFINES += __ND_WIN__
+}
+
+
+DEFINES += X86_64
 
 INCLUDEPATH += $$ndsdk_dir/include \
         $$game_dir/include \

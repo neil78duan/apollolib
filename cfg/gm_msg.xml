@@ -3,9 +3,9 @@
 <send_msg_list name="发送消息" delete="no" expand_stat="1">
 	<message name="新建建筑" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="5" minId="0">0</msgid>
-		<data name="建筑类型ID" kinds="numeral" param="0">1002</data>
-		<data name="坐标X" kinds="numeral" param="4">100</data>
-		<data name="坐标X" kinds="numeral" param="4">100</data>
+		<data name="建筑类型ID" kinds="numeral" param="0">1</data>
+		<data name="坐标X" kinds="numeral" param="4">50</data>
+		<data name="坐标X" kinds="numeral" param="4">50</data>
 	</message>
 	<message name="移动建筑" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="5" minId="2">0</msgid>
@@ -154,5 +154,9 @@
 		<msgid kinds="hide" maxId="0" minId="22">0</msgid>
 		<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">11</data>
 		<data name="文件名" kinds="string" param="2" desc="文件名">apoclient.log</data>
+	</message>
+	<message name="GM_获取玩家资源版本信息" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="7" minId="16">0</msgid>
+		<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">2</data>
 	</message>
 </send_msg_list>

@@ -195,6 +195,12 @@ void startDialog::_beginEdit(const char *script_file, const char *title)
 	xmlDlg.loadUserdefDisplayList(xml_events_id, LOGIC_EVENT_LIST_NAME);
 
 
+    if (0 == common_export_error_list("./.error_list.xml")) {
+        _LOAD_XML(xml_error, "./.error_list.xml", "utf8", 0);
+        xmlDlg.loadUserdefDisplayList(xml_error, LOGIC_ERROR_LIST_NAME);
+        ndxml_destroy(&xml_error);
+    }
+
 	const char *package_file = _getFromIocfg("game_data_package_file");
 	DBLDatabase::get_Instant()->LoadBinStream(package_file);
 	//DBLDatabase::get_Instant()->LoadBinStream(getGameDataOutfile());

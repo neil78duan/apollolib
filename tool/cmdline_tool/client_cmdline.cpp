@@ -549,7 +549,7 @@ ND_CMDLINE_FUNC_INSTANCE(init_tool)
 
 ND_CMDLINE_FUNC_INSTANCE(convert_error)
 {
-	nd_register_error_convert(atlantis_error);
+	nd_register_error_convert(apollo_error);
 	ND_CMDLINE_CHECK_SHOW_HELP(argc, argv,"error error-code : convert error to text") ;
 	
 	if (argc < 2) {		

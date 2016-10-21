@@ -352,7 +352,7 @@ void CXmlCfg::SetXmlName(ndxml *xml_node, ndxml *xmlParent)
 
 bool CXmlCfg::_GetUserDefinData(const char *pUserParam, CString &val)
 {
-	if (0==ndstricmp((char*)pUserParam,"func_list") ) {
+	if (0==ndstricmp(pUserParam,"func_list") ) {
 		//m_root
 		CDlgFunclist dlg;
 		ndxml *node = ndxml_getnode(m_root, "baseFunction");
@@ -383,6 +383,9 @@ bool CXmlCfg::_GetUserDefinData(const char *pUserParam, CString &val)
 			}
 		}
 	}
+// 	else if (0 == ndstricmp(pUserParam, "error_list")) {
+// 
+// 	}
 	/*else if (0 == ndstricmp((char*)pUserParam, "msg_list")) {
 		//m_root
 		return _GetUserSelEnumVal(m_messageList, val);
