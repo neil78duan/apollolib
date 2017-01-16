@@ -17,6 +17,105 @@
 #include "apollo_errors.h"
 #include "login_apollo.h"
 
+#define myfprintf fprintf
+
+int msg_default_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
+{
+	int reLine = 0;
+	myfprintf(stdout, "recv (%d,%d) message data-len =%d\n", ND_USERMSG_MAXID(msg), ND_USERMSG_MINID(msg), ND_USERMSG_LEN(msg));
+	
+	return 0;
+}
+
+int msg_get_version_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
+{
+	NDIStreamMsg inmsg(msg);
+	NDUINT32 ver_id = 0;
+	NDUINT8 isDebug = 0;
+	NDUINT8 buf[1024];
+	buf[0] = 0;
+	
+	inmsg.Read(ver_id);
+	inmsg.Read(isDebug);
+	inmsg.Read(buf, sizeof(buf));
+	
+	myfprintf(stdout, "Get Server Version ver-id=%d %s\n Version description=%s\n", ver_id, isDebug ? "debug" : "release", buf[0] == 0 ? "unknow" : (const char*)buf);
+	
+	return 0;
+}
+
+int msg_get_rlimit_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
+{
+	NDIStreamMsg inmsg(msg);
+	NDUINT8 buf[1024];
+	buf[0] = 0;
+	
+	inmsg.Read(buf, sizeof(buf));
+	
+	myfprintf(stdout, "server rlimit info :\n%s\n", buf[0] == 0 ? "unknow" : (const char*)buf);
+	
+	return 0;
+}
+
+
+int msg_show_msg_name_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
+{
+	NDIStreamMsg inmsg(msg);
+	NDUINT16 maxID, minID;
+	NDUINT8 buf[1024];
+	inmsg.Read(maxID);
+	
+	inmsg.Read(minID);
+	inmsg.Read(buf, sizeof(buf));
+	
+	myfprintf(stdout, "message (%d, %d)  name=%s \n", maxID, minID, buf);
+	return 0;
+}
+
+
+int msg_show_server_time_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
+{
+	NDIStreamMsg inmsg(msg);
+	NDUINT64 tm1;
+	if (0 == inmsg.Read(tm1)) {
+		time_t tm2 = (time_t)tm1;
+		
+		char str[128];
+		myfprintf(stdout, "%s\n", nd_get_datetimestr_ex(tm2, str, 128));
+	}
+	
+	
+	return 0;
+}
+
+int msg_show_game_time_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
+{
+	NDIStreamMsg inmsg(msg);
+	NDUINT64 tm1;
+	if (0 == inmsg.Read(tm1)) {
+		time_t tm2 = (time_t)tm1;
+		
+		char str[128];
+		myfprintf(stdout, "%s\n", nd_get_datetimestr_ex(tm2, str, 128));
+	}
+	
+	
+	return 0;
+}
+
+
+void atlantis_base_message(NDIConn *pconn)
+{
+	CONNECT_INSTALL_MSG(pconn, msg_show_server_time_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_TIME);
+	CONNECT_INSTALL_MSG(pconn, msg_show_game_time_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GAME_TIME);
+	
+	CONNECT_INSTALL_MSG(pconn, msg_show_msg_name_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_MESSAGE_NAME);
+	CONNECT_INSTALL_MSG(pconn, msg_get_version_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GETVERSION);
+	CONNECT_INSTALL_MSG(pconn, msg_get_rlimit_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_RLIMIT);
+	
+	pconn->SetDftMsgHandler(msg_default_handler);
+	
+}
 
 int msg_echo_handler(NDIConn* pconn, nd_usermsgbuf_t *msg )
 {

@@ -631,7 +631,7 @@ int DBLTable::loadFromText(const char *tablename, int codeType)
 	if (m_cols <= 0) {
 		fclose(pf);
 		nd_logerror("file %s first col not be empty\n", tablename);
-		return 0;
+		return -1;
 	}
 	if (m_pcols[0].type == OT_FLOAT) {
 		m_pcols[0].type = OT_INT;
@@ -641,7 +641,7 @@ int DBLTable::loadFromText(const char *tablename, int codeType)
 
 		fclose(pf);
 		nd_logerror("file %s first col not be int\n", tablename);
-		return 0;
+		return -1;
 	}
 	
 	int rowIndex = 1;
@@ -1272,7 +1272,7 @@ int DBLDatabase::LoadBinStream(const char *file)
 		m_dbName = "dbl-database" ;
 	}
 
-	nd_logmsg("begin load %s from %s ....\n", m_dbName.c_str(), file) ;
+	//nd_logmsg("begin load %s from %s ....\n", m_dbName.c_str(), file) ;
 
 	//NDTRAC("==========begin READing database from bin-stream ....\n");
 	//write table numbers 16bits
@@ -1294,7 +1294,7 @@ int DBLDatabase::LoadBinStream(const char *file)
 			tablename[name_len] = 0 ;
 		}
 
-		NDTRAC("loading %s....\n", tablename);
+		//NDTRAC("loading %s....\n", tablename);
 
 		DBLTable *ptable = new DBLTable(DBLDatabase::m_pool, tablename);
 		if(!ptable) {
@@ -1308,7 +1308,7 @@ int DBLDatabase::LoadBinStream(const char *file)
 
 		m_tables.insert(std::make_pair(dbl_name(tablename), ptable)) ;
 
-		nd_logdebug("Load %s file from stream success\n", tablename);
+		//nd_logdebug("Load %s file from stream success\n", tablename);
 	}
 	crypt_fclose(pf);
 	m_bLoaded = true;
@@ -1514,6 +1514,14 @@ void DBLDatabase::Destroy()
 	nd_pool_destroy(DBLDatabase::m_pool, 0);
 	DBLDatabase::m_pool = 0;
 	m_bLoaded = false;
+
+
+#ifdef ND_DEBUG
+	for (int i = 0; i < 4; i++){
+		m_dbinfos[0].clear();
+	}
+#endif 
+	m_dbName.clear();
 }
 
 

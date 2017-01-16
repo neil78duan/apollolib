@@ -49,6 +49,7 @@ NDIConn* LoginServer( const char * host,int port, const char* user, const char *
 		DestroyConnectorObj(pConn) ;
 		return 0 ;
 	}
+	
 	fprintf(stdout, "connect %s:%d success \n",host, port ) ;
 	
 	if (!user || !user[0]) {

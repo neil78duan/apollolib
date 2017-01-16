@@ -1,5 +1,5 @@
-
-// apolloParseEditorDlg.cpp : ÊµÏÖÎÄ¼ş
+ï»¿
+// apolloParseEditorDlg.cpp : å®ç°æ–‡ä»¶
 //
 
 
@@ -38,20 +38,20 @@ void _xml_errorout(const char *errdesc)
 	str1.Format("parse xml error %s", errdesc);
 	AfxMessageBox((LPCTSTR)str1);
 }
-// ÓÃÓÚÓ¦ÓÃ³ÌĞò¡°¹ØÓÚ¡±²Ëµ¥ÏîµÄ CAboutDlg ¶Ô»°¿ò
+// ç”¨äºåº”ç”¨ç¨‹åºâ€œå…³äºâ€èœå•é¡¹çš„ CAboutDlg å¯¹è¯æ¡†
 
 class CAboutDlg : public CDialogEx
 {
 public:
 	CAboutDlg();
 
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 	enum { IDD = IDD_ABOUTBOX };
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV æ”¯æŒ
 
-// ÊµÏÖ
+// å®ç°
 protected:
 	DECLARE_MESSAGE_MAP()
 };
@@ -69,7 +69,7 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CapolloParseEditorDlg ¶Ô»°¿ò
+// CapolloParseEditorDlg å¯¹è¯æ¡†
 
 
 
@@ -106,15 +106,15 @@ ON_BN_CLICKED(IDC_BT_RUN_GM, &CapolloParseEditorDlg::OnBnClickedBtRunGm)
 END_MESSAGE_MAP()
 
 
-// CapolloParseEditorDlg ÏûÏ¢´¦Àí³ÌĞò
+// CapolloParseEditorDlg æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 BOOL CapolloParseEditorDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	// ½«¡°¹ØÓÚ...¡±²Ëµ¥ÏîÌí¼Óµ½ÏµÍ³²Ëµ¥ÖĞ¡£
+	// å°†â€œå…³äº...â€èœå•é¡¹æ·»åŠ åˆ°ç³»ç»Ÿèœå•ä¸­ã€‚
 
-	// IDM_ABOUTBOX ±ØĞëÔÚÏµÍ³ÃüÁî·¶Î§ÄÚ¡£
+	// IDM_ABOUTBOX å¿…é¡»åœ¨ç³»ç»Ÿå‘½ä»¤èŒƒå›´å†…ã€‚
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -132,23 +132,23 @@ BOOL CapolloParseEditorDlg::OnInitDialog()
 		}
 	}
 
-	// ÉèÖÃ´Ë¶Ô»°¿òµÄÍ¼±ê¡£  µ±Ó¦ÓÃ³ÌĞòÖ÷´°¿Ú²»ÊÇ¶Ô»°¿òÊ±£¬¿ò¼Ü½«×Ô¶¯
-	//  Ö´ĞĞ´Ë²Ù×÷
-	SetIcon(m_hIcon, TRUE);			// ÉèÖÃ´óÍ¼±ê
-	SetIcon(m_hIcon, FALSE);		// ÉèÖÃĞ¡Í¼±ê
+	// è®¾ç½®æ­¤å¯¹è¯æ¡†çš„å›¾æ ‡ã€‚  å½“åº”ç”¨ç¨‹åºä¸»çª—å£ä¸æ˜¯å¯¹è¯æ¡†æ—¶ï¼Œæ¡†æ¶å°†è‡ªåŠ¨
+	//  æ‰§è¡Œæ­¤æ“ä½œ
+	SetIcon(m_hIcon, TRUE);			// è®¾ç½®å¤§å›¾æ ‡
+	SetIcon(m_hIcon, FALSE);		// è®¾ç½®å°å›¾æ ‡
 
-	// TODO:  ÔÚ´ËÌí¼Ó¶îÍâµÄ³õÊ¼»¯´úÂë
+	// TODO:  åœ¨æ­¤æ·»åŠ é¢å¤–çš„åˆå§‹åŒ–ä»£ç 
 
 	if (0 != ndxml_load_ex(CONFIG_FILE_PATH, &m_editor_setting,"gbk")){
-		AfxMessageBox("¼ÓÔØÅäÖÃÎÄ¼ş´íÎó");
+		AfxMessageBox("åŠ è½½é…ç½®æ–‡ä»¶é”™è¯¯");
 		return false;
 	}
 	if (0 != ndxml_load_ex(CONFIG_IO_SETTING, &m_io_setting, "gbk")){
-		AfxMessageBox("¼ÓÔØÅäÖÃÎÄ¼ş´íÎó");
+		AfxMessageBox("åŠ è½½é…ç½®æ–‡ä»¶é”™è¯¯");
 		return false;
 	}
 
-	return TRUE;  // ³ı·Ç½«½¹µãÉèÖÃµ½¿Ø¼ş£¬·ñÔò·µ»Ø TRUE
+	return TRUE;  // é™¤éå°†ç„¦ç‚¹è®¾ç½®åˆ°æ§ä»¶ï¼Œå¦åˆ™è¿”å› TRUE
 }
 
 void CapolloParseEditorDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -164,19 +164,19 @@ void CapolloParseEditorDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 }
 
-// Èç¹ûÏò¶Ô»°¿òÌí¼Ó×îĞ¡»¯°´Å¥£¬ÔòĞèÒªÏÂÃæµÄ´úÂë
-//  À´»æÖÆ¸ÃÍ¼±ê¡£  ¶ÔÓÚÊ¹ÓÃÎÄµµ/ÊÓÍ¼Ä£ĞÍµÄ MFC Ó¦ÓÃ³ÌĞò£¬
-//  Õâ½«ÓÉ¿ò¼Ü×Ô¶¯Íê³É¡£
+// å¦‚æœå‘å¯¹è¯æ¡†æ·»åŠ æœ€å°åŒ–æŒ‰é’®ï¼Œåˆ™éœ€è¦ä¸‹é¢çš„ä»£ç 
+//  æ¥ç»˜åˆ¶è¯¥å›¾æ ‡ã€‚  å¯¹äºä½¿ç”¨æ–‡æ¡£/è§†å›¾æ¨¡å‹çš„ MFC åº”ç”¨ç¨‹åºï¼Œ
+//  è¿™å°†ç”±æ¡†æ¶è‡ªåŠ¨å®Œæˆã€‚
 
 void CapolloParseEditorDlg::OnPaint()
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // ÓÃÓÚ»æÖÆµÄÉè±¸ÉÏÏÂÎÄ
+		CPaintDC dc(this); // ç”¨äºç»˜åˆ¶çš„è®¾å¤‡ä¸Šä¸‹æ–‡
 
 		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
 
-		// Ê¹Í¼±êÔÚ¹¤×÷Çø¾ØĞÎÖĞ¾ÓÖĞ
+		// ä½¿å›¾æ ‡åœ¨å·¥ä½œåŒºçŸ©å½¢ä¸­å±…ä¸­
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -184,7 +184,7 @@ void CapolloParseEditorDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// »æÖÆÍ¼±ê
+		// ç»˜åˆ¶å›¾æ ‡
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
@@ -193,8 +193,8 @@ void CapolloParseEditorDlg::OnPaint()
 	}
 }
 
-//µ±ÓÃ»§ÍÏ¶¯×îĞ¡»¯´°¿ÚÊ±ÏµÍ³µ÷ÓÃ´Ëº¯ÊıÈ¡µÃ¹â±ê
-//ÏÔÊ¾¡£
+//å½“ç”¨æˆ·æ‹–åŠ¨æœ€å°åŒ–çª—å£æ—¶ç³»ç»Ÿè°ƒç”¨æ­¤å‡½æ•°å–å¾—å…‰æ ‡
+//æ˜¾ç¤ºã€‚
 HCURSOR CapolloParseEditorDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
@@ -265,7 +265,7 @@ void CapolloParseEditorDlg::clearLog()
 		if(_isexit) return;							\
 	}
 
-//±à¼­Âß¼­½Å±¾
+//ç¼–è¾‘é€»è¾‘è„šæœ¬
 void CapolloParseEditorDlg::OnBnClickedBtEdit()
 {
 	CNewfileDlg dlg;
@@ -279,21 +279,21 @@ void CapolloParseEditorDlg::OnBnClickedBtEdit()
 			_beginEdit(file);
 		}
 		else {
-			AfxMessageBox(_T("ÇëÑ¡ÔñÒª±à¼­µÄÎÄ¼ş!"));
+			AfxMessageBox(_T("è¯·é€‰æ‹©è¦ç¼–è¾‘çš„æ–‡ä»¶!"));
 		}
 	}
 }
-//±àÒëÂß¼­½Å±¾
+//ç¼–è¯‘é€»è¾‘è„šæœ¬
 void CapolloParseEditorDlg::OnBnClickedBtCompile()
 {
 	//load config file 
 	clearLog();
 
 	if (false == compile()){
-		AfxMessageBox("±àÒë½Å±¾´íÎó");
+		AfxMessageBox("ç¼–è¯‘è„šæœ¬é”™è¯¯");
 		return;
 	}
-	LogText("==========±àÒë½Å±¾³É¹¦===========\n");
+	LogText("==========ç¼–è¯‘è„šæœ¬æˆåŠŸ===========\n");
 
 	const char *packaged_cmd = _getFromIocfg("compiled_rum_cmd");
 
@@ -301,33 +301,33 @@ void CapolloParseEditorDlg::OnBnClickedBtCompile()
 		int ret = system(packaged_cmd);
 
 		if (0 != ret)	{
-			nd_logerror("ÔËĞĞÃüÁî %s %d\n", packaged_cmd, ret);
+			nd_logerror("è¿è¡Œå‘½ä»¤ %s %d\n", packaged_cmd, ret);
 		}
 
 	}
 
 }
 
-//²âÊÔËùÓĞÊı¾İµ¼³ö¼ÓÔØºÍÏà¹Ø¹¦ÄÜ
+//æµ‹è¯•æ‰€æœ‰æ•°æ®å¯¼å‡ºåŠ è½½å’Œç›¸å…³åŠŸèƒ½
 void CapolloParseEditorDlg::OnBnClickedBtLoaderTest()
 {
-	//¼ÓÔØ²¢²âÊÔÊı¾İ
+	//åŠ è½½å¹¶æµ‹è¯•æ•°æ®
 	clearLog();
 	if (false == runTest()){
-		AfxMessageBox("²âÊÔÊ§°Ü!");
+		AfxMessageBox("æµ‹è¯•å¤±è´¥!");
 	}	
 }
 
-//µ¼³ö²ß»®Êı¾İ
+//å¯¼å‡ºç­–åˆ’æ•°æ®
 void CapolloParseEditorDlg::OnBnClickedBtExpData()
 {
 	clearLog();
 	
 	if (false == expExcel()) {
-		AfxMessageBox("µ¼³öexcel´íÎó");
+		AfxMessageBox("å¯¼å‡ºexcelé”™è¯¯");
 		return;
 	}
-	LogText("==========EXCEL´ò°ü³É¹¦===========\n");
+	LogText("==========EXCELæ‰“åŒ…æˆåŠŸ===========\n");
 
 	const char *packaged_cmd = _getFromIocfg("packeaged_rum_cmd");
 
@@ -336,7 +336,7 @@ void CapolloParseEditorDlg::OnBnClickedBtExpData()
 		int ret = system(packaged_cmd);
 
 		if (0 != ret)	{
-			nd_logerror("ÔËĞĞÃüÁî %s %d\n",packaged_cmd, ret);
+			nd_logerror("è¿è¡Œå‘½ä»¤ %s %d\n",packaged_cmd, ret);
 		}
 
 	}	
@@ -359,14 +359,14 @@ void CapolloParseEditorDlg::OnBnClickedBtAllExport()
 {
 	clearLog();
 	if (false == compile()){
-		AfxMessageBox("±àÒë½Å±¾´íÎó");
+		AfxMessageBox("ç¼–è¯‘è„šæœ¬é”™è¯¯");
 		return ;
 	}
 	if (false == expExcel()) {
-		AfxMessageBox("µ¼³öexcel´íÎó");
+		AfxMessageBox("å¯¼å‡ºexcelé”™è¯¯");
 		return ;
 	}
-	LogText("==========Ò»¼ü´ò°ü³É¹¦===========\n");
+	LogText("==========ä¸€é”®æ‰“åŒ…æˆåŠŸ===========\n");
 }
 
 void CapolloParseEditorDlg::OnDestroy()
@@ -434,6 +434,7 @@ bool CapolloParseEditorDlg::compile()
 
 bool CapolloParseEditorDlg::compileScript(const char *scriptFile)
 {
+	
 	ndxml_root xmlScript;
 	ndxml_initroot(&xmlScript);
 	if (-1 == ndxml_load_ex(scriptFile, &xmlScript, "gbk")) {
@@ -450,7 +451,7 @@ bool CapolloParseEditorDlg::compileScript(const char *scriptFile)
 	int orderType = ND_L_ENDIAN;
 	const char *orderName = _getFromIocfg("bin_data_byte_order");
 	if (orderName) {
-		orderType = atoi(orderName);
+		orderType = ndstr_atoi_hex(orderName);
 	}
 
 	LogicCompiler lgcompile;
@@ -474,11 +475,11 @@ bool CapolloParseEditorDlg::compileScript(const char *scriptFile)
 		return false ;
 	}
 
-	LogText("!!!!!!!!!!±àÒë½Å±¾³É¹¦!!!!!!!!!!!\nÔËĞĞ²âÊÔ³ÌĞò...\n");
+	LogText("!!!!!!!!!!ç¼–è¯‘è„šæœ¬æˆåŠŸ!!!!!!!!!!!\nè¿è¡Œæµ‹è¯•ç¨‹åº...\n");
 
 	ClientMsgHandler::ApoConnectScriptOwner apoOwner;
 	if (!apoOwner.loadDataType(_getFromIocfg("net_data_def"))) {
-		LogText("¼ÓÔØÊı¾İ¸ñÊ½´íÎó\n");
+		LogText("åŠ è½½æ•°æ®æ ¼å¼é”™è¯¯\n");
 		return false;
 	}
 
@@ -488,20 +489,20 @@ bool CapolloParseEditorDlg::compileScript(const char *scriptFile)
 	scriptRoot->setPrint(out_print, NULL);
 	scriptRoot->getGlobalParser().setSimulate(true, &apoOwner);
 	if (0 != scriptRoot->LoadScript(outFile.c_str())){
-		LogText("¼ÓÔØ½Å±¾³ö´í£¡\n");
+		LogText("åŠ è½½è„šæœ¬å‡ºé”™ï¼\n");
 		LogicEngineRoot::destroy_Instant();
 		return false;
 	}
 
-	LogText("¿ªÊ¼ÔËĞĞ½Å±¾...\n");
+	LogText("å¼€å§‹è¿è¡Œè„šæœ¬...\n");
 	if (0 != scriptRoot->test()){
-		LogText("ÔËĞĞ½Å±¾³ö´í£¡\n");
+		LogText("è¿è¡Œè„šæœ¬å‡ºé”™ï¼\n");
 		LogicEngineRoot::destroy_Instant();
 		return false;
 	}
 
 	LogicEngineRoot::destroy_Instant();
-	LogText("!!!!!!!!!!!!!!!!!!!½Å±¾±àÒëÔËĞĞ³É¹¦!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+	LogText("!!!!!!!!!!!!!!!!!!!è„šæœ¬ç¼–è¯‘è¿è¡ŒæˆåŠŸ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	return true;
 }
 
@@ -509,7 +510,7 @@ bool CapolloParseEditorDlg::expExcel()
 {
 	char path[1024];
 
-	LogText("==============¿ªÊ¼µ¼³öexcel===============\n");
+	LogText("==============å¼€å§‹å¯¼å‡ºexcel===============\n");
 
 	const char *exp_cmd = _getFromIocfg("game_data_export_cmd");
 	const char *excel_path = _getFromIocfg("excel_data_in_path");
@@ -518,7 +519,7 @@ bool CapolloParseEditorDlg::expExcel()
 	const char *excel_list = _getFromIocfg("game_data_listfile");
 
 	if (!exp_cmd || !excel_path || !text_path || !package_file ){
-		LogText("µ¼³öexcel´íÎó:ÅäÖÃÎÄ¼ş´íÎó\n");
+		LogText("å¯¼å‡ºexcelé”™è¯¯:é…ç½®æ–‡ä»¶é”™è¯¯\n");
 		return false ;
 	}
 	
@@ -526,29 +527,57 @@ bool CapolloParseEditorDlg::expExcel()
 	int orderType = ND_L_ENDIAN;
 	const char *orderName = _getFromIocfg("bin_data_byte_order");
 	if (orderName) {
-		orderType = atoi(orderName);
+		orderType = ndstr_atoi_hex(orderName);
 	}
 
 	const char *cur_dir = nd_getcwd();
 	const char *encodeName = getGameDateEncodeType();
 
-	snprintf(path, sizeof(path), "cmd.exe /c %s/%s %s %s %s %s ", cur_dir, exp_cmd, excel_list, excel_path, text_path,  encodeName);
-	int ret = system(path);
+	// use windows system api 
+	snprintf(path, sizeof(path), "%s %s %s %s ", excel_list, excel_path, text_path, encodeName);
 
-	if (0 != ret)	{
-		nd_logerror("µ¼³ö²ß»®Êı¾İÊ§°Ü£¬ÇëÊÖ¶¯µ¼³ö\n");
+	SHELLEXECUTEINFO exeInfo = { 0 };
+	exeInfo.cbSize = sizeof(SHELLEXECUTEINFO);
+	exeInfo.hwnd = (HWND)this;
+	exeInfo.fMask = SEE_MASK_NOASYNC | SEE_MASK_WAITFORINPUTIDLE | SEE_MASK_NOCLOSEPROCESS;
+
+	exeInfo.lpFile = exp_cmd;
+	exeInfo.lpDirectory = cur_dir;
+	exeInfo.nShow = SW_SHOWNORMAL;
+	exeInfo.lpParameters = path;
+	
+	BOOL bRet = ShellExecuteExA(&exeInfo);
+
+	if (!bRet)	{
+		nd_logerror("export to text error : %s\n", nd_last_error());
 		return false;
 	}
-	LogText("excel µ¼³öÍê³É!!!!!!!\n==================¿ªÊ¼´ò°ü======================\n");
+	if (-1 == nd_waitthread((ndth_handle)exeInfo.hProcess)){
+
+		nd_logerror("%s run error: %s\n", exp_cmd, nd_last_error());
+		return false;
+	}
+	DWORD shellExit = 0;
+	if (!GetExitCodeProcess(exeInfo.hProcess, &shellExit)) {
+		return false;
+	}
+	if (0 != shellExit){
+		nd_logerror("%s run error: %s\n", exp_cmd, nd_last_error());
+		return false;
+	}
+	
+
+	LogText("excel å¯¼å‡ºå®Œæˆ!!!!!!!\n==================å¼€å§‹æ‰“åŒ…======================\n");
 
 	//DUMP FOR WINDOWS only
 	do 	{		
 		std::string strWinPack = package_file;
 		strWinPack += ".gbk";
 
+		
 		DBLDatabase dbwin;
 		if (0 != dbwin.LoadFromText(text_path, excel_list, encodeName, "gbk")) {
-			nd_logerror("´ò°üÊı¾İ´íÎó:²»ÄÜ´ÓtxtÎÄ¼şÖĞ¶ÁÈ¡Êı¾İ\n");
+			nd_logerror("æ‰“åŒ…æ•°æ®é”™è¯¯:ä¸èƒ½ä»txtæ–‡ä»¶ä¸­è¯»å–æ•°æ®\n");
 			return false;
 		}
 
@@ -556,65 +585,57 @@ bool CapolloParseEditorDlg::expExcel()
 			nd_logmsg("EXPORT game data for windows error\n");
 		}
 		dbwin.Destroy();
+		
+		//for test
+		DBLDatabase *pdbl = DBLDatabase::get_Instant();
+		nd_assert(pdbl);
+		
+		if (0 != pdbl->LoadBinStream(strWinPack.c_str())) {
+			nd_logmsg("åŠ è½½äºŒè¿›åˆ¶ç­–åˆ’æ•°æ®é”™è¯¯!\n");
+			DBLDatabase::destroy_Instant();
+			return false;
+		}
+
+		const char*attr_table = _getFromIocfg("role_attr_table");
+		if (attr_table)	{
+			NDSingleton<RoleAttrHelper>::Destroy();
+
+			if (0 != NDSingleton<RoleAttrHelper>::Get()->Load(attr_table, NULL)) {
+				nd_logmsg("test %s ERROR\n", attr_table);
+				return false;
+			}
+			NDSingleton<RoleAttrHelper>::Destroy();
+		}
+		DBLDatabase::destroy_Instant();
+
 	} while (0);
-
-// 	do 	{
-// 		std::string strTextGBKPath = text_path;
-// 		strTextGBKPath += "_gbk";
-// 		nd_mkdir(strTextGBKPath.c_str());
-// 
-// 		snprintf(path, sizeof(path), "cmd.exe /c %s/%s %s %s %s gbk ", cur_dir, exp_cmd, excel_list, excel_path, strTextGBKPath.c_str());
-// 		ret = system(path);
-// 		if (0 != ret)	{
-// 			nd_logerror("µ¼³öwindows°æÊı¾İ´íÎó\n");
-// 			return false;
-// 		}
-// 
-// 		LogText("excel µ¼³öÍê³É!!!!!!!\n==================¿ªÊ¼´ò°ü======================\n");
-// 
-// 
-// 		std::string strWinPack = package_file;
-// 		strWinPack += ".gbk";
-// 		
-// 		DBLDatabase dbwin;
-// 		if (0 != dbwin.LoadFromText(strTextGBKPath.c_str(), excel_list, "gbk", "gbk")) {
-// 			nd_logerror("´ò°üÊı¾İ´íÎó:²»ÄÜ´ÓtxtÎÄ¼şÖĞ¶ÁÈ¡Êı¾İ\n");
-// 			return false;
-// 		}
-// 
-// 		if (0 != dbwin.Dump(strWinPack.c_str(), "gamedbGBK", orderType)) {
-// 			nd_logmsg("EXPORT game data for windows error\n");
-// 		}		
-// 		dbwin.Destroy();
-// 	} while (0);
 	
-
 
 	DBLDatabase dbtmp;
 	if (0 != dbtmp.LoadFromText(text_path, excel_list, encodeName, encodeName)) {
-		nd_logerror("´ò°üÊı¾İ´íÎó:²»ÄÜ´ÓtxtÎÄ¼şÖĞ¶ÁÈ¡Êı¾İ\n");
+		nd_logerror("æ‰“åŒ…æ•°æ®é”™è¯¯:ä¸èƒ½ä»txtæ–‡ä»¶ä¸­è¯»å–æ•°æ®\n");
 		return false;
 	}
 	if (0 == dbtmp.Dump(package_file, "gamedatadb", orderType)) {
 		nd_logmsg("package game data SUCCESS!!\n");
-		LogText("==========µ¼³ö²ß»®Êı¾İ³É¹¦===========\n");
+		LogText("==========å¯¼å‡ºç­–åˆ’æ•°æ®æˆåŠŸ===========\n");
 	}
 	else{
-		nd_logerror("excelµ¼³ö¶ş½øÖÆÎÄ¼ş´íÎó\n");
+		nd_logerror("excelå¯¼å‡ºäºŒè¿›åˆ¶æ–‡ä»¶é”™è¯¯\n");
 	}
 		
 	//before run test need load dbl 
 	DBLDatabase *pdbl = DBLDatabase::get_Instant();
 	if (pdbl){
 		if (0 != pdbl->LoadBinStream(package_file)) {
-			nd_logmsg("¼ÓÔØ¶ş½øÖÆ²ß»®Êı¾İ´íÎó!\n");
+			nd_logmsg("åŠ è½½äºŒè¿›åˆ¶ç­–åˆ’æ•°æ®é”™è¯¯!\n");
 			dbtmp.Destroy();
 			DBLDatabase::destroy_Instant();
 			return false;
 		}
 	}
 	if (!(*pdbl == dbtmp)){
-		nd_logmsg("´ò°üÊı¾İºÍÔ­Ê¼Êı¾İ²»ÏàµÈ!");
+		nd_logmsg("æ‰“åŒ…æ•°æ®å’ŒåŸå§‹æ•°æ®ä¸ç›¸ç­‰!");
 		dbtmp.Destroy();
 		DBLDatabase::destroy_Instant();
 		return false ;
@@ -626,13 +647,13 @@ bool CapolloParseEditorDlg::expExcel()
 	strOutTextPath  += "/test_outputData";
 	nd_mkdir(strOutTextPath.c_str());
 	if (0 != pdbl->TestOutput(strOutTextPath.c_str())) {
-		nd_logmsg("´ÓdataÊä³ötextÎÄ¼şÊ§°Ü!");
+		nd_logmsg("ä»dataè¾“å‡ºtextæ–‡ä»¶å¤±è´¥!");
 		DBLDatabase::destroy_Instant();
 		return false; 
 
 	}
-
 	DBLDatabase::destroy_Instant();
+
 	return true;
 }
 
@@ -641,7 +662,7 @@ bool CapolloParseEditorDlg::runTest()
 	if (expExcel()==false ){
 		return false;
 	}
-	LogText("¼ÓÔØ²ß»®Êı¾İÍê³É\n¼ÓÔØ½Å±¾.....\n");
+	LogText("åŠ è½½ç­–åˆ’æ•°æ®å®Œæˆ\nåŠ è½½è„šæœ¬.....\n");
 
 	if (compile() == false ) {
 		return false;
@@ -652,37 +673,14 @@ bool CapolloParseEditorDlg::runTest()
 	const char *package_file = _getFromIocfg("game_data_package_file");
 
 	if (0 != DBLDatabase::get_Instant()->LoadBinStream(package_file)) {
-		LogText("¼ÓÔØ¶ş½øÖÆ²ß»®Êı¾İ´íÎó!\n");
+		LogText("åŠ è½½äºŒè¿›åˆ¶ç­–åˆ’æ•°æ®é”™è¯¯!\n");
 		return false;;
 	}
 
-	do 	{
-		const char*attr_table = _getFromIocfg("role_attr_table");
-		NDSingleton<RoleAttrHelper>::Destroy();
-		//StatMachine::Destroy();
-
-		if (0 != NDSingleton<RoleAttrHelper>::Get()->Load(attr_table,"role_level_attr.xlsx")) {
-			LogText("½ÇÉ«ÊôĞÔ¼ÓÔØÊ§°Ü\n");
-			ret = false;
-			goto ERROR_EXIT;
-		}
-// 		if (0 != StatMachine::load(forbid_table, state_table, operate_table)) {
-// 			LogText("×´Ì¬±í¼ÓÔØÊ§°Ü\n");
-// 			ret = false;
-// 			goto ERROR_EXIT;
-// 		}
-		NDSingleton<RoleAttrHelper>::Destroy();
-		//StatMachine::Destroy();
-
-		LogText("×´Ì¬ÊôĞÔ¼ÓÔØ²âÊÔ³É¹¦\n");
-
-	} while (0);
 	//test role attribute 
 
-	LogText("£¡£¡£¡£¡£¡£¡£¡²âÊÔ³É¹¦£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡\n");
+	LogText("ï¼ï¼ï¼ï¼ï¼ï¼ï¼æµ‹è¯•æˆåŠŸï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼\n");
 
-	
-ERROR_EXIT:
 
 	DBLDatabase::destroy_Instant();
 	return ret;
@@ -695,17 +693,17 @@ void CapolloParseEditorDlg::_beginEdit(const char *script_file)
 	const char *filename;
 	clearLog();
 
-	LogText("±à¼­ÖĞ.....\n");
+	LogText("ç¼–è¾‘ä¸­.....\n");
 	//filename = getGameScript();
 
 	filename = script_file;
 	_LOAD_XML(xml_script, filename, "gbk", 1);
 
-	filename = getScriptSetting(&xml_script, "c_func_api");
-	_LOAD_XML(xml_cpp_func, filename, "gbk", 0);
+	//filename = getScriptSetting(&xml_script, "c_func_api");
+	//_LOAD_XML(xml_cpp_func, filename, "gbk", 0);
 
-	filename = getScriptSetting(&xml_script, "events_id");
-	_LOAD_XML(xml_events_id, filename, "gbk", 0);
+	//filename = getScriptSetting(&xml_script, "events_id");
+	//_LOAD_XML(xml_events_id, filename, "gbk", 0);
 
 
 	filename = getNetProtocol();
@@ -713,6 +711,14 @@ void CapolloParseEditorDlg::_beginEdit(const char *script_file)
 
 	CXmlCfg xmlDlg;
 	xmlDlg.SetXML(&m_editor_setting, &xml_script);
+
+	//load user define enum 
+	common_export_error_list("./.error_list.xml");
+	filename = getScriptSetting(&xml_script, "user_define_enum");
+	if (!_loadUserDefEnum(filename,&xmlDlg)) {
+		nd_logmsg("load user define dlg error \n");
+		return;
+	}
 
 	//load function list 
 	ndxml *funcroot = ndxml_getnode(&xml_net_protocol, "MessageDefine");
@@ -726,18 +732,18 @@ void CapolloParseEditorDlg::_beginEdit(const char *script_file)
 			const char *p = buildDisplaNameValStr(pRealVal, pDispname, buf, sizeof(buf));
 			messageList.push_back(CString(p));
 		}
-
 		xmlDlg.addDisplayNameList("msg_list", messageList);
 	}
-	xmlDlg.loadUserdefDisplayList(xml_cpp_func, LOGIC_FUNCTION_LIST_NAME);
-	xmlDlg.loadUserdefDisplayList(xml_events_id, LOGIC_EVENT_LIST_NAME);
+	
+	//xmlDlg.loadUserdefDisplayList(xml_cpp_func, LOGIC_FUNCTION_LIST_NAME);
+	//xmlDlg.loadUserdefDisplayList(xml_events_id, LOGIC_EVENT_LIST_NAME);
 
-	if (0 == common_export_error_list("./.error_list.xml")) {
-		_LOAD_XML(xml_error, "./.error_list.xml", "gbk", 0);
-		xmlDlg.loadUserdefDisplayList(xml_error, LOGIC_ERROR_LIST_NAME);
-
-		ndxml_destroy(&xml_error);
-	}
+// 	if (0 == common_export_error_list("./.error_list.xml")) {
+// 		_LOAD_XML(xml_error, "./.error_list.xml", "gbk", 0);
+// 		xmlDlg.loadUserdefDisplayList(xml_error, LOGIC_ERROR_LIST_NAME);
+// 
+// 		ndxml_destroy(&xml_error);
+// 	}
 
 	const char *package_file = _getFromIocfg("game_data_package_file");
 	DBLDatabase::get_Instant()->LoadBinStream(package_file);
@@ -746,18 +752,78 @@ void CapolloParseEditorDlg::_beginEdit(const char *script_file)
 		nd_chdir(nd_getcwd());
 
 		ndxml_save_encode(&xml_script, script_file, E_SRC_CODE_GBK, E_SRC_CODE_UTF_8);
-		LogText("±à¼­Íê³É\n");
+		LogText("ç¼–è¾‘å®Œæˆ\n");
 	}
 	else {
-		LogText("Ã»ÓĞĞŞ¸Ä\n");
+		LogText("æ²¡æœ‰ä¿®æ”¹\n");
 	}
 	ndxml_destroy(&xml_script);
-	ndxml_destroy(&xml_cpp_func);
+	//ndxml_destroy(&xml_cpp_func);
 	ndxml_destroy(&xml_net_protocol);
-	ndxml_destroy(&xml_events_id);
+	//ndxml_destroy(&xml_events_id);
+
+	
 	DBLDatabase::destroy_Instant();
+
 }
 
+
+#define MY_LOAD_XML(_xml_name, _filename,_encode) \
+	ndxml_root _xml_name;				\
+	ndxml_initroot(&_xml_name);			\
+	if (ndxml_load_ex((char*)_filename, &_xml_name,_encode)) {	\
+		CString tipText  ;		\
+		tipText.Format("open file %s error", _filename);	\
+		AfxMessageBox((LPCTSTR)tipText);	\
+		return false;							\
+	}
+
+bool CapolloParseEditorDlg::_loadUserDefEnum(const char *userDefEnumFile, void *pDlg)
+{
+
+	CXmlCfg *xmlDlg = (CXmlCfg *)pDlg;
+	MY_LOAD_XML(xml_root, userDefEnumFile, "gbk");
+	ndxml *xmlData = ndxml_getnode(&xml_root, "userData");
+	if (!xmlData){
+		return false;
+	}
+	for (int i = 0; i < ndxml_getsub_num(xmlData); i++){
+		ndxml *dataEnum = ndxml_getnodei(xmlData, i);
+		const char *type = ndxml_getattr_val(dataEnum, "src_type");
+		const char *name = ndxml_getattr_val(dataEnum, "dataName");
+
+		if (!type || !name) {
+			nd_logmsg("unknown type typename =NULL or name=null\n");
+			continue;
+		}
+
+		if (0==ndstricmp(type,"file")){
+			const char *file = ndxml_getattr_val(dataEnum, "filename");
+			if (!file || !*file) {
+				nd_logmsg("unknown type file name\n");
+				continue;
+			}
+			MY_LOAD_XML(xml_subfile, file, "gbk");
+
+			if (!xmlDlg->loadUserdefDisplayList(xml_subfile, name)) {
+				nd_logmsg("load user define enum from %s error\n", file);
+			}
+
+			ndxml_destroy(&xml_subfile);
+		}
+		else if (0 == ndstricmp(type, "list")) {
+
+			if (!xmlDlg->loadUserdefDisplayList(*dataEnum, name)) {
+				nd_logmsg("load user define enum  %s error\n", name);
+			}
+		}
+		else {
+			nd_logmsg("unknown type %s\n", type);
+		}
+	}
+	ndxml_destroy(&xml_root);
+	return true;
+}
 
 const char *CapolloParseEditorDlg::getScriptSetting(ndxml *scriptXml, const char *settingName)
 {
@@ -802,7 +868,7 @@ const char *CapolloParseEditorDlg::getNetProtocol()
 
 const char *CapolloParseEditorDlg::getGameDateEncodeType()
 {
-	int codeType = atoi(_getFromIocfg("game_data_out_encode"));
+	int codeType = ndstr_atoi_hex(_getFromIocfg("game_data_out_encode"));
 	return nd_get_encode_name(codeType);
 }
 

@@ -19,7 +19,7 @@ ErrorElement(ESERVER_ERR_MAX_LEVEL, "已经是最高级"),
 
 ErrorElement(ESERVER_ERR_NO_BUILDING, "沒有建筑物"),
 ErrorElement(ESERVER_ERR_BUILDING_LEVEL_LOW, "建筑物等级不够"),
-
+ErrorElement(ESERVER_ERR_BUILDING_SWITCH_TYPE, "建筑替换类型不匹配"),
 
 ErrorElement(ESERVER_ERR_PACKAGE_FULL, "背包已满"),
 ErrorElement(ESERVER_ERR_SHOP_NOT_EXIST, "商店不存在"),
@@ -50,5 +50,26 @@ ErrorElement(ESERVER_ERR_AIM_ROLE_NOT_EXIST, "目标用户不存在"),
 ErrorElement(ESERVER_ERR_NEED_PASS_MAP, "需要先通关地图"),
 
 ErrorElement(ESERVER_ERR_POS_ERROR, "位置错误"),
+ErrorElement(ESERVER_ERR_BUILDING_GRID_IN_USING, "建筑格子被占用"),
+
+
+ErrorElement(ESERVER_ERR_NO_SKILL, "技能不存在"),
+
+ErrorElement(ESERVER_ERR_NO_CARD, "卡牌不存在"),
+
+ErrorElement(ESERVER_ERR_NO_EQUIP, "装备不存在"),
+
+
+ErrorElement(ESERVER_ERR_NOT_IN_MAP, "没有在当前地图"),
+
+
+ErrorElement(ESERVER_ERR_CARD_PART_NOT_STRENGTHEN, "需要先强化子部位"),
+
+ErrorElement(ESERVER_ERR_NEED_COMPLETED_MAP, "需要完成指定地图"),
+ErrorElement(ESERVER_ERR_NEED_UNLOCK_ZONE, "需要解锁指定区域"),
+ErrorElement(ESERVER_ERR_SHORT_STUFF, "缺少材料"),
+
+ErrorElement(ESERVER_ERR_NO_SOLDIER, "没有兵种"),
+ErrorElement(ESERVER_ERR_BUILDING_IN_CREATE, "建筑在建造升級中"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

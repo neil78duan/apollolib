@@ -29,7 +29,8 @@
 #define HOST_NAME_SIZE 64
 #define PHONE_NUMBER_SIZE 20
 #define EMAIL_SIZE 100
-#define USER_DATA_SIZE 8192
+#define USER_DATA_SIZE 16384
+#define ADDITION_DATA_SIZE 4096
 #define DEVICE_UDID_SIZE 64
 
 #define ENTER_ROOM_PASSWORD_SIZE 6
@@ -154,7 +155,7 @@ struct host_list_node {
 	NDUINT8 name[HOST_NAME_SIZE] ;
 };
 
-#define CURRENT_DATA_VERSION 1
+//#define CURRENT_DATA_VERSION 1
 struct userdata_info
 {
 	userdata_info() {
@@ -166,9 +167,14 @@ struct userdata_info
 	userdata_info &operator =(const userdata_info &r)
 	{
 		//version = r.version ;
-		size = r.size ;
-		memcpy(data, r.data, r.size) ;
+		size = NDMIN( r.size , sizeof(data));
+		memcpy(data, r.data, size) ;
 		return  *this ;
+	}
+	void setData(void *indata, size_t len)
+	{
+		size = NDMIN(len, sizeof(data));
+		memcpy(data, indata, size);
 	}
 	size_t get_stream_len() const
 	{
@@ -176,8 +182,45 @@ struct userdata_info
 	}
 	
 	NDUINT32 size;
-	//NDUINT16 version ;
 	char data[USER_DATA_SIZE];
 };
+
+struct addition_data_info
+{
+	addition_data_info() {
+		size = 0;
+		data[0] = 0;
+
+	}
+	addition_data_info &operator =(const addition_data_info &r)
+	{
+		size = NDMIN(r.size, sizeof(data));
+		memcpy(data, r.data, size);
+		return  *this;
+	}
+
+	addition_data_info &operator =(const userdata_info &r)
+	{
+		size = NDMIN(r.size, sizeof(data));
+		memcpy(data, r.data, size);
+		return  *this;
+	}
+
+	void setData(void *indata, size_t len)
+	{
+		size = NDMIN(len, sizeof(data));
+		memcpy(data, indata, size);
+	}
+
+	size_t get_stream_len() const
+	{
+		return sizeof(addition_data_info) - sizeof(data) + size;
+	}
+
+	NDUINT32 size;
+	char data[ADDITION_DATA_SIZE];
+};
+
+
 
 #endif

@@ -90,7 +90,7 @@ int RoleAttrHelper::loadUplevelExp(const char *file)
 			m_maxLevel = NDMAX(level, m_maxLevel);
 		}
 	}
-	for (int i = 1; i < m_maxLevel; ++i){
+	for (int i = 2; i < m_maxLevel + 1; ++i){
 		if (m_upLevelExp[i] ==0)	{
 			nd_logerror("load up-level exp error UP TO level %d need exp is ZERO\n", i);
 			return -1;
@@ -104,8 +104,7 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 {
 	const char *attrmax[ROLE_ATTR_CAPACITY][2] = { 0 };
 	const char *pfields[] = { "id", "name", "formula", "save_db", "sync", "min_val", "max_val", 
-		"client_change", "client_name", "is_gen_event", "affect_buildings", "forRole", "forBuilding"
-};
+		"client_change", "real_name", "forBuilding", "affect_buildings", "forRole", "affect_card","forCard"};
 	
 	m_wa_num = 0 ;
 	role_attr_description *pwa_desc ;
@@ -116,7 +115,12 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 	nd_assert(pTable);
 	
 	DBLCursor cursor(pTable, pfields, ND_ELEMENTS_NUM(pfields), E_SRC_CODE_ANSI);
-	for (int result = cursor.FetchFirst(); result != -1; result = cursor.FetchNext()) {
+	int result = cursor.FetchFirst();
+	if (result == -1) {
+		nd_logfatal("load file %s error can not fetch role \n", attr_file);
+		return -1;
+	}
+	for (; result != -1; result = cursor.FetchNext()) {
 		NDUINT32 aid  = cursor[0].GetInt();
 		if (aid > ROLE_ATTR_CAPACITY) {
 			nd_logfatal("attr_test: 编号为%d属性超过了%d\n" , aid , ROLE_ATTR_CAPACITY);
@@ -142,12 +146,14 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 
 		pwa_desc->issave = cursor[3].GetInt();
 		pwa_desc->issync = cursor[4].GetInt();
-		pwa_desc->iscallEvent = cursor[9].GetInt();
 		pwa_desc->isChangeByclient = cursor[7].GetInt();
 
+		pwa_desc->forBuilding = cursor[9].GetInt();
 		pwa_desc->isSyncBuilding = cursor[10].GetInt();
-		pwa_desc->forRole = cursor[11].GetInt(); 
-		pwa_desc->forBuilding = cursor[12].GetInt();
+		pwa_desc->forRole = cursor[11].GetInt();
+
+		pwa_desc->isAffectCard = cursor[12].GetInt();
+		pwa_desc->forCard = cursor[13].GetInt();
 		//pwa_desc->issyncai = cursor[7].GetInt();
 
 		pwa_desc->wa_id = (attrid_t ) aid ;
@@ -171,8 +177,10 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 		return -1 ;
 	}
 	
-
-	return loadUplevelExp(up_level_file);
+	if (up_level_file)	{
+		return loadUplevelExp(up_level_file);
+	}
+	return 0;
 }
 
 
@@ -194,6 +202,9 @@ int RoleAttrHelper::FetchAttr2Others(attrval_t *inbufs,int bufsize, attrval_node
 
 attrid_t RoleAttrHelper::GetID(const char *name) 
 {
+	if (!name || !*name){
+		return INVALID_ATTR_ID;
+	}
 	role_attr_description  *pwa = m_wahelper_bufs;
 	for(int i=0; i<m_wa_num; i++,pwa++ ) {
 		if (pwa->wa_id == INVALID_ATTR_ID)	{
@@ -209,26 +220,29 @@ attrid_t RoleAttrHelper::GetID(const char *name)
 	
 	return INVALID_ATTR_ID;
 }
-
-attrid_t RoleAttrHelper::GetIDByRealName(const char *name)
-{
-	role_attr_description  *pwa = m_wahelper_bufs;
-	for (int i = 0; i < m_wa_num; i++, pwa++) {
-		if (pwa->wa_id == INVALID_ATTR_ID)	{
-			continue;
-		}
-		else if (pwa->real_name.attrname[0] == 0){
-			continue;
-		}
-		else if (0 == ndstricmp(name, pwa->real_name.attrname)) {
-			return pwa->wa_id;
-		}
-	}
-	return INVALID_ATTR_ID;
-}
+// 
+// attrid_t RoleAttrHelper::GetIDByRealName(const char *name)
+// {
+// 	role_attr_description  *pwa = m_wahelper_bufs;
+// 	for (int i = 0; i < m_wa_num; i++, pwa++) {
+// 		if (pwa->wa_id == INVALID_ATTR_ID)	{
+// 			continue;
+// 		}
+// 		else if (pwa->real_name.attrname[0] == 0){
+// 			continue;
+// 		}
+// 		else if (0 == ndstricmp(name, pwa->real_name.attrname)) {
+// 			return pwa->wa_id;
+// 		}
+// 	}
+// 	return INVALID_ATTR_ID;
+// }
 
 attrid_t RoleAttrHelper::GetIDEx(const char *name,int &MinOrMax)
 {
+	if (!name || !*name){
+		return INVALID_ATTR_ID;
+	}
 	role_attr_description  *pwa = m_wahelper_bufs;
 	MinOrMax = 0 ;
 	for(int i=0; i<m_wa_num; i++,pwa++ ) {
@@ -259,6 +273,15 @@ const char *RoleAttrHelper::Getname(attrid_t wa_id)
 	}
 	return m_wahelper_bufs[wa_id].name.attrname ;
 }
+
+const char *RoleAttrHelper::GetRealname(attrid_t wa_id)
+{
+	if (wa_id >= m_wa_num || m_wahelper_bufs[wa_id].wa_id == INVALID_ATTR_ID) {
+		return NULL;
+	}
+	return m_wahelper_bufs[wa_id].real_name.attrname;
+}
+
 
 role_attr_description *RoleAttrHelper::get_wa_desc(attrid_t wa_id)
 {
@@ -632,4 +655,40 @@ int DBL_ReadAttrList(const char *tableName, int index, attr_node_buf &attrbuf)
 	}
 	attrbuf.number = n;
 	return n;
+}
+
+
+int Dbl_TableStringToAttr(const DBLDataNode &dataString, attr_node_buf &attrbuf)
+{
+	RoleAttrHelper *root = get_attr_helper();
+	nd_assert(root);
+
+	if (dataString.GetDataType() == OT_ARRAY && dataString.GetArrayType() == OT_STRING) {
+		DBLDataNode tmp;
+		if (tmp.StringToArrayString(dataString.GetarrayText(0))) {
+			for (int i = 0; i < dataString.GetArraySize(); i++)	{
+				const char *p = dataString.GetarrayText(i);
+				if (!p || !*p)
+					continue;
+				DBLDataNode node;
+				if (node.StringToArrayString(p)) {
+					attrid_t aid = root->GetID( node.GetarrayText(0));
+					if (aid == ATTR_VALUE_DETA) {
+						return -1;
+					}
+					attrval_t val = node.GetarrayFloat(1);
+					attrbuf.push_back(aid, val);
+				}
+			}
+		}
+		else {
+			attrid_t aid = root->GetID(dataString.GetarrayText(0));
+			if (aid == INVALID_ATTR_ID) {
+				return -1;
+			}
+			attrval_t val = dataString.GetarrayFloat(1);
+			attrbuf.push_back(aid, val);
+		}
+	}
+	return attrbuf.number;
 }

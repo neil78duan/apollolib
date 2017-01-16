@@ -193,19 +193,13 @@ protected:
 	std::string m_dbName ;
 };
 
-DBLDataNode DBL_FindDataObject_ex(const char *table, const int RowID, const char *ColName, int inputEncodeType, int outputEncode);
+DBLDataNode DBL_FindDataObject_ex(const char *table, const int RowID, const char *ColName, int inputEncodeType = E_SRC_CODE_ANSI, int outputEncode = ND_ENCODE_TYPE);
 
-inline DBLDataNode DBL_FindDataObjectByname(const char *table, const int RowID, const char *ColName)
-{
-	return DBL_FindDataObject_ex(table, RowID, ColName, DBLDatabase::get_Instant()->GetEncodeType(), ND_ENCODE_TYPE);
-}
-
-//int init_game_data(const char *path, const char *listfile);
-//DBLDatabase* get_dbl_loader() ;
-inline DBLDataNode DBL_FindDataObject(const char *table, const int RowID, const char *ColName, int inputEncodeType = E_SRC_CODE_ANSI, int outputEncode = E_SRC_CODE_UTF_8)
-{
-	return DBL_FindDataObject_ex(table,RowID,ColName,inputEncodeType, outputEncode);
-}
+#define DBL_FindDataObject DBL_FindDataObject_ex
+// inline DBLDataNode DBL_FindDataObject(const char *table, const int RowID, const char *ColName, int inputEncodeType = E_SRC_CODE_ANSI, int outputEncode = ND_ENCODE_TYPE)
+// {
+// 	return DBL_FindDataObject_ex(table,RowID,ColName,inputEncodeType, outputEncode);
+// }
 DBLTable * DBL_FindTable(const char *table) ;
 //int add_dbfile_useinfo(const char *file) ;
 

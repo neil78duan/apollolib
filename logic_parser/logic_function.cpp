@@ -27,6 +27,9 @@ static bool apollo_func_change_time(LogicParserEngine*parser, parse_arg_list_t &
 //static bool apollo_func_exit(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 
 static bool apollo_func_read_userData_from_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+static bool apollo_func_get_userDataType(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+
+static bool apollo_func_binary_to_userData(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 
 static bool apollo_load_script_file(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 static bool apollo_export_cpp_api(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
@@ -35,6 +38,12 @@ static bool apollo_export_events_list(LogicParserEngine*parser, parse_arg_list_t
 static bool apollo_run_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 
 static bool apollo_get_dbl_name(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+static bool apollo_str_cmp(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+
+
+static bool apollo_str_str(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+static bool apollo_str_len(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+
 //
 //static NDUINT32 _getMsgid(DBLDataNode &data , nd_handle hListen)
 //{
@@ -63,6 +72,10 @@ int init_sys_functions(LogicEngineRoot *root)
 	root->installFunc(apollo_func_change_time, "apollo_func_change_time", "修改服务器时间(int:add_hours, int:add_minutes)");
 	root->installFunc(apollo_func_read_userData_from_msg, "apollo_func_read_userData_from_msg", "从消息中读取类型(输入消息, 类型名字)");
 
+	root->installFunc(apollo_func_get_userDataType, "apollo_func_get_userDataType", "获得消息数据类型(类型名字)");
+	root->installFunc(apollo_func_binary_to_userData, "apollo_func_binary_to_userData", "把二进制转换为dataType(binary,类型名字)");
+		
+	
 	root->installFunc(apollo_load_script_file, "apollo_load_script_file", "加载脚本(scriptn_name)");
 
 	root->installFunc(apollo_run_test, "apollo_run_test", "运行测试(test_output_path)");
@@ -73,16 +86,83 @@ int init_sys_functions(LogicEngineRoot *root)
 	root->installFunc(apollo_load_file_data, "apollo_load_file_data", "读取整个文件(filename)");
 	root->installFunc(apollo_write_file, "apollo_write_file", "写入文件(filename,var1,var2...)");
 	root->installFunc(apollo_make_full_path, "apollo_make_full_path", "合成文件名(path,filename)");
-	root->installFunc(apollo_get_dbl_name, "apollo_get_dbl_name", "获得dbl信息()");
-	
+	root->installFunc(apollo_get_dbl_name, "apollo_get_dbl_name", "获得dbl信息()");	
+	root->installFunc(apollo_str_cmp, "apollo_str_cmp", "字符串比较(str1,str2)");
+	root->installFunc(apollo_str_str, "apollo_str_str", "字符串查找(str1,str2)");
+	root->installFunc(apollo_str_len, "apollo_str_len", "字符串长度(str1)");
+
 
 	return 0;
 }
+
+
+bool apollo_str_cmp(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+{
+	CHECK_ARGS_NUM_ONLY(args, 3, parser);
+	//CHECK_DATA_TYPE(args[1], OT_STRING, parser);
+	//CHECK_DATA_TYPE(args[2], OT_STRING, parser);
+
+	const char *p1 = args[1].GetText();
+	const char *p2 = args[2].GetText();
+	bool ret = false;
+
+	if (p1 && p2){
+		if (ndstricmp(p1, p2) == 0) {
+			ret = true;
+		}
+	}
+	result.InitSet(ret);
+	return true;
+}
+
+
+bool apollo_str_str(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+{
+	CHECK_ARGS_NUM_ONLY(args, 3, parser);
+	//CHECK_DATA_TYPE(args[1], OT_STRING, parser);
+	CHECK_DATA_TYPE(args[2], OT_STRING, parser);
+	result = DBLDataNode();
+
+	if (!args[1].CheckValid() || args[1].GetDataType() != OT_STRING) {
+		return true;
+	}
+	const char *p1 = args[1].GetText();
+	const char *p2 = args[2].GetText();
+
+	
+	if (p1 && p2){
+		const char *str1 = ndstristr(p1, p2);
+		if (str1) {
+			result.InitSet(str1);
+		}		
+	}
+	return true;
+}
+
+bool apollo_str_len(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+{
+	CHECK_ARGS_NUM_ONLY(args, 2, parser);
+	//CHECK_DATA_TYPE(args[1], OT_STRING, parser);
+
+	result.InitSet(0);
+	if (!args[1].CheckValid() || args[1].GetDataType() != OT_STRING) {
+		return true;
+	}
+
+	const char *p1 = args[1].GetText();	
+	if (p1 && *p1){
+		int len = strlen(p1);
+		result.InitSet(len);
+	}
+	return true;
+}
+
 bool apollo_get_dbl_name(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
 	DBLDatabase *pdbl = DBLDatabase::get_Instant();
 	if (!pdbl) {
 		nd_logerror("load database library error\n");
+		parser->setErrno(NDERR_PROGRAM_OBJ_NOT_FOUND);
 		return false;
 	}
 	result.InitSet(pdbl->getDatabaseName()) ;
@@ -92,12 +172,13 @@ bool apollo_get_dbl_name(LogicParserEngine*parser, parse_arg_list_t &args, DBLDa
 bool apollo_run_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
 
-	CHECK_ARGS_NUM(args, 2);
-	CHECK_DATA_TYPE(args[1], OT_STRING);
+	CHECK_ARGS_NUM(args, 2, parser);
+	CHECK_DATA_TYPE(args[1], OT_STRING, parser);
 	//test database library
 	DBLDatabase *pdbl = DBLDatabase::get_Instant();
 	if (!pdbl) {
 		nd_logerror("load database library error\n");
+		parser->setErrno(NDERR_PROGRAM_OBJ_NOT_FOUND);
 		return false;
 	}
 	if (-1 == pdbl->Test(args[1].GetText())) {
@@ -121,13 +202,14 @@ bool apollo_run_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNo
 bool apollo_load_script_file(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
 	
-	CHECK_ARGS_NUM(args, 2);
-	CHECK_DATA_TYPE(args[1], OT_STRING);
+	CHECK_ARGS_NUM(args, 2, parser);
+	CHECK_DATA_TYPE(args[1], OT_STRING, parser);
 	
 	LogicEngineRoot *root = LogicEngineRoot::get_Instant() ;
 	nd_assert(root);
 	if (-1== root->LoadScript(args[1].GetText(), parser ) ) {
-		nd_logerror("load %s script error \n", args[1].GetText()) ;
+		nd_logerror("load %s script error \n", args[1].GetText());
+		parser->setErrno(NDERR_OPENFILE);
 		return  false ;
 	}
 	return  true ;
@@ -137,8 +219,8 @@ bool apollo_load_script_file(LogicParserEngine*parser, parse_arg_list_t &args, D
 bool apollo_export_cpp_api(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
 	
-	CHECK_ARGS_NUM(args, 2);
-	CHECK_DATA_TYPE(args[1], OT_STRING);
+	CHECK_ARGS_NUM(args, 2, parser);
+	CHECK_DATA_TYPE(args[1], OT_STRING, parser);
 	
 	if(-1==common_export_c_api_descript(args[1].GetText()) ) {
 		nd_logerror("export cpp api to %s error \n", args[1].GetText()) ;
@@ -201,8 +283,8 @@ int common_export_event_id_descript(const char *outfile)
 bool apollo_export_events_list(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
 
-	CHECK_ARGS_NUM(args, 2);
-	CHECK_DATA_TYPE(args[1], OT_STRING);
+	CHECK_ARGS_NUM(args, 2, parser);
+	CHECK_DATA_TYPE(args[1], OT_STRING, parser);
 
 	if (-1 == common_export_event_id_descript(args[1].GetText())) {
 		nd_logerror("export events list to %s error \n", args[1].GetText());
@@ -258,10 +340,10 @@ int common_export_error_list(const char *outfile)
 //////////////////////////////////
 bool apollo_set_message_handler(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
-	CHECK_ARGS_NUM(args, 6);
+	CHECK_ARGS_NUM(args, 6, parser);
 
-	CHECK_DATA_TYPE(args[1], OT_STRING);
-	CHECK_DATA_TYPE(args[2], OT_STRING);
+	CHECK_DATA_TYPE(args[1], OT_STRING, parser);
+	CHECK_DATA_TYPE(args[2], OT_STRING, parser);
 	int maxId = args[3].GetInt();
 	int minId = args[4].GetInt();
 	const char *pScript = args[2].GetText();
@@ -276,6 +358,7 @@ bool apollo_set_message_handler(LogicParserEngine*parser, parse_arg_list_t &args
 
 			if (0 == nd_msgentry_script_install(hListen, args[2].GetText(), maxId, minId, args[5].GetInt())) {
 				ret = true;
+				nd_logdebug("installl MESSAGE (%d,%d) handler %s success\n", maxId, minId, args[1].GetText());
 			}
 			else {
 				nd_logerror("apollo_set_message_handler installl (%d,%d) to %s error \n", maxId, minId, args[1].GetText());
@@ -292,9 +375,9 @@ bool apollo_set_message_handler(LogicParserEngine*parser, parse_arg_list_t &args
 //install event handler
 bool apollo_func_install_event_handler(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
-	CHECK_ARGS_NUM(args, 3);
-	CHECK_DATA_TYPE(args[1], OT_STRING);
-	CHECK_DATA_TYPE(args[2], OT_INT);
+	CHECK_ARGS_NUM(args, 3, parser);
+	CHECK_DATA_TYPE(args[1], OT_STRING, parser);
+	CHECK_DATA_TYPE(args[2], OT_INT, parser);
 
 	LogicEngineRoot *logicEngine = LogicEngineRoot::get_Instant();
 	logicEngine->installEvent(args[2].GetInt(), args[1].GetText());
@@ -304,7 +387,7 @@ bool apollo_func_install_event_handler(LogicParserEngine*parser, parse_arg_list_
 //send message api apollo_func_send_msg
 bool apollo_func_send_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
-	CHECK_ARGS_NUM(args, 3);
+	CHECK_ARGS_NUM(args, 3, parser);
 
 	//CHECK_DATA_TYPE(args[2], OT_STRING);
 	int maxId =0, minId = 0; 
@@ -316,6 +399,8 @@ bool apollo_func_send_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLD
 		DBLDataNode &dataMsg = args[i];
 		if (-1 == logicDataWrite(dataMsg, omsg)) {
 			nd_logerror("apollo_func_send_msg args[%d] write to message-buf error \n", i);
+
+			parser->setErrno(NDERR_BAD_GAME_OBJECT);
 			return false;
 		}
 	}
@@ -340,23 +425,25 @@ bool apollo_func_send_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLD
 		}
 	}
 	
+	parser->setErrno(NDERR_BAD_GAME_OBJECT);
 	return false;
 }
 
 //send message api
 bool apollo_func_read_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
-	CHECK_ARGS_NUM(args, 3);	
+	CHECK_ARGS_NUM(args, 3, parser);
 		
-	CHECK_DATA_TYPE(args[1], OT_OBJ_MSGSTREAM);
+	CHECK_DATA_TYPE(args[1], OT_OBJ_MSGSTREAM, parser);
 	NDIStreamMsg *pInmsg = (NDIStreamMsg *)args[1].GetObject();
 
-	CHECK_DATA_TYPE(args[2], OT_INT);
+	CHECK_DATA_TYPE(args[2], OT_INT, parser);
 	DBL_ELEMENT_TYPE t = (DBL_ELEMENT_TYPE)args[2].GetInt();
 		
 	DBLDataNode val(NULL, t, (DBL_ELEMENT_TYPE) 0);
 	if (0 != logicDataRead(val,*pInmsg) ) {
 		nd_logerror("read message error\n");
+		parser->setErrno(NDERR_BAD_GAME_OBJECT);
 		return false;
 	}
 	result = val;
@@ -375,17 +462,21 @@ static bool _get_format_type(LogicParserEngine*parser, const char *typeName, DBL
 		DBLDataNode datatype;
 		if (!parser->getOwner()->getOtherObject("FormatMsgData", datatype)){
 			nd_logerror("not found datatype define \n");
+
+			parser->setErrno(NDERR_PROGRAM_OBJ_NOT_FOUND);
 			return false;
 		}
 
 		userDefineDataType_map_t *pDataType = (userDefineDataType_map_t*)datatype.GetObject();
 		if (!pDataType)	{
 			nd_logerror("not found datatype define \n");
+			parser->setErrno(NDERR_PROGRAM_OBJ_NOT_FOUND);
 			return false;
 		}
 
 		userDefineDataType_map_t::iterator it = pDataType->find(typeName);
 		if (it == pDataType->end())	{
+			parser->setErrno(NDERR_INVALID_INPUT);
 			nd_logerror("not found data %s \n", typeName);
 			return false;
 		}
@@ -394,17 +485,39 @@ static bool _get_format_type(LogicParserEngine*parser, const char *typeName, DBL
 	return true;
 }
 
+//get data type
+bool apollo_func_get_userDataType(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+{
+	CHECK_ARGS_NUM(args, 2, parser);
+	CHECK_DATA_TYPE(args[1], OT_STRING, parser);
+	if (!args[1].CheckValid()) {
+		nd_logerror("data type name is NULL\n");
+
+		parser->setErrno(NDERR_PARAM_INVALID);
+		return false;
+	}
+
+	if (!_get_format_type(parser, args[1].GetText(), result)) {
+		nd_logerror("data type name %s not found\n", args[2].GetText());
+		parser->setErrno(NDERR_INVALID_INPUT);
+		return false;
+	}
+	return true;
+}
+
 bool apollo_func_read_userData_from_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
-	CHECK_ARGS_NUM(args, 3);
-	CHECK_DATA_TYPE(args[2], OT_STRING);
+	CHECK_ARGS_NUM(args, 3, parser);
+	CHECK_DATA_TYPE(args[2], OT_STRING, parser);
 	if (!args[2].CheckValid()) {
 		nd_logerror("data type name is NULL\n");
+		parser->setErrno(NDERR_PARAM_INVALID);
 		return false;
 	}
 
 	if (!_get_format_type(parser, args[2].GetText(),  result)) {
 		nd_logerror("data type name %s not found\n", args[2].GetText());
+		parser->setErrno(NDERR_INVALID_INPUT);
 		return false;
 	}
 
@@ -412,53 +525,57 @@ bool apollo_func_read_userData_from_msg(LogicParserEngine*parser, parse_arg_list
 		return true;
 	}
 
-	CHECK_DATA_TYPE(args[1], OT_OBJ_MSGSTREAM);
+	CHECK_DATA_TYPE(args[1], OT_OBJ_MSGSTREAM, parser);
 	NDIStreamMsg *pInmsg = (NDIStreamMsg *)args[1].GetObject();
 
 	if(-1 == logicDataRead(result, *pInmsg)) {
 		nd_logerror("read data-type %s error from message  \n", args[2].GetText());
+		parser->setErrno(NDERR_READ_STREAM);
 		return false;
 	}
 
 	return true;
-// 
-// 	DBL_ELEMENT_TYPE t = (DBL_ELEMENT_TYPE) get_type_from_alias(args[2].GetText());
-// 	if (t != OT_USER_DEFINED) {
-// 
-// 		DBLDataNode valTmp(NULL, t, (DBL_ELEMENT_TYPE)0);
-// 		if (0 != logicDataRead(valTmp, *pInmsg)) {
-// 			nd_logerror("read message error, stream not match\n");
-// 			return false;
-// 		}
-// 		result = valTmp;
-// 		return true;
-// 	}
-// 
-// 	DBLDataNode datatype;
-// 	if (!parser->getOwner()->getOtherObject("FormatMsgData", datatype)){
-// 		nd_logerror("not found datatype define \n");
-// 		return false;
-// 	}
-// 
-// 	userDefineDataType_map_t *pDataType = (userDefineDataType_map_t*) datatype.GetObject();
-// 	if (!pDataType)	{
-// 		nd_logerror("not found datatype define \n");
-// 		return false;
-// 	}
-// 
-// 	userDefineDataType_map_t::iterator it = pDataType->find(args[2].GetText());
-// 	if (it == pDataType->end())	{
-// 		nd_logerror("not found data %s \n", args[2].GetText());
-// 		return false;
-// 	}
-// 	result.InitSet(it->second);
 
 }
 
+
+bool apollo_func_binary_to_userData(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+{
+	CHECK_ARGS_NUM(args, 3, parser);
+	CHECK_DATA_TYPE(args[1], OT_BINARY_DATA, parser);
+	CHECK_DATA_TYPE(args[2], OT_STRING, parser);
+	if (!args[2].CheckValid()) {
+		nd_logerror("data type name is NULL\n");
+		parser->setErrno(NDERR_PARAM_INVALID);
+		return false;
+	}
+
+	if (!_get_format_type(parser, args[2].GetText(), result)) {
+		nd_logerror("data type name %s not found\n", args[2].GetText());
+		parser->setErrno(NDERR_INVALID_INPUT);
+		return false;
+	}
+
+	nd_usermsgbuf_t msgbuf;
+	nd_usermsghdr_init(&msgbuf.msg_hdr);
+
+	memcpy(msgbuf.data, args[1].GetBinary(), args[1].GetBinarySize());
+
+	ND_USERMSG_LEN(&msgbuf) += (NDUINT16)args[1].GetBinarySize();
+	NDIStreamMsg inmsg(&msgbuf);
+
+	if (-1 == logicDataRead(result, inmsg)) {
+		nd_logerror("read data-type %s error from message  \n", args[2].GetText());
+		parser->setErrno(NDERR_READ_STREAM);
+		return false;
+	}
+	return true;
+
+}
 //change server time 
 bool apollo_func_change_time(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
-	CHECK_ARGS_NUM(args, 3);
+	CHECK_ARGS_NUM(args, 3, parser);
 
 	int hours = args[1].GetInt();
 	int minutes = args[2].GetInt();
@@ -475,17 +592,20 @@ bool apollo_func_change_time(LogicParserEngine*parser, parse_arg_list_t &args, D
 
 bool apollo_load_file_data(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
-	CHECK_ARGS_NUM(args, 2);
+	CHECK_ARGS_NUM(args, 2, parser);
 
 	size_t size = 0;
 	const char *fileName = args[1].GetText();
 	if (!fileName || !*fileName) {
 		nd_logmsg("input file name error\n");
+		parser->setErrno(NDERR_PARAM_INVALID);
 		return false;
 	}
 	void *pdata = nd_load_file(fileName, &size);
 	if (!pdata) {
 		nd_logmsg("file %s not open\n", fileName);
+
+		parser->setErrno(NDERR_OPENFILE);
 		return false;
 	}
 	result.InitSet(pdata, size, OT_BINARY_DATA);
@@ -496,15 +616,18 @@ bool apollo_load_file_data(LogicParserEngine*parser, parse_arg_list_t &args, DBL
 //send message api apollo_write_file(filename,var1,var2...
 bool apollo_write_file(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
-	CHECK_ARGS_NUM(args, 2);
+	CHECK_ARGS_NUM(args, 2, parser);
 
 	//CHECK_DATA_TYPE(args[2], OT_STRING);
 	const char *filename = args[1].GetText();
 	if (!filename || !*filename) {
+		parser->setErrno(NDERR_PARAM_INVALID);
+		
 		return false;
 	}
 	FILE *pf = fopen(filename, "wb");
 	if (!pf) {
+		parser->setErrno(NDERR_OPENFILE);
 		return false;
 	}
 
@@ -523,11 +646,12 @@ bool apollo_write_file(LogicParserEngine*parser, parse_arg_list_t &args, DBLData
 bool apollo_make_full_path(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
 	char buf[ND_FILE_PATH_SIZE];
-	CHECK_ARGS_NUM(args, 3);
+	CHECK_ARGS_NUM(args, 3, parser);
 
 	const char *path = args[1].GetText();
 	const char *file = args[2].GetText();
 	if (!path || !file) {
+		parser->setErrno(NDERR_PARAM_INVALID);
 		nd_logerror("input file or path is null\n");
 		return false;
 	}
@@ -679,10 +803,10 @@ enum eApolloTimeUnit
 bool apollo_time_func(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
 
-	CHECK_ARGS_NUM(args, 4);
+	CHECK_ARGS_NUM(args, 4, parser);
 
-	CHECK_DATA_TYPE(args[1], OT_INT);
-	CHECK_DATA_TYPE(args[2], OT_INT);
+	CHECK_DATA_TYPE(args[1], OT_INT, parser);
+	CHECK_DATA_TYPE(args[2], OT_INT, parser);
 	//CHECK_DATA_TYPE(args[3], OT_TIME);
 	int opType = args[1].GetInt();
 	int opUnit = args[2].GetInt();
@@ -722,7 +846,7 @@ bool apollo_time_func(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataN
 			nd_logerror("apollo_time_func error need 4 args on ADD/sub\n");
 			return false;
 		}
-		CHECK_DATA_TYPE(args[4], OT_INT);
+		CHECK_DATA_TYPE(args[4], OT_INT, parser);
 		NDUINT64 deta = args[4].GetInt();
 		time_t orgtime = args[3].GetTime();
 
@@ -818,7 +942,7 @@ bool apollo_time_func(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataN
 		result.InitSet(orgtime);
 	}
 	else if (E_APOLLO_TIME_OP_INTERVAL) {
-		CHECK_DATA_TYPE(args[4], OT_TIME);
+		CHECK_DATA_TYPE(args[4], OT_TIME, parser);
 		time_t tim1 = args[3].GetTime(), tim2 = args[4].GetTime();
 		if (tim1 < tim2){
 			time_t _tmp = tim1;

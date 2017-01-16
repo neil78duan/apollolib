@@ -13,9 +13,9 @@
 </alias>
 	
 <data_type_define kinds="hide" desc="define enum data type">
-	<type_operate_dest kinds="enum" enum_value="无,角色属性,背包,任务,基地,附加属性" enum_type="text" enum_text="none,attr,package,task,home,addition"/>
+	<!-- type_operate_dest kinds="enum" enum_value="无,角色属性,背包,任务,基地,卡牌,附加属性" enum_type="text" enum_text="none,attr,package,task,home,card,addition"/ -->
 	<type_compare_sub_entry kinds="enum" enum_value="其他,等于,小于,大于,小于等于,大于等于"/>
-	<type_data_type kinds="enum" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,time,变量,参数,上一步结果,user_define,compile_time,function_name, module_name,binary_data"/>	
+	<type_data_type kinds="enum" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,time,变量,参数,当前结果,user_define,compile_time,function_name, module_name,binary_data"/>	
 	<type_netmsg_privilege kinds="enum" enum_value="不限制,连接,登录,进入游戏,GM"/>
 	<type_encode kinds="enum" enum_value="ansi,gbk,utf8"/>
 	<type_time_unit kinds="enum" enum_value="秒,分钟,小时,天,月,年,星期"/>
@@ -29,7 +29,7 @@
 	<list instruction="1" ins_id="2" size="0" >op_write</list>
 	<list instruction="1" ins_id="3" size="0" >op_add</list>
 	<list instruction="1" ins_id="4" size="0" >op_sub</list>
-	<list instruction="1" ins_id="5" size="0" >op_clear</list>
+	<list instruction="1" ins_id="5" size="0" >op_operate</list>
 	<list instruction="1" ins_id="6" size="0" >op_make_var</list>
 	<list instruction="1" ins_id="7" size="0" >op_read_table</list>
 	<list instruction="1" ins_id="8" size="0" >op_comp</list>
@@ -38,13 +38,17 @@
 	<list instruction="1" ins_id="11" size="0" >op_getobj</list>
 	<list instruction="1" ins_id="12" size="8" >op_set_error_continue</list>
 	<list instruction="1" ins_id="13" size="0" record_param_num="1">op_call_func</list>	
-	<list instruction="1" ins_id="19" size="0" >op_save_register</list>	
-	<list instruction="1" ins_id="18" size="0" >op_set_result</list>
+	<list instruction="1" ins_id="14" size="8" >op_short_jump</list>	
+	<list instruction="1" ins_id="16" size="8" >op_error_short_jump</list>
+	<list instruction="1" ins_id="18" size="8" >op_success_short_jump</list>
+	<!-- list instruction="1" ins_id="19" size="0" >op_save_register</list>	
+	<list instruction="1" ins_id="18" size="0" >op_set_result</list -->
 	<list instruction="1" ins_id="21" size="0" record_param_num="1">op_print</list>	
 	<list instruction="1" ins_id="22" size="0" record_param_num="1">op_log</list>	
 	<list instruction="1" ins_id="23" size="12" >op_rand</list>	
 	<list instruction="1" ins_id="26" size="0" record_param_num="1">op_sendevent</list>
 	<list instruction="1" ins_id="27" size="4" >op_get_time</list>
+	<list instruction="1" ins_id="19" size="4" >op_commit_affair</list>
 	<list instruction="1" ins_id="29" size="4" >op_begin_affair</list>
 	<list instruction="1" ins_id="30" size="4" >op_get_compile_time</list>
 	<list instruction="1" ins_id="31" size="0" record_param_num="1">op_time_function</list>
@@ -67,7 +71,7 @@
 	<list instruction="1" ins_id="49" size="0" >op_get_arrsize</list>
 	<list instruction="1" ins_id="50" size="8" >op_set_loop_index</list>
 	<list instruction="1" ins_id="51" size="4" >op_get_last_error</list>
-	
+	<list instruction="1" ins_id="52" size="4" >op_get_simulate_stat</list>
 	
 	<!-- list instruction="1" ins_id="24" size="0" >op_set_loops</list>	
 	<list instruction="1" ins_id="25" size="0" >op_count_jump</list -->	
@@ -88,7 +92,8 @@
 	<list instruction="0" size="0" datatype="2" need_type_stream="1" >var</list>
 	<list instruction="0" size="0" datatype="0" need_type_stream="1" >msgtype</list>
 	<list instruction="0" size="0" datatype="0" need_type_stream="1" >varInt</list>
-	<list instruction="0" size="0" datatype="1" need_type_stream="1" >varFloat</list>
+	<list instruction="0" size="0" datatype="1" need_type_stream="1" >varFloat</list>	
+	<list instruction="0" size="0" datatype="0" need_refill_offset="1">jumpOffset</list>
 	
 	<list instruction="4" size="0">param_collect</list>
 	<list instruction="3" size="0">formula_text</list>
@@ -98,7 +103,8 @@
 	<list instruction="6" size="0" datatype="2">is_open_role_affair</list>
 	<list instruction="7" size="0" >exception_catch_block</list>
 	<list instruction="8" size="0" >function_init_block</list>
-	
+	<list instruction="9" >steps_collection</list>
+	<list instruction="9" >function_filter</list>
 	
 </compile_setting>
 
@@ -130,6 +136,10 @@
 			<n2 name="comment" value="函数说明"></n2>
 		</sub_node>
 	</create_func>
+	<create_function_filter name="标签页" create_type="1">
+		<function_filter name="类型_消息类"  create_template="create_msg_handler" auto_index="1" expand_stat="1">
+		</function_filter>
+	</create_function_filter>
 	
 	<create_msg_handler name="消息处理函数创建模板" create_type="1">		
 		<msg_handler_node name="message_handler" enable_drag="yes" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1">
@@ -152,9 +162,66 @@
 					<varInt name="权限" kinds="enum" enum_value="none,connect,login,ingame,hight" delete="no">2</varInt>
 				</op_call_func>
 			</function_init_block>
-			<exception_catch_block name="节点_异常处理" create_template="create_list1" expand_list="comment" auto_index="0"  >
+			<exception_catch_block name="节点_异常处理" create_template="create_list1" expand_list="comment" auto_index="2" expand_stat="1">
 				<comment name="功能说明" rw_stat="read">catch{}</comment>
-			</exception_catch_block>
+				<op_get_last_error name="节点_获得错误号" expand="yes">
+					<comment name="功能说明" rw_stat="read">get_last_error()</comment>
+				</op_get_last_error>
+				<op_call_func name="节点_调用函数_send_error" create_template="create_input_param" auto_index="1" expand_list="comment,func_name" expand_stat="0">
+					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+					<func_name kinds="user_define" user_param="func_list">_realval=CPP.gscript_send_client_error&_dispname=发送错误通知(errorId)</func_name>
+					<param_collect name="参数_错误号" expand="yes" expand_stat="1">
+						<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+						<var kinds="string" delete="no" restrict="type">0</var>
+					</param_collect>
+				</op_call_func>
+			</exception_catch_block>			
+			<op_begin_affair name="节点_出错时回滚角色数据" expand="yes" expand_stat="1">
+				<comment name="功能说明" rw_stat="read">player_affair_rollback()</comment>
+			</op_begin_affair>
+			
+			<op_skip_error name="节点_忽略错误_for_test" expand="yes">
+				<comment name="功能说明" rw_stat="read">skip_error(value)</comment>
+				<num name="错误类型" kinds="user_define" user_param="error_list" delete="no">_realval=47&_dispname=system(NDERR_VARIANT_NOT_EXIST):variant not found</num>
+			</op_skip_error>
+			
+			<op_call_func name="节点_从dataType定义读取消息_NeedRead_DataType" expand="yes" expand_list="comment,var" expand_stat="1">
+				<comment name="功能说明" rw_stat="read">function_read_fromat_message(data_type_name)</comment>
+				<func_name name="函数" kinds="hide" delete="no">apollo_func_read_userData_from_msg</func_name>
+				<param_collect name="参数1_输入消息对象" kinds="hide" delete="no">
+					<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
+					<var kinds="string" delete="no" restrict="type">2</var>
+				</param_collect>
+				<var name="类型名字" kinds="string">none</var>
+			</op_call_func>
+				
+			<op_make_var name="节点_申明变量_already_read_msg_data" expand="yes" expand_stat="1">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<param name="名字" kinds="string" delete="no">none</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">none</var>
+			</op_make_var>
+		
+			<op_call_func name="节点_最后_发送处理结果" create_template="create_input_param" auto_index="4" expand_list="comment,func_name" expand_stat="1">
+				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+				<func_name kinds="user_define" user_param="func_list">send_common_reply_msg</func_name>
+				<param_collect name="参数_主消息号" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+					<var kinds="string" delete="no" restrict="type">0</var>
+				</param_collect>
+				<param_collect name="参数_次消息号" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+					<var kinds="string" delete="no" restrict="type">0</var>
+				</param_collect>
+				<param_collect name="参数_是否成功" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+					<var kinds="string" delete="no" restrict="type">0</var>
+				</param_collect>
+				<param_collect name="参数_处理参数" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+					<var kinds="string" delete="no" restrict="type">none</var>
+				</param_collect>
+			</op_call_func>
 		</msg_handler_node>
 	</create_msg_handler>
 	
@@ -192,7 +259,7 @@
 	<create_step_exit name="退出节点" create_type="1" expand="yes" >
 		<op_exit name="节点_退出" expand="yes">			
 			<comment name="功能说明" rw_stat="read">op_exit(value)</comment>
-			<num name="返回结果" kinds="enum" enum_value="false,true" delete="no">0</num>
+			<num name="返回结果" kinds="user_define" user_param="error_list" delete="no">0</num>
 		</op_exit>
 	</create_step_exit>
 	
@@ -201,6 +268,15 @@
 			<comment name="功能说明" rw_stat="read">get_last_error()</comment>
 		</op_get_last_error>
 	</create_get_last_error>
+	
+	
+	<create_get_simulate_stat name="得到模拟器状态" create_type="1" expand="yes" >
+		<op_get_simulate_stat name="节点_模拟器状态" expand="yes">			
+			<comment name="功能说明" rw_stat="read">check_simulate_stat()</comment>
+		</op_get_simulate_stat>
+	</create_get_simulate_stat>
+	
+	
 	
 	<create_set_loop_index name="设置循环索引" create_type="1" expand="yes" >
 		<op_set_loop_index name="节点_设置循环索引" expand="yes">			
@@ -271,29 +347,19 @@
 	</create_step_time_function>
 	
 	
-	<create_step_begin_affair name="出错自动恢复数据" create_type="1" expand="yes" >
-		<op_begin_affair name="节点_角色数据出错自动复原" expand="yes">
+	<create_step_begin_affair name="打开角色事务" create_type="1" expand="yes" >
+		<op_begin_affair name="节点_打开事务_若出错回滚" expand="yes">
 			<comment name="功能说明" rw_stat="read">player_affair_rollback()</comment>
 		</op_begin_affair>
 	</create_step_begin_affair>
 	
+	<create_step_commit_affair name="提交角色事务" create_type="1" expand="yes" >
+		<op_commit_affair name="节点_提交事务_写入改动数据" expand="yes">
+			<comment name="功能说明" rw_stat="read">player_commit_rollback()</comment>
+		</op_commit_affair>
+	</create_step_commit_affair>
 	
-	<create_set_var name="保存当前值" create_type="1" expand="yes" >
-		<op_save_register name="节点_把当前值赋给变量" expand="yes">
-			<comment name="功能说明" rw_stat="read">var=current-value</comment>
-			<type kinds="key_value" key="变量,参数" value="9,10" delete="no">9</type>
-			<var name="变量名" kinds="string" delete="no" restrict="type">none</var>
-		</op_save_register>
-	</create_set_var>
-	
-	<create_set_result name="设置上一步结果" create_type="1" expand="yes" >
-		<op_set_result name="节点_设置上一步结果" expand="yes">
-			<comment name="功能说明" rw_stat="read">set-current-value</comment>
-			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-			<var kinds="string" delete="no" restrict="type">none</var>
-		</op_set_result>
-	</create_set_result>
-	
+		
 	<create_step_rand name="范围随机数" create_type="1" expand="yes" >
 		<op_rand name="节点_生成随机数" expand="yes">
 			<comment name="功能说明" rw_stat="read">rand(low_limit,hight_limit)</comment>
@@ -305,7 +371,7 @@
 	<create_step_read name="对象读取节点" create_type="1" expand="yes" >
 		<op_read name="节点_读取" expand="yes">
 			<comment name="功能说明" rw_stat="read">op_read(aim,index_name)</comment>
-			<aim kinds="reference" reference_type="type_operate_dest">0</aim>
+			<aim kinds="user_define" user_param="internal_object">none</aim>
 			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
 				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
@@ -316,7 +382,7 @@
 	<create_step_write name="对象写入节点" create_type="1" desc="创建写入节点">
 		<op_write name="节点_写入" expand="yes">
 			<comment name="功能说明" rw_stat="read">op_write(aim,index_name,value)</comment>
-			<aim kinds="reference" reference_type="type_operate_dest">0</aim>			
+			<aim kinds="user_define" user_param="internal_object">none</aim>			
 			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
 				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
@@ -328,7 +394,7 @@
 	<create_step_add name="对象增加节点" create_type="1" >
 		<op_add name="节点_增加" expand="yes">
 			<comment name="功能说明" rw_stat="read">op_add(aim,index_name,value)</comment>
-			<aim kinds="reference" reference_type="type_operate_dest">0</aim>	
+			<aim kinds="user_define" user_param="internal_object">none</aim>	
 			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
 				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
@@ -341,7 +407,7 @@
 	<create_step_sub name="对象减少节点" create_type="1" >
 		<op_sub name="节点_减少" expand="yes">
 			<comment name="功能说明" rw_stat="read">op_sub(aim,index_name,value)</comment>
-			<aim kinds="reference" reference_type="type_operate_dest">0</aim>	
+			<aim kinds="user_define" user_param="internal_object">none</aim>	
 			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
 				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
@@ -350,23 +416,11 @@
 			<var name="结果" kinds="string" delete="no" restrict="type">none</var>
 		</op_sub>
 	</create_step_sub>
-	<create_step_clear name="对象清除节点" create_type="1" >
-		<op_clear name="节点_清除" expand="yes">
-			<comment name="功能说明" rw_stat="read">op_clear(aim,index_name)</comment>
-			<aim kinds="reference" reference_type="type_operate_dest">0</aim>	
-			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
-				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
-			</param_collect>
-			<type name="青春类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-			<var name="结果" kinds="string" delete="no" restrict="type">none</var>
-		</op_clear>
-	</create_step_clear>
 	
 	<create_step_test name="对象检测节点" create_type="1" >
 		<op_test name="节点_检测" expand="yes">
 			<comment name="功能说明" rw_stat="read">op_test(aim,index_name,value)</comment>
-			<aim kinds="reference" reference_type="type_operate_dest">0</aim>	
+			<aim kinds="user_define" user_param="internal_object">none</aim>	
 			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
 				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
@@ -375,6 +429,22 @@
 			<var name="结果" kinds="string" delete="no" restrict="type">none</var>
 		</op_test>
 	</create_step_test>
+	
+	<create_step_operate name="对象命令" create_type="1" >
+		<op_operate name="节点_对象操作" expand="yes">
+			<comment name="功能说明" rw_stat="read">op_cmd(aim,cmd, index,value)</comment>
+			<aim kinds="user_define" user_param="internal_object">none</aim>
+			<param name="命令" kinds="string" delete="no">none</param>
+			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
+				<type name="命令索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>			
+			<type name="命令值类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var name="命令值" kinds="string" delete="no" restrict="type">none</var>
+		</op_operate>
+	</create_step_operate>
+	
+	
 	
 	<create_make_var name="创建变量" create_type="1" >
 		<op_make_var name="节点_申明变量" expand="yes">
@@ -412,7 +482,7 @@
 	<create_assignin name="赋值操作" create_type="1" >
 		<op_assignin name="节点_赋值" expand="yes">
 			<comment name="功能说明" rw_stat="read">var = value</comment>
-			<param name="变量名称" kinds="string" delete="no" restrict="type">none</param>			
+			<param name="变量名称" kinds="string" delete="no" restrict="type">none</param>
 			<param_collect name="值" expand="yes" expand_stat="1" delete="no">
 				<type name="赋值类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var name="值" kinds="string" delete="no" restrict="type">none</var>
@@ -548,6 +618,21 @@
 		</op_log>
 	</create_step_log>
 		
+	<create_step_inistall_msg_handler name="安裝网络消息处理器" create_type="1">
+		<op_call_func name="节点_安装消息处理器" expand="yes" expand_list="comment">
+			<comment name="功能说明" rw_stat="read">function_install_msg_handler(netModuleName, scriptName,maxId, minId,privilege)</comment>
+			<func_name name="函数" kinds="hide" delete="no" >apollo_set_message_handler</func_name>
+			<var name="网络接收器" kinds="string" delete="no">listener</var>
+			<param_collect name="脚本名" kinds="hide" delete="no">
+				<type name="类型" kinds="reference" reference_type="type_data_type" delete="no">14</type>
+				<var name="值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>			
+			<msgtype name="主消息" kinds="numeral"  delete="no">0</msgtype>	
+			<msgtype name="次消息" kinds="numeral"  delete="no">0</msgtype>					
+			<varInt name="权限" kinds="enum" enum_value="none,connect,login,ingame,hight" delete="no">2</varInt>
+		</op_call_func>
+	</create_step_inistall_msg_handler>
+	
 	<create_step_send_msg name="发送消息" create_type="1">
 		<op_call_func name="节点_发送消息" create_template="create_input_param" auto_index="0" expand_list="comment,varInt,msgtype">
 			<comment name="功能说明" rw_stat="read">function_send_message(msg_id,...)</comment>
@@ -585,6 +670,16 @@
 		</op_call_func>		
 	</create_step_read_datatype_msg>
 	
+	
+	<create_step_get_user_data_type name="从dataType获得类型" create_type="1">
+		<op_call_func name="节点_从dataType读取类型" expand="yes" expand_list="comment,var">
+			<comment name="功能说明" rw_stat="read">function_get_userDataType(data_type_name)</comment>
+			<func_name name="函数" kinds="hide" delete="no" >apollo_func_get_userDataType</func_name>					
+			<var name="类型名字" kinds="string" >none</var>			
+		</op_call_func>		
+	</create_step_get_user_data_type>
+	
+	
 	<create_step_read_excel_attr name="从excel读取属性节点" create_type="1" >
 		<op_call_func name="节点_从excel读取属性" expand="yes" expand_list="comment">
 			<comment name="功能说明" rw_stat="read">function_collect_attrs_from_excel(table,index)</comment>
@@ -603,15 +698,16 @@
 	</create_step_check_valid>
 	
 	<create_step_type_transfer name="类型转换" create_type="1" >
-		<op_type_transfer name="节点_类型转换" expand_list="comment,index" >			
-			<comment name="功能说明" rw_stat="read">data.convert( type )</comment>					
-			<index name="需要转换的类型" kinds="reference" reference_type="type_data_type" delete="no">0</index>
+		<op_type_transfer name="节点_类型转换" expand_list="comment,param,index" >			
+			<comment name="功能说明" rw_stat="read">data.convert( type )</comment>			
+			<param name="变量名" kinds="string" delete="no" restrict="type">none</param>
+			<index name="新类型" kinds="reference" reference_type="type_data_type" delete="no">0</index>
 		</op_type_transfer>
 	</create_step_type_transfer>
 	
 	
 	
-	<create_op_comp name="逻辑比较" create_type="1" >
+	<create_op_comp name="逻辑运算" create_type="1" >
 		<op_comp name="节点_逻辑运算" expand="yes">
 			<comment name="功能说明" rw_stat="read"> 大于小于等级 </comment>
 			<index  name="逻辑运算" kinds="reference" reference_type="type_compare_sub_entry" delete="no">0</index>	
@@ -639,7 +735,33 @@
 		</op_bool_entry>
 	</create_step_bool_entry>
 	
-	<create_step_comp_entry name="创建数值比较分支" create_type="1" >
+	<create_comp_steps name="数值比较分支" create_type="1" >
+		<steps_collection name="节点_数值比较分支" auto_index="0">	
+			<op_comp name="比较运行" expand="yes">
+				<comment name="功能说明" rw_stat="read"> 大于小于等级 </comment>
+				<index  name="逻辑运算" kinds="reference" reference_type="type_compare_sub_entry" delete="no">0</index>	
+				<param_collect name="操作数1" expand="yes" expand_stat="1" delete="no">
+					<type name="操作数1类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+					<var name="操作数1值" kinds="string" delete="no" restrict="type">none</var>
+				</param_collect>
+				<param_collect name="操作数2" expand="yes" expand_stat="1" delete="no">
+					<type name="操作数2类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+					<var name="操作数2值" kinds="string" delete="no" restrict="type">none</var>
+				</param_collect>
+			</op_comp>
+			<op_bool_entry name="比较成功就执行"  >
+				<op_sub_comp_entry name="执行块" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
+					<condition no_comp="1" kinds="hide" delete="no">1</condition>
+				</op_sub_comp_entry>
+				<op_sub_comp_entry name="上一步false时执行" kinds="hide" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
+					<condition no_comp="1" kinds="hide"  delete="no">0</condition>
+				</op_sub_comp_entry>
+			</op_bool_entry>
+		</steps_collection>
+	</create_comp_steps>
+	
+	
+	<!-- create_step_comp_entry name="创建数值比较分支" create_type="1" >
 		<op_comp_entry name="节点_比较分支" create_template="create_sub_comp_entry" expand_list="comment" >
 			<comment name="功能说明" rw_stat="read">if{}</comment>
 			<op_sub_comp_entry name="子节点_比较分支" create_template="create_list1" expand_list="condition,type,var" comp_cond="condition" comp_value="var">
@@ -668,7 +790,7 @@
 				<var name="操作数2值" kinds="string" delete="no" restrict="type">none</var>
 			</param_collect>
 		</op_sub_comp_entry>
-	</create_sub_comp_entry>
+	</create_sub_comp_entry -->
 	
 	
 	<create_step_loop_entry name="循环分支" create_type="1" >
@@ -680,6 +802,55 @@
 			</condition>
 		</op_loop_entry>
 	</create_step_loop_entry>
+		
+	<create_break name="break" create_type="1" >
+		<op_short_jump name="节点_break" expand_list="comment"  >
+			<comment name="功能说明" rw_stat="read">break</comment>
+			<jumpOffset kinds="hide" delete="no" >0</jumpOffset>
+		</op_short_jump>
+	</create_break>
+	
+	<op_error_break name="break-on-error" create_type="1" >
+		<op_error_short_jump name="节点_break_on_error" expand_list="comment"  >
+			<comment name="功能说明" rw_stat="read">break when last false</comment>
+			<jumpOffset kinds="hide" delete="no" >0</jumpOffset>
+		</op_error_short_jump>
+	</op_error_break>
+	
+	<create_success_break name="break-n-sucess" create_type="1" >
+		<op_success_short_jump name="节点_break" expand_list="comment"  >
+			<comment name="功能说明" rw_stat="read">break when last success</comment>
+			<jumpOffset kinds="hide" delete="no" >0</jumpOffset>
+		</op_success_short_jump>
+	</create_success_break>
+	
+	
+	
+	<create_step_true_exit name="true时返回" create_type="1" >
+		<op_bool_entry name="节点_结果true时返回" expand_list="comment" >			
+			<comment name="功能说明" rw_stat="read">if($curval==true)exit</comment>
+			<op_sub_comp_entry name="上一步true时执行" kinds="hide" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
+				<condition no_comp="1" kinds="hide" delete="no">1</condition>
+				<op_exit name="节点_退出" expand="yes">			
+					<comment name="功能说明" rw_stat="read">op_exit(value)</comment>
+					<num name="返回结果" kinds="user_define" user_param="error_list" delete="no">0</num>
+				</op_exit>
+			</op_sub_comp_entry>
+		</op_bool_entry>
+	</create_step_true_exit>
+	
+	<create_step_false_eixt name="false时返回" create_type="1" >
+		<op_bool_entry name="节点_结果false时返回" expand_list="comment" >			
+			<comment name="功能说明" rw_stat="read">if($curval==false)exit</comment>
+			<op_sub_comp_entry name="上一步false时执行" kinds="hide" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
+				<condition no_comp="1" kinds="hide"  delete="no">0</condition>				
+				<op_exit name="节点_退出" expand="yes">			
+					<comment name="功能说明" rw_stat="read">op_exit(value)</comment>
+					<num name="返回结果" kinds="user_define" user_param="error_list" delete="no">0</num>
+				</op_exit>
+			</op_sub_comp_entry>
+		</op_bool_entry>
+	</create_step_false_eixt>
 	
 	<create_input_param name="消息参数" create_type="1" >
 		<param_collect name="参数" expand="yes">
@@ -707,6 +878,7 @@
 		<list>create_step_exit</list>
 		<list>create_get_last_error</list>		
 		<list>create_skip_error</list>
+		<list>create_get_simulate_stat</list>
 		<list>create_step_error_catch_block</list>
 		<list>create_error_continue</list>
 		
@@ -715,8 +887,9 @@
 		<list>create_step_write</list>
 		<list>create_step_add</list>
 		<list>create_step_sub</list>
-		<list>create_step_clear</list>
 		<list>create_step_test</list>	
+		<list>create_step_operate</list>	
+		
 		
 		<list>create_read_table</list>
 		<list>create_step_calc</list>
@@ -732,20 +905,29 @@
 		<list>create_op_comp</list>
 		<list>create_step_check_valid</list>
 		<list>create_step_bool_entry</list>
-		<list>create_step_comp_entry</list>
 		<list>create_step_loop_entry</list>	
-		<list>create_get_arrsize</list>
+		<list>create_comp_steps</list>
 		
+		<list>create_break</list>
+		<list>create_success_break</list>		
+		<list>op_error_break</list>	
+		
+		<list>create_step_true_exit</list>	
+		<list>create_step_false_eixt</list>	
+		
+		<list>create_get_arrsize</list>		
 		<list>create_make_var</list>
 		<list>create_step_type_transfer</list>
-		<list>create_set_var</list>	
-		<list>create_set_result</list>	
+		
 		<list>create_build_user_data</list>
 		<list>create_build_data_type</list>
+		<list>create_step_get_user_data_type</list>
 		
 		<list>create_math_operate</list>
 		<list>create_assignin</list>
 		
+		<list>create_step_inistall_msg_handler</list>
+		<list>create_step_send_msg</list>	
 		<list>create_step_print</list>
 		<list>create_step_log</list>
 		<list>create_step_rand</list>
@@ -754,6 +936,8 @@
 		<list>create_step_time_function</list>
 		
 		<list>create_step_begin_affair</list>
+		<list>create_step_commit_affair</list>
+		
 		<list>create_step_read_excel_attr</list>
 		
 		<list>create_function_init_block</list>	
@@ -767,6 +951,7 @@
 		<list>create_step_exit</list>
 		<list>create_get_last_error</list>
 		<list>create_skip_error</list>
+		<list>create_get_simulate_stat</list>		
 		
 		<list>create_step_error_catch_block</list>
 		<list>create_error_continue</list>
@@ -775,8 +960,8 @@
 		<list>create_step_write</list>
 		<list>create_step_add</list>
 		<list>create_step_sub</list>
-		<list>create_step_clear</list>	
 		<list>create_step_test</list>	
+		<list>create_step_operate</list>	
 		
 		<list>create_read_table</list>
 		<list>create_step_calc</list>
@@ -794,21 +979,31 @@
 		
 		<list>create_step_check_valid</list>
 		<list>create_step_bool_entry</list>
-		<list>create_step_comp_entry</list>
 		<list>create_step_loop_entry</list>
+		<list>create_comp_steps</list>
+		
+		
+		<list>create_break</list>
+		<list>create_success_break</list>		
+		<list>op_error_break</list>	
+		
+		<list>create_step_true_exit</list>	
+		<list>create_step_false_eixt</list>	
+		
 		<list>create_get_arrsize</list>
 		
 		
 		<list>create_make_var</list>
 		<list>create_step_type_transfer</list>
-		<list>create_set_var</list>	
-		<list>create_set_result</list>	
+		<!-- list>create_set_var</list>	
+		<list>create_set_result</list -->	
 		<list>create_build_user_data</list>
 		<list>create_build_data_type</list>
+		<list>create_step_get_user_data_type</list>		
 		<list>create_math_operate</list>
 		<list>create_assignin</list>
 		
-		
+		<list>create_step_inistall_msg_handler</list>
 		<list>create_step_send_msg</list>	
 		<list>create_step_read_msg</list>	
 		<list>create_step_read_datatype_msg</list>
@@ -820,6 +1015,7 @@
 		<list>create_step_compile_time</list>
 		<list>create_step_time_function</list>		
 		<list>create_step_begin_affair</list>
+		<list>create_step_commit_affair</list>
 		<list>create_step_read_excel_attr</list>
 		<list>create_function_init_block</list>
 		<list>create_step_chdir</list>		

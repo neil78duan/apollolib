@@ -20,6 +20,9 @@ public:
 	virtual ~CDrawTreeCtrl();
 
 protected:
+
+	//HTREEITEM CopyItem(HTREEITEM hItem, HTREEITEM htiNewParent, HTREEITEM htiAfter);
+	//HTREEITEM CopyBranch(HTREEITEM htiBranch, HTREEITEM htiNewParent, HTREEITEM htiAfter);
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBegindrag(NMHDR* pNMHDR, LRESULT* pResult);

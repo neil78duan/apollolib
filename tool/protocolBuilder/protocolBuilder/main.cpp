@@ -243,6 +243,74 @@ int get_saveDB_sort(ndxml_root *xmlfile,name_list_t &res_list,name_list_t &save_
 	return 0;
 }
 
+const char *_get_construction_func(char *input,size_t size, ndxml *dataNode)
+{
+	char *org = input;
+	*input = 0;
+	int subNodes = ndxml_getsub_num(dataNode);
+	for (int n = 0; n < subNodes; ++n) {
+		int len = 0;
+		ndxml *node1 = ndxml_refsubi(dataNode, n);
+		int bIsString = false;
+		const char *pType = ndxml_getattr_val(node1, "type");
+		if (0 == ndstricmp((char*)pType, (char*)"string") || 0 == ndstricmp((char*)pType, (char*)"char")) {
+			bIsString = true;
+		}
+		const char *pArray = ndxml_getattr_val(node1, "isArray");
+		const char *pValName = ndxml_getattr_val(node1, "name");
+		if (pArray && pArray[0] && pArray[0] == '1') {
+			if (!bIsString) {
+				len = snprintf(input, size, "\t\t%sCount = 0 ;\n", pValName);
+			}
+			else {
+				len = snprintf(input, size, "\t\t%s[0] = 0 ;\n", pValName);
+			}
+		}
+		else {
+			if (is_base_type(pType)) {
+				len = snprintf(input, size, "\t\t%s = 0 ;\n", pValName);
+			}
+		}
+		input += len;
+		size -= len;
+	}
+	return  org;
+}
+
+const char *_get_copy_function_func(char *input, size_t size, ndxml *dataNode)
+{
+	char *org = input;
+	*input = 0;
+	int subNodes = ndxml_getsub_num(dataNode);
+	for (int n = 0; n < subNodes; ++n) {
+		int len = 0;
+		ndxml *node1 = ndxml_refsubi(dataNode, n);
+		int bIsString = false;
+		const char *pType = ndxml_getattr_val(node1, "type");
+		if (0 == ndstricmp((char*)pType, (char*)"string") || 0 == ndstricmp((char*)pType, (char*)"char")) {
+			bIsString = true;
+		}
+		const char *pArray = ndxml_getattr_val(node1, "isArray");
+		const char *pValName = ndxml_getattr_val(node1, "name");
+		if (pArray && pArray[0] && pArray[0] == '1') {
+			if (!bIsString) {
+				len = snprintf(input, size, "\t\tfor(int i=0;i<r.%sCount;i++) { \n"
+					"\t\t\t%s[i]=r.%s[i];\n\t\t} \n"
+					"\t\t%sCount=r.%sCount;\n"
+					, pValName, pValName, pValName, pValName, pValName);
+			}
+			else {
+				len = snprintf(input, size, "\t\tstrncpy(%s,r.%s,sizeof(%s));\n", pValName, pValName, pValName);
+			}
+		}
+		else {
+			len = snprintf(input, size, "\t\t%s = r.%s ;\n", pValName, pValName);
+		}
+		input += len;
+		size -= len;
+	}
+	return  org;
+}
 int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bool SaveDB)
 {
 	const char *pName = ndxml_getname(sub) ;
@@ -250,6 +318,7 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 		return-1 ;
 	}
 	char name_buf[256] ;
+	char construct_func[1024];
 	
 	const char *pComment = ndxml_getattr_val(sub, "comment");
 	if (pComment) {
@@ -260,13 +329,19 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 		snprintf(name_buf, sizeof(name_buf), "%s_v%s",pName,version) ;
 		pName = name_buf ;
 		
-		fprintf(pf, "struct %s \n{\n ", pName) ;
-		fprintf(pf, "\t%s() \n\t{\n\t\tmemset(this, 0, sizeof(*this) ); \n\t}\n\n",pName) ;
+		//fprintf(pf, "struct %s \n{\n ", pName) ;
+		//fprintf(pf, "\t%s() \n\t{\n\t\tmemset(this, 0, sizeof(*this) ); \n\t}\n\n",pName, ) ;
 	}
 	else {
-		fprintf(pf, "struct %s \n{\n ", pName) ;
-		fprintf(pf, "\t%s() \n\t{\n\t\tmemset(this, 0, sizeof(*this) ); \n\t}\n\n",pName) ;
+		//fprintf(pf, "struct %s \n{\n ", pName) ;
+		//fprintf(pf, "\t%s() \n\t{\n\t\tmemset(this, 0, sizeof(*this) ); \n\t}\n\n",pName) ;
 	}
+	fprintf(pf, "struct %s \n{\n ", pName);
+	fprintf(pf, "\t%s() \n\t{\n%s\t}\n\n", pName, _get_construction_func(construct_func, sizeof(construct_func), sub));
+	fprintf(pf, "\t%s& operator=(const %s &r)\n\t{\n%s\t\treturn *this;\n\t}\n\n",
+		pName, pName, _get_copy_function_func(construct_func, sizeof(construct_func), sub));
+
+
 	char buf_read_func[4096] ;
 	char buf_write_func[4096];
 	char buf_toUser_func[4096];
@@ -399,7 +474,7 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 			pWriteStream += size ;
 			write_size -= size;
 
-			if (is_base_type(pType)) {
+			if (is_base_type(pType) || ndstricmp("binaryData",pType)==0) {
 				size = snprintf(pTouserStream, toUser_size, "\t\tTO_USER_DEF_ELE(paramUserData, %s, paramInputData);\n", pValName);
 				pTouserStream += size;
 				toUser_size -= size;
@@ -466,9 +541,11 @@ int build_dataType(ndxml_root *xmlfile, const char *out_file,bool saveDB)
 		return -1;
 	}
 	
+	const char *nameSpace = ndxml_getattr_val(xnode, "namespace"); 
+
 	name_list_t res_list ;
 	get_name_sort(xmlfile, res_list);
-
+	
 	NDUINT64 nowTime = (NDUINT64) time(NULL);
 	if (saveDB) {
 		
@@ -487,18 +564,31 @@ int build_dataType(ndxml_root *xmlfile, const char *out_file,bool saveDB)
 		}
 		
 		_OUT_PUT_TIME(pfCpp) ;
-		fprintf(pfCpp, "\n\n#include \"netMessage/dataStream.h\"\n" );
+		fprintf(pfCpp, "\n\n#include \"netMessage/dataStream.h\"\n");
 		fprintf(pfCpp, "\n\n#include \"netMessage/auto_dataTypeDb_v%s.h\"\n", version );
-		fprintf(pfCpp, "namespace NetMessage \n{\n" );
+		//fprintf(pfCpp, "namespace NetMessage \n{\n" );
+		if (nameSpace) {
+			fprintf(pfCpp, "namespace %s \n{\n", nameSpace);
+		}
+		else {
+			fprintf(pfCpp, "/* undefined namespace*/\n{\n");
+		}
+
 
 		
 		_OUT_PUT_TIME(pf) ;
 		fprintf(pf, "#ifndef _AUTO_DATA_TYPE_DEFINE_DB_%s_H_\n",version );
 		fprintf(pf, "#define _AUTO_DATA_TYPE_DEFINE_DB_%s_H_\n",version );
 		fprintf(pf, "#include \"netMessage/auto_macroDefine.h\"\n\n") ;
-		fprintf(pf, "#include \"netMessage/dataStream.h\"\n\n") ;
+		fprintf(pf, "#include \"netMessage/dataStream.h\"\n\n");
+		fprintf(pf, "#include \"netMessage/dataBinary.h\"\n\n");
 
-		fprintf(pf, "namespace NetMessage \n{\n" );
+		if (nameSpace) {
+			fprintf(pf, "namespace %s \n{\n", nameSpace);
+		}
+		else {
+			fprintf(pf, "/* undefined namespace*/\n{\n");
+		}
 		
 		
 		name_list_t save_list;
@@ -535,19 +625,34 @@ int build_dataType(ndxml_root *xmlfile, const char *out_file,bool saveDB)
 
 		_OUT_PUT_TIME(pfCpp) ;
 		fprintf(pfCpp, "\n\n#include \"netMessage/auto_dataType.h\"\n" );
-		fprintf(pfCpp, "namespace NetMessage \n{\n" );
+		//fprintf(pfCpp, "namespace NetMessage \n{\n" );
+
+		if (nameSpace) {
+			fprintf(pfCpp, "namespace %s \n{\n", nameSpace);
+		}
+		else {
+			fprintf(pfCpp, "/* undefined namespace*/\n{\n");
+		}
+
 		
 		_OUT_PUT_TIME(pf) ;
 		fprintf(pf, "#ifndef _AUTO_DATA_TYPE_DEFINE_H_\n" );
 		fprintf(pf, "#define _AUTO_DATA_TYPE_DEFINE_H_\n" );;
 		fprintf(pf, "#include \"netMessage/auto_macroDefine.h\"\n\n") ;
 		fprintf(pf, "#include \"netMessage/dataStream.h\"\n\n") ;
-		
+		fprintf(pf, "#include \"netMessage/dataBinary.h\"\n\n");
+
 		fprintf(pf, "#define DATA_IN_DB_VERSION %s \n\n", version);
 		fprintf(pf, "#define NET_MESSAGE_EXPORT_TM %lld \n", nowTime);
 		
-		fprintf(pf, "namespace NetMessage \n{\n" );
-		
+
+		if (nameSpace) {
+			fprintf(pf, "namespace %s \n{\n", nameSpace);
+		}
+		else {
+			fprintf(pf, "/* undefined namespace*/\n{\n");
+		}
+
 		int total =(int) res_list.size(); //ndxml_getsub_num(xnode) ;
 		for (int i=0; i<total; ++i) {
 			ndxml *sub = ndxml_refsub(xnode,res_list[i].name.c_str()) ;
@@ -1015,7 +1120,7 @@ do { 			\
 	}					\
 }while(0)
 
-//extern int build_CSharp(ndxml_root *xmlID, ndxml_root *xmlMarco, ndxml_root *xmlData, const char *outfile);
+extern int build_CSharp(ndxml_root *xmlID, ndxml_root *xmlMarco, ndxml_root *xmlData, const char *outfile);
 int main(int argc, char *argv[])
 {
 	int i ;
@@ -1049,8 +1154,8 @@ int main(int argc, char *argv[])
 	nd_rmdir("./cpp") ;
 	nd_mkdir("./cpp") ;
 	
-	nd_rmdir("./cpp_ue") ;
-	nd_mkdir("./cpp_ue") ;
+	//nd_rmdir("./cpp_ue") ;
+	//nd_mkdir("./cpp_ue") ;
 	
 	if(-1==build_dataTypeForUE4(&xmlDatatype, "./cpp_ue/netStreamAutoDefine" ) ) {
 		fprintf(stderr, "export datatype error \n")  ;
@@ -1085,11 +1190,14 @@ int main(int argc, char *argv[])
 //		exit(1) ;
 //	}
 	//export cs
-//	
-//	if(build_CSharp(&xmlMessage,&xmlMarco , &xmlDatatype, "./csharp/ProtocolMessage.cs") ) {
-//		fprintf(stderr, "export CSharp error \n")  ;
-//		exit(1) ;
-//	}
+	
+	nd_rmdir("./csharp");
+	nd_mkdir("./csharp");
+
+	if(build_CSharp(&xmlMessage,&xmlMarco , &xmlDatatype, "./csharp/ProtocolMessage.cs") ) {
+		fprintf(stderr, "export CSharp error \n")  ;
+		exit(1) ;
+	}
 	
 	
 	ndxml_destroy(&xmlMarco); ndxml_destroy(&xmlDatatype); ndxml_destroy(&xmlMessage) ;

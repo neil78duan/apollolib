@@ -137,7 +137,7 @@ MSG_ENTRY_INSTANCE(unwrap_call_session_msgproc_entry)
 			nd_assert(h_listen) ;
 		}
 		
-		nd_logdebug("world translate call proc real message (%d, %d)\n", ND_USERMSG_MAXID(&realMsg), ND_USERMSG_MAXID(&realMsg)) ;
+		nd_logdebug("world translate call proc real message (%d, %d)\n", ND_USERMSG_MAXID(&realMsg), ND_USERMSG_MINID(&realMsg)) ;
 		nd_netmsg_handle(sid, &realMsg.msg_hdr, h_listen) ; 
 	}
 	return 0;
@@ -217,3 +217,55 @@ MSG_ENTRY_INSTANCE(resend_playermsg_to_world_handler)
 }
 
 
+//show error
+const char *apollo_error(int errcode)
+{
+	static char errdesc[128];
+
+	const char *nd_err[] = {
+		"UNKNOW_ERROR"
+#undef ErrorElement 
+#define ErrorElement(a,_err_desc) "game(ESERVER_"#a "):" _err_desc
+#include "_error_def.h"
+#undef ErrorElement 
+	};
+
+	if (errcode <= NDERR_UNKNOWN) {
+
+		nd_error_convert  oldFunc = nd_register_error_convert(NULL);
+		const char *perr = nd_error_desc(errcode);
+		nd_register_error_convert(oldFunc);
+		return perr;
+	}
+	else if (errcode > ApolloError_Start && errcode < ESERVER_ERR_NUMBER){
+		return nd_err[errcode - ApolloError_Start-1];
+	}
+	else {
+		snprintf(errdesc, sizeof(errdesc), "Error code =%d", errcode);
+		return errdesc;
+	}
+}
+
+
+MSG_ENTRY_INSTANCE(sys_get_error_desc)
+{
+	ND_TRACE_FUNC();
+	//send ack success
+	NDIStreamMsg inmsg(msg);
+	NDOStreamMsg omsg(inmsg.MsgMaxid(), inmsg.MsgMinid());
+
+	NDSession *pSession = NDGetSession(nethandle);
+
+	NDUINT32 errorId = 0 ;
+
+	inmsg.Read(errorId);
+	
+	omsg.Write(errorId);
+	const char *perr =apollo_error(errorId);
+
+	if (perr){
+		omsg.Write(perr);
+	}
+	pSession->SendMsg(omsg);
+	return 0;
+}

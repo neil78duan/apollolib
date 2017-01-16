@@ -48,6 +48,7 @@ nd_cmdline_root* _get_cmd_root()
 void init_cmdline_msg(NDIConn* pconn)
 {	
 	
+	atlantis_base_message(pconn);
 	CONNECT_INSTALL_MSG(pconn, msg_echo_handler,ND_MAIN_ID_SYS,ND_MSG_SYS_ECHO) ;	
 	//room message 	
 //	CONNECT_INSTALL_MSG(pconn, msg_create_room_ack_handler,NETMSG_MAX_ROOM,ROOM_MSG_CREATE_ACK) ;	
@@ -71,6 +72,7 @@ int _loginServer( const char * host,int port, const char* user, const char *pass
 	__g_conn = LoginServer(  host, port,  user, passwd,sessionfile ) ;
 	if (__g_conn) {
 		init_cmdline_msg(__g_conn) ;
+		
 		return 0 ;
 	}
 	return -1;

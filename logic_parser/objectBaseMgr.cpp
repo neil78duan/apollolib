@@ -44,18 +44,26 @@ bool LogicObjectBase::opSub(const DBLDataNode& id, const DBLDataNode &val)
 	m_error = NDERR_NOT_SURPORT;
 	return false;
 }
-
-bool LogicObjectBase::opClear(const DBLDataNode& id, const DBLDataNode &val)
-{
-	m_error = NDERR_NOT_SURPORT;
-	return false;
-}
+// 
+// bool LogicObjectBase::opClear(const DBLDataNode& id, const DBLDataNode &val)
+// {
+// 	m_error = NDERR_NOT_SURPORT;
+// 	return false;
+// }
 
 bool LogicObjectBase::opCheck(const DBLDataNode& id, const  DBLDataNode &val)
 {
 	m_error = NDERR_NOT_SURPORT;
 	return false;
 }
+//common operate 
+bool LogicObjectBase::opOperate(const char *cmd, const DBLDataNode& id,  DBLDataNode &val)
+{
+
+	m_error = NDERR_NOT_SURPORT;
+	return false;
+}
+
 
 // bool LogicObjectBase::getObject(eOperatorObjType type, const  DBLDataNode& id, DBLDataNode &val)
 // {
@@ -163,12 +171,12 @@ bool TestLogicObject::opSub(const DBLDataNode& id, const  DBLDataNode &val)
 	//_setval(val);
 	return true;
 }
-
-bool TestLogicObject::opClear(const DBLDataNode& id, const  DBLDataNode &val)
-{
-	PARSE_TRACE("logic_engine_test: opClear(%d) \n", id.GetInt());
-	return true;
-}
+// 
+// bool TestLogicObject::opClear(const DBLDataNode& id, const  DBLDataNode &val)
+// {
+// 	PARSE_TRACE("logic_engine_test: opClear(%d) \n", id.GetInt());
+// 	return true;
+// }
 
 
 bool TestLogicObject::opCheck(const DBLDataNode& id, const  DBLDataNode &val)
@@ -190,10 +198,21 @@ bool TestLogicObject::opCheck(const DBLDataNode& id, const  DBLDataNode &val)
 	return true;
 }
 
+bool TestLogicObject::opOperate(const char *cmd, const DBLDataNode& id,  DBLDataNode &val)
+{
+	PARSE_TRACE("logic_engine_test: opOperate(%s,%d,%d) \n",cmd,  id.GetInt(), val.GetInt());
+	return true;
+}
+
 
 bool TestLogicObject::getOtherObject(const char*objName, DBLDataNode &val)
 {
 	//PARSE_TRACE("logic_engine_test: getObject(%d, %d) \n",type);
+	if (0==ndstricmp(objName , "machineInfo")) {
+		char buf[256];
+		val.InitSet(nd_common_machine_info(buf, sizeof(buf)));
+		return true;
+	}
 	_setval(val);
 	return true;
 

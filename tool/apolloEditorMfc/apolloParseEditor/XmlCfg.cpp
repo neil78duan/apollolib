@@ -254,11 +254,25 @@ bool CXmlCfg::ExpandTree(HTREEITEM hItem)
 	return ret;
 }
 
-HTREEITEM CXmlCfg::InitTreeNode(ndxml *xml_node,HTREEITEM hParent)
+void CXmlCfg::SetExpand(HTREEITEM hItem)
+{
+	if (!hItem){
+		return ;
+	}
+	ndxml* xml = (ndxml*)m_pTree->GetItemData(hItem);
+	if (!xml){
+		return ;
+	}
+	ndxml_setattrval(xml, _GetReverdWord(ERT_EXPAND_STAT), "1");
+	m_pTree->Expand(hItem, TVE_EXPAND);
+
+}
+
+HTREEITEM CXmlCfg::InitTreeNode(ndxml *xml_node, HTREEITEM hParent, HTREEITEM hiAfter)
 {
 	HTREEITEM hNode ;
 
-	hNode = m_pTree->InsertItem(_GetXmlName(xml_node,&m_alias),hParent,TVI_LAST) ;
+	hNode = m_pTree->InsertItem(_GetXmlName(xml_node,&m_alias),hParent,hiAfter) ;
 	m_pTree->SetItemData(hNode,(DWORD)xml_node) ;
 	
 
@@ -1084,7 +1098,10 @@ void CXmlCfg::OnPopXmlDel()
 	ndxml *xml_parent = (ndxml *)m_pTree->GetItemData(hParent);
 	if (xml_parent) {
 		ndxml_delxml(xml,xml_parent);
-		CreateXmlTree(m_root);
+		
+		m_pTree->DeleteItem(m_hCurItem);
+		m_hCurItem = NULL;
+		//CreateXmlTree(m_root);
 		CfgChanged();
 	}
 
@@ -1132,7 +1149,8 @@ bool CXmlCfg::TreeDragCallback(HTREEITEM  hFrom, HTREEITEM hTo)
 	HTREEITEM parent1 = m_pTree->GetParentItem(hFrom);
 	HTREEITEM parent2 = m_pTree->GetParentItem(hTo);
 	if (parent2!=parent1){
-		return false;
+		return _TreeDragInNotSameRoot(hFrom, hTo);
+		//return false;
 	}
 	ndxml *xmlparent = GetSelXml(parent1);
 	ndxml*xmlFrom = GetSelXml(hFrom);
@@ -1141,10 +1159,7 @@ bool CXmlCfg::TreeDragCallback(HTREEITEM  hFrom, HTREEITEM hTo)
 		return false;
 	}
 	const char *pEnableDrag = ndxml_getattr_val(xmlparent, "enable_drag");
-	if (!pEnableDrag){
-		return false;
-	}
-	if (0!=ndstricmp(pEnableDrag,"yes")){
+	if (pEnableDrag && 0 == ndstricmp(pEnableDrag, "no")){
 		return false;
 	}
 
@@ -1153,17 +1168,67 @@ bool CXmlCfg::TreeDragCallback(HTREEITEM  hFrom, HTREEITEM hTo)
 	if (-1==index || -1==src_index){
 		return false;
 	}
-	if (-1==ndxml_remove(xmlFrom, xmlparent)){
-		return false;
-	}
-	if (src_index > index) {
-		index -= 1;
-	}
-	if (-1 == ndxml_insert_ex(xmlparent, xmlFrom, index)) {
+
+	if (-1 == ndxml_remove(xmlFrom, xmlparent)){
 		return false;
 	}
 
-	CreateXmlTree(m_root);
+	if (-1 == ndxml_insert_ex(xmlparent, xmlFrom, index - 1)) {
+		return false;
+	}
+
+
+	//rebuild tree node 
+
+	HTREEITEM gp = m_pTree->GetParentItem(parent1);
+	HTREEITEM hNode = InitTreeNode(xmlparent, gp, parent1);
+	m_pTree->DeleteItem(parent1);
+
+	ExpandTree(hNode);
+
+
+	//CreateXmlTree(m_root);	
 	CfgChanged();
 	return true;
+}
+
+
+bool CXmlCfg::_TreeDragInNotSameRoot(HTREEITEM hFrom, HTREEITEM hTo)
+{
+	HTREEITEM parentFrom = m_pTree->GetParentItem(hFrom);
+
+	ndxml *xmlparent = GetSelXml(parentFrom);
+
+	ndxml*xmlFrom = GetSelXml(hFrom);
+	ndxml*xmlTo = GetSelXml(hTo);
+	if (!xmlparent || !xmlFrom || !xmlTo)	{
+		return false;
+	}
+	const char *fromName = ndxml_getname(xmlFrom);
+	const char *acceptName = ndxml_getattr_val(xmlTo,"accept_drag_in");
+	if (!fromName || !acceptName){
+		return false;
+	}
+	if (0!=ndstricmp(fromName, acceptName))	{
+		return false;
+	}
+
+	//move
+	if (-1 == ndxml_remove(xmlFrom, xmlparent)){
+		return false;
+	}
+
+	if (-1 == ndxml_insert(xmlTo, xmlFrom)) {
+		return false;
+	}
+
+
+	//rebuild tree node 
+	m_pTree->DeleteItem(hFrom);
+	InitTreeNode(xmlFrom, hTo);
+	SetExpand(hTo);
+
+	//CreateXmlTree(m_root);	
+	CfgChanged();
+
 }

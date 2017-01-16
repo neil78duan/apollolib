@@ -91,6 +91,8 @@ enum ATLANTIS_SERVER_MSG {
 	SERVER_MSG_INPUT_INVITE_CODE ,// input invite code format: 32bits:accountid + 32bit: roleid + text: invitecode
 	
 	SERVER_MSG_UPDATE_PVP_DATA, //NetMessage::RolePvpDetail 
+
+	SERVER_MSG_GET_OTHER_ROLE_DATA, //int32:role-id, int8:field-type, int16:callback-msg
 	SERVER_MSG_NUMBER 
 };
 // 

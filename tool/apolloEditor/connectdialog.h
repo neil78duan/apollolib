@@ -52,6 +52,8 @@ private slots:
 
     void on_gmMsgButton_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::ConnectDialog *ui;
     QTimer *timer ;

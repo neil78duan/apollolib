@@ -76,8 +76,8 @@ const char *apollo_error(int errcode)
 		nd_register_error_convert(oldFunc);
 		return perr;
 	}
-	else if (errcode >= ApolloError_Start && errcode < ESERVER_ERR_NUMBER){
-		return nd_err[errcode - ApolloError_Start];
+	else if (errcode > ApolloError_Start && errcode < ESERVER_ERR_NUMBER){
+		return nd_err[errcode - ApolloError_Start-1];
 	}
 	else {
 		snprintf(errdesc, sizeof(errdesc), "Error code =%d",errcode) ;
@@ -351,14 +351,17 @@ int LoginApollo::Logout()
 		return -1;
 	}
 	
-	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_LOGOUT_REQ);	
-	nd_usermsgbuf_t recv_msg;
-	if (0 != ndSendAndWaitMessage(m_conn, omsg.GetMsgAddr(), &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_LOGOUT_NTF, ESF_URGENCY, 2000)) {
-		nd_object_seterror(m_conn, NDERR_IO);
+	if (nd_connector_valid((nd_netui_handle)m_conn)) {
+		NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_LOGOUT_REQ);
+		nd_usermsgbuf_t recv_msg;
+		if (0 != ndSendAndWaitMessage(m_conn, omsg.GetMsgAddr(), &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_LOGOUT_NTF, ESF_URGENCY, 2000)) {
+			nd_object_seterror(m_conn, NDERR_IO);
+		}
 	}
+	
 	nd_connect_level_set(m_conn, EPL_CONNECT) ;	
-
 	nd_connector_set_crypt(m_conn, NULL, 0);
+
 	return 0;
 }
 
@@ -629,9 +632,7 @@ int LoginApollo::relogin(void *token_info, int sendMsgID, int waitMsgID)
 	size = sizeof(k) ;
 	nd_net_ioctl((nd_netui_handle)m_conn,  NDIOCTL_SET_CRYPT_KEY,&k, &size) ;
 	
-	nd_log_screen("set new crypt key = { %x, %x, %x, %x} \n", k.k[0],k.k[1],k.k[2],k.k[3] ) ;
-	
-	
+	//nd_log_screen("set new crypt key = { %x, %x, %x, %x} \n", k.k[0],k.k[1],k.k[2],k.k[3] ) ;	
 	
 	nd_usermsgbuf_t recv_msg ;
 	
@@ -715,7 +716,7 @@ int LoginApollo::onLogin(NDIStreamMsg &inmsg)
 
 	//__g_login_account =  m_accIndex ;
 	
-	nd_logdebug("login ack accound-id=%d session_id =%d  connector=%p \n" AND m_accIndex  AND  m_sessionID AND  m_conn);
+	//nd_logdebug("login ack accound-id=%d session_id =%d  connector=%p \n" AND m_accIndex  AND  m_sessionID AND  m_conn);
 
 	if ( m_session_file && m_session_file[0]) {		
 		login_token_info sessionifo ;

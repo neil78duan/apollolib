@@ -163,11 +163,11 @@ void startDialog::_beginEdit(const char *script_file, const char *title)
 	filename = script_file;
 	_LOAD_XML(xml_script, filename, "utf8", 1);
 
-	filename = getScriptSetting(&xml_script, "c_func_api");
-	_LOAD_XML(xml_cpp_func, filename, "utf8", 0);
+	//filename = getScriptSetting(&xml_script, "c_func_api");
+	//_LOAD_XML(xml_cpp_func, filename, "utf8", 0);
 
-	filename = getScriptSetting(&xml_script, "events_id");
-	_LOAD_XML(xml_events_id, filename, "utf8", 0);
+	//filename = getScriptSetting(&xml_script, "events_id");
+	//_LOAD_XML(xml_events_id, filename, "utf8", 0);
 
 
 	filename = getNetProtocol();
@@ -175,8 +175,14 @@ void startDialog::_beginEdit(const char *script_file, const char *title)
 
 	XMLDialog xmlDlg(this);
 	xmlDlg.SetXML(&m_editor_setting, &xml_script,title);
-	//xmlDlg.SetMessageID(&xml_net_protocol);
-	//xmlDlg.SetEventsID(&xml_events_id);
+	
+	//load user define enum 
+	common_export_error_list("./.error_list.xml");
+	filename = getScriptSetting(&xml_script, "user_define_enum");
+	if (!_loadUserDefEnum(filename, &xmlDlg)) {
+		nd_logmsg("load user define dlg error \n");
+		return;
+	}
 
 	ndxml *funcroot = ndxml_getnode(&xml_net_protocol, "MessageDefine");
 	if (funcroot) {
@@ -191,15 +197,15 @@ void startDialog::_beginEdit(const char *script_file, const char *title)
 		}
 		xmlDlg.addDisplayNameList("msg_list", messageList);
 	}
-	xmlDlg.loadUserdefDisplayList(xml_cpp_func, LOGIC_FUNCTION_LIST_NAME);
-	xmlDlg.loadUserdefDisplayList(xml_events_id, LOGIC_EVENT_LIST_NAME);
+	//xmlDlg.loadUserdefDisplayList(xml_cpp_func, LOGIC_FUNCTION_LIST_NAME);
+	//xmlDlg.loadUserdefDisplayList(xml_events_id, LOGIC_EVENT_LIST_NAME);
 
 
-    if (0 == common_export_error_list("./.error_list.xml")) {
-        _LOAD_XML(xml_error, "./.error_list.xml", "utf8", 0);
-        xmlDlg.loadUserdefDisplayList(xml_error, LOGIC_ERROR_LIST_NAME);
-        ndxml_destroy(&xml_error);
-    }
+//     if (0 == common_export_error_list("./.error_list.xml")) {
+//         _LOAD_XML(xml_error, "./.error_list.xml", "utf8", 0);
+//         xmlDlg.loadUserdefDisplayList(xml_error, LOGIC_ERROR_LIST_NAME);
+//         ndxml_destroy(&xml_error);
+//     }
 
 	const char *package_file = _getFromIocfg("game_data_package_file");
 	DBLDatabase::get_Instant()->LoadBinStream(package_file);
@@ -215,12 +221,67 @@ void startDialog::_beginEdit(const char *script_file, const char *title)
 	}
 
 	ndxml_destroy(&xml_script);
-	ndxml_destroy(&xml_cpp_func);
+	//ndxml_destroy(&xml_cpp_func);
 	ndxml_destroy(&xml_net_protocol);
-	ndxml_destroy(&xml_events_id);
+	//ndxml_destroy(&xml_events_id);
 	DBLDatabase::destroy_Instant();
 }
 
+
+#define MY_LOAD_XML(_xml_name, _filename,_encode) \
+	ndxml_root _xml_name;				\
+	ndxml_initroot(&_xml_name);			\
+	if (ndxml_load_ex((char*)_filename, &_xml_name,_encode)) {	\
+		nd_logerror("open file %s error", _filename);	\
+		return false;							\
+	}
+
+bool startDialog::_loadUserDefEnum(const char *userDefEnumFile, void *pDlg)
+{
+
+	XMLDialog *xmlDlg = (XMLDialog *)pDlg;
+	MY_LOAD_XML(xml_root, userDefEnumFile, "utf8");
+	ndxml *xmlData = ndxml_getnode(&xml_root, "userData");
+	if (!xmlData){
+		return false;
+	}
+	for (int i = 0; i < ndxml_getsub_num(xmlData); i++){
+		ndxml *dataEnum = ndxml_getnodei(xmlData, i);
+		const char *type = ndxml_getattr_val(dataEnum, "src_type");
+		const char *name = ndxml_getattr_val(dataEnum, "dataName");
+
+		if (!type || !name) {
+			nd_logmsg("unknown type typename =NULL or name=null\n");
+			continue;
+		}
+
+		if (0 == ndstricmp(type, "file")){
+			const char *file = ndxml_getattr_val(dataEnum, "filename");
+			if (!file || !*file) {
+				nd_logmsg("unknown type file name\n");
+				continue;
+			}
+			MY_LOAD_XML(xml_subfile, file, "utf8");
+
+			if (!xmlDlg->loadUserdefDisplayList(xml_subfile, name)) {
+				nd_logmsg("load user define enum from %s error\n", file);
+			}
+
+			ndxml_destroy(&xml_subfile);
+		}
+		else if (0 == ndstricmp(type, "list")) {
+
+			if (!xmlDlg->loadUserdefDisplayList(*dataEnum, name)) {
+				nd_logmsg("load user define enum  %s error\n", name);
+			}
+		}
+		else {
+			nd_logmsg("unknown type %s\n", type);
+		}
+	}
+	ndxml_destroy(&xml_root);
+	return true;
+}
 
 const char *startDialog::getScriptSetting(ndxml *scriptXml, const char *settingName)
 {

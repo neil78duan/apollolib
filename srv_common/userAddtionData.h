@@ -29,11 +29,9 @@ public:
 	UserAdditionData() ;
 	~UserAdditionData ();
 
-	int FromStream(void *data, size_t size);
-	int ToStream(void *buf, size_t bufsize) const;
-
-	//int AppendToStream(void *buf, size_t bufsize, const char*name, void *data, size_t datalen) ;
-
+	int FromStream(void *data, size_t size, int byteOrder = 1);
+	int ToStream(void *buf, size_t bufsize, int byteOrder = 1) const;
+	
 	const DBLDataNode *getData(const char *name) const;
 	bool setData(const char *name, const DBLDataNode &val);
 	bool removeData(const char *name);
@@ -41,11 +39,11 @@ public:
 	bool setData(const char *name, const userdata_info* data);
 	
 	
-	bool convert2node( DBLDataNode &val) const;
-	bool Init(const DBLDataNode *val,int version =0) ;
-	int toStream(DBLDataNode *outData) const
+	bool convert2node(DBLDataNode &val, int byteOrder = 1) const;
+	bool Init(const DBLDataNode *val, int version = 0, int byteOrder = 1);
+	int toStream(DBLDataNode *outData, int byteOrder = 1) const
 	{
-		return convert2node(*outData)?0:-1;
+		return convert2node(*outData,byteOrder)?0:-1;
 	}
 
 	int Count() { return (int)m_data_map.size(); }
@@ -57,7 +55,7 @@ public:
 	bool opWrite(const DBLDataNode& id, const DBLDataNode &val);
 	bool opAdd(const DBLDataNode& id, const  DBLDataNode &val);
 	bool opSub(const DBLDataNode& id, const DBLDataNode &val);
-	bool opClear(const DBLDataNode& id, const DBLDataNode &val);
+	//bool opClear(const DBLDataNode& id, const DBLDataNode &val);
 	
 	bool CheckInAffair();
 	bool BeginAffair();

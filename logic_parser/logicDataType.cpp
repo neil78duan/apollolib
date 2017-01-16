@@ -13,6 +13,17 @@
 #include <stdarg.h>
 
 
+NDUINT8 DBLDataNode::s_bOutHex = 0;
+
+
+bool DBLDataNode::setOutHex(bool isHex)
+{
+	bool ret = s_bOutHex ? true : false;
+	s_bOutHex = isHex ? 1 : 0;
+	return ret;
+}
+#define IS_OUT_HEX() (DBLDataNode::s_bOutHex==1)
+
 static bool _int_array_init(int *arr, int size, dbl_element_base * eledata)
 {
 	size_t mem_len = sizeof(dbl_intarray) + (size - 1) * sizeof(int);
@@ -20,6 +31,9 @@ static bool _int_array_init(int *arr, int size, dbl_element_base * eledata)
 	if (!eledata->_data){
 		return false;
 	}
+
+	memset(eledata->_data, 0, mem_len);
+	eledata->_i_arr->capacity = size;
 
 	for (int i = 0; i < size; i++) {
 		eledata->_i_arr->data[i] = arr[i];
@@ -36,6 +50,9 @@ static bool _float_array_init(float *arr, int size, dbl_element_base * eledata)
 		return false;
 	}
 
+	memset(eledata->_data, 0, mem_len);
+	eledata->_f_arr->capacity = size;
+
 	for (int i = 0; i < size; i++) {
 		eledata->_f_arr->data[i] = arr[i];
 	}
@@ -47,25 +64,52 @@ static bool _str_array_init(const char *arr[], int size, dbl_element_base * eled
 {
 	size_t mem_len = sizeof(dbl_strarray) + (size - 1) * sizeof(char*);
 	eledata->_data = malloc(mem_len);
-
+	
 	if (!eledata->_data){
 		return false;
 	}
+
+	memset(eledata->_data, 0, mem_len);
+	eledata->_str_arr->capacity = size;
 
 	for (int i = 0; i < size; i++) {
 		size_t len = strlen(arr[i]);
 		if (len > 0)	{
 			eledata->_str_arr->data[i] = (char*)malloc(len + 1);
-			if (eledata->_str_arr->data[i])
-				strncpy(eledata->_str_arr->data[i], arr[i], len+1);
-		}
-		else {
-			eledata->_str_arr->data[i] = NULL;
+			if (eledata->_str_arr->data[i]) {
+				strncpy(eledata->_str_arr->data[eledata->_str_arr->number], arr[i], len + 1);
+				eledata->_str_arr->number++;
+			}
 		}
 	}
-	eledata->_str_arr->number = size;
 	return true;
 }
+
+
+static bool _userDef_array_init(const LogicUserDefStruct *arr[], int size, dbl_element_base * eledata)
+{
+	size_t mem_len = sizeof(dbl_userDefArray) + (size - 1) * sizeof(char*);
+	dbl_userDefArray *paddr = (dbl_userDefArray*)malloc(mem_len);
+	if (!paddr){
+		return false;
+	}
+	eledata->_data = paddr;
+
+	memset(eledata->_data, 0, mem_len);
+	eledata->_arr_user->capacity = size;
+
+	//memset(paddr, 0, mem_len);
+
+	for (int i = 0; i < size; i++) {
+		if (arr[i]) {
+			paddr->data[paddr->number] = new LogicUserDefStruct(*arr[i]);
+			paddr->number++;
+		}
+	}
+	return true;
+}
+
+
 static bool _check_array(const char *src);
 //////////////////////////////////////////////////////////////////////////
 DBLDataNode::DBLDataNode(dbl_element_base *data, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype) :
@@ -145,7 +189,7 @@ bool DBLDataNode::operator < (const DBLDataNode &r) const
 			if (i >= r.GetArraySize() )	{
 				return false;
 			}
-			if (m_sub_type == OT_INT)	{
+			if (m_sub_type == OT_INT )	{
 				int ret = GetarrayInt(i) - r.GetarrayInt(i);
 				if (0==ret)	{
 					continue; 
@@ -244,29 +288,7 @@ bool DBLDataNode::operator == (const DBLDataNode &r) const
 		}
 
 		return true;
-// 		
-// 	case OT_ARRAY_2D :
-// 		if (Get2DArrSize() != ((DBLDataNode&)r).Get2DArrSize())	{
-// 			return false;
-// 		}
-// 		if (m_sub_type == OT_INT)	{
-// 			for (int i = 0; i < Get2DArrSize(); i++)	{
-// 				if (Get2DSubArrsize(i) != ((DBLDataNode&)r).Get2DSubArrsize(i))	{
-// 					return false;
-// 				}
-// 				for (int x = 0; x < Get2DSubArrsize(i); x++)	{
-// 					if (Get2DArrayInt(i, x) != ((DBLDataNode &)r).Get2DArrayInt(i, x))	{
-// 						return false;
-// 					}
-// 				}
-// 			}
-// 			return true;
-// 		}
-// 
-// 		break;
-	//case OT_OBJECT :
-	//	return m_data->_data == m_data->_data;
-	//	break;
+
 	default:
 		return m_data->_data == m_data->_data;
 		break;
@@ -424,6 +446,19 @@ void DBLDataNode::InitSet(const char *arr[], int size)
 	}
 }
 
+
+void DBLDataNode::InitSet(const LogicUserDefStruct *arr[], int size)
+{
+	Destroy();
+	if (size > 0) {
+		m_ele_type = OT_ARRAY;
+		m_sub_type = OT_STRING;
+		m_dataOwner = true;
+		m_data = &m_dataOwn;
+		_userDef_array_init(arr, size, &m_dataOwn);
+	}
+}
+
 void DBLDataNode::InitSet(void *binary, size_t size, DBL_ELEMENT_TYPE eleType)
 {
 
@@ -500,7 +535,8 @@ bool DBLDataNode::InitReservedArray(size_t size, int attay_type)
 		for (int i = 0; i < size; i++) {
 			paddr->data[i] = 0;
 		}
-		paddr->number = size;
+		paddr->number = 0;
+		paddr->capacity = size;
 		m_dataOwn._data = paddr;
 
 	}
@@ -514,7 +550,8 @@ bool DBLDataNode::InitReservedArray(size_t size, int attay_type)
 		for (int i = 0; i < size; i++) {
 			paddr->data[i] = 0;
 		}
-		paddr->number = size;
+		paddr->number = 0;
+		paddr->capacity = size;
 		m_dataOwn._data = paddr;
 	}
 	else if (OT_STRING == m_sub_type || OT_USER_DEFINED == m_sub_type) {
@@ -523,11 +560,10 @@ bool DBLDataNode::InitReservedArray(size_t size, int attay_type)
 		if (!paddr){
 			return false;
 		}
+		memset(paddr, 0, mem_len);
 
-		for (int i = 0; i < size; i++) {
-			paddr->data[i] = 0;
-		}
-		paddr->number = size;
+		paddr->number = 0;
+		paddr->capacity = size;
 		m_dataOwn._data = paddr;
 	}
 	m_dataOwner = true;
@@ -535,10 +571,18 @@ bool DBLDataNode::InitReservedArray(size_t size, int attay_type)
 	return true;
 }
 
+bool DBLDataNode::pushArray(const DBLDataNode &data) 
+{
+	dbl_intarray *paddr = (dbl_intarray *)m_data->_data;
+	if (!paddr || paddr->number>= paddr->capacity ){
+		return false;
+	}
+	return SetArray(data, (int)paddr->number);
+}
 bool DBLDataNode::SetArray(const DBLDataNode &data, int index)
 {
 	dbl_intarray *paddr = (dbl_intarray *)m_data->_data;
-	if (!paddr || paddr->number <= index){
+	if (!paddr || paddr->capacity <= index){
 		return false;
 	}
 
@@ -564,17 +608,23 @@ bool DBLDataNode::SetArray(const DBLDataNode &data, int index)
 		strncpy(paddr->data[index], data.GetText(), size);
 
 	}
-	if (OT_USER_DEFINED == m_sub_type) {
+	else if (OT_USER_DEFINED == m_sub_type) {
 		dbl_userDefArray *pU = (dbl_userDefArray *)m_data->_data;
 		const LogicUserDefStruct *puserData = data.getUserDef();
 		if (puserData)		{
-
+			if (pU->data[index]) {
+				delete pU->data[index];
+			}
 			pU->data[index] = new LogicUserDefStruct(*puserData);
 		}
-
-
+	}
+	else {
+		return false;
 	}
 	
+	if (index >= paddr->number) {
+		paddr->number = index + 1;
+	}
 	return true;
 }
 
@@ -645,6 +695,7 @@ bool DBLDataNode::GetVal(int *arr, size_t &size)const
 {
 	if (OT_ARRAY == m_ele_type)	{
 		size_t len = NDMIN(this->GetArraySize(), size);
+		size = 0;
 		for (size_t i = 0; i < len; i++){
 			arr[i] = this->GetarrayInt(i);
 			++size;
@@ -659,6 +710,7 @@ bool DBLDataNode::GetVal(float *arr, size_t &size)const
 {
 	if (OT_ARRAY == m_ele_type)	{
 		size_t len = NDMIN(this->GetArraySize(), size);
+		size = 0;
 		for (size_t i = 0; i < len; i++){
 			arr[i] = this->GetarrayFloat(i);
 			++size;
@@ -669,7 +721,7 @@ bool DBLDataNode::GetVal(float *arr, size_t &size)const
 
 }
 
-DBLDataNode DBLDataNode::getUserDefMember(const char *name)
+DBLDataNode DBLDataNode::getUserDefMember(const char *name)const
 {
 	if (m_ele_type != OT_USER_DEFINED || !m_data->_data) {
 		return DBLDataNode() ;
@@ -682,7 +734,6 @@ DBLDataNode DBLDataNode::getUserDefMember(const char *name)
 }
 void DBLDataNode::setUserDefMember(const char *name,const DBLDataNode &val)
 {
-	
 	if (m_ele_type != OT_USER_DEFINED || !m_data->_data) {
 		return  ;
 	}
@@ -810,7 +861,6 @@ int DBLDataNode::WriteStream(char *streamBuf, size_t buf_size, int streamByteOrd
 			write_len += 2;
 			buf_size -= 2;
 			for (NDUINT16 i = 0; i < num; i++)	{
-				//const LogicUserDefStruct * logicdata = GetArray(i).getUserDef(); //this way leader error getArray() ruturn a temp var
 				const LogicUserDefStruct *logicdata = GetarrayUser(i);
 				if (logicdata) {
 					int size = logicdata->ToStream(streamBuf, buf_size, streamByteOrder);
@@ -868,10 +918,21 @@ int DBLDataNode::GetInt() const
 			if (tmpdata.StringToArrayInt(pText)){
 				return tmpdata.GetarrayInt(0);
 			}
-			return atoi(pText);
+			return ndstr_atoi_hex(pText);
 		}
 	}
 	return 0;
+}
+
+int DBLDataNode::GetRoundInt() const
+{
+	if (m_ele_type == OT_FLOAT || m_ele_type == OT_STRING)	{
+		float fVal = GetFloat();
+		return (int)( fVal + 0.5f );
+	}
+	else {
+		return GetInt();
+	}
 }
 
 NDUINT64 DBLDataNode::GetInt64() const
@@ -920,14 +981,15 @@ bool DBLDataNode::GetBool() const
 	}
 	else if (OT_STRING == m_ele_type) {
 		if (m_data->str_val && m_data->str_val[0]){
-			if (0 == ndstricmp(m_data->str_val, "yes") || 0 == ndstricmp(m_data->str_val, "true")) {
-				return true; 
+			if (0 == ndstricmp(m_data->str_val, "no") || 0 == ndstricmp(m_data->str_val, "none")
+				|| 0 == ndstricmp(m_data->str_val, "false") || 0 == ndstricmp(m_data->str_val, "0")) {
+				return false; 
 			}
+			return true;
 		}
-		return false;
 		//return atoi(m_data->str_val) ? true : false;
 	}
-	return 0;
+	return false;
 }
 float DBLDataNode::GetFloat() const
 {
@@ -1032,7 +1094,8 @@ DBLDataNode DBLDataNode::GetArray(int index)const
 	if (m_ele_type != OT_ARRAY){
 		return *this;
 	}
-	if (m_sub_type == OT_INT || m_sub_type == OT_BOOL || m_sub_type == OT_INT8 || m_sub_type == OT_INT16 || OT_INT64 == m_sub_type)	{
+	if (m_sub_type == OT_INT || m_sub_type == OT_BOOL || m_sub_type == OT_INT8 || 
+		m_sub_type == OT_INT16 || OT_INT64 == m_sub_type || OT_TIME == m_sub_type)	{
 		return DBLDataNode(GetarrayInt(index), m_sub_type);
 	}
 	else if (OT_FLOAT == m_sub_type){
@@ -1067,7 +1130,8 @@ int DBLDataNode::GetarrayInt(int index) const
 		return 0;
 	}
 	if (OT_ARRAY == m_ele_type){
-		if (OT_INT == m_sub_type || OT_BOOL == m_sub_type)	{
+		if (m_sub_type == OT_INT || m_sub_type == OT_BOOL || m_sub_type == OT_INT8 ||
+			m_sub_type == OT_INT16 || OT_INT64 == m_sub_type || OT_TIME == m_sub_type){
 			return m_data->_i_arr->data[index];
 		}
 		else if (OT_FLOAT == m_sub_type) {
@@ -1081,7 +1145,7 @@ int DBLDataNode::GetarrayInt(int index) const
 					if (tmpdata.StringToArrayInt(pText)){
 						return tmpdata.GetarrayInt(0);
 					}
-					return atoi(pText);
+					return ndstr_atoi_hex(pText);
 				}
 
 				//return atoi(m_data->_str_arr->data[index]);
@@ -1109,7 +1173,8 @@ bool DBLDataNode::GetarrayBool(int index) const
 		return false;
 	}
 	if (OT_ARRAY == m_ele_type){
-		if (OT_INT == m_sub_type || OT_BOOL == m_sub_type)	{
+		if (m_sub_type == OT_INT || m_sub_type == OT_BOOL || m_sub_type == OT_INT8 ||
+			m_sub_type == OT_INT16 || OT_INT64 == m_sub_type || OT_TIME == m_sub_type)	{
 			return m_data->_i_arr->data[index] ? true : false;
 		}
 		else if (OT_FLOAT == m_sub_type) {
@@ -1124,7 +1189,7 @@ bool DBLDataNode::GetarrayBool(int index) const
 					if (tmpdata.StringToArrayInt(pText)){
 						return tmpdata.GetarrayInt(0)?true:false;
 					}
-					return atoi(pText) ? true : false;
+					return ndstr_atoi_hex(pText) ? true : false;
 				}
 
 			}
@@ -1151,7 +1216,8 @@ float DBLDataNode::GetarrayFloat(int index) const
 		return 0;
 	}
 	if (OT_ARRAY == m_ele_type){
-		if (OT_INT == m_sub_type || OT_BOOL == m_sub_type)	{
+		if (m_sub_type == OT_INT || m_sub_type == OT_BOOL || m_sub_type == OT_INT8 ||
+			m_sub_type == OT_INT16 || OT_INT64 == m_sub_type || OT_TIME == m_sub_type)	{
 			return(float)m_data->_i_arr->data[index];
 		}
 		else if (OT_FLOAT == m_sub_type) {
@@ -1195,18 +1261,6 @@ const char *DBLDataNode::GetarrayText(int index) const
 	return (m_data->_str_arr->data[index]);
 }
 
-// 
-// bool DBLDataNode::PushBack(LogicUserDefStruct &u)
-// {
-// 	dbl_userDefArray *pU = (dbl_userDefArray *)m_data->_data;
-// 	for (size_t i = 0; i < pU->number; i++)	{
-// 		if (!pU->data[i]){
-// 			pU->data[i] = new LogicUserDefStruct(u);
-// 			return true;
-// 		}
-// 	}
-// 	return false;
-// }
 const LogicUserDefStruct *DBLDataNode::GetarrayUser(int index) const
 {
 	if (m_ele_type == OT_USER_DEFINED)	{
@@ -1214,7 +1268,7 @@ const LogicUserDefStruct *DBLDataNode::GetarrayUser(int index) const
 	}
 	else if (m_ele_type == OT_ARRAY && m_sub_type == OT_USER_DEFINED) {
 		dbl_userDefArray *pU = m_data->_arr_user;
-		if (pU)	{
+		if (pU && index < pU->number )	{
 			return pU->data[index];
 		}
 	}
@@ -1253,15 +1307,148 @@ DBLDataNode  DBLDataNode::operator + (const DBLDataNode &r) const
 	}
 	case OT_STRING:
 	{
-		std::string str1 = GetText();
-		str1 += r.GetText();
+		std::string str1 = GetString();
+		str1 += r.GetString();
 
 		return DBLDataNode(str1.c_str());
 	}
+	case OT_BINARY_DATA:
+		if (r.m_ele_type==OT_BINARY_DATA){
+			size_t s1 = GetBinarySize();
+			if (s1 > 0)	{
+				size_t s2 = r.GetBinarySize();
+				char *pdata = (char*) malloc(s1+s2);
+				if (pdata)	{
+					memcpy(pdata, GetBinary(), s2);
+					memcpy(pdata+s2, r.GetBinary(), s1);
+					DBLDataNode tmp((void*)pdata, s1 + s2);
+					free(pdata);
+					return tmp;
+				}
+			}
+		}
+		break;
+	case OT_ATTR_DATA:
+		return _attrMathAdd(r);
+	case  OT_ARRAY:
+		return _arrayMathAdd(r);
 	default:
+		nd_logerror("dbldatanode math op ADD not surport\n");
 		break;
 	}
-	return DBLDataNode();
+	return *this;
+}
+
+DBLDataNode  DBLDataNode::operator-(const DBLDataNode &r) const
+{
+	if (!CheckValid() || !r.CheckValid())	{
+		return *this;
+	}
+	switch (m_ele_type)
+	{
+	case OT_INT8:
+	case OT_INT16:
+	case OT_INT:
+	{
+		int val = GetInt() - r.GetInt();
+		return DBLDataNode(val);
+	}
+	case OT_TIME:
+	case OT_INT64:
+	{
+		NDUINT64 val = GetInt64() - r.GetInt64();
+		return DBLDataNode(val);
+	}
+	case OT_FLOAT:
+	{
+		float val = GetFloat() - r.GetFloat();
+		return DBLDataNode(val);
+	}
+	case OT_ATTR_DATA:
+		return _attrMathSub(r);
+	case  OT_ARRAY:
+		return _arrayMathSub(r);
+	default:
+		nd_logerror("dbldatanode math op SUB not surport\n");
+		break;
+	}
+	return *this;
+}
+DBLDataNode  DBLDataNode::operator*(const DBLDataNode &r) const
+{
+	if (!CheckValid() || !r.CheckValid())	{
+		return *this;
+	}
+	switch (m_ele_type)
+	{
+	case OT_INT8:
+	case OT_INT16:
+	case OT_INT:
+	{
+		int val = GetInt() * r.GetInt();
+		return DBLDataNode(val);
+	}
+	case OT_TIME:
+	case OT_INT64:
+	{
+		NDUINT64 val = GetInt64() * r.GetInt64();
+		return DBLDataNode(val);
+	}
+	case OT_FLOAT:
+	{
+		float val = GetFloat() * r.GetFloat();
+		return DBLDataNode(val);
+	}
+	case OT_ATTR_DATA:
+		return _attrMathMul(r);
+	case  OT_ARRAY:
+		return _arrayMathMul(r);
+	default:
+		nd_logerror("dbldatanode math op MUL not surport\n");
+		break;
+	}
+	return *this;
+}
+
+DBLDataNode  DBLDataNode::operator/(const DBLDataNode &r) const
+{
+	if (!CheckValid() || !r.CheckValid())	{
+		return *this;
+	}
+	float f1 = GetFloat();
+	float f2 = r.GetFloat();
+	float val = 0;
+	if (f2 == 0) {
+		val = f1;
+	}
+	else {
+		val = f1 * f2;
+	}
+	
+	switch (m_ele_type)
+	{
+	case OT_INT8:
+		return DBLDataNode((NDUINT8)val);
+	case OT_INT16:
+		return DBLDataNode((NDUINT16)val);
+	case OT_INT:
+		return DBLDataNode((int)val);
+	case OT_TIME:
+		return DBLDataNode((time_t)val);
+	case OT_INT64:
+
+		return DBLDataNode((NDUINT64)val);
+	case OT_FLOAT:
+		return DBLDataNode(val);
+	case OT_ATTR_DATA:
+		return _attrMathDiv(r);
+	case  OT_ARRAY:
+		return _arrayMathDiv(r);
+	default:
+		nd_logerror("dbldatanode math op DIV not surport\n");
+		break;
+	}
+	return *this;
 }
 
 DBLDataNode  DBLDataNode::operator+(const char *text) const
@@ -1278,14 +1465,14 @@ DBLDataNode  DBLDataNode::operator+(const char *text) const
 	case OT_INT16:
 	case OT_INT:
 	{
-		int rval = atoi(text);
+		int rval = ndstr_atoi_hex(text);
 		int val = GetInt() +rval;
 		return DBLDataNode(val);
 	}
 	case OT_TIME:
 	case OT_INT64:
 	{
-		int rval = atoi(text);
+		int rval = ndstr_atoi_hex(text);
 		NDUINT64 val = GetInt64() + rval;
 		return DBLDataNode(val);
 	}
@@ -1602,10 +1789,20 @@ int DBLDataNode::Print(logic_print print_func, void *pf) const
 	case  OT_INT:
 	case  OT_INT8:
 	case  OT_INT16:
-		ret = print_func(pf, "%d", GetInt());
+		if (IS_OUT_HEX()) {
+			ret = print_func(pf, "0x%x", GetInt());
+		}
+		else{
+			ret = print_func(pf, "%d", GetInt());
+		}
 		break; 
 	case  OT_INT64:
-		ret = print_func(pf, "%lld", GetInt64());
+		if (IS_OUT_HEX()) {
+			ret = print_func(pf, "0x%llx", GetInt64());
+		}
+		else{
+			ret = print_func(pf, "%lld", GetInt64());
+		}
 		break;
 	case OT_TIME:
 	{
@@ -1626,12 +1823,23 @@ int DBLDataNode::Print(logic_print print_func, void *pf) const
 	case  OT_ARRAY:
 		ret += print_func(pf, "%c", _ARRAR_BEGIN_MARK);
 		for (int x = 0; x < GetArraySize(); x++) {
-			if (m_sub_type==OT_INT) {
+			if (m_sub_type == OT_INT || m_sub_type == OT_INT8 || m_sub_type == OT_INT16 || m_sub_type == OT_BOOL||
+				m_sub_type == OT_INT64 || m_sub_type == OT_TIME) {
 				if (x<GetArraySize()-1){
-					ret += print_func(pf, "%d,", GetarrayInt(x));
+					if (IS_OUT_HEX()) {
+						ret += print_func(pf, "%x,", GetarrayInt(x));
+					}
+					else{
+						ret += print_func(pf, "%d,", GetarrayInt(x));
+					}
 				}
 				else {
-					ret += print_func(pf, "%d", GetarrayInt(x));
+					if (IS_OUT_HEX()) {
+						ret += print_func(pf, "%x", GetarrayInt(x));
+					}
+					else{
+						ret += print_func(pf, "%d", GetarrayInt(x));
+					}
 				}
 			}
 			else if(m_sub_type == OT_FLOAT) {
@@ -1719,6 +1927,7 @@ DBL_ELEMENT_TYPE DBLDataNode::GetArrayType() const
 	return (DBL_ELEMENT_TYPE)m_sub_type;
 }
 
+
 void DBLDataNode::Destroy()
 {
 	if (m_dataOwner && m_dataOwn._data) {
@@ -1732,6 +1941,257 @@ void DBLDataNode::Destroy()
 	m_dataOwner = false;
 
 	m_dataOwn.isInit = true;
+}
+
+//math operate 
+
+static float getValAttr(_attrDataBin *pattr, NDUINT8 id)
+{
+	for (int i = 0; i < pattr->count; i++)	{
+		if (id == pattr->datas[i].aid) {
+			return pattr->datas[i].val;
+		}
+	}
+	return 0;
+}
+
+DBLDataNode DBLDataNode::_attrMathAdd(const DBLDataNode &leftval)const
+{
+	DBLDataNode val = *this;
+
+	_attrDataBin *pattr = (_attrDataBin *) val.GetBinary();
+	if (!pattr){
+		return DBLDataNode();
+	}
+
+	if (leftval.GetDataType() == OT_ATTR_DATA){
+		_attrDataBin *left_attr = (_attrDataBin *)leftval.GetBinary();
+		if (!left_attr)	{
+			return *this;
+		}
+
+		for (int i = 0; i < pattr->count; i++)	{
+			pattr->datas[i].val += getValAttr(left_attr, pattr->datas[i].aid);
+		}
+
+	}
+	else {
+		float ldata = leftval.GetFloat();
+		if (ldata != 0)	{
+			for (int i = 0; i < pattr->count; i++)	{
+				pattr->datas[i].val += ldata;
+			}
+		}
+
+	}
+	return val;
+}
+DBLDataNode DBLDataNode::_attrMathSub(const DBLDataNode &leftval)const
+{
+	DBLDataNode val = *this;
+
+	_attrDataBin *pattr = (_attrDataBin *)val.GetBinary();
+	if (!pattr){
+		return DBLDataNode();
+	}
+
+	if (leftval.GetDataType() == OT_ATTR_DATA){
+		_attrDataBin *left_attr = (_attrDataBin *)leftval.GetBinary();
+		if (!left_attr)	{
+			return *this;
+		}
+
+		for (int i = 0; i < pattr->count; i++)	{
+			pattr->datas[i].val -= getValAttr(left_attr, pattr->datas[i].aid);
+		}
+
+	}
+	else {
+		float ldata = leftval.GetFloat();
+		if (ldata != 0)	{
+			for (int i = 0; i < pattr->count; i++)	{
+				pattr->datas[i].val -= ldata;
+			}
+		}
+
+	}
+	return val;
+}
+DBLDataNode DBLDataNode::_attrMathMul(const DBLDataNode &leftval)const
+{
+	DBLDataNode val = *this;
+
+	_attrDataBin *pattr = (_attrDataBin *)val.GetBinary();
+	if (!pattr){
+		return DBLDataNode();
+	}
+
+	if (leftval.GetDataType() == OT_ATTR_DATA){
+		_attrDataBin *left_attr = (_attrDataBin *)leftval.GetBinary();
+		if (!left_attr)	{
+			return *this;
+		}
+
+		for (int i = 0; i < pattr->count; i++)	{
+			pattr->datas[i].val *= getValAttr(left_attr, pattr->datas[i].aid);
+		}
+
+	}
+	else {
+		float ldata = leftval.GetFloat();
+		for (int i = 0; i < pattr->count; i++)	{
+			pattr->datas[i].val *= ldata;
+		}
+	}
+	return val;
+}
+DBLDataNode DBLDataNode::_attrMathDiv(const DBLDataNode &leftval)const
+{
+	DBLDataNode val = *this;
+
+	_attrDataBin *pattr = (_attrDataBin *)val.GetBinary();
+	if (!pattr){
+		return DBLDataNode();
+	}
+
+	if (leftval.GetDataType() == OT_ATTR_DATA){
+		_attrDataBin *left_attr = (_attrDataBin *)leftval.GetBinary();
+		if (!left_attr)	{
+			return *this;
+		}
+
+		for (int i = 0; i < pattr->count; i++)	{
+			float divval = getValAttr(left_attr, pattr->datas[i].aid);
+			if (divval != 0)	{
+				pattr->datas[i].val /= divval;
+			}
+		}
+
+	}
+	else {
+		float ldata = leftval.GetFloat();
+		if (ldata != 0)	{
+			for (int i = 0; i < pattr->count; i++)	{
+				pattr->datas[i].val /= ldata;
+			}
+		}
+
+	}
+	return val;
+}
+
+/// array math operate
+
+DBLDataNode DBLDataNode::_arrayMathAdd(const DBLDataNode &leftval)const
+{
+
+	DBLDataNode val = *this;
+	switch (m_sub_type)
+	{
+	case OT_INT8:
+	case OT_INT16:
+	case OT_INT:
+	{
+		dbl_intarray *parray = val.m_data->_i_arr;
+		for (int i = 0; i < parray->number; i++){
+			parray->data[i] += leftval.GetarrayInt(i);
+		}
+	}
+	case OT_FLOAT:
+	{
+		dbl_floatarray *parray = val.m_data->_f_arr;
+		for (int i = 0; i < parray->number; i++){
+			parray->data[i] += leftval.GetarrayFloat(i);
+		}
+	}
+	}
+	
+	return val;
+}
+DBLDataNode DBLDataNode::_arrayMathSub(const DBLDataNode &leftval)const
+{
+	DBLDataNode val = *this;
+	switch (m_sub_type)
+	{
+	case OT_INT8:
+	case OT_INT16:
+	case OT_INT:
+	{
+		dbl_intarray *parray = val.m_data->_i_arr;
+		for (int i = 0; i < parray->number; i++){
+			parray->data[i] -= leftval.GetarrayInt(i);
+		}
+	}
+	case OT_FLOAT:
+	{
+		dbl_floatarray *parray = val.m_data->_f_arr;
+		for (int i = 0; i < parray->number; i++){
+			parray->data[i] -= leftval.GetarrayFloat(i);
+		}
+	}
+	}
+
+	return val;
+
+}
+
+DBLDataNode DBLDataNode::_arrayMathMul(const DBLDataNode &leftval)const
+{
+	DBLDataNode val = *this;
+	switch (m_sub_type)
+	{
+	case OT_INT8:
+	case OT_INT16:
+	case OT_INT:
+	{
+		dbl_intarray *parray = val.m_data->_i_arr;
+		for (int i = 0; i < parray->number; i++){
+			parray->data[i] *= leftval.GetarrayInt(i);
+		}
+	}
+	case OT_FLOAT:
+	{
+		dbl_floatarray *parray = val.m_data->_f_arr;
+		for (int i = 0; i < parray->number; i++){
+			parray->data[i] *= leftval.GetarrayFloat(i);
+		}
+	}
+	}
+
+	return val;
+}
+DBLDataNode DBLDataNode::_arrayMathDiv(const DBLDataNode &leftval)const
+{
+	DBLDataNode val = *this;
+	switch (m_sub_type)
+	{
+	case OT_INT8:
+	case OT_INT16:
+	case OT_INT:
+	{
+		dbl_intarray *parray = val.m_data->_i_arr;
+		for (int i = 0; i < parray->number; i++){
+			int divval = leftval.GetarrayInt(i); 
+			if (divval != 0) {
+				parray->data[i] /= divval;
+			}
+		}
+	}
+	case OT_FLOAT:
+	{
+		dbl_floatarray *parray = val.m_data->_f_arr;
+		for (int i = 0; i < parray->number; i++){
+
+			float divval = leftval.GetarrayFloat(i);
+			if (divval != 0) {
+				parray->data[i] /= divval;
+			}
+
+		}
+	}
+	}
+
+	return val;
 }
 
 ///////////////////////////////////////////////
@@ -2079,6 +2539,7 @@ int dbl_destroy_data(dbl_element_base *buf, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_
 			for (int i = 0; i < buf->_arr_user->number; i++)	{
 				if (buf->_arr_user->data[i])	{
 					delete buf->_arr_user->data[i];
+					buf->_arr_user->data[i]=0;
 				}
 			}
 		}
@@ -2103,7 +2564,7 @@ int dbl_destroy_data(dbl_element_base *buf, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_
 #undef SAVE_FREE
 }
 
-int dbl_data_copy(dbl_element_base *input, dbl_element_base *output, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype)
+int dbl_data_copy(const dbl_element_base *input, dbl_element_base *output, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype)
 {
 	output->isInit = input->isInit;
 	switch (etype){
@@ -2135,35 +2596,43 @@ int dbl_data_copy(dbl_element_base *input, dbl_element_base *output, DBL_ELEMENT
 		}
 		if (sub_etype == OT_INT) {
 			if (input->_i_arr->number) {
-				size_t size = sizeof(dbl_intarray) + (input->_i_arr->number - 1) * sizeof(int);
-				output->_data = malloc(size);
-				memcpy(output->_data, input->_data, size);
+				_int_array_init(input->_i_arr->data, input->_i_arr->number, output);
+// 				size_t size = sizeof(dbl_intarray) + (input->_i_arr->number - 1) * sizeof(int);
+// 				output->_data = malloc(size);
+// 				memcpy(output->_data, input->_data, size);
+// 				output->_i_arr->capacity = input->_i_arr->number;
 			}
 		}
 		else if (sub_etype == OT_FLOAT) {
 			if (input->_f_arr->number) {
-				size_t size = sizeof(dbl_floatarray) + (input->_i_arr->number - 1) * sizeof(float);
-				output->_data = malloc(size);
-				memcpy(output->_data, input->_data, size);
+				_float_array_init(input->_f_arr->data, input->_f_arr->number, output);
+// 				size_t size = sizeof(dbl_floatarray) + (input->_i_arr->number - 1) * sizeof(float);
+// 				output->_data = malloc(size);
+// 				memcpy(output->_data, input->_data, size);
+// 
+// 				output->_i_arr->capacity = input->_i_arr->number;
 			}
 		}
 		else if (sub_etype == OT_STRING  ) {
 			_str_array_init((const char**)input->_str_arr->data, input->_str_arr->number, output);
 		}
 		else if (sub_etype == OT_USER_DEFINED) {
-			size_t mem_len = sizeof(dbl_userDefArray) + (input->_arr_user->number - 1) * sizeof(char*);
-			dbl_userDefArray *paddr = (dbl_userDefArray*)malloc(mem_len);
-			if (!paddr){
-				return false;
-			}
-
-			for (int i = 0; i < input->_arr_user->number; i++) {
-				if (input->_arr_user->data[i]) {
-					paddr->data[i] = new LogicUserDefStruct(*(input->_arr_user->data[i]) );
-				}				
-			}
-			paddr->number = input->_arr_user->number;
-			output->_arr_user = paddr;
+			_userDef_array_init((const LogicUserDefStruct **)input->_arr_user->data, input->_arr_user->number, output);
+// 			size_t mem_len = sizeof(dbl_userDefArray) + (input->_arr_user->capacity - 1) * sizeof(char*);
+// 			dbl_userDefArray *paddr = (dbl_userDefArray*)malloc(mem_len);
+// 			if (!paddr){
+// 				return false;
+// 			}
+// 			paddr->capacity = input->_arr_user->capacity;
+// 			//memset(paddr, 0, mem_len);
+// 
+// 			for (int i = 0; i < input->_arr_user->number; i++) {
+// 				if (input->_arr_user->data[i]) {
+// 					paddr->data[i] = new LogicUserDefStruct(*(input->_arr_user->data[i]) );
+// 					paddr->number++;
+// 				}				
+// 			}
+// 			output->_arr_user = paddr;
 		}
 
 		break;
@@ -2209,7 +2678,7 @@ int dbl_build_from_text(dbl_element_base *buf, const char *in_data, DBL_ELEMENT_
 	}
 	switch (etype){
 	case OT_INT:
-		buf->i_val = atoi(in_data);
+		buf->i_val = ndstr_atoi_hex(in_data);
 		break;
 	case OT_FLOAT:
 		buf->f_val = (float)atof(in_data);
@@ -2224,7 +2693,7 @@ int dbl_build_from_text(dbl_element_base *buf, const char *in_data, DBL_ELEMENT_
 	}
 		break;
 	case OT_BOOL:
-		buf->i_val = atoi(in_data);
+		buf->i_val = ndstr_atoi_hex(in_data);
 		break;
 
 	case OT_ARRAY:

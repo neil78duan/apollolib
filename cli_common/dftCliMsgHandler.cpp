@@ -56,7 +56,7 @@ namespace ClientMsgHandler
 	}
 	bool ApoConnectScriptOwner::getOtherObject(const char*objName, DBLDataNode &val)
 	{
-		if (ndstricmp(objName, "connector") == 0 || 0 == ndstricmp(objName, "session")){
+		if (0==ndstricmp(objName, "connector") || 0 == ndstricmp(objName, "session")){
 			if (!m_conn) {
 				return false;
 			}
@@ -64,7 +64,7 @@ namespace ClientMsgHandler
 			val.InitSet((void*)h, OT_OBJ_NDHANDLE);
 			return true;
 		}
-		else if (ndstricmp(objName, "FormatMsgData") == 0){
+		else if (0==ndstricmp(objName, "FormatMsgData")){
 
 			val.InitSet((void*)&m_dataType);
 			return true;
@@ -74,7 +74,19 @@ namespace ClientMsgHandler
 			return true;
 		}
 
-
+		else if (0 == ndstricmp(objName, "SelfName")) {
+			val.InitSet("client");
+			return true;
+		}
+		else if (0 == ndstricmp(objName, "self")) {
+			val.InitSet((void*)this, OT_OBJ_BASE_OBJ);
+			return true;
+		}
+		else if (0 == ndstricmp(objName, "machineInfo")) {
+			char buf[256];
+			val.InitSet(nd_common_machine_info(buf, sizeof(buf)));
+			return true;
+		}
 		return false;
 	}
 
@@ -293,19 +305,11 @@ namespace ClientMsgHandler
 		OutputMessage2File(pconn, APOLLO_DATA_FORMAT, inmsg);
 		
 #ifdef ND_DEBUG
-		//const char *logpath = 
-		// 	std::string mypath = getLogPath(pconn);
-		// 
-		// 	if (mypath.empty()) {
-		// 		mypath = "./client_msg_foramt.txt";
-		// 	}
-		// 	else {
-		// 		char pathbuf[ND_FILE_PATH_SIZE];
-		// 		nd_full_path(mypath.c_str(), "client_msg_foramt.txt", pathbuf, sizeof(pathbuf));
-		// 		mypath = pathbuf;
-		// 
-		// 	}
-		// 	dumpMessageData(*pdatatype,mypath.c_str());
+		char mypath[1024];
+		std::string mywritePath = getWritablePath(pconn);
+		nd_full_path(mywritePath.c_str(), "client_msg_foramt.txt", mypath, sizeof(mypath));
+		dumpMessageData(*pdatatype, mypath);
+
 #endif
 		return 0;
 	}
@@ -452,7 +456,7 @@ namespace ClientMsgHandler
 					}
 					else {
 
-						print_func(log_file, "%s=", pmember);
+						print_func(log_file, "%s=", pmember?pmember:typeName);
 						dataFormat.Print(print_func, log_file);
 						print_func(log_file, ", ");
 					}

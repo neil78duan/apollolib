@@ -53,13 +53,14 @@ public:
 
 	CGradShow *m_grad ;
 protected:
-
+	bool _TreeDragInNotSameRoot(HTREEITEM hFrom, HTREEITEM hTo);
 	bool _GetUserDefinData(const char *pUserParam, CString &val);
 	bool _GetUserSelEnumVal(const text_list_t &enum_vals, CString &val);
 	bool _beginEdit(int nRow, int nCol);
 	bool CreateXmlTree(ndxml_root *xml_root) ;
 	bool ExpandTree(HTREEITEM hItem);
-	HTREEITEM InitTreeNode(ndxml *xml_node,HTREEITEM hParent); 
+	void SetExpand(HTREEITEM hItem);
+	HTREEITEM InitTreeNode(ndxml *xml_node, HTREEITEM hParent, HTREEITEM hiAfter = TVI_LAST);
 	int ShowXMLValue(ndxml *xml_node,CGradShow *show_ctrl, int expand =0) ;	//œ‘ æxmlµƒƒ⁄»›
 	int DisplaySelXml() ;
 	ndxml* GetSelXml(HTREEITEM hItem);

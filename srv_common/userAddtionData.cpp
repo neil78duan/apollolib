@@ -41,7 +41,7 @@ void UserAdditionData::Destroy()
 	m_data_map.clear();
 }
 
-int UserAdditionData::FromStream(void *data, size_t size)
+int UserAdditionData::FromStream(void *data, size_t size, int byteOrder )
 {
 	const char *p = (const char*)data;
 	const char *pend = p + size;
@@ -56,7 +56,7 @@ int UserAdditionData::FromStream(void *data, size_t size)
 		size -= len;
 
 		DBLDataNode val;
-		len = val.ReadStream(p,size,1);
+		len = val.ReadStream(p,size,byteOrder);
 		if (-1== len){
 			return -1;
 		}
@@ -68,7 +68,7 @@ int UserAdditionData::FromStream(void *data, size_t size)
 	return (int) (p - (const char*)data);
 }
 
-int UserAdditionData::ToStream(void *buf, size_t bufsize) const
+int UserAdditionData::ToStream(void *buf, size_t bufsize,int byteOrder) const
 {
 	char *p = ( char*)buf;
 	user_addition_map::const_iterator it = m_data_map.begin();
@@ -88,7 +88,7 @@ int UserAdditionData::ToStream(void *buf, size_t bufsize) const
 		strncpy(p, it->first.c_str(), bufsize - 2);
 		bufsize -= len+2;
 		p += len;
-		len = it->second.WriteStream(p,bufsize,1);
+		len = it->second.WriteStream(p,bufsize,byteOrder);
 		if (-1 == len){
 			return -1;				 
 		}
@@ -98,12 +98,12 @@ int UserAdditionData::ToStream(void *buf, size_t bufsize) const
 	return (int) (p - (char*)buf);
 }
 
-bool UserAdditionData::convert2node( DBLDataNode &val) const
+bool UserAdditionData::convert2node(DBLDataNode &val, int byteOrder) const
 {
 	int len ;
 	char buf[0x10000] ;
 	
-	len = ToStream(buf, sizeof(buf)) ;
+	len = ToStream(buf, sizeof(buf),byteOrder) ;
 	if (-1==len || len ==0){
 		return false;
 	}
@@ -114,10 +114,10 @@ bool UserAdditionData::convert2node( DBLDataNode &val) const
 	
 }
 
-bool UserAdditionData::Init(const DBLDataNode *val, int )
+bool UserAdditionData::Init(const DBLDataNode *val, int version ,int byteOrder)
 {
 	if (val->GetDataType() == OT_BINARY_DATA) {
-		FromStream(val->GetBinary(),val->GetBinarySize());
+		FromStream(val->GetBinary(),val->GetBinarySize(),byteOrder);
 	
 		return  true ;
 	}
@@ -206,14 +206,14 @@ bool UserAdditionData::opSub(const DBLDataNode& id, const DBLDataNode &val)
 	}
 	return removeData(name);
 }
-bool UserAdditionData::opClear(const DBLDataNode& id, const DBLDataNode &val)
-{
-	const char *name = id.GetText();
-	if (!name || !*name) {
-		return false;
-	}
-	return removeData(name);
-}
+// bool UserAdditionData::opClear(const DBLDataNode& id, const DBLDataNode &val)
+// {
+// 	const char *name = id.GetText();
+// 	if (!name || !*name) {
+// 		return false;
+// 	}
+// 	return removeData(name);
+// }
 
 void UserAdditionData::Undo(std::string &index, DBLDataNode &old_val, int optype)
 {

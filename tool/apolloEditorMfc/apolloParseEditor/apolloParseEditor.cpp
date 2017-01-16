@@ -7,6 +7,7 @@
 #include "apolloParseEditorDlg.h"
 #include "nd_common/nd_common.h"
 #include "cli_common/login_apollo.h"
+#include "apollo_errors.h"
 
 //#include <vld.h>
 #ifdef _DEBUG

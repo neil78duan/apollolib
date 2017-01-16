@@ -62,6 +62,16 @@ struct attr_node_buf
 		++number;
 		return true;
 	}
+	void addval(attrid_t id, attrval_t val)
+	{
+		for (int i = 0; i < number; i++) {
+			if (id == buf[i].id) {
+				buf[i].val += val;
+				return;
+			}
+		}
+		push_back(id, val);
+	}
 	attr_node_buf & operator = (const attr_node_buf &r)
 	{
 		for (int i = 0; i < r.number; i++) {
@@ -93,6 +103,7 @@ struct role_attr_description{
 	attrid_t wa_id ;
 	unsigned char issave, issync,isChangeByclient,iscallEvent ;	//是否存档，是否同步  
 	unsigned char isSyncBuilding, forRole, forBuilding; //玩家属性是否影响的是建筑物， 玩家属性，建筑物属性
+	unsigned char isAffectCard, forCard; 
 	int infection_num ;				//受当前属性影响的属性
 	int need_num ;					//当前属性计算需要的属性个数
 	attr_name_t name;
@@ -119,10 +130,12 @@ class RoleAttrHelper
 
 public:
 	attrid_t GetID(const char *name); 
-	attrid_t GetIDByRealName(const char *name);
+	inline attrid_t GetIDByRealName(const char *name) { return GetID(name); }
+	//attrid_t GetIDByRealName(const char *name);
 
 	attrid_t GetIDEx(const char *name,int &MinOrMax);		//得到战斗属性MinOrMax =1 min , 2max , 0 none (ref 资质min	资质max)
 	const char *Getname(attrid_t wa_id);
+	const char *GetRealname(attrid_t wa_id);
 	attrid_t GetwaIDBase() ;
 	int GetAttrNum(){ return m_wa_num; }
 	
@@ -196,5 +209,8 @@ static inline void Attrbuf2LogicType(DBLDataNode &toData, attr_node_buf *from_bu
 	size_t size = sizeof(attr_node_buf) - sizeof(from_buf->buf) + from_buf->number * sizeof(attrval_node);
 	toData.InitSet((void*)from_buf, size, OT_ATTR_DATA);
 }
+
+//dataString read from excel-table
+int Dbl_TableStringToAttr(const DBLDataNode &dataString, attr_node_buf &attrbuf);
 
 #endif

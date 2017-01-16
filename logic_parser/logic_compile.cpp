@@ -54,31 +54,37 @@ bool LogicCompiler::setConfigFile(const char *config)
 		setnode.name = ndxml_getval(sub_set);
 		p = ndxml_getattr_val(sub_set, "instruction");
 		if (p)	{
-			setnode.ins_type = atoi(p);
+			setnode.ins_type =(NDUINT8) ndstr_atoi_hex(p);
 		}
 
 		p = ndxml_getattr_val(sub_set, "ins_id");
 		if (p)	{
-			setnode.ins_id = atoi(p);
+			setnode.ins_id = (NDUINT8)ndstr_atoi_hex(p);
 		}
 
 		p = ndxml_getattr_val(sub_set, "size");
 		if (p)	{
-			setnode.size = atoi(p);
+			setnode.size = ndstr_atoi_hex(p);
 		}
 
 		p = ndxml_getattr_val(sub_set, "datatype");
 		if (p)	{
-			setnode.data_type = atoi(p);
+			setnode.data_type = (NDUINT8)ndstr_atoi_hex(p);
 		}
 		p = ndxml_getattr_val(sub_set, "record_param_num");
 		if (p)	{
-			setnode.record_param_num = atoi(p);
+			setnode.record_param_num = (NDUINT8)ndstr_atoi_hex(p);
 		}
 		p = ndxml_getattr_val(sub_set, "need_type_stream");
 		if (p)	{
-			setnode.need_type_stream = atoi(p);
+			setnode.need_type_stream = (NDUINT8)ndstr_atoi_hex(p);
 		}
+		
+		p = ndxml_getattr_val(sub_set, "need_refill_offset");
+		if (p)	{
+			setnode.need_refill_jump_len = (NDUINT8)ndstr_atoi_hex(p);
+		}
+		
 		m_settings.insert(std::make_pair(setnode.name, setnode));
 	}
 	//get enum text
@@ -233,13 +239,8 @@ const char* LogicCompiler::_getNodeText(ndxml *paramNode, char *buf, size_t bufs
 
 bool LogicCompiler::compileXml(const char *xmlFile, const char *outStreamFile, int outEncodeType, bool withDgbInfo, int byteOrder)
 {
-// 	const char *pOutType = "gbk";
-// 	if (encodeType == E_SRC_CODE_UTF_8) {
-// 		pOutType = "utf8";
-// 	}
 	const char *pOutType = nd_get_encode_name(outEncodeType);
 	ndxml_root xmlroot;
-	char buf[1024*64];
 	char init_buf[1024*64];
 
 	m_aimByteOrder = byteOrder;
@@ -252,6 +253,12 @@ bool LogicCompiler::compileXml(const char *xmlFile, const char *outStreamFile, i
 		nd_logerror("input file %s error\n", xmlFile);
 		return false;
 	}
+
+	if (!_compilePreCmd(&xmlroot)) {
+		nd_logerror("compile pre-command error %s \n", xmlFile);
+		return false;
+	}
+
 	m_bDebugInfo = withDgbInfo;
 	m_curRoot = &xmlroot;
 
@@ -283,28 +290,13 @@ bool LogicCompiler::compileXml(const char *xmlFile, const char *outStreamFile, i
 	for (int x = 0; x < ndxml_num(&xmlroot); x++){
 		ndxml *funcList = ndxml_getnodei(&xmlroot, x);
 		if (_isFileInfo(funcList)) {
-			continue ;
+			continue;
 		}
-
-		for (int i = 0; i < ndxml_num(funcList); i++) {
-			ndxml *node = ndxml_getnodei(funcList, i);
-			memset(buf, 0xf3, sizeof(buf));
-			int ret = func2Stream(node, buf, sizeof(buf));
-			if (-1 == ret || ret > sizeof(buf))	{
-				//const char *name = ndxml_getval(node);
-				//nd_logerror("compile function %s error \n", name ? name: "unknow");
-				return false;
-			}
-			NDUINT8 isGlobal = _isGlobalFunc(node) ? 1 : 0; 
-			fwrite(&isGlobal, 1, 1, pf);
-
-			int outval =  lp_host2stream(ret, m_aimByteOrder);
-			fwrite(&outval, 1, sizeof(outval), pf);
-			if (fwrite(buf, 1, ret, pf) <= 0)	{
-				return false;
-			}
+		if (!compileFuncs(funcList, pf)) {
+			return false;
 		}
 	}
+
 	//write init block 
 	if (m_initBlockSize != sizeof(init_buf)){
 		const char *initBlocName = DEFAULT_LOAD_INITILIZER_FUNC;
@@ -325,6 +317,45 @@ bool LogicCompiler::compileXml(const char *xmlFile, const char *outStreamFile, i
 	ndxml_destroy(&xmlroot);
 	fflush(pf);
 	fclose(pf);
+	return true;
+}
+
+bool LogicCompiler::compileFuncs(ndxml *funcsCollect, FILE *pf)
+{
+	char buf[1024 * 32];
+	for (int i = 0; i < ndxml_num(funcsCollect); i++) {
+		ndxml *node = ndxml_getnodei(funcsCollect, i);
+		memset(buf, 0xf3, sizeof(buf));
+
+		//////////////////////////////////////////////////////////////////////////		
+		const char *stepInsName = ndxml_getname(node);
+		if (!stepInsName){
+			continue;
+		}
+
+		compile_setting_t::iterator it = m_settings.find(stepInsName);
+		if (it != m_settings.end() && it->second.ins_type == E_INSTRUCT_TYPE_STEP_COLLECTION){
+			if (!compileFuncs(node, pf)){
+				return false;
+			}
+		}
+		else {
+			int ret = func2Stream(node, buf, sizeof(buf));
+			if (-1 == ret || ret > sizeof(buf))	{
+				return false;
+			}
+			NDUINT8 isGlobal = _isGlobalFunc(node) ? 1 : 0;
+			fwrite(&isGlobal, 1, 1, pf);
+
+			int outval = lp_host2stream(ret, m_aimByteOrder);
+			fwrite(&outval, 1, sizeof(outval), pf);
+			if (fwrite(buf, 1, ret, pf) <= 0)	{
+				return false;
+			}
+		}
+
+	}
+
 	return true;
 }
 
@@ -356,6 +387,12 @@ int LogicCompiler::func2Stream(ndxml *funcNode, char *buf, size_t bufsize)
 		m_initBlockSize -= len;
 	}
 
+	//add pre compile cmd to function 
+	len = _trutoFillPreCmd(funcNode, p, bufsize);
+	if (len > 0){
+		p += len;
+		bufsize -= len;
+	}
 
 	len = blockSteps2Stream(funcNode, p, bufsize);
 	if (-1 == len)	{
@@ -399,6 +436,7 @@ int LogicCompiler::subEntry2Stream(compile_setting *stepSetting, ndxml *subEntry
 		node.node_index = i;
 		//insert jump to current lock end size cmd
 		if (node.cmp_instruct){
+			/*
 			if (!node.no_comp)	{
 				ndxml *cmpvalXml = ndxml_getnode(blockXml, pCompValName);
 				if (!cmpvalXml)	{
@@ -406,9 +444,6 @@ int LogicCompiler::subEntry2Stream(compile_setting *stepSetting, ndxml *subEntry
 					return -1;
 				}
 				node.cmp_val = ndxml_getval(cmpvalXml);
-				//add test instruction
-				//*((*(NDUINT32**)&p)++) = (NDUINT32)E_OP_COMP;
-				//*((*(NDUINT32**)&p)++) = (NDUINT32)node.cmp_instruct;
 
 				p = lp_write_stream(p, (NDUINT32)E_OP_COMP, m_aimByteOrder);
 				p = lp_write_stream(p, (NDUINT32)(NDUINT32)node.cmp_instruct, m_aimByteOrder);
@@ -420,13 +455,12 @@ int LogicCompiler::subEntry2Stream(compile_setting *stepSetting, ndxml *subEntry
 				p += len;
 
 			}
+			*/
 
 			//test false and jump next block
-			//*((*(NDUINT32**)&p)++) = (NDUINT32)E_OP_TEST_FALSE_SHORT_JUMP;
 			p = lp_write_stream(p, (NDUINT32)E_OP_TEST_FALSE_SHORT_JUMP, m_aimByteOrder);
 
 			pLocalJumpOffset = (NDUINT32*) p;
-			//*((*(NDUINT32**)&p)++) = (NDUINT32)REVERT_INSTRUCT; //jump the if{..} end
 			p = lp_write_stream(p, (NDUINT32)REVERT_INSTRUCT, m_aimByteOrder);
 		}
 
@@ -656,6 +690,9 @@ int LogicCompiler::blockSteps2Stream(ndxml *blockNode, char *buf, size_t bufsize
 			it->second.ins_type == E_INSTRUCT_TYPE_INIT_BLOCK) {
 			continue; 
 		}
+		else if (it->second.ins_type == E_INSTRUCT_TYPE_STEP_COLLECTION) {
+			ret = blockSteps2Stream(xmlStep, p, len);
+		}
 		else if (it->second.ins_type == E_INSTRUCT_TYPE_CMD) 	{
 			ret = step2Strem(&it->second, xmlStep, p, len);
 			if (ret > 0){
@@ -689,6 +726,11 @@ int LogicCompiler::blockSteps2Stream(ndxml *blockNode, char *buf, size_t bufsize
 		if (len <= 0)	{
 			return -1;
 		}
+	}
+	//try to refill jump address 
+	if (!_fillJumpLengthInblock(buf, bufsize - len)) {
+		nd_logerror("refill jump address error\n");
+		return -1;
 	}
 	return (int)(bufsize - len);
 }
@@ -783,27 +825,6 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 int LogicCompiler::user_define_step(compile_setting *setting, ndxml *stepNode, char *buf, size_t bufsize)
 {
 	return 0;
-// 	int ret = 0;
-// 	const char *type = ndxml_getattr_val(stepNode, "name");
-// 	if (!type || !type[0]){
-// 		return 0;
-// 	}
-// 
-// 	char *p = buf;
-// 	int len = (int)bufsize;
-// 
-// 	if (0 == ndstricmp((char*)type, (char*)"init_msg_func") ) {
-// 		ret = user_define_msg_init(stepNode, p, len);
-// 	}
-// 	else if (0 == ndstricmp((char*)type, (char*)"init_event_func")) {
-// 		ret = user_define_event_init(stepNode, p, len);
-// 	}
-// 
-// 	if (ret != -1){
-// 		p += ret;
-// 		len -= ret;
-// 	}
-// 	return (int)(p - buf);
 }
 int LogicCompiler::step_function_info(compile_setting *setting, ndxml *stepNode, char *buf, size_t bufsize)
 {
@@ -832,121 +853,9 @@ int LogicCompiler::step_function_info(compile_setting *setting, ndxml *stepNode,
 	return (int)(p - buf);
 }
 
-/*
-int LogicCompiler::user_define_msg_init(ndxml *stepNode, char *buf, size_t bufsize)
-{
-	char *p = buf;
-	int len = (int)bufsize;
-
-	m_cur_function = "install_message_handler";
-	const char *pMsgFuncName = ndxml_getattr_val(stepNode, "install_root");
-	const char *callFuncName = ndxml_getattr_val(stepNode, "action");
-	if (!pMsgFuncName || !pMsgFuncName[0] || !callFuncName)	{
-		return 0;
-	}
-	ndxml *msg_entry = ndxml_getnode(m_curRoot, pMsgFuncName);
-	if (!msg_entry)	{
-		return 0;
-	}
-	m_cur_node_index = 0;
-	for (int i = 0; i < ndxml_num(msg_entry); i++){
-		++m_cur_node_index;
-		ndxml *node = ndxml_getnodei(msg_entry, i);
-		ndxml *msgID = ndxml_getnode(node, "install_msg_id");
-		ndxml *msgPrivilege = ndxml_getnode(node, "msg_privilege");
-		if (!msgID)	{
-			continue;
-		}
-		const char *pScriptName = ndxml_getattr_val(node, "name");
-		const char *pMsgName = ndxml_getval(msgID);
-		m_cur_step = pScriptName;
-		if (!pScriptName || !pScriptName[0] || !pMsgName || 0 == ndstricmp((char*)pMsgName, (char*)"none")){
-			nd_logerror("install message %s handler error msg_id not define \n", pScriptName);
-			return -1;
-		}
-		nd_assert(node);
-		char msg_name_buf[128];
-		pMsgName = getRealValFromStr(pMsgName, msg_name_buf, sizeof(msg_name_buf));
-		//call function
-		*((*(NDUINT32**)&p)++) = E_OP_CALL_FUNC;
-		*((*(NDUINT32**)&p)++) = 4;
-
-		*((*(NDUINT16**)&p)++) = OT_STRING;
-		WRITE_STRING_TOSTREAM(p, callFuncName); //function name 
-
-		*((*(NDUINT16**)&p)++) = OT_STRING;
-		WRITE_STRING_TOSTREAM(p, pScriptName); //arg1 -script name 
-
-		*((*(NDUINT16**)&p)++) = OT_STRING;
-		WRITE_STRING_TOSTREAM(p, pMsgName); //arg2 - msg_id_name
-
-		*((*(NDUINT16**)&p)++) = OT_INT;
-		int valPrivilege = 0;
-		if (msgPrivilege) {
-			const char *pVal = ndxml_getval(msgPrivilege);
-			if (pVal&& *pVal) {
-				valPrivilege = atoi(pVal);
-			}
-		}
-		*((*(NDUINT32**)&p)++) = valPrivilege;
-	}
-	return (int) (p - buf);
-}
-int LogicCompiler::user_define_event_init(ndxml *stepNode, char *buf, size_t bufsize)
-{
-	char *p = buf;
-	int len = (int)bufsize;
-
-	m_cur_function = "install_message_handler";
-	const char *pMsgFuncName = ndxml_getattr_val(stepNode, "install_root");
-	const char *callFuncName = ndxml_getattr_val(stepNode, "action");
-	if (!pMsgFuncName || !pMsgFuncName[0] || !callFuncName)	{
-		return 0;
-	}
-	ndxml *msg_entry = ndxml_getnode(m_curRoot, pMsgFuncName);
-	if (!msg_entry)	{
-		return 0;
-	}
-	m_cur_node_index = 0;
-	for (int i = 0; i < ndxml_num(msg_entry); i++){
-		++m_cur_node_index;
-		ndxml *node = ndxml_getnodei(msg_entry, i);
-		ndxml *eventID = ndxml_getnode(node, "event_id");
-		if (!eventID)	{
-			continue;
-		}
-		const char *pScriptName = ndxml_getattr_val(node, "name");
-		const char *pMsgName = ndxml_getval(eventID);
-		m_cur_step = pScriptName;
-		if (!pScriptName || !pScriptName[0] || !pMsgName || 0 == ndstricmp((char*)pMsgName, (char*)"none")){
-			nd_logerror("install message %s handler error msg_id not define \n", pScriptName);
-			return -1;
-		}
-		nd_assert(node);
-		char msg_name_buf[128];
-		pMsgName = getRealValFromStr(pMsgName, msg_name_buf, sizeof(msg_name_buf));
-		//call function
-		*((*(NDUINT32**)&p)++) = E_OP_CALL_FUNC;
-		*((*(NDUINT32**)&p)++) = 3;
-
-		*((*(NDUINT16**)&p)++) = OT_STRING;
-		WRITE_STRING_TOSTREAM(p, callFuncName); //function name 
-
-		*((*(NDUINT16**)&p)++) = OT_STRING;
-		WRITE_STRING_TOSTREAM(p, pScriptName); //arg1 -script name 
-
-		*((*(NDUINT16**)&p)++) = OT_INT;		//event id
-		*((*(NDUINT32**)&p)++) = atoi(pMsgName);
-
-	}
-	return (int)(p - buf);
-}
-*/
 int LogicCompiler::writeDebugInfo(ndxml *stepNode, const char*stepName, char *buf, size_t bufsize)
 {
 	char *p = buf;
-	//*((*(NDUINT32**)&p)++) = E_OP_DEBUG_INFO ;
-	//*((*(NDUINT16**)&p)++) = m_compileStep++;
 
 	p = lp_write_stream(p, (NDUINT32)E_OP_DEBUG_INFO, m_aimByteOrder);
 	p = lp_write_stream(p, (NDUINT16)m_compileStep, m_aimByteOrder);
@@ -1030,29 +939,48 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 		p = lp_write_stream(p, (NDUINT16) type, m_aimByteOrder);
 		len -= 2;
 	}
+	if (paramSetting->need_refill_jump_len)	{
+		_pushReFillJumpAddr(p);
+	}
+
+#define CHECK_IS_NUMERAL(_text) do {	\
+		if (_text) {		\
+			if (!ndstr_is_numerals(_text)) {		\
+				nd_logerror("value is number: %s\n", _text);	\
+				return -1;						\
+			}									\
+		}										\
+	}while (0)
+
 	switch (type)
 	{
-	case  OT_INT :
-	case OT_BOOL :
+	case  OT_INT:
 	case  OT_PARAM:
+		CHECK_IS_NUMERAL(pVal);
+	case OT_BOOL :
 		//*((*(NDUINT32**)&p)++) = pVal ? atoi(pVal) : 0;
-		p = lp_write_stream(p, (int) (pVal ? atoi(pVal) : 0), m_aimByteOrder);
+		p = lp_write_stream(p, (int)(pVal ? ndstr_atoi_hex(pVal) : 0), m_aimByteOrder);
 		break;
-	case OT_FLOAT: {
+	case OT_FLOAT: 
+	{
+		CHECK_IS_NUMERAL(pVal);
 		float fv = pVal ? (float)atof(pVal) : 0;
 		_write_float_to_buf(p, fv);
 	}
 		break;
 	case OT_INT8:
-		*((*(NDUINT8**)&p)++) = (NDUINT8)(pVal ? atoi(pVal) : 0);
+		CHECK_IS_NUMERAL(pVal);
+		*((*(NDUINT8**)&p)++) = (NDUINT8)(pVal ? ndstr_atoi_hex(pVal) : 0);
 		break;
 	case OT_INT16:
+		CHECK_IS_NUMERAL(pVal);
 		//*((*(NDUINT16**)&p)++) = (NDUINT16)(pVal ? atoi(pVal) : 0);
-		p = lp_write_stream(p, (NDUINT16)(pVal ? atoi(pVal) : 0), m_aimByteOrder);
+		p = lp_write_stream(p, (NDUINT16)(pVal ? ndstr_atoi_hex(pVal) : 0), m_aimByteOrder);
 		break;
 	case OT_INT64:
+		CHECK_IS_NUMERAL(pVal);
 		//*((*(NDUINT64**)&p)++) = (NDUINT64)(pVal ? nd_atoi64(pVal) : 0);
-		p = lp_write_stream(p, (NDUINT64)(pVal ? nd_atoi64(pVal) : 0), m_aimByteOrder);
+		p = lp_write_stream(p, (NDUINT64)(pVal ? ndstr_atoll_hex(pVal) : 0), m_aimByteOrder);
 
 		break; 
 
@@ -1147,4 +1075,79 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 		++(*param_num);
 	}
 	return (int) (p - buf);
+}
+
+
+void LogicCompiler::_pushReFillJumpAddr(char *addr)
+{
+	shortJumpInfo jinfo;
+	jinfo.addr = addr;
+	m_reFillJumpStepSize.push_back(jinfo);
+}
+
+bool LogicCompiler::_fillJumpLengthInblock(const char *blockStart, size_t blockSize)
+{
+	if (m_reFillJumpStepSize.size() ==0){
+		return true;			 
+	}
+
+	for (shortJumpAddr_vct::iterator it=m_reFillJumpStepSize.begin(); it != m_reFillJumpStepSize.end();  it++){
+		char *paddr = it->addr;
+		if (paddr < blockStart || paddr >= (blockStart + blockSize)) {
+			return false;
+		}
+		NDUINT32 offset = blockSize - (paddr + sizeof(NDUINT32) - blockStart);
+		lp_write_stream(paddr,offset, m_aimByteOrder);
+	}
+
+	m_reFillJumpStepSize.clear();
+	return true;
+}
+
+int LogicCompiler::_trutoFillPreCmd(ndxml *funcNode, char *buf, size_t bufsize)
+{
+	const char *pFuncName = ndxml_getattr_val(funcNode, "preFillCmd");
+	if (pFuncName && *pFuncName){
+		streamCMD_map_t::iterator it = m_preCMDs.find(pFuncName);
+		if (it!=m_preCMDs.end() && it->second.size > 0 && bufsize >= it->second.size) {
+			memcpy(buf, it->second.buf, it->second.size);
+			return it->second.size;
+		}
+		return -1;
+	}
+	return 0;
+}
+
+bool LogicCompiler::_compilePreCmd(ndxml *xmlroot)
+{
+	m_preCMDs.clear();
+	ndxml *xmlModule = ndxml_getnode(xmlroot, "moduleInfo");
+	if (!xmlModule) {
+		return true;
+	}
+	ndxml *preCMDxml = ndxml_getnode(xmlModule, "PreCmd");
+	if (!preCMDxml)	{
+		return true;
+	}
+
+	for (int i = 0; i < ndxml_num(preCMDxml); i++) {
+		ndxml *cmdNode = ndxml_getnodei(preCMDxml, i);
+
+		const char *pFuncName = ndxml_getattr_val(cmdNode, "name");
+		if (!pFuncName || !*pFuncName) {
+			continue;
+		}
+		//std::string name = pFuncName;
+		streamNode nodeBuf;
+
+		int ret = blockSteps2Stream(cmdNode, nodeBuf.buf, sizeof(nodeBuf.buf));
+		if (-1 == ret )	{
+			nd_logerror("compile pre-cmd instruct  %s error \n", pFuncName);
+			return false;
+		}
+		nodeBuf.size = ret;
+		m_preCMDs[pFuncName] = nodeBuf;
+	}
+
+	return true;
 }

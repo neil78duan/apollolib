@@ -45,6 +45,7 @@ protected:
 	const char *getGameDateEncodeType();
 	
 	const char *_getFromIocfg(const char *cfgName);
+	bool _loadUserDefEnum(const char *userDefEnumFile, void *pDlg);
 	bool compile();
 	bool compileScript(const char *scriptFile);
 	bool expExcel();

@@ -7,6 +7,7 @@
  * 2015-5-29
  */
 #include "attribute/attr_mgr.h"
+#include "apollo_errors.h"
 #include <math.h>
 
 RoleAttrAsset::RoleAttrAsset(role_attr_data *data) : m_data(data), m_EnableRecalc(false)
@@ -64,8 +65,7 @@ bool RoleAttrAsset::setVal(attrid_t index, attrval_t val)
 
 	int ret = 0;
 	attrval_t *pdata = &m_data->datas[index];
-	//attrval_t oldval = *pdata;
-
+	
 	if (val != *pdata) {
 		ret = _set_val(val, index);
 		if (ret > 0  && m_EnableRecalc){
@@ -102,6 +102,8 @@ bool RoleAttrAsset::subVal(attrid_t index, attrval_t val)
 	}
 	attrval_t curVal = getVal(index);
 	if (curVal < val) {
+		m_lastErrorCode = ESERVER_ERR_ATTR_NOT_ENOUGH;
+		m_lastErrorID = index;
 		return false;
 	}
 	bool ret = setVal(index, curVal - val);
@@ -113,15 +115,6 @@ bool RoleAttrAsset::subVal(attrid_t index, attrval_t val)
 		int codeType = this->getLastError();
 		if (codeType && errorAttrID != INVALID_ATTR_ID)	{
 			ret = false;
-		}
-		else {
-//			if (m_recordChange)	{
-//				attrval_node node;
-//				node.id = index;
-//				node.val = -val;
-//				m_changed.push_back(node);
-//			}
-
 		}
 	}
 	return  ret ;
@@ -145,6 +138,8 @@ bool RoleAttrAsset::setVal(const char *name, attrval_t newval)
 	if (waid != INVALID_ATTR_ID){
 		return setVal(waid, newval);
 	}
+	m_lastErrorCode = NDERR_INVALID_INPUT;
+	m_lastErrorID = INVALID_ATTR_ID;
 	return false;
 }
 bool RoleAttrAsset::addVal(const char *name, attrval_t addval)
@@ -155,6 +150,8 @@ bool RoleAttrAsset::addVal(const char *name, attrval_t addval)
 	if (waid != INVALID_ATTR_ID){
 		return addVal(waid, addval);
 	}
+	m_lastErrorCode = NDERR_INVALID_INPUT;
+	m_lastErrorID = INVALID_ATTR_ID;
 	return false;
 
 }
@@ -169,6 +166,9 @@ bool RoleAttrAsset::subVal(const char *name, attrval_t subval)
 	if (waid != INVALID_ATTR_ID){
 		return  subVal(waid, subval);
 	}
+
+	m_lastErrorCode = NDERR_INVALID_INPUT;
+	m_lastErrorID = INVALID_ATTR_ID;
 	return false;
 }
 bool RoleAttrAsset::setVal(const attr_node_buf &attrs)
@@ -266,7 +266,7 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 	}
 
 	m_lastErrorID = INVALID_ATTR_ID;
-	m_lastErrorCode = 0;
+	m_lastErrorCode = (int)ESERVER_ERR_SUCCESS;
 
 	attrval_t  *pdata = &m_data->datas[aid];
 	attrval_t oldval = *pdata;
@@ -276,7 +276,7 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 			*pdata = pdesc->maxval;
 
 			m_lastErrorID = aid;
-			m_lastErrorCode = 2;
+			m_lastErrorCode = (int) ESERVER_ERR_ATTR_TOO_MUCH;
 		}
 	}
 	else if (2 == pdesc->ismax){
@@ -285,7 +285,7 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 			*pdata = m_data->datas[idmax];
 
 			m_lastErrorID = aid;
-			m_lastErrorCode = 2;
+			m_lastErrorCode = ESERVER_ERR_ATTR_TOO_MUCH;
 		}
 	}
 
@@ -294,7 +294,7 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 			*pdata = pdesc->minval;
 
 			m_lastErrorID = aid;
-			m_lastErrorCode = 1;
+			m_lastErrorCode = ESERVER_ERR_ATTR_NOT_ENOUGH;
 		}
 	}
 	else if (2 == pdesc->ismin){
@@ -303,7 +303,7 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 			*pdata = m_data->datas[idmin];
 
 			m_lastErrorID = aid;
-			m_lastErrorCode = 2;
+			m_lastErrorCode = ESERVER_ERR_ATTR_TOO_MUCH;
 		}
 	}
 
@@ -370,7 +370,7 @@ int RoleAttrAsset::Recalc()
 		return 0;
 	}
 	
-	nd_logdebug("start recalc role attribute\n") ;
+	//nd_logdebug("start recalc role attribute\n") ;
 	
 	//int ret = 0;
 	RoleAttrHelper  *pwah = get_attr_helper();

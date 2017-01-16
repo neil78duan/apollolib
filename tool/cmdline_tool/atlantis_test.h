@@ -13,6 +13,8 @@
 //#include "atls_room.h"
 
 int msg_echo_handler(NDIConn* pconn, nd_usermsgbuf_t *msg ) ;
+
+void atlantis_base_message(NDIConn *pconn);
 //
 //CPPAPI ND_CMDLINE_FUNC_INSTANCE(atlantisChat);
 //

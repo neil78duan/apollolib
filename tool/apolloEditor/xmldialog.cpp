@@ -198,19 +198,37 @@ bool XMLDialog::ExpandTree(QTreeWidgetItem* hItem)
         for(int i=0 ; i<hItem->childCount(); i++ ) {
             QTreeWidgetItem *pChild = hItem->child(i) ;
             ExpandTree(pChild) ;
-            //pChild->setExpanded(true);
-
         }
-
     }
-
     return ret;
 }
 
-QTreeWidgetItem* XMLDialog::InitTreeNode(ndxml *xml_node,QTreeWidgetItem *hParent)
+void XMLDialog::SetExpand(QTreeWidgetItem* hItem)
 {
-    xmlTreeItem *leaf =new xmlTreeItem(hParent, QStringList(QString(_GetXmlName(xml_node,&m_alias))));
+	if (!hItem){
+		return;
+	}
+	ndxml* xml = GetSelXml(hItem);
+	if (!xml){
+		return;
+	}
+	ndxml_setattrval(xml, _GetReverdWord(ERT_EXPAND_STAT), "1");
+	hItem->setExpanded(true);
 
+}
+
+QTreeWidgetItem* XMLDialog::InitTreeNode(ndxml *xml_node, QTreeWidgetItem *hParent, QTreeWidgetItem *after)
+{
+    //xmlTreeItem *leaf =new xmlTreeItem(hParent, QStringList(QString(_GetXmlName(xml_node,&m_alias))));
+	xmlTreeItem *leaf = NULL;
+	if (!after) {
+		leaf = new xmlTreeItem(hParent, QStringList(QString(_GetXmlName(xml_node, &m_alias))));
+	}
+	else {
+		leaf = new xmlTreeItem(hParent, after);
+		leaf->setText(0, QString(_GetXmlName(xml_node, &m_alias)));
+	}
+	
     leaf->setFlags(leaf->flags()| (Qt::ItemIsEditable | Qt::ItemIsDragEnabled) );
 
     leaf->setUserData(xml_node);
@@ -839,7 +857,11 @@ void XMLDialog::OnPopXmlDel()
     ndxml *xml_parent = (ndxml *) hParent->getUserData();
     if (xml_parent) {
         ndxml_delxml(xml,xml_parent);
-        CreateXmlTree(m_root);
+
+		hParent->removeChild(curItem);
+
+		m_curItem = NULL;
+        //CreateXmlTree(m_root);
         //CfgChanged();
     }
 
@@ -1065,22 +1087,19 @@ bool XMLDialog::TreeDragCallback(xmlTreeItem*  hFrom, xmlTreeItem* hTo)
     xmlTreeItem *parent1 = (xmlTreeItem *) hFrom->parent() ;
     xmlTreeItem *parent2 = (xmlTreeItem *) hTo->parent();
     if (parent2!=parent1){
-        return false;
+		return _TreeDragInNotSameRoot(hFrom, hTo);
     }
     ndxml *xmlparent = GetSelXml(parent1);
     ndxml*xmlFrom = GetSelXml(hFrom);
     ndxml*xmlTo = GetSelXml(hTo);
     if (!xmlparent|| !xmlFrom || !xmlTo)	{
-        return false;
+		return false;
     }
 
     nd_logmsg("drag  item %s to %s",  _GetXmlName(xmlFrom, &m_alias) , _GetXmlName(xmlTo, &m_alias)) ;
 
     const char *pEnableDrag = ndxml_getattr_val(xmlparent, "enable_drag");
-    if (!pEnableDrag){
-        return false;
-    }
-    if (0!=ndstricmp(pEnableDrag,"yes")){
+	if (pEnableDrag && 0 == ndstricmp(pEnableDrag, "no")){
         return false;
     }
 
@@ -1092,18 +1111,62 @@ bool XMLDialog::TreeDragCallback(xmlTreeItem*  hFrom, xmlTreeItem* hTo)
     if (-1==ndxml_remove(xmlFrom, xmlparent)){
         return false;
     }
-    if (src_index > index) {
-        index -= 1;
-    }
-    if (-1 == ndxml_insert_ex(xmlparent, xmlFrom, index)) {
+    if (-1 == ndxml_insert_ex(xmlparent, xmlFrom, index-1)) {
         return false;
     }
 
-    CreateXmlTree(m_root);
+	//recreate tree node 
+
+	xmlTreeItem *gp = (xmlTreeItem*) parent1->parent();	
+	xmlTreeItem* hNode = (xmlTreeItem* ) InitTreeNode(xmlparent, gp, parent1);
+	gp->removeChild(parent1);
+	
+	ExpandTree(hNode);
+
+    //CreateXmlTree(m_root);
     CfgChanged();
     return true;
 }
 
+
+bool XMLDialog::_TreeDragInNotSameRoot(xmlTreeItem*  hFrom, xmlTreeItem*  hTo)
+{
+
+	xmlTreeItem *parentFrom = (xmlTreeItem *)hFrom->parent();
+
+	ndxml *xmlparent = GetSelXml(parentFrom);
+
+	ndxml*xmlFrom = GetSelXml(hFrom);
+	ndxml*xmlTo = GetSelXml(hTo);
+	if (!xmlparent || !xmlFrom || !xmlTo)	{
+		return false;
+	}
+	const char *fromName = ndxml_getname(xmlFrom);
+	const char *acceptName = ndxml_getattr_val(xmlTo, "accept_drag_in");
+	if (!fromName || !acceptName){
+		return false;
+	}
+	if (0 != ndstricmp(fromName, acceptName))	{
+		return false;
+	}
+
+	//move
+	if (-1 == ndxml_remove(xmlFrom, xmlparent)){
+		return false;
+	}
+
+	if (-1 == ndxml_insert(xmlTo, xmlFrom)) {
+		return false;
+	}
+
+
+	//rebuild tree node 
+	parentFrom->removeChild(hFrom);
+	InitTreeNode(xmlFrom, hTo);
+	SetExpand(hTo);
+	CfgChanged();
+
+}
 
 void XMLDialog::on_ButtonOK_clicked()
 {

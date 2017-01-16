@@ -94,7 +94,7 @@ private:
 
     const char *_getFromIocfg(const char *cfgName);
 	void _beginEdit(const char *script_file, const char *title);
-
+	bool _loadUserDefEnum(const char *userDefEnumFile, void *pDlg);
 	bool compileScript(const char *scriptFile);
 	bool compile();
 

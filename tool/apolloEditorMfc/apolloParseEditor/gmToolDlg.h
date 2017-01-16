@@ -63,4 +63,7 @@ public:
 	afx_msg void OnBnClickedButtonServerReload();
 	afx_msg void OnBnClickedButtonClear();
 	afx_msg void OnBnClickedBtGmmsg();
+public:
+	afx_msg void OnBnClickedButtonShowError();
+	afx_msg void OnBnClickedCheckShowHex();
 };

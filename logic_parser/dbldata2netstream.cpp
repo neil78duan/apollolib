@@ -9,6 +9,7 @@
 
 #include "logic_parser/dbldata2netstream.h"
 #include "logic_parser/logicStruct.hpp"
+#include "attribute/roleattr_help.h"
 
 static int _writeMsgToUserDef(const DBLDataNode &data, NDOStreamMsg &omsg)
 {
@@ -80,6 +81,21 @@ int logicDataWrite(DBLDataNode &data, NDOStreamMsg &omsg)
 		break;
 	case OT_BINARY_DATA:
 		return omsg.WriteBin(data.GetBinary(), data.GetBinarySize());
+
+	case OT_ATTR_DATA:
+	{
+		_attrDataBin *data_attr = (_attrDataBin *)data.GetBinary();
+		if (!data_attr)	{
+			return 0;
+		}
+
+		omsg.Write((NDUINT16)data_attr->count);
+		for (int i = 0; i < data_attr->count; i++)	{
+			omsg.Write(data_attr->datas[i].aid);
+			omsg.Write(data_attr->datas[i].val);
+		}
+		return 0;
+	}
 	default:
 		ret = -1;
 		break;
@@ -97,7 +113,9 @@ int logicDataRead(DBLDataNode &data, NDIStreamMsg &inmsg)
 	_read_type a = 0;					\
 	if (0 == _msg.Read(a))					\
 		_data.InitSet(_writeType(a));		\
-	else return -1;						\
+	else  {							\
+		return -1;					\
+	}								\
 }while (0)
 
 	switch (type)
@@ -136,6 +154,29 @@ int logicDataRead(DBLDataNode &data, NDIStreamMsg &inmsg)
 		data.InitSet((char*)buf);
 	}
 		break;
+	case OT_ATTR_DATA:
+	{
+		attr_node_buf bufs;
+		NDUINT16 num = 0;
+		if (-1 == inmsg.Read(num)) {
+			return -1;
+		}
+		for (int i = 0; i < num; i++)	{
+			attrid_t id;
+			float val;
+			if (-1 == inmsg.Read(id)) {
+				return -1;
+			}
+			if (-1 == inmsg.Read(val)) {
+				return -1;
+			}
+			bufs.push_back(id, val);
+
+		}
+		Attrbuf2LogicType(data, &bufs);
+	}
+
+		break;
 	case OT_BINARY_DATA:
 	{
 		NDUINT8 buf[0x10000];
@@ -153,12 +194,13 @@ int logicDataRead(DBLDataNode &data, NDIStreamMsg &inmsg)
 			return -1;
 		}
 		if (count > 0)	{
-			DBLDataNode readData = data.GetArray(0);
+			DBLDataNode readDataOrg = data.GetArray(0);
 
 			data.InitReservedArray(count, sub_type);
 			for (int i = 0; i < count; i++)	{
+				DBLDataNode readData = readDataOrg;
 				if (0 == logicDataRead(readData, inmsg)){
-					data.SetArray(readData, i);
+					data.pushArray(readData);					
 				}
 			}
 		}
@@ -171,6 +213,7 @@ int logicDataRead(DBLDataNode &data, NDIStreamMsg &inmsg)
 		break;
 	default:
 		ret = -1;
+		nd_assert(0);
 		break;
 	}
 	return ret;
@@ -218,6 +261,9 @@ int get_type_from_alias(const char *name )
 			return alias_type[i].type;
 		}
 	}
+	if (0 == ndstricmp("binaryData", name)) {
+		return OT_BINARY_DATA;
+	}
 	return OT_USER_DEFINED;
 }
 
@@ -257,6 +303,7 @@ LogicUserDefStruct* createUserData(ndxml *msgNode, ndxml *msg_root, userDefineDa
 			bIsString = true;
 		}
 
+
 		dataType = get_type_from_alias(pType);
 
 		const char *pArray = ndxml_getattr_val(node1, "isArray");
@@ -275,7 +322,7 @@ LogicUserDefStruct* createUserData(ndxml *msgNode, ndxml *msg_root, userDefineDa
 			// find from root manager 
 			LogicUserDefStruct*pOther = _getUserType(pType, msg_root, typeRoot);
 			if (!pOther)	{
-				nd_logerror("can not cate tyep %s\n", pType);
+				nd_logerror("can not get type %s\n", pType);
 				return NULL; //on error
 			}
 

@@ -71,6 +71,7 @@ private:
     ndxml* GetSelXml(QTreeWidgetItem* hItem);
     void DragCallBack(QTreeWidgetItem* from, QTreeWidgetItem* to) ;
     bool TreeDragCallback(xmlTreeItem*  hFrom, xmlTreeItem* hTo) ;
+	bool _TreeDragInNotSameRoot(xmlTreeItem*  hFrom, xmlTreeItem*  hTo);
 
     void CfgChanged() { m_stat = 1;}
     int DisplaySelXml();
@@ -79,9 +80,10 @@ private:
     void ShowRow(const char *name, const char *val, ndxml* param,QTableWidget *show_ctrl);
 
     bool CreateXmlTree(ndxml_root *xml_root)  ;
-    QTreeWidgetItem *InitTreeNode(ndxml *xml_node,QTreeWidgetItem *hParent);
+	QTreeWidgetItem *InitTreeNode(ndxml *xml_node, QTreeWidgetItem *hParent, QTreeWidgetItem *after = NULL);
 
     bool ExpandTree(QTreeWidgetItem* hItem) ;
+	void SetExpand(QTreeWidgetItem* hItem);
     bool _GetUserDefinData(const char *pUserParam, QString &val);
     bool _GetUserSelEnumVal(const text_list_t &enum_vals, QString &val);
     bool _GetFileName(bool bOpen, QString & strFile, const char *default_file) ;

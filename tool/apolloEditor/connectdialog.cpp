@@ -57,11 +57,7 @@ class ConnectScriptOwner :public  ClientMsgHandler::ApoConnectScriptOwner
 public:
     bool getOtherObject(const char*objName, DBLDataNode &val)
     {
-        bool ret = ClientMsgHandler::ApoConnectScriptOwner::getOtherObject(objName, val);
-        if (ret) {
-            return ret;
-        }
-        else if (0 == ndstricmp(objName, "LogFunction")) {
+        if (0 == ndstricmp(objName, "LogFunction")) {
             val.InitSet((void*)out_print);
             return true;
         }
@@ -77,6 +73,20 @@ public:
             val.InitSet("../../log");
             return true;
         }
+
+		else if (0 == ndstricmp(objName, "SelfName")) {
+			val.InitSet("gmtool");
+			return true;
+		}
+		else if (0 == ndstricmp(objName, "self")) {
+			val.InitSet((void*)this, OT_OBJ_BASE_OBJ);
+			return true;
+		}
+
+		bool ret = ClientMsgHandler::ApoConnectScriptOwner::getOtherObject(objName, val);
+		if (ret) {
+			return ret;
+		}
         return false;
     }
 };
@@ -735,4 +745,11 @@ void ConnectDialog::on_gmMsgButton_clicked()
     xmlDlg.setButtonText("Send", "Exit") ;
     xmlDlg.exec() ;
 
+}
+
+void ConnectDialog::on_pushButton_clicked()
+{
+    int a = ui->msgDataEdit->text().toInt();
+
+    out_print(NULL, "error[%d]: %s\n", a, apollo_error(a)) ;
 }

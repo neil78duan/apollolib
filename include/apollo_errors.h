@@ -43,4 +43,6 @@ namespace result {
 	
 };
 
+
+extern const char *apollo_error(int errcode);
 #endif

@@ -25,6 +25,7 @@ enum instructType {
 	E_INSTRUCT_TYPE_FUNCTION_INFO,
 	E_INSTRUCT_TYPE_EXCEPTION_CATCH, //handle error
 	E_INSTRUCT_TYPE_INIT_BLOCK, //the block of function init entry
+	E_INSTRUCT_TYPE_STEP_COLLECTION, // steps collection
 
 	E_INSTRUCT_TYPE_COMMENT = 100, // MARRK
 
@@ -38,6 +39,7 @@ struct compile_setting
 	NDUINT8 data_type;
 	NDUINT8 record_param_num;
 	NDUINT8 need_type_stream;
+	NDUINT8 need_refill_jump_len;
 	NDUINT32 size;
 
 	compile_setting()
@@ -48,6 +50,7 @@ struct compile_setting
 		record_param_num = 0;
 		size = -1;
 		need_type_stream = 0;
+		need_refill_jump_len = 0;
 	}
 };
 
@@ -69,6 +72,22 @@ struct enumTextVct
 	std::vector<std::string>  enumTextVals;
 };
 
+//record short jump addr ,after compile ,so it will get the current block size , the short jump need to goto the block-end
+struct shortJumpInfo
+{
+	char *addr;
+};
+
+struct streamNode
+{
+	int size;
+	char buf[4089];
+};
+
+
+typedef std::vector<shortJumpInfo> shortJumpAddr_vct;
+
+typedef std::map<std::string, streamNode> streamCMD_map_t;
 class LogicCompiler
 {
 public:
@@ -78,6 +97,7 @@ public:
 	bool setConfigFile(const char *config);
 private:
 	
+	bool compileFuncs(ndxml *funcsCollect, FILE *pf);
 	//compile function
 	int func2Stream(ndxml *funcNode, char *buf, size_t bufsize);
 	//compile if-else
@@ -113,6 +133,15 @@ private:
 	int _writeFileInfo(ndxml *module, FILE *pf) ;
 	bool _isGlobalFunc(ndxml *funcNode);
 
+	void _pushReFillJumpAddr(char *addr);
+	bool _fillJumpLengthInblock(const char *blockStart, size_t blockSize);
+
+
+	int _trutoFillPreCmd(ndxml *funcNode, char *buf, size_t bufsize);
+
+	bool _compilePreCmd(ndxml *xmlroot);
+
+
 	//compile init block
 	ndxml m_configRoot;
 
@@ -131,6 +160,10 @@ private:
 
 	size_t m_initBlockSize;
 	char *m_pInitBlock;
+
+	shortJumpAddr_vct m_reFillJumpStepSize;
+
+	streamCMD_map_t m_preCMDs;
 public:
 	//current compile info 
 	std::string m_cur_file;

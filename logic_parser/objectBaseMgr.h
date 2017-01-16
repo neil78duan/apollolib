@@ -39,9 +39,12 @@ public:
 
 	virtual bool opSub(const DBLDataNode& id, const  DBLDataNode &val) = 0;
 
-	virtual bool opClear(const DBLDataNode& id, const  DBLDataNode &val) = 0;
+	//virtual bool opClear(const DBLDataNode& id, const  DBLDataNode &val) = 0;
 
 	virtual bool opCheck(const DBLDataNode& id, const DBLDataNode &val) ;
+
+	//common operate @val  input-output
+	virtual bool opOperate(const char *cmd, const DBLDataNode& id,  DBLDataNode &val); 
 
 	
 	//get object manager for opRead/write/...
@@ -104,8 +107,10 @@ public:
 	bool opWrite(const DBLDataNode& id, const DBLDataNode &val);
 	bool opAdd(const DBLDataNode& id, const DBLDataNode &val);
 	bool opSub(const DBLDataNode& id, const  DBLDataNode &val);
-	bool opClear(const DBLDataNode& id, const  DBLDataNode &val);
+	//bool opClear(const DBLDataNode& id, const  DBLDataNode &val);
 	bool opCheck(const DBLDataNode& id, const  DBLDataNode &val);
+	//common operate 
+	bool opOperate(const char *cmd, const DBLDataNode& id,  DBLDataNode &val);
 	//bool getObject(eOperatorObjType type, const DBLDataNode &id, DBLDataNode &val);
 	//LogicObjectBase *getObjectMgr(eOperatorDestMgr destID);
 	

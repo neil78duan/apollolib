@@ -57,64 +57,81 @@ enum DBL_ELEMENT_TYPE
 struct dbl_intarray
 {
 	size_t number;
+	size_t capacity;
 	int data[1];
 };
 struct dbl_binary
 {
 	size_t size;
+	size_t capacity;
 	char data[1];
 };
 //浮点数组
 struct dbl_floatarray
 {
 	size_t number;
+	size_t capacity;
 	float data[1];
 };
 //文本数组
 struct dbl_strarray
 {
 	size_t number;
+	size_t capacity;
 	char* data[1];
 };
 struct  dbl_userDefArray
 {
 	size_t number;
+	size_t capacity;
 	LogicUserDefStruct *data[1];
 };
 
-enum { ARRAY_SIZE_1D = 32 };
-struct _dbl_intarr_1d
-{
-	size_t number;
-	int data[ARRAY_SIZE_1D];
-};
+// enum { ARRAY_SIZE_1D = 32 };
+// struct _dbl_intarr_1d
+// {
+// 	size_t number;
+// 	int data[ARRAY_SIZE_1D];
+// };
 
-struct dbl_intarray2d
-{
-	size_t number;
-	_dbl_intarr_1d data[1];
-};
-struct _dbl_float_1d
-{
-	size_t number;
-	float data[ARRAY_SIZE_1D];
-};
+// struct dbl_intarray2d
+// {
+// 	size_t number;
+// 	_dbl_intarr_1d data[1];
+// };
+// struct _dbl_float_1d
+// {
+// 	size_t number;
+// 	float data[ARRAY_SIZE_1D];
+// };
+// 
+// struct dbl_float2d
+// {
+// 	size_t number;
+// 	_dbl_float_1d data[1];
+// };
 
-struct dbl_float2d
-{
-	size_t number;
-	_dbl_float_1d data[1];
-};
+// struct _dbl_string_1d
+// {
+// 	size_t number;
+// 	char* data[ARRAY_SIZE_1D];
+// };
+// struct dbl_string2d
+// {
+// 	size_t number;
+// 	_dbl_string_1d data[1];
+// };
 
-struct _dbl_string_1d
-{
-	size_t number;
-	char* data[ARRAY_SIZE_1D];
+struct _attrDataBin {
+	int count;
+	struct {
+		NDUINT8 aid;
+		float val;
+	}datas[100];
 };
-struct dbl_string2d
-{
+struct dbl_attr {
 	size_t number;
-	_dbl_string_1d data[1];
+	_attrDataBin attr;
 };
 
 struct dbl_element_base
@@ -130,10 +147,11 @@ struct dbl_element_base
 		dbl_intarray *_i_arr;
 		dbl_floatarray *_f_arr;
 		dbl_strarray *_str_arr;
-		dbl_intarray2d *_arr_2d;
-		dbl_float2d *_arr_float_2d;
+		//dbl_intarray2d *_arr_2d;
+		//dbl_float2d *_arr_float_2d;
 		dbl_binary *_bin;
 		dbl_userDefArray *_arr_user;
+		dbl_attr *_attr_data;
 	};
 	
 };
@@ -183,6 +201,7 @@ public:
 	void InitSet(int *arr, int size);
 	void InitSet(float *arr, int size);
 	void InitSet(const char *arr[], int size);
+	void InitSet(const LogicUserDefStruct *arr[], int size);
 	void InitSet(void *object, DBL_ELEMENT_TYPE type = OT_OBJECT_VOID);
 	void InitSet(void *binary, size_t size, DBL_ELEMENT_TYPE eleType = OT_BINARY_DATA);
 	void InitSet(NDUINT64 a);
@@ -192,6 +211,7 @@ public:
 	void InitSet(const LogicUserDefStruct &u);
 	bool InitReservedArray(size_t size, int attay_type = OT_INT);
 	bool SetArray(const DBLDataNode &data, int index);	
+	bool pushArray(const DBLDataNode &data);
 	void InitFromTxt(const char *valText);
 	
 
@@ -209,6 +229,7 @@ public:
 	int ReadStream(const char *streamBuf, size_t data_len, int streamByteOrder);
 	int WriteStream(char *streamBuf, size_t buf_size, int streamByteOrder )const;
 	int GetInt() const;
+	int GetRoundInt() const;
 	NDUINT64 GetInt64() const;
 	bool GetBool() const;
 	float GetFloat() const;
@@ -239,13 +260,17 @@ public:
 	int GetTimeSecond()const;
 	int GetTimeWeekDay()const;
 	
-	DBLDataNode getUserDefMember(const char *name) ;
+	DBLDataNode getUserDefMember(const char *name) const;
 	void setUserDefMember(const char *name,const DBLDataNode &val) ;
 	const LogicUserDefStruct *getUserDef() const;
 
 	int GetArraySize() const;
 
 	DBLDataNode  operator+(const DBLDataNode &r) const;
+	DBLDataNode  operator-(const DBLDataNode &r) const;
+	DBLDataNode  operator*(const DBLDataNode &r) const;
+	DBLDataNode  operator/(const DBLDataNode &r) const;
+
 	DBLDataNode  operator+(const char *text) const ;
 
 	DBLDataNode & operator+=(const DBLDataNode &r);
@@ -263,7 +288,19 @@ public:
 
 	DBL_ELEMENT_TYPE GetDataType() const;
 	DBL_ELEMENT_TYPE GetArrayType() const;
+
+	static bool setOutHex(bool isHex = true);
 protected:
+	DBLDataNode _attrMathAdd(const DBLDataNode &leftval)const ;
+	DBLDataNode _attrMathSub(const DBLDataNode &leftval)const ;
+	DBLDataNode _attrMathMul(const DBLDataNode &leftval)const ;
+	DBLDataNode _attrMathDiv(const DBLDataNode &leftval)const ;
+
+	DBLDataNode _arrayMathAdd(const DBLDataNode &leftval)const;
+	DBLDataNode _arrayMathSub(const DBLDataNode &leftval)const;
+	DBLDataNode _arrayMathMul(const DBLDataNode &leftval)const;
+	DBLDataNode _arrayMathDiv(const DBLDataNode &leftval)const;
+
 	void Destroy();
 	void init() ;
 	void _copy(const DBLDataNode &r);
@@ -273,12 +310,14 @@ protected:
 	NDUINT8 m_sub_type;
 	dbl_element_base *m_data;
 	dbl_element_base m_dataOwn;
+
+	static NDUINT8 s_bOutHex;
 };
 
 
 CPPAPI int dbl_destroy_data(dbl_element_base *buf, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype);
 CPPAPI int dbl_build_from_text(dbl_element_base *buf, const char *in_data, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype);
-CPPAPI int dbl_data_copy(dbl_element_base *input, dbl_element_base *output, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype);
+CPPAPI int dbl_data_copy(const dbl_element_base *input, dbl_element_base *output, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype);
 
 typedef size_t (*dbl_stream_fread)( void * _DstBuf,  size_t _ElementSize,  size_t _Count,  FILE * _File);
 typedef size_t(*dbl_stream_fwrite)(const void * _DstBuf, size_t _ElementSize, size_t _Count, FILE * _File);

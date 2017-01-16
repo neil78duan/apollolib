@@ -61,8 +61,8 @@ enum eParserOperator{
 	E_OP_READ ,			//	 eOperatorDest + DBLDataNode:index
 	E_OP_WRITE,			//	 eOperatorDest + DBLDataNode:index + DBLDataNode-stream
 	E_OP_ADD ,			//	 eOperatorDest + DBLDataNode:index + DBLDataNode-stream
-	E_OP_SUB ,			//	 eOperatorDest + DBLDataNode:index + DBLDataNode-stream
-	E_OP_CLEAR,			//   eOperatorDest + DBLDataNode:index
+	E_OP_SUB,			//	 eOperatorDest + DBLDataNode:index + DBLDataNode-stream
+	E_OP_OPERATE,		//like  E_OP_ADD : string:obj-name, string:cmd-name, DBLDataNode:index ,DBLDataNode:value
 	E_OP_MAKE_VAR ,		//  make local variant	 name + DBLDataNode-stream
 	E_OP_READ_TABLE, 	//	read game-static-data  string(tablename)  + col-name + id
 	E_OP_COMP,	 		//	 eParserCompare  + DBLDataNode-stream1 + DBLDataNode-stream1
@@ -75,8 +75,8 @@ enum eParserOperator{
 	E_OP_LONG_JUMP,		//  jump abs addr
 	E_OP_TEST_FALSE_SHORT_JUMP, // test flag register and jump  instruct + address
 	E_OP_TEST_FALSE_LONG_JUMP, // 
-	E_OP_SET_REGISTER, // SET calc-register 
-	E_OP_REG_2VAR,		// STORE string var_name
+	E_OP_TEST_SUCCESS_SHORT_JUMP, //not use SET calc-register 
+	E_OP_COMMIT_AFFAIR,		//COMMIT AFFAIR
 	E_OP_DEBUG_INFO,	// the following info is debug (int16-nodeindex, string node name)
 	E_OP_OUT_PUT ,		// out put var info 
 	E_OP_LOG,		// out put var info 
@@ -96,7 +96,7 @@ enum eParserOperator{
 	E_OP_ADD_TIMER, // FORMAT:area(gloabl/local), type, interval, timer_name, function_name
 	E_OP_DEL_TIMER, // timer_name
 	E_OP_TEST_LAST_VAL, //test last step result is valid
-	E_OP_DATATYPE_TRANSFER, //transfer data type of current value FORMAT: aimtype
+	E_OP_DATATYPE_TRANSFER, //transfer data type of current value FORMAT: string var-name, aimtype
 	E_OP_MAKE_USER_DATA, //build user define data: format:string-type-name, (string member,value)[], like json
 	E_OP_CREATE_TYPE, //create user define data type , like c-struct global
 	E_OP_MATH_OPERATE, // RUN + - * / ** sqrt max, min rand() format: int-op-type, DBLNodeData-stream1, DBLNodeData-stream2
@@ -109,6 +109,7 @@ enum eParserOperator{
 	E_OP_GET_ARRAY_SIZE,	//get array size 
 	E_OP_SET_LOOP_INDEX, // set loop index, used in list_for_each
 	E_OP_GET_LAST_ERROR,	//get last error before exception
+	E_OP_CHECK_IS_SIMULATE, // get current simulate status , true run in simulate , false run in real game env.
 
 };
 
@@ -301,15 +302,13 @@ public:
 	
 	//call in c++
 	bool runScript(int encodeType ,const char *scriptName, DBLDataNode &result, int num, ...);
+	//CALL IN c++ ARGS must be included args
 	bool runScript(const char *scriptName,  parse_arg_list_t &args, DBLDataNode &result, int encodeType = ND_ENCODE_TYPE);
 	
 	// generate game event in c++
 	bool eventNtf(int event_id, int num, ...);
 	bool eventNtf(int event_id, parse_arg_list_t &args);
 	
-	bool _runCmdBuf(const char *moduleName, const scriptCmdBuf *buf, int param_num, ...);
-	bool _runCmdBuf(const char *moduleName, const scriptCmdBuf *buf, parse_arg_list_t &params);
-
 	void update(ndtime_t interval) ;
 	void Reset() ;
 	void setErrno(int errcode);
@@ -320,9 +319,14 @@ public:
 	LogicObjectBase *getOwner() { return m_owner; }
 	void setOwner(LogicObjectBase *owner) { m_owner = owner; }
 	runningStack *getCurStack() { return m_curStack; }
-	
+
+
 private:
-	
+	friend class LogicEngineRoot;
+	//do not call directly, only call in loader
+	bool _runCmdBuf(const char *moduleName, const scriptCmdBuf *buf, int param_num, ...);
+	bool _runCmdBuf(const char *moduleName, const scriptCmdBuf *buf, parse_arg_list_t &params);
+
 	//bool ParseFuncName(const char *inName, std::string &outName) ;
 	//void fetchModuleName(const char * fullName,std::string &moduleName) ;
 	const char *getCurMoudle() ;
@@ -344,7 +348,7 @@ protected:
 	
 	bool _buildUserDefData(runningStack *runstack,parse_arg_list_t &args) ;
 	
-	bool _mathOperate(eMathOperate op,DBLDataNode &var1, DBLDataNode &var2);
+	bool _mathOperate(eMathOperate op,const DBLDataNode &var1,const DBLDataNode &var2);
 	bool _varAssignin(runningStack *runstack,const char *varName, DBLDataNode &inputVal);
 
 	bool _CreateUserDefType(runningStack *runstack, parse_arg_list_t &args);
@@ -356,7 +360,7 @@ protected:
 	int _makeVar(runningStack *stack, char *pCmdStream); //make variant from instruction 
 	bool _getArg(runningStack *stack, int index, DBLDataNode &outValue);
 	int _storeReg2Var(runningStack *stack, char *pCmdStream);
-	DBLDataNode* _refVariant(runningStack *stack, char *&pCmdStream);
+	//DBLDataNode* _refVariant(runningStack *stack, char *&pCmdStream);
 	int _getValueFromUserDef(const char *name, DBLDataNode &outValue);
 	int _getValue(runningStack *stack, char *pCmdStream, DBLDataNode &outValue); //get value from instruction
 	int _readGameDataTable(runningStack *stack, char *pCmdStream, DBLDataNode &outValue);

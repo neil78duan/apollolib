@@ -144,7 +144,8 @@ void CDrawTreeCtrl::OnLButtonUp(UINT nFlags, CPoint point)
 // 		SelectItem(htiNew);
 		CXmlCfg *cfg = dynamic_cast<CXmlCfg*>(GetParent());
 		if (cfg){
-			cfg->TreeDragCallback(m_hItemDragS, m_hItemDragD);
+			if (cfg->TreeDragCallback(m_hItemDragS, m_hItemDragD)) {
+			}
 		}
 		KillTimer(m_nScrollTimerID);
 	}

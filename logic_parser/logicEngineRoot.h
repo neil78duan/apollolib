@@ -100,22 +100,31 @@ private:
 };
 
 
+#define CHECK_ARGS_NUM_ONLY(_args, _num, _parser) \
+	if (_args.size() < _num){		\
+		if(_parser)_parser->setErrno(NDERR_FEW_PARAMS); \
+		nd_logerror("%s error need %d args \n",__FUNCTION__, _num);	\
+		return false;				\
+						}
 
 #ifndef ND_DEBUG
-#define CHECK_ARGS_NUM(_args, _num) \
+#define CHECK_ARGS_NUM(_args, _num, _parser) \
 	if (_args.size() < _num){		\
+		if(_parser)_parser->setErrno(NDERR_FEW_PARAMS); \
 		nd_logerror("%s error need %d args \n",__FUNCTION__, _num);	\
 		return false;				\
 				}
 #else 
-#define CHECK_ARGS_NUM(_args, _num) \
+#define CHECK_ARGS_NUM(_args, _num, _parser) \
 	if (_args.size() < _num){		\
+		if(_parser)_parser->setErrno(NDERR_FEW_PARAMS); \
 		nd_logerror("%s error need %d args \n",__FUNCTION__, _num);	\
 		return false;				\
 	}								\
 	else {							\
 		for (int _j=1; _j<_num; _j++) {	\
 			if(!_args[_j].CheckValid()) {	\
+				if(_parser)_parser->setErrno(NDERR_PARAM_INVALID); \
 				nd_logerror("%s error arg[%d] is invalid\n",__FUNCTION__, _j);	\
 				return false ;			\
 			}							\
@@ -124,12 +133,14 @@ private:
 
 #endif
 
-#define CHECK_DATA_TYPE(_data, _type) \
+#define CHECK_DATA_TYPE(_data, _type, _parser) \
 	if (_data.GetDataType() != _type) {	\
+		if (_parser)_parser->setErrno(NDERR_PARAM_TYPE_NOT_MATCH); \
 		nd_logerror(#_data " type error need " #_type " \n");	\
 		return false;					\
 			}									\
 	if (_type >= OT_OBJECT_VOID && NULL==_data.GetObject()) {	\
+		if(_parser)_parser->setErrno(NDERR_PARAM_INVALID); \
 		nd_logerror(#_data " is NULL \n");	\
 		return false;						\
 			}

@@ -122,8 +122,8 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 	
 	
 	fprintf(pf,"#region StructFileString \n \tpublic class MessageDataBase\n\t{\n" ) ;
-	fprintf(pf,"\t\tpublic virtual void Read(DataTranser dataStream){} \n" ) ;
-	fprintf(pf,"\t\tpublic virtual int Write(DataTranser dataStream){return 0;}\n\t}\n") ;
+	fprintf(pf,"\t\tpublic virtual void Read(NDMsgStream dataStream){} \n" ) ;
+	fprintf(pf,"\t\tpublic virtual int Write(NDMsgStream dataStream){return 0;}\n\t}\n") ;
 	
 	
 	int total = ndxml_getsub_num(xnode) ;
@@ -134,12 +134,10 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 		if (!pName) {
 			continue ;
 		}
-		fprintf(pf, "\tpublic class %s : MessageDataBase \n\t{\n ", pName) ;
-		
-		char buf_read_func[4096] ;
-		char buf_write_func[4096] ;
-		char buf_constrct_func[4096] ;
-		
+		fprintf(pf, "\tpublic class %s : MessageDataBase \n\t{\n ", pName) ;		
+		char buf_read_func[40960] ;
+		char buf_write_func[40960] ;
+		char buf_constrct_func[40960] ;		
 		char *pReadStream = buf_read_func;
 		char *pWriteStream = buf_write_func ;
 		char *pConstructStream = buf_constrct_func;
@@ -173,13 +171,13 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 				int size = 0 ;
 				//readstream array
 				
-				size = snprintf(pReadStream, sizeof(buf_read_func),
+				size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
 									"\t\t\t%sCount = dataStream.ReadUint16();\n"
 									"\t\t\t%s = new %s[%sCount];\n" ,
 									pValName, pValName, realType ? realType : pType, pValName);
 				pReadStream += size;
 				
-				size = snprintf(pReadStream, sizeof(buf_read_func),
+				size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
 								"\t\t\tfor(int i=0; i<%sCount;++i){\n",pValName ) ;
 				pReadStream += size ;
 				
@@ -188,12 +186,12 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 				//write stream
 				if (realOp)	{
 
-					size = snprintf(pReadStream, sizeof(buf_read_func),
+					size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
 						"\t\t\t\t%s[i] = dataStream.Read%s();\n\t\t\t}\n"
 						, pValName, realType ? realType : pType, pValName, realOp );
 					pReadStream += size;
 
-					size = snprintf(pWriteStream, sizeof(buf_write_func),
+					size = snprintf(pWriteStream, sizeof(buf_write_func) - (pWriteStream - buf_write_func),
 						"\t\t\tsize += dataStream.WriteUint16(%sCount);\n"
 						"\t\t\tfor(int i=0; i<%sCount;++i) {\n"
 						"\t\t\t\tsize += dataStream.Write%s(%s[i]);\n\t\t\t} \n",
@@ -203,13 +201,13 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 				}
 				else {
 
-					size = snprintf(pReadStream, sizeof(buf_read_func),
+					size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
 						"\t\t\t\t%s[i] = new %s();\n"
 						"\t\t\t\t%s[i].Read(dataStream);\n\t\t\t}\n"
 						, pValName, realType ? realType : pType, pValName);
 					pReadStream += size;
 
-					size = snprintf(pWriteStream, sizeof(buf_write_func),
+					size = snprintf(pWriteStream, sizeof(buf_write_func) - (pWriteStream - buf_write_func),
 						"\t\t\tsize += dataStream.WriteUint16(%sCount);\n"
 						"\t\t\tfor(int i=0; i<%sCount;++i) {\n"
 						"\t\t\t\tsize += %s[i].Write(dataStream);\n\t\t\t} \n",
@@ -223,42 +221,28 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 			else {
 				int size = 0;
 				fprintf(pf,"\t\tpublic %s  %s; \t//%s \n",realType?realType:pType, pValName,ndxml_getattr_val(node1, "comment") ) ;
-				//construct
-// 				
-// 				if (bIsString) {
-// 					size = snprintf(pConstructStream, sizeof(buf_constrct_func),
-// 									"\t\t\t%s = string.Empty ;\n",pValName ) ;
-// 					pConstructStream += size ;
-// 				}
-// 				else {
-// 					size = snprintf(pConstructStream, sizeof(buf_constrct_func),
-// 									"\t\t\t%s = new %s() ;\n",pValName ,realType?realType:pType) ;
-// 					pConstructStream += size ;
-// 				}
-				
+				//construct				
 				if (realOp)	{
 					//readstream
-					size = snprintf(pReadStream, sizeof(buf_read_func),
+					size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
 						"\t\t\t%s = dataStream.Read%s();\n", pValName, realOp );
 					pReadStream += size;
 					//write stream
-					size = snprintf(pWriteStream, sizeof(buf_write_func),
+					size = snprintf(pWriteStream, sizeof(buf_write_func) - (pWriteStream - buf_write_func),
 						"\t\t\tsize += dataStream.Write%s(%s);\n", realOp , pValName);
 					pWriteStream += size;
 				}
 				else {
 					//readstream
-					size = snprintf(pReadStream, sizeof(buf_read_func),
+					size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
 						"\t\t\t%s.Read(dataStream);\n", pValName);
 					pReadStream += size;
 					//write stream
-					size = snprintf(pWriteStream, sizeof(buf_write_func),
+					size = snprintf(pWriteStream, sizeof(buf_write_func) - (pWriteStream - buf_write_func),
 						"\t\t\tsize += %s.Write(dataStream);\n", pValName);
 					pWriteStream += size;
-				}
-				
-			}
-			
+				}				
+			}			
 		}
 		
 		//output funciont
@@ -266,11 +250,11 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 		fprintf(pf, "\n\t\tpublic %s() \n\t\t{\n\t\t}\n", pName) ;
 		
 		//read stream
-		fprintf(pf, "\n\t\tpublic override void Read(DataTranser dataStream)\n"
+		fprintf(pf, "\n\t\tpublic override void Read(NDMsgStream dataStream)\n"
 				"\t\t{\n%s\n\t\t}\n", buf_read_func ) ;
 		
 		//write strea
-		fprintf(pf, "\n\t\tpublic override int Write(DataTranser dataStream)\n"
+		fprintf(pf, "\n\t\tpublic override int Write(NDMsgStream dataStream)\n"
 				"\t\t{\n\t\t\tint size = 0;\n"
 				"%s\n\t\t\treturn size;\n\t\t}\n", buf_write_func ) ;
 		
@@ -291,10 +275,10 @@ int build_csMessageRecvSend(ndxml_root *xmlfile, FILE *pf)
 	
 	fprintf(pf,"#region MessageReceiveSendClassString \n") ;
  	fprintf(pf,"\tpublic class MessageReceiveSend\n\t{\n" ) ;
-	fprintf(pf,"\t\tDataTranser m_readDataTranser;\n\t\tDataTranser m_sendDataTranser;\n") ;
+	fprintf(pf,"\t\NDMsgStream m_readDataTranser;\n\t\NDMsgStream m_sendDataTranser;\n") ;
 	fprintf(pf,"\t\tpublic MessageReceiveSend()\n\t\t{\n") ;
-	fprintf(pf,"\t\t\tm_readDataTranser = new DataTranser();\n") ;
-	fprintf(pf,"\t\t\tm_sendDataTranser = new DataTranser();\n\t\t}\n") ;
+	fprintf(pf,"\t\t\tm_readDataTranser = new NDMsgStream();\n") ;
+	fprintf(pf,"\t\t\tm_sendDataTranser = new NDMsgStream();\n\t\t}\n") ;
 	fprintf(pf,"#region EventString\n\n") ;
 	
 	for (int i=0; i<total; ++i) {
@@ -416,11 +400,11 @@ int xml2Sharp(ndxml_root *xml, const char *file, xml_export_func func)
 
 	_OUT_PUT_TIME(pf);
 
-	fprintf(pf, "using AutoMessageProtocol;\n");
+	fprintf(pf, "using NetMessage;\n");
 	fprintf(pf, "using System.IO;\n");
 	fprintf(pf, "using System.Text;\n");
 	fprintf(pf, "using System.Collections.Generic;\n");
-	fprintf(pf, "namespace AutoMessageProtocol\n{\n\n");
+	fprintf(pf, "namespace NetMessage\n{\n\n");
 
 	func(xml, pf);
 

@@ -11,7 +11,7 @@
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_func" auto_index="0" expand_stat="0">	
 </baseFunction>
-<message_handler name="消息处理入口" delete="no" create_template="create_msg_handler" auto_index="0" expand_stat="0">
+<message_handler name="消息处理入口" delete="no" create_template="create_function_filter" auto_index="0" expand_stat="0">
 </message_handler>
 
 <event_callback name="事件处理" delete="no" create_template="create_event_callback" auto_index="0" expand_stat="1">	

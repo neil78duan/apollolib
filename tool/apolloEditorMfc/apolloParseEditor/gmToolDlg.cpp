@@ -9,17 +9,16 @@
 
 #include "nd_common/nd_common.h"
 #include "cli_common/netui_atl.h"
-//#include "commonTest.h"
 #include "cli_common/login_apollo.h"
 #include "apollo_errors.h"
-//#include "netMessage/message_inc.h"
 #include "logic_parser/logicDataType.h"
+#include "logic_parser/dbl_mgr.h"
 // gmToolDlg dialog
 #include "logic_parser/dbldata2netstream.h"
 #include "logic_parser/logicEngineRoot.h"
 #include "cli_common/dftCliMsgHandler.h"
 #include "logic_parser/script_event_id.h"
-//#include "cli_common/gameMessage.h"
+
 
 static gmToolDlg *__pMyDlg;
 static void*  __oldFunc;
@@ -51,7 +50,26 @@ static int out_print(void *pf, const char *stm, ...)
 	out_log(buf);
 	return done;
 }
+/*
+#include "netMessage/message_inc.h"
+static int msgRoleDataInit(NDIConn* pconn, nd_usermsgbuf_t *msg)
+{
+	NetMessage::RoleInfo data;
+	NetMessage::ReadStream(inmsg, data);
+	RoleDataManager* roleMgr = RoleDataManager::getInstance();
 
+	NDIStreamMsg inmsg(msg);
+
+	nd_assert(roleMgr);
+
+	if (roleMgr->Init(inmsg) != ESERVER_ERR_SUCCESS) {
+		nd_logerror("error received role data message \n");
+	}
+
+	//roleMgr->SaveLocalFile();
+	return 0;
+}
+*/
 /////////////////////////////////////
 
 class ConnectScriptOwner :public  ClientMsgHandler::ApoConnectScriptOwner
@@ -59,11 +77,7 @@ class ConnectScriptOwner :public  ClientMsgHandler::ApoConnectScriptOwner
 public:
 	bool getOtherObject(const char*objName, DBLDataNode &val)
 	{
-		bool ret = ClientMsgHandler::ApoConnectScriptOwner::getOtherObject(objName, val);
-		if (ret) {
-			return ret;
-		}
-		else if (0 == ndstricmp(objName, "LogFunction")) {
+		if (0 == ndstricmp(objName, "LogFunction")) {
 			val.InitSet((void*)out_print);
 			return true;
 		}
@@ -72,12 +86,25 @@ public:
 			return true;
 		}
 		else if (0 == ndstricmp(objName, "LogPath")) {
-			val.InitSet("../../log");
+			val.InitSet("../../log/");
 			return true;
 		}
 		else if (0 == ndstricmp(objName, "WritablePath")) {
-			val.InitSet("../../log");
+			val.InitSet("../../log/");
 			return true;
+		}
+		else if (0 == ndstricmp(objName, "SelfName")) {
+			val.InitSet("gmtool");
+			return true;
+		}
+		else if (0 == ndstricmp(objName, "self")) {
+			val.InitSet((void*)this, OT_OBJ_BASE_OBJ);
+			return true;
+		}
+
+		bool ret = ClientMsgHandler::ApoConnectScriptOwner::getOtherObject(objName, val);
+		if (ret) {
+			return ret;
 		}
 		return false;
 	}
@@ -140,7 +167,6 @@ IMPLEMENT_DYNAMIC(gmToolDlg, CDialog)
 gmToolDlg::gmToolDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(gmToolDlg::IDD, pParent)
 	, m_nPort(6600)
-	, m_strPasswd(_T("test123"))
 	, m_maxId(0)
 	, m_minId(0)
 	, m_msgData(_T(""))
@@ -152,6 +178,7 @@ gmToolDlg::gmToolDlg(CWnd* pParent /*=NULL*/)
 
 	m_strHost = theApp.getDefaultSetting(_T("host"), _T("192.168.8.55"));
 	m_strUserName = theApp.getDefaultSetting(_T("user"), _T("test1"));
+	m_strPasswd = theApp.getDefaultSetting(_T("passwd"), _T("test123"));
 	
 	//ndxml_initroot(&m_message_define);
 }
@@ -177,6 +204,7 @@ gmToolDlg::~gmToolDlg()
 
 	DeinitNet();
 	//destroyUserDefData(m_dataTypeDef);
+	DBLDatabase::destroy_Instant();
 }
 
 void gmToolDlg::DoDataExchange(CDataExchange* pDX)
@@ -207,6 +235,8 @@ BEGIN_MESSAGE_MAP(gmToolDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_SERVER_RELOAD, &gmToolDlg::OnBnClickedButtonServerReload)
 	ON_BN_CLICKED(IDC_BUTTON_CLEAR, &gmToolDlg::OnBnClickedButtonClear)
 	ON_BN_CLICKED(IDC_BT_GMMSG, &gmToolDlg::OnBnClickedBtGmmsg)
+	ON_BN_CLICKED(IDC_BUTTON_SHOW_ERROR, &gmToolDlg::OnBnClickedButtonShowError)
+	ON_BN_CLICKED(IDC_CHECK_SHOW_HEX, &gmToolDlg::OnBnClickedCheckShowHex)
 END_MESSAGE_MAP()
 
 
@@ -315,6 +345,7 @@ void gmToolDlg::OnBnClickedButtonLogin()
 		
 		theApp.setDefaultSetting(_T("host"), (LPCTSTR)m_strHost);
 		theApp.setDefaultSetting(_T("user"), (LPCTSTR)m_strUserName);
+		theApp.setDefaultSetting(_T("passwd"), (LPCTSTR)m_strPasswd);
 
 		__myScriptOwner.LoadMsgDataTypeFromServer();
 
@@ -334,19 +365,19 @@ void gmToolDlg::OnBnClickedButtonWriteData()
 {
 	UpdateData(TRUE);
 	if (m_selDataType==0){
-		int a = atoi((LPCTSTR)m_msgData);
+		int a = ndstr_atoi_hex((LPCTSTR)m_msgData);
 		__sendMsg.Write((NDUINT8)a);
 	}
 	else if (m_selDataType == 1){
-		int a = atoi((LPCTSTR)m_msgData);
+		int a = ndstr_atoi_hex((LPCTSTR)m_msgData);
 		__sendMsg.Write((NDUINT16)a);
 	}
 	else if (m_selDataType == 2){
-		int a = atoi((LPCTSTR)m_msgData);
+		int a = ndstr_atoi_hex((LPCTSTR)m_msgData);
 		__sendMsg.Write((NDUINT32)a);
 	}
 	else if (m_selDataType == 3){
-		NDUINT64 a = atoll((LPCTSTR)m_msgData);
+		NDUINT64 a = ndstr_atoll_hex((LPCTSTR)m_msgData);
 		__sendMsg.Write(a);
 	}
 	else if (m_selDataType == 4){
@@ -767,7 +798,7 @@ static bool gmdlgSend(CDlgWithAccelerators *curDlg)
 		const char *maxId = ndxml_getattr_val(msgXML, "maxId");
 		const char *minId = ndxml_getattr_val(msgXML, "minId");
 		if (maxId && minId)	{
-			msgid = ND_MAKE_WORD(atoi(maxId), atoi(minId));
+			msgid = ND_MAKE_WORD(ndstr_atoi_hex(maxId), ndstr_atoi_hex(minId));
 		}
 		else {
 			msgid = ndxml_getval_int(msgXML);
@@ -782,7 +813,7 @@ static bool gmdlgSend(CDlgWithAccelerators *curDlg)
 			int typeId = 0;
 			const char *typeName = ndxml_getattr_val(node, "param");
 			if (typeName)
-				typeId = atoi(typeName);
+				typeId = ndstr_atoi_hex(typeName);
 			switch (typeId)
 			{
 			case OT_INT :
@@ -828,4 +859,25 @@ void gmToolDlg::OnBnClickedBtGmmsg()
 	xmlDlg.SetXML(m_editor_setting, m_gmCfg);
 	xmlDlg.DoModal();
 
+}
+
+
+void gmToolDlg::OnBnClickedButtonShowError()
+{
+	// TODO: Add your control notification handler code here
+	UpdateData();
+	int a = ndstr_atoi_hex((LPCTSTR)m_msgData);
+
+	out_print(NULL, "error[%d] : %s\n", a, apollo_error(a));
+	
+}
+
+
+void gmToolDlg::OnBnClickedCheckShowHex()
+{
+	// TODO: Add your control notification handler code here
+	CButton *pbt = (CButton *) GetDlgItem(IDC_CHECK_SHOW_HEX);
+	if (pbt){
+		DBLDataNode::setOutHex(pbt->GetCheck() ? true : false);
+	}
 }
