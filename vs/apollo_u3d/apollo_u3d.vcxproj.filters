@@ -1,0 +1,479 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{456e0f6c-dcb9-4757-b3f5-b7f0503624fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common">
+      <UniqueIdentifier>{a4ac2b6d-71bf-408c-ac07-69723cd428b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\nd_net">
+      <UniqueIdentifier>{f840d986-1ddd-463c-bc16-7f5dca0a1e13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\nd_crypt">
+      <UniqueIdentifier>{25e0a798-febc-4c7b-b470-70cf36708361}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="apollo">
+      <UniqueIdentifier>{c7d60218-8375-4230-ac5f-9e75d3b0852b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="apollo\login">
+      <UniqueIdentifier>{2a9e2e84-5966-4c1b-b78d-7839273bc3af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="apollo\logicParser">
+      <UniqueIdentifier>{ad11418b-b15c-46c1-82a0-1f2b1e79c0f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="apollo\attribute">
+      <UniqueIdentifier>{92f4ee1f-00b8-4350-89c1-a09a1d31b1df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{58e4e73a-82b8-44a1-bcca-0f76afea7d4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common">
+      <UniqueIdentifier>{da02a562-d206-4bcf-bc71-0f6c50adc5fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\nd_crypt">
+      <UniqueIdentifier>{fe18b25e-9e27-44c2-8a77-bf7f385564fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\nd_net">
+      <UniqueIdentifier>{2b080c3b-965a-4382-9c30-0a0e4035f410}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\nd_vm">
+      <UniqueIdentifier>{ce78ea7f-4115-4bd4-86b5-5b0d69effb78}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\ndsdk\include\ndapplib\nd_msgpacket.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\ndcli\nd_api_c.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\ndlib.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_msg.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\list.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\ndchar.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nddir.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_alloc.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_atomic.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_bintree.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_cmdline.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_comcfg.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_comdef.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_common.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_dbg.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_define.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_handle.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_iconv.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_mempool.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_node_mgr.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_os.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_recbuf.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_static_alloc.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_str.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_timer.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_unix.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_win.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_xml.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\_nderr.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_net\byte_order.h">
+      <Filter>include\nd_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_iphdr.h">
+      <Filter>include\nd_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_msgentry.h">
+      <Filter>include\nd_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_netcrypt.h">
+      <Filter>include\nd_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_netioctl.h">
+      <Filter>include\nd_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_netlib.h">
+      <Filter>include\nd_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_netobj.h">
+      <Filter>include\nd_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_netpack.h">
+      <Filter>include\nd_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_netui.h">
+      <Filter>include\nd_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_sock.h">
+      <Filter>include\nd_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_srv.h">
+      <Filter>include\nd_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_tcp.h">
+      <Filter>include\nd_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_udp.h">
+      <Filter>include\nd_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_udt.h">
+      <Filter>include\nd_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_udthdr.h">
+      <Filter>include\nd_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_crypt\nd_crypt.h">
+      <Filter>include\nd_crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_crypt\nd_cryptfile.h">
+      <Filter>include\nd_crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_crypt\nd_pubkey.h">
+      <Filter>include\nd_crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_crypt\tea.h">
+      <Filter>include\nd_crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cli_common\dftCliMsgHandler.h">
+      <Filter>apollo\login</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cli_common\login_apollo.h">
+      <Filter>apollo\login</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\dbldata2netstream.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\dbl_mgr.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\logicDataType.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\logicEndian.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\logicEngineRoot.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\logicParser.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\logicStruct.hpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\logic_compile.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\logic_editor_helper.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\logic_function.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\objectBaseMgr.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\attribute\attr_mgr.h">
+      <Filter>apollo\attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\attribute\roleattr_help.h">
+      <Filter>apollo\attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plugin_u3d\apoClientU3d.h">
+      <Filter>apollo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plugin_u3d\apoCliApi.h">
+      <Filter>apollo</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp">
+      <Filter>apollo\login</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cli_common\login_apollo.cpp">
+      <Filter>apollo\login</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\dbldata2netstream.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\dbl_mgr.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\logicDataType.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\logicEngineRoot.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\logicParser.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\logicStruct.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\logic_compile.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\logic_editor_helper.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\logic_function.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\objectBaseMgr.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\attribute\attr_mgr.cpp">
+      <Filter>apollo\attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\attribute\roleattr_help.cpp">
+      <Filter>apollo\attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_datatransfer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_msgpack.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\msg_format.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\nd_connector.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\nd_exch_key.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\bintree.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\callstack.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\common.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nddir.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_cmdline.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_handle.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_iconv.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_mempool.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_mutex.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_static_alloc.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_str.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_time.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_timer.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_trace.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_unix.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_win.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_xml.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\node_mgr.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\recbuf.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\source_log.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\desc.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\digit.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\md2c.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\md5c.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\nn.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\prime.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\rsa.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\r_dh.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\r_encode.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\r_enhanc.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\r_keygen.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\r_random.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\r_stdlib.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\src\ndcrypt.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\src\ndrsa.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\src\nd_cryptfile.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\src\nd_pubkey.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\src\tea.c">
+      <Filter>src\nd_crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\ipraw.c">
+      <Filter>src\nd_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\nd_msgentry.c">
+      <Filter>src\nd_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\nd_net.c">
+      <Filter>src\nd_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\nd_netobj.c">
+      <Filter>src\nd_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\nd_netui.c">
+      <Filter>src\nd_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\nd_socket.c">
+      <Filter>src\nd_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\nd_tcp.c">
+      <Filter>src\nd_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\nd_udp.c">
+      <Filter>src\nd_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\net_srv.c">
+      <Filter>src\nd_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\proxy_cli.c">
+      <Filter>src\nd_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\udt_icmp.c">
+      <Filter>src\nd_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\udt_net.c">
+      <Filter>src\nd_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\udt_socket.c">
+      <Filter>src\nd_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\udt_srv.c">
+      <Filter>src\nd_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_vm\src\nd_asm.c">
+      <Filter>src\nd_vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_vm\src\nd_formula.c">
+      <Filter>src\nd_vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_vm\src\nd_vm.c">
+      <Filter>src\nd_vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_vm\src\nd_vmdbg.c">
+      <Filter>src\nd_vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\plugin_u3d\apoClinetU3d.cpp">
+      <Filter>apollo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\plugin_u3d\apoCliApi.cpp">
+      <Filter>apollo</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\logic_parser\Makefile">
+      <Filter>apollo\logicParser</Filter>
+    </None>
+  </ItemGroup>
+</Project>

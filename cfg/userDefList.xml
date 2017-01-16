@@ -1,0 +1,22 @@
+<?xml  version="1.0" encoding="utf8"?>
+<userData>
+	<data_list dataName="event_list" src_type="file" filename="../cfg/events_id.xml" desc="事件列表"/>
+	<data_list dataName="func_list" src_type="file" filename="../cfg/func_list.xml" desc="c函数列表" />
+	<data_list dataName="error_list" src_type="file" filename=".error_list.xml" desc="错误列表" />
+	<data_list dataName="internal_object" src_type="list" desc="游戏内部对象" >
+		<internal_object>
+			<node desc="无">none</node>
+			<node desc="角色属性">attr</node>
+			<node desc="背包">package</node>
+			<node desc="任务">task</node>
+			<node desc="基地">home</node>
+			<node desc="卡牌">card</node>
+			<node desc="装备">equip</node>
+			<node desc="技能">skill</node>
+			<node desc="兵种">soldier</node>			
+			<node desc="角色对象">role</node>			
+			<node desc="附加属性">addition</node>
+		</internal_object>
+	</data_list>
+</userData>
+
