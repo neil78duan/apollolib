@@ -7,14 +7,19 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 using System.Net;
+using NetMessage ;
 
-public class NetBridge {
+
+using RESULT_T=System.Int32;  
+
+
+public class apoClient {
 
 	
 	/* Interface to native implementation */
 #if UNITY_IPHONE || UNITY_XBOX360
 	
-	// On iOS and Xbox 360 plugins are statically linked into
+	// On iOS and Xbox 360 plugin are statically linked into
 	// the executable, so we have to use __Internal as the
 	// library name.
 
@@ -28,6 +33,18 @@ public class NetBridge {
     
     [DllImport ("__Internal")]
 	private static extern  RESULT_T apoCli_open(string host, int port, string dev_udid);
+    
+    [DllImport ("__Internal")]
+	private static extern  RESULT_T apoCli_send(int messageId, IntPtr messageBody, int bodySize);
+
+	
+	[DllImport ("__Internal")]
+	private static extern int apoCli_recv(ref int messageId, IntPtr buf, int bufsize, int timeOutMS);
+
+	[DllImport ("__Internal")]
+	private static extern RESULT_T apoCli_GetLastError();
+
+
     
     [DllImport ("__Internal")]
 	private static extern  RESULT_T apoCli_ReloginBackground(string host, int port, string dev_udid);
@@ -50,8 +67,8 @@ public class NetBridge {
     [DllImport ("__Internal")]
 	private static extern  void apoCli_ClearLoginHistory();
 
-    [DllImport ("__Internal")]
-	private static extern  bool apoCli_Update();
+    //[DllImport ("__Internal")]
+	//private static extern  bool apoCli_Update();
 
     [DllImport ("__Internal")]
 	private static extern  NDUINT32 apoCli_GetCurAccId();
@@ -59,14 +76,14 @@ public class NetBridge {
     [DllImport ("__Internal")]
 	private static extern  NDUINT32 apoCli_GetCurRoleId();
 
-    [DllImport ("__Internal")]
-	private static extern  time_t apoCli_getServerTime();
+    //[DllImport ("__Internal")]
+	//private static extern  time_t apoCli_getServerTime();
     
     ///    
     [DllImport ("__Internal")]
     private static extern IntPtr get_NDNetObject();
 
-    //wait net message untill timeout, when you get the data ,you need handle it yourself
+    //wait net message until timeout, when you get the data ,you need handle it yourself
     [DllImport ("__Internal")]
     private static extern int ndWaitMsg(IntPtr ndNetObj, IntPtr streamBuf, int bufsize, int timeOutMS);
 
@@ -87,11 +104,30 @@ public class NetBridge {
 	private static extern  bool apoCli_init(string workingPath, string logPath);
     
     [DllImport ("apollo_u3d")]
-	private static extern  void apoCli_destroy();
-    
+	private static extern  void apoCli_destroy();    
     
     [DllImport ("apollo_u3d")]
-	private static extern  RESULT_T apoCli_open(string host, int port, string dev_udid);
+	private static extern  RESULT_T apoCli_open(string host, int port, string dev_udid); 
+
+    
+    [DllImport ("apollo_u3d")]
+    private static extern unsafe RESULT_T apoCli_sendMsg(int messageId, IntPtr messageBody, int bodySize);
+
+    [DllImport ("apollo_u3d")]
+    private static extern unsafe RESULT_T apoCli_send(IntPtr bufferFram, int frameSize);
+
+
+    [DllImport ("apollo_u3d")]
+    private static extern unsafe int apoCli_recvMsg(int* messageId, IntPtr msgBody, int bufsize, int timeOutMS);
+
+    [DllImport("apollo_u3d")]
+    private static extern unsafe int apoCli_recv(IntPtr bufferFram, int bufsize, int timeOutMS);
+
+
+
+	[DllImport ("apollo_u3d")]
+	private static extern RESULT_T apoCli_GetLastError();
+
     
     [DllImport ("apollo_u3d")]
 	private static extern  RESULT_T apoCli_ReloginBackground(string host, int port, string dev_udid);
@@ -114,103 +150,159 @@ public class NetBridge {
     [DllImport ("apollo_u3d")]
 	private static extern  void apoCli_ClearLoginHistory();
 
-    [DllImport ("apollo_u3d")]
-	private static extern  bool apoCli_Update();
+    //[DllImport ("apollo_u3d")]
+	//private static extern  bool apoCli_Update();
 
     [DllImport ("apollo_u3d")]
-	private static extern  NDUINT32 apoCli_GetCurAccId();
+	private static extern  uint apoCli_GetCurAccId();
 
     [DllImport ("apollo_u3d")]
-	private static extern  NDUINT32 apoCli_GetCurRoleId();
+	private static extern  uint apoCli_GetCurRoleId();
 
-    [DllImport ("apollo_u3d")]
-	private static extern  time_t apoCli_getServerTime();
+    //[DllImport ("apollo_u3d")]
+	//private static extern  time_t apoCli_getServerTime();
     
     ///    
     [DllImport ("apollo_u3d")]
     private static extern IntPtr get_NDNetObject();
 
-    //wait net message untill timeout, when you get the data ,you need handle it yourself
-    [DllImport ("apollo_u3d")]
-    private static extern int ndWaitMsg(IntPtr ndNetObj, IntPtr streamBuf, int bufsize, int timeOutMS);
-
-
-    [DllImport ("apollo_u3d")]
-	private static extern  int ndGetLastError(IntPtr ndNetObj);
-
-    [DllImport ("apollo_u3d")]
-	private static extern  string ndGetLastErrorDesc(IntPtr ndNetObj);
+    
 
 ////////////////
 
 	#endif
 
-    #region for-test-api
+    private IntPtr m_netObject;
+
     private const int accType = 2;
     //private const string sessionFile = Application.persistentDataPath + "/sessionFile.session";
    
-
-    public static void Login(string host, int port, string user, string passwd)
+    public bool Init() 
     {
-        string sessionFile = Application.persistentDataPath + "/sessionFile.session";
-        int result = atls_login(host, port, accType, user, passwd, sessionFile);
-        Debug.Log("Login---> result=" + result);
-        //send test 
-        test_loginRequest();
+        string workPath = Application.persistentDataPath;
+        Debug.Log("begin init....");
+        return apoCli_init(workPath, workPath);
+    }
+    
+    public void Destroy() 
+    {
+        apoCli_destroy() ;
     }
 
-    public static void Relogin(string host, int port)
+    public unsafe int Send(int messageId, byte[]body) 
     {
-        string sessionFile = Application.persistentDataPath + "/sessionFile.session";
-        int result = atls_relogin(host, port, sessionFile);
-        Debug.Log("Relogin---> result=" + result);
-    }
-
-    public static void Register(string host, int port, string user, string passwd)
-    {
-        string sessionFile = Application.persistentDataPath + "/sessionFile.session";
-        int result = atls_register(host, port, user, passwd, sessionFile);
-        Debug.Log("Register---> result=" + result);
-    }
-
-    public static void CloseConnet()
-    {
-
-    }
-
-    public static void SendMsg()
-    {
-
-    }
-
-    public static void QueryMsg()
-    {
-
-    }
-
-    public static int test_loginRequest()
-    {
-        const string reqString = @"hello world";
-        IntPtr intPtr = Marshal.StringToHGlobalAnsi(reqString);
-        //int ret = atls_echo_test( intPtr, 11);
-        int ret = atls_send(2, intPtr, 11, 0);
-        Marshal.FreeHGlobal(intPtr);
-
-        //ndMsgData recv_buf = new ndMsgData() ;
-        IntPtr bufPtr = Marshal.AllocHGlobal(0xffff);
-        ret = ndWaitMsg(bufPtr,0x10000, 1000);
-        if (ret > 0)
+        fixed (byte* pAddr = &body[0])
         {
-            int len = IPAddress.NetworkToHostOrder(Marshal.ReadInt16(bufPtr, 0));
-            int msgID = IPAddress.NetworkToHostOrder(Marshal.ReadInt16(bufPtr, 2));
-            //read text
+            return apoCli_sendMsg(messageId, (IntPtr)pAddr, body.Length);
         }
-
-        Marshal.FreeHGlobal(bufPtr);
-        return ret;
+    }
+    public unsafe int Send(int messageId)
+    {
+        return apoCli_sendMsg(messageId, (IntPtr)0, 0);
     }
 
-    //»Øµ÷
+    unsafe public int Recv(out int messageId, ref byte[]body, int waitMs)
+    {
+        int MsgId = 0 ;
+        
+        IntPtr bufPtr = Marshal.AllocHGlobal(0x10000);
+
+        int res = apoCli_recvMsg(&MsgId, bufPtr, 0x10000, waitMs);
+        if (res > 0)
+        {
+            Marshal.Copy(bufPtr, body, 0, res);
+        }
+        messageId = MsgId;
+        Marshal.FreeHGlobal(bufPtr);
+        return res;
+    }
+
+    public int Open(string host, int port)
+    {
+
+        string udid = SystemInfo.deviceUniqueIdentifier;
+        RESULT_T res = apoCli_open(host, port, udid); 
+        if(res != 0 ) {
+            return -1 ;
+        }
+        m_netObject = get_NDNetObject() ;
+        return 0 ;
+    }
+
+    public int Login(string user, string passwd)
+    {
+        if(m_netObject == null) {
+            return -1 ;
+        }
+        return apoCli_LoginAccount( user,  passwd);
+    }
+    public void Logout()
+    {
+        apoCli_Logout();
+    }
+    #region for-test-api
+
+    // 
+//     public static void Login(string host, int port, string user, string passwd)
+//     {
+//         string sessionFile = Application.persistentDataPath + "/sessionFile.session";
+//         int result = atls_login(host, port, accType, user, passwd, sessionFile);
+//         Debug.Log("Login---> result=" + result);
+//         //send test 
+//         test_loginRequest();
+//     }
+// 
+//     public static void Relogin(string host, int port)
+//     {
+//         string sessionFile = Application.persistentDataPath + "/sessionFile.session";
+//         int result = atls_relogin(host, port, sessionFile);
+//         Debug.Log("Relogin---> result=" + result);
+//     }
+// 
+//     public static void Register(string host, int port, string user, string passwd)
+//     {
+//         string sessionFile = Application.persistentDataPath + "/sessionFile.session";
+//         int result = atls_register(host, port, user, passwd, sessionFile);
+//         Debug.Log("Register---> result=" + result);
+//     }
+// 
+//     public static void CloseConnet()
+//     {
+// 
+//     }
+// 
+//     public static void SendMsg()
+//     {
+// 
+//     }
+// 
+//     public static void QueryMsg()
+//     {
+// 
+//     }
+// 
+//     public static int test_loginRequest()
+//     {
+//         const string reqString = @"hello world";
+//         IntPtr intPtr = Marshal.StringToHGlobalAnsi(reqString);
+//         //int ret = atls_echo_test( intPtr, 11);
+//         int ret = atls_send(2, intPtr, 11, 0);
+//         Marshal.FreeHGlobal(intPtr);
+// 
+//         //ndMsgData recv_buf = new ndMsgData() ;
+//         IntPtr bufPtr = Marshal.AllocHGlobal(0xffff);
+//         ret = ndWaitMsg(bufPtr,0x10000, 1000);
+//         if (ret > 0)
+//         {
+//             int len = IPAddress.NetworkToHostOrder(Marshal.ReadInt16(bufPtr, 0));
+//             int msgID = IPAddress.NetworkToHostOrder(Marshal.ReadInt16(bufPtr, 2));
+//             //read text
+//         }
+// 
+//         Marshal.FreeHGlobal(bufPtr);
+//         return ret;
+//     }
+
     #endregion
     // 
 // 	[AOT.MonoPInvokeCallback (typeof (ndNetFunc))]

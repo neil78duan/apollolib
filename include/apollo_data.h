@@ -173,7 +173,7 @@ struct userdata_info
 	}
 	void setData(void *indata, size_t len)
 	{
-		size = NDMIN(len, sizeof(data));
+		size =(NDUINT32) NDMIN(len, sizeof(data));
 		memcpy(data, indata, size);
 	}
 	size_t get_stream_len() const
@@ -208,7 +208,7 @@ struct addition_data_info
 
 	void setData(void *indata, size_t len)
 	{
-		size = NDMIN(len, sizeof(data));
+		size = (NDUINT32) NDMIN(len, sizeof(data));
 		memcpy(data, indata, size);
 	}
 

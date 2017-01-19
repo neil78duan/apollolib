@@ -17,8 +17,17 @@
 typedef int RESULT_T;
 ND_CONNCLI_API bool apoCli_init(const char *workingPath, const char *logPath);
 ND_CONNCLI_API void apoCli_destroy();
-ND_CONNCLI_API void* apoCli_getConnObj();
+ND_CONNCLI_API void* get_NDNetObject();
+
 ND_CONNCLI_API RESULT_T apoCli_open(const char *host, int port, const char *dev_udid);
+
+ND_CONNCLI_API RESULT_T apoCli_send(int messageId, void *messageBody, int bodySize);
+ND_CONNCLI_API RESULT_T apoCli_recv(void *recvObject, int waitTime);
+ND_CONNCLI_API void *apoCli_createRecvObject();
+ND_CONNCLI_API void apoCli_destroyRecvObject(void *recvObject);
+ND_CONNCLI_API int apoCli_readMsgIdFromObj(void *recvObject);
+ND_CONNCLI_API RESULT_T apoCli_readMsgBodyFromObj(void *recvObject, char *buf, int bufSize);
+
 ND_CONNCLI_API RESULT_T apoCli_ReloginBackground(const char *host, int port, const char *dev_udid);
 ND_CONNCLI_API RESULT_T apoCli_TrytoRelogin();
 ND_CONNCLI_API RESULT_T apoCli_LoginAccount(const char *account, const char *passwd);
@@ -26,10 +35,10 @@ ND_CONNCLI_API RESULT_T apoCli_CreateAccount(const char *userName, const char *p
 ND_CONNCLI_API RESULT_T apoCli_testOneKeyLogin(const char *host, int port, const char *user, const char *passwd);
 ND_CONNCLI_API void apoCli_Logout();
 ND_CONNCLI_API void apoCli_ClearLoginHistory();
-ND_CONNCLI_API bool apoCli_Update();
+//ND_CONNCLI_API bool apoCli_Update();
 ND_CONNCLI_API NDUINT32 apoCli_GetCurAccId();
 ND_CONNCLI_API NDUINT32 apoCli_GetCurRoleId();
-ND_CONNCLI_API time_t apoCli_getServerTime();
+//ND_CONNCLI_API time_t apoCli_getServerTime();
 
 
 #endif /* defined(_APO_CLI_API_H_) */

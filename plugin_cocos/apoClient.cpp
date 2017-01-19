@@ -1,24 +1,25 @@
-﻿/* file apoClientU3d.h
+﻿/* file apoClient.h
 *
-* wrapper of apollo-client , implemention of connect to server for unity-3d.
+* wrapper of apollo-client , implemention of connect to server .
 *
 * create by duan
 * 2016.8.18
 */
+#include "cocos2d.h"
 
-#include "apoClientU3d.h"
+#include "apoClient.h"
 #include "logic_parser/dbldata2netstream.h"
 #include "cli_common/dftCliMsgHandler.h"
-//#include "netMessage/message_inc.h"
+#include "netMessage/message_inc.h"
 #include "logic_parser/script_event_id.h"
 
-//#include "RoleDataManager.h"
-//#include "NotificationKeyDefine.h"
-//#include "BuildingInfoInheritsRef.h"
+#include "RoleDataManager.h"
+#include "NotificationKeyDefine.h"
+#include "BuildingInfoInheritsRef.h"
 
 static void ndnetLog(const char *text)
 {
-	//cocos2d::log("%s", text);
+	cocos2d::log("%s", text);
 }
 
 static int apoPrintf(void *pf, const char *stm, ...)
@@ -32,96 +33,65 @@ static int apoPrintf(void *pf, const char *stm, ...)
 	done = vsnprintf(p, sizeof(buf), stm, arg);
 	va_end(arg);
 
-	return  fprintf((FILE*)pf, "%s", buf);
-	//cocos2d::log("%s",buf);
-	//return done;
+	cocos2d::log("%s",buf);
+	return done;
 }
 //load ios file 
-// 
-// static bool apollo_load_file_data_cocos(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-// {
-// 	//CHECK_ARGS_NUM(args, 2, parser);
-// 
-// 	size_t size = 0;
-// 	const char *fileName = args[1].GetText();
-// 	if (!fileName || !*fileName) {
-// 		nd_logmsg("input file name error\n");
-// 		return false;
-// 	}
-// 	std::string mypath;
-// 	
-// 	if (nd_existfile(fileName)) {
-// 		mypath = fileName;
-// 	}
-// 	else {
-// 		mypath = cocos2d::FileUtils::getInstance()->fullPathForFilename(fileName);
-// 		if (mypath.empty()) {
-// 			DBLDataNode val1;
-// 			if (parser->getOwner()->getOtherObject("WritablePath", val1)) {
-// 				char pathbuf[ND_FILE_PATH_SIZE];
-// 				mypath = val1.GetText();
-// 				nd_full_path(mypath.c_str(), fileName, pathbuf, sizeof(pathbuf));
-// 				mypath = pathbuf;
-// 			}
-// 		}
-// 
-// 		if (!nd_existfile(mypath.c_str())) {
-// 			nd_logmsg("cant not found file %s\n", fileName);
-// 			return false;
-// 		}
-// 	}
-// 	
-// 
-// 	void *pdata = nd_load_file(mypath.c_str(), &size);
-// 	if (!pdata) {
-// 		nd_logmsg("file %s not open\n", fileName);
-// 		return false;
-// 	}
-// 	result.InitSet(pdata, size, OT_BINARY_DATA);
-// 	nd_unload_file(pdata);
-// 	return true;
-// }
 
-
-static void myInitAccCreateInfo(account_base_info &acc, int accType, const char *userName, const char *passwd)
+static bool apollo_load_file_data_cocos(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {
-	acc.type = accType;
-	acc.gender = 0; //default F
-	acc.birth_day = 8;
-	acc.birth_month = 8;
-	acc.birth_year = 1988;
-	strncpy((char*)acc.acc_name, userName, sizeof(acc.acc_name));
-	strncpy((char*)acc.nick, userName, sizeof(acc.nick));
-	strncpy((char*)acc.passwd, passwd, sizeof(acc.passwd));
-	strncpy((char*)acc.phone, "100086", sizeof(acc.phone));
-	strncpy((char*)acc.email, "webmaster@qq.com", sizeof(acc.email));
+	//CHECK_ARGS_NUM(args, 2, parser);
 
+	size_t size = 0;
+	const char *fileName = args[1].GetText();
+	if (!fileName || !*fileName) {
+		nd_logmsg("input file name error\n");
+		return false;
+	}
+	std::string mypath;
+	
+	if (nd_existfile(fileName)) {
+		mypath = fileName;
+	}
+	else {
+		mypath = cocos2d::FileUtils::getInstance()->fullPathForFilename(fileName);
+		if (mypath.empty()) {
+			DBLDataNode val1;
+			if (parser->getOwner()->getOtherObject("WritablePath", val1)) {
+				char pathbuf[ND_FILE_PATH_SIZE];
+				mypath = val1.GetText();
+				nd_full_path(mypath.c_str(), fileName, pathbuf, sizeof(pathbuf));
+				mypath = pathbuf;
+			}
+		}
+
+		if (!nd_existfile(mypath.c_str())) {
+			nd_logmsg("cant not found file %s\n", fileName);
+			return false;
+		}
+	}
+	
+
+	void *pdata = nd_load_file(mypath.c_str(), &size);
+	if (!pdata) {
+		nd_logmsg("file %s not open\n", fileName);
+		return false;
+	}
+	result.InitSet(pdata, size, OT_BINARY_DATA);
+	nd_unload_file(pdata);
+	return true;
 }
 
 
 class ApoScriptOwner : public  ClientMsgHandler::ApoConnectScriptOwner
 {
 public:
-
-	ApoScriptOwner() : ClientMsgHandler::ApoConnectScriptOwner(), m_netHandler(0)
-	{
-
-	}
 	bool getOtherObject(const char*objName, DBLDataNode &val)
 	{
 		bool ret = ClientMsgHandler::ApoConnectScriptOwner::getOtherObject(objName, val);
 		if (ret) {
 			return ret;
 		}
-
-		else if (0 == ndstricmp(objName, "connector") || 0 == ndstricmp(objName, "session")){
-			if (!m_netHandler) {
-				return false;
-			}
-			val.InitSet((void*)m_netHandler, OT_OBJ_NDHANDLE);
-			return true;
-		}
-
 		else if (0==ndstricmp(objName, "LogFunction")) {
 			val.InitSet((void*)apoPrintf);
 			return true;
@@ -132,14 +102,12 @@ public:
 		}
 
 		else if (0==ndstricmp(objName, "LogPath")) {
-			//std::string mypath = cocos2d::FileUtils::getInstance()->getWritablePath();
-			std::string mypath = ApoClient::getInstant()->getPath();
+			std::string mypath = cocos2d::FileUtils::getInstance()->getWritablePath();
 			val.InitSet(mypath.c_str());
 			return true;
 		}
 		else if (0==ndstricmp(objName, "WritablePath")) {
-			//std::string mypath = cocos2d::FileUtils::getInstance()->getWritablePath();
-			std::string mypath = ApoClient::getInstant()->getPath();
+			std::string mypath = cocos2d::FileUtils::getInstance()->getWritablePath();
 			val.InitSet(mypath.c_str());
 			return true;
 		}
@@ -148,22 +116,41 @@ public:
 
 	const char *getMsgName(int msgId)
 	{
-		return NULL;
-		//return NetMessage::getNameByID(msgId);
+		return NetMessage::getNameByID(msgId);
 	}
 	const char *getMsgBody(int msgId)
 	{
-		return NULL;
-		//return NetMessage::getMessageBody(msgId);
+		return NetMessage::getMessageBody(msgId);
 	}
-	void setConn(nd_handle pconn)
-	{
-		m_netHandler = pconn;
-	}
-private:
-	nd_handle m_netHandler;
 };
 static ApoScriptOwner  __scriptObjOwner;
+
+// 
+// static int get_data_format_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
+// {
+// 	NDIStreamMsg inmsg(msg);
+// 
+// 	if (-1 == UserDefFormatFromMessage(__scriptObjOwner.m_dataType, inmsg)) {
+// 		__scriptObjOwner.m_dataType.clear();
+// 		return 0;
+// 	}
+// #ifdef ND_DEBUG
+// 	
+// 	std::string mypath = cocos2d::FileUtils::getInstance()->getWritablePath();
+// 	if(mypath.empty()) {
+// 		mypath = "./client_msg_foramt.txt" ;
+// 	}
+// 	else {
+// 		char pathbuf[ND_FILE_PATH_SIZE];
+// 		nd_full_path(mypath.c_str(), "client_msg_foramt.txt", pathbuf, sizeof(pathbuf));
+// 		mypath = pathbuf;
+// 
+// 	}
+// 	
+// 	dumpMessageData(__scriptObjOwner.m_dataType, mypath.c_str());
+// #endif
+// 	return 0;
+// }
 
 
 #define _SEND_AND_WAIT(_conn, _omsg, _rmsg_buf,_wait_maxid, _wait_minid,_sendflag) \
@@ -199,40 +186,33 @@ void ApoClient::destroyInstant()
 }
 
 
-void ApoClient::setWorkingPath(const char *pathText)
-{
-	m_path = pathText;
-}
-
 void ApoClient::Destroy()
 {
-	//RoleDataManager::getInstance()->SaveLocalFile();
+	RoleDataManager::getInstance()->SaveLocalFile();
 
 	if (m_login) {
 		delete m_login;
 		m_login = 0;
 	}
 
-	if (m_pconn && nd_connector_valid((nd_netui_handle)m_pconn) ) {
-		ndClostConnect(m_pconn);
-		//m_pconn->Close(0);
+	if (m_pconn && m_pconn->CheckValid()) {
+		m_pconn->Close(0);
 		//TryLogout(m_pconn->GetHandle());
 	}
-
-	nd_object_destroy(m_pconn, 0);
+	DestroyConnectorObj(m_pconn);
 	m_pconn = 0 ;
 
 	LogicEngineRoot::destroy_Instant();
 	DBLDatabase::destroy_Instant();
 
-	ndDeinitNet(); 
+	DeinitNet();
 }
 
 
 bool ApoClient::IsLoginOk()
 {
-	if (m_pconn && nd_connector_valid((nd_netui_handle)m_pconn)){
-		return nd_connect_level_get(m_pconn) >= EPL_LOGIN;
+	if (m_pconn && m_pconn->CheckValid()){
+		return m_pconn->GetStatus() >= EPL_LOGIN;
 	}
 	return false;
 }
@@ -249,65 +229,65 @@ void ApoClient::setServerTime(time_t srvTime)
 	m_serverTm = srvTime;
 }
 
-// 
-// bool ApoClient::_moveFileToWritable(const char *infileName, const char*outFileName)
-// {
-// 	cocos2d::FileUtils *fileUtilInst = cocos2d::FileUtils::getInstance();
-// 	std::string mypath = fileUtilInst->fullPathForFilename(infileName);
-// 
-// 	cocos2d::Data data = fileUtilInst->getDataFromFile(mypath.c_str());
-// 	if (!data.isNull()) {
-// 
-// 		std::string outpath = _getWritableFile(outFileName);
-// 		FILE *pf = fopen(outpath.c_str(), "wb");
-// 		if (pf)	{
-// 			fwrite(data.getBytes(), 1, data.getSize(), pf);
-// 			fclose(pf);
-// 			return true;
-// 		}
-// 
-// 		nd_logerror("open file  %s error %s\n", infileName, nd_last_error()) ;
-// 	}
-// 	else {
-// 		nd_logerror("load file empty %s\n", infileName);
-// 
-// 	}
-// 	return false;
-// }
-// std::string ApoClient::_getWritableFile(const char *file)
-// {
-// 	std::string outpath = cocos2d::FileUtils::getInstance()->getWritablePath();
-// 	outpath += file;
-// 	return outpath;
-// }
+
+bool ApoClient::_moveFileToWritable(const char *infileName, const char*outFileName)
+{
+	cocos2d::FileUtils *fileUtilInst = cocos2d::FileUtils::getInstance();
+	std::string mypath = fileUtilInst->fullPathForFilename(infileName);
+
+	cocos2d::Data data = fileUtilInst->getDataFromFile(mypath.c_str());
+	if (!data.isNull()) {
+
+		std::string outpath = _getWritableFile(outFileName);
+		FILE *pf = fopen(outpath.c_str(), "wb");
+		if (pf)	{
+			fwrite(data.getBytes(), 1, data.getSize(), pf);
+			fclose(pf);
+			return true;
+		}
+
+		nd_logerror("open file  %s error %s\n", infileName, nd_last_error()) ;
+	}
+	else {
+		nd_logerror("load file empty %s\n", infileName);
+
+	}
+	return false;
+}
+std::string ApoClient::_getWritableFile(const char *file)
+{
+	std::string outpath = cocos2d::FileUtils::getInstance()->getWritablePath();
+	outpath += file;
+	return outpath;
+}
 
 int ApoClient::Init()
 {
-	//char logfilePath[ND_FILE_PATH_SIZE] ;
+	char logfilePath[ND_FILE_PATH_SIZE] ;
 	
-// 	//get write path
-// 	m_path=cocos2d::FileUtils::getInstance()->getWritablePath();
-// 	nd_full_path(m_path.c_str(),APO_LOG_FILE_NAME, logfilePath, sizeof(logfilePath)) ;
-// 	nd_log_set_file( logfilePath ) ;
-// 
-// 	//move file to writable path 
-// #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-// 	_moveFileToWritable(APO_EXCEL_DATA_FILE_ORG, APO_EXCEL_DATA_FILE_TMP);
-// 	_moveFileToWritable(APO_SCRIPT_FILE_ORG, APO_SCRIPT_FILE_TMP);
-// #endif 
-// 	
-// 	
-// 	cocos2d::FileUtils *fileUtilInst = cocos2d::FileUtils::getInstance();
-// 	//load data
-// 	std::string mypath = fileUtilInst->fullPathForFilename(APO_EXCEL_DATA_FILE);
-// 	if (fileUtilInst->isFileExist(mypath.c_str())) {
-// 		if (DBLDatabase::get_Instant()->LoadBinStream(mypath.c_str())) {
-// 			cocos2d::log("load excel data error \n");
-// 		}
-// 	}
-// 	else {		
-// 		cocos2d::log("cehua_data file %s not exists. current working path is %s\n", mypath.c_str(), nd_getcwd());
-// 	}
+	//get write path
+	m_path=cocos2d::FileUtils::getInstance()->getWritablePath();
+	nd_full_path(m_path.c_str(),APO_LOG_FILE_NAME, logfilePath, sizeof(logfilePath)) ;
+	nd_log_set_file( logfilePath ) ;
+
+	//move file to writable path 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	_moveFileToWritable(APO_EXCEL_DATA_FILE_ORG, APO_EXCEL_DATA_FILE_TMP);
+	_moveFileToWritable(APO_SCRIPT_FILE_ORG, APO_SCRIPT_FILE_TMP);
+#endif 
+	
+	
+	cocos2d::FileUtils *fileUtilInst = cocos2d::FileUtils::getInstance();
+	//load data
+	std::string mypath = fileUtilInst->fullPathForFilename(APO_EXCEL_DATA_FILE);
+	if (fileUtilInst->isFileExist(mypath.c_str())) {
+		if (DBLDatabase::get_Instant()->LoadBinStream(mypath.c_str())) {
+			cocos2d::log("load excel data error \n");
+		}
+	}
+	else {		
+		cocos2d::log("cehua_data file %s not exists. current working path is %s\n", mypath.c_str(), nd_getcwd());
+	}
 
 	//init message script handler
 	LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
@@ -318,22 +298,21 @@ int ApoClient::Init()
 	scriptRoot->getGlobalParser().setSimulate(false);
 	
 	scriptRoot->setPrint(apoPrintf, NULL);
-// 	
-// 	//load script 
-// 	mypath = cocos2d::FileUtils::getInstance()->fullPathForFilename(APO_SCRIPT_FILE);
-// 	if (0 != scriptRoot->LoadScript(mypath.c_str())){
-// 		cocos2d::log("load script error \n");
-// 	}
-// 	else {
-// 		//install script-export-c function
-// 		scriptRoot->installFunc(apollo_load_file_data_cocos, "apollo_load_file_data", "读取整个文件(filename)");
-// 	}
-
-	ndInitNet();
 	
-	m_pconn = nd_object_create("tcp-connector");
-	//m_pconn = CreateConnectorObj(NULL);
-	//m_pconn->SetUserData(&parser) ;
+	//load script 
+	mypath = cocos2d::FileUtils::getInstance()->fullPathForFilename(APO_SCRIPT_FILE);
+	if (0 != scriptRoot->LoadScript(mypath.c_str())){
+		cocos2d::log("load script error \n");
+	}
+	else {
+		//install script-export-c function
+		scriptRoot->installFunc(apollo_load_file_data_cocos, "apollo_load_file_data", "读取整个文件(filename)");
+	}
+
+	InitNet();
+	
+	m_pconn = CreateConnectorObj(NULL);
+	m_pconn->SetUserData(&parser) ;
 	__scriptObjOwner.setConn(m_pconn);
 	
 	parser.eventNtf(APOLLO_EVENT_SERVER_START, 0); //program start up
@@ -362,16 +341,14 @@ RESULT_T ApoClient::ReloginBackground(const char *host, int port, const char *de
 {
 	CHECK_CONN_VALID(m_pconn) ;
 	
-	nd_connector_close(m_pconn, 1);
-	//m_pconn->Close(1);
+	m_pconn->Close(1);
 	RESULT_T res = Open(host, port,dev_udid);
 	if (res != ESERVER_ERR_SUCCESS ){
 		return res;
 	}
 	res = TrytoRelogin();
 	if (res != ESERVER_ERR_SUCCESS) {
-		nd_connector_close(m_pconn, 0);
-		//m_pconn->Close(0);
+		m_pconn->Close(0);
 	}
 	return res;
 }
@@ -381,15 +358,13 @@ RESULT_T ApoClient::Open(const char *host, int port, const char *dev_udid)
 	//connect host
 	
 	CHECK_CONN_VALID(m_pconn) ;
-	if (m_pconn) {
-		nd_connector_set_crypt(m_pconn, NULL, 0);
+	if (m_pconn->GetHandle()) {
+		nd_connector_set_crypt(m_pconn->GetHandle(), NULL, 0);
 	}
-	if (!host || !*host){
-		return NDSYS_ERR_INVALID_INPUT;
-	}
+	
 	m_host = host;
 	m_port = port;
-	m_udid = (dev_udid && *dev_udid) ? dev_udid: "unknow-udid-for-unity" ;
+	m_udid = dev_udid ;
 	
 	return ESERVER_ERR_SUCCESS ;
 	
@@ -400,8 +375,7 @@ RESULT_T ApoClient::_connectHost(const char *host, int port)
 	
 	CHECK_CONN_VALID(m_pconn) ;
 	
-	//if (-1 == m_pconn->Open(host, port, "tcp-connector", NULL)) {
-	if (-1==nd_connector_open(m_pconn,host,port, NULL)){
+	if (-1 == m_pconn->Open(host, port, "tcp-connector", NULL)) {
 		return (RESULT_T)NDSYS_ERR_HOST_UNAVAILABLE;
 	}
 	
@@ -411,13 +385,13 @@ RESULT_T ApoClient::_connectHost(const char *host, int port)
 	}
 	
 	if (m_path.empty()){
-		m_login = new LoginApollo(m_pconn,  NULL, m_udid.c_str());
+		m_login = new LoginApollo(m_pconn->GetHandle(),  NULL, m_udid.c_str());
 	}
 	else {
 		char sessionFile[ND_FILE_PATH_SIZE] ;
 		nd_full_path(m_path.c_str(),APO_LOGIN_SESSION_FILE, sessionFile, sizeof(sessionFile)) ;
 		
-		m_login = new LoginApollo(m_pconn,  sessionFile, m_udid.c_str());
+		m_login = new LoginApollo(m_pconn->GetHandle(),  sessionFile, m_udid.c_str());
 	}
 	nd_assert(m_login);
 	
@@ -442,7 +416,7 @@ RESULT_T ApoClient::CreateAccount(const char *userName, const char *passwd, cons
 	account_base_info acc;
 
 	m_runningUpdate = ERUN_UP_STOP;
-	myInitAccCreateInfo(acc, ACC_APOLLO, userName, passwd);
+	initAccCreateInfo(acc, ACC_APOLLO, userName, passwd);
 	strncpy((char*)acc.email, email, sizeof(acc.email));
 	strncpy((char*)acc.phone, phone, sizeof(acc.phone));
 
@@ -509,7 +483,7 @@ RESULT_T ApoClient::LoginAccount(const char *account, const char *passwd)
 
 int ApoClient::_trytoOpen()
 {
-	if (m_pconn && nd_connector_valid((nd_netui_handle)m_pconn)) {
+	if (m_pconn && m_pconn->CheckValid()) {
 		return 0;
 	}
 	
@@ -546,7 +520,7 @@ RESULT_T ApoClient::_enterGame(const char *host, int port, const char *roleName)
 
 	//get role list
 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN,LOGIN_MSG_GET_ROLE_LIST_REQ);
-	nd_handle h = m_pconn;
+	nd_handle h = m_pconn->GetHandle();
 	nd_usermsgbuf_t recv_msg;
 
 	_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0)
@@ -599,10 +573,11 @@ RESULT_T ApoClient::createRole(const char *roleName)
 	omsg.Write((NDUINT8)20);
 	omsg.Write((float)0);
 
+	nd_handle h = m_pconn->GetHandle();
 	nd_usermsgbuf_t recv_msg;
 
 
-	_SEND_AND_WAIT(m_pconn, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_ACK, 0)
+	_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_ACK, 0)
 	else {
 		NDUINT32 roleid = 0;
 		NDUINT32 error_code = 0;
@@ -661,8 +636,7 @@ RESULT_T ApoClient::testOneKeyLogin(const char *host, int port, const char *user
 void ApoClient::Logout()
 {
 	m_login->Logout();
-	//m_pconn->Close(0);
-	nd_connector_close(m_pconn, 0);
+	m_pconn->Close(0);
 
 	LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
 	parser.eventNtf(APOLLO_EVENT_LOGOUT, 0); //program start up
@@ -683,7 +657,7 @@ void ApoClient::ClearLoginHistory()
 
 void ApoClient::EnterBackground()
 {
-	//RoleDataManager::getInstance()->SaveLocalFile();
+	RoleDataManager::getInstance()->SaveLocalFile();
 }
 
 void ApoClient::LeaveBackground()
@@ -696,28 +670,37 @@ bool ApoClient::Update()
 	if (ERUN_UP_NORMAL != m_runningUpdate)	{
 		return true;
 	}
-	if (m_pconn && nd_connector_valid((nd_netui_handle)m_pconn)){
+	if (m_pconn && m_pconn->CheckValid()){
 		++m_updateIndex;
-		int ret =ndUpdateConnect((netObject)m_pconn,0) ;
+		int ret = m_pconn->Update(0);
 		if (-1 == ret) {
 			//return false;
-			int err =nd_object_lasterror(m_pconn) ;
+			int err = m_pconn->LastError() ;
 			
 			m_login->Logout() ;
-			//m_pconn->Close() ;
+			m_pconn->Close() ;
 
-			nd_connector_close(m_pconn, 0);
-
-// 			ErrorDesignDataNotify* notifyInfo = ErrorDesignDataNotify::create();
-// 			notifyInfo->setDesignID(err);
-// 			
-// 			cocos2d::NotificationCenter::getInstance()->postNotification(RELOGIN_NTF, notifyInfo);
+			ErrorDesignDataNotify* notifyInfo = ErrorDesignDataNotify::create();
+			notifyInfo->setDesignID(err);
+			
+			//if (err ==(int) NDSYS_ERR_LOGIN_OTHER_CLIENT) {
+			//	cocos2d::NotificationCenter::getInstance()->postNotification(RELOGIN_NTF);
+			//}
+			//else {
+			//	cocos2d::NotificationCenter::getInstance()->postNotification(RELOGIN_NTF, notifyInfo);
+			//}
+			cocos2d::NotificationCenter::getInstance()->postNotification(RELOGIN_NTF, notifyInfo);
 		}
 		if ((m_updateIndex & 255) == 255){
-			//m_pconn->Send(ND_MAIN_ID_SYS, ND_MSG_SYS_GAME_TIME, NULL, 0);
-			ndSend(m_pconn, ND_MAIN_ID_SYS, ND_MSG_SYS_GAME_TIME, NULL, 0);
+			m_pconn->Send(ND_MAIN_ID_SYS, ND_MSG_SYS_GAME_TIME, NULL, 0);
 		}
 	}
+	//for test
+//	else {
+//		//ReloginBackground("192.168.10.75", 6600, "unknow-udid");
+//		m_pconn->Close() ;
+//		cocos2d::NotificationCenter::getInstance()->postNotification(RELOGIN_NTF);
+//	}
 
 	return true;
 }
@@ -726,32 +709,32 @@ bool ApoClient::Update()
 //////////////////////////////////////////////////////////////////////////
 
 
-//#include "MessageHandler/msgHandler.h"
+#include "MessageHandler/msgHandler.h"
 
 //install message handler
 void ApoClient::onInit()
 {
-	//ClientMsgHandler::InstallDftClientHandler(m_pconn);
-	//NetMessageHandler::MessageHandlerInit(m_pconn);	
+	ClientMsgHandler::InstallDftClientHandler(m_pconn);
+	NetMessageHandler::MessageHandlerInit(m_pconn);	
 	
-	//m_pconn->SetDftMsgHandler(ClientMsgHandler::apollo_dft_message_handler);
+	m_pconn->SetDftMsgHandler(ClientMsgHandler::apollo_dft_message_handler);
 	
-	//LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
-	//nd_message_set_script_engine(m_pconn->GetHandle(), (void*)&parser, ClientMsgHandler::apollo_cli_msg_script_entry);
+	LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
+	nd_message_set_script_engine(m_pconn->GetHandle(), (void*)&parser, ClientMsgHandler::apollo_cli_msg_script_entry);
 	
 }
 
 void ApoClient::onLogin()
 {
 	//get message format
-	//__scriptObjOwner.LoadMsgDataTypeFromServer() ;//get program define data
-	//ndSend(m_pconn, ND_MAIN_ID_SYS, ND_MSG_SYS_GAME_TIME, NULL, 0);
+	__scriptObjOwner.LoadMsgDataTypeFromServer() ;//get program define data
+	m_pconn->Send(ND_MAIN_ID_SYS, ND_MSG_SYS_GAME_TIME, NULL, 0);
 
 	
-	//RoleDataManager::getInstance()->LoadData(); //load role data from local-file or remote-host
+	RoleDataManager::getInstance()->LoadData(); //load role data from local-file or remote-host
 
-	//LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
-	//parser.eventNtf(APOLLO_EVENT_LOGIN, 0); //program start up
+	LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
+	parser.eventNtf(APOLLO_EVENT_LOGIN, 0); //program start up
 }
 
 ///////////////////////////////

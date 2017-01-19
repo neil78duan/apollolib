@@ -19,7 +19,7 @@ namespace NetMessage
     public class NDMsgStream
     {
         //    BufferedStream m_buf;
-        private Stream m_buf;
+		private MemoryStream m_buf;
         //Encoding m_encoding;
 
         public NDMsgStream()
@@ -58,7 +58,7 @@ namespace NetMessage
 
        
 
-        public void SetStream(Stream stream)
+		public void SetStream(MemoryStream stream)
         {
             m_buf = stream;
         }
@@ -130,7 +130,7 @@ namespace NetMessage
         {
             ushort dataLenth = (ushort)data.Length;
 
-            if (dataLength >= 0xffff)
+			if (data.Length >= 0xffff)
             {
                 return -1;
             }
@@ -201,15 +201,15 @@ namespace NetMessage
             ushort stringLen = ReadUint16();
             if(stringLen == 0 ) 
             {
-                return new string() ;
+				return string.Empty ;
             }
             stringLen--;
             byte[] receivedData = new byte[stringLen];
 			m_buf.Read(receivedData,0,stringLen);
-            byte endByte = m_buf.ReadByte();
+			byte endByte = (byte) m_buf.ReadByte();
             if (endByte != 0x7f)
             {
-                return new string() ;
+				return string.Empty ;
             }
             return Encoding.ASCII.GetString(receivedData);
         }
