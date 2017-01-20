@@ -14,31 +14,49 @@
 #endif
 #include "ndcli/nd_api_c.h"
 
-typedef int RESULT_T;
-ND_CONNCLI_API bool apoCli_init(const char *workingPath, const char *logPath);
-ND_CONNCLI_API void apoCli_destroy();
-ND_CONNCLI_API void* get_NDNetObject();
+#ifndef APO_RESULT_T 
+typedef int  APO_RESULT_T;
+#endif 
 
-ND_CONNCLI_API RESULT_T apoCli_open(const char *host, int port, const char *dev_udid);
+#if  defined(_MSC_VER )
 
-ND_CONNCLI_API RESULT_T apoCli_send(int messageId, void *messageBody, int bodySize);
-ND_CONNCLI_API RESULT_T apoCli_recv(void *recvObject, int waitTime);
-ND_CONNCLI_API void *apoCli_createRecvObject();
-ND_CONNCLI_API void apoCli_destroyRecvObject(void *recvObject);
-ND_CONNCLI_API int apoCli_readMsgIdFromObj(void *recvObject);
-ND_CONNCLI_API RESULT_T apoCli_readMsgBodyFromObj(void *recvObject, char *buf, int bufSize);
+#ifdef APOLLO_U3D_EXPORTS
+#define APOLLO_CLI_API 				CPPAPI  __declspec(dllexport)
+#define APOLLO_CLI_CLASS 			__declspec(dllexport)
+#else 
+#define APOLLO_CLI_API 				CPPAPI __declspec(dllimport)
+#define APOLLO_CLI_CLASS 			__declspec(dllimport)
+#endif
 
-ND_CONNCLI_API RESULT_T apoCli_ReloginBackground(const char *host, int port, const char *dev_udid);
-ND_CONNCLI_API RESULT_T apoCli_TrytoRelogin();
-ND_CONNCLI_API RESULT_T apoCli_LoginAccount(const char *account, const char *passwd);
-ND_CONNCLI_API RESULT_T apoCli_CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email);
-ND_CONNCLI_API RESULT_T apoCli_testOneKeyLogin(const char *host, int port, const char *user, const char *passwd);
-ND_CONNCLI_API void apoCli_Logout();
-ND_CONNCLI_API void apoCli_ClearLoginHistory();
-//ND_CONNCLI_API bool apoCli_Update();
-ND_CONNCLI_API NDUINT32 apoCli_GetCurAccId();
-ND_CONNCLI_API NDUINT32 apoCli_GetCurRoleId();
-//ND_CONNCLI_API time_t apoCli_getServerTime();
+#else
+
+#define APOLLO_CLI_API 				CPPAPI
+#define APOLLO_CLI_CLASS 			
+#endif
+
+
+
+APOLLO_CLI_API bool apoCli_init(const char *workingPath, const char *logPath);
+APOLLO_CLI_API void apoCli_destroy();
+APOLLO_CLI_API void* get_NDNetObject();
+
+APOLLO_CLI_API APO_RESULT_T apoCli_open(const char *host, int port, const char *dev_udid);
+APOLLO_CLI_API APO_RESULT_T apoCli_send(char *bufferFram, int frameSize);
+APOLLO_CLI_API APO_RESULT_T apoCli_sendMsg(int messageId, void *messageBody, int bodySize);
+APOLLO_CLI_API int apoCli_recv(char *bufferFram, int bufsize, int timeOutMS);
+APOLLO_CLI_API int apoCli_recvMsg(int *messageId, char *msgBody, int bufsize, int timeOutMS);
+
+APOLLO_CLI_API APO_RESULT_T apoCli_ReloginBackground(const char *host, int port, const char *dev_udid);
+APOLLO_CLI_API APO_RESULT_T apoCli_TrytoRelogin();
+APOLLO_CLI_API APO_RESULT_T apoCli_LoginAccount(const char *account, const char *passwd);
+APOLLO_CLI_API APO_RESULT_T apoCli_CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email);
+APOLLO_CLI_API APO_RESULT_T apoCli_testOneKeyLogin(const char *host, int port, const char *user, const char *passwd);
+APOLLO_CLI_API void apoCli_Logout();
+APOLLO_CLI_API void apoCli_ClearLoginHistory();
+//APOLLO_CLI_API bool apoCli_Update();
+APOLLO_CLI_API NDUINT32 apoCli_GetCurAccId();
+APOLLO_CLI_API NDUINT32 apoCli_GetCurRoleId();
+//APOLLO_CLI_API time_t apoCli_getServerTime();
 
 
 #endif /* defined(_APO_CLI_API_H_) */

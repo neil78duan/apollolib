@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 duanxiuyun. All rights reserved.
 //
 
+#define APO_RESULT_T  RESULT_T
+
 #include "nd_common/nd_common.h"
 #include "cli_common/login_apollo.h"
 #include "apollo_errors.h"

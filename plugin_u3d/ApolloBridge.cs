@@ -13,9 +13,7 @@ using NetMessage ;
 using RESULT_T=System.Int32;  
 
 
-public class apoClient {
-
-	
+public class apoClient {	
 	/* Interface to native implementation */
 #if UNITY_IPHONE || UNITY_XBOX360
 	
@@ -28,22 +26,27 @@ public class apoClient {
 	private static extern  bool apoCli_init(string workingPath, string logPath);
     
     [DllImport ("__Internal")]
-	private static extern  void apoCli_destroy();
-    
-    
-    [DllImport ("__Internal")]
-	private static extern  RESULT_T apoCli_open(string host, int port, string dev_udid);
+	private static extern  void apoCli_destroy();    
     
     [DllImport ("__Internal")]
-	private static extern  RESULT_T apoCli_send(int messageId, IntPtr messageBody, int bodySize);
+	private static extern  RESULT_T apoCli_open(string host, int port, string dev_udid); 
 
-	
-	[DllImport ("__Internal")]
-	private static extern int apoCli_recv(ref int messageId, IntPtr buf, int bufsize, int timeOutMS);
+    
+    [DllImport ("__Internal")]
+    private static extern unsafe RESULT_T apoCli_sendMsg(int messageId, IntPtr messageBody, int bodySize);
 
-	[DllImport ("__Internal")]
+    [DllImport ("__Internal")]
+    private static extern unsafe RESULT_T apoCli_send(IntPtr bufferFram, int frameSize);
+
+
+    [DllImport ("__Internal")]
+    private static extern unsafe int apoCli_recvMsg(int* messageId, IntPtr msgBody, int bufsize, int timeOutMS);
+
+    [DllImport("__Internal")]
+    private static extern unsafe int apoCli_recv(IntPtr bufferFram, int bufsize, int timeOutMS);
+
+    [DllImport ("__Internal")]
 	private static extern RESULT_T apoCli_GetLastError();
-
 
     
     [DllImport ("__Internal")]
@@ -67,39 +70,17 @@ public class apoClient {
     [DllImport ("__Internal")]
 	private static extern  void apoCli_ClearLoginHistory();
 
-    //[DllImport ("__Internal")]
-	//private static extern  bool apoCli_Update();
+    [DllImport ("__Internal")]
+	private static extern  uint apoCli_GetCurAccId();
 
     [DllImport ("__Internal")]
-	private static extern  NDUINT32 apoCli_GetCurAccId();
-
-    [DllImport ("__Internal")]
-	private static extern  NDUINT32 apoCli_GetCurRoleId();
-
-    //[DllImport ("__Internal")]
-	//private static extern  time_t apoCli_getServerTime();
-    
+	private static extern  uint apoCli_GetCurRoleId();
+        
     ///    
     [DllImport ("__Internal")]
     private static extern IntPtr get_NDNetObject();
-
-    //wait net message until timeout, when you get the data ,you need handle it yourself
-    [DllImport ("__Internal")]
-    private static extern int ndWaitMsg(IntPtr ndNetObj, IntPtr streamBuf, int bufsize, int timeOutMS);
-
-
-    [DllImport ("__Internal")]
-	private static extern  int ndGetLastError(IntPtr ndNetObj);
-
-    [DllImport ("__Internal")]
-	private static extern  string ndGetLastErrorDesc(IntPtr ndNetObj);
-    
-
 #else
 
-    // Other platforms load plugins dynamically, so pass the name
-	// of the plugin's dynamic library.
-        
     [DllImport ("apollo_u3d")]
 	private static extern  bool apoCli_init(string workingPath, string logPath);
     
@@ -123,9 +104,7 @@ public class apoClient {
     [DllImport("apollo_u3d")]
     private static extern unsafe int apoCli_recv(IntPtr bufferFram, int bufsize, int timeOutMS);
 
-
-
-	[DllImport ("apollo_u3d")]
+    [DllImport ("apollo_u3d")]
 	private static extern RESULT_T apoCli_GetLastError();
 
     
@@ -150,26 +129,16 @@ public class apoClient {
     [DllImport ("apollo_u3d")]
 	private static extern  void apoCli_ClearLoginHistory();
 
-    //[DllImport ("apollo_u3d")]
-	//private static extern  bool apoCli_Update();
-
     [DllImport ("apollo_u3d")]
 	private static extern  uint apoCli_GetCurAccId();
 
     [DllImport ("apollo_u3d")]
 	private static extern  uint apoCli_GetCurRoleId();
-
-    //[DllImport ("apollo_u3d")]
-	//private static extern  time_t apoCli_getServerTime();
-    
+        
     ///    
     [DllImport ("apollo_u3d")]
     private static extern IntPtr get_NDNetObject();
-
     
-
-////////////////
-
 	#endif
 
     private IntPtr m_netObject;
@@ -196,6 +165,12 @@ public class apoClient {
             return apoCli_sendMsg(messageId, (IntPtr)pAddr, body.Length);
         }
     }
+    public unsafe int Send(int messageId, NDMsgStream body) 
+    {
+        return Send(messageId, body.ToArray());
+    }
+
+    
     public unsafe int Send(int messageId)
     {
         return apoCli_sendMsg(messageId, (IntPtr)0, 0);
@@ -216,6 +191,23 @@ public class apoClient {
         Marshal.FreeHGlobal(bufPtr);
         return res;
     }
+    unsafe public int Recv(out int messageId, ref NDMsgStream body, int waitMs)
+    {
+        int MsgId = 0 ;
+        
+        IntPtr bufPtr = Marshal.AllocHGlobal(0x10000);
+
+        int res = apoCli_recvMsg(&MsgId, bufPtr, 0x10000, waitMs);
+        if (res > 0)
+        {
+            body.FromAddr(bufPtr, res);
+            //Marshal.Copy(bufPtr, body, 0, res);
+        }
+        messageId = MsgId;
+        Marshal.FreeHGlobal(bufPtr);
+        return res;
+    }
+    
 
     public int Open(string host, int port)
     {
