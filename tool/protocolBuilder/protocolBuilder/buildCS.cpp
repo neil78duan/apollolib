@@ -275,7 +275,7 @@ int build_csMessageRecvSend(ndxml_root *xmlfile, FILE *pf)
 	
 	fprintf(pf,"#region MessageReceiveSendClassString \n") ;
  	fprintf(pf,"\tpublic class MessageReceiveSend\n\t{\n" ) ;
-	fprintf(pf,"\t\NDMsgStream m_readDataTranser;\n\t\NDMsgStream m_sendDataTranser;\n") ;
+	fprintf(pf,"\t\NDMsgStream m_readDataTranser;\n\tNDMsgStream m_sendDataTranser;\n") ;
 	fprintf(pf,"\t\tpublic MessageReceiveSend()\n\t\t{\n") ;
 	fprintf(pf,"\t\t\tm_readDataTranser = new NDMsgStream();\n") ;
 	fprintf(pf,"\t\t\tm_sendDataTranser = new NDMsgStream();\n\t\t}\n") ;
@@ -428,9 +428,9 @@ int build_CSharp(ndxml_root *xmlID, ndxml_root *xmlMarco, ndxml_root *xmlData, c
 		return -1;
 	}
 
-	if (-1 == xml2Sharp(xmlID, "./csharp/MessageRecvSend.cs", build_csMessageRecvSend)) {
-		return -1;
-	}
+	//if (-1 == xml2Sharp(xmlID, "./csharp/MessageRecvSend.cs", build_csMessageRecvSend)) {
+	//	return -1;
+	//}
 	return 0 ;
 	/*
 	FILE *pf = fopen(outfile, "w") ;

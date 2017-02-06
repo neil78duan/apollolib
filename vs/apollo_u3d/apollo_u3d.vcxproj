@@ -98,7 +98,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) D:\study\login\Assets\Plugins\x86</Command>
+      <Command>copy $(TargetPath) D:\work\code\client\lghTest\Assets\Plugins</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,7 +116,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) D:\study\login\Assets\Plugins\x86_64</Command>
+      <Command>copy $(TargetPath) D:\work\code\client\common\Assets\Plugins</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -137,6 +137,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>copy $(TargetPath) D:\work\code\client\lghTest\Assets\Plugins</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -156,6 +159,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>copy $(TargetPath) D:\work\code\client\common\Assets\Plugins</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\ndsdk\include\ndapplib\nd_msgpacket.h" />
@@ -301,7 +307,7 @@
     <ClCompile Include="..\..\logic_parser\logic_function.cpp" />
     <ClCompile Include="..\..\logic_parser\objectBaseMgr.cpp" />
     <ClCompile Include="..\..\plugin_u3d\apoCliApi.cpp" />
-    <ClCompile Include="..\..\plugin_u3d\apoClinetU3d.cpp" />
+    <ClCompile Include="..\..\plugin_u3d\apoClientU3d.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\logic_parser\Makefile" />

@@ -7,6 +7,7 @@
 	<connect_script name="客户端脚本" kinds="in_file">../../data/client_script.bin</connect_script>
 	<excel_data_in_path name="游戏数据excel输入目录" kinds="dir" delete="no">../../../../design/game_data_v1</excel_data_in_path>
 	<text_data_out_path name="游戏数据text输出目录" kinds="dir" delete="no">../../resource/text_output</text_data_out_path>
+	<lua_data_out_path name="游戏数据lua输出目录" kinds="dir" delete="no">../../resource/lua_out</lua_data_out_path>
 	<game_data_listfile name="excel列表" kinds="in_file">../../../../design/game_data_v1/excel_filelist.txt</game_data_listfile>
 	<game_data_package_file name="数据打包文件" kinds="out_file">../../data/cehua_data.dat</game_data_package_file>
 	<game_data_export_cmd name="策划数据导出工具" kinds="in_file">exp_xls.bat</game_data_export_cmd>
@@ -14,6 +15,6 @@
 	<bin_data_byte_order name="输出字节顺序" kinds="enum" enum_value="big-end, little-end">1</bin_data_byte_order>
 	<role_attr_table name="角色属性表" kinds="string">attribute_config.xlsx</role_attr_table>
 	<gm_send_msg name="gm消息配置表" kinds="in_file">../cfg/gm_msg.xml</gm_send_msg>
-	<compiled_rum_cmd name="编译后输出命令" kinds="string">copy /y ..\..\data\client_script.bin ..\..\..\..\code\client\Rabbit\Resources</compiled_rum_cmd>
-	<packeaged_rum_cmd name="打包后输出命令" kinds="string">copy /y ..\..\data\cehua_data.dat ..\..\..\..\code\client\Rabbit\Resources</packeaged_rum_cmd>
+	<compiled_rum_cmd name="编译后输出命令" kinds="string"></compiled_rum_cmd>
+	<packeaged_rum_cmd name="打包后输出命令" kinds="string">xcopy /y /s /e  ..\..\resource\lua_out ..\..\..\..\code\client\common\Assets\luadata</packeaged_rum_cmd>
 </setting_config>

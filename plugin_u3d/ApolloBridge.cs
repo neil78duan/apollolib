@@ -16,130 +16,71 @@ using RESULT_T=System.Int32;
 public class apoClient {	
 	/* Interface to native implementation */
 #if UNITY_IPHONE || UNITY_XBOX360
-	
-	// On iOS and Xbox 360 plugin are statically linked into
-	// the executable, so we have to use __Internal as the
-	// library name.
 
-    
-    [DllImport ("__Internal")]
+	const string APO_DLL_NAME = "__Internal";
+
+#else    
+    const string APO_DLL_NAME = "apollo_u3d";
+#endif
+
+    [DllImport (APO_DLL_NAME)]
 	private static extern  bool apoCli_init(string workingPath, string logPath);
     
-    [DllImport ("__Internal")]
+    [DllImport (APO_DLL_NAME)]
 	private static extern  void apoCli_destroy();    
     
-    [DllImport ("__Internal")]
+    [DllImport (APO_DLL_NAME)]
 	private static extern  RESULT_T apoCli_open(string host, int port, string dev_udid); 
 
     
-    [DllImport ("__Internal")]
+    [DllImport (APO_DLL_NAME)]
     private static extern unsafe RESULT_T apoCli_sendMsg(int messageId, IntPtr messageBody, int bodySize);
 
-    [DllImport ("__Internal")]
+    [DllImport (APO_DLL_NAME)]
     private static extern unsafe RESULT_T apoCli_send(IntPtr bufferFram, int frameSize);
 
 
-    [DllImport ("__Internal")]
+    [DllImport (APO_DLL_NAME)]
     private static extern unsafe int apoCli_recvMsg(int* messageId, IntPtr msgBody, int bufsize, int timeOutMS);
 
-    [DllImport("__Internal")]
+    [DllImport(APO_DLL_NAME)]
     private static extern unsafe int apoCli_recv(IntPtr bufferFram, int bufsize, int timeOutMS);
 
-    [DllImport ("__Internal")]
+    [DllImport (APO_DLL_NAME)]
 	private static extern RESULT_T apoCli_GetLastError();
 
     
-    [DllImport ("__Internal")]
+    [DllImport (APO_DLL_NAME)]
 	private static extern  RESULT_T apoCli_ReloginBackground(string host, int port, string dev_udid);
     
-    [DllImport ("__Internal")]
+    [DllImport (APO_DLL_NAME)]
 	private static extern  RESULT_T apoCli_TrytoRelogin();
 
-    [DllImport ("__Internal")]
+    [DllImport (APO_DLL_NAME)]
 	private static extern  RESULT_T apoCli_LoginAccount(string account, string passwd);
 
-    [DllImport ("__Internal")]
+    [DllImport (APO_DLL_NAME)]
 	private static extern  RESULT_T apoCli_CreateAccount(string userName, string passwd, string phone, string email);
 
-    [DllImport ("__Internal")]
+    [DllImport (APO_DLL_NAME)]
 	private static extern  RESULT_T apoCli_testOneKeyLogin(string host, int port, string user, string passwd);
 
-    [DllImport ("__Internal")]
+    [DllImport (APO_DLL_NAME)]
 	private static extern  void apoCli_Logout();
 
-    [DllImport ("__Internal")]
+    [DllImport (APO_DLL_NAME)]
 	private static extern  void apoCli_ClearLoginHistory();
 
-    [DllImport ("__Internal")]
+    [DllImport (APO_DLL_NAME)]
 	private static extern  uint apoCli_GetCurAccId();
 
-    [DllImport ("__Internal")]
+    [DllImport (APO_DLL_NAME)]
 	private static extern  uint apoCli_GetCurRoleId();
         
     ///    
-    [DllImport ("__Internal")]
-    private static extern IntPtr get_NDNetObject();
-#else
-
-    [DllImport ("apollo_u3d")]
-	private static extern  bool apoCli_init(string workingPath, string logPath);
-    
-    [DllImport ("apollo_u3d")]
-	private static extern  void apoCli_destroy();    
-    
-    [DllImport ("apollo_u3d")]
-	private static extern  RESULT_T apoCli_open(string host, int port, string dev_udid); 
-
-    
-    [DllImport ("apollo_u3d")]
-    private static extern unsafe RESULT_T apoCli_sendMsg(int messageId, IntPtr messageBody, int bodySize);
-
-    [DllImport ("apollo_u3d")]
-    private static extern unsafe RESULT_T apoCli_send(IntPtr bufferFram, int frameSize);
-
-
-    [DllImport ("apollo_u3d")]
-    private static extern unsafe int apoCli_recvMsg(int* messageId, IntPtr msgBody, int bufsize, int timeOutMS);
-
-    [DllImport("apollo_u3d")]
-    private static extern unsafe int apoCli_recv(IntPtr bufferFram, int bufsize, int timeOutMS);
-
-    [DllImport ("apollo_u3d")]
-	private static extern RESULT_T apoCli_GetLastError();
-
-    
-    [DllImport ("apollo_u3d")]
-	private static extern  RESULT_T apoCli_ReloginBackground(string host, int port, string dev_udid);
-    
-    [DllImport ("apollo_u3d")]
-	private static extern  RESULT_T apoCli_TrytoRelogin();
-
-    [DllImport ("apollo_u3d")]
-	private static extern  RESULT_T apoCli_LoginAccount(string account, string passwd);
-
-    [DllImport ("apollo_u3d")]
-	private static extern  RESULT_T apoCli_CreateAccount(string userName, string passwd, string phone, string email);
-
-    [DllImport ("apollo_u3d")]
-	private static extern  RESULT_T apoCli_testOneKeyLogin(string host, int port, string user, string passwd);
-
-    [DllImport ("apollo_u3d")]
-	private static extern  void apoCli_Logout();
-
-    [DllImport ("apollo_u3d")]
-	private static extern  void apoCli_ClearLoginHistory();
-
-    [DllImport ("apollo_u3d")]
-	private static extern  uint apoCli_GetCurAccId();
-
-    [DllImport ("apollo_u3d")]
-	private static extern  uint apoCli_GetCurRoleId();
-        
-    ///    
-    [DllImport ("apollo_u3d")]
+    [DllImport (APO_DLL_NAME)]
     private static extern IntPtr get_NDNetObject();
     
-	#endif
 
     private IntPtr m_netObject;
 
@@ -231,6 +172,14 @@ public class apoClient {
     public void Logout()
     {
         apoCli_Logout();
+    }
+
+    public int Register(string user, string password, string phone, string email)
+    {
+        if(m_netObject == null) {
+            return -1 ;
+        }
+        return apoCli_CreateAccount(user, password, phone, email);
     }
     #region for-test-api
 

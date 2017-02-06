@@ -506,6 +506,18 @@ bool CapolloParseEditorDlg::compileScript(const char *scriptFile)
 	return true;
 }
 
+bool CapolloParseEditorDlg::expLua(const char *outPath, const DBLDatabase &db)
+{
+	nd_mkdir(outPath);
+	bool outflag = DBLDataNode::setOutLua(true);
+	if (-1 == db.OutputLua(outPath)) {
+		DBLDataNode::setOutLua(outflag);
+		return false;
+	}
+	DBLDataNode::setOutLua(outflag);
+	return true;
+}
+
 bool CapolloParseEditorDlg::expExcel()
 {
 	char path[1024];
@@ -517,6 +529,7 @@ bool CapolloParseEditorDlg::expExcel()
 	const char *text_path = _getFromIocfg("text_data_out_path");
 	const char *package_file = _getFromIocfg("game_data_package_file");
 	const char *excel_list = _getFromIocfg("game_data_listfile");
+	const char *exp_luapath = _getFromIocfg("lua_data_out_path");
 
 	if (!exp_cmd || !excel_path || !text_path || !package_file ){
 		LogText("导出excel错误:配置文件错误\n");
@@ -639,6 +652,13 @@ bool CapolloParseEditorDlg::expExcel()
 		dbtmp.Destroy();
 		DBLDatabase::destroy_Instant();
 		return false ;
+	}
+
+	if (!expLua(exp_luapath,dbtmp)) {
+		nd_logmsg("输出lua数据错误！");
+		dbtmp.Destroy();
+		DBLDatabase::destroy_Instant();
+		return false;
 	}
 	
 	dbtmp.Destroy();

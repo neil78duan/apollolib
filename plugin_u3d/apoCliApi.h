@@ -56,6 +56,7 @@ APOLLO_CLI_API void apoCli_ClearLoginHistory();
 //APOLLO_CLI_API bool apoCli_Update();
 APOLLO_CLI_API NDUINT32 apoCli_GetCurAccId();
 APOLLO_CLI_API NDUINT32 apoCli_GetCurRoleId();
+APOLLO_CLI_API RESULT_T apoCli_GetLastError() ;
 //APOLLO_CLI_API time_t apoCli_getServerTime();
 
 

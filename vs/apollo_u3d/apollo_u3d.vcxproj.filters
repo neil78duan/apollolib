@@ -464,10 +464,10 @@
     <ClCompile Include="..\..\..\ndsdk\src\nd_vm\src\nd_vmdbg.c">
       <Filter>src\nd_vm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\plugin_u3d\apoClinetU3d.cpp">
+    <ClCompile Include="..\..\plugin_u3d\apoCliApi.cpp">
       <Filter>apollo</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\plugin_u3d\apoCliApi.cpp">
+    <ClCompile Include="..\..\plugin_u3d\apoClientU3d.cpp">
       <Filter>apollo</Filter>
     </ClCompile>
   </ItemGroup>

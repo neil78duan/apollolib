@@ -8,7 +8,7 @@
 #define CONFIG_IO_SETTING "../cfg/io_config.xml"
 
 #include "nd_common/nd_common.h"
-
+class DBLDatabase;
 // CapolloParseEditorDlg ¶Ô»°¿ò
 class CapolloParseEditorDlg : public CDialogEx
 {
@@ -48,6 +48,7 @@ protected:
 	bool _loadUserDefEnum(const char *userDefEnumFile, void *pDlg);
 	bool compile();
 	bool compileScript(const char *scriptFile);
+	bool expLua(const char *outPath, const DBLDatabase &db);
 	bool expExcel();
 	bool runTest();
 	void _beginEdit(const char *filename);

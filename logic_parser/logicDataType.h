@@ -290,6 +290,7 @@ public:
 	DBL_ELEMENT_TYPE GetArrayType() const;
 
 	static bool setOutHex(bool isHex = true);
+	static bool setOutLua(bool isLua);
 protected:
 	DBLDataNode _attrMathAdd(const DBLDataNode &leftval)const ;
 	DBLDataNode _attrMathSub(const DBLDataNode &leftval)const ;
@@ -312,6 +313,7 @@ protected:
 	dbl_element_base m_dataOwn;
 
 	static NDUINT8 s_bOutHex;
+	static NDUINT8 s_bOutLua;
 };
 
 

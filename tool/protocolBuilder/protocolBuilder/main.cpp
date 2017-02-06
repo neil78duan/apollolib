@@ -1157,10 +1157,10 @@ int main(int argc, char *argv[])
 	//nd_rmdir("./cpp_ue") ;
 	//nd_mkdir("./cpp_ue") ;
 	
-	if(-1==build_dataTypeForUE4(&xmlDatatype, "./cpp_ue/netStreamAutoDefine" ) ) {
-		fprintf(stderr, "export datatype error \n")  ;
-		exit(1) ;
-	}
+// 	if(-1==build_dataTypeForUE4(&xmlDatatype, "./cpp_ue/netStreamAutoDefine" ) ) {
+// 		fprintf(stderr, "export datatype error \n")  ;
+// 		exit(1) ;
+// 	}
 	
 	
 	if(-1==build_dataType(&xmlDatatype, "./cpp/auto_dataType",false ) ) {

@@ -14,6 +14,8 @@
 
 
 NDUINT8 DBLDataNode::s_bOutHex = 0;
+NDUINT8 DBLDataNode::s_bOutLua = 0;
+
 
 
 bool DBLDataNode::setOutHex(bool isHex)
@@ -22,7 +24,16 @@ bool DBLDataNode::setOutHex(bool isHex)
 	s_bOutHex = isHex ? 1 : 0;
 	return ret;
 }
+
+bool DBLDataNode::setOutLua(bool isLua)
+{
+	bool ret = s_bOutLua ? true : false;
+	s_bOutLua = isLua ? 1 : 0;
+	return ret;
+}
 #define IS_OUT_HEX() (DBLDataNode::s_bOutHex==1)
+
+#define IS_OUT_LUA() (DBLDataNode::s_bOutLua==1)
 
 static bool _int_array_init(int *arr, int size, dbl_element_base * eledata)
 {
@@ -1812,7 +1823,12 @@ int DBLDataNode::Print(logic_print print_func, void *pf) const
 	}
 		break;
 	case OT_STRING:
-		ret = print_func(pf, "%s", GetText());
+		if (IS_OUT_LUA()) {
+			ret = print_func(pf, "\"%s\"", CheckValid()? GetText():"nil");
+		}
+		else {
+			ret = print_func(pf, "%s", GetText());
+		}
 		break;
 	case  OT_BOOL:
 		ret = print_func(pf, "%s", GetInt() ? "true" : "false");
@@ -1821,56 +1837,50 @@ int DBLDataNode::Print(logic_print print_func, void *pf) const
 		ret = print_func(pf, "%f", GetFloat());
 		break;
 	case  OT_ARRAY:
-		ret += print_func(pf, "%c", _ARRAR_BEGIN_MARK);
+		ret += print_func(pf, "%c", IS_OUT_LUA()?'{': _ARRAR_BEGIN_MARK);
 		for (int x = 0; x < GetArraySize(); x++) {
 			if (m_sub_type == OT_INT || m_sub_type == OT_INT8 || m_sub_type == OT_INT16 || m_sub_type == OT_BOOL||
 				m_sub_type == OT_INT64 || m_sub_type == OT_TIME) {
-				if (x<GetArraySize()-1){
-					if (IS_OUT_HEX()) {
-						ret += print_func(pf, "%x,", GetarrayInt(x));
-					}
-					else{
-						ret += print_func(pf, "%d,", GetarrayInt(x));
-					}
+				if (IS_OUT_HEX()) {
+					ret += print_func(pf, "%x", GetarrayInt(x));
 				}
-				else {
-					if (IS_OUT_HEX()) {
-						ret += print_func(pf, "%x", GetarrayInt(x));
-					}
-					else{
-						ret += print_func(pf, "%d", GetarrayInt(x));
-					}
+				else{
+					ret += print_func(pf, "%d", GetarrayInt(x));
 				}
 			}
+
 			else if(m_sub_type == OT_FLOAT) {
-				if (x<GetArraySize()-1){
-					ret += print_func(pf, "%f,", GetarrayFloat(x));
-				}
-				else {
-					ret += print_func(pf, "%f", GetarrayFloat(x));
-				}
+				ret += print_func(pf, "%f", GetarrayFloat(x));
 			}
 			else if(m_sub_type == OT_STRING) {
-				if (x < GetArraySize() - 1){
-					ret += print_func(pf, "%s,", GetarrayText(x));
+				if (IS_OUT_LUA()) {
+					DBLDataNode node;
+					if (node.StringToArrayString(GetarrayText(x))) {
+						ret += node.Print(print_func, pf);
+					}
+					else {
+						ret += print_func(pf, "\"%s\"", GetarrayText(x));
+					}
 				}
 				else {
 					ret += print_func(pf, "%s", GetarrayText(x));
 				}
+				
 			}
 			else if (m_sub_type == OT_USER_DEFINED) {
 				const LogicUserDefStruct *pUser = GetarrayUser(x);
 				if (pUser)	{
 					ret = pUser->Print(print_func, pf);
 				}
-				if (x < GetArraySize() - 1){
-					ret += print_func(pf, ",\n");
-				}
 			}
 
-
+			//out ,
+			if (x < GetArraySize() - 1){
+				ret += print_func(pf, ",");
+			}
+					
 		}
-		ret += print_func(pf, "%c", _ARRAR_END_MARK);
+		ret += print_func(pf, "%c", IS_OUT_LUA() ? '}': _ARRAR_BEGIN_MARK);
 		break;
 		
 	case OT_OBJ_BASE_OBJ:

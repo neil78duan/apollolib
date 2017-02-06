@@ -4,7 +4,6 @@ protocolBuilderVS.exe -d ../../resource/msg_config -encode gbk
 
 copy /y cpp\* ..\..\src\netMessage
 
-pause
 @goto :eof
 
 :ERROR

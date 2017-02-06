@@ -81,7 +81,9 @@ LOCAL_SRC_FILES := ../../../ndsdk/src/nd_common/src/bintree.c \
 ../../logic_parser/logicEngineRoot.cpp	\
 ../../logic_parser/logic_editor_helper.cpp \
 ../../attribute/attr_mgr.cpp \
-../../attribute/roleattr_help.cpp 
+../../attribute/roleattr_help.cpp \
+../../plugin_u3d/apoCliApi.cpp	\
+../../plugin_u3d/apoClientU3d.cpp	\
 
 LOCAL_CFLAGS := -D__ND_ADNROID__
 LOCAL_CPPFLAGS := -D__ND_ANDROID__
@@ -98,6 +100,9 @@ LOCAL_LDLIBS += -L$(SYSROOT)/usr/lib -llog
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../include \
 	$(LOCAL_PATH)/../../../ndsdk/include \
-	$(LOCAL_PATH)/../..
+	$(LOCAL_PATH)/../.. \
+	$(LOCAL_PATH)/../../plugin_u3d
 
-include $(BUILD_STATIC_LIBRARY)
+#include $(BUILD_STATIC_LIBRARY)
+include $(BUILD_SHARED_LIBRARY)
+

@@ -171,7 +171,8 @@ public:
 
 	int Test(const char *outPath); //test database is ok 
 	int TestOutput(const char *path);
-	int GetEncodeType() {
+	int OutputLua(const char *path)const;
+	int GetEncodeType()const {
 		return s_data_encodeType;
 	}
 	const char *getDatabaseName() { return m_dbName.c_str() ;}
