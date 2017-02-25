@@ -34,7 +34,7 @@ public:
 	//bool addDisplayNameList(const char *name, text_vct_t &text_list);
 
 	void setNewFileTempl(const char *newfiletempl) { m_fileTemplate = newfiletempl; }
-	bool setConfig(const char *cfgFile);
+	bool setConfig(const char *cfgFile,const char *messageFile);
 	bool setFileRoot(const char *rootFile);
 	
 
@@ -94,6 +94,7 @@ protected:
 	ndxml *m_currFunction;
 	
 	std::string m_fileTemplate;
+	std::string m_messageFile ;
 private:
 
     Ui::MainWindow *ui;

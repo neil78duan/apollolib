@@ -707,7 +707,8 @@ void startDialog::on_Test_clicked()
 	pMain->setHostWidget(this);
 	pMain->setAttribute(Qt::WA_DeleteOnClose, true);
 
-	if (!pMain->setConfig(editorConfigFile.c_str()))	{
+	
+	if (!pMain->setConfig(editorConfigFile.c_str(),getNetProtocol()))	{
 		return;
 	}
 

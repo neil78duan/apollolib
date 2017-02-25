@@ -264,6 +264,7 @@ bool MainWindow::loadScriptFile(const char *scriptFile)
 	const char *filename = getScriptSetting(m_curFile, "user_define_enum");
 	if (filename){
 		m_editorSetting.loadUserDefEnum(filename);
+		m_editorSetting.loadMessageDefine(m_messageFile.c_str()) ;
 	}
 // 
 // 	ndxml *funcroot = ndxml_getnode(&xml_net_protocol, "MessageDefine");
@@ -517,8 +518,9 @@ void MainWindow::on_actionExit_triggered()
 // }
 
 
-bool MainWindow::setConfig(const char *cfgFile)
+bool MainWindow::setConfig(const char *cfgFile,const char *messageFile)
 {
+	m_messageFile = messageFile;
 	if (m_editorSetting.setConfigFile(cfgFile, E_SRC_CODE_UTF_8)) {
 		if (m_editorWindow) {
 			m_editorWindow->setSettingConfig(&m_editorSetting);

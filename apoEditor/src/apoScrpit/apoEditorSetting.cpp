@@ -231,6 +231,28 @@ bool apoEditorSetting::loadUserDefEnum(const char *userDefEnumFile)
 	ndxml_destroy(&xml_root);
 	return true;
 }
+
+bool apoEditorSetting::loadMessageDefine(const char *messageFile)
+{
+	
+	MY_LOAD_XML(xml_net_protocol, messageFile, "utf8");
+	
+	ndxml *funcroot = ndxml_getnode(&xml_net_protocol, "MessageDefine");
+	if (funcroot) {
+		char buf[256];
+		text_vct_t messageList;
+		for (int i = 0; i < ndxml_num(funcroot); i++){
+			ndxml *fnode = ndxml_getnodei(funcroot, i);
+			const char *pDispname = ndxml_getattr_val(fnode, "comment");
+			const char *pRealVal = ndxml_getattr_val(fnode, "id");
+			const char *p = buildDisplaNameValStr(pRealVal, pDispname, buf, sizeof(buf));
+			messageList.push_back(QString(p));
+		}
+		addDisplayNameList("msg_list", messageList);
+	}
+	return true;
+}
+
 #undef MY_LOAD_XML
 bool apoEditorSetting::loadUserdefDisplayList(ndxml_root &xmlNameList, const char *name)
 {

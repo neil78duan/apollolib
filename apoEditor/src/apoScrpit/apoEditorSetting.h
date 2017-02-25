@@ -59,6 +59,7 @@ public:
 	ndxml* AddNewXmlNode(ndxml *node, QWidget *parentWindow);//create new xml node from template @need show dialog and get user selected
 
 	bool loadUserDefEnum(const char *userDefEnumFile);
+	bool loadMessageDefine(const char *messageFile) ;
 private:
 
 	bool loadUserdefDisplayList(ndxml_root &xmlNameList, const char *name);
