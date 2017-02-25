@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf8" ?>
 <alias kinds="hide">
 	<aim>目标</aim>
 	<index>编号</index>
@@ -22,6 +22,34 @@
 	<type_time_cmd kinds="enum" enum_value="获得,增加,减少,计数间隔"/>
 	<type_week kinds="key_value" key="星期1,星期2,星期3,星期4,星期5,星期6,星期天" value="1,2,3,4,5,6,0"/>
 </data_type_define>
+
+<blueprint_node_name kinds="hide"  desc="define exe-node and blue-printf ui relation">
+	<default>Common</default>
+	<func_node>FuncEntry</func_node>
+	<event_callback_node>FuncEntry</event_callback_node>
+	<msg_handler_node>FuncEntry</msg_handler_node>	
+	<function_init_block>ModuleInitEntry</function_init_block>
+	<exception_catch_block>ExceptionEntry</exception_catch_block>
+	<!-- op_make_var>NewVar</op_make_var>
+	<op_build_json_data>NewJson</op_build_json_data>
+	<op_create_struct_type>NewStruct</op_create_struct_type>
+	<op_assignin>Assignment</op_assignin -->
+	<op_short_jump>Break</op_short_jump>
+	<op_success_short_jump>TrueBreak</op_success_short_jump>
+	<op_error_short_jump>FalseBreak</op_error_short_jump>
+	<op_exit>Quit</op_exit>
+	<op_loop_entry>Loop</op_loop_entry>
+	<op_bool_entry>Bool</op_bool_entry>
+	<op_throw>Throw</op_throw>
+</blueprint_node_name>
+
+
+<blueprint_show_action kinds="hide" >
+	<moduleInfo>detail</moduleInfo>
+	<func_node>function</func_node>
+	<msg_handler_node>function</msg_handler_node>
+	<event_callback_node>function</event_callback_node>
+</blueprint_show_action>
 
 <compile_setting kinds="hide" desc="编译设定,关键字和指令的对照表而已 instruction=1是命令 0是变量 2分支,3循环,4变量集合,5user-define,6function-info,7错误处理 100注释">
 	<list instruction="1" ins_id="0" size="8" >op_exit</list>
@@ -59,8 +87,8 @@
 	<list instruction="1" ins_id="37" size="0" >op_del_timer</list>
 	<list instruction="1" ins_id="38" size="4" >op_check_valide</list>
 	<list instruction="1" ins_id="39" size="8" >op_type_transfer</list>
-	<list instruction="1" ins_id="40" size="0" record_param_num="1" >op_build_user_data</list>
-	<list instruction="1" ins_id="41" size="0" record_param_num="1" >op_create_data_type</list>
+	<list instruction="1" ins_id="40" size="0" record_param_num="1" >op_build_json_data</list>
+	<list instruction="1" ins_id="41" size="0" record_param_num="1" >op_create_struct_type</list>
 	<list instruction="1" ins_id="42" size="0"  >op_math_operate</list>
 	<list instruction="1" ins_id="43" size="0" desc="赋值操作" >op_assignin</list>	
 	<list instruction="1" ins_id="44" size="0"  >op_chdir</list>
@@ -98,6 +126,7 @@
 	<list instruction="4" size="0">param_collect</list>
 	<list instruction="3" size="0">formula_text</list>
 	<list instruction="100" size="0">comment</list>
+	<list instruction="100" size="0">apoEditorPos</list>
 	<list instruction="5" size="0">user_define_function</list>
 	<list instruction="6" size="0" datatype="2">function_info</list>	
 	<list instruction="6" size="0" datatype="2">is_open_role_affair</list>
@@ -446,10 +475,10 @@
 	
 	
 	
-	<create_make_var name="创建变量" create_type="1" >
+	<create_make_var name="创建变量" create_type="1" auto_index_list="param" auto_index_reference="variant_index">
 		<op_make_var name="节点_申明变量" expand="yes">
 			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<param name="名字" kinds="string" delete="no">var1</param>
+			<param name="名字" kinds="string" delete="no">var</param>
 			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 			<var name="初始值" kinds="string" delete="no" restrict="type">none</var>
 		</op_make_var>
@@ -585,19 +614,19 @@
 		</op_del_timer>
 	</create_del_timer>
 	
-	<create_build_user_data name="创建json数据" create_type="1" >
-		<op_build_user_data name="节点_创建json数据" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+	<create_build_json_data name="创建json数据" create_type="1" >
+		<op_build_json_data name="节点_创建json数据" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
 			<comment name="功能说明" rw_stat="read">define  name{...}</comment>			
 			<var name="变量名" kinds="string" delete="no">none</var>
-		</op_build_user_data>
-	</create_build_user_data>
+		</op_build_json_data>
+	</create_build_json_data>
 	
-	<create_build_data_type name="创建新类型" create_type="1" >
-		<op_create_data_type name="节点_创建新数据类型" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+	<create_build_struct_type name="创建新类型" create_type="1" >
+		<op_create_struct_type name="节点_创建新数据类型" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
 			<comment name="功能说明" rw_stat="read">typedef struct{...}</comment>			
 			<var name="类型名" kinds="string" delete="no">none</var>
-		</op_create_data_type>
-	</create_build_data_type>
+		</op_create_struct_type>
+	</create_build_struct_type>
 	
 	
 	<create_step_call_func name="调用函数" create_type="1" >
@@ -761,38 +790,6 @@
 	</create_comp_steps>
 	
 	
-	<!-- create_step_comp_entry name="创建数值比较分支" create_type="1" >
-		<op_comp_entry name="节点_比较分支" create_template="create_sub_comp_entry" expand_list="comment" >
-			<comment name="功能说明" rw_stat="read">if{}</comment>
-			<op_sub_comp_entry name="子节点_比较分支" create_template="create_list1" expand_list="condition,type,var" comp_cond="condition" comp_value="var">
-				<condition name="执行条件" kinds="reference" reference_type="type_compare_sub_entry" delete="no" >0</condition>
-				<param_collect name="操作数1" expand="yes" expand_stat="1" delete="no">
-					<type name="操作数1类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-					<var name="操作数1值" kinds="string" delete="no" restrict="type">none</var>
-				</param_collect>
-				<param_collect name="操作数2" expand="yes" expand_stat="1" delete="no">
-					<type name="操作数2类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-					<var name="操作数2值" kinds="string" delete="no" restrict="type">none</var>
-				</param_collect>
-			</op_sub_comp_entry>
-		</op_comp_entry>
-	</create_step_comp_entry>
-	
-	<create_sub_comp_entry name="创建比较子分支" create_type="1" >	
-		<op_sub_comp_entry name="子节点_比较分支" create_template="create_list1" expand_list="condition,type,var" comp_cond="condition" comp_value="var" auto_index="0">
-			<condition name="执行条件" kinds="reference" reference_type="type_compare_sub_entry" delete="no" >0</condition>
-			<param_collect name="操作数1" expand="yes" expand_stat="1" delete="no">
-				<type name="操作数1类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="操作数1值" kinds="string" delete="no" restrict="type">none</var>
-			</param_collect>
-			<param_collect name="操作数2" expand="yes" expand_stat="1" delete="no">
-				<type name="操作数2类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="操作数2值" kinds="string" delete="no" restrict="type">none</var>
-			</param_collect>
-		</op_sub_comp_entry>
-	</create_sub_comp_entry -->
-	
-	
 	<create_step_loop_entry name="循环分支" create_type="1" >
 		<op_loop_entry name="节点_循环" create_template="create_list2" expand_list="condition" auto_index="0"  comp_cond="condition">
 			<comment name="功能说明" rw_stat="read">loop{}</comment>
@@ -817,7 +814,7 @@
 		</op_error_short_jump>
 	</op_error_break>
 	
-	<create_success_break name="break-n-sucess" create_type="1" >
+	<create_success_break name="break-on-sucess" create_type="1" >
 		<op_success_short_jump name="节点_break" expand_list="comment"  >
 			<comment name="功能说明" rw_stat="read">break when last success</comment>
 			<jumpOffset kinds="hide" delete="no" >0</jumpOffset>
@@ -852,7 +849,7 @@
 		</op_bool_entry>
 	</create_step_false_eixt>
 	
-	<create_input_param name="消息参数" create_type="1" >
+	<create_input_param name="创建参数参数" create_type="1" >
 		<param_collect name="参数" expand="yes">
 			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 			<var kinds="string" delete="no" restrict="type">none</var>			
@@ -862,7 +859,7 @@
 	
 	<create_user_def_param name="自定义类型参数" create_type="1" >
 		<param_collect name="参数" expand="yes">
-			<func_name name="成员名" kinds="string" delete="no" >member1</func_name>
+			<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">member1</func_name>
 			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 			<var kinds="string" delete="no" restrict="type">none</var>			
 		</param_collect>
@@ -919,8 +916,8 @@
 		<list>create_make_var</list>
 		<list>create_step_type_transfer</list>
 		
-		<list>create_build_user_data</list>
-		<list>create_build_data_type</list>
+		<list>create_build_json_data</list>
+		<list>create_build_struct_type</list>
 		<list>create_step_get_user_data_type</list>
 		
 		<list>create_math_operate</list>
@@ -997,8 +994,8 @@
 		<list>create_step_type_transfer</list>
 		<!-- list>create_set_var</list>	
 		<list>create_set_result</list -->	
-		<list>create_build_user_data</list>
-		<list>create_build_data_type</list>
+		<list>create_build_json_data</list>
+		<list>create_build_struct_type</list>
 		<list>create_step_get_user_data_type</list>		
 		<list>create_math_operate</list>
 		<list>create_assignin</list>

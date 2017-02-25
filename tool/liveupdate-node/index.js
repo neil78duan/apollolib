@@ -92,7 +92,7 @@ function errorHandle(response, request)
 {
     //console.log("request \n", request) ;
     response.writeHead(404, {"Content-Type": "text/html"});
-    response.write("ERROR not found");
+    response.write("ERROR not found 404");
     response.end();
 }
 

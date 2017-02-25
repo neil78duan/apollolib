@@ -85,16 +85,47 @@ struct streamNode
 };
 
 
+class logciCompileSetting
+{
+public:
+	logciCompileSetting();
+	virtual ~logciCompileSetting();
+
+
+	bool setConfigFile(const char *config, int encodeType = ND_ENCODE_TYPE);
+	ndxml_root *getConfig() { return &m_configRoot; }
+	const compile_setting* getStepConfig(const char *stepName)const;
+protected:
+
+	const char* _getNodeText(ndxml *paramNode, char *buf, size_t bufsize);
+	int _loadEnumText(ndxml *dataTypeDef);
+	int _getEnumText(ndxml * node, enumTextVct &enumText);
+
+	virtual bool onLoad(ndxml &cfgRoot);
+	//compile init block
+	ndxml m_configRoot;
+
+	typedef std::map<std::string, compile_setting> compile_setting_t;
+	compile_setting_t m_settings;
+
+	//read enum-text, not enum-int
+	typedef std::map<std::string, enumTextVct> enum_textValue_t;
+	enum_textValue_t m_enumText;
+
+};
+
+
 typedef std::vector<shortJumpInfo> shortJumpAddr_vct;
 
 typedef std::map<std::string, streamNode> streamCMD_map_t;
-class LogicCompiler
+
+class LogicCompiler : public logciCompileSetting
 {
 public:
 	LogicCompiler();
 	~LogicCompiler();
 	bool compileXml(const char *xmlFile, const char *outStreamFile, int outEncodeType = 0, bool withDgbInfo = false, int byteOrder=1);
-	bool setConfigFile(const char *config);
+	//bool setConfigFile(const char *config);
 private:
 	
 	bool compileFuncs(ndxml *funcsCollect, FILE *pf);
@@ -125,10 +156,6 @@ private:
 	int trytoCompileExceptionHandler(ndxml *funcNode, char *buf, size_t bufsize);
 	int trytoCompileInitilizerBlock(ndxml *funcNode, char *buf, size_t bufsize);
 
-	const char* _getNodeText(ndxml *paramNode, char *buf, size_t bufsize);
-	int _loadEnumText(ndxml *dataTypeDef);
-	int _getEnumText(ndxml * node, enumTextVct &enumText);
-	
 	bool _isFileInfo(ndxml * node);
 	int _writeFileInfo(ndxml *module, FILE *pf) ;
 	bool _isGlobalFunc(ndxml *funcNode);
@@ -142,15 +169,6 @@ private:
 	bool _compilePreCmd(ndxml *xmlroot);
 
 
-	//compile init block
-	ndxml m_configRoot;
-
-	typedef std::map<std::string, compile_setting> compile_setting_t;
-	compile_setting_t m_settings;
-
-	//read enum-text, not enum-int
-	typedef std::map<std::string, enumTextVct> enum_textValue_t;
-	enum_textValue_t m_enumText;
 
 	bool m_bDebugInfo;
 	int m_compileStep;

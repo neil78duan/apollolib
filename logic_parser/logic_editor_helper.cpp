@@ -182,15 +182,34 @@ namespace LogicEditorHelper
 	{
 		return (char*)ndxml_getattr_val(xml, _szReserved[ERT_PARAM]);
 	}
+
+	const char *_GetNodeComment(ndxml *xml)
+	{
+		ndxml *pSub = ndxml_getnode(xml, "comment");
+		if (pSub) {
+			return ndxml_getval(pSub);
+		}
+		else {
+			const char *p = ndxml_getname(xml);
+			const char* ret = strchr(p, '_');
+			if (ret){
+				return ++ret;
+			}
+			return p;
+		}
+	}
+
 	const char *_GetXmlName(ndxml *xml, CXMLAlias *alias)
 	{
 		//需要获得别名
 		const char *name = ndxml_getattr_val(xml, _szReserved[ERT_NAME]);
 		if (!name) {
 			name = ndxml_getname(xml);
-			const char *alia_name = alias->GetAlia(name);
-			if (alia_name)	{
-				return alia_name;
+			if (alias)	{
+				const char *alia_name = alias->GetAlia(name);
+				if (alia_name)	{
+					return alia_name;
+				}
 			}
 		}
 		return name;

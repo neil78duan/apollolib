@@ -708,7 +708,7 @@ bool DBLDataNode::GetVal(int *arr, size_t &size)const
 		size_t len = NDMIN(this->GetArraySize(), size);
 		size = 0;
 		for (size_t i = 0; i < len; i++){
-			arr[i] = this->GetarrayInt(i);
+			arr[i] = this->GetarrayInt((int)i);
 			++size;
 		}
 		return true;
@@ -723,7 +723,7 @@ bool DBLDataNode::GetVal(float *arr, size_t &size)const
 		size_t len = NDMIN(this->GetArraySize(), size);
 		size = 0;
 		for (size_t i = 0; i < len; i++){
-			arr[i] = this->GetarrayFloat(i);
+			arr[i] = this->GetarrayFloat((int)i);
 			++size;
 		}
 		return true;
@@ -1780,11 +1780,11 @@ void DBLDataNode::ConvertEncode(int from, int to)
 	if (!pBuf)
 		return;
 	if (from == E_SRC_CODE_UTF_8){
-		nd_utf8_to_gbk(text, pBuf, size);
+		nd_utf8_to_gbk(text, pBuf, (int)size);
 		InitSet(pBuf);
 	}
 	else if (to == E_SRC_CODE_UTF_8) {
-		nd_gbk_to_utf8(text, pBuf, size);
+		nd_gbk_to_utf8(text, pBuf, (int)size);
 		InitSet(pBuf);
 	}
 	else {

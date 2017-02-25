@@ -1308,7 +1308,7 @@ int LogicParserEngine::_getValueFromUserDef(const char *inputName, DBLDataNode &
 		}				\
 	}
 	
-	int ret = 0;
+	//int ret = 0;
 	LogicUserDefStruct myType = *(it->second);
 	if (p && *p=='(' ) 	{
 		// read init function 
@@ -1559,7 +1559,7 @@ bool LogicParserEngine::_mathOperate(eMathOperate op,const DBLDataNode &var1, co
 		case E_MATH_SQRT:
 		{
 			float fv1 = var1.GetFloat();
-			float fv2 = var2.GetFloat();
+			//float fv2 = var2.GetFloat();
 			float val = sqrt(fv1);
 			m_registerVal.InitSet(val);
 			break;

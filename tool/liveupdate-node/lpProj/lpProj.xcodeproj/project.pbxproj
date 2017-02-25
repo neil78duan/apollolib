@@ -1,0 +1,736 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		075C9CC91E5D67FE00924F52 /* base64.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = base64.js; path = ../base64.js; sourceTree = "<group>"; };
+		075C9CCA1E5D67FE00924F52 /* configuration.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = configuration.json; path = ../configuration.json; sourceTree = "<group>"; };
+		075C9CCB1E5D67FE00924F52 /* create_md5.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = create_md5.sh; path = ../create_md5.sh; sourceTree = "<group>"; };
+		075C9CCC1E5D67FE00924F52 /* downloadFile.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = downloadFile.js; path = ../downloadFile.js; sourceTree = "<group>"; };
+		075C9CCD1E5D67FE00924F52 /* genkey.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = genkey.sh; path = ../genkey.sh; sourceTree = "<group>"; };
+		075C9CCE1E5D67FE00924F52 /* gmTool.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = gmTool.js; path = ../gmTool.js; sourceTree = "<group>"; };
+		075C9CCF1E5D67FE00924F52 /* index.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = index.js; path = ../index.js; sourceTree = "<group>"; };
+		075C9CD11E5D67FE00924F52 /* sheldon_certificate.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = sheldon_certificate.pem; sourceTree = "<group>"; };
+		075C9CD21E5D67FE00924F52 /* sheldon_certrequest.csr */ = {isa = PBXFileReference; lastKnownFileType = text; path = sheldon_certrequest.csr; sourceTree = "<group>"; };
+		075C9CD31E5D67FE00924F52 /* sheldon_privatekey.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = sheldon_privatekey.pem; sourceTree = "<group>"; };
+		075C9CD41E5D67FE00924F52 /* liveupdate */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = liveupdate; path = ../liveupdate; sourceTree = "<group>"; };
+		075C9CD51E5D67FE00924F52 /* liveupdate-ubuntu.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = "liveupdate-ubuntu.sh"; path = "../liveupdate-ubuntu.sh"; sourceTree = "<group>"; };
+		075C9CDD1E5D67FE00924F52 /* b64url.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = b64url.js; sourceTree = "<group>"; };
+		075C9CDE1E5D67FE00924F52 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		075C9CDF1E5D67FE00924F52 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
+		075C9CE11E5D67FE00924F52 /* .npmignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .npmignore; sourceTree = "<group>"; };
+		075C9CE21E5D67FE00924F52 /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
+		075C9CE31E5D67FE00924F52 /* index.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = index.js; sourceTree = "<group>"; };
+		075C9CE51E5D67FE00924F52 /* file.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = file.js; sourceTree = "<group>"; };
+		075C9CE61E5D67FE00924F52 /* incoming_form.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = incoming_form.js; sourceTree = "<group>"; };
+		075C9CE71E5D67FE00924F52 /* index.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = index.js; sourceTree = "<group>"; };
+		075C9CE81E5D67FE00924F52 /* json_parser.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = json_parser.js; sourceTree = "<group>"; };
+		075C9CE91E5D67FE00924F52 /* multipart_parser.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = multipart_parser.js; sourceTree = "<group>"; };
+		075C9CEA1E5D67FE00924F52 /* octet_parser.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = octet_parser.js; sourceTree = "<group>"; };
+		075C9CEB1E5D67FE00924F52 /* querystring_parser.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = querystring_parser.js; sourceTree = "<group>"; };
+		075C9CEC1E5D67FE00924F52 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		075C9CED1E5D67FE00924F52 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		075C9CEE1E5D67FE00924F52 /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
+		075C9CF11E5D67FE00924F52 /* lodash.compat.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = lodash.compat.js; sourceTree = "<group>"; };
+		075C9CF21E5D67FE00924F52 /* lodash.compat.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = lodash.compat.min.js; sourceTree = "<group>"; };
+		075C9CF31E5D67FE00924F52 /* lodash.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = lodash.js; sourceTree = "<group>"; };
+		075C9CF41E5D67FE00924F52 /* lodash.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = lodash.min.js; sourceTree = "<group>"; };
+		075C9CF51E5D67FE00924F52 /* lodash.underscore.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = lodash.underscore.js; sourceTree = "<group>"; };
+		075C9CF61E5D67FE00924F52 /* lodash.underscore.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = lodash.underscore.min.js; sourceTree = "<group>"; };
+		075C9CF71E5D67FE00924F52 /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		075C9CF81E5D67FE00924F52 /* lodash.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = lodash.js; sourceTree = "<group>"; };
+		075C9CF91E5D67FE00924F52 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		075C9CFA1E5D67FE00924F52 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		075C9CFE1E5D67FE00924F52 /* jshint.out */ = {isa = PBXFileReference; lastKnownFileType = text; path = jshint.out; sourceTree = "<group>"; };
+		075C9CFF1E5D67FE00924F52 /* .bob.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = .bob.json; sourceTree = "<group>"; };
+		075C9D001E5D67FE00924F52 /* .jshintrc */ = {isa = PBXFileReference; lastKnownFileType = text; path = .jshintrc; sourceTree = "<group>"; };
+		075C9D011E5D67FE00924F52 /* .npmignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .npmignore; sourceTree = "<group>"; };
+		075C9D021E5D67FE00924F52 /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
+		075C9D041E5D67FE00924F52 /* cheese.log */ = {isa = PBXFileReference; lastKnownFileType = text; path = cheese.log; sourceTree = "<group>"; };
+		075C9D051E5D67FE00924F52 /* example-connect-logger.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "example-connect-logger.js"; sourceTree = "<group>"; };
+		075C9D061E5D67FE00924F52 /* example-socket.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "example-socket.js"; sourceTree = "<group>"; };
+		075C9D071E5D67FE00924F52 /* example.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = example.js; sourceTree = "<group>"; };
+		075C9D081E5D67FE00924F52 /* flush-on-exit.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "flush-on-exit.js"; sourceTree = "<group>"; };
+		075C9D091E5D67FE00924F52 /* fromreadme.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = fromreadme.js; sourceTree = "<group>"; };
+		075C9D0A1E5D67FE00924F52 /* log-rolling.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "log-rolling.js"; sourceTree = "<group>"; };
+		075C9D0B1E5D67FE00924F52 /* loggly-appender.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "loggly-appender.js"; sourceTree = "<group>"; };
+		075C9D0C1E5D67FE00924F52 /* memory-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "memory-test.js"; sourceTree = "<group>"; };
+		075C9D0D1E5D67FE00924F52 /* missing-log-dir.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "missing-log-dir.js"; sourceTree = "<group>"; };
+		075C9D0E1E5D67FE00924F52 /* pants.log */ = {isa = PBXFileReference; lastKnownFileType = text; path = pants.log; sourceTree = "<group>"; };
+		075C9D0F1E5D67FE00924F52 /* patternLayout-tokens.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "patternLayout-tokens.js"; sourceTree = "<group>"; };
+		075C9D101E5D67FE00924F52 /* smtp-appender.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "smtp-appender.js"; sourceTree = "<group>"; };
+		075C9D131E5D67FE00924F52 /* categoryFilter.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = categoryFilter.js; sourceTree = "<group>"; };
+		075C9D141E5D67FE00924F52 /* clustered.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = clustered.js; sourceTree = "<group>"; };
+		075C9D151E5D67FE00924F52 /* console.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = console.js; sourceTree = "<group>"; };
+		075C9D161E5D67FE00924F52 /* dateFile.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = dateFile.js; sourceTree = "<group>"; };
+		075C9D171E5D67FE00924F52 /* file.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = file.js; sourceTree = "<group>"; };
+		075C9D181E5D67FE00924F52 /* fileSync.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = fileSync.js; sourceTree = "<group>"; };
+		075C9D191E5D67FE00924F52 /* gelf.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = gelf.js; sourceTree = "<group>"; };
+		075C9D1A1E5D67FE00924F52 /* hookio.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = hookio.js; sourceTree = "<group>"; };
+		075C9D1B1E5D67FE00924F52 /* loggly.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = loggly.js; sourceTree = "<group>"; };
+		075C9D1C1E5D67FE00924F52 /* logLevelFilter.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = logLevelFilter.js; sourceTree = "<group>"; };
+		075C9D1D1E5D67FE00924F52 /* multiprocess.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = multiprocess.js; sourceTree = "<group>"; };
+		075C9D1E1E5D67FE00924F52 /* smtp.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = smtp.js; sourceTree = "<group>"; };
+		075C9D1F1E5D67FE00924F52 /* connect-logger.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "connect-logger.js"; sourceTree = "<group>"; };
+		075C9D201E5D67FE00924F52 /* date_format.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = date_format.js; sourceTree = "<group>"; };
+		075C9D211E5D67FE00924F52 /* debug.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = debug.js; sourceTree = "<group>"; };
+		075C9D221E5D67FE00924F52 /* layouts.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = layouts.js; sourceTree = "<group>"; };
+		075C9D231E5D67FE00924F52 /* levels.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = levels.js; sourceTree = "<group>"; };
+		075C9D241E5D67FE00924F52 /* log4js.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = log4js.js; sourceTree = "<group>"; };
+		075C9D251E5D67FE00924F52 /* log4js.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = log4js.json; sourceTree = "<group>"; };
+		075C9D261E5D67FE00924F52 /* logger.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = logger.js; sourceTree = "<group>"; };
+		075C9D281E5D67FE00924F52 /* BaseRollingFileStream.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = BaseRollingFileStream.js; sourceTree = "<group>"; };
+		075C9D291E5D67FE00924F52 /* DateRollingFileStream.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = DateRollingFileStream.js; sourceTree = "<group>"; };
+		075C9D2A1E5D67FE00924F52 /* index.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = index.js; sourceTree = "<group>"; };
+		075C9D2B1E5D67FE00924F52 /* RollingFileStream.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = RollingFileStream.js; sourceTree = "<group>"; };
+		075C9D2E1E5D67FE00924F52 /* semver */ = {isa = PBXFileReference; lastKnownFileType = text; path = semver; sourceTree = "<group>"; };
+		075C9D301E5D67FE00924F52 /* .gitmodules */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitmodules; sourceTree = "<group>"; };
+		075C9D321E5D67FE00924F52 /* nodeunit.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = nodeunit.css; sourceTree = "<group>"; };
+		075C9D331E5D67FE00924F52 /* nodeunit.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = nodeunit.js; sourceTree = "<group>"; };
+		075C9D351E5D67FE00924F52 /* async.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = async.min.js; sourceTree = "<group>"; };
+		075C9D361E5D67FE00924F52 /* index.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = index.js; sourceTree = "<group>"; };
+		075C9D381E5D67FE00924F52 /* async.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = async.js; sourceTree = "<group>"; };
+		075C9D391E5D67FE00924F52 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		075C9D3A1E5D67FE00924F52 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		075C9D3B1E5D67FE00924F52 /* nodelint.cfg */ = {isa = PBXFileReference; lastKnownFileType = text; path = nodelint.cfg; sourceTree = "<group>"; };
+		075C9D3C1E5D67FE00924F52 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		075C9D3D1E5D67FE00924F52 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		075C9D3F1E5D67FE00924F52 /* test-async.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "test-async.js"; sourceTree = "<group>"; };
+		075C9D401E5D67FE00924F52 /* test.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = test.html; sourceTree = "<group>"; };
+		075C9D421E5D67FE00924F52 /* .npmignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .npmignore; sourceTree = "<group>"; };
+		075C9D431E5D67FE00924F52 /* duplex.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = duplex.js; sourceTree = "<group>"; };
+		075C9D451E5D67FE00924F52 /* _stream_duplex.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = _stream_duplex.js; sourceTree = "<group>"; };
+		075C9D461E5D67FE00924F52 /* _stream_passthrough.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = _stream_passthrough.js; sourceTree = "<group>"; };
+		075C9D471E5D67FE00924F52 /* _stream_readable.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = _stream_readable.js; sourceTree = "<group>"; };
+		075C9D481E5D67FE00924F52 /* _stream_transform.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = _stream_transform.js; sourceTree = "<group>"; };
+		075C9D491E5D67FE00924F52 /* _stream_writable.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = _stream_writable.js; sourceTree = "<group>"; };
+		075C9D4A1E5D67FE00924F52 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		075C9D4D1E5D67FE00924F52 /* float.patch */ = {isa = PBXFileReference; lastKnownFileType = text; path = float.patch; sourceTree = "<group>"; };
+		075C9D4F1E5D67FE00924F52 /* util.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = util.js; sourceTree = "<group>"; };
+		075C9D501E5D67FE00924F52 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		075C9D511E5D67FE00924F52 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		075C9D521E5D67FE00924F52 /* util.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = util.js; sourceTree = "<group>"; };
+		075C9D541E5D67FE00924F52 /* inherits.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = inherits.js; sourceTree = "<group>"; };
+		075C9D551E5D67FE00924F52 /* inherits_browser.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = inherits_browser.js; sourceTree = "<group>"; };
+		075C9D561E5D67FE00924F52 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		075C9D571E5D67FE00924F52 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		075C9D581E5D67FE00924F52 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		075C9D591E5D67FE00924F52 /* test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = test.js; sourceTree = "<group>"; };
+		075C9D5C1E5D67FE00924F52 /* build.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = build.js; sourceTree = "<group>"; };
+		075C9D5D1E5D67FE00924F52 /* component.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = component.json; sourceTree = "<group>"; };
+		075C9D5E1E5D67FE00924F52 /* index.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = index.js; sourceTree = "<group>"; };
+		075C9D5F1E5D67FE00924F52 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		075C9D601E5D67FE00924F52 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		075C9D621E5D67FE00924F52 /* .npmignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .npmignore; sourceTree = "<group>"; };
+		075C9D631E5D67FE00924F52 /* index.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = index.js; sourceTree = "<group>"; };
+		075C9D641E5D67FE00924F52 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		075C9D651E5D67FE00924F52 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		075C9D661E5D67FE00924F52 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		075C9D671E5D67FE00924F52 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		075C9D681E5D67FE00924F52 /* passthrough.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = passthrough.js; sourceTree = "<group>"; };
+		075C9D691E5D67FE00924F52 /* readable.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = readable.js; sourceTree = "<group>"; };
+		075C9D6A1E5D67FE00924F52 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		075C9D6B1E5D67FE00924F52 /* transform.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = transform.js; sourceTree = "<group>"; };
+		075C9D6C1E5D67FE00924F52 /* writable.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = writable.js; sourceTree = "<group>"; };
+		075C9D6F1E5D67FE00924F52 /* semver */ = {isa = PBXFileReference; lastKnownFileType = text; path = semver; sourceTree = "<group>"; };
+		075C9D701E5D67FE00924F52 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		075C9D711E5D67FE00924F52 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		075C9D721E5D67FE00924F52 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		075C9D731E5D67FE00924F52 /* semver.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = semver.js; sourceTree = "<group>"; };
+		075C9D741E5D67FE00924F52 /* test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = test.js; sourceTree = "<group>"; };
+		075C9D751E5D67FE00924F52 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		075C9D761E5D67FE00924F52 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		075C9D781E5D67FE00924F52 /* categoryFilter-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "categoryFilter-test.js"; sourceTree = "<group>"; };
+		075C9D791E5D67FE00924F52 /* clusteredAppender-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "clusteredAppender-test.js"; sourceTree = "<group>"; };
+		075C9D7A1E5D67FE00924F52 /* configuration-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "configuration-test.js"; sourceTree = "<group>"; };
+		075C9D7B1E5D67FE00924F52 /* configureNoLevels-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "configureNoLevels-test.js"; sourceTree = "<group>"; };
+		075C9D7C1E5D67FE00924F52 /* connect-logger-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "connect-logger-test.js"; sourceTree = "<group>"; };
+		075C9D7D1E5D67FE00924F52 /* consoleAppender-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "consoleAppender-test.js"; sourceTree = "<group>"; };
+		075C9D7E1E5D67FE00924F52 /* date_format-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "date_format-test.js"; sourceTree = "<group>"; };
+		075C9D7F1E5D67FE00924F52 /* dateFileAppender-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "dateFileAppender-test.js"; sourceTree = "<group>"; };
+		075C9D801E5D67FE00924F52 /* debug-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "debug-test.js"; sourceTree = "<group>"; };
+		075C9D811E5D67FE00924F52 /* fileAppender-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "fileAppender-test.js"; sourceTree = "<group>"; };
+		075C9D821E5D67FE00924F52 /* fileSyncAppender-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "fileSyncAppender-test.js"; sourceTree = "<group>"; };
+		075C9D831E5D67FE00924F52 /* gelfAppender-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "gelfAppender-test.js"; sourceTree = "<group>"; };
+		075C9D841E5D67FE00924F52 /* gelfAppender-test.js.orig */ = {isa = PBXFileReference; lastKnownFileType = text; path = "gelfAppender-test.js.orig"; sourceTree = "<group>"; };
+		075C9D851E5D67FE00924F52 /* global-log-level-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "global-log-level-test.js"; sourceTree = "<group>"; };
+		075C9D861E5D67FE00924F52 /* hookioAppender-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "hookioAppender-test.js"; sourceTree = "<group>"; };
+		075C9D871E5D67FE00924F52 /* layouts-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "layouts-test.js"; sourceTree = "<group>"; };
+		075C9D881E5D67FE00924F52 /* levels-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "levels-test.js"; sourceTree = "<group>"; };
+		075C9D891E5D67FE00924F52 /* log-abspath-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "log-abspath-test.js"; sourceTree = "<group>"; };
+		075C9D8A1E5D67FE00924F52 /* log4js.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = log4js.json; sourceTree = "<group>"; };
+		075C9D8B1E5D67FE00924F52 /* logger-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "logger-test.js"; sourceTree = "<group>"; };
+		075C9D8C1E5D67FE00924F52 /* logging-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "logging-test.js"; sourceTree = "<group>"; };
+		075C9D8D1E5D67FE00924F52 /* logglyAppender-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "logglyAppender-test.js"; sourceTree = "<group>"; };
+		075C9D8E1E5D67FE00924F52 /* logLevelFilter-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "logLevelFilter-test.js"; sourceTree = "<group>"; };
+		075C9D8F1E5D67FE00924F52 /* multiprocess-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "multiprocess-test.js"; sourceTree = "<group>"; };
+		075C9D901E5D67FE00924F52 /* nolog-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "nolog-test.js"; sourceTree = "<group>"; };
+		075C9D911E5D67FE00924F52 /* reloadConfiguration-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "reloadConfiguration-test.js"; sourceTree = "<group>"; };
+		075C9D921E5D67FE00924F52 /* setLevel-asymmetry-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "setLevel-asymmetry-test.js"; sourceTree = "<group>"; };
+		075C9D931E5D67FE00924F52 /* smtpAppender-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "smtpAppender-test.js"; sourceTree = "<group>"; };
+		075C9D951E5D67FE00924F52 /* BaseRollingFileStream-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "BaseRollingFileStream-test.js"; sourceTree = "<group>"; };
+		075C9D961E5D67FE00924F52 /* DateRollingFileStream-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "DateRollingFileStream-test.js"; sourceTree = "<group>"; };
+		075C9D971E5D67FE00924F52 /* rollingFileStream-test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "rollingFileStream-test.js"; sourceTree = "<group>"; };
+		075C9D981E5D67FE00924F52 /* test-rolling-file-stream */ = {isa = PBXFileReference; lastKnownFileType = text; path = "test-rolling-file-stream"; sourceTree = "<group>"; };
+		075C9D991E5D67FE00924F52 /* test-rolling-file-stream-write-less */ = {isa = PBXFileReference; lastKnownFileType = text; path = "test-rolling-file-stream-write-less"; sourceTree = "<group>"; };
+		075C9D9A1E5D67FE00924F52 /* test-rolling-file-stream-write-more */ = {isa = PBXFileReference; lastKnownFileType = text; path = "test-rolling-file-stream-write-more"; sourceTree = "<group>"; };
+		075C9D9B1E5D67FE00924F52 /* test-rolling-file-stream-write-more.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = "test-rolling-file-stream-write-more.1"; sourceTree = "<group>"; };
+		075C9D9C1E5D67FE00924F52 /* test-rolling-stream-with-existing-files */ = {isa = PBXFileReference; lastKnownFileType = text; path = "test-rolling-stream-with-existing-files"; sourceTree = "<group>"; };
+		075C9D9D1E5D67FE00924F52 /* test-rolling-stream-with-existing-files.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = "test-rolling-stream-with-existing-files.1"; sourceTree = "<group>"; };
+		075C9D9E1E5D67FE00924F52 /* test-rolling-stream-with-existing-files.11 */ = {isa = PBXFileReference; lastKnownFileType = text; path = "test-rolling-stream-with-existing-files.11"; sourceTree = "<group>"; };
+		075C9D9F1E5D67FE00924F52 /* test-rolling-stream-with-existing-files.2 */ = {isa = PBXFileReference; lastKnownFileType = text; path = "test-rolling-stream-with-existing-files.2"; sourceTree = "<group>"; };
+		075C9DA01E5D67FE00924F52 /* test-rolling-stream-with-existing-files.20 */ = {isa = PBXFileReference; lastKnownFileType = text; path = "test-rolling-stream-with-existing-files.20"; sourceTree = "<group>"; };
+		075C9DA11E5D67FE00924F52 /* test-rolling-stream-with-existing-files.3 */ = {isa = PBXFileReference; lastKnownFileType = text; path = "test-rolling-stream-with-existing-files.3"; sourceTree = "<group>"; };
+		075C9DA21E5D67FE00924F52 /* test-rolling-stream-with-existing-files.4 */ = {isa = PBXFileReference; lastKnownFileType = text; path = "test-rolling-stream-with-existing-files.4"; sourceTree = "<group>"; };
+		075C9DA31E5D67FE00924F52 /* test-rolling-stream-with-existing-files.5 */ = {isa = PBXFileReference; lastKnownFileType = text; path = "test-rolling-stream-with-existing-files.5"; sourceTree = "<group>"; };
+		075C9DA41E5D67FE00924F52 /* with-categoryFilter.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "with-categoryFilter.json"; sourceTree = "<group>"; };
+		075C9DA51E5D67FE00924F52 /* with-dateFile.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "with-dateFile.json"; sourceTree = "<group>"; };
+		075C9DA61E5D67FE00924F52 /* with-log-rolling.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "with-log-rolling.json"; sourceTree = "<group>"; };
+		075C9DA71E5D67FE00924F52 /* with-logLevelFilter.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "with-logLevelFilter.json"; sourceTree = "<group>"; };
+		075C9DA81E5D67FE00924F52 /* publish-release.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = "publish-release.sh"; path = "../publish-release.sh"; sourceTree = "<group>"; };
+		075C9DA91E5D67FE00924F52 /* publish.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = publish.sh; path = ../publish.sh; sourceTree = "<group>"; };
+		075C9DAA1E5D67FE00924F52 /* readme.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = readme.txt; path = ../readme.txt; sourceTree = "<group>"; };
+		075C9DAB1E5D67FE00924F52 /* resumable.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = resumable.js; path = ../resumable.js; sourceTree = "<group>"; };
+		075C9DAC1E5D67FE00924F52 /* route.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = route.js; path = ../route.js; sourceTree = "<group>"; };
+		075C9DAD1E5D67FE00924F52 /* run_insrv.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = run_insrv.sh; path = ../run_insrv.sh; sourceTree = "<group>"; };
+		075C9DAE1E5D67FE00924F52 /* sheldonLog.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = sheldonLog.js; path = ../sheldonLog.js; sourceTree = "<group>"; };
+		075C9DAF1E5D67FE00924F52 /* upload.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = upload.js; path = ../upload.js; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		075C9CC21E5D67E200924F52 = {
+			isa = PBXGroup;
+			children = (
+				075C9CC91E5D67FE00924F52 /* base64.js */,
+				075C9CCA1E5D67FE00924F52 /* configuration.json */,
+				075C9CCB1E5D67FE00924F52 /* create_md5.sh */,
+				075C9CCC1E5D67FE00924F52 /* downloadFile.js */,
+				075C9CCD1E5D67FE00924F52 /* genkey.sh */,
+				075C9CCE1E5D67FE00924F52 /* gmTool.js */,
+				075C9CCF1E5D67FE00924F52 /* index.js */,
+				075C9CD01E5D67FE00924F52 /* keydir */,
+				075C9CD41E5D67FE00924F52 /* liveupdate */,
+				075C9CD51E5D67FE00924F52 /* liveupdate-ubuntu.sh */,
+				075C9CDA1E5D67FE00924F52 /* node_modules */,
+				075C9DA81E5D67FE00924F52 /* publish-release.sh */,
+				075C9DA91E5D67FE00924F52 /* publish.sh */,
+				075C9DAA1E5D67FE00924F52 /* readme.txt */,
+				075C9DAB1E5D67FE00924F52 /* resumable.js */,
+				075C9DAC1E5D67FE00924F52 /* route.js */,
+				075C9DAD1E5D67FE00924F52 /* run_insrv.sh */,
+				075C9DAE1E5D67FE00924F52 /* sheldonLog.js */,
+				075C9DAF1E5D67FE00924F52 /* upload.js */,
+			);
+			sourceTree = "<group>";
+		};
+		075C9CD01E5D67FE00924F52 /* keydir */ = {
+			isa = PBXGroup;
+			children = (
+				075C9CD11E5D67FE00924F52 /* sheldon_certificate.pem */,
+				075C9CD21E5D67FE00924F52 /* sheldon_certrequest.csr */,
+				075C9CD31E5D67FE00924F52 /* sheldon_privatekey.pem */,
+			);
+			name = keydir;
+			path = ../keydir;
+			sourceTree = "<group>";
+		};
+		075C9CDA1E5D67FE00924F52 /* node_modules */ = {
+			isa = PBXGroup;
+			children = (
+				075C9CDB1E5D67FE00924F52 /* b64url */,
+				075C9CE01E5D67FE00924F52 /* formidable */,
+				075C9CEF1E5D67FE00924F52 /* lodash */,
+				075C9CFB1E5D67FE00924F52 /* log4js */,
+			);
+			name = node_modules;
+			path = ../node_modules;
+			sourceTree = "<group>";
+		};
+		075C9CDB1E5D67FE00924F52 /* b64url */ = {
+			isa = PBXGroup;
+			children = (
+				075C9CDC1E5D67FE00924F52 /* lib */,
+				075C9CDE1E5D67FE00924F52 /* package.json */,
+				075C9CDF1E5D67FE00924F52 /* readme.md */,
+			);
+			path = b64url;
+			sourceTree = "<group>";
+		};
+		075C9CDC1E5D67FE00924F52 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				075C9CDD1E5D67FE00924F52 /* b64url.js */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		075C9CE01E5D67FE00924F52 /* formidable */ = {
+			isa = PBXGroup;
+			children = (
+				075C9CE11E5D67FE00924F52 /* .npmignore */,
+				075C9CE21E5D67FE00924F52 /* .travis.yml */,
+				075C9CE31E5D67FE00924F52 /* index.js */,
+				075C9CE41E5D67FE00924F52 /* lib */,
+				075C9CEC1E5D67FE00924F52 /* LICENSE */,
+				075C9CED1E5D67FE00924F52 /* package.json */,
+				075C9CEE1E5D67FE00924F52 /* Readme.md */,
+			);
+			path = formidable;
+			sourceTree = "<group>";
+		};
+		075C9CE41E5D67FE00924F52 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				075C9CE51E5D67FE00924F52 /* file.js */,
+				075C9CE61E5D67FE00924F52 /* incoming_form.js */,
+				075C9CE71E5D67FE00924F52 /* index.js */,
+				075C9CE81E5D67FE00924F52 /* json_parser.js */,
+				075C9CE91E5D67FE00924F52 /* multipart_parser.js */,
+				075C9CEA1E5D67FE00924F52 /* octet_parser.js */,
+				075C9CEB1E5D67FE00924F52 /* querystring_parser.js */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		075C9CEF1E5D67FE00924F52 /* lodash */ = {
+			isa = PBXGroup;
+			children = (
+				075C9CF01E5D67FE00924F52 /* dist */,
+				075C9CF71E5D67FE00924F52 /* LICENSE.txt */,
+				075C9CF81E5D67FE00924F52 /* lodash.js */,
+				075C9CF91E5D67FE00924F52 /* package.json */,
+				075C9CFA1E5D67FE00924F52 /* README.md */,
+			);
+			path = lodash;
+			sourceTree = "<group>";
+		};
+		075C9CF01E5D67FE00924F52 /* dist */ = {
+			isa = PBXGroup;
+			children = (
+				075C9CF11E5D67FE00924F52 /* lodash.compat.js */,
+				075C9CF21E5D67FE00924F52 /* lodash.compat.min.js */,
+				075C9CF31E5D67FE00924F52 /* lodash.js */,
+				075C9CF41E5D67FE00924F52 /* lodash.min.js */,
+				075C9CF51E5D67FE00924F52 /* lodash.underscore.js */,
+				075C9CF61E5D67FE00924F52 /* lodash.underscore.min.js */,
+			);
+			path = dist;
+			sourceTree = "<group>";
+		};
+		075C9CFB1E5D67FE00924F52 /* log4js */ = {
+			isa = PBXGroup;
+			children = (
+				075C9CFC1E5D67FE00924F52 /* .bob */,
+				075C9CFF1E5D67FE00924F52 /* .bob.json */,
+				075C9D001E5D67FE00924F52 /* .jshintrc */,
+				075C9D011E5D67FE00924F52 /* .npmignore */,
+				075C9D021E5D67FE00924F52 /* .travis.yml */,
+				075C9D031E5D67FE00924F52 /* examples */,
+				075C9D111E5D67FE00924F52 /* lib */,
+				075C9D2C1E5D67FE00924F52 /* node_modules */,
+				075C9D751E5D67FE00924F52 /* package.json */,
+				075C9D761E5D67FE00924F52 /* README.md */,
+				075C9D771E5D67FE00924F52 /* test */,
+			);
+			path = log4js;
+			sourceTree = "<group>";
+		};
+		075C9CFC1E5D67FE00924F52 /* .bob */ = {
+			isa = PBXGroup;
+			children = (
+				075C9CFD1E5D67FE00924F52 /* lint */,
+			);
+			path = .bob;
+			sourceTree = "<group>";
+		};
+		075C9CFD1E5D67FE00924F52 /* lint */ = {
+			isa = PBXGroup;
+			children = (
+				075C9CFE1E5D67FE00924F52 /* jshint.out */,
+			);
+			path = lint;
+			sourceTree = "<group>";
+		};
+		075C9D031E5D67FE00924F52 /* examples */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D041E5D67FE00924F52 /* cheese.log */,
+				075C9D051E5D67FE00924F52 /* example-connect-logger.js */,
+				075C9D061E5D67FE00924F52 /* example-socket.js */,
+				075C9D071E5D67FE00924F52 /* example.js */,
+				075C9D081E5D67FE00924F52 /* flush-on-exit.js */,
+				075C9D091E5D67FE00924F52 /* fromreadme.js */,
+				075C9D0A1E5D67FE00924F52 /* log-rolling.js */,
+				075C9D0B1E5D67FE00924F52 /* loggly-appender.js */,
+				075C9D0C1E5D67FE00924F52 /* memory-test.js */,
+				075C9D0D1E5D67FE00924F52 /* missing-log-dir.js */,
+				075C9D0E1E5D67FE00924F52 /* pants.log */,
+				075C9D0F1E5D67FE00924F52 /* patternLayout-tokens.js */,
+				075C9D101E5D67FE00924F52 /* smtp-appender.js */,
+			);
+			path = examples;
+			sourceTree = "<group>";
+		};
+		075C9D111E5D67FE00924F52 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D121E5D67FE00924F52 /* appenders */,
+				075C9D1F1E5D67FE00924F52 /* connect-logger.js */,
+				075C9D201E5D67FE00924F52 /* date_format.js */,
+				075C9D211E5D67FE00924F52 /* debug.js */,
+				075C9D221E5D67FE00924F52 /* layouts.js */,
+				075C9D231E5D67FE00924F52 /* levels.js */,
+				075C9D241E5D67FE00924F52 /* log4js.js */,
+				075C9D251E5D67FE00924F52 /* log4js.json */,
+				075C9D261E5D67FE00924F52 /* logger.js */,
+				075C9D271E5D67FE00924F52 /* streams */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		075C9D121E5D67FE00924F52 /* appenders */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D131E5D67FE00924F52 /* categoryFilter.js */,
+				075C9D141E5D67FE00924F52 /* clustered.js */,
+				075C9D151E5D67FE00924F52 /* console.js */,
+				075C9D161E5D67FE00924F52 /* dateFile.js */,
+				075C9D171E5D67FE00924F52 /* file.js */,
+				075C9D181E5D67FE00924F52 /* fileSync.js */,
+				075C9D191E5D67FE00924F52 /* gelf.js */,
+				075C9D1A1E5D67FE00924F52 /* hookio.js */,
+				075C9D1B1E5D67FE00924F52 /* loggly.js */,
+				075C9D1C1E5D67FE00924F52 /* logLevelFilter.js */,
+				075C9D1D1E5D67FE00924F52 /* multiprocess.js */,
+				075C9D1E1E5D67FE00924F52 /* smtp.js */,
+			);
+			path = appenders;
+			sourceTree = "<group>";
+		};
+		075C9D271E5D67FE00924F52 /* streams */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D281E5D67FE00924F52 /* BaseRollingFileStream.js */,
+				075C9D291E5D67FE00924F52 /* DateRollingFileStream.js */,
+				075C9D2A1E5D67FE00924F52 /* index.js */,
+				075C9D2B1E5D67FE00924F52 /* RollingFileStream.js */,
+			);
+			path = streams;
+			sourceTree = "<group>";
+		};
+		075C9D2C1E5D67FE00924F52 /* node_modules */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D2D1E5D67FE00924F52 /* .bin */,
+				075C9D2F1E5D67FE00924F52 /* async */,
+				075C9D411E5D67FE00924F52 /* readable-stream */,
+				075C9D6D1E5D67FE00924F52 /* semver */,
+			);
+			path = node_modules;
+			sourceTree = "<group>";
+		};
+		075C9D2D1E5D67FE00924F52 /* .bin */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D2E1E5D67FE00924F52 /* semver */,
+			);
+			path = .bin;
+			sourceTree = "<group>";
+		};
+		075C9D2F1E5D67FE00924F52 /* async */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D301E5D67FE00924F52 /* .gitmodules */,
+				075C9D311E5D67FE00924F52 /* deps */,
+				075C9D341E5D67FE00924F52 /* dist */,
+				075C9D361E5D67FE00924F52 /* index.js */,
+				075C9D371E5D67FE00924F52 /* lib */,
+				075C9D391E5D67FE00924F52 /* LICENSE */,
+				075C9D3A1E5D67FE00924F52 /* Makefile */,
+				075C9D3B1E5D67FE00924F52 /* nodelint.cfg */,
+				075C9D3C1E5D67FE00924F52 /* package.json */,
+				075C9D3D1E5D67FE00924F52 /* README.md */,
+				075C9D3E1E5D67FE00924F52 /* test */,
+			);
+			path = async;
+			sourceTree = "<group>";
+		};
+		075C9D311E5D67FE00924F52 /* deps */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D321E5D67FE00924F52 /* nodeunit.css */,
+				075C9D331E5D67FE00924F52 /* nodeunit.js */,
+			);
+			path = deps;
+			sourceTree = "<group>";
+		};
+		075C9D341E5D67FE00924F52 /* dist */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D351E5D67FE00924F52 /* async.min.js */,
+			);
+			path = dist;
+			sourceTree = "<group>";
+		};
+		075C9D371E5D67FE00924F52 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D381E5D67FE00924F52 /* async.js */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		075C9D3E1E5D67FE00924F52 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D3F1E5D67FE00924F52 /* test-async.js */,
+				075C9D401E5D67FE00924F52 /* test.html */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
+		075C9D411E5D67FE00924F52 /* readable-stream */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D421E5D67FE00924F52 /* .npmignore */,
+				075C9D431E5D67FE00924F52 /* duplex.js */,
+				075C9D441E5D67FE00924F52 /* lib */,
+				075C9D4A1E5D67FE00924F52 /* LICENSE */,
+				075C9D4B1E5D67FE00924F52 /* node_modules */,
+				075C9D671E5D67FE00924F52 /* package.json */,
+				075C9D681E5D67FE00924F52 /* passthrough.js */,
+				075C9D691E5D67FE00924F52 /* readable.js */,
+				075C9D6A1E5D67FE00924F52 /* README.md */,
+				075C9D6B1E5D67FE00924F52 /* transform.js */,
+				075C9D6C1E5D67FE00924F52 /* writable.js */,
+			);
+			path = "readable-stream";
+			sourceTree = "<group>";
+		};
+		075C9D441E5D67FE00924F52 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D451E5D67FE00924F52 /* _stream_duplex.js */,
+				075C9D461E5D67FE00924F52 /* _stream_passthrough.js */,
+				075C9D471E5D67FE00924F52 /* _stream_readable.js */,
+				075C9D481E5D67FE00924F52 /* _stream_transform.js */,
+				075C9D491E5D67FE00924F52 /* _stream_writable.js */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		075C9D4B1E5D67FE00924F52 /* node_modules */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D4C1E5D67FE00924F52 /* core-util-is */,
+				075C9D531E5D67FE00924F52 /* inherits */,
+				075C9D5A1E5D67FE00924F52 /* isarray */,
+				075C9D611E5D67FE00924F52 /* string_decoder */,
+			);
+			path = node_modules;
+			sourceTree = "<group>";
+		};
+		075C9D4C1E5D67FE00924F52 /* core-util-is */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D4D1E5D67FE00924F52 /* float.patch */,
+				075C9D4E1E5D67FE00924F52 /* lib */,
+				075C9D501E5D67FE00924F52 /* package.json */,
+				075C9D511E5D67FE00924F52 /* README.md */,
+				075C9D521E5D67FE00924F52 /* util.js */,
+			);
+			path = "core-util-is";
+			sourceTree = "<group>";
+		};
+		075C9D4E1E5D67FE00924F52 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D4F1E5D67FE00924F52 /* util.js */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		075C9D531E5D67FE00924F52 /* inherits */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D541E5D67FE00924F52 /* inherits.js */,
+				075C9D551E5D67FE00924F52 /* inherits_browser.js */,
+				075C9D561E5D67FE00924F52 /* LICENSE */,
+				075C9D571E5D67FE00924F52 /* package.json */,
+				075C9D581E5D67FE00924F52 /* README.md */,
+				075C9D591E5D67FE00924F52 /* test.js */,
+			);
+			path = inherits;
+			sourceTree = "<group>";
+		};
+		075C9D5A1E5D67FE00924F52 /* isarray */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D5B1E5D67FE00924F52 /* build */,
+				075C9D5D1E5D67FE00924F52 /* component.json */,
+				075C9D5E1E5D67FE00924F52 /* index.js */,
+				075C9D5F1E5D67FE00924F52 /* package.json */,
+				075C9D601E5D67FE00924F52 /* README.md */,
+			);
+			path = isarray;
+			sourceTree = "<group>";
+		};
+		075C9D5B1E5D67FE00924F52 /* build */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D5C1E5D67FE00924F52 /* build.js */,
+			);
+			path = build;
+			sourceTree = "<group>";
+		};
+		075C9D611E5D67FE00924F52 /* string_decoder */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D621E5D67FE00924F52 /* .npmignore */,
+				075C9D631E5D67FE00924F52 /* index.js */,
+				075C9D641E5D67FE00924F52 /* LICENSE */,
+				075C9D651E5D67FE00924F52 /* package.json */,
+				075C9D661E5D67FE00924F52 /* README.md */,
+			);
+			path = string_decoder;
+			sourceTree = "<group>";
+		};
+		075C9D6D1E5D67FE00924F52 /* semver */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D6E1E5D67FE00924F52 /* bin */,
+				075C9D701E5D67FE00924F52 /* LICENSE */,
+				075C9D711E5D67FE00924F52 /* package.json */,
+				075C9D721E5D67FE00924F52 /* README.md */,
+				075C9D731E5D67FE00924F52 /* semver.js */,
+				075C9D741E5D67FE00924F52 /* test.js */,
+			);
+			path = semver;
+			sourceTree = "<group>";
+		};
+		075C9D6E1E5D67FE00924F52 /* bin */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D6F1E5D67FE00924F52 /* semver */,
+			);
+			path = bin;
+			sourceTree = "<group>";
+		};
+		075C9D771E5D67FE00924F52 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D781E5D67FE00924F52 /* categoryFilter-test.js */,
+				075C9D791E5D67FE00924F52 /* clusteredAppender-test.js */,
+				075C9D7A1E5D67FE00924F52 /* configuration-test.js */,
+				075C9D7B1E5D67FE00924F52 /* configureNoLevels-test.js */,
+				075C9D7C1E5D67FE00924F52 /* connect-logger-test.js */,
+				075C9D7D1E5D67FE00924F52 /* consoleAppender-test.js */,
+				075C9D7E1E5D67FE00924F52 /* date_format-test.js */,
+				075C9D7F1E5D67FE00924F52 /* dateFileAppender-test.js */,
+				075C9D801E5D67FE00924F52 /* debug-test.js */,
+				075C9D811E5D67FE00924F52 /* fileAppender-test.js */,
+				075C9D821E5D67FE00924F52 /* fileSyncAppender-test.js */,
+				075C9D831E5D67FE00924F52 /* gelfAppender-test.js */,
+				075C9D841E5D67FE00924F52 /* gelfAppender-test.js.orig */,
+				075C9D851E5D67FE00924F52 /* global-log-level-test.js */,
+				075C9D861E5D67FE00924F52 /* hookioAppender-test.js */,
+				075C9D871E5D67FE00924F52 /* layouts-test.js */,
+				075C9D881E5D67FE00924F52 /* levels-test.js */,
+				075C9D891E5D67FE00924F52 /* log-abspath-test.js */,
+				075C9D8A1E5D67FE00924F52 /* log4js.json */,
+				075C9D8B1E5D67FE00924F52 /* logger-test.js */,
+				075C9D8C1E5D67FE00924F52 /* logging-test.js */,
+				075C9D8D1E5D67FE00924F52 /* logglyAppender-test.js */,
+				075C9D8E1E5D67FE00924F52 /* logLevelFilter-test.js */,
+				075C9D8F1E5D67FE00924F52 /* multiprocess-test.js */,
+				075C9D901E5D67FE00924F52 /* nolog-test.js */,
+				075C9D911E5D67FE00924F52 /* reloadConfiguration-test.js */,
+				075C9D921E5D67FE00924F52 /* setLevel-asymmetry-test.js */,
+				075C9D931E5D67FE00924F52 /* smtpAppender-test.js */,
+				075C9D941E5D67FE00924F52 /* streams */,
+				075C9DA41E5D67FE00924F52 /* with-categoryFilter.json */,
+				075C9DA51E5D67FE00924F52 /* with-dateFile.json */,
+				075C9DA61E5D67FE00924F52 /* with-log-rolling.json */,
+				075C9DA71E5D67FE00924F52 /* with-logLevelFilter.json */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
+		075C9D941E5D67FE00924F52 /* streams */ = {
+			isa = PBXGroup;
+			children = (
+				075C9D951E5D67FE00924F52 /* BaseRollingFileStream-test.js */,
+				075C9D961E5D67FE00924F52 /* DateRollingFileStream-test.js */,
+				075C9D971E5D67FE00924F52 /* rollingFileStream-test.js */,
+				075C9D981E5D67FE00924F52 /* test-rolling-file-stream */,
+				075C9D991E5D67FE00924F52 /* test-rolling-file-stream-write-less */,
+				075C9D9A1E5D67FE00924F52 /* test-rolling-file-stream-write-more */,
+				075C9D9B1E5D67FE00924F52 /* test-rolling-file-stream-write-more.1 */,
+				075C9D9C1E5D67FE00924F52 /* test-rolling-stream-with-existing-files */,
+				075C9D9D1E5D67FE00924F52 /* test-rolling-stream-with-existing-files.1 */,
+				075C9D9E1E5D67FE00924F52 /* test-rolling-stream-with-existing-files.11 */,
+				075C9D9F1E5D67FE00924F52 /* test-rolling-stream-with-existing-files.2 */,
+				075C9DA01E5D67FE00924F52 /* test-rolling-stream-with-existing-files.20 */,
+				075C9DA11E5D67FE00924F52 /* test-rolling-stream-with-existing-files.3 */,
+				075C9DA21E5D67FE00924F52 /* test-rolling-stream-with-existing-files.4 */,
+				075C9DA31E5D67FE00924F52 /* test-rolling-stream-with-existing-files.5 */,
+			);
+			path = streams;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		075C9CC31E5D67E200924F52 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0810;
+			};
+			buildConfigurationList = 075C9CC61E5D67E200924F52 /* Build configuration list for PBXProject "lpProj" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 075C9CC21E5D67E200924F52;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		075C9CC71E5D67E200924F52 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		075C9CC81E5D67E200924F52 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		075C9CC61E5D67E200924F52 /* Build configuration list for PBXProject "lpProj" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				075C9CC71E5D67E200924F52 /* Debug */,
+				075C9CC81E5D67E200924F52 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 075C9CC31E5D67E200924F52 /* Project object */;
+}

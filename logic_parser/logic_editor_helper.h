@@ -176,6 +176,7 @@ namespace LogicEditorHelper
 
 	const char* GetXmlParam(ndxml *xml);
 	const char *_GetXmlName(ndxml *xml, CXMLAlias *alias);
+	const char *_GetNodeComment(ndxml *xml);
 
 	const char *_GetXmlDesc(ndxml *xml);
 

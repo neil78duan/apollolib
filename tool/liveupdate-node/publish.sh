@@ -42,23 +42,23 @@ rm -rf $package_name
 update_hostFile()
 {
 	hostName="$1"
-	pem_file="$2"
+	remote_port="$2"
 
 	echo "begin update $hostName"
 
-	ssh -tt $pem_file $hostName "sudo nohup /etc/init.d/liveupdate stop "
+	ssh -tt -p $remote_port $hostName "sudo nohup /etc/init.d/liveupdate stop "
 	sleep 1
 	echo "stop service success!"
 
- 	scp $pem_file $package_name".zip"  $hostName:/home/liveupdate
+ 	scp -P $remote_port $package_name".zip"  $hostName:/home/liveupdate
  	[ $? -ne 0 ] && return 1
  	echo "Copy $package_name to $hostName success!"
 
- 	ssh -t $pem_file $hostName "/home/liveupdate/run_insrv.sh $package_name"
+ 	ssh -t -p $remote_port $hostName "/home/liveupdate/run_insrv.sh $package_name"
  	[ $? -ne 0 ] && return 1
  	echo "unzip file success!"
 
-	ssh -tt $pem_file  $hostName "sudo nohup /etc/init.d/liveupdate start "
+	ssh -tt -p $remote_port  $hostName "sudo nohup /etc/init.d/liveupdate start "
 	sleep 1
 	echo "update server program to $hostName SUCCESS!"
 }
@@ -67,6 +67,6 @@ update_hostFile()
 # update file to aws-np-2
 # update_hostFile $ROOT_INTER
 
-update_hostFile $AWS_APO_HOST "-i $AWS_APO_PEM"
+update_hostFile $RABBIT_HOST 1101
 cd $orgDir
 

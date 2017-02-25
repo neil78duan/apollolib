@@ -21,24 +21,23 @@
 #include "logic_editor_helper.h"
 using namespace LogicEditorHelper;
 
-/////////////////////////////
-
-LogicCompiler::LogicCompiler() :m_bDebugInfo(false), m_compileStep(0), m_curRoot(0), m_aimByteOrder(ND_L_ENDIAN)
-{
-}
-
-LogicCompiler::~LogicCompiler()
-{
-	ndxml_destroy(&m_configRoot);
-	m_enumText.clear();
-}
 
 
-bool LogicCompiler::setConfigFile(const char *config)
+logciCompileSetting::logciCompileSetting()
 {
 	ndxml_initroot(&m_configRoot);
-	
-	if (ndxml_load_ex(config, &m_configRoot, nd_get_encode_name(ND_ENCODE_TYPE))) {
+}
+
+logciCompileSetting::~logciCompileSetting()
+{
+}
+
+
+bool logciCompileSetting::setConfigFile(const char *config, int encodeType )
+{
+	ndxml_initroot(&m_configRoot);
+
+	if (ndxml_load_ex(config, &m_configRoot, nd_get_encode_name(encodeType))) {
 		nd_logerror("open compile setting %s file error please check file exist\n", config);
 		return false;
 	}
@@ -54,7 +53,7 @@ bool LogicCompiler::setConfigFile(const char *config)
 		setnode.name = ndxml_getval(sub_set);
 		p = ndxml_getattr_val(sub_set, "instruction");
 		if (p)	{
-			setnode.ins_type =(NDUINT8) ndstr_atoi_hex(p);
+			setnode.ins_type = (NDUINT8)ndstr_atoi_hex(p);
 		}
 
 		p = ndxml_getattr_val(sub_set, "ins_id");
@@ -79,12 +78,12 @@ bool LogicCompiler::setConfigFile(const char *config)
 		if (p)	{
 			setnode.need_type_stream = (NDUINT8)ndstr_atoi_hex(p);
 		}
-		
+
 		p = ndxml_getattr_val(sub_set, "need_refill_offset");
 		if (p)	{
 			setnode.need_refill_jump_len = (NDUINT8)ndstr_atoi_hex(p);
 		}
-		
+
 		m_settings.insert(std::make_pair(setnode.name, setnode));
 	}
 	//get enum text
@@ -92,11 +91,23 @@ bool LogicCompiler::setConfigFile(const char *config)
 	if (node){
 		_loadEnumText(node);
 	}
+	if (!onLoad(m_configRoot))	{
+		return false;
+	}
 	return true;
 }
 
 
-int LogicCompiler::_loadEnumText(ndxml *dataTypeDef)
+const compile_setting* logciCompileSetting::getStepConfig(const char *stepName)const
+{
+	compile_setting_t::const_iterator it = m_settings.find(stepName);
+	if (it == m_settings.end())	{
+		return NULL;
+	}
+	return &(it->second);
+}
+
+int logciCompileSetting::_loadEnumText(ndxml *dataTypeDef)
 {
 	for (int i = 0; i < ndxml_num(dataTypeDef); i++) {
 		const char *p;
@@ -106,12 +117,12 @@ int LogicCompiler::_loadEnumText(ndxml *dataTypeDef)
 		if (!p || !*p){
 			continue;
 		}
-		if (0!=ndstricmp(p, "enum")){
+		if (0 != ndstricmp(p, "enum")){
 			continue;
 		}
 		enumTextVct textvals;
 		int num = _getEnumText(node, textvals);
-		if (num==0)	{
+		if (num == 0)	{
 			continue;
 		}
 		std::string name = ndxml_getname(node);
@@ -120,7 +131,7 @@ int LogicCompiler::_loadEnumText(ndxml *dataTypeDef)
 	return (int)m_enumText.size();
 }
 
-int LogicCompiler::_getEnumText(ndxml * node, enumTextVct &enumText)
+int logciCompileSetting::_getEnumText(ndxml * node, enumTextVct &enumText)
 {
 	const char *pEnumType = (char*)ndxml_getattr_val(node, "enum_type");
 	if (!pEnumType || !*pEnumType){
@@ -146,16 +157,81 @@ int LogicCompiler::_getEnumText(ndxml * node, enumTextVct &enumText)
 			++pEnumTexts;
 		}
 	} while (pEnumTexts && *pEnumTexts);
-	return (int) enumText.enumTextVals.size();
+	return (int)enumText.enumTextVals.size();
 }
+
+
+
+const char* logciCompileSetting::_getNodeText(ndxml *paramNode, char *buf, size_t bufsize)
+{
+	const char *p = ndxml_getattr_val(paramNode, "kinds");
+	if (!p || !*p){
+		return getRealValFromStr(ndxml_getval(paramNode), buf, bufsize);
+	}
+
+	if (0 == ndstricmp(p, "enum")){
+
+		enumTextVct textvals;
+		int num = _getEnumText(paramNode, textvals);
+		if (num > 0)	{
+			int index = ndxml_getval_int(paramNode);
+			if (index < textvals.enumTextVals.size()) {
+				strncpy(buf, textvals.enumTextVals[index].c_str(), bufsize);
+				return buf;
+			}
+		}
+
+	}
+	else if (0 == ndstricmp(p, "reference")){
+		p = ndxml_getattr_val(paramNode, "reference_type");
+		if (p && *p){
+			enum_textValue_t::iterator it = m_enumText.find(p);
+			if (it != m_enumText.end()) {
+				int index = ndxml_getval_int(paramNode);
+				if (index < it->second.enumTextVals.size()) {
+					strncpy(buf, it->second.enumTextVals[index].c_str(), bufsize);
+					return buf;
+				}
+				return NULL;
+			}
+		}
+	}
+
+	return getRealValFromStr(ndxml_getval(paramNode), buf, bufsize);
+}
+
+
+bool logciCompileSetting::onLoad(ndxml &cfgRoot)
+{
+	return true;
+}
+
+/////////////////////////////
+
+LogicCompiler::LogicCompiler() :m_bDebugInfo(false), m_compileStep(0), m_curRoot(0), m_aimByteOrder(ND_L_ENDIAN)
+{
+}
+
+LogicCompiler::~LogicCompiler()
+{
+	ndxml_destroy(&m_configRoot);
+	m_enumText.clear();
+}
+
 
 
 bool LogicCompiler::_isFileInfo(ndxml * node)
 {
-	const char *name = ndxml_getname(node) ;
-	if (name && 0==strcmp(name, "moduleInfo") ) {
-		return true ;
+	const char *p = ndxml_getattr_val(node, "is_file_info");
+	if (p && *p){
+		if (0 == ndstricmp(p, "true") || 0 == ndstricmp(p, "yes") || 0 == ndstricmp(p, "ok") ) {
+			return true;
+		}
 	}
+// 	const char *name = ndxml_getname(node) ;
+// 	if (name && 0==strcmp(name, "moduleInfo") ) {
+// 		return true ;
+// 	}
 	return  false ;
 }
 
@@ -196,45 +272,6 @@ bool LogicCompiler::_isGlobalFunc(ndxml *funcNode)
 		}
 	}
 	return bGlobal ? true : false;
-}
-
-
-const char* LogicCompiler::_getNodeText(ndxml *paramNode, char *buf, size_t bufsize)
-{
-	const char *p = ndxml_getattr_val(paramNode, "kinds");
-	if (!p || !*p){
-		return getRealValFromStr(ndxml_getval(paramNode), buf, bufsize);
-	}
-
-	if (0 == ndstricmp(p, "enum")){
-
-		enumTextVct textvals;
-		int num = _getEnumText(paramNode, textvals);
-		if (num > 0)	{
-			int index = ndxml_getval_int(paramNode);
-			if (index < textvals.enumTextVals.size()) {
-				strncpy(buf, textvals.enumTextVals[index].c_str(), bufsize);
-				return buf;
-			}
-		}
-
-	}
-	else if (0 == ndstricmp(p, "reference")){
-		p = ndxml_getattr_val(paramNode, "reference_type");
-		if (p && *p){
-			enum_textValue_t::iterator it = m_enumText.find(p);
-			if (it != m_enumText.end() ) {
-				int index = ndxml_getval_int(paramNode);
-				if (index < it->second.enumTextVals.size()) {
-					strncpy(buf, it->second.enumTextVals[index].c_str(), bufsize);
-					return buf;
-				}
-				return NULL;
-			}
-		}
-	}
-	
-	return getRealValFromStr(ndxml_getval(paramNode), buf, bufsize);
 }
 
 bool LogicCompiler::compileXml(const char *xmlFile, const char *outStreamFile, int outEncodeType, bool withDgbInfo, int byteOrder)
@@ -421,7 +458,7 @@ int LogicCompiler::subEntry2Stream(compile_setting *stepSetting, ndxml *subEntry
 		}
 
 		const char *pCompCondName = ndxml_getattr_val(blockXml, "comp_cond");
-		const char *pCompValName = ndxml_getattr_val(blockXml, "comp_value");
+		//const char *pCompValName = ndxml_getattr_val(blockXml, "comp_value");
 		nd_assert(pCompCondName);
 		//nd_assert(pCompValName);
 
@@ -608,7 +645,7 @@ int LogicCompiler::trytoCompileExceptionHandler(ndxml *funcNode, char *buf, size
 			p = lp_write_stream(p, (NDUINT32)E_OP_EXIT, m_aimByteOrder);
 			p = lp_write_stream(p, (NDUINT32)0, m_aimByteOrder);
 			
-			ret = p - buf;
+			ret = (int)( p - buf);
 			//*size_addr = (NDUINT16)(p - (char*)size_addr) - sizeof(NDUINT16);
 			NDUINT16 blockSize =(NDUINT16)(p - (char*)size_addr) - sizeof(NDUINT16) ;
 			lp_write_stream((lp_stream_t)size_addr, blockSize,m_aimByteOrder) ;
@@ -657,7 +694,7 @@ int LogicCompiler::trytoCompileInitilizerBlock(ndxml *funcNode,char *buf, size_t
 			p += len;
 			bufsize -= len;
 			
-			ret = p - buf;
+			ret = (int)( p - buf);
 			break;
 		}
 	}
@@ -740,7 +777,7 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 	char *p = buf;
 	int len = (int)bufsize;
 	lp_stream_t cur_step_size = 0; //record this step size in debug block 
-	NDUINT32 _reverd = 0;
+	//NDUINT32 _reverd = 0;
 
 	//get current step name 
 	m_cur_node_index++;
@@ -829,7 +866,7 @@ int LogicCompiler::user_define_step(compile_setting *setting, ndxml *stepNode, c
 int LogicCompiler::step_function_info(compile_setting *setting, ndxml *stepNode, char *buf, size_t bufsize)
 {
 	char *p = buf;
-	int len = (int)bufsize;
+	//int len = (int)bufsize;
 	const char *pStepName = ndxml_getname(stepNode);
 	const char *pValOrg = ndxml_getval(stepNode);
 	if (!pStepName || !pValOrg || *pValOrg)	{
@@ -1096,7 +1133,7 @@ bool LogicCompiler::_fillJumpLengthInblock(const char *blockStart, size_t blockS
 		if (paddr < blockStart || paddr >= (blockStart + blockSize)) {
 			return false;
 		}
-		NDUINT32 offset = blockSize - (paddr + sizeof(NDUINT32) - blockStart);
+		NDUINT32 offset =(NDUINT32)( blockSize - (paddr + sizeof(NDUINT32) - blockStart) );
 		lp_write_stream(paddr,offset, m_aimByteOrder);
 	}
 

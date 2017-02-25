@@ -48,7 +48,7 @@ static const char* get_pwd_text(char *buf, int inlen)
 	MD5CryptToStr32(tmp_buf, size, buf) ;
 #else
 	
-	MD5CryptToStr32("test-duan", 9, buf) ;
+        MD5CryptToStr32((char*)"test-duan", 9, buf) ;
 #endif
 	buf[32] = 0 ;
 	return buf ;

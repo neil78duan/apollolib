@@ -1,0 +1,32 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "d8e9d0bf-a0f4-486c-b570-114cb19f679c++6143",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "d8e9d0bf-a0f4-486c-b570-114cb19f679c++6143" : {
+      "DVTSourceControlWorkingCopyRepositoryBranchesLocationKey" : "Guardian\/branches",
+      "DVTSourceControlWorkingCopyRepositoryTagsLocationKey" : "Guardian\/tags",
+      "DVTSourceControlWorkingCopyRepositoryPrimaryBranchLocationKey" : "Guardian\/trunk"
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "d8e9d0bf-a0f4-486c-b570-114cb19f679c++6143" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "0974DCF3-B177-46A6-9138-7F53EFD2C12E",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "d8e9d0bf-a0f4-486c-b570-114cb19f679c++6143" : "apollolib\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "lpProj",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "tool\/liveupdate-node\/lpProj\/lpProj.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/neil78duan\/apollolib.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "d8e9d0bf-a0f4-486c-b570-114cb19f679c++6143"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "svn:\/\/shsvn.xinghehudong.com\/developer",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "d8e9d0bf-a0f4-486c-b570-114cb19f679c++6143"
+    }
+  ]
+}
