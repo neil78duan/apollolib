@@ -10,7 +10,12 @@
 #include "logic_parser/logicEngineRoot.h"
 #include "logic_parser/logic_editor_helper.h"
 
+#include "cli_common/dftCliMsgHandler.h"
+
+
 #include "nd_common/nd_common.h"
+#include "ndlib.h"
+
 #include "ndlog_wrapper.h"
 ND_LOG_WRAPPER_IMPLEMENTION(MainWindow, __glogWrapper);
 
@@ -207,12 +212,12 @@ bool MainWindow::openDetailView()
 }
 
 
-
-
-QWidget *MainWindow::getMainEditor()
-{
-	return m_editorWindow;
-}
+// 
+// 
+// QWidget *MainWindow::getMainEditor()
+// {
+// 	return m_editorWindow;
+// }
 
 
 const char *MainWindow::getScriptSetting(ndxml *scriptXml, const char *settingName)
@@ -283,6 +288,7 @@ void MainWindow::onXmlNodeDel(ndxml *xmlnode)
 	if (xmlnode == m_currFunction || ndxml_get_parent(m_currFunction)==xmlnode)	{
 		if (m_editorWindow)	{
 			m_editorWindow->close();
+			m_editorWindow = 0;
 		}
 		m_currFunction = NULL;
 	}
@@ -442,6 +448,66 @@ void MainWindow::onFilesTreeItemDBClicked(QTreeWidgetItem *item, int column)
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////
+
+
+bool MainWindow::setConfig(const char *cfgFile, const char *messageFile)
+{
+	m_messageFile = messageFile;
+	m_confgiFile = cfgFile;
+	if (m_editorSetting.setConfigFile(cfgFile, E_SRC_CODE_UTF_8)) {
+		if (m_editorWindow) {
+			m_editorWindow->setSettingConfig(&m_editorSetting);
+		}
+		return true;
+	}
+	return false;
+}
+bool MainWindow::setFileRoot(const char *rootFile)
+{
+	MY_LOAD_XML_AND_NEW(m_fileRoot, rootFile, return false);
+
+	ndxml *fileroot = ndxml_getnode(m_fileRoot, "script_file_manager");
+	if (!fileroot){
+		return true;
+	}
+	m_fileRootPath = rootFile;
+	const char *lastOpen = ndxml_getattr_val(fileroot, "last_edited");
+	if (!lastOpen)	{
+		return true;
+	}
+
+	for (int i = 0; i < ndxml_getsub_num(fileroot); i++) {
+		ndxml *node = ndxml_getnodei(fileroot, i);
+		const char *fileName = ndxml_getattr_val(node, "name");
+		if (0 == ndstricmp(fileName, lastOpen))	{
+			loadScriptFile(ndxml_getval(node));
+			break;
+		}
+	}
+	return true;
+}
+
+
+bool MainWindow::setDefaultFile(const char *lastEditfile)
+{
+	ndxml *fileroot = ndxml_getnode(m_fileRoot, "script_file_manager");
+	if (!fileroot){
+		return false;
+	}
+
+	for (int i = 0; i < ndxml_getsub_num(fileroot); i++) {
+		ndxml *node = ndxml_getnodei(fileroot, i);
+
+		const char *fileName = ndxml_getval(node);
+		if (0 == ndstricmp(fileName, lastEditfile))	{
+			ndxml_setattrval(fileroot, "last_edited", ndxml_getattr_val(node, "name"));
+			break;
+		}
+	}
+	return true;
+}
+
 //menu
 void MainWindow::on_actionViewList_triggered()
 {
@@ -533,61 +599,132 @@ void MainWindow::on_actionExit_triggered()
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-
-
-bool MainWindow::setConfig(const char *cfgFile,const char *messageFile)
+void MainWindow::on_actionCompileAll_triggered()
 {
-	m_messageFile = messageFile;
-	if (m_editorSetting.setConfigFile(cfgFile, E_SRC_CODE_UTF_8)) {
-		if (m_editorWindow) {
-			m_editorWindow->setSettingConfig(&m_editorSetting);
+	saveCurFile();
+	ndxml_root *xml = ndxml_getnode(m_fileRoot, "script_file_manager");
+	if (!xml){
+		return ;
+	}
+
+	bool ret = true;
+	int num = ndxml_num(xml);
+	for (int i = 0; i < num; i++) {
+		ndxml *node = ndxml_getnodei(xml, i);
+		if (!node)
+			continue;
+		if (!compileScript(ndxml_getval(node))) {
+			ret = false;
+			break;
 		}
-		return true;
+	}
+
+}
+
+
+
+static int getScriptExpEncodeType(ndxml *scriptXml)
+{
+	ndxml *moduleInfo = ndxml_getnode(scriptXml, "moduleInfo");
+	if (moduleInfo){
+		ndxml *node = ndxml_getnode(moduleInfo, "script_out_encode");
+		if (node){
+			return ndxml_getval_int(node);
+		}
+	}
+	return 0;
+}
+
+static bool getScriptExpDebugInfo(ndxml *scriptXml)
+{
+	ndxml *moduleInfo = ndxml_getnode(scriptXml, "moduleInfo");
+	if (moduleInfo){
+		ndxml *node = ndxml_getnode(moduleInfo, "script_with_debug");
+		if (node){
+			return ndxml_getval_int(node) ? true : false;
+		}
 	}
 	return false;
 }
-bool MainWindow::setFileRoot(const char *rootFile)
+bool MainWindow::compileScript(const char *scriptFile)
 {
-	MY_LOAD_XML_AND_NEW(m_fileRoot, rootFile, return false);
-
-	ndxml *fileroot = ndxml_getnode(m_fileRoot, "script_file_manager");
-	if (!fileroot){
-		return true;
-	}
-	m_fileRootPath = rootFile;
-	const char *lastOpen = ndxml_getattr_val(fileroot, "last_edited");
-	if (!lastOpen )	{
-		return true;
-	}
-
-	for (int i = 0; i < ndxml_getsub_num(fileroot); i++) {
-		ndxml *node = ndxml_getnodei(fileroot, i);
-		const char *fileName = ndxml_getattr_val(node, "name");
-		if (0 == ndstricmp(fileName, lastOpen))	{
-			loadScriptFile(ndxml_getval(node));
-			break;
-		}
-	}
-	return true;
-}
-
-
-bool MainWindow::setDefaultFile(const char *lastEditfile)
-{
-	ndxml *fileroot = ndxml_getnode(m_fileRoot, "script_file_manager");
-	if (!fileroot){
+	ndxml_root xmlScript;
+	ndxml_initroot(&xmlScript);
+	//nd_get_encode_name(ND_ENCODE_TYPE)
+	if (-1 == ndxml_load_ex(scriptFile, &xmlScript,"utf8" )) {
 		return false;
 	}
-	
-	for (int i = 0; i < ndxml_getsub_num(fileroot); i++) {
-		ndxml *node = ndxml_getnodei(fileroot, i);
+	const char*inFile = scriptFile;
 
-		const char *fileName = ndxml_getval(node);
-		if (0 == ndstricmp(fileName, lastEditfile))	{
-			ndxml_setattrval(fileroot, "last_edited", ndxml_getattr_val(node,"name"));
-			break;
-		}
+	const char *outFile = getScriptSetting(&xmlScript, "out_file");
+	if (!outFile){
+		nd_logerror("compile %s error !!!\nMaybe file is destroyed\n", scriptFile);
+		return false;
 	}
+	int outEncode = getScriptExpEncodeType(&xmlScript);
+	bool withDebug = getScriptExpDebugInfo(&xmlScript);
+	std::string outPath = outFile;
+	ndxml_destroy(&xmlScript);
+
+	outFile = outPath.c_str();
+
+	int orderType = ND_L_ENDIAN;
+// 	const char *orderName = _getFromIocfg("bin_data_byte_order");
+// 	if (orderName) {
+// 		orderType = atoi(orderName);
+// 	}
+
+	LogicCompiler lgcompile;
+
+	if (!lgcompile.setConfigFile(m_confgiFile.c_str())) {
+		return false;
+	}
+	if (!lgcompile.compileXml(inFile, outFile, outEncode, withDebug, orderType)) {
+
+		const char *pFunc = lgcompile.m_cur_function.c_str();
+		const char *pStep = lgcompile.m_cur_step.c_str();
+		char func_name[256];
+		char step_name[256];
+		if (outEncode == E_SRC_CODE_GBK) {
+			pFunc = nd_gbk_to_utf8(pFunc, func_name, sizeof(func_name));
+			pStep = nd_gbk_to_utf8(pStep, step_name, sizeof(step_name));
+		}
+		nd_logerror("compile error file %s, function %s, step %s , stepindex %d\n",
+			lgcompile.m_cur_file.c_str(), pFunc, pStep, lgcompile.m_cur_node_index);
+
+
+		return false;
+	}
+
+	/*
+	WriteLog("!!!!!!!!!!COMPILE script success !!!!!!!!!!!\n begining run script...\n");
+
+	ClientMsgHandler::ApoConnectScriptOwner apoOwner;
+	if (!apoOwner.loadDataType(_getFromIocfg("net_data_def"))) {
+		WriteLog("load data type error\n");
+		return false;
+	}
+
+	LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
+	nd_assert(scriptRoot);
+
+	scriptRoot->setPrint(ND_LOG_WRAPPER_PRINT(MainWindow), NULL);
+	scriptRoot->getGlobalParser().setSimulate(true, &apoOwner);
+
+	if (0 != scriptRoot->LoadScript(outFile)){
+		WriteLog("load script error n");
+		LogicEngineRoot::destroy_Instant();
+		return false;
+	}
+
+	WriteLog("start run script...\n");
+	if (0 != scriptRoot->test()){
+		WriteLog("run script error\n");
+		LogicEngineRoot::destroy_Instant();
+		return false;
+	}
+
+	LogicEngineRoot::destroy_Instant();*/
+	WriteLog("!!!!!!!!!!!!!!!!!!!SCRIPT COMPILE SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	return true;
 }

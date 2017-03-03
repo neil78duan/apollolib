@@ -71,6 +71,12 @@ bool apoUiMainEditor::showFunction(ndxml *data, ndxml_root *xmlfile)
 }
 
 
+bool apoUiMainEditor::showCompileError(ndxml_root *xmlfile, stackIndex_vct &errStackIndex)
+{
+
+	return false;
+}
+
 void apoUiMainEditor::clear()
 {
 	m_curDragType = E_MOUSE_TYPE_MOVE;
@@ -80,8 +86,7 @@ void apoUiMainEditor::clear()
 	m_popSrc = 0;
 
 	m_drawingBezier = 0;
-	for (int i = 0; i < m_beziersVct.size(); i++)
-	{
+	for (int i = 0; i < m_beziersVct.size(); i++){
 		delete m_beziersVct[i];
 	}
 	m_beziersVct.clear();

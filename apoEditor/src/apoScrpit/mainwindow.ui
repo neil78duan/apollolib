@@ -33,6 +33,7 @@
     <addaction name="separator"/>
     <addaction name="actionSave"/>
     <addaction name="actionCompile"/>
+    <addaction name="actionCompileAll"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuWindows">
@@ -145,10 +146,15 @@
   </action>
   <action name="actionCompile">
    <property name="text">
-    <string>Compile</string>
+    <string>CompileThis</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+B</string>
+   </property>
+  </action>
+  <action name="actionCompileAll">
+   <property name="text">
+    <string>CompileAll</string>
    </property>
   </action>
  </widget>

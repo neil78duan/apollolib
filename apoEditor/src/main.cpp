@@ -18,12 +18,13 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-#ifdef WIN32 
-
-	QTextCodec::setCodecForLocale(QTextCodec::codecForName("GB18030"));
-#endif 
+// #ifdef WIN32 
+// 
+// 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("GB18030"));
+// #endif 
     //QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
+	ndstr_set_code(E_SRC_CODE_UTF_8);
     QString workDir, ioCfgFile , editorCfg;
     if (!trytoGetSetting(workDir, ioCfgFile, editorCfg)) {
         return 1 ;

@@ -535,6 +535,7 @@ int LogicCompiler::subEntry2Stream(compile_setting *stepSetting, ndxml *subEntry
 	for (int i = 0; i < blocks.size(); i++) {
 		blockStrem &node = blocks[i];
 		if (node.size >= len) {
+			nd_logerror("block size is to long\n");
 			return -1;
 		}
 		if (node.jump_end_offset){
@@ -562,12 +563,16 @@ int LogicCompiler::subLoop2Stream(compile_setting *setting, ndxml *loopSteps, ch
 	const char *pCompCondName = ndxml_getattr_val(loopSteps, "comp_cond");
 	if (!pCompCondName)	{
 		nd_logerror("loop need loop times setting\n");
+
+		_makeErrorStack(loopSteps);
 		return -1;
 	}
 
 	ndxml *cmpNode = ndxml_getnode(loopSteps, pCompCondName);
 	if (!cmpNode){
 		nd_logerror("loop need loop times xmlnode short\n");
+
+		_makeErrorStack(loopSteps);
 		return -1;
 	}
 	//write index count
@@ -785,6 +790,8 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 	if (!pStepName) {
 		pStepName = ndxml_getname(stepNode);
 		if (!pStepName)	{
+
+			_makeErrorStack(stepNode);
 			return	-1;
 		}
 	}
@@ -803,6 +810,8 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 
 		}
 		else {
+			nd_logerror("wirte debug info error :%s\n", pStepName);
+			_makeErrorStack(stepNode);
 			return -1;
 		}
 	}
@@ -825,6 +834,7 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 		}
 		int ret = param2Stream(xmlParam, stepNode, p, len, &args_num);
 		if (-1==ret)	{
+			//_makeErrorStack(xmlParam);
 			return -1;
 		}
 		p += ret;
@@ -957,6 +967,8 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 	const char *pVal = _getNodeText(xmlParam, tmpbuf, sizeof(tmpbuf));
 	if (!pVal || !*pVal){
 		nd_logerror("paser %s error string value is empty\n", paramName);
+
+		_makeErrorStack(xmlParam);
 		return -1;
 	}
 
@@ -966,6 +978,8 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 	if (type < OT_LAST_RET || type == OT_TIME)	{
 		if (0 == ndstricmp(pVal, "none") || 0 == ndstricmp(pVal, "null")) {
 			nd_logerror("%s string value not none or null\n", paramName);
+
+			_makeErrorStack(xmlParam);
 			return -1;
 		}
 	}
@@ -1103,7 +1117,8 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 		}
 		break;
 	default:
-		nd_logerror("param %s type %d not suport \n", paramName,type);
+		nd_logerror("param %s type %d not suport \n", paramName, type);
+		_makeErrorStack(xmlParam);
 		return -1;
 		break;
 	}
@@ -1131,6 +1146,7 @@ bool LogicCompiler::_fillJumpLengthInblock(const char *blockStart, size_t blockS
 	for (shortJumpAddr_vct::iterator it=m_reFillJumpStepSize.begin(); it != m_reFillJumpStepSize.end();  it++){
 		char *paddr = it->addr;
 		if (paddr < blockStart || paddr >= (blockStart + blockSize)) {
+			nd_logerror("bin code is to big\n");
 			return false;
 		}
 		NDUINT32 offset =(NDUINT32)( blockSize - (paddr + sizeof(NDUINT32) - blockStart) );

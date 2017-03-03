@@ -128,6 +128,7 @@ public:
 	LogicCompiler();
 	~LogicCompiler();
 	bool compileXml(const char *xmlFile, const char *outStreamFile, int outEncodeType = 0, bool withDgbInfo = false, int byteOrder=1);
+	stackIndex_vct &getErrorStack() { return m_curCompileStack; }
 	//bool setConfigFile(const char *config);
 private:
 	

@@ -64,6 +64,8 @@ private slots:
 
 	void onFilesTreeItemDBClicked(QTreeWidgetItem *item, int column);
 	void onFunctionsTreeItemDBClicked(QTreeWidgetItem *item, int column);
+    void on_actionCompileAll_triggered();
+
 protected:
 
 	bool openFileView();
@@ -72,6 +74,7 @@ protected:
 	bool openDetailView();
 
 	bool showCommonDeatil(ndxml *xmldata);
+	bool compileScript(const char *scriptFile);
 
 	bool loadScriptFile(const char *scriptFile);
 	const char *getScriptSetting(ndxml *scriptXml, const char *settingName);
@@ -82,7 +85,7 @@ protected:
 	bool checkNeedSave();
 	void closeCurFile();
 
-	QWidget *getMainEditor();
+	//QWidget *getMainEditor();
 
 	//bool loadUserdefDisplayList(ndxml_root &xmlNameList, const char *name);
 
@@ -99,6 +102,7 @@ protected:
 	
 	std::string m_fileTemplate;
 	std::string m_messageFile ;
+	std::string m_confgiFile;
 private:
 
     Ui::MainWindow *ui;

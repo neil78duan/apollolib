@@ -14,6 +14,7 @@
 #include "apoScrpit/apoUiBezier.h"
 #include "apoScrpit/apoEditorSetting.h"
 #include "apoScrpit/apoUiDetailView.h"
+#include "logic_parser/logic_compile.h"
 
 #include <map>
 #include <QWidget>
@@ -39,6 +40,8 @@ public:
 
 	void clear();
 	void curDetailChanged(apoBaseExeNode *exenode);
+
+	bool showCompileError(ndxml_root *xmlfile, stackIndex_vct &errStackIndex);
 
 public slots:
 	void onExenodeDBClicked(apoBaseExeNode *exeNode, QMouseEvent * event);
