@@ -120,6 +120,8 @@ typedef std::vector<shortJumpInfo> shortJumpAddr_vct;
 
 typedef std::map<std::string, streamNode> streamCMD_map_t;
 
+typedef std::vector<int> stackIndex_vct;
+
 class LogicCompiler : public logciCompileSetting
 {
 public:
@@ -169,7 +171,9 @@ private:
 
 	bool _compilePreCmd(ndxml *xmlroot);
 
-
+	void _pushStack(int stackIndex) ;
+	void _popStac();
+	void _makeErrorStack(ndxml *xmlError) ;
 
 	bool m_bDebugInfo;
 	int m_compileStep;
@@ -183,6 +187,8 @@ private:
 	shortJumpAddr_vct m_reFillJumpStepSize;
 
 	streamCMD_map_t m_preCMDs;
+	
+	friend class CStackIndexHelper ;
 public:
 	//current compile info 
 	std::string m_cur_file;
@@ -191,7 +197,24 @@ public:
 	std::string m_cur_step;
 	int m_cur_node_index;
 
-	
+	stackIndex_vct m_curCompileStack ;
+};
+
+
+class CStackIndexHelper
+{
+public:
+	CStackIndexHelper(LogicCompiler *host,int index) {
+		m_host = host ;
+		m_host->_pushStack(index);
+	}
+	~CStackIndexHelper() {
+		if (m_host) {
+			m_host->_popStac() ;
+		}
+	}
+private:
+	LogicCompiler *m_host ;
 };
 
 //bool getTimeFromStr(const char *pInput, size_t *size, time_t *tim);

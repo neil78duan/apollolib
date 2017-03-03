@@ -1188,3 +1188,32 @@ bool LogicCompiler::_compilePreCmd(ndxml *xmlroot)
 
 	return true;
 }
+void LogicCompiler::_pushStack(int stackIndex)
+{
+	m_curCompileStack.push_back(stackIndex);
+}
+void LogicCompiler::_popStac()
+{
+	if(m_curCompileStack.size() >0) {
+		m_curCompileStack.pop_back();
+	}
+}
+
+void LogicCompiler::_makeErrorStack(ndxml *xmlError)
+{
+	stackIndex_vct stackIndex ;
+	m_curCompileStack.clear() ;
+	ndxml *parent = ndxml_get_parent(xmlError) ;
+	ndxml *node = xmlError ;
+	
+	while (parent ) {
+		int index = ndxml_get_index(parent, node) ;
+		stackIndex.push_back(index) ;
+		
+		node = parent ;
+		parent = ndxml_get_parent(node) ;
+	}
+	m_curCompileStack.clear() ;
+	
+	m_curCompileStack.insert(m_curCompileStack.begin(), stackIndex.rbegin(), stackIndex.rend()) ;
+}
