@@ -30,13 +30,10 @@ public:
     ~MainWindow();
 
 	void showAllView();
-	//bool loadUserDefEnum(const char *userDefEnumFile);
-	//bool addDisplayNameList(const char *name, text_vct_t &text_list);
-
 	void setNewFileTempl(const char *newfiletempl) { m_fileTemplate = newfiletempl; }
 	bool setConfig(const char *cfgFile,const char *messageFile);
 	bool setFileRoot(const char *rootFile);
-	
+	bool setDefaultFile(const char *lastEditfile);
 
 	void ClearLog();
 	void WriteLog(const char *logText);
@@ -45,6 +42,8 @@ public:
 
 public slots:
 	void onShowExeNodeDetail(apoBaseExeNode *exenode);
+	void onFileChanged();
+	void onXmlNodeDel(ndxml *xmlnode);
 private slots:
     void on_actionViewList_triggered();
     void on_actionViewOutput_triggered();
@@ -79,8 +78,9 @@ protected:
 	bool showCurFile();
 	bool showCurFunctions();
 
-	bool saveCurFile(){ return true; }
-	bool checkNeedSave(){ return true; }
+	bool saveCurFile();
+	bool checkNeedSave();
+	void closeCurFile();
 
 	QWidget *getMainEditor();
 
@@ -88,8 +88,12 @@ protected:
 
 
 	//ndxml_root *m_config; //editor cconfig 
+	bool m_isChangedCurFile;
+	std::string m_fileRootPath;
 	ndxml_root *m_fileRoot;
 
+
+	std::string m_filePath;
 	ndxml_root *m_curFile;
 	ndxml *m_currFunction;
 	

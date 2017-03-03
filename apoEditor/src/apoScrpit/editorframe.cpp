@@ -23,16 +23,25 @@ void EditorFrame::setHostWidget(QWidget *host)
 void EditorFrame::closeEvent(QCloseEvent *event)
 {
 	if (myBase::checkNeedSave() )	{
+		/*
 		int ret = QMessageBox::question(this, tr("Question"), tr("The file not save,\nDo you save now?"),
-			QMessageBox::Yes | QMessageBox::No,
+			QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
 			QMessageBox::Yes);
+
 		if (QMessageBox::Yes == ret) {
 			saveCurFile();
 		}
+		else if (QMessageBox::Cancel == ret) {
+			event->ignore();
+			return;
+		}
+		*/
+		saveCurFile();
 	}
-
+	
 	if (m_myHost){
 		m_myHost->setVisible(true);
 		m_myHost->activateWindow();
 	}
+
 }

@@ -26,6 +26,7 @@ QMainWindow(parent), m_editorSetting(), m_editorWindow(0),
 	m_fileRoot(0), m_curFile(0), m_currFunction(0), 
     ui(new Ui::MainWindow)
 {
+	m_isChangedCurFile = false;
     ui->setupUi(this);
 
     setWindowTitle(tr("main editor"));
@@ -34,11 +35,9 @@ QMainWindow(parent), m_editorSetting(), m_editorWindow(0),
 
 MainWindow::~MainWindow()
 {
-// 	if (m_config){
-// 		ndxml_destroy(m_config);
-// 		m_config = 0;
-// 	}
+	closeCurFile();
 	if (m_fileRoot){
+		ndxml_save(m_fileRoot, m_fileRootPath.c_str());
 		ndxml_destroy(m_fileRoot);
 		m_fileRoot = 0;
 	}
@@ -63,20 +62,22 @@ void MainWindow::ClearLog()
 
 void MainWindow::WriteLog(const char *logText)
 {
-#ifdef WIN32
-	char buf[1024];
-	nd_gbk_to_utf8(logText, buf, sizeof(buf));
-	logText = buf;
-#endif
+// #ifdef WIN32
+// 	char buf[1024];
+// 	nd_gbk_to_utf8(logText, buf, sizeof(buf));
+// 	logText = buf;
+// #endif
 	
 	QDockWidget *pDock = this->findChild<QDockWidget*>("outputView");
 	if (pDock){
 		QTextEdit *pEdit = pDock->findChild<QTextEdit*>("logTextEdit");
 		if (pEdit)	{
-			QTextCursor cursor(pEdit->textCursor());
-			cursor.movePosition(QTextCursor::End);
-			pEdit->insertPlainText(QString(logText));
-			return;				 
+			pEdit->append(QString(logText));
+			return;
+// 			QTextCursor cursor(pEdit->textCursor());
+// 			cursor.movePosition(QTextCursor::End);
+// 			pEdit->insertPlainText(QString(logText));
+// 			return;				 
 		}
 	}
 	m_logText.append(QString(logText));	
@@ -136,8 +137,20 @@ bool MainWindow::openFunctionsView()
 		apoXmlTreeView *subwindow = new apoXmlTreeView();
 		subwindow->setAttribute(Qt::WA_DeleteOnClose, true);
 		subwindow->setObjectName("functionsTree");
+
+		//mask functon create
+		subwindow->unCreateNewChild("func_node");
+		subwindow->unCreateNewChild("msg_handler_node"); 
+		subwindow->unCreateNewChild("event_callback_node");
+
+
 		QObject::connect(subwindow, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
 			this, SLOT(onFunctionsTreeItemDBClicked(QTreeWidgetItem *, int)));
+
+		QObject::connect(subwindow, SIGNAL(xmlNodeDelSignal(ndxml *)),
+			this, SLOT(onXmlNodeDel(ndxml *)));
+
+		QObject::connect(subwindow, SIGNAL(xmlDataChangedSignal()),this, SLOT(onFileChanged()));
 
 		if (m_curFile)	{
 			//subwindow->setComfig(m_editorSetting.getConfig());
@@ -194,43 +207,6 @@ bool MainWindow::openDetailView()
 }
 
 
-bool MainWindow::showCommonDeatil(ndxml *xmldata)
-{
-	QDockWidget *pDock = this->findChild<QDockWidget*>("DetailView");
-	if (pDock)	{
-		QWidget *w = pDock->findChild<QWidget*>("xmlDetailTable");
-				
-		if (dynamic_cast<apoUiCommonXmlView*>(w)) {
-			apoUiCommonXmlView *subwindow = (apoUiCommonXmlView*)w;
-			subwindow->showDetail(xmldata, m_curFile);
-		}
-		else {
-			w->close();
-
-			apoUiCommonXmlView *subwindow = new apoUiCommonXmlView();
-			subwindow->setAttribute(Qt::WA_DeleteOnClose, true);
-			subwindow->setObjectName("xmlDetailTable");
-			subwindow->showDetail(xmldata, m_curFile);
-			pDock->setWidget(subwindow);
-		}
-	}
-	else {
-		pDock = new QDockWidget(tr("Detail"), this);
-		pDock->setObjectName("DetailView");
-		pDock->setAttribute(Qt::WA_DeleteOnClose, true);
-
-		apoUiCommonXmlView *subwindow = new apoUiCommonXmlView();
-		subwindow->setAttribute(Qt::WA_DeleteOnClose, true);
-		subwindow->setObjectName("xmlDetailTable");
-
-		subwindow->showDetail(xmldata, m_curFile);
-
-		pDock->setWidget(subwindow);
-		addDockWidget(Qt::RightDockWidgetArea, pDock);
-		return true;
-	}
-	return true;
-}
 
 
 QWidget *MainWindow::getMainEditor()
@@ -256,6 +232,11 @@ bool MainWindow::loadScriptFile(const char *scriptFile)
 	if (!scriptFile)	{
 		return false;
 	}
+	if (checkNeedSave()){
+		saveCurFile();
+		ndxml_destroy(m_curFile);
+		delete m_curFile;
+	}
 
 	MY_LOAD_XML_AND_NEW(m_curFile, scriptFile, return true);
 
@@ -266,26 +247,12 @@ bool MainWindow::loadScriptFile(const char *scriptFile)
 		m_editorSetting.loadUserDefEnum(filename);
 		m_editorSetting.loadMessageDefine(m_messageFile.c_str()) ;
 	}
-// 
-// 	ndxml *funcroot = ndxml_getnode(&xml_net_protocol, "MessageDefine");
-// 	if (funcroot) {
-// 		char buf[256];
-// 		text_list_t messageList;
-// 		for (int i = 0; i < ndxml_num(funcroot); i++){
-// 			ndxml *fnode = ndxml_getnodei(funcroot, i);
-// 			const char *pDispname = ndxml_getattr_val(fnode, "comment");
-// 			const char *pRealVal = ndxml_getattr_val(fnode, "id");
-// 			const char *p = buildDisplaNameValStr(pRealVal, pDispname, buf, sizeof(buf));
-// 			messageList.push_back(QString(p));
-// 		}
-// 		xmlDlg.addDisplayNameList("msg_list", messageList);
-// 	}
-
 
 	m_currFunction = NULL;
 	if (!openFunctionsView()) {
 		showCurFile();
 	}
+	m_filePath = scriptFile;
 	return true;
 }
 bool MainWindow::showCurFile()
@@ -304,6 +271,23 @@ bool MainWindow::showCurFile()
 	return true;
 }
 
+
+void MainWindow::onFileChanged()
+{
+	m_isChangedCurFile = true;
+}
+
+void MainWindow::onXmlNodeDel(ndxml *xmlnode)
+{
+	m_isChangedCurFile = true;
+	if (xmlnode == m_currFunction || ndxml_get_parent(m_currFunction)==xmlnode)	{
+		if (m_editorWindow)	{
+			m_editorWindow->close();
+		}
+		m_currFunction = NULL;
+	}
+}
+
 bool MainWindow::showCurFunctions()
 {
 	if (m_editorWindow)	{
@@ -313,9 +297,8 @@ bool MainWindow::showCurFunctions()
 	m_editorWindow = new apoUiMainEditor(this);
 	m_editorWindow->setAttribute(Qt::WA_DeleteOnClose, true);
 
-	//QObject::connect(m_editorWindow, SIGNAL(showExenodeDetail(apoBaseExeNode *exeNode)),
-		//this, SLOT(onShowExeNodeDetail(apoBaseExeNode *)));
-
+	QObject::connect(m_editorWindow, SIGNAL(showExenodeSignal(apoBaseExeNode*)),
+		this, SLOT(onShowExeNodeDetail(apoBaseExeNode *)));
 	
 	setCentralWidget(m_editorWindow);
 
@@ -323,40 +306,94 @@ bool MainWindow::showCurFunctions()
 	return false;
 }
 
-void MainWindow::onShowExeNodeDetail(apoBaseExeNode *exenode)
+bool MainWindow::saveCurFile()
+{ 
+	m_isChangedCurFile = false;
+	if (m_curFile){
+		ndxml_save(m_curFile, m_filePath.c_str());
+		nd_logmsg("save %s script ok\n", m_filePath.c_str());
+		return true;
+	}
+	return false;
+}
+
+void MainWindow::closeCurFile()
+{
+	if (m_curFile) {
+		ndxml_destroy(m_curFile);
+		delete m_curFile;
+	}
+	m_isChangedCurFile = false;
+}
+
+bool MainWindow::checkNeedSave()
+{
+	return m_isChangedCurFile && m_curFile;
+}
+
+bool MainWindow::showCommonDeatil(ndxml *xmldata)
 {
 	QDockWidget *pDock = this->findChild<QDockWidget*>("DetailView");
 	if (pDock)	{
 		QWidget *w = pDock->findChild<QWidget*>("xmlDetailTable");
-
-		if (dynamic_cast<apoUiDetailView*>(w)) {
-			apoUiDetailView *subwindow = (apoUiDetailView*)w;
-			subwindow->showDetail(exenode, m_curFile);
-		}
-		else {
+		if (w)	{
 			w->close();
-
-			apoUiDetailView *subwindow = new apoUiDetailView();
-			subwindow->setAttribute(Qt::WA_DeleteOnClose, true);
-			subwindow->setObjectName("xmlDetailTable");
-			subwindow->showDetail(exenode, m_curFile);
-			pDock->setWidget(subwindow);
 		}
 	}
 	else {
 		pDock = new QDockWidget(tr("Detail"), this);
 		pDock->setObjectName("DetailView");
 		pDock->setAttribute(Qt::WA_DeleteOnClose, true);
-
-		apoUiDetailView *subwindow = new apoUiDetailView();
-		subwindow->setAttribute(Qt::WA_DeleteOnClose, true);
-		subwindow->setObjectName("xmlDetailTable");
-		subwindow->showDetail(exenode, m_curFile);
-		pDock->setWidget(subwindow);
-
-		pDock->setWidget(subwindow);
-		addDockWidget(Qt::RightDockWidgetArea, pDock);
 	}
+
+	apoUiCommonXmlView *subwindow = new apoUiCommonXmlView();
+	subwindow->setAttribute(Qt::WA_DeleteOnClose, true);
+	subwindow->setObjectName("xmlDetailTable");
+
+	subwindow->showDetail(xmldata, m_curFile);
+
+	QObject::connect(subwindow, SIGNAL(xmlDataChanged()),
+		this, SLOT(onFileChanged()));
+
+	pDock->setWidget(subwindow);
+	addDockWidget(Qt::RightDockWidgetArea, pDock);
+	
+	return true;
+}
+
+void MainWindow::onShowExeNodeDetail(apoBaseExeNode *exenode)
+{
+	QDockWidget *pDock = this->findChild<QDockWidget*>("DetailView");
+	if (pDock)	{
+		QWidget *w = pDock->findChild<QWidget*>("xmlDetailTable");
+		if (w)	{
+			w->close();
+		}
+	}
+	else {
+		pDock = new QDockWidget(tr("Detail"), this);
+		pDock->setObjectName("DetailView");
+		pDock->setAttribute(Qt::WA_DeleteOnClose, true);
+	}
+
+	apoUiDetailView *subwindow = new apoUiDetailView();
+	subwindow->setAttribute(Qt::WA_DeleteOnClose, true);
+	subwindow->setObjectName("xmlDetailTable");
+	subwindow->showDetail(exenode, m_curFile);
+
+	QObject::connect(subwindow, SIGNAL(xmlDataChanged()),
+		this, SLOT(onFileChanged()));
+
+	if (m_editorWindow) {
+		QObject::connect(subwindow, SIGNAL(xmlDataChanged()),
+			m_editorWindow, SLOT(onCurNodeChanged()));
+	}
+
+
+	pDock->setWidget(subwindow);
+
+	addDockWidget(Qt::RightDockWidgetArea, pDock);
+
 }
 
 //double click function list
@@ -383,10 +420,10 @@ void MainWindow::onFunctionsTreeItemDBClicked(QTreeWidgetItem *item, int column)
 	}
 	else if (0 == ndstricmp(pAction, "detail")) {
 		showCommonDeatil(pxml);
-		m_editorWindow->curDetailChanged(NULL);
-		//m_currFunction = pxml;
+		if (m_editorWindow) {
+			m_editorWindow->curDetailChanged(NULL);
+		}
 	}
-	//nd_logmsg("show functions !");
 }
 
 // double click file list
@@ -400,19 +437,9 @@ void MainWindow::onFilesTreeItemDBClicked(QTreeWidgetItem *item, int column)
 	if (!pxml)	{
 		return;
 	}
-	loadScriptFile(ndxml_getval(pxml));
-// 
-// 	const char *fileName = ndxml_getval(pxml);
-// 	if (fileName && *fileName)	{
-// 		MY_LOAD_XML_AND_NEW(m_curFile, fileName, return);
-// 
-// 		m_currFunction = NULL;
-// 		if (!openFunctionsView()) {
-// 			showCurFile();
-// 		}
-// 
-// 	}
-	//nd_logmsg("load %s\n", fileName);
+	if (loadScriptFile(ndxml_getval(pxml))) {
+		setDefaultFile(ndxml_getval(pxml));
+	}
 }
 
 //menu
@@ -424,8 +451,7 @@ void MainWindow::on_actionViewList_triggered()
 		return;
 	}
 	else {
-		openFileView();
-	
+		openFileView();	
 	}
 	
 }
@@ -510,14 +536,6 @@ void MainWindow::on_actionExit_triggered()
 //////////////////////////////////////////////////////////////////////////
 
 
-// 
-// bool MainWindow::setConfig(const char *cfgFile)
-// {
-// 	MY_LOAD_XML_AND_NEW(m_config, cfgFile, return false);
-// 	return true;
-// }
-
-
 bool MainWindow::setConfig(const char *cfgFile,const char *messageFile)
 {
 	m_messageFile = messageFile;
@@ -537,6 +555,7 @@ bool MainWindow::setFileRoot(const char *rootFile)
 	if (!fileroot){
 		return true;
 	}
+	m_fileRootPath = rootFile;
 	const char *lastOpen = ndxml_getattr_val(fileroot, "last_edited");
 	if (!lastOpen )	{
 		return true;
@@ -547,19 +566,28 @@ bool MainWindow::setFileRoot(const char *rootFile)
 		const char *fileName = ndxml_getattr_val(node, "name");
 		if (0 == ndstricmp(fileName, lastOpen))	{
 			loadScriptFile(ndxml_getval(node));
-// 			const char *filePath = ndxml_getval(node);
-// 			if (filePath)	{
-// 				MY_LOAD_XML_AND_NEW(m_curFile, filePath, return true);
-// 				m_currFunction = NULL;
-// 				if (!openFunctionsView()) {
-// 					showCurFile();
-// 				}
-// 			}
 			break;
 		}
-
 	}
-
 	return true;
+}
 
+
+bool MainWindow::setDefaultFile(const char *lastEditfile)
+{
+	ndxml *fileroot = ndxml_getnode(m_fileRoot, "script_file_manager");
+	if (!fileroot){
+		return false;
+	}
+	
+	for (int i = 0; i < ndxml_getsub_num(fileroot); i++) {
+		ndxml *node = ndxml_getnodei(fileroot, i);
+
+		const char *fileName = ndxml_getval(node);
+		if (0 == ndstricmp(fileName, lastEditfile))	{
+			ndxml_setattrval(fileroot, "last_edited", ndxml_getattr_val(node,"name"));
+			break;
+		}
+	}
+	return true;
 }

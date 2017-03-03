@@ -442,10 +442,17 @@ bool CapolloParseEditorDlg::compileScript(const char *scriptFile)
 	}
 	const char*inFile = scriptFile;
 
-	std::string outFile = getScriptSetting(&xmlScript, "out_file");
+	const char *outFile = getScriptSetting(&xmlScript, "out_file"); 
+	if (!outFile){
+		nd_logerror("compile %s error !!!\nMaybe file is destroyed\n", scriptFile);
+		return false;
+	}
 	int outEncode = getScriptExpEncodeType(&xmlScript);
 	bool withDebug = getScriptExpDebugInfo(&xmlScript);
+	std::string outPath = outFile;
 	ndxml_destroy(&xmlScript);
+
+	outFile = outPath.c_str();
 
 
 	int orderType = ND_L_ENDIAN;
@@ -459,7 +466,7 @@ bool CapolloParseEditorDlg::compileScript(const char *scriptFile)
 	if (!lgcompile.setConfigFile(CONFIG_FILE_PATH)) {
 		return false;
 	}
-	if (!lgcompile.compileXml(inFile, outFile.c_str(), outEncode, withDebug, orderType)) {
+	if (!lgcompile.compileXml(inFile, outFile, outEncode, withDebug, orderType)) {
 
 		const char *pFunc = lgcompile.m_cur_function.c_str();
 		const char *pStep = lgcompile.m_cur_step.c_str();
@@ -488,7 +495,7 @@ bool CapolloParseEditorDlg::compileScript(const char *scriptFile)
 
 	scriptRoot->setPrint(out_print, NULL);
 	scriptRoot->getGlobalParser().setSimulate(true, &apoOwner);
-	if (0 != scriptRoot->LoadScript(outFile.c_str())){
+	if (0 != scriptRoot->LoadScript(outFile)){
 		LogText("加载脚本出错！\n");
 		LogicEngineRoot::destroy_Instant();
 		return false;

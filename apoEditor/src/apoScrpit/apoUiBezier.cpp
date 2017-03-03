@@ -15,6 +15,9 @@
 apoUiBezier::apoUiBezier( QWidget *parent, const QPoint &startPos, const QPoint &endPos):
     m_parent(parent)
 {
+	m_type = LineParam;
+	m_color = Qt::red;
+	m_lineWid = 1;
 
 	m_startCtrl = 0;
 	m_endCtrl = 0 ;
@@ -24,7 +27,13 @@ apoUiBezier::apoUiBezier( QWidget *parent, const QPoint &startPos, const QPoint 
 
 apoUiBezier::apoUiBezier(QWidget *parent) : m_parent(parent)
 {
+	m_type = LineParam;
 
+	m_color = Qt::red;
+	m_lineWid = 1;
+
+	m_startCtrl = 0;
+	m_endCtrl = 0;
 }
 
 apoUiBezier::~apoUiBezier()
@@ -44,11 +53,16 @@ apoUiBezier &apoUiBezier::operator=(const apoUiBezier &r)
 
 	COPY_FROM_R(m_startCtrl);
 	COPY_FROM_R(m_endCtrl);
+
+	COPY_FROM_R(m_color);
+	COPY_FROM_R(m_lineWid);
+	COPY_FROM_R(m_type);
+
 	return *this;
 }
 
 
-void apoUiBezier::setConnector(QWidget *fromCtrl, QWidget *toCtrl)
+void apoUiBezier::setAnchor(QWidget *fromCtrl, QWidget *toCtrl)
 {
 	m_startCtrl = fromCtrl;
 	m_endCtrl = toCtrl;
@@ -133,9 +147,11 @@ void apoUiBezier::paint()
 	QPainter painter(m_parent);
 	QPainterPath myPath;
 
+	//painter.setPen(QPen(Qt::red, 2));
+
 	myPath.moveTo(m_start);
 	myPath.cubicTo(m_ctrlPos1, m_ctrlPos2, m_end);
-	painter.setPen(Qt::red);
+	painter.setPen(QPen(m_color, (qreal)m_lineWid));
 	painter.drawPath(myPath);
 }
 

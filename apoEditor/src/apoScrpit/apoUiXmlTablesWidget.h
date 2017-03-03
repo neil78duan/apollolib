@@ -33,7 +33,7 @@ public:
 
 
 	virtual bool showDetail(void *data, ndxml_root *xmlfile);
-	void setDisplayFile(ndxml_root *filexml) { m_root = filexml; }
+	void setDisplayFile(ndxml_root *filexml) { m_rootFile = filexml; }
 
 
 public slots:
@@ -58,11 +58,13 @@ protected:
 	bool _GetFileName(bool bOpen, QString & strFile, const char *default_file);
 	bool _OpenFilter(QString &strPath, const QString &tip);
 
+	virtual bool onChanged(int row, int column, const char *xmlRealValue);
+	ndxml *_getXml(int row, int column);
 	apoEditorSetting *m_rootSetting;
 
-	ndxml_root *m_root;		//be edited file 
+	ndxml_root *m_rootFile;		//be edited file 
 	ndxml_root *m_config;	//setting.xml file
-	ndxml *m_curValue;
+	ndxml *m_editedNode;
 
 	LogicEditorHelper::CXMLAlias *m_alias;
 	bool m_beginEditor;

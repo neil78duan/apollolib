@@ -17,6 +17,7 @@ namespace Ui {
 class startDialog;
 }
 
+class DBLDatabase;
 class dialogCloseHelper
 {
 public:
@@ -101,6 +102,8 @@ private:
 
     bool runTest();
     bool expExcel();
+
+	bool expLua(const char *outPath, const DBLDatabase &db);
 
     Ui::startDialog *ui;
 

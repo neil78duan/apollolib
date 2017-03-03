@@ -6,7 +6,7 @@
  *
  * 2017.2.7
  */
-
+#include "apoUiBezier.h"
 #include "apoBaseExeNode.h"
 #include "apoUiParam.h"
 #include "apoScrpit/apoEditorSetting.h"
@@ -22,7 +22,7 @@
 
 //////////////////////////////////////////////////////////////////////////
 apoBaseExeNode::apoBaseExeNode(QWidget *parent, ndxml *xmlnode, const char*tips) :
-QWidget(parent), m_toNextNode(NULL),  m_nodeXml(0),
+QWidget(parent), m_toNextNode(NULL), m_nodeXml(0), m_outParamAddNew(0),
 	m_returnValue(NULL), m_title(NULL), m_addNewParam(NULL), m_runInNode(NULL)
 {
 
@@ -31,6 +31,7 @@ QWidget(parent), m_toNextNode(NULL),  m_nodeXml(0),
 	m_disableNewParam = false;
 	m_disableIn = false;
 	m_selected = false;
+	m_disableNewFuncParam = true;
 	m_type = 0;
 	m_tips = tips;
 	setNodeInfo(parent, xmlnode);
@@ -39,7 +40,7 @@ QWidget(parent), m_toNextNode(NULL),  m_nodeXml(0),
 
 
 apoBaseExeNode::apoBaseExeNode(QWidget *parent) :
-	QWidget(parent), m_toNextNode(NULL),
+QWidget(parent), m_toNextNode(NULL), m_outParamAddNew(0),
 	m_returnValue(NULL), m_title(NULL), m_addNewParam(NULL), m_runInNode(NULL)
 {
 	m_type = 0;
@@ -225,6 +226,14 @@ void apoBaseExeNode::disableConnectIn()
 {
 	m_disableIn = true;
 }
+
+void apoBaseExeNode::enableOutParam()
+{
+	m_disableNewFuncParam = false;
+}
+
+void setOutParamNum(int num);
+
 void apoBaseExeNode::setSelected(bool isSelected)
 {
 	m_selected = isSelected;
@@ -238,18 +247,175 @@ void apoBaseExeNode::setTitle(const QString &title)
 	}
 }
 
+QString apoBaseExeNode::getTitle()
+{
+	if (m_title){
+		return m_title->text();
+	}
+	return QString("Node");
+}
+
 void apoBaseExeNode::setTips(const QString &tips)
 {
 	m_tips = tips;
 }
 
-void apoBaseExeNode::addnewClicked()
+void apoBaseExeNode::onInputValAddClicked()
 {
 	apoBaseParam *paramCtrl = insertNewParam();
 	if (paramCtrl)	{
 		onParamCreated(paramCtrl);
 		this->update();
+		emit NodeAddParamSignal(this);
 	} 	
+}
+
+
+bool apoBaseExeNode::isMyParam(apoBaseParam *paramCtrl)
+{
+	for (int i = 0; i < m_paramVct.size(); i++){
+		if (m_paramVct[i] == paramCtrl)	{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool apoBaseExeNode::closeParam(apoBaseSlotCtrl *param)
+{
+	bool ret = false;
+	for (QVector<apoBaseParam *>::iterator it = m_paramVct.begin(); it != m_paramVct.end(); it++) {
+		if ((*it) == param)	{			
+			m_paramVct.erase(it);
+			param->close();
+
+			ret = true;
+			break;
+		}
+	}
+	if (ret) {
+		initParamPos();
+		return ret;
+	}
+
+	QVector<apoBaseSlotCtrl *>::iterator itFnd = m_outParamVct.end();
+	for (QVector<apoBaseSlotCtrl *>::iterator it = m_outParamVct.begin(); it != m_outParamVct.end(); it++) {
+		if ((*it) == param)	{
+			if (param->getConnector() )	{
+				return false;
+			}
+			itFnd = it;
+			continue;
+		}
+		if (itFnd != m_outParamVct.end())	{
+			QPoint pos = (*it)->pos();
+			pos.setY(pos.y() - E_LINE_HEIGHT);
+			(*it)->move(pos);
+ 		}
+	}
+
+	if (itFnd != m_outParamVct.end())	{
+		m_outParamVct.erase(itFnd);
+		param->close();
+
+		QPoint pos = m_outParamAddNew->pos();
+		pos.setY(pos.y() - E_LINE_HEIGHT);
+		m_outParamAddNew->move(pos);
+		return true;
+	}
+
+	return false;
+}
+
+apoBaseSlotCtrl* apoBaseExeNode::getFunctionParam(int index)
+{
+	if (index > 10 || index<= 0)	{
+		return NULL;
+	}
+	
+	int num = m_outParamVct.size();
+	if (num < index){
+		for (int i = 0; i < (index - num) ; i++){
+			onAddFunctionInParam();
+		}
+	}
+	return m_outParamVct[index - 1];
+}
+
+
+int apoBaseExeNode::getFunctionParamIndex(apoBaseSlotCtrl* slot)
+{
+	for (int i = 0; i < m_outParamVct.size(); i++)	{
+		if (slot == m_outParamVct[i]){
+			return i + 1;
+		}
+	}
+	return -1;
+}
+
+apoBaseExeNode *apoBaseExeNode::getMyPreNode()
+{
+	if (!m_runInNode) {
+		return NULL;
+	}
+
+	apoUiBezier *pBze = m_runInNode->getConnector();
+	if (!pBze){
+		return NULL;
+	}
+
+	QWidget *w = pBze->getAnotherSlot(m_runInNode);
+	if (!w)	{
+		return NULL;
+	}
+	return dynamic_cast<apoBaseExeNode*>(w->parent());		
+}
+
+apoBaseExeNode *apoBaseExeNode::getMyNextNode()
+{
+	if (!m_toNextNode) {
+		return NULL;
+	}
+
+	apoUiBezier *pBze = m_toNextNode->getConnector();
+	if (!pBze){
+		return NULL;
+	}
+
+	QWidget *w = pBze->getAnotherSlot(m_toNextNode);
+	if (!w)	{
+		return NULL;
+	}
+	return dynamic_cast<apoBaseExeNode*>(w->parent());
+}
+
+void apoBaseExeNode::onAddFunctionInParam()
+{
+	//apoBaseSlotCtrl*pParamCtrl;
+	//CREATE_CTRL_OBJECT(apoBaseSlotCtrl, ">>", white, return);
+
+	QString str1;
+	str1.sprintf("In%d >>", m_outParamVct.size() + 1);
+	apoBaseSlotCtrl*pParamCtrl = new apoBaseSlotCtrl(str1,this);	
+	pParamCtrl->resize(PARAM_CTRL_W*2, PARAM_CTRL_H);
+	pParamCtrl->setStyleSheet("QLabel{background-color:white;}");
+	pParamCtrl->setAttribute(Qt::WA_DeleteOnClose, true);
+
+	pParamCtrl->setSlotType(apoBaseParam::SLOT_FUNCTION_PARAM);
+
+	QPoint newPos = m_outParamAddNew->pos();
+	pParamCtrl->move(newPos.x() , newPos.y());
+	pParamCtrl->show();
+
+	newPos.setY(newPos.y() + E_LINE_HEIGHT);
+	m_outParamAddNew->move(newPos);
+
+	m_outParamVct.push_back(pParamCtrl);
+
+	int param_num = m_outParamVct.size();
+	if (param_num >= 2) {
+		m_size.setHeight(m_size.height() + E_LINE_HEIGHT);
+	}
 }
 
 apoBaseParam* apoBaseExeNode::insertNewParam()
@@ -348,23 +514,11 @@ void apoBaseExeNode::init(const QString &title)
 	destroy();
 	apoBaseSlotCtrl *label;
     int x = 0, y = MARGIN_Y ;  //START coord
-
-#define CREATE_CTRL_OBJECT(_qType,_text, _color, _outputVar) \
-	do		{		\
-		_qType *ctrl1 = new _qType(QString(_text) , this);	\
-		ctrl1->resize(PARAM_CTRL_W, PARAM_CTRL_H);			\
-        ctrl1->setStyleSheet("QLabel{background-color:"# _color ";}");	\
-		ctrl1->move(x, y);									\
-		ctrl1->show();										\
-		ctrl1->setAttribute(Qt::WA_DeleteOnClose, true);	\
-		_outputVar = ctrl1;									\
-	} while (0)
-
-
+	
     //connect in ctrl
 	if (!m_disableIn)	{
 		CREATE_CTRL_OBJECT(apoBaseSlotCtrl, "->", green, m_runInNode);
-		m_runInNode->setSlotType(apoBaseSlotCtrl::SLOT_IN);
+		m_runInNode->setSlotType(apoBaseSlotCtrl::SLOT_RUN_IN);
 	}
 
     //init title label ;
@@ -391,7 +545,7 @@ void apoBaseExeNode::init(const QString &title)
     //add new-param button
 	if (!m_disableNewParam) {
 		CREATE_CTRL_OBJECT(QPushButton, "+", green, m_addNewParam);
-		connect(m_addNewParam, SIGNAL(clicked()), this, SLOT(addnewClicked()));
+		connect(m_addNewParam, SIGNAL(clicked()), this, SLOT(onInputValAddClicked()));
 		y += E_LINE_HEIGHT;
 	}
 
@@ -408,7 +562,7 @@ void apoBaseExeNode::init(const QString &title)
 	if (!m_disableToNext) {
 		y = E_LINE_HEIGHT *2 - MARGIN_Y;
 		CREATE_CTRL_OBJECT(apoBaseSlotCtrl, "->", yellow, m_toNextNode);
-		m_toNextNode->setSlotType(apoBaseSlotCtrl::SLOT_OUT);
+		m_toNextNode->setSlotType(apoBaseSlotCtrl::SLOT_RUN_OUT);
 
 	}
 
@@ -419,10 +573,49 @@ void apoBaseExeNode::init(const QString &title)
 		CREATE_CTRL_OBJECT(apoBaseSlotCtrl, ">>", yellow, m_returnValue);
 		m_returnValue->setSlotType(apoBaseSlotCtrl::SLOT_RETURN_VALUE);
 	}
+
+
+	x = E_LINE_WIDTH - PARAM_CTRL_W;
+	if (!m_disableNewFuncParam) {
+		y += E_LINE_HEIGHT;
+		CREATE_CTRL_OBJECT(QPushButton, "+", green, m_outParamAddNew);
+		connect(m_outParamAddNew, SIGNAL(clicked()), this, SLOT(onAddFunctionInParam()));
+		y += E_LINE_HEIGHT;
+	}
 	
 	onInit();
 	this->setStyleSheet("background-color:white;");
 
+}
+
+void apoBaseExeNode::initParamPos()
+{
+	int x = 0;
+	int y = MARGIN_Y + E_LINE_HEIGHT * 1.5;
+
+	//draw param
+
+	foreach(apoBaseParam *label, m_paramVct){
+		label->move(x, y);
+		y += E_LINE_HEIGHT;
+		label->show();
+	}
+
+	//add new-param button
+	if (m_addNewParam) {
+		m_addNewParam->move(x, y);
+		m_addNewParam->show();
+		y += E_LINE_HEIGHT;
+	}
+
+	int param_num = m_paramVct.size();
+	if (param_num < 2) {
+		y += E_LINE_HEIGHT * (2 - param_num);
+	}
+	x += E_LINE_WIDTH;
+
+	m_size.setWidth(x + MARGIN_X);
+	m_size.setHeight(y + MARGIN_Y);
 }
 
 
@@ -468,15 +661,10 @@ void apoBaseExeNode::paintEvent(QPaintEvent *event)
 			QPoint pos = (*it)->pos();
 			pos.setX(pos.x() + (*it)->size().width() + 2);
 			pos.setY(pos.y() + MARGIN_Y -1);
-
 			painter.drawText(pos, paramInfo);
-
-
 		}
-
 	}
-
-
+	
 	if (!m_tips.isEmpty()) {
 
 		int x = MARGIN_X ;

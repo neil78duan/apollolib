@@ -26,6 +26,7 @@ enum instructType {
 	E_INSTRUCT_TYPE_EXCEPTION_CATCH, //handle error
 	E_INSTRUCT_TYPE_INIT_BLOCK, //the block of function init entry
 	E_INSTRUCT_TYPE_STEP_COLLECTION, // steps collection
+	E_INSTRUCT_TYPE_CASE_ENTRY, // SWITCH-CASE sub entry
 
 	E_INSTRUCT_TYPE_COMMENT = 100, // MARRK
 

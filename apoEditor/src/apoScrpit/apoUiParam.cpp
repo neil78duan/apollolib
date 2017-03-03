@@ -11,12 +11,35 @@
 #include "logic_parser/logic_editor_helper.h"
 #include "apoScrpit/apoEditorSetting.h"
 
+#include "apoScrpit/apoUiExeNode.h"
+
 using namespace LogicEditorHelper;
+
+bool apoBaseSlotCtrl::checkConnectIn()
+{
+	if (m_slotType == SLOT_RUN_IN || m_slotType == SLOT_NODE_INPUUT_PARAM || m_slotType == SLOT_VAR)	{
+		return true;
+	}
+	return false;
+
+}
+bool apoBaseSlotCtrl::onConnectIn(apoBaseSlotCtrl*fromSlot)
+{
+	return true;
+}
+
+
+bool apoBaseSlotCtrl::onDisconnect()
+{
+	m_myConnect = 0;
+	return true;
+}
+//////////////////////////////////////////////////////////////////////////
 
 apoBaseParam::apoBaseParam(QWidget *parent, Qt::WindowFlags f) :
 apoBaseSlotCtrl(parent, f), m_index(0)
 {
-	m_slotType = apoBaseSlotCtrl::SLOT_PARAM;
+	m_slotType = apoBaseSlotCtrl::SLOT_NODE_INPUUT_PARAM;
 
 	setParam(NULL, NULL,NULL);
 
@@ -24,7 +47,7 @@ apoBaseSlotCtrl(parent, f), m_index(0)
 apoBaseParam::apoBaseParam(const QString &text, QWidget *parent, Qt::WindowFlags f) :
 apoBaseSlotCtrl(text, parent, f), m_index(0)
 {
-	m_slotType = apoBaseSlotCtrl::SLOT_PARAM;
+	m_slotType = apoBaseSlotCtrl::SLOT_NODE_INPUUT_PARAM;
 
 	setParam(NULL, NULL,NULL);
 
@@ -69,13 +92,17 @@ void apoBaseParam::setParam(ndxml *parent, ndxml *param, ndxml *paramRef, ndxml 
 // 	return false;
 // }
 
-QString apoBaseParam::getTypeName()
+
+const char *apoBaseParam::getValue()
 {
-
+	return ndxml_getval(m_xml);
+}
+int apoBaseParam::getParamType()
+{
 	apoEditorSetting* rootSetting = apoEditorSetting::getInstant();
-	ndxml_root *config = rootSetting->getConfig();
+	//ndxml_root *config = rootSetting->getConfig();
 
-	
+
 	//get type 
 	int type = 2;
 
@@ -83,14 +110,24 @@ QString apoBaseParam::getTypeName()
 		type = ndxml_getval_int(m_reference);
 	}
 	else {
-		const compile_setting*pStepSetting =rootSetting->getStepConfig(ndxml_getname(m_xml));
+		const compile_setting*pStepSetting = rootSetting->getStepConfig(ndxml_getname(m_xml));
 		if (pStepSetting){
 			type = pStepSetting->data_type;
 		}
 	}
-	
+
+	return type;
+}
+
+QString apoBaseParam::getTypeName()
+{
 	//get type 
 	//get name list from editor_setting.xml data_type_define.type_data_type
+
+	apoEditorSetting* rootSetting = apoEditorSetting::getInstant();
+	ndxml_root *config = rootSetting->getConfig();
+
+	int type = getParamType();
 
 	ndxml *typeNameList = getDefinedType(config, "type_data_type");
 	nd_assert(typeNameList);
@@ -109,7 +146,7 @@ QString apoBaseParam::getParamName()
 	}
 	else {
 		const char *pRootName = ndxml_getname(m_parent);
-		if (0 == ndstricmp(pRootName, "param_collect"))	{
+		if (0 == ndstricmp(pRootName, "param_collect") || 0 == ndstricmp(pRootName, "condition"))	{
 			return QString(_GetXmlName(m_parent, NULL));
 
 		}
@@ -163,3 +200,63 @@ QString apoBaseParam::getDisplayValue()
 	return QString(p);
 }
 
+
+bool apoBaseParam::checkConnectIn()
+{
+	if (m_reference) {
+		return true;
+	}
+	return false;
+
+}
+bool apoBaseParam::onConnectIn(apoBaseSlotCtrl*fromSlot)
+{
+	if (!checkConnectIn()){
+		return false;
+	}
+	apoBaseExeNode *parentFrom = dynamic_cast<apoBaseExeNode *>(fromSlot->parent());
+	if (!parentFrom){
+		return false;
+	}
+	eBaseSlotType type = fromSlot->slotType();
+	if (type == SLOT_FUNCTION_PARAM){
+		int paramIndex = parentFrom->getFunctionParamIndex(fromSlot);
+		if (-1==paramIndex)	{
+			return false;
+		}
+
+		ndxml_setval_int(m_reference, (int)OT_PARAM);
+		ndxml_setval_int(m_xml, paramIndex);
+
+	}
+	else if (type == SLOT_VAR){
+		apoUiExenodeNewVar *varNode = dynamic_cast<apoUiExenodeNewVar *>(parentFrom);
+		if (!varNode){
+			return false;
+		}
+		const char *varName = varNode->getVarName();
+		if (!varName){
+			return false;
+		}
+
+		ndxml_setval_int(m_reference, (int)OT_VARIABLE);
+		ndxml_setval(m_xml, varName);
+	}
+	else if (type == SLOT_RETURN_VALUE)	{
+
+		ndxml_setval_int(m_reference, (int)OT_LAST_RET);
+		ndxml_setval(m_xml, "0");
+	}
+	return true;
+}
+
+
+bool apoBaseParam::onDisconnect()
+{
+	if (m_reference){
+		ndxml_setval_int(m_reference, (int)OT_INT);
+	}
+	ndxml_setval(m_xml, "0");
+	m_myConnect = 0;
+	return true;
+}

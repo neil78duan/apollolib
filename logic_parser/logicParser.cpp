@@ -1053,6 +1053,14 @@ DBLDataNode* LogicParserEngine::_getLocalVar(runningStack *stack, const char *va
 	if (0==ndstricmp(varname, "$CurValue") || 0==ndstricmp(varname, "$LastValue")) {
 		return &m_registerVal ;
 	}
+	else if (*varname == '$') {
+		const char *p = varname + 1;
+		int index = atoi(p);
+		if (index>0 && index <stack->params.size())	{
+			return &stack->params[index];
+		}
+		return NULL;
+	}
 	for (LogicData_vct::iterator it = stack->local_vars.begin(); it != stack->local_vars.end(); it++)	{
 		if (ndstricmp((char*)it->name.c_str(), (char*)varname) == 0) {
 			return &it->var;

@@ -38,7 +38,7 @@ apoUiDetailView::~apoUiDetailView()
 bool apoUiDetailView::showDetail(void *data, ndxml_root *xmlfile)
 {
 	preShow();
-	m_root = xmlfile;
+	m_rootFile = xmlfile;
 	showExeNode((apoBaseExeNode *)data);
 
 	postShow();
@@ -140,6 +140,53 @@ bool apoUiDetailView::_insertRow(xmlTableItem *nameItem, xmlTableItem* typeItem,
 	return true;
 }
 
+bool apoUiDetailView::onChanged(int row, int column, const char *xmlRealValue)
+{
+	if (column != 1){
+		return true;
+	}
+	ndxml *xmlval = _getXml(row, column+1);
+	if (!xmlval){
+		return false;
+	}
+
+
+	ndxml *xmlType = _getXml(row, column );
+	if (!xmlType){
+		return false;
+	}
+
+	//get type 
+	int type = -1;
+	const char *restrictType = ndxml_getattr_val(xmlval, "restrict");
+	if (restrictType&& 0==ndstricmp(restrictType, ndxml_getname(xmlType) )) {
+		type = ndxml_getval_int(xmlType);
+	}
+	if (-1==type)	{
+		return false;
+	}
+	
+	xmlTableItem *cell = (xmlTableItem*)item(row, column + 1);
+	if (!cell){
+		return NULL;
+	}
+
+	if (type == OT_PARAM){
+		cell->setText(QString("1"));
+	}
+	else if (type == OT_VARIABLE) {
+		cell->setText(QString("var1"));
+	}
+	else if (type == OT_LAST_RET) {
+		cell->setText(QString("0"));
+	}
+// 	else if (type == OT_LAST_RET) {
+// 		cell->setText(QString("0"));
+// 	}
+
+	return true;
+}
+
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
@@ -164,10 +211,15 @@ bool apoUiCommonXmlView::showDetail(void *data, ndxml_root *xmlfile)
 	preShow();
 
 	_initShowCtrl();
-	m_root = xmlfile;
-	m_curValue = (ndxml *)data;
+	m_rootFile = xmlfile;
+	m_editedNode = (ndxml *)data;
 
-	ShowXMLValue(m_curValue, CheckExpand(m_curValue));
+	int num = ndxml_getsub_num(m_editedNode);
+	for (int i = 0; i < num; i++){
+		ndxml *subNode = ndxml_getnodei(m_editedNode, i);
+		ShowXMLValue(subNode, CheckExpand(subNode));
+	}
+	//
 
 	postShow();
 

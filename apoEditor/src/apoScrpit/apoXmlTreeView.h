@@ -35,16 +35,31 @@ public:
 	void setAlias(LogicEditorHelper::CXMLAlias *alias);
 
 	void hideXmlNodeChildren(const char *xmlName);
+
+	void unCreateNewChild(const char *xmlName);
+
 signals:
+	void xmlDataChangedSignal();
+	void xmlNodeDelSignal(ndxml *delxml);
 
 public slots:
-
+	void DragCallBack(QTreeWidgetItem* from, QTreeWidgetItem* to);
+	void onItemChanged(QTreeWidgetItem *item, int column);
 protected:
+	bool TreeDragCallback(xmlTreeItem*  hFrom, xmlTreeItem* hTo);
+	bool _TreeDragInNotSameRoot(xmlTreeItem*  hFrom, xmlTreeItem*  hTo);
+	void SetExpand(QTreeWidgetItem* hItem);
 	void loadHideNodeInfo(ndxml *xmldata);
 	bool isHideChildren(const char *xmlName);
+	bool isNotCreateNewChild(const char *xmlName);
 	bool createTree();
 	bool ExpandTree(QTreeWidgetItem* hItem);
 	QTreeWidgetItem* InitTreeNode(int depth, ndxml *xml_node, QTreeWidgetItem *hParent, QTreeWidgetItem *after=NULL);
+
+
+	void contextMenuEvent(QContextMenuEvent *event);
+	void OnPopInsertNode();
+	void OnPopXmlDel();
 
 	int m_disp_depth; //deisplay depth
 	ndxml *m_xmldata;
@@ -54,6 +69,8 @@ protected:
 	LogicEditorHelper::CXMLAlias *m_alias;
 
 	strings_vct_t m_hideChildren;
+
+	strings_vct_t m_unCreateNew;
 };
 
 #endif // APOXMLTREEVIEW_H

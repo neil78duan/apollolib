@@ -367,10 +367,17 @@ bool startDialog::compileScript(const char *scriptFile)
 	}
 	const char*inFile = scriptFile;
 
-	std::string outFile = getScriptSetting(&xmlScript, "out_file");
+	const char *outFile = getScriptSetting(&xmlScript, "out_file");
+	if (!outFile){
+		nd_logerror("compile %s error !!!\nMaybe file is destroyed\n", scriptFile);
+		return false;
+	}
 	int outEncode = getScriptExpEncodeType(&xmlScript);
 	bool withDebug = getScriptExpDebugInfo(&xmlScript);
+	std::string outPath = outFile;
 	ndxml_destroy(&xmlScript);
+
+	outFile = outPath.c_str();
 
 	int orderType = ND_L_ENDIAN;
 	const char *orderName = _getFromIocfg("bin_data_byte_order");
@@ -383,7 +390,7 @@ bool startDialog::compileScript(const char *scriptFile)
 	if (!lgcompile.setConfigFile(CONFIG_FILE_PATH)) {
 		return false;
 	}
-	if (!lgcompile.compileXml(inFile, outFile.c_str(), outEncode, withDebug, orderType)) {
+	if (!lgcompile.compileXml(inFile, outFile, outEncode, withDebug, orderType)) {
 
 		const char *pFunc = lgcompile.m_cur_function.c_str();
 		const char *pStep = lgcompile.m_cur_step.c_str();
@@ -413,7 +420,7 @@ bool startDialog::compileScript(const char *scriptFile)
 	scriptRoot->setPrint(ND_LOG_WRAPPER_PRINT(startDialog), NULL);
 	scriptRoot->getGlobalParser().setSimulate(true,&apoOwner);
 
-	if (0 != scriptRoot->LoadScript(outFile.c_str())){
+	if (0 != scriptRoot->LoadScript(outFile)){
 		WriteLog("load script error n");
 		LogicEngineRoot::destroy_Instant();
 		return false;
@@ -467,12 +474,30 @@ bool startDialog::expExcel()
 
     WriteLog("===============export excel to text file  success =========");
 
+
 	//get byte order  
 	int orderType = ND_L_ENDIAN;
 	const char *orderName = _getFromIocfg("bin_data_byte_order");
 	if (orderName) {
 		orderType = atoi(orderName);
 	}
+
+	//DUMP FOR WINDOWS only
+	do 	{
+		std::string strWinPack = package_file;
+		strWinPack += ".gbk";
+
+		DBLDatabase dbwin;
+		if (0 != dbwin.LoadFromText(text_path, excel_list, encodeName, "gbk")) {
+			nd_logerror("can not read from text gbk\n");
+			return false;
+		}
+		if (0 != dbwin.Dump(strWinPack.c_str(), "gamedbGBK", orderType)) {
+			nd_logmsg("EXPORT game data for windows error\n");
+		}
+		dbwin.Destroy();
+
+	} while (0);
 
 	DBLDatabase dbtmp;
 	if (0 != dbtmp.LoadFromText(text_path, excel_list, encodeName, encodeName)) {
@@ -504,6 +529,15 @@ bool startDialog::expExcel()
         return false ;
     }
 
+	const char *exp_luapath = _getFromIocfg("lua_data_out_path");
+	if (!expLua(exp_luapath, dbtmp)) {
+		nd_logmsg("Êä³öluaÊý¾Ý´íÎó£¡");
+		dbtmp.Destroy();
+		DBLDatabase::destroy_Instant();
+		return false;
+	}
+
+
     dbtmp.Destroy();
 
 	std::string strOutTextPath = text_path;
@@ -516,10 +550,22 @@ bool startDialog::expExcel()
 
     }
 
+
     DBLDatabase::destroy_Instant();
     return true;
 }
 
+bool startDialog::expLua(const char *outPath, const DBLDatabase &db)
+{
+	nd_mkdir(outPath);
+	bool outflag = DBLDataNode::setOutLua(true);
+	if (-1 == db.OutputLua(outPath)) {
+		DBLDataNode::setOutLua(outflag);
+		return false;
+	}
+	DBLDataNode::setOutLua(outflag);
+	return true;
+}
 
 bool startDialog::runTest()
 {

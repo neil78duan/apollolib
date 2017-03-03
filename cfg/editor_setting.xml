@@ -30,8 +30,8 @@
 	<msg_handler_node>FuncEntry</msg_handler_node>	
 	<function_init_block>ModuleInitEntry</function_init_block>
 	<exception_catch_block>ExceptionEntry</exception_catch_block>
-	<!-- op_make_var>NewVar</op_make_var>
-	<op_build_json_data>NewJson</op_build_json_data>
+	<op_make_var>NewVar</op_make_var>
+	<!--op_build_json_data>NewJson</op_build_json_data>
 	<op_create_struct_type>NewStruct</op_create_struct_type>
 	<op_assignin>Assignment</op_assignin -->
 	<op_short_jump>Break</op_short_jump>
@@ -40,6 +40,7 @@
 	<op_exit>Quit</op_exit>
 	<op_loop_entry>Loop</op_loop_entry>
 	<op_bool_entry>Bool</op_bool_entry>
+	<steps_collection>ValueComp</steps_collection>
 	<op_throw>Throw</op_throw>
 </blueprint_node_name>
 
@@ -134,7 +135,7 @@
 	<list instruction="8" size="0" >function_init_block</list>
 	<list instruction="9" >steps_collection</list>
 	<list instruction="9" >function_filter</list>
-	
+	<list instruction="10" desc="switch-case sub entry" >op_sub_comp_entry</list>	
 </compile_setting>
 
 <create_template kinds="hide" desc="新建节点的创建模板">

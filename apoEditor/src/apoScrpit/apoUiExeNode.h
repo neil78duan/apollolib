@@ -61,6 +61,7 @@ public:
 		disableReturnVar();
 		disableNewParam();
 		disableConnectIn();
+		enableOutParam();
 
 		setNodeInfo(parent, exeNodeXml,false);
 		//InitCtrl(parent, "Begin", 0);
@@ -136,40 +137,19 @@ private:
 // 
 // };
 
-/*
+
 class apoUiExenodeNewVar : public apoBaseExeNode
 {
 public:
-	explicit apoUiExenodeNewVar(QWidget *parent, ndxml *exeNodeXml) :apoBaseExeNode()
-	{
-		apoBaseExeNode::m_type = EAPO_EXE_NODE_NewVar;
+	explicit apoUiExenodeNewVar(QWidget *parent, ndxml *exeNodeXml);
 
-		disableNewParam();
+	virtual ~apoUiExenodeNewVar();
+	const char *getVarName();
 
-		setNodeInfo(parent, exeNodeXml);
-		//InitCtrl(parent, "Variant",  1);
-		setTips(QString("Create Var"));
-	}
-	virtual ~apoUiExenodeNewVar(){}
-
-
-	virtual void paramCtrlDbClicked(apoBaseParam * paramCtrl)
-	{
-
-	}
-	virtual void nameCtrlDbClicked()
-	{
-
-	}
-
-	virtual void onParamCreated(apoBaseParam * paramCtrl)
-	{
-
-	}
 private:
 
 };
-*/
+
 // 
 // class apoUiExenodeNewJson : public apoBaseExeNode
 // {
@@ -362,33 +342,12 @@ private:
 class apoUiExenodeLoop : public apoBaseExeNode
 {
 public:
-	explicit apoUiExenodeLoop(QWidget *parent, ndxml *exeNodeXml) :apoBaseExeNode()
-	{
-		apoBaseExeNode::m_type = EAPO_EXE_NODE_Loop;
+	explicit apoUiExenodeLoop(QWidget *parent, ndxml *exeNodeXml);
+	virtual ~apoUiExenodeLoop();
 
-		disableNewParam();
-		setNodeInfo(parent, exeNodeXml);
-		//InitCtrl(parent, "Loop",  1);
-		setTips(QString("loop $count times "));
+	virtual void onInit();
 
-
-	}
-	virtual ~apoUiExenodeLoop(){}
-
-	virtual void onInit()
-	{
-		//create loop ctrl
-		
-		apoBaseSlotCtrl *ctrl1 = new apoBaseSlotCtrl(QString("{}"), this);	
-		ctrl1->resize(PARAM_CTRL_W, PARAM_CTRL_H);
-		ctrl1->setStyleSheet("QLabel{background-color:yellow;}");
-		ctrl1->move(E_LINE_WIDTH - PARAM_CTRL_W, E_LINE_HEIGHT * 1.5);
-		ctrl1->show();
-		ctrl1->setAttribute(Qt::WA_DeleteOnClose, true);
-
-		m_loopSlot = ctrl1;
-	}
-
+	apoBaseSlotCtrl *getLoopSlot() { return m_loopSlot; }
 private:
 	apoBaseSlotCtrl *m_loopSlot;
 };
@@ -397,45 +356,33 @@ private:
 class apoUiExenodeBool : public apoBaseExeNode
 {
 public:
-	explicit apoUiExenodeBool(QWidget *parent, ndxml *exeNodeXml) :apoBaseExeNode()
-	{
-		apoBaseExeNode::m_type = EAPO_EXE_NODE_Bool;
+	explicit apoUiExenodeBool(QWidget *parent, ndxml *exeNodeXml);
+	virtual ~apoUiExenodeBool();
+	virtual void onInit();
 
-		disableNewParam();
-		setNodeInfo(parent, exeNodeXml,false);
-		//InitCtrl(parent, "Bool",  0);
-		setTips(QString("if-else "));
+	apoBaseSlotCtrl *getTrueSlot() { return m_trueSlot; }
+	apoBaseSlotCtrl *getFalseSlot() { return m_falseSlot; }
 
-
-	}
-	virtual ~apoUiExenodeBool(){}
-
-	virtual void onInit()
-	{
-		//create loop ctrl
-
-		apoBaseSlotCtrl *ctrl1 = new apoBaseSlotCtrl(QString("T"), this);
-		ctrl1->resize(PARAM_CTRL_W, PARAM_CTRL_H);
-		ctrl1->setStyleSheet("QLabel{background-color:green;}");
-		ctrl1->move(E_LINE_WIDTH - PARAM_CTRL_W, E_LINE_HEIGHT * 1.5);
-		ctrl1->show();
-		ctrl1->setAttribute(Qt::WA_DeleteOnClose, true);
-		m_trueSlot = ctrl1;
-
-
-		ctrl1 = new apoBaseSlotCtrl(QString("F"), this);
-		ctrl1->resize(PARAM_CTRL_W, PARAM_CTRL_H);
-		ctrl1->setStyleSheet("QLabel{background-color:red;}");
-		ctrl1->move(E_LINE_WIDTH - PARAM_CTRL_W, E_LINE_HEIGHT * 2.5);
-		ctrl1->show();
-		ctrl1->setAttribute(Qt::WA_DeleteOnClose, true);
-		m_falseSlot = ctrl1;
-	}
 
 private:
 	apoBaseSlotCtrl *m_trueSlot;
 	apoBaseSlotCtrl *m_falseSlot;
 };
+
+class apoUiExenodeValueComp : public apoBaseExeNode
+{
+public:
+	explicit apoUiExenodeValueComp(QWidget *parent, ndxml *exeNodeXml);
+	virtual ~apoUiExenodeValueComp();
+
+	virtual void onInit();
+
+	apoBaseSlotCtrl *getSubSlot() { return m_subSlot; }
+private:
+	apoBaseSlotCtrl *m_subSlot;
+};
+
+
 
 
 

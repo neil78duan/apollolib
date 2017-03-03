@@ -20,8 +20,8 @@ QTableWidget(parent)
 	m_rootSetting = apoEditorSetting::getInstant();
 	m_config = m_rootSetting->getConfig();
 	m_alias = &m_rootSetting->getAlias();
-	m_curValue = 0;
-	m_root = 0;
+	m_editedNode = 0;
+	m_rootFile = 0;
 
 	m_beginEditor = false;
 
@@ -35,8 +35,8 @@ QTableWidget(rows, columns, parent)
 	m_rootSetting = apoEditorSetting::getInstant();
 	m_config = m_rootSetting->getConfig();
 	m_alias = &m_rootSetting->getAlias();
-	m_curValue = 0;
-	m_root = 0;
+	m_editedNode = 0;
+	m_rootFile = 0;
 
 	m_beginEditor = false;
 
@@ -76,7 +76,7 @@ bool apoUiXmlTableWidget::_GetUserDefinData(const char *pUserParam, QString &val
 		//m_root
 
 		ListDialog dlg(this);
-		ndxml *node = ndxml_getnode(m_root, "baseFunction");
+		ndxml *node = ndxml_getnode(m_rootFile, "baseFunction");
 		if (node)	{
 			for (int i = 0; i < ndxml_num(node); i++){
 				ndxml *funcNode = ndxml_getnodei(node, i);
@@ -122,7 +122,7 @@ bool apoUiXmlTableWidget::_GetUserDefinData(const char *pUserParam, QString &val
 			return false;
 		}
 
-		ndxml *xml = m_curValue;
+		ndxml *xml = m_editedNode;
 		if (!xml)	{
 			return false;
 		}
@@ -210,23 +210,6 @@ bool apoUiXmlTableWidget::_GetUserSelEnumVal(const apoEditorSetting::text_vct_t 
 	return false;
 }
 
-// 
-// int apoUiXmlTableWidget::DisplaySelXml()
-// {
-
-// 	apoUiDetailView *pTable = getDetailWidget();
-// 	if (!pTable){
-
-// 		return -1;
-
-// 	}
-// 	pTable->showExeNode(m_curDetailNode);
-// 
-// 	//_initShowCtrl(pTable);
-// 	//ShowXMLValue(m_curDetailXml, pTable, (int)CheckExpand(m_curDetailXml));
-// 
-// 	return 0;
-// }
 
 void apoUiXmlTableWidget::onCellClicked(int row, int column)
 {
@@ -237,10 +220,15 @@ void apoUiXmlTableWidget::onCellClicked(int row, int column)
 }
 void apoUiXmlTableWidget::oCellChanged(int row, int column)
 {
+	if (!m_beginEditor)	{
+		return;
+	}
 	xmlTableItem *pItem = dynamic_cast<xmlTableItem*>(this->item(row, column));
 	if (!pItem) {
 		return;
 	}
+
+	bool ret = false;
 	
 	ndxml *xml = (ndxml *)pItem->getUserData();
 	if (xml){
@@ -259,7 +247,8 @@ void apoUiXmlTableWidget::oCellChanged(int row, int column)
 			if (-1 != sel) {
 				str1.sprintf("%d", sel);
 				ndxml_setval(xml, str1.toStdString().c_str());
-				dataChangedSignal();
+				//dataChangedSignal();
+				ret = true;
 			}
 
 		}
@@ -279,15 +268,22 @@ void apoUiXmlTableWidget::oCellChanged(int row, int column)
 				getKeyValueList(xml, m_config, value_texts);
 				if (sel < value_texts.size()){
 					ndxml_setval(xml, value_texts[sel].toStdString().c_str());
-					dataChangedSignal();
+					ret = true;
+					//dataChangedSignal();
 				}
 			}
 
 		}
 		else if (!str1.isNull()) {
 			ndxml_setval(xml, str1.toStdString().c_str());
-			dataChangedSignal();
+			//dataChangedSignal();
+			ret = true;
 		}
+	}
+
+	if (ret){
+		onChanged(row, column, ndxml_getval(xml));
+		dataChangedSignal();
 	}
 }
 
@@ -310,6 +306,8 @@ bool apoUiXmlTableWidget::_beginEdit(int nRow, int nCol)
 		if (_GetFileName(type == EDT_IN_FILE, str1, GetXmlParam(xml))) {
 			cell->setText(str1);
 			if (0 == ndxml_setval(xml, str1.toStdString().c_str())) {
+				//onChanged(nRow, nCol, ndxml_getval(xml));
+				//dataChangedSignal();
 				ret = true;
 			}
 		}
@@ -319,6 +317,8 @@ bool apoUiXmlTableWidget::_beginEdit(int nRow, int nCol)
 			str1 += '/';
 			cell->setText(str1);
 			if (0 == ndxml_setval(xml, str1.toStdString().c_str())){
+				//onChanged(nRow, nCol, ndxml_getval(xml));
+				//dataChangedSignal();
 				ret = true;
 			}
 		}
@@ -335,6 +335,7 @@ bool apoUiXmlTableWidget::_beginEdit(int nRow, int nCol)
 			ret = true;
 			cell->setText(str1);
 			ndxml_setval(xml, stdText.c_str());
+			//dataChangedSignal();
 		}
 	}
 	else if (EDT_BOOL == type) {
@@ -349,6 +350,8 @@ bool apoUiXmlTableWidget::_beginEdit(int nRow, int nCol)
 			cell->setText(str1);
 			ndxml_setval(xml, selval ? "1" : "0");
 			ret = true;
+			//onChanged(nRow, nCol, ndxml_getval(xml));
+			//dataChangedSignal();
 		}
 
 	}
@@ -368,7 +371,9 @@ bool apoUiXmlTableWidget::_beginEdit(int nRow, int nCol)
 					str3.sprintf("%d", sel);
 
 					cell->setText(str1);
+
 					ndxml_setval(xml, str3.toStdString().c_str());
+					//dataChangedSignal();
 					ret = true;
 				}
 
@@ -400,5 +405,23 @@ bool apoUiXmlTableWidget::_beginEdit(int nRow, int nCol)
 			}
 		}
 	}
+	if (ret ){
+		//onChanged(nRow, nCol, ndxml_getval(xml));
+		//dataChangedSignal();
+	}
 	return ret;
+}
+
+
+bool apoUiXmlTableWidget::onChanged(int row, int column, const char *xmlRealValue)
+{
+	return true;
+}
+ndxml *apoUiXmlTableWidget::_getXml(int row, int column)
+{
+	xmlTableItem *cell = (xmlTableItem*)item(row, column );
+	if (!cell){
+		return NULL;
+	}
+	return  (ndxml *)cell->getUserData();
 }

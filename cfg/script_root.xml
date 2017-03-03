@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml  version="1.0" encoding="utf-8" ?>
 <script_file_manager name="脚本" delete="no" create_template="create_new_file" last_edited="game_script">
 	<file name="game_script">../../resource/script/apollo_script.xml</file>
 	<file name="client_script">../../resource/script/client_script.xml</file>
