@@ -418,6 +418,16 @@ ndxml *apoUiMainEditor::getUnconnectRoot(ndxml* xmlFunc)
 		unConnNode = ndxml_from_text(nodeText);
 		ndxml_insert(m_editedFunction, unConnNode);
 	}
+	else {
+		int num = ndxml_getsub_num(unConnNode);
+		for (int i = 0; i < num; i++)	{
+			ndxml *subnode = ndxml_getnodei(unConnNode, i);
+			if (ndxml_getsub_num(subnode)==0)	{
+				ndxml_delxml(subnode, unConnNode);
+				break;
+			}
+		}
+	}
 	return unConnNode;
 }
 
