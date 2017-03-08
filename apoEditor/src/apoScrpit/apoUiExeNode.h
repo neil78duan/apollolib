@@ -308,7 +308,7 @@ public:
 		disableNewParam();
 		disableToNext();
 
-		setNodeInfo(parent, exeNodeXml,false);
+		setNodeInfo(parent, exeNodeXml,true);
 		//InitCtrl(parent, "Return",  2);
 		setTips(QString("Return function"));
 	}

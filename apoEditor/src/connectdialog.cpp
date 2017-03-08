@@ -246,9 +246,18 @@ void ConnectDialog::ClearLog()
 
 void ConnectDialog::WriteLog(const char *logText)
 {
-	QTextCursor cursor(ui->logEdit->textCursor());//
-	cursor.movePosition(QTextCursor::End);
-    ui->logEdit->insertPlainText(QString(logText));
+
+	QTextEdit *pEdit = ui->logEdit;
+	
+	pEdit->moveCursor(QTextCursor::End, QTextCursor::KeepAnchor);
+	pEdit->insertPlainText(QString(logText));
+	//pEdit->append(QString(logText));
+	
+
+// 	QTextCursor cursor(ui->logEdit->textCursor());//
+// 	cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+// 
+//     ui->logEdit->insertPlainText(QString(logText));
 }
 
 bool ConnectDialog::LoadDataDef(const char *file, const char *script, const char *message_def)

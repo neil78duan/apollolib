@@ -108,15 +108,19 @@ void startDialog::ClearLog()
 
 void startDialog::WriteLog(const char *logText)
 {
-#ifdef WIN32
-	char buf[1024];
-	nd_gbk_to_utf8(logText, buf, sizeof(buf));
-	logText = buf ;
-#endif
+// #ifdef WIN32
+// 	char buf[1024];
+// 	nd_gbk_to_utf8(logText, buf, sizeof(buf));
+// 	logText = buf ;
+// #endif
+	QTextEdit *pEdit = ui->LogText;
+	pEdit->moveCursor(QTextCursor::End);
+	pEdit->insertPlainText(QString(logText));
+	pEdit->moveCursor(QTextCursor::End, QTextCursor::KeepAnchor);
 
-	QTextCursor cursor(ui->LogText->textCursor());//
-	cursor.movePosition(QTextCursor::End);
-	ui->LogText->insertPlainText(QString(logText));
+// 	QTextCursor cursor(ui->LogText->textCursor());//
+// 	cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+// 	ui->LogText->insertPlainText(QString(logText));
 }
 
 

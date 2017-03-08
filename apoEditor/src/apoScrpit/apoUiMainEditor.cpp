@@ -670,8 +670,20 @@ void apoUiMainEditor::popMenuAddnewTrigged()
 		nd_logerror("can not create unconnected nodes \n");		
 		ndxml_free(newxml);
 		return;
-	}	
+	}
+	
+	apoBaseExeNode *exeNode = _showExeNode(NULL, newxml, m_curClicked);
+	if (!exeNode){
+		ndxml_delxml(newxml, NULL);
+		nd_logerror("create %s Exenode Error \n", _GetXmlName(newxml, NULL));
+		return;
+	}
 
+	savePosition(exeNode);
+	onFileChanged();
+	nd_logmsg("create %s SUCCESS\n", _GetXmlName(newxml, NULL));
+
+	/*
 	apoBaseExeNode *exeNode = g_apoCreateExeNode(newxml, this);
 	if (!exeNode){
 		ndxml_delxml(newxml, NULL);
@@ -684,7 +696,7 @@ void apoUiMainEditor::popMenuAddnewTrigged()
 	exeNode->show(); //must call show functiong	
 	onFileChanged();
 	nd_logmsg("create %s SUCCESS\n", _GetXmlName(newxml, NULL));
-
+	*/
 }
 
 void apoUiMainEditor::popMenuDeleteTrigged()
@@ -1204,13 +1216,26 @@ bool apoUiMainEditor::buildRunSerqConnector(apoBaseSlotCtrl *fromSlot, apoBaseSl
 
 	//build new connection
 	ndxml *moveInRoot = ndxml_get_parent(fromXml);
-	int insertPos = ndxml_get_index(moveInRoot, fromXml) + 1;
+	//int insertPos = ndxml_get_index(moveInRoot, fromXml) + 1;
 
 	if (fromXml == m_editedFunction){
 		moveInRoot = m_editedFunction;
-		insertPos = -1;
 	}
+	
+	while (toXml){
+		ndxml_disconnect(NULL, toXml);
+		if (-1 == ndxml_insert_after(moveInRoot, toXml, fromXml)) {
+			return false;
+		}
+		fromXml = toXml;
 
+		toXml = NULL;
+		toCtrl = toCtrl->getMyNextNode();
+		if (toCtrl){
+			toXml = (ndxml *)toCtrl->getMyUserData();
+		}
+	}
+	/*
 	if (toCtrl->getMyNextNode()){
 		apoBaseExeNode *moveCtrl = toCtrl;
 
@@ -1218,17 +1243,19 @@ bool apoUiMainEditor::buildRunSerqConnector(apoBaseSlotCtrl *fromSlot, apoBaseSl
 			apoBaseExeNode *next = moveCtrl->getMyNextNode();
 			ndxml *movxml = (ndxml *)moveCtrl->getMyUserData();
 			ndxml_disconnect(NULL, movxml);
-			ndxml_insert_ex(moveInRoot, movxml, insertPos);
-			insertPos++;
+			ndxml_insert_after(moveInRoot, movxml, fromXml);
+			fromXml = movxml;
+			//ndxml_insert_ex(moveInRoot, movxml, insertPos);
+			//insertPos++;
 			moveCtrl = next;
 		};
 
 	}
 	else {
-		ndxml_disconnect(NULL, toXml);
-		ndxml_insert_ex(moveInRoot, toXml, insertPos);
+		
+		//ndxml_insert_ex(moveInRoot, toXml, insertPos);
 	}
-
+	*/
 	_connectSlots(fromSlot, toSlot, apoUiBezier::LineRunSerq);
 
 	return true;
@@ -1253,6 +1280,7 @@ bool apoUiMainEditor::_removeConnector(apoBaseSlotCtrl *slot)
 		}
 		if (_disconnectRunSerq((apoBaseSlotCtrl *)pbze->getSlot1(), (apoBaseSlotCtrl *)pbze->getSlot2())){
 			this->_removeBezier(pbze);
+			return true;
 		}
 	}
 	return false;

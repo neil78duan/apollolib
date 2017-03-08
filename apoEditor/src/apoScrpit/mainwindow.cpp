@@ -78,6 +78,7 @@ void MainWindow::WriteLog(const char *logText)
 		QTextEdit *pEdit = pDock->findChild<QTextEdit*>("logTextEdit");
 		if (pEdit)	{
 			pEdit->append(QString(logText));
+			pEdit->moveCursor(QTextCursor::End, QTextCursor::KeepAnchor);
 			return;
 // 			QTextCursor cursor(pEdit->textCursor());
 // 			cursor.movePosition(QTextCursor::End);
