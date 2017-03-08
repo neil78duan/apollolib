@@ -34,13 +34,27 @@ bool apoBaseSlotCtrl::onDisconnect()
 	m_myConnect = 0;
 	return true;
 }
+
+
+void apoBaseSlotCtrl::setValid(bool enable)
+{ 
+	m_valid = enable; 
+	if (m_valid){
+		setStyleSheet("QLabel{background-color:yellow;}");
+	}
+	else {
+		setStyleSheet("QLabel{background-color:gray;}");
+
+	}
+}
+
 //////////////////////////////////////////////////////////////////////////
 
 apoBaseParam::apoBaseParam(QWidget *parent, Qt::WindowFlags f) :
 apoBaseSlotCtrl(parent, f), m_index(0)
 {
 	m_slotType = apoBaseSlotCtrl::SLOT_NODE_INPUUT_PARAM;
-
+	//m_inDrag = false;
 	setParam(NULL, NULL,NULL);
 
 }
@@ -48,7 +62,7 @@ apoBaseParam::apoBaseParam(const QString &text, QWidget *parent, Qt::WindowFlags
 apoBaseSlotCtrl(text, parent, f), m_index(0)
 {
 	m_slotType = apoBaseSlotCtrl::SLOT_NODE_INPUUT_PARAM;
-
+	//m_inDrag = false;
 	setParam(NULL, NULL,NULL);
 
 }
@@ -75,22 +89,6 @@ void apoBaseParam::setParam(ndxml *parent, ndxml *param, ndxml *paramRef, ndxml 
 	m_varName = varname;
 
 }
-
-// 
-// bool apoBaseParam::checkNameEdited()
-// {
-// 	if (m_varName) {
-// 		return true;
-// 	}
-// 	return false;
-// }
-// bool apoBaseParam::checkTypeEdited()
-// {
-// 	if (m_reference) {
-// 		return true;
-// 	}
-// 	return false;
-// }
 
 
 const char *apoBaseParam::getValue()
@@ -121,13 +119,22 @@ int apoBaseParam::getParamType()
 
 QString apoBaseParam::getTypeName()
 {
-	//get type 
-	//get name list from editor_setting.xml data_type_define.type_data_type
-
 	apoEditorSetting* rootSetting = apoEditorSetting::getInstant();
 	ndxml_root *config = rootSetting->getConfig();
 
-	int type = getParamType();
+	
+	//const char *val = ndxml_getval(m_xml);
+	int type = GetXmlValType(m_xml, config);
+
+	if (type == EDT_BOOL) {
+		return QString("Bool");
+	}
+	else if (type == EDT_ENUM || type == EDT_KEY_VAL) {
+		return QString("Enum");
+	}
+
+	//get name list from editor_setting.xml data_type_define.type_data_type
+	type = getParamType();
 
 	ndxml *typeNameList = getDefinedType(config, "type_data_type");
 	nd_assert(typeNameList);

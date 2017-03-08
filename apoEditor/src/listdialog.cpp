@@ -19,7 +19,8 @@ ListDialog::~ListDialog()
 void ListDialog::on_mylist_doubleClicked(const QModelIndex &index)
 {
     m_selIndex = index.row() ;
-    accepted();
+    //emit accepted();
+	accept();
 }
 
 void ListDialog::InitList()

@@ -32,13 +32,13 @@ public:
 	};
 
 	explicit apoBaseSlotCtrl(QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags()) :
-		QLabel(parent, f), m_slotType(SLOT_UNKNOWN),  m_myConnect(0)
+		QLabel(parent, f), m_slotType(SLOT_UNKNOWN), m_myConnect(0), m_inDrag(false), m_valid(true)
 	{
 
 	}
 
 	explicit apoBaseSlotCtrl(const QString &text, QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags()) :
-		QLabel(text, parent, f), m_slotType(SLOT_UNKNOWN),  m_myConnect(0)
+		QLabel(text, parent, f), m_slotType(SLOT_UNKNOWN), m_myConnect(0), m_inDrag(false), m_valid(true)
 	{
 
 	}
@@ -46,6 +46,12 @@ public:
 	{
 
 	}
+
+	bool checkInDrag() { return m_inDrag; }
+	void setInDrag(bool inDrag = true) { m_inDrag = inDrag; }
+
+	bool checkValid() { return m_valid; }
+	void setValid(bool enable = true);
 
 	eBaseSlotType slotType(){ return m_slotType; }
 	void setSlotType(eBaseSlotType stype){ m_slotType = stype; }
@@ -60,6 +66,8 @@ public:
 	virtual bool onConnectIn(apoBaseSlotCtrl*fromSlot);
 	virtual bool onDisconnect();
 protected:
+	bool m_inDrag;
+	bool m_valid; //not in using
 	eBaseSlotType m_slotType;
 	//void *m_UserData;
 

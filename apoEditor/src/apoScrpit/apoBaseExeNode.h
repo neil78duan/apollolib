@@ -104,6 +104,7 @@ protected:
 	void paintEvent(QPaintEvent *event);
 	void mouseDoubleClickEvent(QMouseEvent * event);
 
+	void trytoDrawConnectSlot();
 	bool _parseParam(ndxml *xmlnode);
 	apoBaseParam* _param2Ctrl(ndxml *xmlParam, ndxml *parent);
 	

@@ -327,11 +327,13 @@ public:
 
 		disableNewParam();
 		disableReturnVar();
-		disableToNext();
+		//disableToNext();
 
 		setNodeInfo(parent, exeNodeXml,false);
 		//InitCtrl(parent, "Throw",  1);
 		setTips(QString("Throw exception"));
+
+		m_toNextNode->setValid(false);
 	}
 	virtual ~apoUiExenodeThrow(){}
 

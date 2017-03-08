@@ -25,6 +25,8 @@
 #include <QPoint>
 #include <QTableWidget>
 
+class apoBaseSlotCtrl;
+
 class apoUiMainEditor : public QWidget
 {
     Q_OBJECT
@@ -58,7 +60,7 @@ private:
 	void saveOffset(const QPoint &offset);
 	void getOffset(QPoint &offset);
 
-	ndxml *getUnconnectRoot();
+	ndxml *getUnconnectRoot(ndxml* xmlFunc);
 
 	bool _createFuncEntry(ndxml *stepsBlocks, const QPoint &defaultPos);
 	bool _showBlocks(apoBaseSlotCtrl *fromSlot, ndxml *stepsBlocks);
@@ -76,13 +78,15 @@ private:
 	bool _connectSlots(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot, apoUiBezier::eBezierType type = apoUiBezier:: LineParam );
 	bool _connectParam(apoBaseExeNode *preNode, apoBaseExeNode *curNode);
 	bool _removeBezier(apoUiBezier *connector);
+	bool _removeExenode(apoBaseExeNode *node);
 	//disconnect existed connector
 	bool _disconnectRunSerq(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot);
 
-	void _disConnect(apoBaseExeNode *changedNode);
+	void _disConnectParam(apoBaseExeNode *changedNode);
 	void _reConnectParam(apoBaseExeNode *changedNode);
 	bool _removeConnector(apoBaseSlotCtrl *slot);
 
+	bool testBuildConnector(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot);
 	bool trytoBuildConnector(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot);
 	bool buildParamConnector(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot);
 	bool buildRunSerqConnector(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot);
@@ -114,6 +118,7 @@ private:
 	eDragType m_curDragType; //move subNode or connect-line
 	//ePopMenuType m_popMenuType;
 
+	apoBaseSlotCtrl *m_connectToSlot;
 	QWidget *m_dragSrc;
 	QWidget *m_popSrc;
 

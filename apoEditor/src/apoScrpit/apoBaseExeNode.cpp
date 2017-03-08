@@ -191,7 +191,7 @@ apoBaseParam* apoBaseExeNode::_param2Ctrl(ndxml *xmlParam, ndxml *parent)
 	pParamCtrl->setParam(parent,myVal, refnode, xmlName);
 
 	pParamCtrl->resize(PARAM_CTRL_W, PARAM_CTRL_H);
-	pParamCtrl->setStyleSheet("QLabel{background-color:white;}");
+	pParamCtrl->setStyleSheet("QLabel{background-color:yellow;}");
 	pParamCtrl->setAttribute(Qt::WA_DeleteOnClose, true);
 
 	m_paramVct.push_back(pParamCtrl);
@@ -398,7 +398,7 @@ void apoBaseExeNode::onAddFunctionInParam()
 	str1.sprintf("In%d >>", m_outParamVct.size() + 1);
 	apoBaseSlotCtrl*pParamCtrl = new apoBaseSlotCtrl(str1,this);	
 	pParamCtrl->resize(PARAM_CTRL_W*2, PARAM_CTRL_H);
-	pParamCtrl->setStyleSheet("QLabel{background-color:white;}");
+	pParamCtrl->setStyleSheet("QLabel{background-color:yellow;}");
 	pParamCtrl->setAttribute(Qt::WA_DeleteOnClose, true);
 
 	pParamCtrl->setSlotType(apoBaseParam::SLOT_FUNCTION_PARAM);
@@ -517,7 +517,7 @@ void apoBaseExeNode::init(const QString &title)
 	
     //connect in ctrl
 	if (!m_disableIn)	{
-		CREATE_CTRL_OBJECT(apoBaseSlotCtrl, "->", green, m_runInNode);
+		CREATE_CTRL_OBJECT(apoBaseSlotCtrl, "->", yellow, m_runInNode);
 		m_runInNode->setSlotType(apoBaseSlotCtrl::SLOT_RUN_IN);
 	}
 
@@ -662,6 +662,7 @@ void apoBaseExeNode::paintEvent(QPaintEvent *event)
 			pos.setX(pos.x() + (*it)->size().width() + 2);
 			pos.setY(pos.y() + MARGIN_Y -1);
 			painter.drawText(pos, paramInfo);
+
 		}
 	}
 	
@@ -679,5 +680,33 @@ void apoBaseExeNode::paintEvent(QPaintEvent *event)
 		font1.setWeight(50);
 		painter.setFont(font1);
 		painter.drawText(x, y, m_tips);
+	}
+	trytoDrawConnectSlot();
+}
+
+
+void apoBaseExeNode::trytoDrawConnectSlot()
+{
+	QPainter painter(this);
+	painter.setRenderHint(QPainter::Antialiasing, true);
+	painter.setPen(QPen(Qt::blue, 2));
+	
+#define DRAW_RECT(_slot)				\
+	if ((_slot) && (_slot)->checkInDrag()){			\
+		painter.drawRect((_slot)->geometry());\
+	}
+// 
+// 	if (m_toNextNode){
+// 		QRect rect = m_toNextNode->geometry();
+// 		painter.drawRect(rect);
+// 
+// 	}
+	DRAW_RECT(m_runInNode);
+	DRAW_RECT(m_toNextNode);
+	DRAW_RECT(m_returnValue);
+
+	for (QVector<apoBaseParam *>::iterator it = m_paramVct.begin(); it != m_paramVct.end(); ++it){
+		DRAW_RECT(*it);
+
 	}
 }

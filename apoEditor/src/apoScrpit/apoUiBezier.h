@@ -47,6 +47,8 @@ public:
 
 	QWidget *getAnotherSlot(QWidget *curSlot){ return curSlot == m_startCtrl? m_endCtrl: m_startCtrl; }
 
+	void onRemove();
+
 protected:
 	Qt::GlobalColor m_color;
 	int m_lineWid;

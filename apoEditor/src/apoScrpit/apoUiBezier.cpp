@@ -7,7 +7,7 @@
 * 2017.2.10
 */
 
-
+#include "apoScrpit/apoUiParam.h"
 #include "apoUiBezier.h"
 #include <QPainter>
 
@@ -158,4 +158,15 @@ void apoUiBezier::paint()
 void apoUiBezier::move(const QPoint &offset)
 {
 	initPos(m_start + offset, m_end + offset);
+}
+
+void apoUiBezier::onRemove()
+{
+	if (m_startCtrl){
+		((apoBaseSlotCtrl *)m_startCtrl)->onDisconnect();
+	}
+
+	if (m_startCtrl){
+		((apoBaseSlotCtrl *)m_endCtrl)->onDisconnect();
+	}
 }
