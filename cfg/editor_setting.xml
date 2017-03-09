@@ -147,6 +147,8 @@
 			<a2 name="auto_index" value="0"/>
 			<a5 name="expand_list" value="comment" />
 			<a6 name="enable_drag" value="yes"/>
+			<a7 name="var_name_index" value="1"/>
+			<a8 name="name_auto_index" value="auto_index"/>
 		</attribute>
 		<sub_node>			
 			<!-- n1 name="op_setflag">
@@ -172,7 +174,7 @@
 	</create_function_filter>
 	
 	<create_msg_handler name="消息处理函数创建模板" create_type="1">		
-		<msg_handler_node name="message_handler" enable_drag="yes" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1">
+		<msg_handler_node name="message_handler" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="1">
 			<comment name="函数说明" expand="yes">
 				<desc>消息处理handle(player, message)</desc>
 				<isGlobal kinds="bool">1</isGlobal>
@@ -256,7 +258,7 @@
 	</create_msg_handler>
 	
 	<create_event_callback name="事件处理函数" create_type="1">		
-		<event_callback_node name="event_callback" enable_drag="yes" create_template="create_list2" auto_index="0" expand_list="comment,event_id" expand_stat="1">
+		<event_callback_node name="event_callback" enable_drag="yes" create_template="create_list2" name_auto_index="auto_index" auto_index="0" expand_list="comment,event_id" expand_stat="1" var_name_index="1">
 			<comment name="函数说明" expand="yes">
 				<desc>事件处理函数</desc>
 				<isGlobal kinds="bool">1</isGlobal>
@@ -479,7 +481,7 @@
 	<create_make_var name="创建变量" create_type="1" auto_index_list="param" auto_index_reference="variant_index">
 		<op_make_var name="节点_申明变量" expand="yes">
 			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<param name="名字" kinds="string" delete="no">var</param>
+			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index">var</param>
 			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 			<var name="初始值" kinds="string" delete="no" restrict="type">none</var>
 		</op_make_var>
@@ -878,6 +880,7 @@
 		<list>create_skip_error</list>
 		<list>create_get_simulate_stat</list>
 		<list>create_step_error_catch_block</list>
+		<list>create_function_init_block</list>	
 		<list>create_error_continue</list>
 		
 		<list>create_step_throw</list>
@@ -938,7 +941,6 @@
 		
 		<list>create_step_read_excel_attr</list>
 		
-		<list>create_function_init_block</list>	
 		<list>create_step_chdir</list>		
 		<list>create_step_rmfile</list>		
 		<list>create_step_mkdir</list>				
@@ -952,6 +954,7 @@
 		<list>create_get_simulate_stat</list>		
 		
 		<list>create_step_error_catch_block</list>
+		<list>create_function_init_block</list>
 		<list>create_error_continue</list>
 		<list>create_step_throw</list>
 		<list>create_step_read</list>
@@ -1015,7 +1018,6 @@
 		<list>create_step_begin_affair</list>
 		<list>create_step_commit_affair</list>
 		<list>create_step_read_excel_attr</list>
-		<list>create_function_init_block</list>
 		<list>create_step_chdir</list>		
 		<list>create_step_rmfile</list>		
 		<list>create_step_mkdir</list>

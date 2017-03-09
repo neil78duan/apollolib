@@ -67,20 +67,54 @@ static ndxml * CreateByTemplate(ndxml *root, ndxml *xml_template)
 
 static void SetXmlName(ndxml *xml_node, ndxml *xmlParent)
 {
-	const char *pAutoIndex = ndxml_getattr_val(xmlParent, "auto_index");
+	const char *autoIndexName = ndxml_getattr_val(xml_node, "name_auto_index");
+	if (!autoIndexName || !*autoIndexName)	{
+		return;
+	}
+
+	const char *pAutoIndex = ndxml_getattr_val(xmlParent, autoIndexName);
 	const char *pName = ndxml_getattr_val(xml_node, "name");
 	if (pAutoIndex && pName){
 		int a = atoi(pAutoIndex);
-		char buf[128];
+		char buf[1024];
 		snprintf(buf, sizeof(buf), "%s%s", pName, pAutoIndex);
 		ndxml_setattrval(xml_node, "name", buf);
 
 		++a;
 		snprintf(buf, sizeof(buf), "%d", a);
-		ndxml_setattrval(xmlParent, "auto_index", buf);
+		ndxml_setattrval(xmlParent, autoIndexName, buf);
 	}
 
 }
+
+
+static void setXmlValueByAutoIndex(ndxml *node, ndxml *xmlParent)
+{
+	const char *autoName = ndxml_getattr_val(node, "auto_index_ref");
+	if (!autoName || !*autoName){
+		return;
+	}
+	const char *pAutoIndex = ndxml_getattr_val(xmlParent, autoName);
+	char buf[1024]; 
+
+	if (pAutoIndex && *pAutoIndex){
+		int a = atoi(pAutoIndex);
+		
+		snprintf(buf, sizeof(buf), "%s%s", ndxml_getval(node), pAutoIndex);
+		ndxml_setval(node, buf);
+
+		++a;
+		snprintf(buf, sizeof(buf), "%d", a);
+		ndxml_setattrval(xmlParent, autoName, buf);
+	}
+	else {
+		snprintf(buf, sizeof(buf), "%s1", ndxml_getval(node));
+		ndxml_setval(node, buf);
+		ndxml_setattrval(xmlParent, autoName, "2");
+	}
+
+}
+
 
 using namespace LogicEditorHelper;
 apoEditorSetting* apoEditorSetting::s_setting = NULL;
@@ -383,6 +417,16 @@ ndxml* apoEditorSetting::AddNewXmlNode(ndxml *xml, QWidget *parentWindow)
 				ndxml_insert(xml, new_xml);
 				SetXmlName(new_xml, xml);
 			}
+		}
+	}
+
+	//handle  auto index 
+	if (new_xml){
+		int num = ndxml_getsub_num(new_xml);
+		for (int i = 0; i < num; i++)	{
+			ndxml *sub = ndxml_getnodei(new_xml, i);
+			nd_assert(sub);
+			setXmlValueByAutoIndex(sub, xml);
 		}
 	}
 	return new_xml;

@@ -48,6 +48,21 @@ void apoBaseSlotCtrl::setValid(bool enable)
 	}
 }
 
+bool apoBaseSlotCtrl::event(QEvent *e) 
+{
+	if (e->type() == QEvent::Enter) {
+		m_inDrag = true;
+		QWidget *p = (QWidget *) this->parent();
+		p->update();
+	}
+	else if (e->type() == QEvent::Leave) {
+		m_inDrag = false;
+		QWidget *p = (QWidget *) this->parent();
+		p->update();
+	}
+	return QWidget::event(e);
+}
+
 //////////////////////////////////////////////////////////////////////////
 
 apoBaseParam::apoBaseParam(QWidget *parent, Qt::WindowFlags f) :

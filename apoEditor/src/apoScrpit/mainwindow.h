@@ -62,9 +62,11 @@ private slots:
 
     void on_actionExit_triggered();
 
-	void onFilesTreeItemDBClicked(QTreeWidgetItem *item, int column);
-	void onFunctionsTreeItemDBClicked(QTreeWidgetItem *item, int column);
-    void on_actionCompileAll_triggered();
+
+	void onFunctionsTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+	void onFilesTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+
+	void on_actionCompileAll_triggered();
 
 protected:
 
