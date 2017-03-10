@@ -38,6 +38,7 @@
 		}						\
 	} while (0)
 
+
 class apoEditorSetting :public logciCompileSetting
 {
 	apoEditorSetting();
@@ -74,6 +75,11 @@ public:
 
 	bool loadUserDefEnum(const char *userDefEnumFile);
 	bool loadMessageDefine(const char *messageFile) ;
+
+	ndxml *CreateByTemplate(ndxml *root, ndxml *xml_template);
+	void SetXmlName(ndxml *xml_node, ndxml *xmlParent);
+	void setXmlValueByAutoIndex(ndxml *node, ndxml *xmlParent);
+	int GetCreateName(ndxml *xml_template, char *buf, size_t size); //get attribute "name" value
 
 public:
 	std::string m_edirotSettingFile;

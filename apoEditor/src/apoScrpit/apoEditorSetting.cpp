@@ -13,108 +13,6 @@
 #include "listdialog.h"
 
 
-static int GetCreateName(ndxml *xml_template, char *buf, size_t size)
-{
-	char *p;
-	p = (char*)ndxml_getattr_val(xml_template, "name");
-	if (!p) {
-		return -1;
-	}
-	else {
-		strncpy(buf, p, size);
-	}
-	return 0;
-
-}
-
-static ndxml * CreateByTemplate(ndxml *root, ndxml *xml_template)
-{
-	char *val, *p;
-	char name[128];
-	if (0 != GetCreateName(xml_template, name, sizeof(name))){
-		return NULL;
-	}
-	val = (char*)ndxml_getattr_val(xml_template, "value");
-
-	ndxml *new_xml = ndxml_addsubnode(root, name, val);
-	if (!new_xml)
-		return NULL;
-
-	ndxml *attr_xml = ndxml_refsub(xml_template, "attribute");
-	if (attr_xml){
-		for (int i = 0; i < ndxml_getsub_num(attr_xml); i++) {
-			ndxml *sub_node = ndxml_refsubi(attr_xml, i);
-			if (sub_node) {
-				p = (char*)ndxml_getattr_val(sub_node, "name");
-				val = (char*)ndxml_getattr_val(sub_node, "value");
-				if (p && val) {
-					ndxml_addattrib(new_xml, p, val);
-				}
-			}
-		}
-	}
-
-	ndxml *child_node = ndxml_refsub(xml_template, "sub_node");
-	if (child_node) {
-		for (int i = 0; i < ndxml_getsub_num(child_node); i++) {
-			ndxml *sub_template = ndxml_refsubi(child_node, i);
-			if (sub_template)
-				CreateByTemplate(new_xml, sub_template);
-		}
-	}
-	return new_xml;
-}
-
-static void SetXmlName(ndxml *xml_node, ndxml *xmlParent)
-{
-	const char *autoIndexName = ndxml_getattr_val(xml_node, "name_auto_index");
-	if (!autoIndexName || !*autoIndexName)	{
-		return;
-	}
-
-	const char *pAutoIndex = ndxml_getattr_val(xmlParent, autoIndexName);
-	const char *pName = ndxml_getattr_val(xml_node, "name");
-	if (pAutoIndex && pName){
-		int a = atoi(pAutoIndex);
-		char buf[1024];
-		snprintf(buf, sizeof(buf), "%s%s", pName, pAutoIndex);
-		ndxml_setattrval(xml_node, "name", buf);
-
-		++a;
-		snprintf(buf, sizeof(buf), "%d", a);
-		ndxml_setattrval(xmlParent, autoIndexName, buf);
-	}
-
-}
-
-
-static void setXmlValueByAutoIndex(ndxml *node, ndxml *xmlParent)
-{
-	const char *autoName = ndxml_getattr_val(node, "auto_index_ref");
-	if (!autoName || !*autoName){
-		return;
-	}
-	const char *pAutoIndex = ndxml_getattr_val(xmlParent, autoName);
-	char buf[1024]; 
-
-	if (pAutoIndex && *pAutoIndex){
-		int a = atoi(pAutoIndex);
-		
-		snprintf(buf, sizeof(buf), "%s%s", ndxml_getval(node), pAutoIndex);
-		ndxml_setval(node, buf);
-
-		++a;
-		snprintf(buf, sizeof(buf), "%d", a);
-		ndxml_setattrval(xmlParent, autoName, buf);
-	}
-	else {
-		snprintf(buf, sizeof(buf), "%s1", ndxml_getval(node));
-		ndxml_setval(node, buf);
-		ndxml_setattrval(xmlParent, autoName, "2");
-	}
-
-}
-
 
 using namespace LogicEditorHelper;
 apoEditorSetting* apoEditorSetting::s_setting = NULL;
@@ -482,4 +380,107 @@ ndxml* apoEditorSetting::AddNewXmlNode(ndxml *xml, QWidget *parentWindow)
 		}
 	}
 	return new_xml;
+}
+
+
+int apoEditorSetting::GetCreateName(ndxml *xml_template, char *buf, size_t size)
+{
+	char *p;
+	p = (char*)ndxml_getattr_val(xml_template, "name");
+	if (!p) {
+		return -1;
+	}
+	else {
+		strncpy(buf, p, size);
+	}
+	return 0;
+
+}
+
+ndxml * apoEditorSetting::CreateByTemplate(ndxml *root, ndxml *xml_template)
+{
+	char *val, *p;
+	char name[128];
+	if (0 != GetCreateName(xml_template, name, sizeof(name))){
+		return NULL;
+	}
+	val = (char*)ndxml_getattr_val(xml_template, "value");
+
+	ndxml *new_xml = ndxml_addsubnode(root, name, val);
+	if (!new_xml)
+		return NULL;
+
+	ndxml *attr_xml = ndxml_refsub(xml_template, "attribute");
+	if (attr_xml){
+		for (int i = 0; i < ndxml_getsub_num(attr_xml); i++) {
+			ndxml *sub_node = ndxml_refsubi(attr_xml, i);
+			if (sub_node) {
+				p = (char*)ndxml_getattr_val(sub_node, "name");
+				val = (char*)ndxml_getattr_val(sub_node, "value");
+				if (p && val) {
+					ndxml_addattrib(new_xml, p, val);
+				}
+			}
+		}
+	}
+
+	ndxml *child_node = ndxml_refsub(xml_template, "sub_node");
+	if (child_node) {
+		for (int i = 0; i < ndxml_getsub_num(child_node); i++) {
+			ndxml *sub_template = ndxml_refsubi(child_node, i);
+			if (sub_template)
+				CreateByTemplate(new_xml, sub_template);
+		}
+	}
+	return new_xml;
+}
+
+void apoEditorSetting::SetXmlName(ndxml *xml_node, ndxml *xmlParent)
+{
+	const char *autoIndexName = ndxml_getattr_val(xml_node, "name_auto_index");
+	if (!autoIndexName || !*autoIndexName)	{
+		return;
+	}
+
+	const char *pAutoIndex = ndxml_getattr_val(xmlParent, autoIndexName);
+	const char *pName = ndxml_getattr_val(xml_node, "name");
+	if (pAutoIndex && pName){
+		int a = atoi(pAutoIndex);
+		char buf[1024];
+		snprintf(buf, sizeof(buf), "%s%s", pName, pAutoIndex);
+		ndxml_setattrval(xml_node, "name", buf);
+
+		++a;
+		snprintf(buf, sizeof(buf), "%d", a);
+		ndxml_setattrval(xmlParent, autoIndexName, buf);
+	}
+
+}
+
+
+void apoEditorSetting::setXmlValueByAutoIndex(ndxml *node, ndxml *xmlParent)
+{
+	const char *autoName = ndxml_getattr_val(node, "auto_index_ref");
+	if (!autoName || !*autoName){
+		return;
+	}
+	const char *pAutoIndex = ndxml_getattr_val(xmlParent, autoName);
+	char buf[1024];
+
+	if (pAutoIndex && *pAutoIndex){
+		int a = atoi(pAutoIndex);
+
+		snprintf(buf, sizeof(buf), "%s%s", ndxml_getval(node), pAutoIndex);
+		ndxml_setval(node, buf);
+
+		++a;
+		snprintf(buf, sizeof(buf), "%d", a);
+		ndxml_setattrval(xmlParent, autoName, buf);
+	}
+	else {
+		snprintf(buf, sizeof(buf), "%s1", ndxml_getval(node));
+		ndxml_setval(node, buf);
+		ndxml_setattrval(xmlParent, autoName, "2");
+	}
+
 }
