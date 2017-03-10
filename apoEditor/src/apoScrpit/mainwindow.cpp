@@ -34,7 +34,16 @@ QMainWindow(parent), m_editorSetting(), m_editorWindow(0),
 	m_isChangedCurFile = false;
     ui->setupUi(this);
 
-    setWindowTitle(tr("main editor"));
+    setWindowTitle(tr("Script editor"));
+	
+	m_editorWindow = new apoUiMainEditor(this);
+	m_editorWindow->setAttribute(Qt::WA_DeleteOnClose, true);
+	m_editorWindow->setObjectName(QString("MainEditor"));
+
+	QObject::connect(m_editorWindow, SIGNAL(showExenodeSignal(apoBaseExeNode*)),
+		this, SLOT(onShowExeNodeDetail(apoBaseExeNode *)));
+	setCentralWidget(m_editorWindow);
+
 	__glogWrapper = ND_LOG_WRAPPER_NEW(MainWindow);
 }
 
@@ -79,11 +88,7 @@ void MainWindow::WriteLog(const char *logText)
 		if (pEdit)	{
 			pEdit->append(QString(logText));
 			pEdit->moveCursor(QTextCursor::End, QTextCursor::KeepAnchor);
-			return;
-// 			QTextCursor cursor(pEdit->textCursor());
-// 			cursor.movePosition(QTextCursor::End);
-// 			pEdit->insertPlainText(QString(logText));
-// 			return;				 
+			return;		 
 		}
 	}
 	m_logText.append(QString(logText));	
@@ -97,7 +102,6 @@ void MainWindow::showAllView()
 	//openDetailView();
 	return;
 }
-//#include "newfiledialog.h"
 
 bool MainWindow::openFileView()
 {
@@ -113,11 +117,10 @@ bool MainWindow::openFileView()
 	apoXmlTreeView *subwindow = new apoXmlTreeView();
 	subwindow->setAttribute(Qt::WA_DeleteOnClose, true);
 
-	QObject::connect(subwindow, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
-		this, SLOT(onFilesTreeItemDBClicked(QTreeWidgetItem *, int)));
+	QObject::connect(subwindow, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
+		this, SLOT(onFilesTreeCurItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)));
 
 	if (m_fileRoot)	{
-		//subwindow->setComfig(m_editorSetting.getConfig());
 		subwindow->setAlias(&m_editorSetting.getAlias());
 		subwindow->setXmlInfo(m_fileRoot, 2);
 	}
@@ -150,8 +153,8 @@ bool MainWindow::openFunctionsView()
 		subwindow->unCreateNewChild("event_callback_node");
 
 
-		QObject::connect(subwindow, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
-			this, SLOT(onFunctionsTreeItemDBClicked(QTreeWidgetItem *, int)));
+		QObject::connect(subwindow, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
+			this, SLOT(onFunctionsTreeCurItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)));
 
 		QObject::connect(subwindow, SIGNAL(xmlNodeDelSignal(ndxml *)),
 			this, SLOT(onXmlNodeDel(ndxml *)));
@@ -159,8 +162,6 @@ bool MainWindow::openFunctionsView()
 		QObject::connect(subwindow, SIGNAL(xmlDataChangedSignal()),this, SLOT(onFileChanged()));
 
 		if (m_curFile)	{
-			//subwindow->setComfig(m_editorSetting.getConfig());
-
 			subwindow->setAlias(&m_editorSetting.getAlias());
 			subwindow->setXmlInfo(m_curFile, 5);
 		}
@@ -211,14 +212,6 @@ bool MainWindow::openDetailView()
 	addDockWidget(Qt::RightDockWidgetArea, pDock);
 	return true;
 }
-
-
-// 
-// 
-// QWidget *MainWindow::getMainEditor()
-// {
-// 	return m_editorWindow;
-// }
 
 
 const char *MainWindow::getScriptSetting(ndxml *scriptXml, const char *settingName)
@@ -286,29 +279,13 @@ void MainWindow::onFileChanged()
 void MainWindow::onXmlNodeDel(ndxml *xmlnode)
 {
 	m_isChangedCurFile = true;
-	if (xmlnode == m_currFunction || ndxml_get_parent(m_currFunction)==xmlnode)	{
-		if (m_editorWindow)	{
-			m_editorWindow->close();
-			m_editorWindow = 0;
-		}
-		m_currFunction = NULL;
+	if (xmlnode == m_currFunction || ndxml_get_parent(m_currFunction)==xmlnode)	{		
+		m_editorWindow->clearFunction();
 	}
 }
 
 bool MainWindow::showCurFunctions()
-{
-	if (m_editorWindow)	{
-		m_editorWindow->close();
-	}
-
-	m_editorWindow = new apoUiMainEditor(this);
-	m_editorWindow->setAttribute(Qt::WA_DeleteOnClose, true);
-
-	QObject::connect(m_editorWindow, SIGNAL(showExenodeSignal(apoBaseExeNode*)),
-		this, SLOT(onShowExeNodeDetail(apoBaseExeNode *)));
-	
-	setCentralWidget(m_editorWindow);
-
+{	
 	m_editorWindow->showFunction(m_currFunction, m_curFile);
 	return false;
 }
@@ -404,14 +381,17 @@ void MainWindow::onShowExeNodeDetail(apoBaseExeNode *exenode)
 }
 
 //double click function list
-void MainWindow::onFunctionsTreeItemDBClicked(QTreeWidgetItem *item, int column)
+void MainWindow::onFunctionsTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
-	xmlTreeItem *pXmlItem = dynamic_cast<xmlTreeItem*>(item);
+	xmlTreeItem *pXmlItem = dynamic_cast<xmlTreeItem*>(current);
 	if (!pXmlItem)	{
 		return;
 	}
 	ndxml *pxml = (ndxml *)pXmlItem->getUserData();
 	if (!pxml)	{
+		return;
+	}
+	if (pxml == m_currFunction){
 		return;
 	}
 
@@ -434,9 +414,9 @@ void MainWindow::onFunctionsTreeItemDBClicked(QTreeWidgetItem *item, int column)
 }
 
 // double click file list
-void MainWindow::onFilesTreeItemDBClicked(QTreeWidgetItem *item, int column)
+void MainWindow::onFilesTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
-	xmlTreeItem *pXmlItem = dynamic_cast<xmlTreeItem*>(item);
+	xmlTreeItem *pXmlItem = dynamic_cast<xmlTreeItem*>(current);
 	if (!pXmlItem)	{
 		return;
 	}

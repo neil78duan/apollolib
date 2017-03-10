@@ -37,16 +37,16 @@ public:
     explicit apoUiMainEditor(QWidget *parent = 0);
     ~apoUiMainEditor(){}
 
-	bool showFunction(ndxml *data,ndxml_root *xmlfile );
+	bool showFunction(ndxml *data, ndxml_root *xmlfile);
+	void clearFunction();
 	void setSettingConfig(apoEditorSetting *setting) { m_setting = setting; }
 
-	void clear();
 	void curDetailChanged(apoBaseExeNode *exenode);
 
 	bool showCompileError(ndxml_root *xmlfile, stackIndex_vct &errStackIndex);
 
 public slots:
-	void onExenodeDBClicked(apoBaseExeNode *exeNode, QMouseEvent * event);
+	//void onExenodeDBClicked(apoBaseExeNode *exeNode, QMouseEvent * event);
 	void onCurNodeChanged();
 	void onNodeAddNewParam(apoBaseExeNode *node);
 
@@ -110,11 +110,12 @@ private:
 	void onFileChanged();
 	ndxml *createSubNode(ndxml *xmlRoot);
 
-	enum eDragType{ E_MOUSE_TYPE_MOVE, E_MOUSE_TYPE_DRAG_DRAW, E_MOUSE_TYPE_MOVE_VIEW};
+	enum eDragType{ E_MOUSE_TYPE_MOVE, E_MOUSE_TYPE_DRAG_DRAW, E_MOUSE_TYPE_MOVE_VIEW,E_MOUSE_TYPE_NONE};
 	//enum ePopMenuType{  E_POP_DEL, E_POP_DISCONNECT };
 
 	enum eDefaultStepSize { X_STEP = apoBaseExeNode::E_LINE_WIDTH + 50, Y_STEP = 20 };
 
+	bool m_bInDrag;
 	eDragType m_curDragType; //move subNode or connect-line
 	//ePopMenuType m_popMenuType;
 

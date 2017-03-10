@@ -13,6 +13,7 @@
 #include "nd_common/nd_common.h"
 #include <QWidget> 
 #include <QLabel>
+#include <QEvent>
 
 class apoUiBezier;
 class apoBaseSlotCtrl : public QLabel
@@ -66,6 +67,8 @@ public:
 	virtual bool onConnectIn(apoBaseSlotCtrl*fromSlot);
 	virtual bool onDisconnect();
 protected:
+	bool event(QEvent *e);
+
 	bool m_inDrag;
 	bool m_valid; //not in using
 	eBaseSlotType m_slotType;
