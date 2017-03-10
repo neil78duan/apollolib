@@ -68,12 +68,6 @@ bool apoUiMainEditor::showFunction(ndxml *data, ndxml_root *xmlfile)
 }
 
 
-bool apoUiMainEditor::showCompileError(ndxml_root *xmlfile, stackIndex_vct &errStackIndex)
-{
-
-	return false;
-}
-
 void apoUiMainEditor::clearFunction()
 {
 	for (int i = 0; i < m_beziersVct.size(); i++){
@@ -1068,15 +1062,42 @@ void apoUiMainEditor::curDetailChanged(apoBaseExeNode *exenode)
 		emit showExenodeSignal(m_curDetailNode);
 	}
 	this->update();
-
 	
 }
-// 
-// void apoUiMainEditor::onExenodeDBClicked(apoBaseExeNode *exeNode, QMouseEvent * event)
-// {
-// 	//get ditail window
-// 	curDetailChanged(exeNode);
-// }
+
+
+bool apoUiMainEditor::setCurDetail(ndxml *xmlNode)
+{
+
+	QObjectList list = children();
+	foreach(QObject *obj, list) {
+		apoBaseExeNode *exeNode = qobject_cast<apoBaseExeNode*>(obj);
+		if (exeNode && exeNode->getMyUserData()==xmlNode){
+			curDetailChanged(exeNode);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool apoUiMainEditor::setCurNodeSlotSelected(ndxml *xmlParam)
+{
+	if (!m_curDetailNode){
+		return false;
+	}
+
+	int num = m_curDetailNode->getParamNum();
+	for (int i = 0; i < num; i++){
+		apoBaseParam *paramSlot = m_curDetailNode->getParam(i);
+		if (paramSlot && paramSlot->getValueXml() == xmlParam) {
+			paramSlot->setInDrag(true);
+			return true;
+		}
+	}
+
+	return false;
+
+}
 
 void apoUiMainEditor::onCurNodeChanged()
 {

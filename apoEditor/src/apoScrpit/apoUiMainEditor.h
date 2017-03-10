@@ -39,12 +39,12 @@ public:
 
 	bool showFunction(ndxml *data, ndxml_root *xmlfile);
 	void clearFunction();
-	void setSettingConfig(apoEditorSetting *setting) { m_setting = setting; }
+	//void setSettingConfig(apoEditorSetting *setting) { m_setting = setting; }
 
 	void curDetailChanged(apoBaseExeNode *exenode);
-
-	bool showCompileError(ndxml_root *xmlfile, stackIndex_vct &errStackIndex);
-
+	bool setCurDetail(ndxml *xmlNode);
+	bool setCurNodeSlotSelected(ndxml *xmlParam);
+	
 public slots:
 	//void onExenodeDBClicked(apoBaseExeNode *exeNode, QMouseEvent * event);
 	void onCurNodeChanged();

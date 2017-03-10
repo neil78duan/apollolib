@@ -24,10 +24,11 @@ ND_LOG_WRAPPER_IMPLEMENTION(MainWindow, __glogWrapper);
 #include <QDockWidget>
 #include <QTableWidget>
 #include <QApplication>
-
+#include <QFileDialog>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
-QMainWindow(parent), m_editorSetting(), m_editorWindow(0),
+QMainWindow(parent), m_editorSetting(*apoEditorSetting::getInstant()), m_editorWindow(0),
 	m_fileRoot(0), m_curFile(0), m_currFunction(0), 
     ui(new Ui::MainWindow)
 {
@@ -60,6 +61,19 @@ MainWindow::~MainWindow()
 	ND_LOG_WRAPPER_DELETE(__glogWrapper);
 }
 
+
+bool MainWindow::myInit()
+{
+	apoEditorSetting *g_seting = apoEditorSetting::getInstant();
+	m_fileTemplate = g_seting->getIoConfigValue("new_template");
+	//m_messageFile = g_seting->getIoConfigValue("net_protocol");
+	m_confgiFile = g_seting->m_edirotSettingFile;
+
+	setFileRoot(g_seting->getIoConfigValue("script_root"));
+	showAllView();
+
+	return true;
+}
 
 void MainWindow::ClearLog()
 {
@@ -116,13 +130,21 @@ bool MainWindow::openFileView()
 
 	apoXmlTreeView *subwindow = new apoXmlTreeView();
 	subwindow->setAttribute(Qt::WA_DeleteOnClose, true);
+	subwindow->setObjectName("FileListTree");
 
 	QObject::connect(subwindow, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
 		this, SLOT(onFilesTreeCurItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)));
 
+	QObject::connect(subwindow, SIGNAL(xmlNodeDelSignal(ndxml *)),
+		this, SLOT(onFilelistDel(ndxml *)));
+
 	if (m_fileRoot)	{
 		subwindow->setAlias(&m_editorSetting.getAlias());
-		subwindow->setXmlInfo(m_fileRoot, 2);
+		ndxml *xmlFiles = ndxml_getnode(m_fileRoot, "script_file_manager");
+		if (xmlFiles){
+			subwindow->setXmlInfo(xmlFiles, 2, "Files");
+		}
+		
 	}
 
 	pDock->setWidget(subwindow);
@@ -163,7 +185,7 @@ bool MainWindow::openFunctionsView()
 
 		if (m_curFile)	{
 			subwindow->setAlias(&m_editorSetting.getAlias());
-			subwindow->setXmlInfo(m_curFile, 5);
+			subwindow->setXmlInfo(m_curFile, 5, m_fileMoudleName.c_str());
 		}
 
 		pDock->setWidget(subwindow);
@@ -244,7 +266,7 @@ bool MainWindow::loadScriptFile(const char *scriptFile)
 	const char *filename = getScriptSetting(m_curFile, "user_define_enum");
 	if (filename){
 		m_editorSetting.loadUserDefEnum(filename);
-		m_editorSetting.loadMessageDefine(m_messageFile.c_str()) ;
+		//m_editorSetting.loadMessageDefine(m_messageFile.c_str());
 	}
 
 	m_currFunction = NULL;
@@ -266,7 +288,28 @@ bool MainWindow::showCurFile()
 		return false;
 	}
 	tree->clear();
-	tree->setXmlInfo(m_curFile, 5);
+	tree->setXmlInfo(m_curFile, 5, m_fileMoudleName.c_str());
+	return true;
+}
+
+bool MainWindow::showFileslist()
+{
+	QDockWidget *pDock = this->findChild<QDockWidget*>("FilelistView");
+	if (!pDock){
+		return false;
+	}
+
+	apoXmlTreeView *tree = this->findChild<apoXmlTreeView*>("FileListTree");
+	if (!tree)	{
+		return false;
+	}
+	
+	ndxml *xmlFiles = ndxml_getnode(m_fileRoot, "script_file_manager");
+	if (xmlFiles){
+		tree->clear();
+		tree->setXmlInfo(xmlFiles, 2, "Files");
+	}
+
 	return true;
 }
 
@@ -276,12 +319,34 @@ void MainWindow::onFileChanged()
 	m_isChangedCurFile = true;
 }
 
+
+void MainWindow::onFilelistDel(ndxml *xmlnode)
+{
+	const char *name = ndxml_getname(xmlnode);
+	if (0==ndstricmp(name, "file") ){
+		const char *path = ndxml_getval(xmlnode);
+		if (path){
+			nd_rmfile(path);
+		}
+	}
+	if (xmlnode == m_curFile) {
+		m_editorWindow->clearFunction();
+		m_editorWindow->update();
+		m_curFile = NULL;
+	}
+	ndxml_delxml(xmlnode, NULL);
+
+	ndxml_save(m_fileRoot, m_fileRootPath.c_str());
+}
+
 void MainWindow::onXmlNodeDel(ndxml *xmlnode)
 {
 	m_isChangedCurFile = true;
-	if (xmlnode == m_currFunction || ndxml_get_parent(m_currFunction)==xmlnode)	{		
+	if (xmlnode == m_currFunction || (m_currFunction&&ndxml_get_parent(m_currFunction) == xmlnode))	{
 		m_editorWindow->clearFunction();
 	}
+	ndxml_delxml(xmlnode, NULL);
+
 }
 
 bool MainWindow::showCurFunctions()
@@ -424,6 +489,7 @@ void MainWindow::onFilesTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidget
 	if (!pxml)	{
 		return;
 	}
+	m_fileMoudleName = ndxml_getattr_val(pxml, "name");
 	if (loadScriptFile(ndxml_getval(pxml))) {
 		setDefaultFile(ndxml_getval(pxml));
 	}
@@ -431,19 +497,19 @@ void MainWindow::onFilesTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidget
 
 //////////////////////////////////////////////////////////////////////////
 
-
-bool MainWindow::setConfig(const char *cfgFile, const char *messageFile)
-{
-	m_messageFile = messageFile;
-	m_confgiFile = cfgFile;
-	if (m_editorSetting.setConfigFile(cfgFile, E_SRC_CODE_UTF_8)) {
-		if (m_editorWindow) {
-			m_editorWindow->setSettingConfig(&m_editorSetting);
-		}
-		return true;
-	}
-	return false;
-}
+// 
+// bool MainWindow::setConfig(const char *cfgFile, const char *messageFile)
+// {
+// 	m_messageFile = messageFile;
+// 	m_confgiFile = cfgFile;
+// 	if (m_editorSetting.setConfigFile(cfgFile, E_SRC_CODE_UTF_8)) {
+// 		if (m_editorWindow) {
+// 			m_editorWindow->setSettingConfig(&m_editorSetting);
+// 		}
+// 		return true;
+// 	}
+// 	return false;
+// }
 bool MainWindow::setFileRoot(const char *rootFile)
 {
 	MY_LOAD_XML_AND_NEW(m_fileRoot, rootFile, return false);
@@ -462,6 +528,8 @@ bool MainWindow::setFileRoot(const char *rootFile)
 		ndxml *node = ndxml_getnodei(fileroot, i);
 		const char *fileName = ndxml_getattr_val(node, "name");
 		if (0 == ndstricmp(fileName, lastOpen))	{
+
+			m_fileMoudleName = ndxml_getattr_val(node, "name");
 			loadScriptFile(ndxml_getval(node));
 			break;
 		}
@@ -551,7 +619,34 @@ void MainWindow::on_actionDetail_triggered()
 
 void MainWindow::on_actionFileNew_triggered()
 {
+	QString filter = QFileDialog::getSaveFileName(this, tr("open file"), ".", tr("Allfile(*.*);;xmlfile(*.xml)"));
 
+	if (filter.isNull()) {
+		return;
+	}
+
+	char buf[1024];
+	nd_relative_path(filter.toStdString().c_str(), nd_getcwd(), buf, sizeof(buf));
+	
+	ndxml_root *xml = ndxml_getnode(m_fileRoot, "script_file_manager");
+	if (!xml){
+		QMessageBox::warning(NULL, "Error", "File Error!!!", QMessageBox::Ok);
+		return;
+	}
+	if (-1 == nd_cpfile(m_fileTemplate.c_str(), buf)) {
+		QMessageBox::warning(NULL, "Error", "SAVE File Error!!!", QMessageBox::Ok);
+		return;
+	}
+	ndxml *newNode = ndxml_addnode(xml, "file", buf);
+	if (newNode){
+		const char *fileName = nd_filename(buf);
+		char moduleName[128];
+		ndstr_nstr_end(fileName, moduleName, '.', 128);
+		ndxml_addattrib(newNode, "name", moduleName);
+	}
+
+	ndxml_save(m_fileRoot, m_fileRootPath.c_str());
+	showFileslist();
 }
 
 void MainWindow::on_actionFileOpen_triggered()
@@ -707,5 +802,41 @@ bool MainWindow::compileScript(const char *scriptFile)
 
 	LogicEngineRoot::destroy_Instant();*/
 	WriteLog("!!!!!!!!!!!!!!!!!!!SCRIPT COMPILE SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+	return true;
+}
+
+
+bool MainWindow::showCompileError(const char *xmlFile, stackIndex_vct &errorStack)
+{
+	if (!loadScriptFile(xmlFile)) {
+		nd_logerror("can not load %s file\n", xmlFile);
+		return false;
+	}
+	ndxml *xmlroot = m_curFile;
+	for (size_t i = 0; i < errorStack.size(); i++){
+		int index = errorStack[i];
+		ndxml *node = ndxml_getnodei(xmlroot, index);
+
+		const char *pAction = m_editorSetting.getDisplayAction(ndxml_getname(node));
+		if (pAction && 0 == ndstricmp(pAction, "function")) {
+			m_currFunction = node;
+			showCurFunctions();
+		}
+
+
+		const compile_setting* compileSetting = m_editorSetting.getStepConfig(ndxml_getname(node));
+		if (compileSetting->ins_type == E_INSTRUCT_TYPE_CMD){
+			if (!m_editorWindow->setCurDetail(node)) {
+				nd_logerror("can not show current detail node \n");
+				return false;
+			}
+		}
+		else if (compileSetting->ins_type == E_INSTRUCT_TYPE_PARAM) {
+			if (!m_editorWindow->setCurNodeSlotSelected(node))	{
+				nd_logerror("can not show current param\n");
+				return false;
+			}
+		}
+	}
 	return true;
 }

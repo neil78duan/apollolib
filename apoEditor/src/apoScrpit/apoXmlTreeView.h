@@ -30,7 +30,7 @@ class apoXmlTreeView : public dragTree
 public:
     explicit apoXmlTreeView(QWidget *parent = 0);
 
-	void setXmlInfo(ndxml *xmldata, int detph);
+	void setXmlInfo(ndxml *xmldata, int detph,const char *rootName=NULL);
 	//void setComfig(ndxml *config);
 	void setAlias(LogicEditorHelper::CXMLAlias *alias);
 
@@ -64,6 +64,7 @@ protected:
 	int m_disp_depth; //deisplay depth
 	ndxml *m_xmldata;
 
+	QString m_rootName;
 	//ndxml *m_config;
 
 	LogicEditorHelper::CXMLAlias *m_alias;

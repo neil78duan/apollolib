@@ -28,10 +28,17 @@ apoXmlTreeView::apoXmlTreeView(QWidget *parent) : dragTree(parent), m_alias(0)
 }
 
 
-void apoXmlTreeView::setXmlInfo(ndxml *xmldata, int detph)
+void apoXmlTreeView::setXmlInfo(ndxml *xmldata, int detph,const char *rootName )
 {
 	m_xmldata = xmldata; 
 	m_disp_depth = detph;
+
+	if (rootName && *rootName){
+		m_rootName = rootName;
+	}
+	else {
+		m_rootName = "Root";
+	}
 
 	loadHideNodeInfo(xmldata);
 	createTree();
@@ -63,7 +70,7 @@ bool apoXmlTreeView::createTree()
 
 	setColumnCount(1);
 
-	xmlTreeItem *root = new xmlTreeItem(this, QStringList(QString("root")));
+	xmlTreeItem *root = new xmlTreeItem(this, QStringList(m_rootName));
 
 	root->setUserData(NULL);
 
@@ -232,7 +239,7 @@ void apoXmlTreeView::contextMenuEvent(QContextMenuEvent *event)
 	//m_curItem = curItem ;
 
 	ndxml *xml = (ndxml *)curItem->getUserData();
-	if (!xml || isNotCreateNewChild(ndxml_getname(xml))) {
+	if (!xml ) {
 		return;
 	}
 
@@ -243,7 +250,7 @@ void apoXmlTreeView::contextMenuEvent(QContextMenuEvent *event)
 	ndxml *create_template = GetCreateTemplate(xml, setting->getConfig());
 	bool addOk = false;
 
-	if (create_template) {
+	if (create_template && !isNotCreateNewChild(ndxml_getname(xml)) ) {
 		QAction *add_node = new QAction(this);
 		add_node->setText(tr("add"));
 		pop_menu->addAction(add_node);

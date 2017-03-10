@@ -95,7 +95,7 @@ private:
     const char *getGameDateEncodeType();
 
     const char *_getFromIocfg(const char *cfgName);
-	void _beginEdit(const char *script_file, const char *title);
+	//void _beginEdit(const char *script_file, const char *title);
 	bool _loadUserDefEnum(const char *userDefEnumFile, void *pDlg);
 	bool compileScript(const char *scriptFile);
 	bool compile();
@@ -107,13 +107,11 @@ private:
 
     Ui::startDialog *ui;
 
-    ndxml_root m_editor_setting;
-    ndxml_root m_io_setting;
+    ndxml_root &m_editor_setting;
+    ndxml_root &m_io_setting;
 
-    //const char *editorConfigFile ;
-    //const char *ioConfigFile ;
-	std::string editorConfigFile ;
-	std::string ioConfigFile;
+	std::string &editorConfigFile ;
+	std::string &ioConfigFile;
 
 };
 

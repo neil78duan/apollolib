@@ -3,6 +3,7 @@
 
 #include "nd_common/nd_common.h"
 #include "apoScrpit/apoEditorSetting.h"
+#include "logic_parser/logic_compile.h"
 
 #include <string>
 
@@ -29,21 +30,25 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-	void showAllView();
-	void setNewFileTempl(const char *newfiletempl) { m_fileTemplate = newfiletempl; }
-	bool setConfig(const char *cfgFile,const char *messageFile);
-	bool setFileRoot(const char *rootFile);
-	bool setDefaultFile(const char *lastEditfile);
+	bool myInit();
+	//void setNewFileTempl(const char *newfiletempl) { m_fileTemplate = newfiletempl; }
+	//bool setConfig(const char *cfgFile,const char *messageFile);
+
 
 	void ClearLog();
 	void WriteLog(const char *logText);
 
-	QTableWidget *getDetailWidget();
+protected:
+	void showAllView();
+	bool setFileRoot(const char *rootFile);
+	bool setDefaultFile(const char *lastEditfile);
+	bool showCompileError(const char *xmlFile, stackIndex_vct &errorStack);
 
 public slots:
 	void onShowExeNodeDetail(apoBaseExeNode *exenode);
 	void onFileChanged();
 	void onXmlNodeDel(ndxml *xmlnode);
+	void onFilelistDel(ndxml *xmlnode);
 private slots:
     void on_actionViewList_triggered();
     void on_actionViewOutput_triggered();
@@ -81,6 +86,7 @@ protected:
 	bool loadScriptFile(const char *scriptFile);
 	const char *getScriptSetting(ndxml *scriptXml, const char *settingName);
 	bool showCurFile();
+	bool showFileslist();
 	bool showCurFunctions();
 
 	bool saveCurFile();
@@ -97,22 +103,21 @@ protected:
 	std::string m_fileRootPath;
 	ndxml_root *m_fileRoot;
 
-
-	std::string m_filePath;
-	ndxml_root *m_curFile;
-	ndxml *m_currFunction;
+	std::string m_fileMoudleName;	//current edit file moudle name 
+	std::string m_filePath;			//current edited file path
+	ndxml_root *m_curFile;			//current edited file 
+	ndxml *m_currFunction;			//current edited function 
 	
-	std::string m_fileTemplate;
-	std::string m_messageFile ;
-	std::string m_confgiFile;
+	std::string m_fileTemplate;		// new-file template
+	//std::string m_messageFile ;		// message file-path
+	std::string m_confgiFile;		// config file-path
 private:
 
     Ui::MainWindow *ui;
 	
 	QString m_logText;
 	apoUiMainEditor *m_editorWindow;
-
-	apoEditorSetting m_editorSetting;
+	apoEditorSetting &m_editorSetting;
 };
 
 #endif // MAINWINDOW_H

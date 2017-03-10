@@ -16,6 +16,7 @@
 #include "ndapplib/ndsingleton.h"
 
 #include "cli_common/dftCliMsgHandler.h"
+#include "apoScrpit/apoEditorSetting.h"
 
 #include <QMessageBox>
 
@@ -58,48 +59,42 @@ ND_LOG_WRAPPER_IMPLEMENTION(startDialog, __glogWrapper);
 
 startDialog::startDialog(QWidget *parent) :
 	QDialog(parent), 
-    ui(new Ui::startDialog)
+    ui(new Ui::startDialog),
+	m_editor_setting(*(apoEditorSetting::getInstant()->getConfig())),
+	m_io_setting(*(apoEditorSetting::getInstant()->getIoConfig())),
+	editorConfigFile(apoEditorSetting::getInstant()->m_edirotSettingFile),
+	ioConfigFile(apoEditorSetting::getInstant()->m_ioConfigFile)
 {
     ui->setupUi(this);
-
-    ndxml_initroot(&m_editor_setting);
-    ndxml_initroot(&m_io_setting);
-
+    //ndxml_initroot(&m_editor_setting);
+    //ndxml_initroot(&m_io_setting);
 
 	__glogWrapper = ND_LOG_WRAPPER_NEW(startDialog);
-//     __g_loginDlg = this ;
-//     __oldFunc = ndSetLogoutFunc((void*)out_log);
-// 
-// 	nd_log_no_file(1);
-// 	nd_log_no_time(1);
 }
 
 startDialog::~startDialog()
 {
     delete ui;
 	ND_LOG_WRAPPER_DELETE(__glogWrapper);
+}
+
 // 
-//     ndSetLogoutFunc((void*)__oldFunc);
-//     __g_loginDlg = NULL;
-}
-
-
-
-bool startDialog::initXmlSetting(const char *editorCfg, const char *ioCfg)
-{
-	if (0 != ndxml_load_ex(editorCfg, &m_editor_setting, "utf8")){
-        nd_logerror("load editor setting error \n") ;
-        return false;
-    }
-	if (0 != ndxml_load_ex(ioCfg, &m_io_setting, "utf8")){
-        nd_logerror("load io setting error \n") ;
-
-        return false;
-    }
-    editorConfigFile = editorCfg;
-    ioConfigFile = ioCfg;
-    return true ;
-}
+// 
+// bool startDialog::initXmlSetting(const char *editorCfg, const char *ioCfg)
+// {
+// 	if (0 != ndxml_load_ex(editorCfg, &m_editor_setting, "utf8")){
+//         nd_logerror("load editor setting error \n") ;
+//         return false;
+//     }
+// 	if (0 != ndxml_load_ex(ioCfg, &m_io_setting, "utf8")){
+//         nd_logerror("load io setting error \n") ;
+// 
+//         return false;
+//     }
+//     editorConfigFile = editorCfg;
+//     ioConfigFile = ioCfg;
+//     return true ;
+// }
 
 void startDialog::ClearLog()
 {
@@ -108,44 +103,24 @@ void startDialog::ClearLog()
 
 void startDialog::WriteLog(const char *logText)
 {
-// #ifdef WIN32
-// 	char buf[1024];
-// 	nd_gbk_to_utf8(logText, buf, sizeof(buf));
-// 	logText = buf ;
-// #endif
+#ifdef WIN32
+	char buf[1024];
+	nd_gbk_to_utf8(logText, buf, sizeof(buf));
+	logText = buf ;
+#endif
 	QTextEdit *pEdit = ui->LogText;
 	pEdit->moveCursor(QTextCursor::End);
 	pEdit->insertPlainText(QString(logText));
 	pEdit->moveCursor(QTextCursor::End, QTextCursor::KeepAnchor);
 
-// 	QTextCursor cursor(ui->LogText->textCursor());//
-// 	cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
-// 	ui->LogText->insertPlainText(QString(logText));
 }
 
-
-const char *startDialog::getNetProtocol()
-{
-    return _getFromIocfg("net_protocol");
-}
-// const char *startDialog::getGameDataInPath()
-// {
-//     return _getFromIocfg("game_data_path");
-// }
-// const char *startDialog::getGameDataList()
-// {
-//     return _getFromIocfg("game_data_listfile");
-// }
-// const char *startDialog::getGameDataOutfile()
-// {
-//     return _getFromIocfg("game_data_outfile");
-// }
 // 
-// const char *startDialog::getExcelExportEncodeType()
+// const char *startDialog::getNetProtocol()
 // {
-//     int codeType = atoi( _getFromIocfg("game_data_in_encode") );
-//     return nd_get_encode_name(codeType);
+//     return _getFromIocfg("net_protocol");
 // }
+
 const char *startDialog::getGameDateEncodeType()
 {
     int codeType = atoi(_getFromIocfg("game_data_out_encode"));
@@ -155,128 +130,122 @@ const char *startDialog::getGameDateEncodeType()
 
 const char *startDialog::_getFromIocfg(const char *cfgName)
 {
-    ndxml *node = ndxml_getnode(&m_io_setting, "setting_config");
-    if (node){
-        ndxml *cfgxml = ndxml_getnode(node, cfgName);
-        if (cfgxml)	{
-            return ndxml_getval(cfgxml);
-        }
-    }
-    return NULL;
+	return	apoEditorSetting::getInstant()->getIoConfigValue(cfgName);
+
 }
 
-void startDialog::_beginEdit(const char *script_file, const char *title)
-{
-	const char *filename;
-	ClearLog();
-
-    WriteLog("begin editor.....\n");
-
-	filename = script_file;
-    _LOAD_XML(xml_script, filename, "utf8", 1);
-
-	filename = getNetProtocol();
-	_LOAD_XML(xml_net_protocol, filename, "utf8", 0);
-
-	XMLDialog xmlDlg(this);
-	xmlDlg.SetXML(&m_editor_setting, &xml_script,title);
-	
-	//load user define enum 
-	common_export_error_list("./.error_list.xml");
-	filename = getScriptSetting(&xml_script, "user_define_enum");
-	if (!_loadUserDefEnum(filename, &xmlDlg)) {
-		nd_logmsg("load user define dlg error \n");
-		return;
-	}
-
-	ndxml *funcroot = ndxml_getnode(&xml_net_protocol, "MessageDefine");
-	if (funcroot) {
-		char buf[256];
-		text_list_t messageList;
-		for (int i = 0; i < ndxml_num(funcroot); i++){
-			ndxml *fnode = ndxml_getnodei(funcroot, i);
-			const char *pDispname = ndxml_getattr_val(fnode, "comment");
-			const char *pRealVal = ndxml_getattr_val(fnode, "id");
-			const char *p = buildDisplaNameValStr(pRealVal, pDispname, buf, sizeof(buf));
-			messageList.push_back(QString(p));
-		}
-		xmlDlg.addDisplayNameList("msg_list", messageList);
-	}
-
-	const char *package_file = _getFromIocfg("game_data_package_file");
-	DBLDatabase::get_Instant()->LoadBinStream(package_file);
-
-	if (xmlDlg.exec() == QDialog::Accepted) {
-		nd_chdir(nd_getcwd());
-		ndxml_save(&xml_script, script_file);
-		WriteLog("save script ok\n");
-	}
-	else {
-		WriteLog("script unedited\n");
-	}
-
-	ndxml_destroy(&xml_script);
-	//ndxml_destroy(&xml_cpp_func);
-	ndxml_destroy(&xml_net_protocol);
-	//ndxml_destroy(&xml_events_id);
-	DBLDatabase::destroy_Instant();
-}
-
-
-#define MY_LOAD_XML(_xml_name, _filename,_encode) \
-	ndxml_root _xml_name;				\
-	ndxml_initroot(&_xml_name);			\
-	if (ndxml_load_ex((char*)_filename, &_xml_name,_encode)) {	\
-		nd_logerror("open file %s error", _filename);	\
-		return false;							\
-	}
-
-bool startDialog::_loadUserDefEnum(const char *userDefEnumFile, void *pDlg)
-{
-
-	XMLDialog *xmlDlg = (XMLDialog *)pDlg;
-	MY_LOAD_XML(xml_root, userDefEnumFile, "utf8");
-	ndxml *xmlData = ndxml_getnode(&xml_root, "userData");
-	if (!xmlData){
-		return false;
-	}
-	for (int i = 0; i < ndxml_getsub_num(xmlData); i++){
-		ndxml *dataEnum = ndxml_getnodei(xmlData, i);
-		const char *type = ndxml_getattr_val(dataEnum, "src_type");
-		const char *name = ndxml_getattr_val(dataEnum, "dataName");
-
-		if (!type || !name) {
-			nd_logmsg("unknown type typename =NULL or name=null\n");
-			continue;
-		}
-
-		if (0 == ndstricmp(type, "file")){
-			const char *file = ndxml_getattr_val(dataEnum, "filename");
-			if (!file || !*file) {
-				nd_logmsg("unknown type file name\n");
-				continue;
-			}
-			MY_LOAD_XML(xml_subfile, file, "utf8");
-
-			if (!xmlDlg->loadUserdefDisplayList(xml_subfile, name)) {
-				nd_logmsg("load user define enum from %s error\n", file);
-			}
-
-			ndxml_destroy(&xml_subfile);
-		}
-		else if (0 == ndstricmp(type, "list")) {
-
-			if (!xmlDlg->loadUserdefDisplayList(*dataEnum, name)) {
-				nd_logmsg("load user define enum  %s error\n", name);
-			}
-		}
-		else {
-			nd_logmsg("unknown type %s\n", type);
-		}
-	}
-	ndxml_destroy(&xml_root);
-	return true;
-}
+// void startDialog::_beginEdit(const char *script_file, const char *title)
+// {
+// 	const char *filename;
+// 	ClearLog();
+// 
+//     WriteLog("begin editor.....\n");
+// 
+// 	filename = script_file;
+//     _LOAD_XML(xml_script, filename, "utf8", 1);
+// 
+// 	filename = getNetProtocol();
+// 	_LOAD_XML(xml_net_protocol, filename, "utf8", 0);
+// 
+// 	XMLDialog xmlDlg(this);
+// 	xmlDlg.SetXML(&m_editor_setting, &xml_script,title);
+// 	
+// 	//load user define enum 
+// 	common_export_error_list("./.error_list.xml");
+// 	filename = getScriptSetting(&xml_script, "user_define_enum");
+// 	if (!_loadUserDefEnum(filename, &xmlDlg)) {
+// 		nd_logmsg("load user define dlg error \n");
+// 		return;
+// 	}
+// 
+// 	ndxml *funcroot = ndxml_getnode(&xml_net_protocol, "MessageDefine");
+// 	if (funcroot) {
+// 		char buf[256];
+// 		text_list_t messageList;
+// 		for (int i = 0; i < ndxml_num(funcroot); i++){
+// 			ndxml *fnode = ndxml_getnodei(funcroot, i);
+// 			const char *pDispname = ndxml_getattr_val(fnode, "comment");
+// 			const char *pRealVal = ndxml_getattr_val(fnode, "id");
+// 			const char *p = buildDisplaNameValStr(pRealVal, pDispname, buf, sizeof(buf));
+// 			messageList.push_back(QString(p));
+// 		}
+// 		xmlDlg.addDisplayNameList("msg_list", messageList);
+// 	}
+// 
+// 	const char *package_file = _getFromIocfg("game_data_package_file");
+// 	DBLDatabase::get_Instant()->LoadBinStream(package_file);
+// 
+// 	if (xmlDlg.exec() == QDialog::Accepted) {
+// 		nd_chdir(nd_getcwd());
+// 		ndxml_save(&xml_script, script_file);
+// 		WriteLog("save script ok\n");
+// 	}
+// 	else {
+// 		WriteLog("script unedited\n");
+// 	}
+// 
+// 	ndxml_destroy(&xml_script);
+// 	//ndxml_destroy(&xml_cpp_func);
+// 	ndxml_destroy(&xml_net_protocol);
+// 	//ndxml_destroy(&xml_events_id);
+// 	DBLDatabase::destroy_Instant();
+// }
+// 
+// 
+// #define MY_LOAD_XML(_xml_name, _filename,_encode) \
+// 	ndxml_root _xml_name;				\
+// 	ndxml_initroot(&_xml_name);			\
+// 	if (ndxml_load_ex((char*)_filename, &_xml_name,_encode)) {	\
+// 		nd_logerror("open file %s error", _filename);	\
+// 		return false;							\
+// 	}
+// 
+// bool startDialog::_loadUserDefEnum(const char *userDefEnumFile, void *pDlg)
+// {
+// 
+// 	XMLDialog *xmlDlg = (XMLDialog *)pDlg;
+// 	MY_LOAD_XML(xml_root, userDefEnumFile, "utf8");
+// 	ndxml *xmlData = ndxml_getnode(&xml_root, "userData");
+// 	if (!xmlData){
+// 		return false;
+// 	}
+// 	for (int i = 0; i < ndxml_getsub_num(xmlData); i++){
+// 		ndxml *dataEnum = ndxml_getnodei(xmlData, i);
+// 		const char *type = ndxml_getattr_val(dataEnum, "src_type");
+// 		const char *name = ndxml_getattr_val(dataEnum, "dataName");
+// 
+// 		if (!type || !name) {
+// 			nd_logmsg("unknown type typename =NULL or name=null\n");
+// 			continue;
+// 		}
+// 
+// 		if (0 == ndstricmp(type, "file")){
+// 			const char *file = ndxml_getattr_val(dataEnum, "filename");
+// 			if (!file || !*file) {
+// 				nd_logmsg("unknown type file name\n");
+// 				continue;
+// 			}
+// 			MY_LOAD_XML(xml_subfile, file, "utf8");
+// 
+// 			if (!xmlDlg->loadUserdefDisplayList(xml_subfile, name)) {
+// 				nd_logmsg("load user define enum from %s error\n", file);
+// 			}
+// 
+// 			ndxml_destroy(&xml_subfile);
+// 		}
+// 		else if (0 == ndstricmp(type, "list")) {
+// 
+// 			if (!xmlDlg->loadUserdefDisplayList(*dataEnum, name)) {
+// 				nd_logmsg("load user define enum  %s error\n", name);
+// 			}
+// 		}
+// 		else {
+// 			nd_logmsg("unknown type %s\n", type);
+// 		}
+// 	}
+// 	ndxml_destroy(&xml_root);
+// 	return true;
+// }
 
 const char *startDialog::getScriptSetting(ndxml *scriptXml, const char *settingName)
 {
@@ -337,7 +306,7 @@ bool startDialog::compile()
 
 	ndxml_root xmlEntry;
 	ndxml_initroot(&xmlEntry);
-	if (-1 == ndxml_load_ex(script_root, &xmlEntry,nd_get_encode_name(ND_ENCODE_TYPE))) {
+	if (-1 == ndxml_load_ex(script_root, &xmlEntry, nd_get_encode_name(ND_ENCODE_TYPE))) {
 		return false;
 	}
 
@@ -541,7 +510,6 @@ bool startDialog::expExcel()
 		return false;
 	}
 
-
     dbtmp.Destroy();
 
 	std::string strOutTextPath = text_path;
@@ -661,26 +629,20 @@ void startDialog::on_Connect_clicked()
     WriteLog("...\n connect server end!");
 }
 
+#include "apoScrpit/editorFrame.h"
 void startDialog::on_ScriptEdit_clicked()
 {
-	NewFileDialog dlg(this);
-	const char *scriptRoot = _getFromIocfg("script_root");
-	const char *newTmplFile = _getFromIocfg("new_template");
+	EditorFrame *pMain = new EditorFrame();
+	pMain->setHostWidget(this);
+	pMain->setAttribute(Qt::WA_DeleteOnClose, true);
 
-	if (!dlg.InitFileRoot(scriptRoot, newTmplFile)) {
-		QMessageBox::warning(NULL, "Error", "Init script-edit config error!", QMessageBox::Ok);
-		return;
-	}
-	if (dlg.exec() == QDialog::Accepted) {
-		const char *file = dlg.getSelectFile();
-		const char *title = dlg.getSelectTitle();
-		if (file && *file)	{
-			_beginEdit(file,title);
-		}
 
+	if (pMain->myInit()) {
+		this->setVisible(false);
+		pMain->showMaximized();
 	}
 	else {
-		WriteLog("script unedited\n");
+		delete pMain;
 	}
 
 }
@@ -743,35 +705,9 @@ void startDialog::on_CompleteAll_clicked()
     WriteLog("==========one key complete success===========\n");
 }
 
-#include "apoScrpit/editorFrame.h"
 void startDialog::on_Test_clicked()
 {
-	const char *scriptRoot = _getFromIocfg("script_root");
-	const char *newTmplFile = _getFromIocfg("new_template");
-	if (!newTmplFile || !scriptRoot){
-		return;
-	}
-
-
-	EditorFrame *pMain = new EditorFrame();
-	pMain->setHostWidget(this);
-	pMain->setAttribute(Qt::WA_DeleteOnClose, true);
-
 	
-	if (!pMain->setConfig(editorConfigFile.c_str(),getNetProtocol()))	{
-		return;
-	}
-
-	pMain->setNewFileTempl(newTmplFile);
-
-	if (!pMain->setFileRoot(scriptRoot))	{
-		return ;
-	}
-
-	this->setVisible(false);
-
-	pMain->showAllView();
-	pMain->showMaximized();
 
 	/*
 	NewFileDialog dlg(this);
@@ -797,9 +733,9 @@ void startDialog::on_Test_clicked()
 
 	*/
 
-    /*
+    
     ClearLog();
     if (false == runTest()){
         WriteLog("Run test error!!!!!!!!!");
-    }*/
+    }
 }

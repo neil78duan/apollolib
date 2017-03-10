@@ -170,27 +170,35 @@ bool apoUiXmlTableWidget::_GetUserDefinData(const char *pUserParam, QString &val
 }
 bool apoUiXmlTableWidget::_GetFileName(bool bOpen, QString & strFile, const char *default_file)
 {
+	QString fullPath;
 	if (bOpen) {
-		strFile = QFileDialog::getOpenFileName(this, tr("open file"), ".", tr("Allfile(*.*);;xmlfile(*.xml)"));
+		fullPath = QFileDialog::getOpenFileName(this, tr("open file"), ".", tr("Allfile(*.*);;xmlfile(*.xml)"));
 	}
 	else {
-		strFile = QFileDialog::getSaveFileName(this, tr("open file"), ".", tr("Allfile(*.*);;xmlfile(*.xml)"));
+		fullPath = QFileDialog::getSaveFileName(this, tr("open file"), ".", tr("Allfile(*.*);;xmlfile(*.xml)"));
 	}
 
-	if (strFile.isNull()) {
-		strFile = default_file;
+	if (fullPath.isNull()) {
+		fullPath = default_file;
 		return false;
 	}
+
+	char buf[1024];
+	strFile = nd_relative_path(fullPath.toStdString().c_str(), nd_getcwd(), buf, sizeof(buf));
+
 	return true;
 
 }
 
 bool apoUiXmlTableWidget::_OpenFilter(QString &strPath, const QString &tip)
 {
-	strPath = QFileDialog::getExistingDirectory(this, tip, ".");
-	if (strPath.isNull()) {
+	QString fullPath = QFileDialog::getExistingDirectory(this, tip, ".");
+	if (fullPath.isNull()) {
 		return false;
 	}
+	char buf[1024];
+	strPath = nd_relative_path(fullPath.toStdString().c_str(), nd_getcwd(), buf, sizeof(buf));
+	
 	return true;
 }
 

@@ -121,18 +121,70 @@ apoEditorSetting* apoEditorSetting::s_setting = NULL;
 
 apoEditorSetting*apoEditorSetting::getInstant()
 {
+	if (!s_setting)	{
+		s_setting = new apoEditorSetting();
+	}
 	return s_setting;
 }
+
+void apoEditorSetting::destroyInstant()
+{
+	if (s_setting)	{
+		delete s_setting;
+		s_setting = NULL;
+	}
+}
+
 apoEditorSetting::apoEditorSetting()
 {
-	if (!apoEditorSetting::s_setting)	{
-		apoEditorSetting::s_setting = this;
-	}
+	m_ioXmlCfg = NULL;
 }
 
 apoEditorSetting::~apoEditorSetting()
 {
-	apoEditorSetting::s_setting = 0;
+	m_userDefineList.clear();
+	MY_DESTROY_XML(m_ioXmlCfg);
+}
+
+
+bool apoEditorSetting::Init(const char *ioSetting, const char *editorSetting, int encodeType)
+{
+	if (!setConfigFile(editorSetting, encodeType))  {		
+		return false;
+	}
+
+	m_ioXmlCfg = new ndxml_root;	
+	ndxml_initroot(m_ioXmlCfg);
+
+	if (0!=ndxml_load_ex(ioSetting, m_ioXmlCfg, nd_get_encode_name(encodeType))) {
+		nd_logerror("open file %s error", ioSetting);
+		return false;
+	}
+
+	m_edirotSettingFile = editorSetting;
+	m_ioConfigFile = ioSetting ;
+
+	//load message enum
+	loadMessageDefine(getIoConfigValue("net_protocol"));
+	return true;
+}
+// 
+// bool apoEditorSetting::loadProgramIOSetting(const char *ioSettingFile)
+// {
+// 	MY_LOAD_XML_AND_NEW(m_ioXmlCfg,ioSettingFile, return false);
+// 	return true;
+// }
+
+const char *apoEditorSetting::getIoConfigValue(const char *cfgName)
+{
+	ndxml *node = ndxml_getnode(m_ioXmlCfg, "setting_config");
+	if (node){
+		ndxml *cfgxml = ndxml_getnode(node, cfgName);
+		if (cfgxml)	{
+			return ndxml_getval(cfgxml);
+		}
+	}
+	return NULL;
 }
 
 // 
