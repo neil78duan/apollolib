@@ -49,7 +49,7 @@ DEFINES += X86_64
 
 INCLUDEPATH += $$ndsdk_dir/include \
         $$apolib_dir/include \
-        $$apolib_dir ./src
+        $$apolib_dir ./src ./src/apoScrpit
 
 QT       += core gui
 

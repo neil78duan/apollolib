@@ -286,7 +286,7 @@ void startDialog::on_Setting_clicked()
 {
     dialogCloseHelper _helperClose(this) ;
     XMLDialog xmlDlg(this);
-    xmlDlg.SetXML(&m_editor_setting, &m_io_setting,"EditorConfig");
+    xmlDlg.showXml( &m_io_setting,"EditorConfig");
 
     if (xmlDlg.exec() == QDialog::Accepted) {
 

@@ -760,7 +760,7 @@ void ConnectDialog::on_gmMsgButton_clicked()
     //dialogCloseHelper _helperClose(this) ;
 
     XMLDialog xmlDlg(this);
-    xmlDlg.SetXML(m_editor_setting, m_gmCfg,"Message");
+    xmlDlg.showXml( m_gmCfg,"Message");
     xmlDlg.preInit(gmdlgInit,gmdlgSend, gmdlgExit) ;
     xmlDlg.setButtonText("Send", "Exit") ;
     xmlDlg.exec() ;

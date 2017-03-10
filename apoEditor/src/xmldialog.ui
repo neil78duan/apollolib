@@ -28,7 +28,7 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <widget class="dragTree" name="xmlTree" native="true">
+  <widget class="apoXmlTreeView" name="xmlTree" native="true">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -45,16 +45,6 @@
    </property>
    <property name="dragEnabled" stdset="0">
     <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QTableWidget" name="xmlTable">
-   <property name="geometry">
-    <rect>
-     <x>375</x>
-     <y>1</y>
-     <width>511</width>
-     <height>591</height>
-    </rect>
    </property>
   </widget>
   <widget class="QPushButton" name="ButtonOK">
@@ -83,12 +73,29 @@
     <string>Cancel</string>
    </property>
   </widget>
+  <widget class="apoUiCommonXmlView" name="xmlTable" native="true">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>0</y>
+     <width>521</width>
+     <height>591</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>dragTree</class>
+   <class>apoXmlTreeView</class>
    <extends>QWidget</extends>
-   <header>dragtree.h</header>
+   <header>apoXmlTreeView.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>apoUiCommonXmlView</class>
+   <extends>QWidget</extends>
+   <header>apoUiDetailView.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

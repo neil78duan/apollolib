@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml  version="1.0" encoding="utf-8" ?>
 <setting_config name="设置" expand="yes" delete="no">
 	<script_root name="脚本文件列表" kinds="in_file">../cfg/script_root.xml</script_root>
 	<new_template name="新建模板" kinds="in_file">../cfg/newfileTemp.xml</new_template>
@@ -11,7 +11,7 @@
 	<game_data_listfile name="excel列表" kinds="in_file">../../../../design/game_data_v1/excel_filelist.txt</game_data_listfile>
 	<game_data_package_file name="数据打包文件" kinds="out_file">../../data/cehua_data.dat</game_data_package_file>
 	<game_data_export_cmd name="策划数据导出工具" kinds="in_file">exp_xls.bat</game_data_export_cmd>
-	<game_data_out_encode name="游戏数据输出编码" kinds="reference" reference_type="type_encode">2</game_data_out_encode>
+	<game_data_out_encode name="游戏数据输出编码" kinds="reference" reference_type="type_encode">1</game_data_out_encode>
 	<bin_data_byte_order name="输出字节顺序" kinds="enum" enum_value="big-end, little-end">1</bin_data_byte_order>
 	<role_attr_table name="角色属性表" kinds="string">attribute_config.xlsx</role_attr_table>
 	<gm_send_msg name="gm消息配置表" kinds="in_file">../cfg/gm_msg.xml</gm_send_msg>

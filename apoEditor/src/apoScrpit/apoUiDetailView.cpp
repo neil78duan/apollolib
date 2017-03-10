@@ -191,11 +191,13 @@ bool apoUiDetailView::onChanged(int row, int column, const char *xmlRealValue)
 //////////////////////////////////////////////////////////////////////////
 
 
-apoUiCommonXmlView::apoUiCommonXmlView(QWidget *parent)
+apoUiCommonXmlView::apoUiCommonXmlView(QWidget *parent):
+apoUiXmlTableWidget(parent)
 {
 }
 
-apoUiCommonXmlView::apoUiCommonXmlView(int rows, int columns, QWidget *parent)
+apoUiCommonXmlView::apoUiCommonXmlView(int rows, int columns, QWidget *parent):
+apoUiXmlTableWidget(rows, columns, parent)
 {
 }
 
