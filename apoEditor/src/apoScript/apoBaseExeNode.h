@@ -10,9 +10,9 @@
 #ifndef _APO_BASE_EXENODE_H_
 #define _APO_BASE_EXENODE_H_
 
-#include "apoScrpit/apoUiParam.h"
+#include "apoScript/apoUiParam.h"
 #include "nd_common/nd_common.h"
-#include "apoScrpit/apoUiParam.h"
+#include "apoScript/apoUiParam.h"
 
 #include <QWidget>
 #include <QVector>

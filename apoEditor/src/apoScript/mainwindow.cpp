@@ -1,9 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "apoScrpit/apoUiMainEditor.h"
-#include "apoScrpit/apoXmlTreeView.h"
-#include "apoScrpit/apoBaseExeNode.h"
+#include "apoScript/apoUiMainEditor.h"
+#include "apoScript/apoXmlTreeView.h"
+#include "apoScript/apoBaseExeNode.h"
 
 #include "logic_parser/dbl_mgr.h"
 #include "logic_parser/logic_compile.h"

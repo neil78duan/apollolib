@@ -8,7 +8,7 @@
  */
 
 #include "apoUiExeNode.h"
-#include "apoScrpit/apoEditorSetting.h"
+#include "apoScript/apoEditorSetting.h"
 #include <QPainter>
 #include <QMessageBox>
 #include <QMouseEvent>
@@ -24,7 +24,7 @@ static int apo_exeNodeGetIndex(const char *name)
 #define APOUI_NODE_ID(id) #id,
 
 	static const char* exeClassname[] = {
-#include "apoScrpit/apouinodedef.h"
+#include "apoScript/apouinodedef.h"
 	};
 #undef APOUI_NODE_ID
 	int number = sizeof(exeClassname) / sizeof(exeClassname[0]);
@@ -66,7 +66,7 @@ apoBaseExeNode *g_apoCreateExeNode(int index, ndxml *xml, QWidget *parent)
 
 	switch (index)
 	{
-#include "apoScrpit/apouinodedef.h"
+#include "apoScript/apouinodedef.h"
 	default:
 		break;
 	}

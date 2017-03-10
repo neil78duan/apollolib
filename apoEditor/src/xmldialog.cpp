@@ -1,9 +1,9 @@
 #include "xmldialog.h"
 #include "ui_xmldialog.h"
 #include "logic_parser/dbl_mgr.h"
-#include "apoScrpit/apoEditorSetting.h"
-#include "apoScrpit/apoUiXmlTablesWidget.h"
-#include "apoScrpit/apoUiDetailView.h"
+#include "apoScript/apoEditorSetting.h"
+#include "apoScript/apoUiXmlTablesWidget.h"
+#include "apoScript/apoUiDetailView.h"
 
 #include "listdialog.h"
 #include <QFileDialog>

@@ -10,7 +10,7 @@
 #ifndef _APOUI_EXENODE_H_
 #define _APOUI_EXENODE_H_
 
-#include "apoScrpit/apoBaseExeNode.h"
+#include "apoScript/apoBaseExeNode.h"
 #include <QWidget>
 #include <QVector>
 #include <QLabel>
@@ -24,7 +24,7 @@
 #define APOUI_NODE_ID(id) EAPO_EXE_NODE_##id,
 
 enum eApoExeNodeType {
-#include "apoScrpit/apouinodedef.h"
+#include "apoScript/apouinodedef.h"
 	EAPO_EXE_NODE_NUMBER 
 };
 #undef APOUI_NODE_ID

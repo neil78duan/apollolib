@@ -2,7 +2,7 @@
 
 #include "workdirdialog.h"
 #include "nd_common/nd_common.h"
-#include "apoScrpit/apoEditorSetting.h"
+#include "apoScript/apoEditorSetting.h"
 
 #include <QApplication>
 #include "startdialog.h"

@@ -8,7 +8,7 @@
 * 2017.2.16
 */
 
-#include "apoScrpit/apoEditorSetting.h"
+#include "apoScript/apoEditorSetting.h"
 #include "apoXmlTreeView.h"
 #include <QHeaderView>
 #include <QContextMenuEvent>

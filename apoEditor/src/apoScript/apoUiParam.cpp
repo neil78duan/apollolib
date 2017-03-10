@@ -7,11 +7,11 @@
 * 2017.2.20
 */
 
-#include "apoScrpit/apoUiParam.h"
+#include "apoScript/apoUiParam.h"
 #include "logic_parser/logic_editor_helper.h"
-#include "apoScrpit/apoEditorSetting.h"
+#include "apoScript/apoEditorSetting.h"
 
-#include "apoScrpit/apoUiExeNode.h"
+#include "apoScript/apoUiExeNode.h"
 
 using namespace LogicEditorHelper;
 

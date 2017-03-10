@@ -22,19 +22,12 @@ class dialogCloseHelper
 {
 public:
     dialogCloseHelper(QDialog *dlg) {
-//        m_oldStat = dlg->testAttribute(Qt::WA_DeleteOnClose) ;
-//        if(m_oldStat) {
-//            dlg->setAttribute(Qt::WA_DeleteOnClose, false);
-//        }
         dlg->setHidden(true);
         m_dlg = dlg ;
     }
     ~dialogCloseHelper()
     {
         if(m_dlg) {
-//            if(m_oldStat) {
-//                m_dlg->setAttribute(Qt::WA_DeleteOnClose, true);
-//            }
 
             m_dlg->setVisible(true);
             m_dlg->activateWindow();
@@ -82,20 +75,11 @@ private:
 	bool getScriptExpDebugInfo(ndxml *scriptXml);
 	const char *getScriptEntry();
 
-    //const char *getGameScript();
-    //const char *getGameScriptOut();
-    //const char *getCppFuncList();
-    //const char *getEventList();
     const char *getNetProtocol();
 
-    //const char *getGameDataInPath();
-    //const char *getGameDataList();
-    //const char *getGameDataOutfile();
-    //const char *getExcelExportEncodeType();
     const char *getGameDateEncodeType();
 
     const char *_getFromIocfg(const char *cfgName);
-	//void _beginEdit(const char *script_file, const char *title);
 	bool _loadUserDefEnum(const char *userDefEnumFile, void *pDlg);
 	bool compileScript(const char *scriptFile);
 	bool compile();

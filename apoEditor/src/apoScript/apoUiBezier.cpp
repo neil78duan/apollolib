@@ -7,7 +7,7 @@
 * 2017.2.10
 */
 
-#include "apoScrpit/apoUiParam.h"
+#include "apoScript/apoUiParam.h"
 #include "apoUiBezier.h"
 #include <QPainter>
 

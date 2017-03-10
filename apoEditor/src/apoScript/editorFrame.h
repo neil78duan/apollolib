@@ -8,7 +8,7 @@
 #ifndef EDITORFRAME_H
 #define EDITORFRAME_H
 
-#include "apoScrpit/mainwindow.h"
+#include "apoScript/mainwindow.h"
 
 class EditorFrame : public MainWindow
 {
