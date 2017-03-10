@@ -10,10 +10,10 @@
 #ifndef APOUIMAINEDITOR_H
 #define APOUIMAINEDITOR_H
 
-#include "apoScrpit/apoUiExeNode.h"
-#include "apoScrpit/apoUiBezier.h"
-#include "apoScrpit/apoEditorSetting.h"
-#include "apoScrpit/apoUiDetailView.h"
+#include "apoScript/apoUiExeNode.h"
+#include "apoScript/apoUiBezier.h"
+#include "apoScript/apoEditorSetting.h"
+#include "apoScript/apoUiDetailView.h"
 #include "logic_parser/logic_compile.h"
 
 #include <map>

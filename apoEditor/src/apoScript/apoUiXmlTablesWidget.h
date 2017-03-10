@@ -13,8 +13,8 @@
 #include "myqtitemctrl.h"
 #include "logic_parser/logic_editor_helper.h"
 #include "listdialog.h"
-#include "apoScrpit/apoEditorSetting.h"
-#include "apoScrpit/apoUiXmlTablesWidget.h"
+#include "apoScript/apoEditorSetting.h"
+#include "apoScript/apoUiXmlTablesWidget.h"
 
 #include <QWidget>
 #include <QTableWidget>

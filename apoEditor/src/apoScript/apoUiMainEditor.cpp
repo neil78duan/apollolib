@@ -8,9 +8,9 @@
 
 
 
-#include "apoScrpit/apoUiMainEditor.h"
-#include "apoScrpit/apoBaseExeNode.h"
-#include "apoScrpit/mainwindow.h"
+#include "apoScript/apoUiMainEditor.h"
+#include "apoScript/apoBaseExeNode.h"
+#include "apoScript/mainwindow.h"
 #include "logic_parser/logic_editor_helper.h"
 #include "logic_parser/logicDataType.h"
 #include "listdialog.h"

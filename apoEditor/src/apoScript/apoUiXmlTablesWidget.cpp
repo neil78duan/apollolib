@@ -6,8 +6,8 @@
 * 2017.2.24
 */
 
-#include "apoScrpit/apoUiXmlTablesWidget.h"
-#include "apoScrpit/apoEditorSetting.h"
+#include "apoScript/apoUiXmlTablesWidget.h"
+#include "apoScript/apoEditorSetting.h"
 #include "logic_parser/logic_editor_helper.h"
 #include "logic_parser/dbl_mgr.h"
 

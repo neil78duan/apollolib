@@ -9,7 +9,7 @@
 */
 
 
-#include "apoScrpit/apoUiDetailView.h"
+#include "apoScript/apoUiDetailView.h"
 #include "logic_parser/logic_editor_helper.h"
 
 #include <QStringList>

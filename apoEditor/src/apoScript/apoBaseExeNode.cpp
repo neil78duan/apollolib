@@ -9,7 +9,7 @@
 #include "apoUiBezier.h"
 #include "apoBaseExeNode.h"
 #include "apoUiParam.h"
-#include "apoScrpit/apoEditorSetting.h"
+#include "apoScript/apoEditorSetting.h"
 #include "logic_parser/logic_compile.h"
 #include "logic_parser/logic_editor_helper.h"
 

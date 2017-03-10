@@ -3,7 +3,6 @@
 #include "connectdialog.h"
 #include "nd_common/nd_common.h"
 #include "xmldialog.h"
-#include "newfiledialog.h"
 #include "ndlib.h"
 
 #include "logic_parser/dbl_mgr.h"
@@ -16,7 +15,7 @@
 #include "ndapplib/ndsingleton.h"
 
 #include "cli_common/dftCliMsgHandler.h"
-#include "apoScrpit/apoEditorSetting.h"
+#include "apoScript/apoEditorSetting.h"
 
 #include <QMessageBox>
 
@@ -35,27 +34,6 @@ ND_LOG_WRAPPER_IMPLEMENTION(startDialog, __glogWrapper);
         if(_isexit) return;							\
     }
 
-// static void out_log(const char *text)
-// {
-//     if (__g_loginDlg){
-//         __g_loginDlg->WriteLog(text);
-//     }
-// }
-// 
-// static int out_print(void *pf, const char *stm, ...)
-// {
-//     char buf[1024 * 4];
-//     char *p = buf;
-//     va_list arg;
-//     int done;
-// 
-//     va_start(arg, stm);
-//     done = vsnprintf(p, sizeof(buf), stm, arg);
-//     va_end(arg);
-// 
-//     out_log(buf);
-//     return done;
-// }
 
 startDialog::startDialog(QWidget *parent) :
 	QDialog(parent), 
@@ -66,8 +44,6 @@ startDialog::startDialog(QWidget *parent) :
 	ioConfigFile(apoEditorSetting::getInstant()->m_ioConfigFile)
 {
     ui->setupUi(this);
-    //ndxml_initroot(&m_editor_setting);
-    //ndxml_initroot(&m_io_setting);
 
 	__glogWrapper = ND_LOG_WRAPPER_NEW(startDialog);
 }
@@ -78,23 +54,6 @@ startDialog::~startDialog()
 	ND_LOG_WRAPPER_DELETE(__glogWrapper);
 }
 
-// 
-// 
-// bool startDialog::initXmlSetting(const char *editorCfg, const char *ioCfg)
-// {
-// 	if (0 != ndxml_load_ex(editorCfg, &m_editor_setting, "utf8")){
-//         nd_logerror("load editor setting error \n") ;
-//         return false;
-//     }
-// 	if (0 != ndxml_load_ex(ioCfg, &m_io_setting, "utf8")){
-//         nd_logerror("load io setting error \n") ;
-// 
-//         return false;
-//     }
-//     editorConfigFile = editorCfg;
-//     ioConfigFile = ioCfg;
-//     return true ;
-// }
 
 void startDialog::ClearLog()
 {
@@ -115,11 +74,6 @@ void startDialog::WriteLog(const char *logText)
 
 }
 
-// 
-// const char *startDialog::getNetProtocol()
-// {
-//     return _getFromIocfg("net_protocol");
-// }
 
 const char *startDialog::getGameDateEncodeType()
 {
@@ -190,62 +144,8 @@ const char *startDialog::_getFromIocfg(const char *cfgName)
 // 	//ndxml_destroy(&xml_events_id);
 // 	DBLDatabase::destroy_Instant();
 // }
-// 
-// 
-// #define MY_LOAD_XML(_xml_name, _filename,_encode) \
-// 	ndxml_root _xml_name;				\
-// 	ndxml_initroot(&_xml_name);			\
-// 	if (ndxml_load_ex((char*)_filename, &_xml_name,_encode)) {	\
-// 		nd_logerror("open file %s error", _filename);	\
-// 		return false;							\
-// 	}
-// 
-// bool startDialog::_loadUserDefEnum(const char *userDefEnumFile, void *pDlg)
-// {
-// 
-// 	XMLDialog *xmlDlg = (XMLDialog *)pDlg;
-// 	MY_LOAD_XML(xml_root, userDefEnumFile, "utf8");
-// 	ndxml *xmlData = ndxml_getnode(&xml_root, "userData");
-// 	if (!xmlData){
-// 		return false;
-// 	}
-// 	for (int i = 0; i < ndxml_getsub_num(xmlData); i++){
-// 		ndxml *dataEnum = ndxml_getnodei(xmlData, i);
-// 		const char *type = ndxml_getattr_val(dataEnum, "src_type");
-// 		const char *name = ndxml_getattr_val(dataEnum, "dataName");
-// 
-// 		if (!type || !name) {
-// 			nd_logmsg("unknown type typename =NULL or name=null\n");
-// 			continue;
-// 		}
-// 
-// 		if (0 == ndstricmp(type, "file")){
-// 			const char *file = ndxml_getattr_val(dataEnum, "filename");
-// 			if (!file || !*file) {
-// 				nd_logmsg("unknown type file name\n");
-// 				continue;
-// 			}
-// 			MY_LOAD_XML(xml_subfile, file, "utf8");
-// 
-// 			if (!xmlDlg->loadUserdefDisplayList(xml_subfile, name)) {
-// 				nd_logmsg("load user define enum from %s error\n", file);
-// 			}
-// 
-// 			ndxml_destroy(&xml_subfile);
-// 		}
-// 		else if (0 == ndstricmp(type, "list")) {
-// 
-// 			if (!xmlDlg->loadUserdefDisplayList(*dataEnum, name)) {
-// 				nd_logmsg("load user define enum  %s error\n", name);
-// 			}
-// 		}
-// 		else {
-// 			nd_logmsg("unknown type %s\n", type);
-// 		}
-// 	}
-// 	ndxml_destroy(&xml_root);
-// 	return true;
-// }
+
+
 
 const char *startDialog::getScriptSetting(ndxml *scriptXml, const char *settingName)
 {
@@ -629,7 +529,7 @@ void startDialog::on_Connect_clicked()
     WriteLog("...\n connect server end!");
 }
 
-#include "apoScrpit/editorFrame.h"
+#include "apoScript/editorFrame.h"
 void startDialog::on_ScriptEdit_clicked()
 {
 	EditorFrame *pMain = new EditorFrame();

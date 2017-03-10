@@ -12,7 +12,7 @@
 
 #include "apoBaseExeNode.h"
 #include "myqtitemctrl.h"
-#include "apoScrpit/apoUiXmlTablesWidget.h"
+#include "apoScript/apoUiXmlTablesWidget.h"
 
 #include <QWidget>
 #include <QTableWidget>

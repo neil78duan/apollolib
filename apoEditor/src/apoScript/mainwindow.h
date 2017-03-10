@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include "nd_common/nd_common.h"
-#include "apoScrpit/apoEditorSetting.h"
+#include "apoScript/apoEditorSetting.h"
 #include "logic_parser/logic_compile.h"
 
 #include <string>
