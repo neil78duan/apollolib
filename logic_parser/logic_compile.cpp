@@ -371,14 +371,17 @@ bool LogicCompiler::compileFuncs(ndxml *funcsCollect, FILE *pf)
 		}
 
 		compile_setting_t::iterator it = m_settings.find(stepInsName);
-		if (it != m_settings.end() && it->second.ins_type == E_INSTRUCT_TYPE_STEP_COLLECTION){
+		if(it == m_settings.end()) {
+			continue;
+		}
+		if ( it->second.ins_type == E_INSTRUCT_TYPE_STEP_COLLECTION){
 			if (!compileFuncs(node, pf)){
 				return false;
 			}
 		}
-		else {
+		else if(E_INSTRUCT_TYPE_FUNCTION == it->second.ins_type) {
 			int ret = func2Stream(node, buf, sizeof(buf));
-			if (-1 == ret || ret > sizeof(buf))	{
+			if (-1 == ret || (size_t)ret > sizeof(buf))	{
 				return false;
 			}
 			NDUINT8 isGlobal = _isGlobalFunc(node) ? 1 : 0;
@@ -903,6 +906,14 @@ int LogicCompiler::step_function_info(compile_setting *setting, ndxml *stepNode,
 int LogicCompiler::writeDebugInfo(ndxml *stepNode, const char*stepName, char *buf, size_t bufsize)
 {
 	char *p = buf;
+	
+	char debugInfo[1024] ;
+	char *start = debugInfo ;
+	int len = snprintf(debugInfo, sizeof(debugInfo), "%s", stepName) ;
+	start += len;
+	
+	_getFuncStackInfo(stepNode,start, sizeof(debugInfo) - len) ;
+	stepName = debugInfo ;
 
 	p = lp_write_stream(p, (NDUINT32)E_OP_DEBUG_INFO, m_aimByteOrder);
 	p = lp_write_stream(p, (NDUINT16)m_compileStep, m_aimByteOrder);
@@ -1218,7 +1229,6 @@ void LogicCompiler::_popStac()
 void LogicCompiler::_makeErrorStack(ndxml *xmlError)
 {
 	stackIndex_vct stackIndex ;
-	m_curCompileStack.clear() ;
 	ndxml *parent = ndxml_get_parent(xmlError) ;
 	ndxml *node = xmlError ;
 	
@@ -1232,4 +1242,43 @@ void LogicCompiler::_makeErrorStack(ndxml *xmlError)
 	m_curCompileStack.clear() ;
 	
 	m_curCompileStack.insert(m_curCompileStack.begin(), stackIndex.rbegin(), stackIndex.rend()) ;
+}
+
+bool LogicCompiler::_getFuncStackInfo(ndxml *curNode,char *buf, size_t size)
+{
+	stackIndex_vct stackIndex ;
+	ndxml *parent = ndxml_get_parent(curNode) ;
+	ndxml *node = curNode ;
+	
+	while (parent ) {
+		const char *stepInsName = ndxml_getname(node);
+		if (stepInsName){
+			compile_setting_t::iterator it = m_settings.find(stepInsName);
+			if(it != m_settings.end()) {
+				
+				if ( it->second.ins_type == E_INSTRUCT_TYPE_FUNCTION){
+					break;
+				}
+			}
+		}
+		
+		int index = ndxml_get_index(parent, node) ;
+		stackIndex.push_back(index) ;
+		
+		node = parent ;
+		parent = ndxml_get_parent(node) ;
+	}
+	
+	if (stackIndex.size()==0) {
+		return false ;
+	}
+	char *p = buf ;
+	*p = 0 ;
+	for (stackIndex_vct::reverse_iterator it =stackIndex.rbegin() ; it!=stackIndex.rend(); ++it) {
+		int len = snprintf(p, size, ".%d", (*it)) ;
+		p+= len ;
+		size -= len ;
+	}
+	
+	return true;
 }

@@ -42,8 +42,8 @@ public:
 	//void setSettingConfig(apoEditorSetting *setting) { m_setting = setting; }
 
 	void curDetailChanged(apoBaseExeNode *exenode);
-	bool setCurDetail(ndxml *xmlNode);
-	bool setCurNodeSlotSelected(ndxml *xmlParam);
+	bool setCurDetail(ndxml *xmlNode, bool inError= false);
+	bool setCurNodeSlotSelected(ndxml *xmlParam, bool inError=false);
 	
 public slots:
 	//void onExenodeDBClicked(apoBaseExeNode *exeNode, QMouseEvent * event);
@@ -110,7 +110,12 @@ private:
 	void onFileChanged();
 	ndxml *createSubNode(ndxml *xmlRoot);
 
-	enum eDragType{ E_MOUSE_TYPE_MOVE, E_MOUSE_TYPE_DRAG_DRAW, E_MOUSE_TYPE_MOVE_VIEW,E_MOUSE_TYPE_NONE};
+	enum eDragType{
+		E_MOUSE_TYPE_MOVE_NODE,
+		E_MOUSE_TYPE_CONNECT_SLOT,
+		E_MOUSE_TYPE_MOVE_VIEW,
+		E_MOUSE_TYPE_NONE
+	};
 	//enum ePopMenuType{  E_POP_DEL, E_POP_DISCONNECT };
 
 	enum eDefaultStepSize { X_STEP = apoBaseExeNode::E_LINE_WIDTH + 50, Y_STEP = 20 };

@@ -136,6 +136,9 @@
 	<list instruction="9" >steps_collection</list>
 	<list instruction="9" >function_filter</list>
 	<list instruction="10" desc="switch-case sub entry" >op_sub_comp_entry</list>	
+	<list instruction="11" desc="function" >func_node</list>	
+	<list instruction="11" desc="net message function" >msg_handler_node</list>	
+	<list instruction="11" desc="event handler" >event_callback_node</list>	
 </compile_setting>
 
 <create_template kinds="hide" desc="新建节点的创建模板">

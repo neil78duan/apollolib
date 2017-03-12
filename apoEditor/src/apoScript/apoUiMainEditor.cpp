@@ -33,7 +33,7 @@ apoUiMainEditor::apoUiMainEditor(QWidget *parent) :
 QWidget(parent), m_editedFunction(0),  m_curDetailNode(0),
 	m_dragSrc(NULL), m_drawingBezier(NULL), m_popSrc(0)
 {
-	m_curDragType = E_MOUSE_TYPE_MOVE;
+	m_curDragType = E_MOUSE_TYPE_NONE;
 	//m_popMenuType = E_POP_DEL;
 	m_scriptFileXml = 0;
 	m_funcEntry = NULL;
@@ -342,7 +342,8 @@ apoBaseExeNode* apoUiMainEditor::_showExeNode(apoBaseSlotCtrl *fromSlot, ndxml *
 	}
 
 // 	QObject::connect(nodeCtrl, SIGNAL(onDBclicked(apoBaseExeNode *, QMouseEvent * )),
-// 		this, SLOT(onExenodeDBClicked(apoBaseExeNode *, QMouseEvent *)));
+// 		this, SLOT(onExenodeDBClicked(apoBaseExeNode *, QMouseEvent *)));
+
 
 	QObject::connect(nodeCtrl, SIGNAL(NodeAddParamSignal(apoBaseExeNode *)),
 		this, SLOT(onNodeAddNewParam(apoBaseExeNode *)));
@@ -905,26 +906,20 @@ void apoUiMainEditor::mousePressEvent(QMouseEvent *event)
 	}	
 	else if (dynamic_cast<apoBaseExeNode*>(w))	{
 		m_dragSrc = w;
-		m_curDragType = E_MOUSE_TYPE_MOVE;
+		m_curDragType = E_MOUSE_TYPE_MOVE_NODE;
 		m_moveOffset = m_dragSrc->mapFromGlobal(event->globalPos());
 	}
 	else if (dynamic_cast<apoBaseSlotCtrl*>(w)) {
 		m_connectToSlot = NULL;
 		m_dragSrc = w;
-		apoBaseSlotCtrl *pSlot = (apoBaseSlotCtrl*)w;
-		pSlot->setInDrag(true);
+		
+		m_curDragType = E_MOUSE_TYPE_CONNECT_SLOT;
+		
+		m_curClicked = event->pos();
+		
+		//apoBaseSlotCtrl *pSlot = (apoBaseSlotCtrl*)w;
+		//pSlot->setInDrag(true);
 
-		m_curDragType = E_MOUSE_TYPE_DRAG_DRAW;
-		m_drawingBezier = new apoUiBezier(this, event->pos(), event->pos());
-		apoBaseSlotCtrl::eBaseSlotType type = pSlot->slotType();
-		if (type == apoBaseSlotCtrl::SLOT_RUN_IN || type == apoBaseSlotCtrl::SLOT_RUN_OUT || type == apoBaseSlotCtrl::SLOT_SUB_ENTRY){
-			m_drawingBezier->setColor(Qt::darkRed);
-			m_drawingBezier->setWidth(2);
-		}
-		else {
-			m_drawingBezier->setColor(Qt::green);
-			m_drawingBezier->setWidth(1);
-		}
 	}
 	else {
 		m_curDragType = E_MOUSE_TYPE_MOVE_VIEW;
@@ -943,17 +938,34 @@ void apoUiMainEditor::mouseMoveEvent(QMouseEvent *event)
 		dragTo(offsetPt);
 		m_moveOffset = event->pos();
 	}
-	else if (m_curDragType == E_MOUSE_TYPE_MOVE)	{
+	else if (m_curDragType == E_MOUSE_TYPE_MOVE_NODE)	{
 		nd_assert(m_dragSrc);
 		QPoint newPos = event->pos() - m_moveOffset;
 		m_dragSrc->move(newPos);
 	}
-	else if (m_curDragType == E_MOUSE_TYPE_DRAG_DRAW){
+	else if (m_curDragType == E_MOUSE_TYPE_CONNECT_SLOT){
+		
+		if (!m_drawingBezier) {
+			
+			apoBaseSlotCtrl *pSlot = (apoBaseSlotCtrl*)m_dragSrc;
+			m_drawingBezier = new apoUiBezier(this, m_curClicked, event->pos());
+			apoBaseSlotCtrl::eBaseSlotType type = pSlot->slotType();
+			if (type == apoBaseSlotCtrl::SLOT_RUN_IN || type == apoBaseSlotCtrl::SLOT_RUN_OUT || type == apoBaseSlotCtrl::SLOT_SUB_ENTRY){
+				m_drawingBezier->setColor(Qt::darkRed);
+				m_drawingBezier->setWidth(2);
+			}
+			else {
+				m_drawingBezier->setColor(Qt::green);
+				m_drawingBezier->setWidth(1);
+			}
+		}
+		
 		if (m_drawingBezier){
 			m_drawingBezier->paintTo(event->pos());
 			m_drawingBezier->paint();
 		}
 
+		//highlight aim slot
 		QWidget *w = this->childAt(event->pos());
 		if (w)	{
 			if (w != m_dragSrc){
@@ -981,35 +993,22 @@ void apoUiMainEditor::mouseMoveEvent(QMouseEvent *event)
 }
 void apoUiMainEditor::mouseReleaseEvent(QMouseEvent *event)
 {
-	if (!m_bInDrag){
-		QWidget *w = this->childAt(event->pos());
-		if (w)	{
-			apoBaseExeNode* clickedNode = dynamic_cast<apoBaseExeNode*>(w);
-			if (clickedNode){
-				curDetailChanged(clickedNode);
-			}
-		}
-	}
+	
 
-	else if (m_curDragType == E_MOUSE_TYPE_MOVE_VIEW){
+	if (m_curDragType == E_MOUSE_TYPE_MOVE_VIEW){
 		QPoint offsetPt = event->pos();
 		offsetPt -= m_moveOffset;
 		dragTo(offsetPt);
 		m_moveOffset = event->pos();
 		saveOffset(m_offset);
 	}
-	else if (E_MOUSE_TYPE_DRAG_DRAW == m_curDragType) {
+	else if (E_MOUSE_TYPE_CONNECT_SLOT == m_curDragType) {
 		nd_assert(m_dragSrc);
 		QWidget *w = this->childAt(event->pos());
 		apoBaseSlotCtrl *fromSlot = dynamic_cast<apoBaseSlotCtrl*>(m_dragSrc);
 		
 		if (trytoBuildConnector(fromSlot, dynamic_cast<apoBaseSlotCtrl*>(w))) {
 			onFileChanged();
-		}
-
-		if (m_drawingBezier){
-			delete m_drawingBezier;
-			m_drawingBezier = 0;
 		}
 
 		if (m_connectToSlot){
@@ -1021,16 +1020,29 @@ void apoUiMainEditor::mouseReleaseEvent(QMouseEvent *event)
 		}
 
 	}
-	else if (E_MOUSE_TYPE_MOVE == m_curDragType) {
-		QPoint pos = m_dragSrc->pos();
-		nd_logdebug("node move to(%d,%d)\n", pos.x(), pos.y());
-		savePosition(dynamic_cast<apoBaseExeNode*>(m_dragSrc));
+	else if (E_MOUSE_TYPE_MOVE_NODE == m_curDragType) {
+		if (!m_bInDrag){
+			apoBaseExeNode* clickedNode = dynamic_cast<apoBaseExeNode*>(m_dragSrc);
+			if (clickedNode){
+				curDetailChanged(clickedNode);
+			}
+		}
+		else {
+			//const QPoint *pos = m_dragSrc->pos();
+			//nd_logdebug("node move to(%d,%d) and \n", pos.x(), pos.y());
+			savePosition(dynamic_cast<apoBaseExeNode*>(m_dragSrc));
+		}
 	}
-
+	
+	if (m_drawingBezier){
+		delete m_drawingBezier;
+		m_drawingBezier = 0;
+	}
+	m_bInDrag = false;
+	
 	this->update();
 	m_dragSrc = NULL;
 	m_curDragType = E_MOUSE_TYPE_NONE;
-	m_bInDrag = false;
 }
 
 
@@ -1066,7 +1078,7 @@ void apoUiMainEditor::curDetailChanged(apoBaseExeNode *exenode)
 }
 
 
-bool apoUiMainEditor::setCurDetail(ndxml *xmlNode)
+bool apoUiMainEditor::setCurDetail(ndxml *xmlNode, bool inError)
 {
 
 	QObjectList list = children();
@@ -1074,13 +1086,16 @@ bool apoUiMainEditor::setCurDetail(ndxml *xmlNode)
 		apoBaseExeNode *exeNode = qobject_cast<apoBaseExeNode*>(obj);
 		if (exeNode && exeNode->getMyUserData()==xmlNode){
 			curDetailChanged(exeNode);
+			if(inError){
+				exeNode->setError(true) ;
+			}
 			return true;
 		}
 	}
 	return false;
 }
 
-bool apoUiMainEditor::setCurNodeSlotSelected(ndxml *xmlParam)
+bool apoUiMainEditor::setCurNodeSlotSelected(ndxml *xmlParam, bool inError)
 {
 	if (!m_curDetailNode){
 		return false;
@@ -1090,7 +1105,14 @@ bool apoUiMainEditor::setCurNodeSlotSelected(ndxml *xmlParam)
 	for (int i = 0; i < num; i++){
 		apoBaseParam *paramSlot = m_curDetailNode->getParam(i);
 		if (paramSlot && paramSlot->getValueXml() == xmlParam) {
-			paramSlot->setInDrag(true);
+			
+			if(inError) {
+				paramSlot->setError(true);
+			}
+			else {
+				paramSlot->setInDrag(true);
+			}
+			
 			return true;
 		}
 	}
@@ -1289,27 +1311,7 @@ bool apoUiMainEditor::buildRunSerqConnector(apoBaseSlotCtrl *fromSlot, apoBaseSl
 			toXml = (ndxml *)toCtrl->getMyUserData();
 		}
 	}
-	/*
-	if (toCtrl->getMyNextNode()){
-		apoBaseExeNode *moveCtrl = toCtrl;
-
-		while (moveCtrl)	{
-			apoBaseExeNode *next = moveCtrl->getMyNextNode();
-			ndxml *movxml = (ndxml *)moveCtrl->getMyUserData();
-			ndxml_disconnect(NULL, movxml);
-			ndxml_insert_after(moveInRoot, movxml, fromXml);
-			fromXml = movxml;
-			//ndxml_insert_ex(moveInRoot, movxml, insertPos);
-			//insertPos++;
-			moveCtrl = next;
-		};
-
-	}
-	else {
-		
-		//ndxml_insert_ex(moveInRoot, toXml, insertPos);
-	}
-	*/
+	
 	_connectSlots(fromSlot, toSlot, apoUiBezier::LineRunSerq);
 
 	return true;

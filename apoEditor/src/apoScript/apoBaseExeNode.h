@@ -42,6 +42,7 @@ public:
 	
 	bool setNodeInfo(QWidget *parent, ndxml *xmlnode, bool showParam=true);
 	void setSelected(bool isSelected);
+	void setError(bool isError=true) ;
 
 	//call before InitCtrl ;
 	void disableReturnVar();
@@ -127,6 +128,7 @@ protected:
 	bool m_disableNewFuncParam;
 
 	bool m_selected;
+	bool m_showError ;		//show compiled error
 	int m_type;
 
     QPushButton *m_addNewParam;

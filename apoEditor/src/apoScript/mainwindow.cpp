@@ -832,13 +832,13 @@ bool MainWindow::showCompileError(const char *xmlFile, stackIndex_vct &errorStac
 		}
 			
 		if (compileSetting->ins_type == E_INSTRUCT_TYPE_CMD){
-			if (!m_editorWindow->setCurDetail(node)) {
+			if (!m_editorWindow->setCurDetail(node,true)) {
 				nd_logerror("can not show current detail node \n");
 				return false;
 			}
 		}
 		else if (compileSetting->ins_type == E_INSTRUCT_TYPE_PARAM) {
-			if (!m_editorWindow->setCurNodeSlotSelected(node))	{
+			if (!m_editorWindow->setCurNodeSlotSelected(node,true))	{
 				nd_logerror("can not show current param\n");
 				return false;
 			}
