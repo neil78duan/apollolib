@@ -62,11 +62,11 @@ void startDialog::ClearLog()
 
 void startDialog::WriteLog(const char *logText)
 {
-#ifdef WIN32
-	char buf[1024];
-	nd_gbk_to_utf8(logText, buf, sizeof(buf));
-	logText = buf ;
-#endif
+// #ifdef WIN32
+// 	char buf[1024];
+// 	nd_gbk_to_utf8(logText, buf, sizeof(buf));
+// 	logText = buf ;
+// #endif
 	QTextEdit *pEdit = ui->LogText;
 	pEdit->moveCursor(QTextCursor::End);
 	pEdit->insertPlainText(QString(logText));
@@ -206,7 +206,7 @@ bool startDialog::compile()
 
 	ndxml_root xmlEntry;
 	ndxml_initroot(&xmlEntry);
-	if (-1 == ndxml_load_ex(script_root, &xmlEntry, nd_get_encode_name(ND_ENCODE_TYPE))) {
+	if (-1 == ndxml_load_ex(script_root, &xmlEntry, apoEditorSetting::getInstant()->m_encodeName.c_str())) {
 		return false;
 	}
 
@@ -235,7 +235,7 @@ bool startDialog::compileScript(const char *scriptFile)
 {
 	ndxml_root xmlScript;
 	ndxml_initroot(&xmlScript);
-	if (-1 == ndxml_load_ex(scriptFile, &xmlScript, nd_get_encode_name(ND_ENCODE_TYPE))) {
+	if (-1 == ndxml_load_ex(scriptFile, &xmlScript, apoEditorSetting::getInstant()->m_encodeName.c_str())) {
 		return false;
 	}
 	const char*inFile = scriptFile;

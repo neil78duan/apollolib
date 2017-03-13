@@ -17,7 +17,7 @@
 
 using namespace LogicEditorHelper;
 
-apoXmlTreeView::apoXmlTreeView(QWidget *parent) : dragTree(parent), m_alias(0)
+apoXmlTreeView::apoXmlTreeView(QWidget *parent) : dragTree(parent), m_alias(0), m_root(0)
 {
 	QObject::connect(this, SIGNAL(itemChanged(QTreeWidgetItem *, int )),
 		this, SLOT(onItemChanged(QTreeWidgetItem *, int )));
@@ -88,9 +88,18 @@ bool apoXmlTreeView::createTree()
 		ExpandTree(pChild);
 	}
 
+	m_root = root;
 	return true;
 }
 
+
+void apoXmlTreeView::setRootName(const QString &name)
+{
+	m_rootName = name;
+	if (m_root)	{
+		m_root->setText(0, m_rootName);
+	}
+}
 
 void apoXmlTreeView::onItemChanged(QTreeWidgetItem *item, int column)
 {

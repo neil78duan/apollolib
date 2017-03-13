@@ -175,7 +175,7 @@ bool apoUiXmlTableWidget::_GetFileName(bool bOpen, QString & strFile, const char
 		fullPath = QFileDialog::getOpenFileName(this, tr("open file"), ".", tr("Allfile(*.*);;xmlfile(*.xml)"));
 	}
 	else {
-		fullPath = QFileDialog::getSaveFileName(this, tr("open file"), ".", tr("Allfile(*.*);;xmlfile(*.xml)"));
+		fullPath = QFileDialog::getSaveFileName(this, tr("save file"), ".", tr("Allfile(*.*);;xmlfile(*.xml)"));
 	}
 
 	if (fullPath.isNull()) {

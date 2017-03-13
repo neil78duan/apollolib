@@ -19,13 +19,15 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-#ifdef WIN32 
-	QTextCodec::setCodecForLocale(QTextCodec::codecForName("GB18030"));
-	ndstr_set_code(E_SRC_CODE_GBK);
-#else 
-	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
-	ndstr_set_code(E_SRC_CODE_UTF_8);
-#endif 
+	//use utf8 
+	ndstr_set_code(APO_QT_SRC_TEXT_ENCODE);
+// #ifdef WIN32 
+// 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("GB18030"));
+// 	ndstr_set_code(E_SRC_CODE_GBK);
+// #else 
+// 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+// 	ndstr_set_code(E_SRC_CODE_UTF_8);
+// #endif 
     //
 
     QString workDir, ioCfgFile , editorCfg;
@@ -41,7 +43,7 @@ re_initd:
 	setting = apoEditorSetting::getInstant(); 
 	nd_assert(setting);
 
-	if (!setting->Init(ioCfgFile.toStdString().c_str(), editorCfg.toStdString().c_str(), E_SRC_CODE_UTF_8) ){
+	if (!setting->Init(ioCfgFile.toStdString().c_str(), editorCfg.toStdString().c_str(), APO_QT_SRC_TEXT_ENCODE)){
 		QMessageBox::warning(NULL, "Error", "load config file error, Please Reload", QMessageBox::Yes);
 		if (!inputSetting(workDir, ioCfgFile, editorCfg)) {
 			exit(1);

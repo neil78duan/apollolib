@@ -21,11 +21,12 @@
 #include <QString>
 #include <QWidget>
 
+#define APO_QT_SRC_TEXT_ENCODE		E_SRC_CODE_UTF_8
 
-#define MY_LOAD_XML_AND_NEW(_xml_addr, _filename, _returnval) \
+#define MY_LOAD_XML_AND_NEW(_xml_addr, _filename,_encodeName, _returnval) \
 	_xml_addr = new ndxml_root;			\
 	ndxml_initroot(_xml_addr);			\
-	if (ndxml_load_ex((char*)_filename, _xml_addr,"utf8")) {	\
+	if (ndxml_load_ex((char*)_filename, _xml_addr,_encodeName)) {	\
 		nd_logerror("open file %s error", _filename);	\
 		_returnval ;							\
 	}
@@ -48,7 +49,7 @@ public:
 	static apoEditorSetting*getInstant();
 	static void destroyInstant();
 
-	bool Init(const char *ioSetting, const char *editorSetting, int encodeType = E_SRC_CODE_UTF_8);
+	bool Init(const char *ioSetting, const char *editorSetting, int encodeType = APO_QT_SRC_TEXT_ENCODE);
 	
 	//bool loadProgramIOSetting(const char *ioSettingFile);//load this program base setting (io_config.xml)
 	const char *getIoConfigValue(const char *cfgName);
@@ -84,6 +85,7 @@ public:
 public:
 	std::string m_edirotSettingFile;
 	std::string m_ioConfigFile;
+	std::string m_encodeName;
 private:
 
 	bool loadUserdefDisplayList(ndxml_root &xmlNameList, const char *name);

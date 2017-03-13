@@ -259,7 +259,7 @@ bool MainWindow::loadScriptFile(const char *scriptFile)
 		delete m_curFile;
 	}
 
-	MY_LOAD_XML_AND_NEW(m_curFile, scriptFile, return true);
+	MY_LOAD_XML_AND_NEW(m_curFile, scriptFile, m_editorSetting.m_encodeName.c_str(), return true);
 
 	//load user define enum 
 	common_export_error_list("./.error_list.xml");
@@ -288,7 +288,9 @@ bool MainWindow::showCurFile()
 		return false;
 	}
 	tree->clear();
-	tree->setXmlInfo(m_curFile, 5, m_fileMoudleName.c_str());
+	if (m_curFile) {
+		tree->setXmlInfo(m_curFile, 5, m_fileMoudleName.c_str());
+	}
 	return true;
 }
 
@@ -317,6 +319,7 @@ bool MainWindow::showFileslist()
 void MainWindow::onFileChanged()
 {
 	m_isChangedCurFile = true;
+	setCurFileSave(false);
 }
 
 
@@ -512,7 +515,7 @@ void MainWindow::onFilesTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidget
 // }
 bool MainWindow::setFileRoot(const char *rootFile)
 {
-	MY_LOAD_XML_AND_NEW(m_fileRoot, rootFile, return false);
+	MY_LOAD_XML_AND_NEW(m_fileRoot, rootFile,m_editorSetting.m_encodeName.c_str(), return false);
 
 	ndxml *fileroot = ndxml_getnode(m_fileRoot, "script_file_manager");
 	if (!fileroot){
@@ -619,7 +622,7 @@ void MainWindow::on_actionDetail_triggered()
 
 void MainWindow::on_actionFileNew_triggered()
 {
-	QString filter = QFileDialog::getSaveFileName(this, tr("open file"), ".", tr("Allfile(*.*);;xmlfile(*.xml)"));
+	QString filter = QFileDialog::getSaveFileName(this, tr("New file"), ".", tr("Allfile(*.*);;xmlfile(*.xml)"));
 
 	if (filter.isNull()) {
 		return;
@@ -651,22 +654,103 @@ void MainWindow::on_actionFileNew_triggered()
 
 void MainWindow::on_actionFileOpen_triggered()
 {
+	char mypath[1024];
+	QString fullPath = QFileDialog::getOpenFileName(this, tr("open file"), ".", tr("Allfile(*.*);;xmlfile(*.xml)"));
+	if (fullPath.isNull()) {
+		return;
+	}
+	if (!nd_relative_path(fullPath.toStdString().c_str(), nd_getcwd(), mypath, sizeof(mypath))) {
+		return;
+	}
+
+	ndxml_root xmlScript;
+	ndxml_initroot(&xmlScript);
+	//nd_get_encode_name(ND_ENCODE_TYPE)
+	if (-1 == ndxml_load_ex(mypath, &xmlScript, "utf8")) {
+		nd_logerror("can not open file %s", fullPath.toStdString().c_str());
+		return;
+	}
+#define CHECK_FILE(_xml, _nodeName) \
+	do 	{	\
+		ndxml *xml = ndxml_getnode((_xml), _nodeName) ;	\
+		if(!xml) {	\
+			nd_logerror("can not load file %s Maybe file is destroyed\n", fullPath.toStdString().c_str());	\
+			return ;	\
+		}				\
+	} while (0)
+
+	CHECK_FILE(&xmlScript, "blueprint_setting");
+	CHECK_FILE(&xmlScript, "moduleInfo");
+	CHECK_FILE(&xmlScript, "baseFunction");
+
+	if (!loadScriptFile(mypath)) {
+		nd_logerror("can not load file %s\n", fullPath.toStdString().c_str());	
+		return;
+	}
+	//////////////////////////////////////////////////////////////////////////
+	ndxml *fileroot = ndxml_getnode(m_fileRoot, "script_file_manager");
+	if (fileroot){
+		bool isFound = false;
+		for (int i = 0; i < ndxml_getsub_num(fileroot); i++) {
+			ndxml *node = ndxml_getnodei(fileroot, i);
+			const char *filePath = ndxml_getval(node);
+#ifdef WIN32
+			if (0 == ndstricmp(filePath, mypath))	{
+#else 
+			if (0 == strcmp(filePath, mypath))	{
+#endif
+
+				m_fileMoudleName = ndxml_getattr_val(node, "name");
+				loadScriptFile(ndxml_getval(node));
+				isFound = true;
+				break;
+			}
+		}
+		if (!isFound) {
+
+			const char *fileName = nd_filename(mypath);
+			char moduleName[128];
+			ndstr_nstr_end(fileName, moduleName, '.', 128);
+			ndxml *newxml = ndxml_addnode(fileroot, "file", mypath);
+			if (newxml)		{
+				ndxml_addattrib(newxml, "name", moduleName);
+			}
+
+			ndxml_save(m_fileRoot, m_fileRootPath.c_str());
+			showFileslist();
+		}
+	}
+	
 
 }
 
 void MainWindow::on_actionFileClose_triggered()
 {
+	if (checkNeedSave()){
+		saveCurFile();
+		ndxml_destroy(m_curFile);
+		delete m_curFile;
+	}
+	m_curFile = NULL;
+	m_editorWindow->clearFunction();
+	showCurFile();
 
 }
 
 void MainWindow::on_actionCompile_triggered()
 {
-
+	on_actionSave_triggered();
+	if (m_filePath.size()) {
+		compileScript(m_filePath.c_str());
+	}
 }
 
 void MainWindow::on_actionSave_triggered()
 {
-	saveCurFile();
+	if (checkNeedSave()){
+		saveCurFile();
+	}
+	setCurFileSave(true);
 }
 
 void MainWindow::on_actionExit_triggered()
@@ -845,4 +929,33 @@ bool MainWindow::showCompileError(const char *xmlFile, stackIndex_vct &errorStac
 		}
 	}
 	return true;
+}
+
+void MainWindow::setCurFileSave(bool isSaved)
+{
+	QDockWidget *pDock = this->findChild<QDockWidget*>("FunctionView");
+	if (!pDock){
+		return;
+	}
+
+	apoXmlTreeView *pEdit = this->findChild<apoXmlTreeView*>("functionsTree");
+	if (!pEdit)	{
+		return;
+	}
+
+	QString rootName = pEdit->rootName();
+
+	if (isSaved){
+		if (rootName[0] == '*'){
+			rootName.remove(0, 1);
+			pEdit->setRootName(rootName);
+		}
+	}
+	else{
+		if (rootName[0] != '*'){
+			rootName.insert(0,"*");
+			pEdit->setRootName(rootName);
+		}
+	}
+
 }

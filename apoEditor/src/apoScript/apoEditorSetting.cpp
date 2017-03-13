@@ -51,10 +51,11 @@ bool apoEditorSetting::Init(const char *ioSetting, const char *editorSetting, in
 		return false;
 	}
 
+	m_encodeName = nd_get_encode_name(encodeType);
 	m_ioXmlCfg = new ndxml_root;	
 	ndxml_initroot(m_ioXmlCfg);
 
-	if (0!=ndxml_load_ex(ioSetting, m_ioXmlCfg, nd_get_encode_name(encodeType))) {
+	if (0 != ndxml_load_ex(ioSetting, m_ioXmlCfg, m_encodeName.c_str())) {
 		nd_logerror("open file %s error", ioSetting);
 		return false;
 	}
@@ -85,40 +86,6 @@ const char *apoEditorSetting::getIoConfigValue(const char *cfgName)
 	return NULL;
 }
 
-// 
-// 
-// bool apoEditorSetting::loadScriptRoot(const char *rootFile)
-// {
-// 	MY_LOAD_XML_AND_NEW(m_fileRoot, rootFile, return false);
-// 
-// 	ndxml *fileroot = ndxml_getnode(m_fileRoot, "script_file_manager");
-// 	if (!fileroot){
-// 		return true;
-// 	}
-// 	const char *lastOpen = ndxml_getattr_val(fileroot, "last_edited");
-// 	if (!lastOpen)	{
-// 		return true;
-// 	}
-// 
-// 	for (int i = 0; i < ndxml_getsub_num(fileroot); i++) {
-// 		ndxml *node = ndxml_getnodei(fileroot, i);
-// 		const char *fileName = ndxml_getattr_val(node, "name");
-// 		if (0 == ndstricmp(fileName, lastOpen))	{
-// 			const char *filePath = ndxml_getval(node);
-// 			if (filePath)	{
-// 				MY_LOAD_XML_AND_NEW(m_curFile, filePath, return true);
-// 				m_currFunction = NULL;
-// 				if (!openFunctionsView()) {
-// 					showCurFile();
-// 				}
-// 			}
-// 			break;
-// 		}
-// 
-// 	}
-// 
-// 	return true;
-// }
 
 bool apoEditorSetting::loadSettingFromScript(ndxml *script)
 {
@@ -219,7 +186,7 @@ bool apoEditorSetting::loadUserDefEnum(const char *userDefEnumFile)
 bool apoEditorSetting::loadMessageDefine(const char *messageFile)
 {
 	
-	MY_LOAD_XML(xml_net_protocol, messageFile, "utf8");
+	MY_LOAD_XML(xml_net_protocol, messageFile, m_encodeName.c_str());
 	
 	ndxml *funcroot = ndxml_getnode(&xml_net_protocol, "MessageDefine");
 	if (funcroot) {

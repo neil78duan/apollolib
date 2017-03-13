@@ -48,14 +48,6 @@
    <addaction name="menuHello_world"/>
    <addaction name="menuWindows"/>
   </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionFileNew">
    <property name="text">
@@ -98,7 +90,7 @@
     <string>View file list window</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+L</string>
+    <string>F2</string>
    </property>
   </action>
   <action name="actionViewOutput">
@@ -109,7 +101,7 @@
     <string>View output window</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+T</string>
+    <string>F5</string>
    </property>
   </action>
   <action name="actionFunctionView">
@@ -117,7 +109,7 @@
     <string>FunctionView</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+U</string>
+    <string>F3</string>
    </property>
   </action>
   <action name="actionExit">
@@ -133,7 +125,7 @@
     <string>Detail</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+D</string>
+    <string>F4</string>
    </property>
   </action>
   <action name="actionSave">
@@ -149,12 +141,15 @@
     <string>CompileThis</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+B</string>
+    <string>F7</string>
    </property>
   </action>
   <action name="actionCompileAll">
    <property name="text">
     <string>CompileAll</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
    </property>
   </action>
  </widget>

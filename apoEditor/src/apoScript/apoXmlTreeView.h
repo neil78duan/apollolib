@@ -38,6 +38,9 @@ public:
 
 	void unCreateNewChild(const char *xmlName);
 
+	void setRootName(const QString &name);
+	QString rootName(){ return m_rootName; }
+
 signals:
 	void xmlDataChangedSignal();
 	void xmlNodeDelSignal(ndxml *delxml);
@@ -63,7 +66,7 @@ protected:
 
 	int m_disp_depth; //deisplay depth
 	ndxml *m_xmldata;
-
+	xmlTreeItem *m_root;
 	QString m_rootName;
 	//ndxml *m_config;
 

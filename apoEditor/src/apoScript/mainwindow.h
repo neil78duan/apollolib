@@ -14,6 +14,7 @@
 #include <QString>
 #include <QTableWidget>
 
+
 class apoBaseExeNode;
 class apoUiMainEditor;
 
@@ -43,6 +44,7 @@ protected:
 	bool setFileRoot(const char *rootFile);
 	bool setDefaultFile(const char *lastEditfile);
 	bool showCompileError(const char *xmlFile, stackIndex_vct &errorStack);
+	void setCurFileSave(bool isSaved=false);
 
 public slots:
 	void onShowExeNodeDetail(apoBaseExeNode *exenode);
@@ -50,21 +52,16 @@ public slots:
 	void onXmlNodeDel(ndxml *xmlnode);
 	void onFilelistDel(ndxml *xmlnode);
 private slots:
+
     void on_actionViewList_triggered();
     void on_actionViewOutput_triggered();
     void on_actionFunctionView_triggered();
     void on_actionDetail_triggered();
-
     void on_actionFileNew_triggered();
-
     void on_actionFileOpen_triggered();
-
-    void on_actionFileClose_triggered();
-
+	void on_actionFileClose_triggered();
     void on_actionCompile_triggered();
-
     void on_actionSave_triggered();
-
     void on_actionExit_triggered();
 
 

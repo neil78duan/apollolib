@@ -695,7 +695,7 @@ static int _apollo_log(void *pf, const char *stm, ...)
 
 static bool _apollo_out(parse_arg_list_t &args, logic_print print_func, void *pf)
 {
-#ifdef _MSC_VER
+#if 0 //def _MSC_VER
 	for (int i = 0; i < args.size(); i++){
 		if (args[i].GetDataType() == OT_STRING)	{
 			DBLDataNode data = args[i];
