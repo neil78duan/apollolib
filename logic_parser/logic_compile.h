@@ -27,6 +27,7 @@ enum instructType {
 	E_INSTRUCT_TYPE_INIT_BLOCK, //the block of function init entry
 	E_INSTRUCT_TYPE_STEP_COLLECTION, // steps collection
 	E_INSTRUCT_TYPE_CASE_ENTRY, // SWITCH-CASE sub entry
+	E_INSTRUCT_TYPE_FUNCTION ,	//function node
 
 	E_INSTRUCT_TYPE_COMMENT = 100, // MARRK
 
@@ -175,6 +176,7 @@ private:
 	void _pushStack(int stackIndex) ;
 	void _popStac();
 	void _makeErrorStack(ndxml *xmlError) ;
+	bool _getFuncStackInfo(ndxml *curNode,char *buf, size_t size) ;
 
 	bool m_bDebugInfo;
 	int m_compileStep;
