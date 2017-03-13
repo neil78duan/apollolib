@@ -156,7 +156,8 @@ private:
 
 	int param2Stream(ndxml *paramNode, ndxml *parent, char *buf, size_t bufsize, NDUINT32 *param_num = NULL);//return stream size ;
 
-	int writeDebugInfo(ndxml *stepNode,const char*stepName, char *buf, size_t bufsize);
+	int writeDebugInfo(ndxml *stepNode, const char*stepName, char *buf, size_t bufsize);
+	int writeDebugFileName(const char *fileInfo, char *buf, size_t bufsize);
 
 	int trytoCompileExceptionHandler(ndxml *funcNode, char *buf, size_t bufsize);
 	int trytoCompileInitilizerBlock(ndxml *funcNode, char *buf, size_t bufsize);

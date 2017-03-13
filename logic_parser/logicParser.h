@@ -110,6 +110,7 @@ enum eParserOperator{
 	E_OP_SET_LOOP_INDEX, // set loop index, used in list_for_each
 	E_OP_GET_LAST_ERROR,	//get last error before exception
 	E_OP_CHECK_IS_SIMULATE, // get current simulate status , true run in simulate , false run in real game env.
+	E_OP_FILE_INFO,			//record file info like E_OP_DEBUG_INFO 
 
 };
 
@@ -209,9 +210,11 @@ struct logcal_variant {
 typedef std::vector <logcal_variant> LogicData_vct; //local variant list
 struct runningStack
 {
-	runningStack() :cmd(0), cur_point(0), dbg_cur_node_index(0), exception_addr(0)
+	runningStack() :cmd(0), cur_point(0),  exception_addr(0)
 	{
-		dbg_node[0] = 0;
+		//dbg_cur_node_index = (0),
+		//dbg_node[0] = 0;
+		//dbg_fileInfo[0] = 0;
 		affairHelper = 0;
 		for (int i = 0; i < LOGIC_ERR_NUMBER; i++)	{
 			skipErrors[i] = 0;
@@ -231,8 +234,9 @@ struct runningStack
 	LogicData_vct local_vars;
 	LogicObjAffairHelper *affairHelper;
 
-	NDUINT16 dbg_cur_node_index;
-	char dbg_node[128];
+	//NDUINT16 dbg_cur_node_index;
+	//char dbg_node[128];
+	//char dbg_fileInfo[64];
 	
 	std::string curModuleName ;		//current script file name
 	std::string workingPath;		//the host work direct
@@ -319,7 +323,7 @@ public:
 	LogicObjectBase *getOwner() { return m_owner; }
 	void setOwner(LogicObjectBase *owner) { m_owner = owner; }
 	runningStack *getCurStack() { return m_curStack; }
-
+	const char *getLastErrorNode() { return m_dbg_node; }
 
 private:
 	friend class LogicEngineRoot;
@@ -423,6 +427,12 @@ protected:
 
 
 	int m_skipErrors[LOGIC_ERR_NUMBER];
+
+
+	NDUINT16 m_dbg_cur_node_index;
+	char m_dbg_node[128];
+	char m_dbg_fileInfo[64];
+
 };
 
 int logic_rand(NDUINT32 val1, NDUINT32 val2);

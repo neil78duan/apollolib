@@ -31,6 +31,10 @@ LogicParserEngine::LogicParserEngine() :m_registorFlag(false), m_simulate(false)
 	m_curStack = NULL;
 	m_ownerIsNew = false;
 
+	m_dbg_cur_node_index = 0;
+	m_dbg_node[0]= 0;
+	m_dbg_fileInfo[0] = 0;
+
 	for (int i = 0; i < LOGIC_ERR_NUMBER; i++)	{
 		m_skipErrors[i] = 0;
 	}
@@ -40,6 +44,11 @@ LogicParserEngine::LogicParserEngine(LogicObjectBase *owner) : m_registorFlag(fa
 {
 	m_curStack = NULL;
 	m_ownerIsNew = false;
+
+	m_dbg_cur_node_index = 0;
+	m_dbg_node[0] = 0;
+	m_dbg_fileInfo[0] = 0;
+
 	for (int i = 0; i < LOGIC_ERR_NUMBER; i++)	{
 		m_skipErrors[i] = 0;
 	}
@@ -438,15 +447,19 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				break;
 			case E_OP_DEBUG_INFO:
 				isdebug_step = true;
-				p = lp_read_stream(p, stack->dbg_cur_node_index, m_cmdByteOrder);
-				GET_TEXT_FROM_STREAM(stack->dbg_node, sizeof(stack->dbg_node),p);
+				p = lp_read_stream(p, m_dbg_cur_node_index, m_cmdByteOrder);
+				GET_TEXT_FROM_STREAM(m_dbg_node, sizeof(m_dbg_node),p);
 				
 				p = lp_read_stream(p, cur_step_size, m_cmdByteOrder);
 				step_start = p;
 				CHECK_INSTRUCTION_OVER_FLOW();
-				apollo_script_printf("logic_script %s: %s %d\n", stack->cmd->cmdname, stack->dbg_node, stack->dbg_cur_node_index);
-				
+				apollo_script_printf("logic_script %s: %s %d\n", stack->cmd->cmdname, m_dbg_node, m_dbg_cur_node_index);				
 				break;
+			case E_OP_FILE_INFO:
+				GET_TEXT_FROM_STREAM(m_dbg_fileInfo, sizeof(m_dbg_fileInfo), p);
+				CHECK_INSTRUCTION_OVER_FLOW();
+				apollo_script_printf("logic_script %s:read file info :\n", stack->cmd->cmdname, m_dbg_fileInfo);
+				break; 
 			case E_OP_HEADER_INFO:
 			{
 				NDUINT16 a;
@@ -645,22 +658,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 					m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
 				}
 				break;
-				/*
-			case E_OP_SET_REGISTER:
-				GET_VAR_FROM_STREAM(stack, p, m_registerVal);
-				m_registorFlag = true;
-				break;
-			case E_OP_REG_2VAR:
-				readlen = _storeReg2Var(stack, p);
-				if (readlen > 0){
-					m_registorFlag = true;
-					p += readlen;
-				}
-				else {
-					m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
-				}
-				break;
-				*/
+				
 			case E_OP_MAKE_VAR:		//  make local variant	 name + DBLDataNode-stream
 				readlen = _makeVar(stack, p);
 				if (readlen > 0){
@@ -939,11 +937,11 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				NDUINT32 ss = (NDUINT32)(p - step_start);
 				if (cur_step_size != ss) {
 					nd_logerror("%s :run step errror %s node-index=%d compile-size=%d, parser-size=%d",
-						stack->cmd->cmdname, stack->dbg_node, stack->dbg_cur_node_index, cur_step_size, ss);
+						stack->cmd->cmdname, m_dbg_node, m_dbg_cur_node_index, cur_step_size, ss);
 				}
 				else {
 					PARSE_TRACE("%s :cmd %d step %s node-index=%d size=%d %s\n",
-						stack->cmd->cmdname, opCmd, stack->dbg_node, stack->dbg_cur_node_index, cur_step_size,
+						stack->cmd->cmdname, opCmd, m_dbg_node, m_dbg_cur_node_index, cur_step_size,
 						m_registorFlag?"success":"failed");
 				}
 			}
@@ -1912,6 +1910,7 @@ void LogicParserEngine::setErrno(int errcode)
 {
 	m_sys_errno = errcode;
 }
+
 
 void LogicParserEngine::setSimulate(bool flag, LogicObjectBase *owner )
 {

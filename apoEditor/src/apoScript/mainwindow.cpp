@@ -931,6 +931,24 @@ bool MainWindow::showCompileError(const char *xmlFile, stackIndex_vct &errorStac
 	return true;
 }
 
+bool  MainWindow::showRuntimeError(const char *scriptFile, const char *errNodeInfo)
+{
+	stackIndex_vct stackIndex;
+	const char *p = strchr(errNodeInfo, '.');
+
+	while (p && *p) {
+		if (*p == '.') {
+			++p;
+		}
+		char buf[10];
+		buf[0] = 0;
+		p = ndstr_nstr_ansi(p, buf,'.', 10);
+		if (buf[0])	{
+			stackIndex.push_back(atoi(buf));
+		}
+	}
+	return showCompileError(scriptFile, stackIndex);
+}
 void MainWindow::setCurFileSave(bool isSaved)
 {
 	QDockWidget *pDock = this->findChild<QDockWidget*>("FunctionView");

@@ -70,6 +70,7 @@ private slots:
 
 private:
 
+	bool showScriptError(const char *scriptFile, const char *nodeDescript);
 	const char *getScriptSetting(ndxml *scriptXml, const char *settingName);
 	int getScriptExpEncodeType(ndxml *scriptXml);
 	bool getScriptExpDebugInfo(ndxml *scriptXml);

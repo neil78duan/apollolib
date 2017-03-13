@@ -414,6 +414,13 @@ int LogicCompiler::func2Stream(ndxml *funcNode, char *buf, size_t bufsize)
 	m_cur_function = pFuncName;
 	m_cur_node_index = 0;
 
+	if (m_bDebugInfo) {
+		len = writeDebugFileName(m_cur_file.c_str(), p, bufsize);
+		if (len > 0){
+			p += len;
+			bufsize -= len;
+		}
+	}
 
 	len = trytoCompileExceptionHandler(funcNode, p, bufsize);
 	if (len > 0){
@@ -681,6 +688,15 @@ int LogicCompiler::trytoCompileInitilizerBlock(ndxml *funcNode,char *buf, size_t
 {
 	int ret = 0;
 	char *p = buf;
+
+	if (m_bDebugInfo) {
+		int len = writeDebugFileName(m_cur_file.c_str(), p, bufsize);
+		if (len > 0){
+			p += len;
+			bufsize -= len;
+		}
+	}
+
 	for (int i = 0; i < ndxml_getsub_num(funcNode); i++) {
 		ndxml *xmlStep = ndxml_getnodei(funcNode, i);
 		if (!xmlStep) {
@@ -920,6 +936,15 @@ int LogicCompiler::writeDebugInfo(ndxml *stepNode, const char*stepName, char *bu
 	++m_compileStep;
 	WRITE_STRING_TOSTREAM(p, stepName);
 
+	return (int)(p - buf);
+}
+
+
+int LogicCompiler::writeDebugFileName(const char *fileInfo, char *buf, size_t bufsize)
+{
+	char *p = buf;
+	p = lp_write_stream(p, (NDUINT32)E_OP_FILE_INFO, m_aimByteOrder);
+	WRITE_STRING_TOSTREAM(p, fileInfo);
 	return (int)(p - buf);
 }
 
@@ -1251,16 +1276,16 @@ bool LogicCompiler::_getFuncStackInfo(ndxml *curNode,char *buf, size_t size)
 	ndxml *node = curNode ;
 	
 	while (parent ) {
-		const char *stepInsName = ndxml_getname(node);
-		if (stepInsName){
-			compile_setting_t::iterator it = m_settings.find(stepInsName);
-			if(it != m_settings.end()) {
-				
-				if ( it->second.ins_type == E_INSTRUCT_TYPE_FUNCTION){
-					break;
-				}
-			}
-		}
+// 		const char *stepInsName = ndxml_getname(node);
+// 		if (stepInsName){
+// 			compile_setting_t::iterator it = m_settings.find(stepInsName);
+// 			if(it != m_settings.end()) {
+// 				
+// 				if ( it->second.ins_type == E_INSTRUCT_TYPE_FUNCTION){
+// 					break;
+// 				}
+// 			}
+// 		}
 		
 		int index = ndxml_get_index(parent, node) ;
 		stackIndex.push_back(index) ;

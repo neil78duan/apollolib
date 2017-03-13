@@ -32,10 +32,8 @@ public:
     ~MainWindow();
 
 	bool myInit();
-	//void setNewFileTempl(const char *newfiletempl) { m_fileTemplate = newfiletempl; }
-	//bool setConfig(const char *cfgFile,const char *messageFile);
-
-
+	bool showRuntimeError(const char *scriptFile, const char *errNodeInfo);
+	
 	void ClearLog();
 	void WriteLog(const char *logText);
 

@@ -17,6 +17,8 @@
 #include "cli_common/dftCliMsgHandler.h"
 #include "apoScript/apoEditorSetting.h"
 
+#include "apoScript/editorFrame.h"
+
 #include <QMessageBox>
 
 #include "ndlog_wrapper.h"
@@ -302,6 +304,12 @@ bool startDialog::compileScript(const char *scriptFile)
 	WriteLog("start run script...\n");
 	if (0 != scriptRoot->test()){
 		WriteLog("run script error\n");
+
+		const char *curErrNode = scriptRoot->getGlobalParser().getLastErrorNode();
+		if (curErrNode && *curErrNode) {
+			showScriptError(scriptFile, curErrNode);
+		}
+
 		LogicEngineRoot::destroy_Instant();
 		return false;
 	}
@@ -491,6 +499,28 @@ ERROR_EXIT:
 }
 
 
+bool startDialog::showScriptError(const char *scriptFile, const char *nodeDescript)
+{
+	EditorFrame *pMain = new EditorFrame();
+	pMain->setHostWidget(this);
+	pMain->setAttribute(Qt::WA_DeleteOnClose, true);
+
+
+	if (pMain->myInit()) {
+		this->setVisible(false);
+
+		if (!pMain->showRuntimeError(scriptFile, nodeDescript)) {
+			return false;
+		}
+		pMain->showMaximized();
+	}
+	else {
+		delete pMain;
+		return false;
+	}
+	return true;
+}
+
 void startDialog::on_Exit_clicked()
 {
     accept() ;
@@ -529,7 +559,6 @@ void startDialog::on_Connect_clicked()
     WriteLog("...\n connect server end!");
 }
 
-#include "apoScript/editorFrame.h"
 void startDialog::on_ScriptEdit_clicked()
 {
 	EditorFrame *pMain = new EditorFrame();
@@ -564,9 +593,7 @@ void startDialog::on_Compile_clicked()
         if (0 != ret)	{
             nd_logerror("run command error %s %d\n", packaged_cmd, ret);
         }
-
     }
-
 
 }
 
