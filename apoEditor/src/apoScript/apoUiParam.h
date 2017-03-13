@@ -33,13 +33,17 @@ public:
 	};
 
 	explicit apoBaseSlotCtrl(QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags()) :
-		QLabel(parent, f), m_slotType(SLOT_UNKNOWN), m_myConnect(0), m_inDrag(false), m_valid(true)
+		QLabel(parent, f),
+		m_inDrag(false), m_valid(true),m_showError(false),
+		m_slotType(SLOT_UNKNOWN),m_myConnect(0)
 	{
 
 	}
 
 	explicit apoBaseSlotCtrl(const QString &text, QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags()) :
-		QLabel(text, parent, f), m_slotType(SLOT_UNKNOWN), m_myConnect(0), m_inDrag(false), m_valid(true)
+		QLabel(text, parent, f),
+		m_inDrag(false), m_valid(true),m_showError(false),
+		m_slotType(SLOT_UNKNOWN),m_myConnect(0)
 	{
 
 	}
@@ -50,9 +54,13 @@ public:
 
 	bool checkInDrag() { return m_inDrag; }
 	void setInDrag(bool inDrag = true) { m_inDrag = inDrag; }
+	
+	void setError(bool isError=true) {m_showError = isError;}
+	bool checkInError() {return m_showError;}
 
 	bool checkValid() { return m_valid; }
 	void setValid(bool enable = true);
+	
 
 	eBaseSlotType slotType(){ return m_slotType; }
 	void setSlotType(eBaseSlotType stype){ m_slotType = stype; }
@@ -71,6 +79,7 @@ protected:
 
 	bool m_inDrag;
 	bool m_valid; //not in using
+	bool m_showError ;		//show compiled error
 	eBaseSlotType m_slotType;
 	//void *m_UserData;
 

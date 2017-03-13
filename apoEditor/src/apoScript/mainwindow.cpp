@@ -769,6 +769,7 @@ bool MainWindow::compileScript(const char *scriptFile)
 			lgcompile.m_cur_file.c_str(), pFunc, pStep, lgcompile.m_cur_node_index);
 
 
+		showCompileError(inFile, lgcompile.getErrorStack()) ;
 		return false;
 	}
 
@@ -816,6 +817,7 @@ bool MainWindow::showCompileError(const char *xmlFile, stackIndex_vct &errorStac
 	for (size_t i = 0; i < errorStack.size(); i++){
 		int index = errorStack[i];
 		ndxml *node = ndxml_getnodei(xmlroot, index);
+		xmlroot = node ;
 
 		const char *pAction = m_editorSetting.getDisplayAction(ndxml_getname(node));
 		if (pAction && 0 == ndstricmp(pAction, "function")) {
@@ -825,14 +827,18 @@ bool MainWindow::showCompileError(const char *xmlFile, stackIndex_vct &errorStac
 
 
 		const compile_setting* compileSetting = m_editorSetting.getStepConfig(ndxml_getname(node));
+		if(!compileSetting) {
+			continue;
+		}
+			
 		if (compileSetting->ins_type == E_INSTRUCT_TYPE_CMD){
-			if (!m_editorWindow->setCurDetail(node)) {
+			if (!m_editorWindow->setCurDetail(node,true)) {
 				nd_logerror("can not show current detail node \n");
 				return false;
 			}
 		}
 		else if (compileSetting->ins_type == E_INSTRUCT_TYPE_PARAM) {
-			if (!m_editorWindow->setCurNodeSlotSelected(node))	{
+			if (!m_editorWindow->setCurNodeSlotSelected(node,true))	{
 				nd_logerror("can not show current param\n");
 				return false;
 			}

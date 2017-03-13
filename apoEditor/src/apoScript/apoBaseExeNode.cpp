@@ -31,6 +31,7 @@ QWidget(parent), m_toNextNode(NULL), m_nodeXml(0), m_outParamAddNew(0),
 	m_disableNewParam = false;
 	m_disableIn = false;
 	m_selected = false;
+	m_showError = false ;
 	m_disableNewFuncParam = true;
 	m_type = 0;
 	m_tips = tips;
@@ -50,6 +51,7 @@ QWidget(parent), m_toNextNode(NULL), m_outParamAddNew(0),
 	m_disableIn = false;
 
 	m_selected = false;
+	m_showError =false ;
 }
 
 apoBaseExeNode::~apoBaseExeNode()
@@ -237,6 +239,11 @@ void setOutParamNum(int num);
 void apoBaseExeNode::setSelected(bool isSelected)
 {
 	m_selected = isSelected;
+}
+
+void apoBaseExeNode::setError(bool isError)
+{
+	m_showError = isError ;
 }
 
 void apoBaseExeNode::setTitle(const QString &title)
@@ -631,8 +638,11 @@ void apoBaseExeNode::paintEvent(QPaintEvent *event)
 
 	painter.setPen(QPen(Qt::red, 1));
 	painter.drawLine(QPoint(1, E_LINE_HEIGHT), QPoint(m_size.width() - 3, E_LINE_HEIGHT));
-
-	if (m_selected)	{
+	
+	if(m_showError) {
+		painter.setPen(QPen(Qt::black, 2));
+	}
+	else if (m_selected)	{
 		painter.setPen(QPen(Qt::green, 2));
 	}
 	else {
@@ -692,8 +702,10 @@ void apoBaseExeNode::trytoDrawConnectSlot()
 	painter.setPen(QPen(Qt::blue, 2));
 	
 #define DRAW_RECT(_slot)				\
-	if ((_slot) && (_slot)->checkInDrag()){			\
-		painter.drawRect((_slot)->geometry());\
+	if ((_slot) ){						\
+		if((_slot)->checkInDrag() || (_slot)->checkInError()) {	\
+			painter.drawRect((_slot)->geometry());\
+		}								\
 	}
 // 
 // 	if (m_toNextNode){
