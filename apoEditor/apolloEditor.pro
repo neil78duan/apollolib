@@ -41,7 +41,7 @@ CONFIG(debug, debug|release) {
     LIBS += -lndclient_s
 }
 
-DEFINES += __ND_WIN__
+DEFINES += __ND_WIN__ DO_NOT_CONVERT_PRINT_TEXT
 }
 
 

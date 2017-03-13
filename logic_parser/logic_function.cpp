@@ -695,28 +695,38 @@ static int _apollo_log(void *pf, const char *stm, ...)
 
 static bool _apollo_out(parse_arg_list_t &args, logic_print print_func, void *pf)
 {
-#if 0 //def _MSC_VER
-	for (int i = 0; i < args.size(); i++){
-		if (args[i].GetDataType() == OT_STRING)	{
-			DBLDataNode data = args[i];
-			data.ConvertEncode(LogicEngineRoot::get_Instant()->GetEncodeType(), ND_ENCODE_TYPE);
-			//char buf[4096];
-			print_func(pf, "%s ", data.GetText());
+	int encode = LogicEngineRoot::get_Instant()->GetEncodeType();
+	int displayType = LogicEngineRoot::get_Instant()->getOutPutEncode();
+
+	if (encode != displayType)	{
+		for (int i = 0; i < args.size(); i++){
+			if (args[i].GetDataType() == OT_STRING)	{
+				DBLDataNode data = args[i];
+				data.ConvertEncode(encode, displayType);
+				//char buf[4096];
+				print_func(pf, "%s ", data.GetText());
+			}
+			else {
+				args[i].Print(print_func, pf);
+				print_func(pf, " ");
+			}
 		}
-		else {
+		print_func(pf, "\n");
+	}
+	else {
+		for (int i = 0; i < args.size(); i++){
 			args[i].Print(print_func, pf);
 			print_func(pf, " ");
 		}
+		print_func(pf, "\n");
 	}
-	print_func(pf, "\n");
-#else 
-	for (int i = 0; i < args.size(); i++){
-		args[i].Print(print_func, pf);
-		print_func(pf, " ");
-	}
-	print_func(pf, "\n");
+// 
+// #if !defined(DO_NOT_CONVERT_PRINT_TEXT) && defined(_MSC_VER)
+// 	
+// #else
+// 	
+// #endif 
 
-#endif
 	return true;
 }
 

@@ -76,6 +76,7 @@ protected:
 	bool openDetailView();
 
 	bool showCommonDeatil(ndxml *xmldata);
+	void closeDetail();
 	bool compileScript(const char *scriptFile);
 
 	bool loadScriptFile(const char *scriptFile);
