@@ -86,6 +86,7 @@ public:
 	virtual bool onDisconnect();
 
 	virtual bool isDelete();
+	virtual QString getParamInfo();
 	
 protected:
 	bool event(QEvent *e);

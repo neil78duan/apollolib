@@ -13,6 +13,8 @@
 
 #include "apoScript/apoUiExeNode.h"
 
+#include <QToolTip>
+
 using namespace LogicEditorHelper;
 
 bool apoBaseSlotCtrl::checkConnectIn()
@@ -47,6 +49,42 @@ bool apoBaseSlotCtrl::isDelete()
 	return false;
 }
 
+
+QString apoBaseSlotCtrl::getParamInfo()
+{
+	switch (m_slotType)
+	{
+	case apoBaseSlotCtrl::SLOT_RUN_IN:
+		return QString("connect in");
+		break;
+	case apoBaseSlotCtrl::SLOT_RUN_OUT:
+		return QString("connect to next");
+		break;
+	case apoBaseSlotCtrl::SLOT_RETURN_VALUE:
+
+		return QString("result");
+		break;
+	case apoBaseSlotCtrl::SLOT_NODE_INPUUT_PARAM:
+		break;
+	case apoBaseSlotCtrl::SLOT_FUNCTION_PARAM:
+
+		return QString("input by caller");
+		break;
+	case apoBaseSlotCtrl::SLOT_SUB_ENTRY:
+		return QString("sub block");
+		break;
+	case apoBaseSlotCtrl::SLOT_VAR:
+		return QString("variant value");
+		break;
+	case apoBaseSlotCtrl::SLOT_UNKNOWN:
+		break;
+	default:
+		break;
+	}
+	return QString();
+}
+
+
 void apoBaseSlotCtrl::setValid(bool enable)
 { 
 	m_valid = enable; 
@@ -65,11 +103,18 @@ bool apoBaseSlotCtrl::event(QEvent *e)
 		m_inDrag = true;
 		QWidget *p = (QWidget *) this->parent();
 		p->update();
+
+		QString tips = getParamInfo();
+		if (tips.size() > 0) {
+			QPoint pos = mapToGlobal(QPoint(0, 0));
+			QToolTip::showText(pos, tips);
+		}
 	}
 	else if (e->type() == QEvent::Leave) {
 		m_inDrag = false;
 		QWidget *p = (QWidget *) this->parent();
 		p->update();
+		QToolTip::hideText();
 	}
 	return QWidget::event(e);
 }
