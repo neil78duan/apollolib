@@ -413,6 +413,14 @@ bool MainWindow::showCommonDeatil(ndxml *xmldata)
 	return true;
 }
 
+void MainWindow::closeDetail()
+{
+	QDockWidget *pDock = this->findChild<QDockWidget*>("DetailView");
+	if (pDock)	{
+		pDock->close();
+	}
+}
+
 void MainWindow::onShowExeNodeDetail(apoBaseExeNode *exenode)
 {
 	QDockWidget *pDock = this->findChild<QDockWidget*>("DetailView");
@@ -484,6 +492,7 @@ void MainWindow::onFunctionsTreeCurItemChanged(QTreeWidgetItem *current, QTreeWi
 // double click file list
 void MainWindow::onFilesTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
+
 	xmlTreeItem *pXmlItem = dynamic_cast<xmlTreeItem*>(current);
 	if (!pXmlItem)	{
 		return;
@@ -492,6 +501,11 @@ void MainWindow::onFilesTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidget
 	if (!pxml)	{
 		return;
 	}
+
+	closeDetail();
+	m_editorWindow->clearFunction();
+	m_currFunction = NULL;
+
 	m_fileMoudleName = ndxml_getattr_val(pxml, "name");
 	if (loadScriptFile(ndxml_getval(pxml))) {
 		setDefaultFile(ndxml_getval(pxml));

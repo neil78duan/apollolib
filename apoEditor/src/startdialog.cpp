@@ -291,6 +291,7 @@ bool startDialog::compileScript(const char *scriptFile)
 	
 	LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
 	nd_assert(scriptRoot);
+	scriptRoot->setOutPutEncode(E_SRC_CODE_UTF_8);
 
 	scriptRoot->setPrint(ND_LOG_WRAPPER_PRINT(startDialog), NULL);
 	scriptRoot->getGlobalParser().setSimulate(true,&apoOwner);
