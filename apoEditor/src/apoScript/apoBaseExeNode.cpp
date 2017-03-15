@@ -122,13 +122,13 @@ bool apoBaseExeNode::_parseParam(ndxml *xmlnode)
 }
 
 
-apoBaseParam* apoBaseExeNode::_param2Ctrl(ndxml *xmlParam, ndxml *parent)
+apoBaseParam* apoBaseExeNode::createParam(ndxml *xmlParam, ndxml *parent)
 {
 	if (LogicEditorHelper::CheckHide(xmlParam)){
 		return NULL;
 	}
 	apoEditorSetting*pSetting = apoEditorSetting::getInstant();
-	
+
 	const char *paramName = ndxml_getname(xmlParam);
 	if (!paramName){
 		return NULL;
@@ -157,7 +157,7 @@ apoBaseParam* apoBaseExeNode::_param2Ctrl(ndxml *xmlParam, ndxml *parent)
 			}
 
 			const char *isNameParam = ndxml_getattr_val(node1, "is_param_name");
-			if (isNameParam && 0==ndstricmp(isNameParam,"yes"))	{
+			if (isNameParam && 0 == ndstricmp(isNameParam, "yes"))	{
 				xmlName = node1;
 			}
 			else {
@@ -173,13 +173,13 @@ apoBaseParam* apoBaseExeNode::_param2Ctrl(ndxml *xmlParam, ndxml *parent)
 		parent = xmlParam;
 	}
 	//step 
-	else if (paramSetting->ins_type == E_INSTRUCT_TYPE_PARAM )  {
+	else if (paramSetting->ins_type == E_INSTRUCT_TYPE_PARAM)  {
 
 		const char *restrictType = ndxml_getattr_val(xmlParam, "restrict");
 		if (restrictType) {
 			refnode = ndxml_getnode(parent, restrictType);
 		}
-		myVal = xmlParam;		
+		myVal = xmlParam;
 	}
 	else {
 		return NULL;
@@ -189,15 +189,21 @@ apoBaseParam* apoBaseExeNode::_param2Ctrl(ndxml *xmlParam, ndxml *parent)
 		return NULL;
 	}
 
-	apoBaseParam *pParamCtrl = new apoBaseParam(this);
-	pParamCtrl->setParam(parent,myVal, refnode, xmlName);
 
+	apoBaseParam *pParamCtrl = new apoBaseParam(this);
+	pParamCtrl->setParam(parent, myVal, refnode, xmlName);
 	pParamCtrl->resize(PARAM_CTRL_W, PARAM_CTRL_H);
 	pParamCtrl->setStyleSheet("QLabel{background-color:yellow;}");
 	pParamCtrl->setAttribute(Qt::WA_DeleteOnClose, true);
+	return pParamCtrl;
+}
 
-	m_paramVct.push_back(pParamCtrl);
-
+apoBaseParam* apoBaseExeNode::_param2Ctrl(ndxml *xmlParam, ndxml *parent)
+{
+	apoBaseParam*pParamCtrl = createParam(xmlParam, parent);
+	if (pParamCtrl)	{
+		m_paramVct.push_back(pParamCtrl);
+	}
 	return pParamCtrl;
 
 }
@@ -526,6 +532,9 @@ void apoBaseExeNode::init(const QString &title)
 	if (!m_disableIn)	{
 		CREATE_CTRL_OBJECT(apoBaseSlotCtrl, "->", yellow, m_runInNode);
 		m_runInNode->setSlotType(apoBaseSlotCtrl::SLOT_RUN_IN);
+
+		m_runInNode->setXmlAnchor(m_nodeXml);
+		m_runInNode->setXmlAnchorParent(ndxml_get_parent(m_nodeXml));
 	}
 
     //init title label ;
@@ -571,6 +580,8 @@ void apoBaseExeNode::init(const QString &title)
 		CREATE_CTRL_OBJECT(apoBaseSlotCtrl, "->", yellow, m_toNextNode);
 		m_toNextNode->setSlotType(apoBaseSlotCtrl::SLOT_RUN_OUT);
 
+		m_toNextNode->setXmlAnchor(m_nodeXml);
+		m_toNextNode->setXmlAnchorParent(ndxml_get_parent(m_nodeXml));
 	}
 
 
@@ -593,6 +604,22 @@ void apoBaseExeNode::init(const QString &title)
 	onInit();
 	this->setStyleSheet("background-color:white;");
 
+}
+
+void apoBaseExeNode::onConnected()
+{
+	if (m_runInNode)	{
+		m_runInNode->setXmlAnchor(m_nodeXml);
+		m_runInNode->setXmlAnchorParent(ndxml_get_parent(m_nodeXml));
+	}
+}
+void apoBaseExeNode::onDisconnected()
+{
+
+	if (m_runInNode)	{
+		m_runInNode->setXmlAnchor(m_nodeXml);
+		m_runInNode->setXmlAnchorParent(ndxml_get_parent(m_nodeXml));
+	}
 }
 
 void apoBaseExeNode::initParamPos()

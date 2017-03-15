@@ -36,6 +36,17 @@ bool apoBaseSlotCtrl::onDisconnect()
 }
 
 
+bool apoBaseSlotCtrl::isDelete()
+{
+	if (m_myConnect){
+		return false;
+	}
+	if (SLOT_FUNCTION_PARAM == m_slotType) {
+		return true;
+	}
+	return false;
+}
+
 void apoBaseSlotCtrl::setValid(bool enable)
 { 
 	m_valid = enable; 
@@ -164,7 +175,11 @@ QString apoBaseParam::getTypeName()
 QString apoBaseParam::getParamName()
 {
 	if (m_varName){
-		return QString(ndxml_getval(m_varName));
+		const char *val = ndxml_getval(m_varName);
+		if (!val)	{
+			val = ndxml_getattr_val(m_varName, "name");
+		}
+		return QString(val);
 	}
 	else {
 		const char *pRootName = ndxml_getname(m_parent);
@@ -281,4 +296,19 @@ bool apoBaseParam::onDisconnect()
 	ndxml_setval(m_xml, "0");
 	m_myConnect = 0;
 	return true;
+}
+
+
+bool apoBaseParam::isDelete()
+{
+	if (m_myConnect){
+		return false;
+	}
+	else if (!m_reference){
+		return CheckCanDelete(m_xml);
+	}
+	else if (m_parent) {
+		return CheckCanDelete(m_parent);
+	}
+	return false;
 }

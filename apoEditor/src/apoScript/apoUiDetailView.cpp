@@ -180,6 +180,9 @@ bool apoUiDetailView::onChanged(int row, int column, const char *xmlRealValue)
 	else if (type == OT_LAST_RET) {
 		cell->setText(QString("0"));
 	}
+	else if (type == OT_INT || type == OT_FLOAT || type == OT_INT64 || type == OT_INT8 || type == OT_INT16) {
+		cell->setText(QString("0"));
+	}
 // 	else if (type == OT_LAST_RET) {
 // 		cell->setText(QString("0"));
 // 	}

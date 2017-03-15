@@ -65,10 +65,12 @@ private:
 	bool _createFuncEntry(ndxml *stepsBlocks, const QPoint &defaultPos);
 	bool _showBlocks(apoBaseSlotCtrl *fromSlot, ndxml *stepsBlocks);
 	void _showUnConnectBlocks(ndxml *functionXml);
+	bool _showSubByslot(apoBaseSlotCtrl *subSlot);
 	
 	bool _showBools(apoBaseExeNode *entryNode, ndxml *entryXml); //show if else 
 	bool _showLoops(apoBaseExeNode *entryNode, ndxml *stepsBlocks);
 	bool _showValueComp(apoBaseExeNode *entryNode, ndxml *stepsBlocks);
+	bool _showSWitch(apoBaseExeNode *entryNode, ndxml *stepsBlocks);
 
 	apoBaseExeNode* _showExeNode(apoBaseSlotCtrl *fromSlot, ndxml *exeNode, const QPoint &pos);
 

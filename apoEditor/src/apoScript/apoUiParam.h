@@ -37,7 +37,8 @@ public:
 		m_inDrag(false), m_valid(true),m_showError(false),
 		m_slotType(SLOT_UNKNOWN),m_myConnect(0)
 	{
-
+		m_xmlAnchorParent = 0;
+		m_xmlAnchor = 0;
 	}
 
 	explicit apoBaseSlotCtrl(const QString &text, QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags()) :
@@ -45,7 +46,8 @@ public:
 		m_inDrag(false), m_valid(true),m_showError(false),
 		m_slotType(SLOT_UNKNOWN),m_myConnect(0)
 	{
-
+		m_xmlAnchorParent = 0;
+		m_xmlAnchor = 0;
 	}
 	~apoBaseSlotCtrl()
 	{
@@ -71,9 +73,20 @@ public:
 	apoUiBezier *getConnector() { return m_myConnect; }
 	void setConnector(apoUiBezier * bezier){ m_myConnect = bezier; }
 
+
+	ndxml * getXmlAnchorParent() { return  m_xmlAnchorParent; }
+	ndxml * getXmlAnchor() { return m_xmlAnchor; }
+
+	void setXmlAnchorParent(ndxml *xml) {  m_xmlAnchorParent = xml; }
+	void setXmlAnchor(ndxml *xml) { m_xmlAnchor= xml; }
+
+
 	virtual bool checkConnectIn();
 	virtual bool onConnectIn(apoBaseSlotCtrl*fromSlot);
 	virtual bool onDisconnect();
+
+	virtual bool isDelete();
+	
 protected:
 	bool event(QEvent *e);
 
@@ -81,9 +94,10 @@ protected:
 	bool m_valid; //not in using
 	bool m_showError ;		//show compiled error
 	eBaseSlotType m_slotType;
-	//void *m_UserData;
-
 	apoUiBezier *m_myConnect;
+
+	ndxml *m_xmlAnchorParent;
+	ndxml *m_xmlAnchor;
 private:
 
 };
@@ -109,6 +123,8 @@ public:
 	QString getDisplayValue();
 	QString getTypeName();
 
+	//void setParamName(const char *name) { m_varName = name; }
+
 
 	ndxml *getTypeXml(){ return m_reference; }
 	ndxml *getNameXml(){ return m_varName; }
@@ -116,11 +132,13 @@ public:
 	ndxml *getParentXml() { return m_parent; }
 
 
+
 	virtual bool checkConnectIn();
 	virtual bool onConnectIn(apoBaseSlotCtrl*fromSlot);
 
 	virtual bool onDisconnect();
 
+	virtual bool isDelete();
 	//bool checkNameEdited();
 	//bool checkTypeEdited();
 protected:

@@ -76,8 +76,10 @@ public:
 	
 	bool isMyParam(apoBaseParam *paramCtrl);
 
-	bool closeParam(apoBaseSlotCtrl *param);
+	virtual bool closeParam(apoBaseSlotCtrl *param);
 
+	void onConnected();
+	void onDisconnected();
 	//void setMyUserData(void *userData) { m_myUserData = userData; }
 
 	enum {
@@ -108,7 +110,9 @@ protected:
 	void trytoDrawConnectSlot();
 	bool _parseParam(ndxml *xmlnode);
 	apoBaseParam* _param2Ctrl(ndxml *xmlParam, ndxml *parent);
-	
+
+	apoBaseParam* createParam(ndxml *xmlParam, ndxml *parent);
+
 
 	virtual void destroy();
 	void init(const QString &title );
@@ -134,9 +138,12 @@ protected:
     QPushButton *m_addNewParam;
 	QPushButton *m_outParamAddNew;
 
-	QVector<apoBaseParam *>m_paramVct;
+	typedef QVector<apoBaseParam *> param_vct_t;
+	typedef QVector<apoBaseSlotCtrl *> slot_vct_t;
 
-	QVector<apoBaseSlotCtrl *>m_outParamVct;
+	param_vct_t  m_paramVct;
+
+	slot_vct_t m_outParamVct;
 
 	apoBaseSlotCtrl *m_toNextNode;
 	apoBaseSlotCtrl *m_returnValue;

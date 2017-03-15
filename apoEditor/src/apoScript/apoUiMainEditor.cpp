@@ -120,6 +120,9 @@ bool apoUiMainEditor::_showBlocks(apoBaseSlotCtrl *fromSlot, ndxml *stepsBlocks)
 		if (!stepInsName){
 			continue;
 		}
+		if (CheckHide(xmlStep))	{
+			continue;
+		}
 		const compile_setting* stepInfo = m_setting->getStepConfig(stepInsName);
 		if (!stepInfo) {
 			continue;
@@ -183,7 +186,8 @@ void apoUiMainEditor::_showUnConnectBlocks(ndxml *functionXml)
 			continue;
 		}
 
-		else if (stepInfo->ins_type == E_INSTRUCT_TYPE_STEP_COLLECTION) {
+		else if (stepInfo->ins_type == E_INSTRUCT_TYPE_COLLOCTION || 
+			stepInfo->ins_type == E_INSTRUCT_TYPE_STEP_BLOCK) {
 			if (ndxml_getsub_num(xmlStep)<=0){
 				delBufs.push_back(xmlStep);
 				continue;;
@@ -202,10 +206,20 @@ void apoUiMainEditor::_showUnConnectBlocks(ndxml *functionXml)
 	}
 }
 
+bool apoUiMainEditor::_showSubByslot(apoBaseSlotCtrl *subSlot)
+{
+	ndxml *xmlblock = subSlot->getXmlAnchorParent();
+	if (!xmlblock){
+		nd_logerror("can not get xml display node entry\n");
+		return false;
+	}
+	return _showBlocks(subSlot, xmlblock);
+}
+
 bool apoUiMainEditor::_showBools(apoBaseExeNode *entryNode, ndxml *entryXml)
 {
-	bool ret = false;
-	int total = ndxml_getsub_num(entryXml);
+	//bool ret = false;
+	//int total = ndxml_getsub_num(entryXml);
 
 	apoUiExenodeBool*pBoolNode = dynamic_cast<apoUiExenodeBool*>(entryNode);
 	if (!pBoolNode){
@@ -214,6 +228,21 @@ bool apoUiMainEditor::_showBools(apoBaseExeNode *entryNode, ndxml *entryXml)
 	int subX = m_startX;
 	int subY = m_startY;
 
+	m_startY = subY - 200;
+	m_startX = subX;
+
+	if (!_showSubByslot(pBoolNode->getTrueSlot())) {
+		return false;
+	}
+	
+	m_startY = subY;
+	m_startX = subX;
+	if (_showSubByslot(pBoolNode->getFalseSlot())) {
+		return false;
+	}
+
+	return true;
+	/*
 	for (int i = 0; i < total; i++) {
 		ndxml *xmlStep = ndxml_getnodei(entryXml, i);
 		const char *stepInsName = ndxml_getname(xmlStep);
@@ -244,7 +273,8 @@ bool apoUiMainEditor::_showBools(apoBaseExeNode *entryNode, ndxml *entryXml)
 			return false;
 		}
 	}
-	return ret;
+	*/
+	//return ret;
 }
 
 bool apoUiMainEditor::_showLoops(apoBaseExeNode *entryNode, ndxml *stepsBlocks)
@@ -258,7 +288,7 @@ bool apoUiMainEditor::_showLoops(apoBaseExeNode *entryNode, ndxml *stepsBlocks)
 	int subY = m_startY;
 
 	m_startY -= 200;
-	bool ret = _showBlocks(pNode->getLoopSlot(), stepsBlocks);
+	bool ret = _showSubByslot(pNode->getLoopSlot());
 
 
 	m_startX = subX;
@@ -282,6 +312,33 @@ bool apoUiMainEditor::_showValueComp(apoBaseExeNode *entryNode, ndxml *stepsBloc
 	m_startX = subX;
 	m_startY = subY;
 	return ret;
+}
+
+bool apoUiMainEditor::_showSWitch(apoBaseExeNode *entryNode, ndxml *stepsBlocks)
+{
+	apoUiExenodeSwitch*pNode = dynamic_cast<apoUiExenodeSwitch*>(entryNode);
+	if (!pNode){
+		return false;
+	}
+
+	int subX = m_startX;
+	int subY = m_startY;
+
+	int num = pNode->getSubBlockNum();
+	for (int i = 0; i < num; i++){
+		m_startY = (subY - 200) + i * 200;
+		m_startX = subX;
+		bool ret = _showSubByslot(pNode->getSubSlot(i));
+		if (!ret)	{
+			return false;
+		}
+	}
+
+	_showSubByslot(pNode->getDefault());
+
+	m_startX = subX;
+	m_startY = subY;
+	return true;
 }
 
 bool apoUiMainEditor::_createFuncEntry(ndxml *stepsBlocks, const QPoint &defaultPos)
@@ -340,11 +397,8 @@ apoBaseExeNode* apoUiMainEditor::_showExeNode(apoBaseSlotCtrl *fromSlot, ndxml *
 	if (nodeCtrl->getType() == EAPO_EXE_NODE_NewVar){
 		pushVarList(exeNode, nodeCtrl);
 	}
-
-// 	QObject::connect(nodeCtrl, SIGNAL(onDBclicked(apoBaseExeNode *, QMouseEvent * )),
-// 		this, SLOT(onExenodeDBClicked(apoBaseExeNode *, QMouseEvent *)));
-
-
+	
+	//change current ditail show view
 	QObject::connect(nodeCtrl, SIGNAL(NodeAddParamSignal(apoBaseExeNode *)),
 		this, SLOT(onNodeAddNewParam(apoBaseExeNode *)));
 
@@ -374,6 +428,10 @@ apoBaseExeNode* apoUiMainEditor::_showExeNode(apoBaseSlotCtrl *fromSlot, ndxml *
 	else if (nodeCtrl->getType() == EAPO_EXE_NODE_ValueComp) {
 		ret = _showValueComp(nodeCtrl, exeNode);
 	}
+	else if (nodeCtrl->getType() == EAPO_EXE_NODE_Switch) {
+		ret = _showSWitch(nodeCtrl, exeNode);
+	}
+
 
 	if (!ret) {		
 		nodeCtrl->close();
@@ -745,12 +803,12 @@ void apoUiMainEditor::popMenuCloseParamTrigged()
 	}
 	apoBaseExeNode *parent = dynamic_cast<apoBaseExeNode *>(pslot->parent());
 	if (parent)	{
-		_disConnectParam(parent);
+		//_disConnectParam(parent);
 		parent->closeParam(pslot);
 		//reconnect 
-		_connectParam(parent->getMyPreNode(), parent);
+		//_connectParam(parent->getMyPreNode(), parent);
 		this->update();
-
+		onFileChanged();
 	}
 }
 
@@ -825,20 +883,14 @@ void apoUiMainEditor::contextMenuEvent(QContextMenuEvent *event)
 			apoBaseSlotCtrl *pslot = (apoBaseSlotCtrl*)w;
 			m_popSrc = w;
 
-			if (pslot->slotType() == apoBaseSlotCtrl::SLOT_FUNCTION_PARAM)	{
-				title = "Close ";
-				title += pslot->text(); 
-				SHOW_POP_MENU(title, apoUiMainEditor::popMenuCloseParamTrigged);
-			}
-			else if (pslot->slotType() == apoBaseSlotCtrl::SLOT_NODE_INPUUT_PARAM)	{
-				title = "Close ";
-				apoBaseParam *param = (apoBaseParam*)pslot;
-				title += param->getParamName();
-				SHOW_POP_MENU2(title, apoUiMainEditor::popMenuCloseParamTrigged, QString("Disconnect"), apoUiMainEditor::popMenuDisconnectTRigged);				
-			}
-			else {
+			if (pslot->getConnector())	{
 				title = "Disconnect";
 				SHOW_POP_MENU(title, apoUiMainEditor::popMenuDisconnectTRigged);
+			}
+			else if (pslot->isDelete())	{
+				title = "Close ";
+				title += pslot->text();
+				SHOW_POP_MENU(title, apoUiMainEditor::popMenuCloseParamTrigged);
 			}
 
 		}
@@ -1005,19 +1057,20 @@ void apoUiMainEditor::mouseReleaseEvent(QMouseEvent *event)
 	else if (E_MOUSE_TYPE_CONNECT_SLOT == m_curDragType) {
 		nd_assert(m_dragSrc);
 		QWidget *w = this->childAt(event->pos());
-		apoBaseSlotCtrl *fromSlot = dynamic_cast<apoBaseSlotCtrl*>(m_dragSrc);
-		
-		if (trytoBuildConnector(fromSlot, dynamic_cast<apoBaseSlotCtrl*>(w))) {
-			onFileChanged();
+		if (w)	{
+			apoBaseSlotCtrl *fromSlot = dynamic_cast<apoBaseSlotCtrl*>(m_dragSrc);
+			if (trytoBuildConnector(fromSlot, dynamic_cast<apoBaseSlotCtrl*>(w))) {
+				onFileChanged();
+			}
+			if (fromSlot){
+				fromSlot->setInDrag(false);
+			}
 		}
 
 		if (m_connectToSlot){
 			m_connectToSlot->setInDrag(false);
 		}
 		m_connectToSlot = NULL;
-		if (fromSlot){
-			fromSlot->setInDrag(false);
-		}
 
 	}
 	else if (E_MOUSE_TYPE_MOVE_NODE == m_curDragType) {
@@ -1123,7 +1176,7 @@ bool apoUiMainEditor::setCurNodeSlotSelected(ndxml *xmlParam, bool inError)
 
 void apoUiMainEditor::onCurNodeChanged()
 {
-	if (m_curDetailNode){
+	if (m_curDetailNode && m_curDetailNode->getType() != EAPO_EXE_NODE_Switch){
 		_reConnectParam(m_curDetailNode);
 		m_curDetailNode->update();
 	}
@@ -1254,23 +1307,23 @@ bool apoUiMainEditor::buildRunSerqConnector(apoBaseSlotCtrl *fromSlot, apoBaseSl
 	if (pBze && pBze == pBze1){
 		return false;
 	}
-	apoBaseExeNode *fromCtrl = dynamic_cast<apoBaseExeNode*> (fromSlot->parent());
+	//apoBaseExeNode *fromCtrl = dynamic_cast<apoBaseExeNode*> ();
 	apoBaseExeNode *toCtrl = dynamic_cast<apoBaseExeNode*> (toSlot->parent());
 
 	//can not connect self
-	if (fromCtrl == toCtrl)	{
+	if (fromSlot->parent() ==toCtrl)	{
 		return false;
 	}
 
-	ndxml *fromXml = (ndxml*)fromCtrl->getMyUserData();
-	ndxml *toXml = (ndxml*)toCtrl->getMyUserData();
+	ndxml *fromXml = fromSlot->getXmlAnchor(); //(ndxml*)fromCtrl->getMyUserData();
+	ndxml *toXml =  (ndxml*)toCtrl->getMyUserData();
 
 	//not connect
-	ndxml *fromParent = ndxml_get_parent(fromXml);
+	ndxml *fromParent = fromSlot->getXmlAnchorParent();  //ndxml_get_parent(fromXml);
 	ndxml *toParent = ndxml_get_parent(toXml);
 
 
-	if (fromParent ==toParent)	{
+	if (pBze1 && fromParent == toParent)	{
 		int index1 = ndxml_get_index(fromParent, fromXml);
 		int index2 = ndxml_get_index(toParent, toXml);
 		if (index1 > index2)	{
@@ -1291,19 +1344,16 @@ bool apoUiMainEditor::buildRunSerqConnector(apoBaseSlotCtrl *fromSlot, apoBaseSl
 	
 
 	//build new connection
-	ndxml *moveInRoot = ndxml_get_parent(fromXml);
-	//int insertPos = ndxml_get_index(moveInRoot, fromXml) + 1;
-
-	if (fromXml == m_editedFunction){
-		moveInRoot = m_editedFunction;
-	}
-	
+	ndxml *moveInRoot = fromSlot->getXmlAnchorParent();// ndxml_get_parent(fromXml);
+	ndxml *insertPosXml = fromSlot->getXmlAnchor();
+		
 	while (toXml){
 		ndxml_disconnect(NULL, toXml);
-		if (-1 == ndxml_insert_after(moveInRoot, toXml, fromXml)) {
+		if (-1 == ndxml_insert_after(moveInRoot, toXml, insertPosXml)) {
 			return false;
 		}
-		fromXml = toXml;
+		insertPosXml = toXml;
+		toCtrl->onConnected();
 
 		toXml = NULL;
 		toCtrl = toCtrl->getMyNextNode();
@@ -1371,6 +1421,8 @@ bool apoUiMainEditor::_disconnectRunSerq(apoBaseSlotCtrl *fromSlot, apoBaseSlotC
 			ndxml *movxml = (ndxml *)toCtrl->getMyUserData();
 			ndxml_disconnect(NULL, movxml);
 			ndxml_insert(movetoXml, movxml);
+
+			toCtrl->onDisconnected();
 			toCtrl = next;
 		};
 
@@ -1378,6 +1430,7 @@ bool apoUiMainEditor::_disconnectRunSerq(apoBaseSlotCtrl *fromSlot, apoBaseSlotC
 	else {
 		ndxml_disconnect(NULL, xml);
 		ndxml_insert(unConnectXml, xml);
+		toCtrl->onDisconnected();
 	}
 	
 	return true;

@@ -66,6 +66,12 @@ public:
 		setNodeInfo(parent, exeNodeXml,false);
 		//InitCtrl(parent, "Begin", 0);
 		setTips(QString("Entry"));
+
+		ndxml *toNextAnchor = ndxml_getnode(m_nodeXml, "comment");
+		if (toNextAnchor){
+			m_toNextNode->setXmlAnchor(toNextAnchor);
+		}
+		m_toNextNode->setXmlAnchorParent(m_nodeXml);
 	}
 	virtual ~apoUiExenodeFuncEntry(){}
 private:
@@ -86,6 +92,12 @@ public:
 		setNodeInfo(parent, exeNodeXml,false);
 		//InitCtrl(parent, "Initializer",  0);
 		setTips(QString("Run-in-loaded"));
+
+		ndxml *toNextAnchor = ndxml_getnode(m_nodeXml, "comment");
+		if (toNextAnchor){
+			m_toNextNode->setXmlAnchor(toNextAnchor);
+		}
+		m_toNextNode->setXmlAnchorParent(m_nodeXml);
 	}
 	virtual ~apoUiExenodeModuleInitEntry(){}
 private:
@@ -105,6 +117,12 @@ public:
 		setNodeInfo(parent, exeNodeXml,false);
 		//InitCtrl(parent, "Exception",  0);
 		setTips(QString("Run-on-except"));
+
+		ndxml *toNextAnchor = ndxml_getnode(m_nodeXml, "comment");
+		if (toNextAnchor){
+			m_toNextNode->setXmlAnchor(toNextAnchor);
+		}
+		m_toNextNode->setXmlAnchorParent(m_nodeXml);
 	}
 	virtual ~apoUiExenodeExceptionEntry(){}
 private:
@@ -327,13 +345,13 @@ public:
 
 		disableNewParam();
 		disableReturnVar();
-		//disableToNext();
+		disableToNext();
 
-		setNodeInfo(parent, exeNodeXml,false);
+		setNodeInfo(parent, exeNodeXml);
 		//InitCtrl(parent, "Throw",  1);
 		setTips(QString("Throw exception"));
 
-		m_toNextNode->setValid(false);
+		//m_toNextNode->setValid(false);
 	}
 	virtual ~apoUiExenodeThrow(){}
 
@@ -384,9 +402,32 @@ private:
 	apoBaseSlotCtrl *m_subSlot;
 };
 
+class apoUiExenodeSwitch : public apoBaseExeNode
+{
+	Q_OBJECT
+public:
+	explicit apoUiExenodeSwitch(QWidget *parent, ndxml *exeNodeXml);
+	virtual ~apoUiExenodeSwitch();
 
+	virtual void onInit();
 
+	virtual bool closeParam(apoBaseSlotCtrl *param);
 
+	int getSubBlockNum(){ return m_caseParam.size(); }
+	apoBaseParam *getSubSlot(int index);
+
+	apoBaseSlotCtrl *getDefault() { return  m_defaultBlock; }
+
+public slots:
+void onAddNewBlockClicked();
+	//apoBaseSlotCtrl *getSubSlot() { return m_subSlot; }
+private:
+	apoBaseParam *createSubBlock(ndxml *subBlockXml);
+	//apoBaseSlotCtrl *m_subSlot;
+	param_vct_t m_caseParam;
+
+	apoBaseSlotCtrl * m_defaultBlock;
+};
 
 
 #endif // _APOUI_EXENODE_H_
