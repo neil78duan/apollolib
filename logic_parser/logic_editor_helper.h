@@ -66,6 +66,7 @@ namespace LogicEditorHelper
 		ERT_NEED_CONFIRM,
 		ERT_KEY,
 		ERT_KEY_VALUE,
+		ERT_BE_REF_ONLY,
 	};
 
 	const char *_GetDataTypeName(eDataType dataType);

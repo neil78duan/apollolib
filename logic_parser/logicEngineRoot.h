@@ -72,6 +72,9 @@ public:
 	}
 	const char *getDftScriptModule() const {return m_dftScriptModule.c_str();}
 	void setDftScriptModule(const char *script) ;
+
+	void setOutPutEncode(int encode) { m_displayEncodeType = encode; }
+	int getOutPutEncode() { return m_displayEncodeType; }
 private:
 
 	//static LogicEngineRoot *s_root;
@@ -87,7 +90,7 @@ private:
 
 	const scriptCmdBuf* _findScript(const char *funcName, const char *moduleName, const char**outModuleName) const;
 
-
+	int m_displayEncodeType;
 	int m_scriptEncodeType;
 	time_t m_compileTm;
 	//script_func_map m_scripts;

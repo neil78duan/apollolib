@@ -89,7 +89,8 @@ namespace LogicEditorHelper
 		"enable_drag",
 		"need_confirm",
 		"key",
-		"value"
+		"value",
+		"referenced_only"
 	};
 
 	const char *_GetDataTypeName(eDataType dataType)

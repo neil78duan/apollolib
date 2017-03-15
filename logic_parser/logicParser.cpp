@@ -936,11 +936,11 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 			if (cur_step_size != -1 && step_start)	{
 				NDUINT32 ss = (NDUINT32)(p - step_start);
 				if (cur_step_size != ss) {
-					nd_logerror("%s :run step errror %s node-index=%d compile-size=%d, parser-size=%d",
+					apollo_script_printf("%s :run step errror %s node-index=%d compile-size=%d, parser-size=%d",
 						stack->cmd->cmdname, m_dbg_node, m_dbg_cur_node_index, cur_step_size, ss);
 				}
 				else {
-					PARSE_TRACE("%s :cmd %d step %s node-index=%d size=%d %s\n",
+					apollo_script_printf("%s :cmd %d step %s node-index=%d size=%d %s\n",
 						stack->cmd->cmdname, opCmd, m_dbg_node, m_dbg_cur_node_index, cur_step_size,
 						m_registorFlag?"success":"failed");
 				}
@@ -1015,17 +1015,16 @@ int LogicParserEngine::_makeVar(runningStack *runstack, char *pCmdStream)//make 
 
 bool LogicParserEngine::_getArg(runningStack *stack, int index, DBLDataNode &outValue)
 {
-	if (m_simulate)	{
+	if (index < stack->params.size()){
+		outValue = stack->params[index];
+		return true;
+	}
+
+	else if (m_simulate)	{
 		DBLDataNode data;
 		data.InitSet("0");
 		outValue = data;
 		return true;
-	}
-	else {
-		if (index < stack->params.size()){
-			outValue = stack->params[index];
-			return true;
-		}
 	}
 
 	return false;
@@ -1151,12 +1150,12 @@ int LogicParserEngine::_getValue(runningStack *stack, char *pCmdStream, DBLDataN
 			return -1;
 		}
 		p += len;
-
-		if (stack->local_vars.size()==0)	{
-			m_sys_errno = LOGIC_ERR_VARIANT_NOT_EXIST;
-			nd_logerror("var %s not init before used\n", name);
-			return (int)(p - pCmdStream);;
-		}
+// 
+// 		if (stack->local_vars.size()==0)	{
+// 			m_sys_errno = LOGIC_ERR_VARIANT_NOT_EXIST;
+// 			nd_logerror("var %s not init before used\n", name);
+// 			return (int)(p - pCmdStream);;
+// 		}
 		// get array member
 		if (strchr(name, '[') ) {
 			char arrayName[128] ;
@@ -1235,6 +1234,10 @@ int LogicParserEngine::_getValue(runningStack *stack, char *pCmdStream, DBLDataN
 		}
 		
 		else {
+			if (0 == ndstricmp(name, "$index")) {
+				outValue.InitSet(m_curStack->loopIndex);
+				return (int)(p - pCmdStream);
+			}
 			DBLDataNode *pData = _getLocalVar(stack, name);
 			if (pData) 	{
 				outValue = *pData;

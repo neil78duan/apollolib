@@ -31,6 +31,7 @@ LogicEngineRoot::LogicEngineRoot()
 	m_screen_out_func = 0;
 	m_print_file = 0;
 	m_scriptEncodeType = E_SRC_CODE_ANSI;
+	m_displayEncodeType = ND_ENCODE_TYPE;
 }
 
 LogicEngineRoot::~LogicEngineRoot()

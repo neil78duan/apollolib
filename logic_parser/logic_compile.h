@@ -25,9 +25,13 @@ enum instructType {
 	E_INSTRUCT_TYPE_FUNCTION_INFO,
 	E_INSTRUCT_TYPE_EXCEPTION_CATCH, //handle error
 	E_INSTRUCT_TYPE_INIT_BLOCK, //the block of function init entry
-	E_INSTRUCT_TYPE_STEP_COLLECTION, // steps collection
+	E_INSTRUCT_TYPE_STEP_BLOCK, // steps block , can use break in this block
 	E_INSTRUCT_TYPE_CASE_ENTRY, // SWITCH-CASE sub entry
 	E_INSTRUCT_TYPE_FUNCTION ,	//function node
+	E_INSTRUCT_TYPE_REF_FROM_PARENT,	//reference from parent node
+	E_INSTRUCT_TYPE_DELAY_COMPILE,		//switch of if (default, else entry) 
+
+	E_INSTRUCT_TYPE_COLLOCTION,			//multi-step clooection ,can not use break ;
 
 	E_INSTRUCT_TYPE_COMMENT = 100, // MARRK
 
@@ -64,7 +68,7 @@ struct blockStrem
 	int cmp_instruct;
 	const char* cmp_val;
 	NDUINT32 jump_end_offset;
-	char block_buf[1000];
+	//char block_buf[1000];
 	blockStrem() : size(0), node_index(-1), no_comp(0), cmp_val(0), jump_end_offset(0)
 	{}
 };
@@ -139,21 +143,19 @@ private:
 	//compile if-else
 	int subEntry2Stream(compile_setting *setting,ndxml *subEntryNode, char *buf, size_t bufsize);
 	//compile step in if{...}
-	int subEntryBlock2Stream(compile_setting *setting, ndxml *stepNode, char *buf, size_t bufsize);
+	//int subEntryBlock2Stream(compile_setting *setting, ndxml *stepNode, char *buf, size_t bufsize);
 	//compile loop
 	int subLoop2Stream(compile_setting *setting, ndxml *stepNode, char *buf, size_t bufsize);
 
 
-	int blockSteps2Stream(ndxml *blockNode, char *buf, size_t bufsize);
+	int blockSteps2Stream(ndxml *blockNode, char *buf, size_t bufsize); //compile block , can use break 
+	int stepsCollect2Stream(ndxml *steps, char *buf, size_t bufsize);	//compile steps collections , not use break ;
+
 	//compile-step
 	int step2Strem(compile_setting *setting, ndxml *stepNode, char *buf, size_t bufsize);//return stream size ;
 
 	int step_function_info(compile_setting *setting, ndxml *stepNode, char *buf, size_t bufsize);
-	//user define step
-	int user_define_step(compile_setting *setting, ndxml *stepNode, char *buf, size_t bufsize);
-	//int user_define_msg_init( ndxml *stepNode, char *buf, size_t bufsize);
-	//int user_define_event_init(ndxml *stepNode, char *buf, size_t bufsize);
-
+	
 	int param2Stream(ndxml *paramNode, ndxml *parent, char *buf, size_t bufsize, NDUINT32 *param_num = NULL);//return stream size ;
 
 	int writeDebugInfo(ndxml *stepNode, const char*stepName, char *buf, size_t bufsize);
@@ -166,8 +168,8 @@ private:
 	int _writeFileInfo(ndxml *module, FILE *pf) ;
 	bool _isGlobalFunc(ndxml *funcNode);
 
-	void _pushReFillJumpAddr(char *addr);
-	bool _fillJumpLengthInblock(const char *blockStart, size_t blockSize);
+	void _pushReFillJumpAddr(char *addr, shortJumpAddr_vct *jumpAddrList=NULL);
+	bool _fillJumpLengthInblock(const char *blockStart, size_t blockSize, shortJumpAddr_vct *jumpAddrList = NULL);
 
 
 	int _trutoFillPreCmd(ndxml *funcNode, char *buf, size_t bufsize);
@@ -178,6 +180,8 @@ private:
 	void _popStac();
 	void _makeErrorStack(ndxml *xmlError) ;
 	bool _getFuncStackInfo(ndxml *curNode,char *buf, size_t size) ;
+
+	ndxml *_getRefNode(ndxml*node);
 
 	bool m_bDebugInfo;
 	int m_compileStep;
