@@ -1880,7 +1880,7 @@ int DBLDataNode::Print(logic_print print_func, void *pf) const
 			}
 					
 		}
-		ret += print_func(pf, "%c", IS_OUT_LUA() ? '}': _ARRAR_BEGIN_MARK);
+		ret += print_func(pf, "%c", IS_OUT_LUA() ? '}' : _ARRAR_END_MARK);
 		break;
 		
 	case OT_OBJ_BASE_OBJ:
