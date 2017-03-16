@@ -246,17 +246,47 @@ void ConnectDialog::ClearLog()
 
 void ConnectDialog::WriteLog(const char *logText)
 {
+	/*
+	static char s_line_buf[4096] = { 0 };
+	char *pstrart = strlen(s_line_buf) + s_line_buf;
+	const char *p = logText;
+	
+
+	while (p && *p)	{
+		int size = s_line_buf + 4096 - pstrart;
+		p = ndstr_nstr_end(p, pstrart, '\n', size);
+		if (p && *p) {
+			ui->logEdit->append(QString(s_line_buf));
+			ui->logEdit->moveCursor(QTextCursor::End);
+			pstrart = s_line_buf;
+			*pstrart = 0;
+			++p;
+		}
+		else if (strlen(s_line_buf) >= sizeof(s_line_buf) - 1) {
+			ui->logEdit->append(QString(s_line_buf));
+			ui->logEdit->moveCursor(QTextCursor::End);
+			pstrart = s_line_buf;
+			*pstrart = 0;
+		}
+		else {
+			break;
+		}	
+
+	} 
+	*/
+
+	/*
 #ifdef WIN32
 	char buf[1024];
 	nd_gbk_to_utf8(logText, buf, sizeof(buf));
 	logText = buf;
 #endif
-
+	*/
 	QTextEdit *pEdit = ui->logEdit;
 	
 	pEdit->moveCursor(QTextCursor::End, QTextCursor::KeepAnchor);
 	pEdit->insertPlainText(QString(logText));
-
+	
 }
 
 bool ConnectDialog::LoadDataDef(const char *file, const char *script, const char *message_def)
