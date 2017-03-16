@@ -237,7 +237,7 @@ bool apoUiMainEditor::_showBools(apoBaseExeNode *entryNode, ndxml *entryXml)
 	
 	m_startY = subY;
 	m_startX = subX;
-	if (_showSubByslot(pBoolNode->getFalseSlot())) {
+	if (!_showSubByslot(pBoolNode->getFalseSlot())) {
 		return false;
 	}
 
@@ -1105,12 +1105,12 @@ void apoUiMainEditor::paintEvent(QPaintEvent *event)
 	if (m_drawingBezier) {
 		m_drawingBezier->paintEvent();
 	}
-
+	
 	QVector<apoUiBezier*>::iterator it;
 	for (it = m_beziersVct.begin(); it != m_beziersVct.end(); ++it) {
 		(*it)->paintEvent();
 	}
-
+	
 }
 
 

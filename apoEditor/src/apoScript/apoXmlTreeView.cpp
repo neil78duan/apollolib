@@ -17,8 +17,15 @@
 
 using namespace LogicEditorHelper;
 
-apoXmlTreeView::apoXmlTreeView(QWidget *parent) : dragTree(parent), m_alias(0), m_root(0)
+apoXmlTreeView::apoXmlTreeView(QWidget *parent) : dragTree(parent), m_alias(0), m_root(0), m_isInitOk(false)
 {
+	QObject::connect(this, SIGNAL(itemCollapsed(QTreeWidgetItem *)),
+		this, SLOT(onItemExpanded(QTreeWidgetItem *)));
+
+	QObject::connect(this, SIGNAL(itemExpanded(QTreeWidgetItem *)),
+		this, SLOT(onItemExpanded(QTreeWidgetItem *)));
+
+	
 	QObject::connect(this, SIGNAL(itemChanged(QTreeWidgetItem *, int )),
 		this, SLOT(onItemChanged(QTreeWidgetItem *, int )));
 
@@ -30,6 +37,7 @@ apoXmlTreeView::apoXmlTreeView(QWidget *parent) : dragTree(parent), m_alias(0), 
 
 void apoXmlTreeView::setXmlInfo(ndxml *xmldata, int detph,const char *rootName )
 {
+	m_isInitOk = false;
 	m_xmldata = xmldata; 
 	m_disp_depth = detph;
 
@@ -42,6 +50,8 @@ void apoXmlTreeView::setXmlInfo(ndxml *xmldata, int detph,const char *rootName )
 
 	loadHideNodeInfo(xmldata);
 	createTree();
+
+	m_isInitOk = true;
 }
 
 
@@ -98,6 +108,26 @@ void apoXmlTreeView::setRootName(const QString &name)
 	m_rootName = name;
 	if (m_root)	{
 		m_root->setText(0, m_rootName);
+	}
+}
+
+void apoXmlTreeView::onItemExpanded(QTreeWidgetItem *item)
+{
+	if (!m_isInitOk){
+		return;
+	}
+	xmlTreeItem* curItem = dynamic_cast<xmlTreeItem*>(item);
+	if (!curItem)
+		return;
+	ndxml *xml = (ndxml *)curItem->getUserData();
+	if (xml) {
+		if (curItem->isExpanded())	{
+			ndxml_setattrval(xml, "expand_stat", "1");
+		}
+		else {
+			ndxml_setattrval(xml, "expand_stat", "0");
+		}
+		emit xmlDataChangedSignal();
 	}
 }
 

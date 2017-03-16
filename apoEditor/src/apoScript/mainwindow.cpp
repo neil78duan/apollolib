@@ -354,8 +354,13 @@ void MainWindow::onXmlNodeDel(ndxml *xmlnode)
 
 bool MainWindow::showCurFunctions()
 {	
-	m_editorWindow->showFunction(m_currFunction, m_curFile);
-	return false;
+	bool ret = m_editorWindow->showFunction(m_currFunction, m_curFile);
+	if (ret == false){
+		m_editorWindow->clearFunction();
+		QMessageBox::warning(NULL, "Error", "Can not show current Function!", QMessageBox::Ok);
+		m_currFunction = NULL;
+	}
+	return ret ;
 }
 
 bool MainWindow::saveCurFile()

@@ -48,6 +48,7 @@ signals:
 public slots:
 	void DragCallBack(QTreeWidgetItem* from, QTreeWidgetItem* to);
 	void onItemChanged(QTreeWidgetItem *item, int column);
+	void onItemExpanded(QTreeWidgetItem *item);
 protected:
 	bool TreeDragCallback(xmlTreeItem*  hFrom, xmlTreeItem* hTo);
 	bool _TreeDragInNotSameRoot(xmlTreeItem*  hFrom, xmlTreeItem*  hTo);
@@ -64,6 +65,7 @@ protected:
 	void OnPopInsertNode();
 	void OnPopXmlDel();
 
+	bool m_isInitOk;
 	int m_disp_depth; //deisplay depth
 	ndxml *m_xmldata;
 	xmlTreeItem *m_root;
