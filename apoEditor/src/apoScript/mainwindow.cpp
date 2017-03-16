@@ -795,6 +795,18 @@ void MainWindow::on_actionCompileAll_triggered()
 
 }
 
+void MainWindow::on_actionClearLog_triggered()
+{
+	m_logText.clear();
+
+	QDockWidget *pDock = this->findChild<QDockWidget*>("outputView");
+	if (pDock){
+		QTextEdit *pEdit = pDock->findChild<QTextEdit*>("logTextEdit");
+		if (pEdit)	{
+			pEdit->clear();
+		}
+	}
+}
 
 
 static int getScriptExpEncodeType(ndxml *scriptXml)

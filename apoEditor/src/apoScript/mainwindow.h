@@ -68,6 +68,8 @@ private slots:
 
 	void on_actionCompileAll_triggered();
 
+    void on_actionClearLog_triggered();
+
 protected:
 
 	bool openFileView();

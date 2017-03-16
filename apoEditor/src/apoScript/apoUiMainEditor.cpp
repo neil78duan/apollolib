@@ -49,13 +49,13 @@ bool apoUiMainEditor::showFunction(ndxml *data, ndxml_root *xmlfile)
 	m_editedFunction = data;
 	m_scriptFileXml = xmlfile;
 
-	m_startX = 10;
-	m_startY = 20;
+	m_startX = DEFAULT_START_X;
+	m_startY = DEFAULT_START_Y;
 
 
 	QPoint init_offset(0,0);	
 	getOffset(init_offset);
-	nd_logdebug("load offset(%d,%d)\n", init_offset.x(), init_offset.y());
+	nd_logdebug("load function %s offset(%d,%d)\n", _GetXmlName(data,NULL), init_offset.x(), init_offset.y());
 
 	if (!_createFuncEntry(m_editedFunction, QPoint(m_startX, m_startY))) {
 		return false;
@@ -352,7 +352,7 @@ bool apoUiMainEditor::_createFuncEntry(ndxml *stepsBlocks, const QPoint &default
 		m_startY = defaultPos.y() + Y_STEP;
 		noInidPos = true;
 	}
-
+	nd_logdebug("begin show function pos(%d,%d), offset(%d,%d)\n", pos.x(), pos.y(), m_offset.x(), m_offset.y());
 	apoBaseExeNode* pbeginNode = _showExeNode(NULL, stepsBlocks, pos);
 	if (!pbeginNode){
 		return false;
@@ -455,7 +455,9 @@ void apoUiMainEditor::saveOffset(const QPoint &offset)
 		snprintf(buf, sizeof(buf), "%d", offset.y());
 		ndxml_setattrval(pPoint, "offset_y", buf);
 
-		nd_logdebug("save offset (%d,%d)\n", offset.x(), offset.y());
+		nd_logdebug("save %s pos(%s,%s) offset (%d,%d)\n",_GetXmlName(m_editedFunction,NULL),
+			ndxml_getattr_val(pPoint, "x"), ndxml_getattr_val(pPoint, "y"),
+			offset.x(), offset.y());
 	}
 
 	onFileChanged();
@@ -509,9 +511,7 @@ bool apoUiMainEditor::_getNodePos(ndxml *exeNode, QPoint &pos)
 		int y = atoi(ndxml_getattr_val(pPoint, "y"));
 		pos = QPoint(x, y);
 		//pos += m_offset;
-
-
-		nd_logdebug("get position node(%d,%d), offset(%d,%d)\n", pos.x(), pos.y(), m_offset.x(), m_offset.y());
+		//nd_logdebug("get position node(%d,%d), offset(%d,%d)\n", pos.x(), pos.y(), m_offset.x(), m_offset.y());
 		return true;
 	}
 	pos = QPoint(m_startX, m_startY);
@@ -564,7 +564,7 @@ void apoUiMainEditor::savePosition(apoBaseExeNode *exeNode,  const QPoint *pNewP
 		}
 	}
 
-	nd_logdebug("save position node(%d,%d), offset(%d,%d)\n", pos.x(), pos.y(), m_offset.x(), m_offset.y());
+	//nd_logdebug("save position node(%d,%d), offset(%d,%d)\n", pos.x(), pos.y(), m_offset.x(), m_offset.y());
 	onFileChanged();
 }
 
@@ -828,7 +828,7 @@ void apoUiMainEditor::popMenuCenterTrigged()
 {
 	//move first not to (20,20) ;
 	QPoint startPos = m_funcEntry->pos();
-	QPoint newOffset = QPoint(20, 20) - startPos;
+	QPoint newOffset = QPoint(DEFAULT_START_X, DEFAULT_START_Y) - startPos;
 
 	dragTo(newOffset);
 	saveCurPosWithOffset();

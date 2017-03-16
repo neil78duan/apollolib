@@ -31,7 +31,7 @@ class apoUiMainEditor : public QWidget
 {
     Q_OBJECT
 public:
-
+	enum { DEFAULT_START_X = 20, DEFAULT_START_Y = 20 };
 	typedef QVector<QString> text_list_t;
 
     explicit apoUiMainEditor(QWidget *parent = 0);

@@ -36,6 +36,7 @@ QWidget(parent), m_toNextNode(NULL), m_nodeXml(0), m_outParamAddNew(0),
 	m_type = 0;
 	m_tips = tips;
 	setNodeInfo(parent, xmlnode);
+	setAttribute(Qt::WA_DeleteOnClose, true);
     //init(QString(title), param_num) ;
 }
 
@@ -52,6 +53,7 @@ QWidget(parent), m_toNextNode(NULL), m_outParamAddNew(0),
 
 	m_selected = false;
 	m_showError =false ;
+	setAttribute(Qt::WA_DeleteOnClose, true);
 }
 
 apoBaseExeNode::~apoBaseExeNode()
