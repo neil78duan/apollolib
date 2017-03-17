@@ -156,3 +156,5 @@ HEADERS  += $$apolib_dir/attribute/stat_data.h \
     $$apolib_dir/attribute/stat_machine.h \
     $$apolib_dir/attribute/attr_mgr.h \
     $$apolib_dir/attribute/roleattr_help.h
+
+RESOURCES +=
