@@ -74,26 +74,34 @@ int build_csMessageID(ndxml_root *xmlfile, FILE *pf)
 {
 	ndxml *xnode = ndxml_getnode(xmlfile, "MessageDefine") ;
 	int total = ndxml_getsub_num(xnode) ;
-	NDUINT8 maxID =0,minID =0 ;
+	//NDUINT8 maxID =0,minID =0 ;
 	
 	fprintf(pf,"#region MessageID \n \tpublic class MessageIDDefine\n\t{\n" ) ;
 	
-	for (int i=0; i<total; ++i) {
-		ndxml *sub = ndxml_refsubi(xnode, i) ;
-		const char *p = ndxml_getattr_val(sub, "number") ;
-		if (p) {
-			int startID = atoi(p) ;
-			if (startID > 0 ) {
-				maxID = startID ;
-				minID = 0 ;
-			}
+	for (int x = 0; x < total; x++)	{
+		ndxml *mainMessage = ndxml_refsubi(xnode, x);
+		int subNum = ndxml_getsub_num(mainMessage);
+
+		NDUINT8 maxID = 0, minID = 0;
+
+		const char *p = ndxml_getattr_val(mainMessage, "maxMessageId");
+		if (!p || !*p)	{
+			continue;
 		}
-		
-		fprintf(pf,"\t\tpublic const int %s = 0x%x ; //%s\t\n", ndxml_getattr_val(sub, "id"),
+		maxID = atoi(p);
+		fprintf(pf, "\n\t\t//%s\n", ndxml_getattr_val(mainMessage, "name"));
+
+		for (int i = 0; i < subNum; ++i) {
+			ndxml *sub = ndxml_refsubi(mainMessage, i);
+
+			fprintf(pf, "\t\tpublic const int %s = 0x%x ; //%s\t\n", ndxml_getattr_val(sub, "id"),
 				ND_MAKE_WORD(maxID, minID),
-				ndxml_getattr_val(sub, "comment") ) ;
-		++minID ;
+				ndxml_getattr_val(sub, "comment"));
+			++minID;
+		}
 	}
+
+	
 	fprintf(pf,"\t}\n#endregion\n\n") ;
 	return 0 ;
 }
@@ -266,126 +274,126 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 	
 	return 0 ;
 }
-
-//MessageReceiveSendClassString
-int build_csMessageRecvSend(ndxml_root *xmlfile, FILE *pf)
-{
-	ndxml *xnode = ndxml_getnode(xmlfile, "MessageDefine") ;
-	int total = ndxml_getsub_num(xnode) ;
-	
-	fprintf(pf,"#region MessageReceiveSendClassString \n") ;
- 	fprintf(pf,"\tpublic class MessageReceiveSend\n\t{\n" ) ;
-	fprintf(pf,"\t\NDMsgStream m_readDataTranser;\n\tNDMsgStream m_sendDataTranser;\n") ;
-	fprintf(pf,"\t\tpublic MessageReceiveSend()\n\t\t{\n") ;
-	fprintf(pf,"\t\t\tm_readDataTranser = new NDMsgStream();\n") ;
-	fprintf(pf,"\t\t\tm_sendDataTranser = new NDMsgStream();\n\t\t}\n") ;
-	fprintf(pf,"#region EventString\n\n") ;
-	
-	for (int i=0; i<total; ++i) {
-		ndxml *sub = ndxml_refsubi(xnode, i) ;
-		const char *body = ndxml_getattr_val(sub, "body") ;
-		
-		if (body && body[0]) {
-			fprintf(pf,"\t\t//%s\n\t\tpublic delegate void Handle%s(MessageHead head,%s body);\n",
-					ndxml_getattr_val(sub, "comment") , ndxml_getattr_val(sub, "id"),body) ;
-		}
-		else {
-			fprintf(pf,"\t\t//%s\n\t\tpublic delegate void Handle%s(MessageHead head);\n",
-					ndxml_getattr_val(sub, "comment") , ndxml_getattr_val(sub, "id")	) ;
-		}
-		
-		
-		fprintf(pf,"\t\tpublic event Handle%s OnHandle%s;\n\n",
-				ndxml_getattr_val(sub, "id") , ndxml_getattr_val(sub, "id")) ;
-		
-	}
-	fprintf(pf,"#endregion\n\n") ;
-	fprintf(pf,"#region PackMsgString\n") ;
-	//message packeage to byte
-	
-	
-	for (int i=0; i<total; ++i) {
-		ndxml *sub = ndxml_refsubi(xnode, i) ;
-		const char *body = ndxml_getattr_val(sub, "body") ;
-		
-		if (body && body[0]) {
-			fprintf(pf,"\tpublic byte[] Pack%s(MessageHead head,%s body)\n",
-				ndxml_getattr_val(sub, "id"),body);
-		}else {
-			
-			fprintf(pf,"\tpublic byte[] Pack%s(MessageHead head)\n",
-					ndxml_getattr_val(sub, "id"));
-		}
-		
-		fprintf(pf,"\t{\n\t\thead.id = MessageIDDefine.%s;\n",ndxml_getattr_val(sub, "id")) ;
-		fprintf(pf,"\t\tMemoryStream sendMemStream = new MemoryStream();\n") ;
-		fprintf(pf, "\t\tm_sendDataTranser.SetStream(sendMemStream);\n") ;
-		fprintf(pf, "\t\tint headSize = m_sendDataTranser.WriteMessageHead(head);\n") ;
-		if (body && body[0]) {
-			fprintf(pf, "\t\tint bodySize = body.Write(m_sendDataTranser);\n") ;
-		}
-		
-		fprintf(pf, "\t\thead.lenth = (ushort)(headSize+bodySize);\n") ;
-		fprintf(pf, "\t\tsendMemStream.Seek(0, SeekOrigin.Begin);\n") ;
-		fprintf(pf, "\t\tm_sendDataTranser.WriteMessageHead(head);\n") ;
-		fprintf(pf, "\t\treturn sendMemStream.ToArray();\n\t}\n") ;
-		
-	}
-	fprintf(pf,"#endregion\n\n") ;
-	fprintf(pf,"#region HandleAction\n") ;
-	
-	//handle action
-	fprintf(pf,"\t\tprivate delegate void HandleActionDelegate(MessageHead head);\n") ;
-	fprintf(pf,"\t\tprivate Dictionary<ushort, HandleActionDelegate> HandleDic = new Dictionary<ushort, HandleActionDelegate>(); \n") ;
-	
-	
-	for (int i=0; i<total; ++i) {
-		ndxml *sub = ndxml_refsubi(xnode, i) ;
-		const char *body = ndxml_getattr_val(sub, "body") ;
-		
-		fprintf(pf,"\t\tpublic void Action%s( MessageHead head ) \n\t\t{\n",ndxml_getattr_val(sub, "id")) ;
-		fprintf(pf,"\t\t\tif( OnHandle%s != null ) {\n",ndxml_getattr_val(sub, "id")) ;
-		
-		if (body && body[0]) {
-			
-			fprintf(pf,"\t\t\t\t%s body = new %s();\n",body,body) ;
-			fprintf(pf,"\t\t\t\tbody.Read(m_readDataTranser); \n") ;
-			fprintf(pf,"\t\t\t\tOnHandle%s(head, body);\n\t\t\t}\n", ndxml_getattr_val(sub, "id")) ;
-		}
-		else {
-			fprintf(pf,"\t\t\t\tOnHandle%s(head);\n\t\t\t}\n", ndxml_getattr_val(sub, "id")) ;
-		}
-		fprintf(pf,"\t\t} \n") ;
-		
-	}
-	fprintf(pf,"#endregion\n\n") ;
-	
-	//receiveInit
-	
-	fprintf(pf,"#region ReceiveInit \n") ;
-	fprintf(pf,"\t\tpublic void ReceiveInit() \n\t\t{\n") ;
-	
-	for (int i=0; i<total; ++i) {
-		ndxml *sub = ndxml_refsubi(xnode, i) ;
-		fprintf(pf,"\t\t\tHandleDic.Add( MessageIDDefine.%s,new HandleActionDelegate( Action%s ) );\n",
-				ndxml_getattr_val(sub, "id"),ndxml_getattr_val(sub, "id")) ;
-		
-	}
-	fprintf(pf,"\t\t} \n") ;
-	fprintf(pf,"#endregion\n\n") ;
-
-	
-	//end
-	fprintf(pf,"\t\tpublic void Recieve( byte[] msgData) \n\t\t{\n") ;
-	
-	fprintf(pf,"\t\t\tMemoryStream memStream = new MemoryStream(msgData); \n") ;
-	fprintf(pf,"\t\t\tm_readDataTranser.SetStream(memStream); \n") ;
-	fprintf(pf,"\t\t\tMessageHead head = m_readDataTranser.ReadMessageHead(); \n") ;
-	fprintf(pf,"\t\t\tHandleDic[head.id].Invoke(head); \n\t\t}\n") ;
-	fprintf(pf, "\t}\n\n#endregion\n");
-	
-	return 0 ;
-}
+// 
+// //MessageReceiveSendClassString
+// int build_csMessageRecvSend(ndxml_root *xmlfile, FILE *pf)
+// {
+// 	ndxml *xnode = ndxml_getnode(xmlfile, "MessageDefine") ;
+// 	int total = ndxml_getsub_num(xnode) ;
+// 	
+// 	fprintf(pf,"#region MessageReceiveSendClassString \n") ;
+//  	fprintf(pf,"\tpublic class MessageReceiveSend\n\t{\n" ) ;
+// 	fprintf(pf,"\t\NDMsgStream m_readDataTranser;\n\tNDMsgStream m_sendDataTranser;\n") ;
+// 	fprintf(pf,"\t\tpublic MessageReceiveSend()\n\t\t{\n") ;
+// 	fprintf(pf,"\t\t\tm_readDataTranser = new NDMsgStream();\n") ;
+// 	fprintf(pf,"\t\t\tm_sendDataTranser = new NDMsgStream();\n\t\t}\n") ;
+// 	fprintf(pf,"#region EventString\n\n") ;
+// 	
+// 	for (int i=0; i<total; ++i) {
+// 		ndxml *sub = ndxml_refsubi(xnode, i) ;
+// 		const char *body = ndxml_getattr_val(sub, "body") ;
+// 		
+// 		if (body && body[0]) {
+// 			fprintf(pf,"\t\t//%s\n\t\tpublic delegate void Handle%s(MessageHead head,%s body);\n",
+// 					ndxml_getattr_val(sub, "comment") , ndxml_getattr_val(sub, "id"),body) ;
+// 		}
+// 		else {
+// 			fprintf(pf,"\t\t//%s\n\t\tpublic delegate void Handle%s(MessageHead head);\n",
+// 					ndxml_getattr_val(sub, "comment") , ndxml_getattr_val(sub, "id")	) ;
+// 		}
+// 		
+// 		
+// 		fprintf(pf,"\t\tpublic event Handle%s OnHandle%s;\n\n",
+// 				ndxml_getattr_val(sub, "id") , ndxml_getattr_val(sub, "id")) ;
+// 		
+// 	}
+// 	fprintf(pf,"#endregion\n\n") ;
+// 	fprintf(pf,"#region PackMsgString\n") ;
+// 	//message packeage to byte
+// 	
+// 	
+// 	for (int i=0; i<total; ++i) {
+// 		ndxml *sub = ndxml_refsubi(xnode, i) ;
+// 		const char *body = ndxml_getattr_val(sub, "body") ;
+// 		
+// 		if (body && body[0]) {
+// 			fprintf(pf,"\tpublic byte[] Pack%s(MessageHead head,%s body)\n",
+// 				ndxml_getattr_val(sub, "id"),body);
+// 		}else {
+// 			
+// 			fprintf(pf,"\tpublic byte[] Pack%s(MessageHead head)\n",
+// 					ndxml_getattr_val(sub, "id"));
+// 		}
+// 		
+// 		fprintf(pf,"\t{\n\t\thead.id = MessageIDDefine.%s;\n",ndxml_getattr_val(sub, "id")) ;
+// 		fprintf(pf,"\t\tMemoryStream sendMemStream = new MemoryStream();\n") ;
+// 		fprintf(pf, "\t\tm_sendDataTranser.SetStream(sendMemStream);\n") ;
+// 		fprintf(pf, "\t\tint headSize = m_sendDataTranser.WriteMessageHead(head);\n") ;
+// 		if (body && body[0]) {
+// 			fprintf(pf, "\t\tint bodySize = body.Write(m_sendDataTranser);\n") ;
+// 		}
+// 		
+// 		fprintf(pf, "\t\thead.lenth = (ushort)(headSize+bodySize);\n") ;
+// 		fprintf(pf, "\t\tsendMemStream.Seek(0, SeekOrigin.Begin);\n") ;
+// 		fprintf(pf, "\t\tm_sendDataTranser.WriteMessageHead(head);\n") ;
+// 		fprintf(pf, "\t\treturn sendMemStream.ToArray();\n\t}\n") ;
+// 		
+// 	}
+// 	fprintf(pf,"#endregion\n\n") ;
+// 	fprintf(pf,"#region HandleAction\n") ;
+// 	
+// 	//handle action
+// 	fprintf(pf,"\t\tprivate delegate void HandleActionDelegate(MessageHead head);\n") ;
+// 	fprintf(pf,"\t\tprivate Dictionary<ushort, HandleActionDelegate> HandleDic = new Dictionary<ushort, HandleActionDelegate>(); \n") ;
+// 	
+// 	
+// 	for (int i=0; i<total; ++i) {
+// 		ndxml *sub = ndxml_refsubi(xnode, i) ;
+// 		const char *body = ndxml_getattr_val(sub, "body") ;
+// 		
+// 		fprintf(pf,"\t\tpublic void Action%s( MessageHead head ) \n\t\t{\n",ndxml_getattr_val(sub, "id")) ;
+// 		fprintf(pf,"\t\t\tif( OnHandle%s != null ) {\n",ndxml_getattr_val(sub, "id")) ;
+// 		
+// 		if (body && body[0]) {
+// 			
+// 			fprintf(pf,"\t\t\t\t%s body = new %s();\n",body,body) ;
+// 			fprintf(pf,"\t\t\t\tbody.Read(m_readDataTranser); \n") ;
+// 			fprintf(pf,"\t\t\t\tOnHandle%s(head, body);\n\t\t\t}\n", ndxml_getattr_val(sub, "id")) ;
+// 		}
+// 		else {
+// 			fprintf(pf,"\t\t\t\tOnHandle%s(head);\n\t\t\t}\n", ndxml_getattr_val(sub, "id")) ;
+// 		}
+// 		fprintf(pf,"\t\t} \n") ;
+// 		
+// 	}
+// 	fprintf(pf,"#endregion\n\n") ;
+// 	
+// 	//receiveInit
+// 	
+// 	fprintf(pf,"#region ReceiveInit \n") ;
+// 	fprintf(pf,"\t\tpublic void ReceiveInit() \n\t\t{\n") ;
+// 	
+// 	for (int i=0; i<total; ++i) {
+// 		ndxml *sub = ndxml_refsubi(xnode, i) ;
+// 		fprintf(pf,"\t\t\tHandleDic.Add( MessageIDDefine.%s,new HandleActionDelegate( Action%s ) );\n",
+// 				ndxml_getattr_val(sub, "id"),ndxml_getattr_val(sub, "id")) ;
+// 		
+// 	}
+// 	fprintf(pf,"\t\t} \n") ;
+// 	fprintf(pf,"#endregion\n\n") ;
+// 
+// 	
+// 	//end
+// 	fprintf(pf,"\t\tpublic void Recieve( byte[] msgData) \n\t\t{\n") ;
+// 	
+// 	fprintf(pf,"\t\t\tMemoryStream memStream = new MemoryStream(msgData); \n") ;
+// 	fprintf(pf,"\t\t\tm_readDataTranser.SetStream(memStream); \n") ;
+// 	fprintf(pf,"\t\t\tMessageHead head = m_readDataTranser.ReadMessageHead(); \n") ;
+// 	fprintf(pf,"\t\t\tHandleDic[head.id].Invoke(head); \n\t\t}\n") ;
+// 	fprintf(pf, "\t}\n\n#endregion\n");
+// 	
+// 	return 0 ;
+// }
 
 
 typedef int (*xml_export_func)(ndxml_root *xmlfile, FILE *pf);

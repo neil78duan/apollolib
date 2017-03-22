@@ -54,6 +54,7 @@ enum eServerType {
 	ESERVER_GAMEHALL,   //游戏大厅
 	ESERVER_GATE,      //游戏入口
 	ESERVER_BATTLE_ROOM, //对战房间
+	ESERVER_SOCIAL,		//SOCIAL SERVER
 	
 	ESERVER_ACCOUNT
 };

@@ -27,7 +27,7 @@ MSG_ENTRY_INSTANCE(register2MgrAck)
 
         pconn->Ioctl(NDIOCTL_SET_LEVEL, &isRegisterOk, &size) ;
     }
-	nd_logmsg("Regisger to worldManager %s\n", isOk ? "FAILED":"SUCCESS") ;
+	nd_logmsg("%s regisger to server  %s\n",pconn->getName(),  isOk ? "FAILED":"SUCCESS") ;
     
     return 0;
 }

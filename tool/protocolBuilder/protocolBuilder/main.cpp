@@ -906,29 +906,34 @@ int build_messageID(ndxml_root *xmlfile, const char *out_file)
 	
 	int total = ndxml_getsub_num(xnode) ;
 	
-	NDUINT8 maxID =0,minID =0 ;
-	
-	for (int i=0; i<total; ++i) {
-		ndxml *sub = ndxml_refsubi(xnode, i) ;
-		const char *p = ndxml_getattr_val(sub, "number") ;
-		if (p) {
-			int startID = atoi(p) ;
-			if (startID > 0 ) {
-				maxID = startID ;
-				minID = 0 ;
-				
-				fprintf(pf, "\n\n\n" ) ;
-			}
+	for (int x = 0; x < total; x++)	{
+		ndxml *mainMessage = ndxml_refsubi(xnode, x);
+		int subNum = ndxml_getsub_num(mainMessage);
+
+		NDUINT8 maxID = 0, minID = 0;
+
+		const char *p = ndxml_getattr_val(mainMessage, "maxMessageId");
+		if (!p || !*p)	{
+			continue;
+		}
+		maxID = atoi(p);
+		fprintf(pf, "\n\n\n// %s\n", ndxml_getattr_val(mainMessage,"name"));
+
+
+		for (int i = 0; i < subNum; ++i) {
+			ndxml *sub = ndxml_refsubi(mainMessage, i);
 			
+			const char *dataInfo = ndxml_getattr_val(sub, "body");
+			if (!dataInfo || !*dataInfo) {
+				dataInfo = "none";
+			}
+			fprintf(pf, "_APOLLO_MSG_ID_DEFINE(%s, 0x%x , \"%s\") //%s,data-format:%s\n", ndxml_getattr_val(sub, "id"),
+				ND_MAKE_WORD(maxID, minID), dataInfo, ndxml_getattr_val(sub, "comment"), dataInfo);
+			++minID;
 		}
-		const char *dataInfo = ndxml_getattr_val(sub, "body") ;
-		if (!dataInfo || !*dataInfo) {
-			dataInfo = "none" ;
-		}
-		fprintf(pf,"_APOLLO_MSG_ID_DEFINE(%s, 0x%x , \"%s\") //%s,data-format:%s\n", ndxml_getattr_val(sub, "id"),
-			ND_MAKE_WORD(maxID, minID), dataInfo,ndxml_getattr_val(sub, "comment"), dataInfo);
-		++minID ;
+
 	}
+	
 	//fprintf(pf,"};\n#endif\n") ;
 	
 	fclose(pf) ;

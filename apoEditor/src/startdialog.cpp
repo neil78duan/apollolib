@@ -187,7 +187,8 @@ bool startDialog::getScriptExpDebugInfo(ndxml *scriptXml)
 void startDialog::on_Setting_clicked()
 {
     dialogCloseHelper _helperClose(this) ;
-    XMLDialog xmlDlg(this);
+    XMLDialog xmlDlg(NULL);
+	
     xmlDlg.showXml( &m_io_setting,"EditorConfig");
 
     if (xmlDlg.exec() == QDialog::Accepted) {
@@ -531,7 +532,7 @@ void startDialog::on_Connect_clicked()
 {
     //ui->LogText->clear();
     dialogCloseHelper _helperClose(this) ;
-
+	
     WriteLog("begin connect to server....");
 
     const char*filename = _getFromIocfg("gm_send_msg");
@@ -542,7 +543,10 @@ void startDialog::on_Connect_clicked()
 	_LOAD_XML(xmlSend, filename, "utf8", 0);
 
 
-    ConnectDialog dlg(this) ;
+    ConnectDialog dlg(NULL) ;
+	
+	//dlg.setWindowFlags(Qt::Popup);
+	//dlg.setWindowFlags(Qt::Window);
 
     dlg.m_editor_setting =&m_editor_setting;
     dlg.m_gmCfg = &xmlSend;

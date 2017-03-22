@@ -475,21 +475,21 @@ namespace ClientMsgHandler
 
 		return true;
 	}
-
-	static ndxml *_getMsgNode(ndxml_root *xmlFile, const char *messageName)
-	{
-		ndxml *root = ndxml_getnode(xmlFile, "MessageDefine");
-		if (!root)	{
-			return 0;
-		}
-		for (int i = 0; i < ndxml_getsub_num(root); i++)	{
-			ndxml *node = ndxml_getnodei(root, i);
-			if (0 == ndstricmp(messageName, ndxml_getattr_val(node, "id"))) {
-				return node;
-			}
-		}
-		return NULL;
-	}
+// 
+// 	static ndxml *_getMsgNode(ndxml_root *xmlFile, const char *messageName)
+// 	{
+// 		ndxml *root = ndxml_getnode(xmlFile, "MessageDefine");
+// 		if (!root)	{
+// 			return 0;
+// 		}
+// 		for (int i = 0; i < ndxml_getsub_num(root); i++)	{
+// 			ndxml *node = ndxml_getnodei(root, i);
+// 			if (0 == ndstricmp(messageName, ndxml_getattr_val(node, "id"))) {
+// 				return node;
+// 			}
+// 		}
+// 		return NULL;
+// 	}
 	char *convert_msg_name(const char *inname, char *buf, int size)
 	{
 		char *ret = buf;

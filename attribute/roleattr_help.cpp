@@ -104,7 +104,7 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 {
 	const char *attrmax[ROLE_ATTR_CAPACITY][2] = { 0 };
 	const char *pfields[] = { "id", "name", "formula", "save_db", "sync", "min_val", "max_val", 
-		"client_change", "real_name", "forBuilding", "affect_buildings", "forRole", "affect_card","forCard"};
+		"client_change", "real_name", "forBuilding", "affect_buildings", "forRole", "affect_card", "forCard", "showInGuild"};
 	
 	m_wa_num = 0 ;
 	role_attr_description *pwa_desc ;
@@ -154,6 +154,7 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 
 		pwa_desc->isAffectCard = cursor[12].GetInt();
 		pwa_desc->forCard = cursor[13].GetInt();
+		pwa_desc->showInGuild = cursor[14].GetInt();
 		//pwa_desc->issyncai = cursor[7].GetInt();
 
 		pwa_desc->wa_id = (attrid_t ) aid ;
