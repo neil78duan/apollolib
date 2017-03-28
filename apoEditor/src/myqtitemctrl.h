@@ -38,10 +38,10 @@ class xmlTableItem : public QTableWidgetItem
 
     typedef QTableWidgetItem myBase ;
 public:
-    explicit xmlTableItem (int type = Type): myBase(type),userData(0){}
-    explicit xmlTableItem(const QString &text, int type = Type) : myBase(text, type),userData(0){}
-    explicit xmlTableItem (const QIcon &icon, const QString &text, int type = Type): myBase(icon, text, type),userData(0){}
-    xmlTableItem(const QTableWidgetItem &other) : myBase(other),userData(0){}
+	explicit xmlTableItem(int type = Type) : myBase(type), userData(0), attrName(0){ }
+	explicit xmlTableItem(const QString &text, int type = Type) : myBase(text, type), userData(0), attrName(0){}
+	explicit xmlTableItem(const QIcon &icon, const QString &text, int type = Type) : myBase(icon, text, type), userData(0), attrName(0){}
+	xmlTableItem(const QTableWidgetItem &other) : myBase(other), userData(0), attrName(0){}
     virtual ~xmlTableItem (){}
 
     void setUserData(void *data) {
@@ -51,9 +51,12 @@ public:
     void *getUserData() {
         return userData ;
     }
+	const char* getAttrName() { return attrName; }
+	void setAttrName(const char *name){ attrName = name;}
 
 private:
     void *userData ;
+	const char *attrName;
 };
 
 

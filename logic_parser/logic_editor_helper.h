@@ -67,6 +67,7 @@ namespace LogicEditorHelper
 		ERT_KEY,
 		ERT_KEY_VALUE,
 		ERT_BE_REF_ONLY,
+		ERT_REPLACE_VAL,
 	};
 
 	const char *_GetDataTypeName(eDataType dataType);
@@ -181,6 +182,8 @@ namespace LogicEditorHelper
 
 	const char *_GetXmlDesc(ndxml *xml);
 
+	ndxml *_getRefNode(ndxml*node,const char *xmlPath);
+	const char *_getRefNodeAttrName(ndxml *node, const char *xmlPath);
 
 	//¼ì²â½ÚµãÊÇ·ñÒþ²Ø
 	bool CheckHide(ndxml *xml);

@@ -26,7 +26,7 @@ namespace ClientMsgHandler
 
 	int msg_default_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
 	{
-		int reLine = 0;
+		//int reLine = 0;
 		nd_logmsg("recv (%d,%d) message data-len =%d\n", ND_USERMSG_MAXID(msg), ND_USERMSG_MINID(msg), ND_USERMSG_LEN(msg));
 
 		return 0;
@@ -439,6 +439,7 @@ namespace ClientMsgHandler
 				if (type_index == OT_USER_DEFINED)	{
 					userDefineDataType_map_t::const_iterator it = m_dataTypeDef.find(typeName);
 					if (it == m_dataTypeDef.end()){
+						nd_logerror("can not parse %s not found type defined }\n", typeName);
 						return false;
 					}
 					dataFormat.InitSet(it->second);

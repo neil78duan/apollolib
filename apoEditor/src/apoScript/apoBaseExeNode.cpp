@@ -61,31 +61,57 @@ apoBaseExeNode::~apoBaseExeNode()
 
 }
 
-
-bool apoBaseExeNode::setNodeInfo(QWidget *parent, ndxml *xmlnode, bool showParam)
+QString apoBaseExeNode::getTitleDisplayName()
 {
-	m_nodeXml = xmlnode;
-	
-
-	this->setParent(parent);
-
 	const char *dispName = LogicEditorHelper::_GetXmlName(m_nodeXml, NULL);
+	char realDisName[1024];
 	if (dispName){
 		const char *pRealDisp = strchr(dispName, '_');
 		if (pRealDisp)	{
 			++pRealDisp;
 			dispName = pRealDisp;
 		}
+
+		const char *p = ndstr_nstr_end(dispName, realDisName, '$', sizeof(realDisName));
+		if (p && *p){
+			char varName[128];
+			++p;
+			
+			p = ndstr_nstr_end(p, varName, '$', sizeof(varName));
+			strncat(realDisName, varName, sizeof(realDisName));
+			if (p && *p){
+				++p;
+				strncat(realDisName, p, sizeof(realDisName));
+			}
+		}
+		dispName = realDisName;
 	}
 	else {
 		dispName = "Common";
 	}
+	return QString(dispName);
+}
 
+bool apoBaseExeNode::renewDisplay()
+{
+	QString titlename = getTitleDisplayName();
 	const char *tip = LogicEditorHelper::_GetNodeComment(m_nodeXml);
 	if (tip){
 		m_tips = tip;
 	}
-	
+	if (m_title) {
+		m_title->setText(titlename);
+		m_title->adjustSize();
+	}
+	return true;
+}
+
+bool apoBaseExeNode::setNodeInfo(QWidget *parent, ndxml *xmlnode, bool showParam)
+{
+	m_nodeXml = xmlnode;
+
+	this->setParent(parent);
+		
 	if (showParam){
 		if (!_parseParam(xmlnode)) {
 			return false;
@@ -98,8 +124,31 @@ bool apoBaseExeNode::setNodeInfo(QWidget *parent, ndxml *xmlnode, bool showParam
 			m_disableNewParam = false;
 		}
 	}
+	//////////////////////////////////////////////////////////////////////////
+// 
+// 	const char *dispName = LogicEditorHelper::_GetXmlName(m_nodeXml, NULL);
+// 	if (dispName){
+// 		const char *pRealDisp = strchr(dispName, '_');
+// 		if (pRealDisp)	{
+// 			++pRealDisp;
+// 			dispName = pRealDisp;
+// 		}
+// 	}
+// 	else {
+// 		dispName = "Common";
+// 	}
+// 
+// 	const char *tip = LogicEditorHelper::_GetNodeComment(m_nodeXml);
+// 	if (tip){
+// 		m_tips = tip;
+// 	}
+	QString titlename = getTitleDisplayName();
+	const char *tip = LogicEditorHelper::_GetNodeComment(m_nodeXml);
+	if (tip){
+		m_tips = tip;
+	}
 
-	init(QString(dispName));
+	init(titlename);
 	return true;
 
 }

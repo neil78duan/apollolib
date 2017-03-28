@@ -4,9 +4,9 @@ if [ -f ./protoBuilder ]; then
 	./protoBuilder -d ../../resource/msg_config -encode utf8
 elif [ -f ./protoBuilder_d ]; then
 	./protoBuilder_d -d ../../resource/msg_config -encode utf8
-else 
+else
 	echo "need build tool before export protocol"
-	exit 1 
+	exit 1
 fi
 
 

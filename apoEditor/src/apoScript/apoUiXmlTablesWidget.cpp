@@ -241,6 +241,15 @@ void apoUiXmlTableWidget::oCellChanged(int row, int column)
 	ndxml *xml = (ndxml *)pItem->getUserData();
 	if (xml){
 		QString str1 = pItem->text();
+
+		const char*attrName = pItem->getAttrName();
+		if (attrName && *attrName)	{
+			ndxml_setattrval(xml, attrName, str1.toStdString().c_str());
+			onChanged(row, column, ndxml_getattr_val(xml, attrName));
+			dataChangedSignal();
+			return ;
+		}
+
 		if (GetXmlValType(xml, m_config) == EDT_ENUM) {
 			int sel = -1;
 			apoEditorSetting::text_vct_t  enum_texts;
@@ -304,6 +313,9 @@ bool apoUiXmlTableWidget::_beginEdit(int nRow, int nCol)
 	ndxml *xml = (ndxml *)cell->getUserData();
 	if (!xml)	{
 		return false;
+	}
+	if (cell->getAttrName()){
+		return true;
 	}
 
 	bool ret = false;
@@ -423,8 +435,71 @@ bool apoUiXmlTableWidget::_beginEdit(int nRow, int nCol)
 
 bool apoUiXmlTableWidget::onChanged(int row, int column, const char *xmlRealValue)
 {
+	xmlTableItem *cell = (xmlTableItem*)item(row, column);
+	if (!cell){
+		return false;
+	}
+
+	ndxml *xml = (ndxml*)cell->getUserData();
+	if (!xml){
+		return false;
+	}
+
+	if (cell->getAttrName()){
+		return true;
+	}
+
+	const char *pReplacePath = ndxml_getattr_val(xml, "replace_val");
+	if (!pReplacePath)	{
+		return true;
+	}
+	const char *newValue = ndxml_getval(xml);
+	if (!newValue){
+		return false;
+	}
+
+	ndxml *repXml = LogicEditorHelper::_getRefNode(xml, pReplacePath);
+	if (!repXml){
+		return true;
+	}
+	const char *attrName = LogicEditorHelper::_getRefNodeAttrName(xml, pReplacePath);
+
+	char buf[1024];
+	const char *val = NULL;
+
+	if (attrName){
+		val = ndxml_getattr_val(repXml, attrName);
+	}
+	else {
+		val = ndxml_getval(repXml);
+	}
+
+	//replace data
+	const char *p = ndstr_nstr_ansi(val, buf, '$', sizeof(buf));
+	strncat(buf, "$", sizeof(buf));
+	strncat(buf, newValue, sizeof(buf));
+
+	if (p && *p){
+		++p;
+		p = strchr(p, '$');
+		if (p){
+			++p;
+			if (*p){
+				strncat(buf, p, sizeof(buf));
+			}
+		}
+	}	
+	strncat(buf, "$", sizeof(buf));
+	
+	if (attrName){
+		ndxml_setattrval(repXml, attrName, buf);
+	}
+	else {
+		ndxml_setval(repXml,buf);
+	}
 	return true;
 }
+
 ndxml *apoUiXmlTableWidget::_getXml(int row, int column)
 {
 	xmlTableItem *cell = (xmlTableItem*)item(row, column );

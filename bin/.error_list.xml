@@ -104,4 +104,8 @@
 	<node desc="Error code =1066">1066</node>
 	<node desc="Error code =1067">1067</node>
 	<node desc="Error code =1068">1068</node>
+	<node desc="Error code =1069">1069</node>
+	<node desc="Error code =1070">1070</node>
+	<node desc="Error code =1071">1071</node>
+	<node desc="Error code =1072">1072</node>
 </error_list>
