@@ -12,16 +12,16 @@ workDir=`pwd`
 create_apohome() {
     cd $HOME
     if [ -f .bash_profile ]; then
-        echo "export LIBAPOLLO=\"$workDir\"" >> .bash_profile
-        source $HOME/.bash_profile
+	echo "export LIBAPOLLO=\"$workDir\"" >> .bash_profile
+	source $HOME/.bash_profile
     elif [ -f .profile ]; then
-        echo "export LIBAPOLLO=\"$workDir\"" >> .profile
-        source $HOME/.profile
+	echo "export LIBAPOLLO=\"$workDir\"" >> .profile
+	source $HOME/.profile
     else
-        echo "could not create LIBAPOLLO "
-        echo "PLEASE set evn $LIBAPOLLO "
-        cd $workDir
-        exit 1
+	echo "could not create LIBAPOLLO "
+	echo "PLEASE set evn $LIBAPOLLO "
+	cd $workDir
+	exit 1
     fi
     cd $workDir
 }

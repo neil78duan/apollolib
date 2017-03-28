@@ -90,7 +90,8 @@ namespace LogicEditorHelper
 		"need_confirm",
 		"key",
 		"value",
-		"referenced_only"
+		"referenced_only",
+		"replace_val"
 	};
 
 	const char *_GetDataTypeName(eDataType dataType)
@@ -322,5 +323,77 @@ namespace LogicEditorHelper
 	{
 		snprintf(outpub, bufsize, "_realval=%s&_dispname=%s", val, dispName);
 		return outpub;
+	}
+
+
+	ndxml *_getRefNode(ndxml*node, const char *xmlPath)
+	{
+		//const char *p = ndxml_getval(node);
+		const char *p = xmlPath;
+		char nodeName[128];
+
+		ndxml *retXml = NULL;
+		if (!p || !*p){
+			return NULL;
+		}
+		while (p && *p && node)	{
+			if (*p == '/') {
+				++p;
+			}
+
+			nodeName[0] = 0;
+			p = ndstr_nstr_ansi(p, nodeName, '/', 128);
+			if (strcmp(nodeName, "..") == 0){
+				retXml = ndxml_get_parent(node);
+			}
+			else if (nodeName[0]) {
+				//skip node.attrName
+				char *attrNameStart = strchr(nodeName, '.');
+				if (attrNameStart)	{
+					*attrNameStart = 0;
+					if (!*nodeName)	{
+						return node;
+					}
+					else {
+						return ndxml_getnode(node, nodeName);
+					}
+				}
+				else {
+					retXml = ndxml_getnode(node, nodeName);
+				}
+			}
+			else {
+				break;
+			}
+			node = retXml;
+		}
+
+		return retXml;
+	}
+
+	const char *_getRefNodeAttrName(ndxml *node, const char *xmlPath)
+	{
+		//const char *start = ndxml_getval(node);
+		const char *start = xmlPath;
+		size_t size = strlen(start);
+		const char *p = start + size;
+
+		bool ret = false;
+
+		while (p-- > start){
+			if (*p == '.'){
+				ret = true;
+				break;
+			}
+			else if (*p == '/')	{
+				ret = false;
+				break;
+			}
+		}
+
+		if (ret){
+			return p + 1;
+		}
+		return NULL;
 	}
 }

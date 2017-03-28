@@ -620,7 +620,7 @@ int gmToolDlg::SelOrCreateRole()
 			char roleName[128];
 			nd_utf8_to_gbk((const char*)name, roleName, sizeof(roleName));
 
-			nd_logmsg("get role %s success \n", roleName);
+			nd_logmsg("get role %s id=%d success \n", roleName, roleid);
 
 			//read attribute
 			NDUINT16 num = 0;

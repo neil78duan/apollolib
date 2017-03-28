@@ -1460,32 +1460,6 @@ bool LogicCompiler::_getFuncStackInfo(ndxml *curNode,char *buf, size_t size)
 
 
 ndxml *LogicCompiler::_getRefNode(ndxml*node)
-{
-	const char *p = ndxml_getval(node);
-	char nodeName[128];
-
-	ndxml *retXml = NULL;
-	if (!p || !*p){
-		return NULL;
-	}
-	while (p && *p && node)	{
-		if (*p == '/') {
-			++p;
-		}
-
-		nodeName[0] = 0;
-		p = ndstr_nstr_ansi(p, nodeName, '/', 128);		
-		if (strcmp( nodeName,"..") == 0){
-			retXml = ndxml_get_parent(node);			
-		}
-		else if (nodeName[0]) {
-			retXml = ndxml_getnode(node, nodeName);
-		}
-		else {
-			break;
-		}
-		node = retXml;
-	}
-
-	return retXml;
+{ 
+	return LogicEditorHelper::_getRefNode(node,ndxml_getval(node));
 }

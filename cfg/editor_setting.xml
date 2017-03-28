@@ -210,7 +210,7 @@
 				<op_get_last_error name="节点_获得错误号" expand="yes">
 					<comment name="功能说明" rw_stat="read">get_last_error()</comment>
 				</op_get_last_error>
-				<op_call_func name="节点_调用函数_send_error" create_template="create_input_param" auto_index="1" expand_list="comment,func_name" expand_stat="0">
+				<op_call_func name="节点_调用: send_error()" create_template="create_input_param" auto_index="1" expand_list="comment,func_name" expand_stat="0">
 					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
 					<func_name kinds="user_define" user_param="func_list">_realval=CPP.gscript_send_client_error&_dispname=发送错误通知(errorId)</func_name>
 					<param_collect name="参数_错误号" expand="yes" expand_stat="1">
@@ -228,24 +228,24 @@
 				<num name="错误类型" kinds="user_define" user_param="error_list" delete="no">_realval=47&_dispname=system(NDERR_VARIANT_NOT_EXIST):variant not found</num>
 			</op_skip_error>
 			
-			<op_call_func name="节点_从dataType定义读取消息_NeedRead_DataType" expand="yes" expand_list="comment,var" expand_stat="1">
+			<op_call_func name="节点_读DataType消息:$none$" expand="yes" expand_list="comment,var" expand_stat="1">
 				<comment name="功能说明" rw_stat="read">function_read_fromat_message(data_type_name)</comment>
 				<func_name name="函数" kinds="hide" delete="no">apollo_func_read_userData_from_msg</func_name>
 				<param_collect name="参数1_输入消息对象" kinds="hide" delete="no">
 					<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
 					<var kinds="string" delete="no" restrict="type">2</var>
 				</param_collect>
-				<var name="类型名字" kinds="string">none</var>
+				<var name="类型名字" kinds="string" replace_val="../.name" >none</var>
 			</op_call_func>
 				
-			<op_make_var name="节点_申明变量_already_read_msg_data" expand="yes" expand_stat="1">
+			<op_make_var name="节点_申明变量:$none$" expand="yes" expand_stat="1">
 				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-				<param name="名字" kinds="string" delete="no">none</param>
+				<param name="名字" kinds="string" delete="no" replace_val="../.name" >none</param>
 				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-				<var name="初始值" kinds="string" delete="no" restrict="type">none</var>
+				<var name="初始值" kinds="string" delete="no" restrict="type" >none</var>
 			</op_make_var>
 		
-			<op_call_func name="节点_最后_发送处理结果" create_template="create_input_param" auto_index="4" expand_list="comment,func_name" expand_stat="1">
+			<op_call_func name="节点_发送处理结果" create_template="create_input_param" auto_index="4" expand_list="comment,func_name" expand_stat="1">
 				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
 				<func_name kinds="user_define" user_param="func_list">send_common_reply_msg</func_name>
 				<param_collect name="参数_主消息号" expand="yes" delete="no">
@@ -300,9 +300,9 @@
 	
 	<!-- create step in function -->
 	<create_step_exit name="退出节点" create_type="1" expand="yes" >
-		<op_exit name="节点_退出" expand="yes">			
+		<op_exit name="节点_退出($errno$)" expand="yes">			
 			<comment name="功能说明" rw_stat="read">op_exit(value)</comment>
-			<num name="返回结果" kinds="user_define" user_param="error_list" delete="no">0</num>
+			<num name="返回结果" kinds="user_define" user_param="error_list" delete="no" replace_val="../.name" >0</num>
 		</op_exit>
 	</create_step_exit>
 	
@@ -338,17 +338,17 @@
 	
 	
 	<create_skip_error name="节点忽略错误" create_type="1" expand="yes" >
-		<op_skip_error name="节点_忽略错误" expand="yes">			
+		<op_skip_error name="节点_忽略错误($errno$)" expand="yes">			
 			<comment name="功能说明" rw_stat="read">skip_error(value)</comment>
-			<num name="错误类型" kinds="user_define" user_param="error_list" delete="no">0</num>
+			<num name="错误类型" kinds="user_define" user_param="error_list" delete="no" replace_val="../.name">0</num>
 		</op_skip_error>
 	</create_skip_error>
 	
 	
 	<create_step_throw name="抛出异常" create_type="1" expand="yes" >
-		<op_throw name="节点_抛出异常" expand="yes">			
+		<op_throw name="节点_抛出异常($except$)" expand="yes">			
 			<comment name="功能说明" rw_stat="read">op_throw(value)</comment>
-			<num name="错误编号" kinds="numeral"  delete="no">0</num>
+			<num name="错误编号" kinds="numeral"  delete="no" replace_val="../.name">0</num>
 		</op_throw>
 	</create_step_throw>
 	
@@ -412,9 +412,9 @@
 	</create_step_rand>
 	
 	<create_step_read name="对象读取节点" create_type="1" expand="yes" >
-		<op_read name="节点_读取" expand="yes">
+		<op_read name="节点_读取_$name$" expand="yes">
 			<comment name="功能说明" rw_stat="read">op_read(aim,index_name)</comment>
-			<aim kinds="user_define" user_param="internal_object">none</aim>
+			<aim kinds="user_define" user_param="internal_object" replace_val="../.name">none</aim>
 			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
 				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
@@ -423,9 +423,9 @@
 		</op_read>
 	</create_step_read>
 	<create_step_write name="对象写入节点" create_type="1" desc="创建写入节点">
-		<op_write name="节点_写入" expand="yes">
+		<op_write name="节点_写入_$name$" expand="yes">
 			<comment name="功能说明" rw_stat="read">op_write(aim,index_name,value)</comment>
-			<aim kinds="user_define" user_param="internal_object" delete="no">none</aim>			
+			<aim kinds="user_define" user_param="internal_object" delete="no" replace_val="../.name">none</aim>			
 			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
 				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
@@ -435,9 +435,9 @@
 		</op_write>
 	</create_step_write>
 	<create_step_add name="对象增加节点" create_type="1" >
-		<op_add name="节点_增加" expand="yes">
+		<op_add name="节点_增加_$name$" expand="yes">
 			<comment name="功能说明" rw_stat="read">op_add(aim,index_name,value)</comment>
-			<aim kinds="user_define" user_param="internal_object" delete="no">none</aim>	
+			<aim kinds="user_define" user_param="internal_object" delete="no" replace_val="../.name">none</aim>	
 			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
 				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
@@ -448,9 +448,9 @@
 	</create_step_add>
 			
 	<create_step_sub name="对象减少节点" create_type="1" >
-		<op_sub name="节点_减少" expand="yes">
+		<op_sub name="节点_减少_$name$" expand="yes">
 			<comment name="功能说明" rw_stat="read">op_sub(aim,index_name,value)</comment>
-			<aim kinds="user_define" user_param="internal_object" delete="no">none</aim>	
+			<aim kinds="user_define" user_param="internal_object" delete="no" replace_val="../.name">none</aim>	
 			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
 				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
@@ -461,9 +461,9 @@
 	</create_step_sub>
 	
 	<create_step_test name="对象检测节点" create_type="1" >
-		<op_test name="节点_检测" expand="yes">
+		<op_test name="节点_检测_$name$" expand="yes">
 			<comment name="功能说明" rw_stat="read">op_test(aim,index_name,value)</comment>
-			<aim kinds="user_define" user_param="internal_object" delete="no">none</aim>	
+			<aim kinds="user_define" user_param="internal_object" delete="no" replace_val="../.name">none</aim>	
 			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
 				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
@@ -474,9 +474,9 @@
 	</create_step_test>
 	
 	<create_step_operate name="对象命令" create_type="1" >
-		<op_operate name="节点_对象操作" expand="yes">
+		<op_operate name="节点_$name$操作" expand="yes">
 			<comment name="功能说明" rw_stat="read">op_cmd(aim,cmd, index,value)</comment>
-			<aim kinds="user_define" user_param="internal_object" delete="no">none</aim>
+			<aim kinds="user_define" user_param="internal_object" replace_val="../.name" delete="no">none</aim>
 			<param name="命令" kinds="string" delete="no">none</param>
 			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
 				<type name="命令索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
@@ -489,20 +489,20 @@
 	
 	
 	
-	<create_make_var name="创建变量" create_type="1" auto_index_list="param" auto_index_reference="variant_index">
-		<op_make_var name="节点_申明变量" expand="yes">
+	<create_make_var name="申明变量" create_type="1" auto_index_list="param" auto_index_reference="variant_index">
+		<op_make_var name="节点_申明变量$var$" expand="yes">
 			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index">var</param>
+			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var</param>
 			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 			<var name="初始值" kinds="string" delete="no" restrict="type">none</var>
 		</op_make_var>
 	</create_make_var>
 	
 	<create_get_arrsize name="获得数组长度" create_type="1" >
-		<op_get_arrsize name="节点_数组长度" expand="yes">
+		<op_get_arrsize name="节点_数组$name$长度" expand="yes">
 			<comment name="功能说明" rw_stat="read">size()</comment>
 			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-			<var name="数组名" kinds="string" delete="no" restrict="type">none</var>
+			<var name="数组名" kinds="string" delete="no" restrict="type" replace_val="../.name">none</var>
 		</op_get_arrsize>
 	</create_get_arrsize>
 		
@@ -551,9 +551,9 @@
 	
 	
 	<create_step_getother_object name="获得其他对象" create_type="1" >
-		<op_getobj name="节点_获得其他对象" expand="yes">
+		<op_getobj name="节点_获得其他对象:$name$" expand="yes">
 			<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
-			<param name="对象名" kinds="string"  delete="no">0</param>
+			<param name="对象名" kinds="string"  delete="no" replace_val="../.name">0</param>
 		</op_getobj>
 	</create_step_getother_object>
 	
@@ -580,16 +580,16 @@
 	
 	
 	<create_step_waitevent name="等待事件节点" create_type="1" >
-		<op_waitevent name="节点_等待事件" create_template="create_input_param" auto_index="0" >
+		<op_waitevent name="节点_等待事件($id$)" create_template="create_input_param" auto_index="0" >
 			<comment name="功能说明" rw_stat="read">wait_event(event_id)</comment>
-			<varInt name="事件名" kinds="user_define" user_param="event_list" delete="no">none</varInt>
+			<varInt name="事件名" kinds="user_define" user_param="event_list" delete="no" replace_val="../.name">none</varInt>
 		</op_waitevent>
 	</create_step_waitevent>
 	
 	<create_step_send_event name="产生事件节点" create_type="1" >
-		<op_sendevent name="节点_产生事件" create_template="create_input_param" auto_index="0" >
+		<op_sendevent name="节点_产生事件($id$)" create_template="create_input_param" auto_index="0" >
 			<comment name="功能说明" rw_stat="read">generate_event(event_id)</comment>
-			<varInt name="事件名" kinds="user_define" user_param="event_list" delete="no">none</varInt>
+			<varInt name="事件名" kinds="user_define" user_param="event_list" delete="no" replace_val="../.name">none</varInt>
 		</op_sendevent>
 	</create_step_send_event>
 	
@@ -610,43 +610,43 @@
 	
 	
 	<create_add_timer name="添加定时器" create_type="1" >
-		<op_add_timer name="节点_添加定时器" create_template="create_input_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+		<op_add_timer name="节点_添加定时器$name$" create_template="create_input_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
 			<comment name="功能说明" rw_stat="read">add_timer(type, tm_interval,name, function,...)</comment>			
 			<msgtype name="类型" kinds="enum" enum_value="局部,全局" delete="no">0</msgtype>					
 			<varInt name="类型" kinds="enum" enum_value="循环,一次性" delete="no">0</varInt>			
 			<varFloat name="间隔(s)" kinds="numeral" delete="no">1.0</varFloat>
-			<var name="取名" kinds="string" delete="no">none</var>
+			<var name="取名" kinds="string" delete="no" replace_val="../.name">none</var>
 			<func_name name="函数名" kinds="user_define" user_param="func_list" delete="no">none</func_name>
 		</op_add_timer>
 	</create_add_timer>
 	
 	<create_del_timer name="删除定时器" create_type="1" >
-		<op_del_timer name="节点_删除定时器" expand="yes">
+		<op_del_timer name="节点_删除定时器$name$" expand="yes">
 			<comment name="功能说明" rw_stat="read">del_timer(name)</comment>	
 			<index name="类型" kinds="enum" enum_value="局部,全局" delete="no">0</index>			
-			<param name="取名" kinds="string" delete="no">none</param>
+			<param name="取名" kinds="string" delete="no" replace_val="../.name">none</param>
 		</op_del_timer>
 	</create_del_timer>
 	
 	<create_build_json_data name="创建json数据" create_type="1" >
-		<op_build_json_data name="节点_创建json数据" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+		<op_build_json_data name="节点_创建json数据$name$" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
 			<comment name="功能说明" rw_stat="read">define  name{...}</comment>			
-			<var name="变量名" kinds="string" delete="no">none</var>
+			<var name="变量名" kinds="string" delete="no" replace_val="../.name">none</var>
 		</op_build_json_data>
 	</create_build_json_data>
 	
 	<create_build_struct_type name="创建新类型" create_type="1" >
-		<op_create_struct_type name="节点_创建新数据类型" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+		<op_create_struct_type name="节点_创建新类型$name$" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
 			<comment name="功能说明" rw_stat="read">typedef struct{...}</comment>			
-			<var name="类型名" kinds="string" delete="no">none</var>
+			<var name="类型名" kinds="string" delete="no" replace_val="../.name">none</var>
 		</op_create_struct_type>
 	</create_build_struct_type>
 	
 	
 	<create_step_call_func name="调用函数" create_type="1" >
-		<op_call_func name="节点_调用函数" create_template="create_input_param"  auto_index="0" expand_list="comment,func_name">
+		<op_call_func name="节点_调用$Function$" create_template="create_input_param"  auto_index="0" expand_list="comment,func_name">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-			<func_name kinds="user_define" user_param="func_list" delete="no">none</func_name>
+			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name" >none</func_name>
 		</op_call_func>
 	</create_step_call_func>
 	
@@ -703,23 +703,23 @@
 	</create_step_read_msg>
 	
 	<create_step_read_datatype_msg name="从dataType定义读取消息" create_type="1">
-		<op_call_func name="节点_从dataType定义读取消息" expand="yes" expand_list="comment,var">
+		<op_call_func name="节点_读DataType消息$name$" expand="yes" expand_list="comment,var">
 			<comment name="功能说明" rw_stat="read">function_read_fromat_message(data_type_name)</comment>
 			<func_name name="函数" kinds="hide" delete="no" >apollo_func_read_userData_from_msg</func_name>
 			<param_collect name="参数1_输入消息对象"  kinds="hide" delete="no">
 				<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
 				<var kinds="string" delete="no" restrict="type">2</var>			
 			</param_collect>			
-			<var name="类型名字" kinds="string"  delete="no">none</var>			
+			<var name="类型名字" kinds="string"  delete="no" replace_val="../.name">none</var>			
 		</op_call_func>		
 	</create_step_read_datatype_msg>
 	
 	
 	<create_step_get_user_data_type name="从dataType获得类型" create_type="1">
-		<op_call_func name="节点_从dataType读取类型" expand="yes" expand_list="comment,var">
+		<op_call_func name="节点_获得DataType类型:$name$" expand="yes" expand_list="comment,var">
 			<comment name="功能说明" rw_stat="read">function_get_userDataType(data_type_name)</comment>
 			<func_name name="函数" kinds="hide" delete="no" >apollo_func_get_userDataType</func_name>					
-			<var name="类型名字" kinds="string"  delete="no">none</var>			
+			<var name="类型名字" kinds="string"  delete="no" replace_val="../.name">none</var>			
 		</op_call_func>		
 	</create_step_get_user_data_type>
 	

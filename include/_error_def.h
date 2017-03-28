@@ -72,4 +72,14 @@ ErrorElement(ESERVER_ERR_SHORT_STUFF, "缺少材料"),
 ErrorElement(ESERVER_ERR_NO_SOLDIER, "没有兵种"),
 ErrorElement(ESERVER_ERR_BUILDING_IN_CREATE, "建筑在建造升級中"),
 
+ErrorElement(ESERVER_ERR_NO_GUILD, "工会不存在"),
+ErrorElement(ESERVER_ERR_DISAGREE, "对方不同意"),
+ErrorElement(ESERVER_ERR_ALREADY_IN_GUILD, "已经加入工会"),
+
+ErrorElement(ESERVER_ERR_NOT_GUILD_MASTER, "不是会长"),
+ErrorElement(ESERVER_ERR_MASTER_NOT_LEAVE, "先转让会长才能离开"),
+ErrorElement(ESERVER_ERR_NOT_GUILD_MANAGER, "不是管理员"),
+ErrorElement(ESERVER_ERR_GUILD_FULL, "人满"),
+
+
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),
