@@ -74,11 +74,12 @@ int apoUiDetailView::_init()
 }
 
 
-static xmlTableItem *createItem(const QString &text, ndxml *refXml = NULL)
+static xmlTableItem *createItem(const QString &text, ndxml *refXml = NULL, const char *attrName=NULL)
 {
 	xmlTableItem *pItem = new xmlTableItem(text );
 	if (refXml) {
 		pItem->setUserData(refXml);
+		pItem->setAttrName(attrName);
 	}
 	else {
 		UNEDIT_CTRL(pItem);
@@ -98,7 +99,7 @@ bool apoUiDetailView::showExeNode(apoBaseExeNode *node)
 		return false;
 	}
 	const char *textName = LogicEditorHelper::_GetXmlName(xml, NULL);
-	_insertRow(createItem("Node"), createItem("text"), createItem(textName));
+	_insertRow(createItem("Node"), createItem("text"), createItem(textName,xml, "name" ));
 	
 	//show comment
 	textName = LogicEditorHelper::_GetNodeComment(xml);
@@ -143,14 +144,14 @@ bool apoUiDetailView::_insertRow(xmlTableItem *nameItem, xmlTableItem* typeItem,
 bool apoUiDetailView::onChanged(int row, int column, const char *xmlRealValue)
 {
 	if (column != 1){
+		apoUiXmlTableWidget::onChanged(row, column, xmlRealValue);
 		return true;
 	}
 	ndxml *xmlval = _getXml(row, column+1);
 	if (!xmlval){
 		return false;
 	}
-
-
+	
 	ndxml *xmlType = _getXml(row, column );
 	if (!xmlType){
 		return false;
@@ -168,7 +169,7 @@ bool apoUiDetailView::onChanged(int row, int column, const char *xmlRealValue)
 	
 	xmlTableItem *cell = (xmlTableItem*)item(row, column + 1);
 	if (!cell){
-		return NULL;
+		return false;
 	}
 
 	if (type == OT_PARAM){
@@ -187,6 +188,7 @@ bool apoUiDetailView::onChanged(int row, int column, const char *xmlRealValue)
 // 		cell->setText(QString("0"));
 // 	}
 
+	apoUiXmlTableWidget::onChanged(row, column, xmlRealValue);
 	return true;
 }
 

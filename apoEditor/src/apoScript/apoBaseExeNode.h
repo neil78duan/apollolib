@@ -41,6 +41,8 @@ public:
 	virtual ~apoBaseExeNode();
 	
 	bool setNodeInfo(QWidget *parent, ndxml *xmlnode, bool showParam=true);
+
+	bool renewDisplay();
 	void setSelected(bool isSelected);
 	void setError(bool isError=true) ;
 
@@ -106,6 +108,7 @@ protected:
 
 	void paintEvent(QPaintEvent *event);
 	void mouseDoubleClickEvent(QMouseEvent * event);
+	QString getTitleDisplayName();
 
 	void trytoDrawConnectSlot();
 	bool _parseParam(ndxml *xmlnode);

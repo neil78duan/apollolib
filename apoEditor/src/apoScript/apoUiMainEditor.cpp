@@ -1177,6 +1177,7 @@ bool apoUiMainEditor::setCurNodeSlotSelected(ndxml *xmlParam, bool inError)
 void apoUiMainEditor::onCurNodeChanged()
 {
 	if (m_curDetailNode && m_curDetailNode->getType() != EAPO_EXE_NODE_Switch){
+		m_curDetailNode->renewDisplay();
 		_reConnectParam(m_curDetailNode);
 		m_curDetailNode->update();
 	}

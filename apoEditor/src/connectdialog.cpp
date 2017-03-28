@@ -609,7 +609,7 @@ int ConnectDialog::SelOrCreateRole(const char *accountName)
         else {
             inmsg.Read(name, sizeof(name));
 
-            nd_logmsg("get role %s success \n", name);
+            nd_logmsg("get role %s id=%d success \n", name, roleid);
 
             //read attribute
             NDUINT16 num = 0;
