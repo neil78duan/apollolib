@@ -40,7 +40,7 @@
 	<op_exit>Quit</op_exit>
 	<op_loop_entry>Loop</op_loop_entry>
 	<op_bool_entry>Bool</op_bool_entry>
-	<steps_block>ValueComp</steps_block>
+	<steps_block_valcomp>ValueComp</steps_block_valcomp>
 	<op_throw>Throw</op_throw>
 	<steps_switch_case>Switch</steps_switch_case>
 </blueprint_node_name>
@@ -135,7 +135,7 @@
 	<list instruction="6" size="0" datatype="2">is_open_role_affair</list>
 	<list instruction="7" size="0" >exception_catch_block</list>
 	<list instruction="8" size="0" >function_init_block</list>
-	<list instruction="9" >steps_block</list>
+	<list instruction="9" >steps_block_valcomp</list>
 	<list instruction="9" >steps_switch_case</list>
 	
 	<list instruction="9" >function_filter</list>
@@ -781,7 +781,7 @@
 	</create_step_bool_entry>
 	
 	<create_comp_steps name="数值比较分支" create_type="1" >
-		<steps_block name="节点_数值比较分支" auto_index="0">	
+		<steps_block_valcomp name="节点_数值比较分支" auto_index="0">	
 			<op_comp name="比较运行" expand="yes"  delete="no">
 				<comment name="功能说明" rw_stat="read"> 大于小于等级 </comment>
 				<index  name="逻辑运算" kinds="reference" reference_type="type_compare_sub_entry" delete="no">0</index>	
@@ -799,7 +799,7 @@
 					<condition no_comp="1" kinds="hide" delete="no">1</condition>
 				</op_sub_comp_entry>
 			</op_bool_entry>
-		</steps_block>
+		</steps_block_valcomp>
 	</create_comp_steps>
 	
 	<create_switch_case name="switc-case" create_type="1" >
