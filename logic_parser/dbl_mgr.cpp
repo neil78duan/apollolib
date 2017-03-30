@@ -1456,7 +1456,7 @@ int DBLDatabase::OutputLua(const char *path)const
 	const char *timestr = nd_get_datetimestr();
 	fprintf(plistFile, "-- file: filelist.lua \n-- export time : %s \n", timestr);
 	fprintf(plistFile, "-- export author: %s\n\n", nd_get_sys_username());	
-	fprintf(plistFile, "module(\"design_filelist\", package.seeall)\n\n");
+	//fprintf(plistFile, "module(\"design_filelist\", package.seeall)\n\n");
 
 	fprintf(plistFile, "filelist = {\n");
 	
@@ -1479,32 +1479,32 @@ int DBLDatabase::OutputLua(const char *path)const
 		fprintf(pf, "-- encode type : %s\n", nd_get_encode_name( GetEncodeType() ));
 		fprintf(pf, "-- export author: %s\n\n", nd_get_sys_username());
 
-		fprintf(pf, "module(\"design_%s\", package.seeall)\n\n", tablename);
+		//fprintf(pf, "module(\"design_%s\", package.seeall)\n\n", tablename);
 
 
 		//output key 
-		fprintf(pf, "keys = {\n\t");
-		for (int i = 0; i < it->second->GetCols(); i++)	{
-			fprintf(pf, "\"%s\",", it->second->GetColAliaName(i));
-		}
-		fprintf(pf, "\n}\n\n");
+// 		fprintf(pf, "keys = {\n\t");
+// 		for (int i = 0; i < it->second->GetCols(); i++)	{
+// 			fprintf(pf, "\"%s\",", it->second->GetColAliaName(i));
+// 		}
+// 		fprintf(pf, "\n}\n\n");
 
 
-		fprintf(pf, "keys_alias = {\n\t");
-		for (int i = 0; i < it->second->GetCols(); i++)	{
-			fprintf(pf, "\"%s\",", it->second->GetColName(i));
-		}
-		fprintf(pf, "\n}\n\n");
+// 		fprintf(pf, "keys_alias = {\n\t");
+// 		for (int i = 0; i < it->second->GetCols(); i++)	{
+// 			fprintf(pf, "\"%s\",", it->second->GetColName(i));
+// 		}
+// 		fprintf(pf, "\n}\n\n");
 
 
 		DBLTable *ptable = it->second;
 		DBLCursor cursor(ptable);
 
-		fprintf(pf, "\ndatas = {}\n");
+		fprintf(pf, "\ndesign_%s = {}\n", tablename);
 		
 		for (int ret = cursor.FetchFirst(); ret == 0; ret = cursor.FetchNext())	{
 			//fprintf(pf, "\tid%d = {",cursor[0].GetInt());
-			fprintf(pf, "datas[%d]={", cursor[0].GetInt());
+			fprintf(pf, "design_%s[%d]={", tablename, cursor[0].GetInt());
 			for (int i = 0; i < cursor.GetCols(); i++)	{
 				fprintf(pf, " %s=", ptable->GetColAliaName(i));
 				cursor[i].Print((logic_print)fprintf, pf);

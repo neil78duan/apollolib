@@ -39,6 +39,7 @@ public:
 	{
 		m_xmlAnchorParent = 0;
 		m_xmlAnchor = 0;
+		setAttribute(Qt::WA_DeleteOnClose, true);
 	}
 
 	explicit apoBaseSlotCtrl(const QString &text, QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags()) :
@@ -48,6 +49,7 @@ public:
 	{
 		m_xmlAnchorParent = 0;
 		m_xmlAnchor = 0;
+		setAttribute(Qt::WA_DeleteOnClose, true);
 	}
 	~apoBaseSlotCtrl()
 	{

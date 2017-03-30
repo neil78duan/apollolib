@@ -128,7 +128,7 @@ bool apoUiMainEditor::_showBlocks(apoBaseSlotCtrl *fromSlot, ndxml *stepsBlocks)
 			continue;
 		}
 
-		if (stepInfo->ins_type == E_INSTRUCT_TYPE_COMMENT)	{
+		if (stepInfo->ins_type == E_INSTRUCT_TYPE_COMMENT || stepInfo->ins_type == E_INSTRUCT_TYPE_PARAM_COLLECT)	{
 			continue;
 		}
 		else if (stepInfo->ins_type == E_INSTRUCT_TYPE_EXCEPTION_CATCH) {
@@ -277,7 +277,7 @@ bool apoUiMainEditor::_showBools(apoBaseExeNode *entryNode, ndxml *entryXml)
 	//return ret;
 }
 
-bool apoUiMainEditor::_showLoops(apoBaseExeNode *entryNode, ndxml *stepsBlocks)
+bool apoUiMainEditor::_showLoop(apoBaseExeNode *entryNode, ndxml *stepsBlocks)
 {
 	apoUiExenodeLoop*pNode = dynamic_cast<apoUiExenodeLoop*>(entryNode);
 	if (!pNode){
@@ -307,7 +307,7 @@ bool apoUiMainEditor::_showValueComp(apoBaseExeNode *entryNode, ndxml *stepsBloc
 	int subY = m_startY;
 
 	m_startY -= 200;
-	bool ret = _showBlocks(pNode->getSubSlot(), stepsBlocks);
+	bool ret = _showSubByslot(pNode->getSubSlot());
 
 	m_startX = subX;
 	m_startY = subY;
@@ -423,7 +423,7 @@ apoBaseExeNode* apoUiMainEditor::_showExeNode(apoBaseSlotCtrl *fromSlot, ndxml *
 		ret = _showBools(nodeCtrl, exeNode);
 	}
 	else if (nodeCtrl->getType() == EAPO_EXE_NODE_Loop) {
-		ret = _showLoops(nodeCtrl, exeNode);
+		ret = _showLoop(nodeCtrl, exeNode);
 	}
 	else if (nodeCtrl->getType() == EAPO_EXE_NODE_ValueComp) {
 		ret = _showValueComp(nodeCtrl, exeNode);
@@ -670,34 +670,47 @@ bool apoUiMainEditor::_removeExenode(apoBaseExeNode *node)
 	apoBaseExeNode *myPre = node->getMyPreNode();
 	apoBaseExeNode *myNext = node->getMyNextNode();
 	
-#define REMOVE_SLOT_CONN(_slot)	\
-	if(_slot) {	\
-		apoUiBezier *pconn = _slot->getConnector();	\
-		if (pconn) {	\
-			_removeBezier(pconn);	\
-		}		\
+// #define REMOVE_SLOT_CONN(_slot)	\
+// 	if(_slot) {	\
+// 		apoUiBezier *pconn = _slot->getConnector();	\
+// 		if (pconn) {	\
+// 			_removeBezier(pconn);	\
+// 		}		\
+// 	}
+	
+
+	QObjectList list = node->children();
+	foreach(QObject *obj, list) {
+		apoBaseSlotCtrl *slot = qobject_cast<apoBaseSlotCtrl*>(obj);
+		if (slot){
+			_removeConnector(slot);
+			//REMOVE_SLOT_CONN(slot);
+		}
 	}
+
+// 	apoBaseSlotCtrl *slot;
+// 
+// 	slot = node->toNext();
+// 	REMOVE_SLOT_CONN(slot);
+// 	
+// 	slot = node->returnVal();
+// 	REMOVE_SLOT_CONN(slot);
+// 
+// 	slot = node->inNode();
+// 	REMOVE_SLOT_CONN(slot);
+
 	
-	apoBaseSlotCtrl *slot;
+	if (myPre && myNext){
 
-	slot = node->toNext();
-	REMOVE_SLOT_CONN(slot);
-	
-	slot = node->returnVal();
-	REMOVE_SLOT_CONN(slot);
+		buildRunSerqConnector(myPre->toNext(), myNext->inNode());
+	}
 
-	slot = node->inNode();
-	REMOVE_SLOT_CONN(slot);
+	ndxml *xml = (ndxml*)node->getMyUserData();
 
-	ndxml *xml = (ndxml*) node->getMyUserData();
 	if (xml) {
 		ndxml_delxml(xml, NULL);
 	}
 	node->close();
-
-	if (myPre && myNext){
-		_connectSlots(myPre->toNext(), myNext->inNode(), apoUiBezier::LineRunSerq);
-	}
 
 	this->update();
 	onFileChanged();
@@ -1373,7 +1386,11 @@ bool apoUiMainEditor::buildRunSerqConnector(apoBaseSlotCtrl *fromSlot, apoBaseSl
 bool apoUiMainEditor::_removeConnector(apoBaseSlotCtrl *slot)
 {
 	apoBaseSlotCtrl::eBaseSlotType type = slot->slotType(); 
-	if (type == apoBaseSlotCtrl::SLOT_NODE_INPUUT_PARAM){
+	if (type == apoBaseSlotCtrl::SLOT_NODE_INPUUT_PARAM||
+		type == apoBaseSlotCtrl::SLOT_RETURN_VALUE ||
+		type == apoBaseSlotCtrl::SLOT_VAR ||
+		type == apoBaseSlotCtrl::SLOT_FUNCTION_PARAM){
+
 		apoUiBezier *pconn = slot->getConnector();
 		if (pconn) {
 			_removeBezier(pconn);

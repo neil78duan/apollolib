@@ -68,7 +68,7 @@ private:
 	bool _showSubByslot(apoBaseSlotCtrl *subSlot);
 	
 	bool _showBools(apoBaseExeNode *entryNode, ndxml *entryXml); //show if else 
-	bool _showLoops(apoBaseExeNode *entryNode, ndxml *stepsBlocks);
+	bool _showLoop(apoBaseExeNode *entryNode, ndxml *stepsBlocks);
 	bool _showValueComp(apoBaseExeNode *entryNode, ndxml *stepsBlocks);
 	bool _showSWitch(apoBaseExeNode *entryNode, ndxml *stepsBlocks);
 

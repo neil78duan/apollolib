@@ -18,8 +18,8 @@
 enum instructType {
 	E_INSTRUCT_TYPE_PARAM = 0,
 	E_INSTRUCT_TYPE_CMD,
-	E_INSTRUCT_TYPE_SUB_ENTRY,
-	E_INSTRUCT_TYPE_LOOP,
+	E_INSTRUCT_TYPE_SUB_ENTRY,	// if -else entry
+	E_INSTRUCT_TYPE_LOOP,		// 
 	E_INSTRUCT_TYPE_PARAM_COLLECT,
 	E_INSTRUCT_TYPE_USER_DEFINE,
 	E_INSTRUCT_TYPE_FUNCTION_INFO,
@@ -32,7 +32,7 @@ enum instructType {
 	E_INSTRUCT_TYPE_DELAY_COMPILE,		//switch of if (default, else entry) 
 
 	E_INSTRUCT_TYPE_COLLOCTION,			//multi-step clooection ,can not use break ;
-
+	
 	E_INSTRUCT_TYPE_COMMENT = 100, // MARRK
 
 };
@@ -183,6 +183,11 @@ private:
 
 	ndxml *_getRefNode(ndxml*node);
 
+// 	int compileJumpLabel(const char *labelName, char *cmdStreamAddr, NDUINT32 jumpCmd);
+// 	void setLabel(const char *labelName, char *addr);
+// 	char *getLable(const char *labelName);
+
+
 	bool m_bDebugInfo;
 	int m_compileStep;
 	int m_aimByteOrder;
@@ -193,6 +198,9 @@ private:
 	char *m_pInitBlock;
 
 	shortJumpAddr_vct m_reFillJumpStepSize;
+	typedef std::map<std::string, char*>label_addr_map;
+
+	label_addr_map m_labelAddr;
 
 	streamCMD_map_t m_preCMDs;
 	

@@ -402,6 +402,7 @@ bool LogicCompiler::compileFuncs(ndxml *funcsCollect, FILE *pf)
 int LogicCompiler::func2Stream(ndxml *funcNode, char *buf, size_t bufsize)
 {
 	m_reFillJumpStepSize.clear();
+	m_labelAddr.clear();
 
 	char *p = buf;	
 	const char *pFuncName = ndxml_getattr_val(funcNode, "name");
@@ -513,92 +514,8 @@ int LogicCompiler::subEntry2Stream(compile_setting *stepSetting, ndxml *subEntry
 	}
 
 	_fillJumpLengthInblock(buf, (p-buf),&jumpLeave);
-	return (p - buf);
-	/*
-	std::vector<blockStrem> blocks;
-
-	size_t taotl_size = 0;
-	for (int i = 0; i < ndxml_getsub_num(subEntryNode); i++) {
-		blockStrem node;
-		char *p = node.block_buf;
-		NDUINT32 *pLocalJumpOffset=0;
-		ndxml *blockXml = ndxml_getnodei(subEntryNode, i);
-		
-		compile_setting_t::iterator it = m_settings.find(ndxml_getname(blockXml));
-		if (it != m_settings.end() && it->second.ins_type == E_INSTRUCT_TYPE_COMMENT){
-			continue;
-		}
-
-		const char *pCompCondName = ndxml_getattr_val(blockXml, "comp_cond");
-		nd_assert(pCompCondName);
-
-		ndxml *cmpNode = ndxml_getnode(blockXml, pCompCondName);
-		if (cmpNode){
-			const char *pVal = ndxml_getattr_val(cmpNode, "no_comp");
-			if(pVal && pVal[0]=='1'){
-				node.no_comp = 1;
-			}
-			node.cmp_instruct = ndxml_getval_int(cmpNode);
-		}		
-		node.node_index = i;
-
-		//insert jump to current lock end size cmd
-		if (node.cmp_instruct){
-			
-			//test false and jump next block
-			p = lp_write_stream(p, (NDUINT32)E_OP_TEST_FALSE_SHORT_JUMP, m_aimByteOrder);
-
-			pLocalJumpOffset = (NDUINT32*) p;
-			p = lp_write_stream(p, (NDUINT32)REVERT_INSTRUCT, m_aimByteOrder);
-		}
-
-
-		int len = stepsCollect2Stream(blockXml, p, sizeof(node.block_buf));
-		if (-1 == len)	{
-			return -1;
-		}
-
-		p += len;
-		if (node.cmp_instruct){
-			//this is not last end block ,need to jump to end 
-			p = lp_write_stream(p, (NDUINT32)E_OP_SHORT_JUMP, m_aimByteOrder);
-
-			node.jump_end_offset = (NDUINT32 ) (p - node.block_buf);
-			p = lp_write_stream(p, (NDUINT32)REVERT_INSTRUCT, m_aimByteOrder);
-
-			lp_write_stream((lp_stream_t)pLocalJumpOffset, (NDUINT32)(len + 8), m_aimByteOrder);
-		}
-
-		node.size = (int)(p - node.block_buf);
-		blocks.push_back(node);
-		taotl_size += node.size;
-	}
-	if (blocks.size()==0) {
-		return 0;
-	}
+	return (int) (p - buf);
 	
-	//link if-else{} blocks
-	char *p = buf;
-	int len = (int)bufsize;
-	for (int i = 0; i < blocks.size(); i++) {
-		blockStrem &node = blocks[i];
-		if (node.size >= len) {
-			nd_logerror("block size is to long\n");
-			return -1;
-		}
-		if (node.jump_end_offset){
-			lp_stream_t jump_offset_val = (node.block_buf + node.jump_end_offset);
-			//*jump_offset_val = (NDUINT32)(taotl_size - node.size);
-			lp_write_stream(jump_offset_val, (NDUINT32)(taotl_size - node.size), m_aimByteOrder);
-
-			taotl_size -= node.size;
-		}
-		memcpy(p, node.block_buf, node.size);
-		p += node.size;
-		len = (int)(bufsize - (buf - p));
-	}
-	return (int)(p - buf);
-	*/
 }
 
 //compile loop
@@ -663,6 +580,10 @@ int LogicCompiler::subLoop2Stream(compile_setting *setting, ndxml *loopSteps, ch
 
 int LogicCompiler::trytoCompileExceptionHandler(ndxml *funcNode, char *buf, size_t bufsize)
 {
+
+	m_reFillJumpStepSize.clear();
+	m_labelAddr.clear();
+
 	int ret = 0;	
 	for (int i = 0; i < ndxml_getsub_num(funcNode); i++) {
 		ndxml *xmlStep = ndxml_getnodei(funcNode, i);
@@ -701,19 +622,6 @@ int LogicCompiler::trytoCompileExceptionHandler(ndxml *funcNode, char *buf, size
 			//*size_addr = (NDUINT16)(p - (char*)size_addr) - sizeof(NDUINT16);
 			NDUINT16 blockSize =(NDUINT16)(p - (char*)size_addr) - sizeof(NDUINT16) ;
 			lp_write_stream((lp_stream_t)size_addr, blockSize,m_aimByteOrder) ;
-#if 0
-			char *p1 = buf;
-			//*((*(NDUINT32**)&p1)++);
-			p1 += sizeof(NDUINT32);
-
-			//NDUINT16 jump_len = *((*(NDUINT16**)&p1)++);
-			NDUINT16 jump_len;
-			p1 = lp_read_stream(p1, jump_len, m_aimByteOrder);
-
-			//nd_assert(*size_addr == jump_len);
-			p1 += jump_len;
-			nd_assert(p1 == p);
-#endif
 			break ;
 		}
 	}
@@ -723,6 +631,10 @@ int LogicCompiler::trytoCompileExceptionHandler(ndxml *funcNode, char *buf, size
 
 int LogicCompiler::trytoCompileInitilizerBlock(ndxml *funcNode,char *buf, size_t bufsize)
 {
+
+	m_reFillJumpStepSize.clear();
+	m_labelAddr.clear();
+
 	int ret = 0;
 	char *p = buf;
 
@@ -770,78 +682,6 @@ int LogicCompiler::blockSteps2Stream(ndxml *blockNode, char *buf, size_t bufsize
 		return ret;
 	}
 
-	//char *p = buf;
-	//int len = (int)bufsize;
-
-	/*
-	ndxml *defaultEntry = NULL;
-	for (int i = 0; i < ndxml_getsub_num(blockNode); i++) {
-		ndxml *xmlStep = ndxml_getnodei(blockNode, i);
-		if (!xmlStep) {
-			continue;
-		}
-		const char *stepInsName = ndxml_getname(xmlStep);
-		if (!stepInsName){
-			continue;
-		}
-
-		compile_setting_t::iterator it = m_settings.find(stepInsName);
-		if (it == m_settings.end()){
-			continue;
-		}
-		ret = 0;
-		if (it->second.ins_type == E_INSTRUCT_TYPE_COMMENT || 
-			it->second.ins_type==E_INSTRUCT_TYPE_EXCEPTION_CATCH ||
-			it->second.ins_type == E_INSTRUCT_TYPE_INIT_BLOCK ||
-			it->second.ins_type == E_INSTRUCT_TYPE_USER_DEFINE || 
-			it->second.ins_type == E_INSTRUCT_TYPE_FUNCTION_INFO) {
-			continue; 
-		}
-		else if (it->second.ins_type == E_INSTRUCT_TYPE_DEFAULT_ENTRY) {
-			defaultEntry = xmlStep;
-			continue;
-		}
-		else if (it->second.ins_type == E_INSTRUCT_TYPE_STEP_BLOCK) {
-			ret = blockSteps2Stream(xmlStep, p, len);
-		}
-		else if (it->second.ins_type == E_INSTRUCT_TYPE_CMD) 	{
-			ret = step2Strem(&it->second, xmlStep, p, len);
-			if (ret > 0){
-
-			}
-			else {
-				const char *pName = ndxml_getattr_val(xmlStep, "name");
-				if (!pName) {
-					nd_logerror("compile node %s error \n", pName);
-				}
-			}
-		}
-		else if (it->second.ins_type == E_INSTRUCT_TYPE_SUB_ENTRY) 	{
-			ret = subEntry2Stream(&it->second, xmlStep, p, len);
-		}
-		else if (it->second.ins_type == E_INSTRUCT_TYPE_LOOP) {
-			ret = subLoop2Stream(&it->second, xmlStep, p, len);
-		}
-
-		if (-1 == ret) {
-			return -1;
-		}
-		p += ret;
-		len -= ret;
-		if (len <= 0)	{
-			return -1;
-		}
-	}
-
-	if (defaultEntry){
-		ret = blockSteps2Stream(defaultEntry, p, len);
-		if (-1==ret){
-			return -1;
-		}
-		p += ret;
-		len -= ret;
-	}
-	*/
 	//try to refill jump address 
 	if (!_fillJumpLengthInblock(buf, ret)) {
 		nd_logerror("refill jump address error\n");
@@ -933,7 +773,7 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 	char *p = buf;
 	int len = (int)bufsize;
 	lp_stream_t cur_step_size = 0; //record this step size in debug block 
-	//NDUINT32 _reverd = 0;
+
 
 	//get current step name 
 	m_cur_node_index++;
@@ -1463,3 +1303,33 @@ ndxml *LogicCompiler::_getRefNode(ndxml*node)
 { 
 	return LogicEditorHelper::_getRefNode(node,ndxml_getval(node));
 }
+// 
+// 
+// int LogicCompiler::compileJumpLabel(const char *labelName, char *cmdStreamAddr, NDUINT32 jumpCmd)
+// {
+// 	char *p = cmdStreamAddr;
+// 	char *jumpAddr = getLable(labelName);
+// 	if (jumpAddr){
+// 		nd_logerror("can not found %s label\n", labelName);
+// 		return -1;
+// 	}
+// 	int offset =(int) (cmdStreamAddr - jumpAddr) + 8;
+// 	//add loop jump instruction 
+// 	p = lp_write_stream(p, (NDUINT32)jumpCmd, m_aimByteOrder);
+// 	p = lp_write_stream(p, (NDUINT32)(-offset), m_aimByteOrder);
+// 
+// 	return (int)(p - cmdStreamAddr);
+// }
+// 
+// void LogicCompiler::setLabel(const char *labelName, char *addr)
+// {
+// 	m_labelAddr[std::string(labelName)] = addr;
+// }
+// char *LogicCompiler::getLable(const char *labelName)
+// {
+// 	label_addr_map::const_iterator it = m_labelAddr.find(labelName);
+// 	if (it == m_labelAddr.end()) {
+// 		return NULL;
+// 	}
+// 	return it->second;
+// }
