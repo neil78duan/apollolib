@@ -34,6 +34,7 @@
     <addaction name="actionSave"/>
     <addaction name="actionCompile"/>
     <addaction name="actionCompileAll"/>
+    <addaction name="actionRun"/>
     <addaction name="actionClearLog"/>
     <addaction name="actionExit"/>
    </widget>
@@ -102,7 +103,7 @@
     <string>View output window</string>
    </property>
    <property name="shortcut">
-    <string>F5</string>
+    <string>F12</string>
    </property>
   </action>
   <action name="actionFunctionView">
@@ -159,6 +160,14 @@
    </property>
    <property name="shortcut">
     <string>F12</string>
+   </property>
+  </action>
+  <action name="actionRun">
+   <property name="text">
+    <string>Run</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R, F5</string>
    </property>
   </action>
  </widget>

@@ -57,7 +57,7 @@ void LogicEngineRoot::update(ndtime_t tminterval)
 	m_globalParser.update(tminterval);
 }
 
-int LogicEngineRoot::LoadScript(const char *scriptStream, LogicParserEngine *loader )
+int LogicEngineRoot::LoadScript(const char *scriptStream, LogicParserEngine *initCallLoader )
 {
 	//script come from file , must be utf8
 	NDUINT8 byteOrder = -1, encodeType = -1;
@@ -158,14 +158,11 @@ int LogicEngineRoot::LoadScript(const char *scriptStream, LogicParserEngine *loa
 		setDftScriptModule(moudleName);
 		m_modules[moudleName] = pscripts;
 	}
-	if (pInitEntry) {
+	if (pInitEntry && initCallLoader) {
 		DBLDataNode result;
-		if (!loader)	{
-			loader = &m_globalParser;
-		}
 
-		if (!loader->_runCmdBuf(moudleName, pInitEntry, 0)) {
-			nd_logerror("run %s error %d\n", DEFAULT_LOAD_INITILIZER_FUNC, loader->getErrno());
+		if (!initCallLoader->_runCmdBuf(moudleName, pInitEntry, 0)) {
+			nd_logerror("run %s error %d\n", DEFAULT_LOAD_INITILIZER_FUNC, initCallLoader->getErrno());
 			return -1;
 		}
 	}

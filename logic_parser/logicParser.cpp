@@ -70,6 +70,21 @@ LogicParserEngine::~LogicParserEngine()
 }
 
 
+int LogicParserEngine::runCmdline(int argc, const char *argv[], int encodeType )
+{
+	parse_arg_list_t params;
+	for (int i = 0; i < argc; i++)	{
+		params.push_back(DBLDataNode(argv[i]));
+	}
+
+	DBLDataNode result;
+
+	if (runScript(argv[0], params, result, encodeType)) {
+		return 0;
+	}
+	return getErrno();
+}
+
 bool LogicParserEngine::runScript(int encodeType ,const char *scriptName,DBLDataNode &result, int param_num, ...)
 {
 	DBLDataNode fname;
@@ -90,7 +105,7 @@ bool LogicParserEngine::runScript(int encodeType ,const char *scriptName,DBLData
 	}
 	va_end(arg);
 	
-	return runScript(scriptName, params, result);
+	return runScript(scriptName, params, result, encodeType);
 }
 bool LogicParserEngine::runScript(const char *scriptName, parse_arg_list_t &args, DBLDataNode &result, int encodeType)
 {

@@ -17,6 +17,7 @@
 #include "ndlib.h"
 
 #include "ndlog_wrapper.h"
+#include "runFuncDialog.h"
 ND_LOG_WRAPPER_IMPLEMENTION(MainWindow, __glogWrapper);
 
 
@@ -99,8 +100,9 @@ void MainWindow::WriteLog(const char *logText)
 	QDockWidget *pDock = this->findChild<QDockWidget*>("outputView");
 	if (pDock){
 		QTextEdit *pEdit = pDock->findChild<QTextEdit*>("logTextEdit");
-		if (pEdit)	{
-			pEdit->append(QString(logText));
+		if (pEdit)	{			
+			pEdit->moveCursor(QTextCursor::End);
+			pEdit->insertPlainText(QString(logText));
 			pEdit->moveCursor(QTextCursor::End, QTextCursor::KeepAnchor);
 			return;		 
 		}
@@ -758,9 +760,11 @@ void MainWindow::on_actionFileClose_triggered()
 
 void MainWindow::on_actionCompile_triggered()
 {
+	//ClearLog();
 	on_actionSave_triggered();
 	if (m_filePath.size()) {
-		compileScript(m_filePath.c_str());
+		std::string outFile;
+		compileScript(m_filePath.c_str(), outFile);
 	}
 }
 
@@ -789,10 +793,11 @@ void MainWindow::on_actionCompileAll_triggered()
 	bool ret = true;
 	int num = ndxml_num(xml);
 	for (int i = 0; i < num; i++) {
+		std::string outFile;
 		ndxml *node = ndxml_getnodei(xml, i);
 		if (!node)
 			continue;
-		if (!compileScript(ndxml_getval(node))) {
+		if (!compileScript(ndxml_getval(node), outFile)) {
 			ret = false;
 			break;
 		}
@@ -811,6 +816,55 @@ void MainWindow::on_actionClearLog_triggered()
 			pEdit->clear();
 		}
 	}
+}
+
+void MainWindow::on_actionRun_triggered()
+{
+	ClearLog();
+
+	RunFuncDialog dlg(this) ;
+	dlg.initFunctionList(m_curFile);
+
+	if (dlg.exec() != QDialog::Accepted) {
+		return ;
+	}
+	QString qfuncName = dlg.getFunc();
+	QString qargs = dlg.getArgs();
+	if (qfuncName.isEmpty()) {
+		nd_logerror("run function name is NULL\n");
+		return;
+	}
+	
+	int argc=0;
+	char argbuf[10][64];
+	char *argv[10];
+
+	for (int i = 0; i < 10; i++){
+		argv[i] = argbuf[i];
+	}
+
+	//get func 
+	std::string funcName = qfuncName.toStdString();
+	std::string input_arg = qargs.toStdString();
+
+	strncpy(argbuf[0], funcName.c_str(), sizeof(argbuf[0]));
+	
+	if ( input_arg.size() > 0)	{
+		nd_logmsg("begin run %s %s\n", funcName.c_str(), input_arg.c_str());
+		argc = ndstr_parse_command(input_arg.c_str(), &argv[1], 64, 9);
+	}
+	else {
+		nd_logmsg("begin run %s\n", funcName.c_str());
+	}
+	++argc;
+	
+	std::string outFile;
+	if (!compileScript(m_filePath.c_str(), outFile)) {
+		return;
+	}
+
+	runFunction(outFile.c_str(), m_filePath.c_str(), argc, (const char**)argv);
+
 }
 
 
@@ -837,7 +891,73 @@ static bool getScriptExpDebugInfo(ndxml *scriptXml)
 	}
 	return false;
 }
-bool MainWindow::compileScript(const char *scriptFile)
+
+bool MainWindow::runFunction(const char *binFile, const char *srcFile, int argc, const char* argv[])
+{
+	bool ret = true;
+	ClientMsgHandler::ApoConnectScriptOwner apoOwner;
+	if (!apoOwner.loadDataType(m_editorSetting.getIoConfigValue("net_data_def"))) {
+		WriteLog("load data type error\n");
+		return false;
+	}
+
+	LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
+	nd_assert(scriptRoot);
+	scriptRoot->setPrint(ND_LOG_WRAPPER_PRINT(MainWindow), NULL);
+	scriptRoot->setOutPutEncode(E_SRC_CODE_UTF_8);
+
+	if (argc ==0)	{
+		scriptRoot->getGlobalParser().setSimulate(true, &apoOwner);
+		if (0 != scriptRoot->LoadScript(binFile, &scriptRoot->getGlobalParser() )){
+			WriteLog("load script error n");
+			LogicEngineRoot::destroy_Instant();
+			return false;
+		}
+
+		WriteLog("start run script...\n");
+		if (0 != scriptRoot->test()){
+			WriteLog("run script error\n");
+			ret = false;
+		}
+		else {
+			nd_logmsg("!!!!!!!!!!!!!!!!!!!RUN SCRIPT %s  SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n", binFile);
+		}
+	}
+	else {
+		LogicParserEngine &parser = scriptRoot->getGlobalParser();
+		parser.setSimulate(false, &apoOwner);
+
+		if (0 != scriptRoot->LoadScript(binFile,NULL)){
+			WriteLog("load script error n");
+			LogicEngineRoot::destroy_Instant();
+			return false;
+		}
+
+		int ret = parser.runCmdline(argc, argv, E_SRC_CODE_UTF_8);
+		if (ret)	{
+			nd_logmsg("run function %s error : %d \n", argv[0], ret);
+			ret = false;
+		}
+		else {
+			nd_logmsg("run function %s SUCCESS \n", argv[0]);
+		}
+	}
+	LogicEngineRoot::destroy_Instant();
+
+	if (ret == false)	{
+		LogicParserEngine &parser = scriptRoot->getGlobalParser();
+		const char *lastError = parser.getLastErrorNode();
+		if (lastError)	{
+			nd_logerror("run in %s\n", lastError);
+			showRuntimeError(srcFile, lastError);
+
+		}
+	}
+
+	return ret;
+}
+
+bool MainWindow::compileScript(const char *scriptFile, std::string &outputFile, bool bWithRun)
 {
 	ndxml_root xmlScript;
 	ndxml_initroot(&xmlScript);
@@ -852,6 +972,8 @@ bool MainWindow::compileScript(const char *scriptFile)
 		nd_logerror("compile %s error !!!\nMaybe file is destroyed\n", scriptFile);
 		return false;
 	}
+	outputFile = outFile;
+
 	int outEncode = getScriptExpEncodeType(&xmlScript);
 	bool withDebug = getScriptExpDebugInfo(&xmlScript);
 	std::string outPath = outFile;
@@ -860,10 +982,11 @@ bool MainWindow::compileScript(const char *scriptFile)
 	outFile = outPath.c_str();
 
 	int orderType = ND_L_ENDIAN;
-// 	const char *orderName = _getFromIocfg("bin_data_byte_order");
-// 	if (orderName) {
-// 		orderType = atoi(orderName);
-// 	}
+	
+	const char *orderName = m_editorSetting.getIoConfigValue("bin_data_byte_order");
+	if (orderName) {
+		orderType = atoi(orderName);
+ 	}
 
 	LogicCompiler lgcompile;
 
@@ -888,37 +1011,12 @@ bool MainWindow::compileScript(const char *scriptFile)
 		return false;
 	}
 
-	/*
-	WriteLog("!!!!!!!!!!COMPILE script success !!!!!!!!!!!\n begining run script...\n");
-
-	ClientMsgHandler::ApoConnectScriptOwner apoOwner;
-	if (!apoOwner.loadDataType(_getFromIocfg("net_data_def"))) {
-		WriteLog("load data type error\n");
-		return false;
+	WriteLog("!!!!!!!!!!COMPILE script success !!!!!!!!!!!\n ");
+	if (!bWithRun)	{
+		return true;
 	}
+	return runFunction(outFile,scriptFile, 0, NULL);
 
-	LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
-	nd_assert(scriptRoot);
-
-	scriptRoot->setPrint(ND_LOG_WRAPPER_PRINT(MainWindow), NULL);
-	scriptRoot->getGlobalParser().setSimulate(true, &apoOwner);
-
-	if (0 != scriptRoot->LoadScript(outFile)){
-		WriteLog("load script error n");
-		LogicEngineRoot::destroy_Instant();
-		return false;
-	}
-
-	WriteLog("start run script...\n");
-	if (0 != scriptRoot->test()){
-		WriteLog("run script error\n");
-		LogicEngineRoot::destroy_Instant();
-		return false;
-	}
-
-	LogicEngineRoot::destroy_Instant();*/
-	WriteLog("!!!!!!!!!!!!!!!!!!!SCRIPT COMPILE SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-	return true;
 }
 
 

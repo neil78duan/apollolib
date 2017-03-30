@@ -218,8 +218,6 @@ bool apoUiMainEditor::_showSubByslot(apoBaseSlotCtrl *subSlot)
 
 bool apoUiMainEditor::_showBools(apoBaseExeNode *entryNode, ndxml *entryXml)
 {
-	//bool ret = false;
-	//int total = ndxml_getsub_num(entryXml);
 
 	apoUiExenodeBool*pBoolNode = dynamic_cast<apoUiExenodeBool*>(entryNode);
 	if (!pBoolNode){
@@ -242,39 +240,7 @@ bool apoUiMainEditor::_showBools(apoBaseExeNode *entryNode, ndxml *entryXml)
 	}
 
 	return true;
-	/*
-	for (int i = 0; i < total; i++) {
-		ndxml *xmlStep = ndxml_getnodei(entryXml, i);
-		const char *stepInsName = ndxml_getname(xmlStep);
-		if (!stepInsName){
-			continue;
-		}
-		const compile_setting* stepInfo = m_setting->getStepConfig(stepInsName);
-		if (!stepInfo || stepInfo->ins_type != E_INSTRUCT_TYPE_CASE_ENTRY) {
-			continue;
-		}
-
-		ndxml *xmlCond = ndxml_getnode(xmlStep, "condition");
-		if (!xmlCond){
-			continue; 
-		}
-		int isTrue = ndxml_getval_int(xmlCond);
-		if (isTrue)	{
-			m_startY = subY - 200;
-			m_startX = subX;
-			ret = _showBlocks(pBoolNode->getTrueSlot(),xmlStep);
-		}
-		else {
-			m_startY = subY ;
-			m_startX = subX;
-			ret = _showBlocks(pBoolNode->getFalseSlot(), xmlStep);
-		}
-		if (!ret){
-			return false;
-		}
-	}
-	*/
-	//return ret;
+	
 }
 
 bool apoUiMainEditor::_showLoop(apoBaseExeNode *entryNode, ndxml *stepsBlocks)
@@ -378,12 +344,6 @@ int apoUiMainEditor::_createParams(ndxml *xmlnode, apoBaseExeNode &exeNode)
 		if (!xmlParam) {
 			continue;
 		}
-// 		int ret = param2Stream(xmlParam, stepNode, p, len, &args_num);
-// 		if (-1 == ret)	{
-// 			return -1;
-// 		}
-// 		p += ret;
-// 		len -= ret;
 	}
 	return 0;
 }
@@ -670,43 +630,20 @@ bool apoUiMainEditor::_removeExenode(apoBaseExeNode *node)
 	apoBaseExeNode *myPre = node->getMyPreNode();
 	apoBaseExeNode *myNext = node->getMyNextNode();
 	
-// #define REMOVE_SLOT_CONN(_slot)	\
-// 	if(_slot) {	\
-// 		apoUiBezier *pconn = _slot->getConnector();	\
-// 		if (pconn) {	\
-// 			_removeBezier(pconn);	\
-// 		}		\
-// 	}
-	
-
 	QObjectList list = node->children();
 	foreach(QObject *obj, list) {
 		apoBaseSlotCtrl *slot = qobject_cast<apoBaseSlotCtrl*>(obj);
 		if (slot){
 			_removeConnector(slot);
-			//REMOVE_SLOT_CONN(slot);
 		}
 	}
 
-// 	apoBaseSlotCtrl *slot;
-// 
-// 	slot = node->toNext();
-// 	REMOVE_SLOT_CONN(slot);
-// 	
-// 	slot = node->returnVal();
-// 	REMOVE_SLOT_CONN(slot);
-// 
-// 	slot = node->inNode();
-// 	REMOVE_SLOT_CONN(slot);
-
 	
 	if (myPre && myNext){
-
 		buildRunSerqConnector(myPre->toNext(), myNext->inNode());
 	}
 
 	ndxml *xml = (ndxml*)node->getMyUserData();
-
 	if (xml) {
 		ndxml_delxml(xml, NULL);
 	}

@@ -76,7 +76,8 @@ SOURCES += src/main.cpp\
     src/apoScript/apoUiDetailView.cpp \
     src/apoScript/apoUiParam.cpp \
     src/apoScript/apoUiXmlTablesWidget.cpp \
-    src/apoScript/apoEditorSetting.cpp
+    src/apoScript/apoEditorSetting.cpp \
+    src/apoScript/runFuncDialog.cpp
 
 HEADERS  += \
     src/startdialog.h \
@@ -96,7 +97,8 @@ HEADERS  += \
     src/apoScript/apoXmlTreeView.h \
     src/apoScript/apoUiDetailView.h \
     src/apoScript/apoUiParam.h \
-    src/apoScript/apoUiXmlTablesWidget.h
+    src/apoScript/apoUiXmlTablesWidget.h \
+    src/apoScript/runFuncDialog.h
 
 FORMS    += \
     src/startdialog.ui \
@@ -105,7 +107,8 @@ FORMS    += \
     src/listdialog.ui \
     src/workdirdialog.ui \
     src/apoScript/mainwindow.ui \
-    src/apoScript/mainwindow.ui
+    src/apoScript/mainwindow.ui \
+    src/apoScript/runFuncDialog.ui
 
 # logic compile modules
  

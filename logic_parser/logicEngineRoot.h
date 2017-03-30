@@ -36,8 +36,8 @@ public:
 	static LogicEngineRoot *get_Instant();
 	static void destroy_Instant();
 
-	int LoadScript(const char *scriptStream, LogicParserEngine *loader=NULL);
-	int Reload(const char *scriptStream, LogicParserEngine *loader = NULL);
+	int LoadScript(const char *scriptStream, LogicParserEngine *initCallLoader);
+	int Reload(const char *scriptStream, LogicParserEngine *initCallLoader);
 
 	int Init();
 	void Destroy();

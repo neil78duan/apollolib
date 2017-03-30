@@ -121,7 +121,7 @@ static bool init_apollo_object(NDIConn *pConn, const char*script_file)
     scriptRoot->getGlobalParser().setSimulate(false);
     pConn->SetUserData(&parser);
 
-    if (0 != scriptRoot->LoadScript(script_file)){
+    if (0 != scriptRoot->LoadScript(script_file, &scriptRoot->getGlobalParser())){
         nd_logerror("加载脚本出错！\n");
         return false;
     }

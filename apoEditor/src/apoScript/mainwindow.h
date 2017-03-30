@@ -70,6 +70,8 @@ private slots:
 
     void on_actionClearLog_triggered();
 
+    void on_actionRun_triggered();
+
 protected:
 
 	bool openFileView();
@@ -79,7 +81,8 @@ protected:
 
 	bool showCommonDeatil(ndxml *xmldata);
 	void closeDetail();
-	bool compileScript(const char *scriptFile);
+	bool runFunction(const char *binFile,const char *srcFile, int argc, const char* argv[]);
+	bool compileScript(const char *scriptFile,std::string &outFile, bool bWithRun=false);
 
 	bool loadScriptFile(const char *scriptFile);
 	const char *getScriptSetting(ndxml *scriptXml, const char *settingName);
