@@ -495,7 +495,7 @@ bool CapolloParseEditorDlg::compileScript(const char *scriptFile)
 
 	scriptRoot->setPrint(out_print, NULL);
 	scriptRoot->getGlobalParser().setSimulate(true, &apoOwner);
-	if (0 != scriptRoot->LoadScript(outFile)){
+	if (0 != scriptRoot->LoadScript(outFile,&scriptRoot->getGlobalParser() )){
 		LogText("加载脚本出错！\n");
 		LogicEngineRoot::destroy_Instant();
 		return false;

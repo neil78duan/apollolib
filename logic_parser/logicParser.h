@@ -304,6 +304,7 @@ public:
 	LogicParserEngine(LogicObjectBase *owner);	
 	virtual ~LogicParserEngine() ;
 	
+	int runCmdline(int argc, const char *argv[], int encodeType = ND_ENCODE_TYPE); //apply to rum from command line
 	//call in c++
 	bool runScript(int encodeType ,const char *scriptName, DBLDataNode &result, int num, ...);
 	//CALL IN c++ ARGS must be included args

@@ -136,7 +136,7 @@ static bool init_apollo_object(NDIConn *pConn, const char*script_file)
 	scriptRoot->getGlobalParser().setSimulate(false);
 	pConn->SetUserData(&parser);
 
-	if (0 != scriptRoot->LoadScript(script_file)){
+	if (0 != scriptRoot->LoadScript(script_file, &parser)){
 		nd_logerror("¼ÓÔØ½Å±¾³ö´í£¡\n");
 		return false;
 	}

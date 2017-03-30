@@ -1266,16 +1266,6 @@ bool LogicCompiler::_getFuncStackInfo(ndxml *curNode,char *buf, size_t size)
 	ndxml *node = curNode ;
 	
 	while (parent ) {
-// 		const char *stepInsName = ndxml_getname(node);
-// 		if (stepInsName){
-// 			compile_setting_t::iterator it = m_settings.find(stepInsName);
-// 			if(it != m_settings.end()) {
-// 				
-// 				if ( it->second.ins_type == E_INSTRUCT_TYPE_FUNCTION){
-// 					break;
-// 				}
-// 			}
-// 		}
 		
 		int index = ndxml_get_index(parent, node) ;
 		stackIndex.push_back(index) ;
