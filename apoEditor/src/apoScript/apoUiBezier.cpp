@@ -166,7 +166,7 @@ void apoUiBezier::onRemove()
 		((apoBaseSlotCtrl *)m_startCtrl)->onDisconnect();
 	}
 
-	if (m_startCtrl){
+	if (m_endCtrl){
 		((apoBaseSlotCtrl *)m_endCtrl)->onDisconnect();
 	}
 }

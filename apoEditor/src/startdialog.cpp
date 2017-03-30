@@ -297,7 +297,7 @@ bool startDialog::compileScript(const char *scriptFile)
 	scriptRoot->setPrint(ND_LOG_WRAPPER_PRINT(startDialog), NULL);
 	scriptRoot->getGlobalParser().setSimulate(true,&apoOwner);
 
-	if (0 != scriptRoot->LoadScript(outFile)){
+	if (0 != scriptRoot->LoadScript(outFile, &scriptRoot->getGlobalParser())){
 		WriteLog("load script error n");
 		LogicEngineRoot::destroy_Instant();
 		return false;

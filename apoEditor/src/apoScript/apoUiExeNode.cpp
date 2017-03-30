@@ -114,7 +114,7 @@ apoUiExenodeLoop::apoUiExenodeLoop(QWidget *parent, ndxml *exeNodeXml) :apoBaseE
 	disableNewParam();
 	setNodeInfo(parent, exeNodeXml);
 	//InitCtrl(parent, "Loop",  1);
-	setTips(QString("loop $count times "));
+	setTips(QString("Loop {}"));
 
 
 }
@@ -139,7 +139,7 @@ void apoUiExenodeLoop::onInit()
 	m_loopSlot = ctrl1;
 
 	m_loopSlot->setXmlAnchorParent(m_nodeXml);
-	ndxml *anchorXml = ndxml_getnode(m_nodeXml, "condition");
+	ndxml *anchorXml = ndxml_getnode(m_nodeXml, "steps_collection");
 	if (anchorXml){
 		m_loopSlot->setXmlAnchor(anchorXml);
 	}
@@ -283,54 +283,34 @@ void apoUiExenodeValueComp::onInit()
 	int y = E_LINE_HEIGHT * 1.5;
 
 
-	int num = ndxml_getsub_num(m_nodeXml);
+	ndxml *xmlBoolEntry = ndxml_getnode(m_nodeXml, "op_bool_entry");
+	if (xmlBoolEntry){
+		ndxml *caseEntry = ndxml_getnode(xmlBoolEntry, "op_sub_comp_entry");
+		if (caseEntry)	{
+			ndxml *xmlCond = ndxml_getnode(caseEntry, "condition");
+			
+			if (xmlCond){
+				const char *pval = ndxml_getval(xmlCond);
+				if (pval && *pval != '0'){
+					//true 
+					apoBaseSlotCtrl *ctrl1 = new apoBaseSlotCtrl(QString("{}->"), this);
+					ctrl1->setStyleSheet("QLabel{background-color:yellow;}");
+					ctrl1->resize(PARAM_CTRL_W * 3, PARAM_CTRL_H);
+					ctrl1->move(x, y);
+					ctrl1->show();
+					ctrl1->setAttribute(Qt::WA_DeleteOnClose, true);
+					ctrl1->setSlotType(apoBaseSlotCtrl::SLOT_SUB_ENTRY);
 
-	for (int i = 0; i < num; i++){
-		ndxml *xml = ndxml_getnodei(m_nodeXml, i);
-		if (LogicEditorHelper::CheckHide(xml))	{
-			continue;
-		}
-		const compile_setting* compileSetting = settingRoot->getStepConfig(ndxml_getname(xml));
-		if (!compileSetting){
-			continue;
-		}
-		else if (E_INSTRUCT_TYPE_CASE_ENTRY != compileSetting->ins_type)	{
-			continue;
-		}
-		const char *condName = ndxml_getattr_val(xml, "comp_cond");
-		if (!condName) {
-			continue;
-		}
-		ndxml *condXml = ndxml_getnode(xml, condName);
-		if (!condXml){
-			continue;
-		}
-		const char *pval = ndxml_getval(condXml);
-		if (pval && *pval != '0'){
-			//true 
-			apoBaseSlotCtrl *ctrl1 = new apoBaseSlotCtrl(QString("{}->"), this);
-			ctrl1->setStyleSheet("QLabel{background-color:yellow;}");
-			ctrl1->resize(PARAM_CTRL_W * 3, PARAM_CTRL_H);
-			ctrl1->move(x, y);
-			ctrl1->show();
-			ctrl1->setAttribute(Qt::WA_DeleteOnClose, true);
-			ctrl1->setSlotType(apoBaseSlotCtrl::SLOT_SUB_ENTRY);
-
-			ctrl1->setXmlAnchor(condXml);
-			ctrl1->setXmlAnchorParent(xml);
-
-			m_subSlot = ctrl1;
-			break;
+					ctrl1->setXmlAnchor(xmlCond);
+					ctrl1->setXmlAnchorParent(caseEntry);
+					m_subSlot = ctrl1;
+				}
+			}
 		}
 	}
-// 	apoBaseSlotCtrl *ctrl1 = new apoBaseSlotCtrl(QString("{}->"), this);
-// 	ctrl1->resize(PARAM_CTRL_W * 2, PARAM_CTRL_H);
-// 	ctrl1->setStyleSheet("QLabel{background-color:yellow;}");
-// 	ctrl1->move(x, y);
-// 	ctrl1->show();
-// 	ctrl1->setAttribute(Qt::WA_DeleteOnClose, true);
-// 	m_subSlot = ctrl1;
 
+
+	nd_assert(m_subSlot);
 
 	y += E_LINE_HEIGHT;
 	x = E_LINE_WIDTH;
