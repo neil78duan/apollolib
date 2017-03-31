@@ -463,6 +463,7 @@ namespace ClientMsgHandler
 					}
 				}
 				else {
+					nd_logerror("(read message data error)}\n");
 					return false;
 				}
 

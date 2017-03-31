@@ -1,11 +1,32 @@
-
 <?xml version="1.0" encoding="utf-8" ?>
 <type_data_type name="数据类型" kinds="hide" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,2维数组,变量,参数,上一步结果,time"/>
 <send_msg_list name="发送消息" delete="no" expand_stat="1">
 	<message name="建立工会" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="9" minId="2">3</msgid>
+		<msgid kinds="hide" maxId="9" minId="2">0</msgid>
 		<data name="工会名" kinds="string" param="2">my guild</data>
 		<data name="工会说明" kinds="string" param="2">this is my guild</data>
+	</message>
+	<message name="加入工会" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="9" minId="4">0</msgid>
+		<data name="工会id" kinds="numeral" param="0">0</data>
+	</message>
+	<message name="离开工会" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="9" minId="12">0</msgid>
+	</message>
+	<message name="工会T人" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="9" minId="14">0</msgid>
+		<data name="玩家id" kinds="numeral" param="0">7</data>
+	</message>
+	<message name="邀请玩家入会" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="9" minId="8">0</msgid>
+		<data name="玩家id" kinds="numeral" param="0">7</data>
+	</message>
+	<message name="转让会长" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="9" minId="15">0</msgid>
+		<data name="新会长id" kinds="numeral" param="0">7</data>
+	</message>
+	<message name="解散工会" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="9" minId="13">0</msgid>
 	</message>
 	<message name="新建建筑" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="4" minId="0">0</msgid>
@@ -180,4 +201,3 @@
 		<msgid kinds="hide" maxId="0" minId="0">0</msgid>
 	</message>
 </send_msg_list>
-
