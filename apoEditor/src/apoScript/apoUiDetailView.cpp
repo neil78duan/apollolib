@@ -224,7 +224,9 @@ bool apoUiCommonXmlView::showDetail(void *data, ndxml_root *xmlfile)
 	int num = ndxml_getsub_num(m_editedNode);
 	for (int i = 0; i < num; i++){
 		ndxml *subNode = ndxml_getnodei(m_editedNode, i);
-		ShowXMLValue(subNode, CheckExpand(subNode));
+		if (!CheckHide(subNode)) {
+			ShowXMLValue(subNode, CheckExpand(subNode));
+		}
 	}
 	//
 
@@ -282,10 +284,12 @@ int apoUiCommonXmlView::ShowXMLValue(ndxml *xml_node, int expand)
 		pval = (char*)ndxml_getattr_vali(xml_node, i);
 		if (pval) {
 			const char *alias = m_alias->GetAlia(name);
-			if (alias)
-				name = alias;
-
-			ShowRow(name, pval, xml_node);
+			if (alias) {
+				ShowRow(alias, pval, xml_node, name);
+			}
+			else {
+				ShowRow(name, pval, xml_node, name);
+			}
 		}
 	}
 
@@ -312,7 +316,7 @@ int apoUiCommonXmlView::ShowXMLValue(ndxml *xml_node, int expand)
 
 }
 
-void apoUiCommonXmlView::ShowRow(const char *name, const char *val, ndxml* param)
+void apoUiCommonXmlView::ShowRow(const char *name, const char *val, ndxml* param,const char *attrName)
 {
 	int rows = rowCount();
 	setRowCount(rows + 1);
@@ -324,10 +328,12 @@ void apoUiCommonXmlView::ShowRow(const char *name, const char *val, ndxml* param
 	tableNode->setUserData(param);
 
 
-	apoEditorSetting*pRootSetting = apoEditorSetting::getInstant();
-	ndxml *configRoot = pRootSetting->getConfig();
-
-	if (param) {
+	if (attrName && *attrName){
+		tableNode->setAttrName(attrName);
+	}
+	else if (param) {
+		apoEditorSetting*pRootSetting = apoEditorSetting::getInstant();
+		ndxml *configRoot = pRootSetting->getConfig();
 
 		int type = GetXmlValType(param, configRoot);
 		if (type == EDT_BOOL) {

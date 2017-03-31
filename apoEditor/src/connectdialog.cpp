@@ -27,32 +27,7 @@
 #include "ndlog_wrapper.h"
 ND_LOG_WRAPPER_IMPLEMENTION(ConnectDialog, __glogWrapper);
 
-//static ConnectDialog *__g_loginDlg ;
-//static void *__oldFunc ;
-
 NDOStreamMsg __sendMsg;
-// 
-// static void out_log(const char *text)
-// {
-//     if (__g_loginDlg){
-//         __g_loginDlg->WriteLog(text);
-//     }
-// }
-// 
-// static int out_print(void *pf, const char *stm, ...)
-// {
-//     char buf[1024 * 4];
-//     char *p = buf;
-//     va_list arg;
-//     int done;
-// 
-//     va_start(arg, stm);
-//     done = vsnprintf(p, sizeof(buf), stm, arg);
-//     va_end(arg);
-// 
-//     out_log(buf);
-//     return done;
-// }
 
 /////////////////////////////////////
 
@@ -112,6 +87,7 @@ static bool init_apollo_object(NDIConn *pConn, const char*script_file)
 
     // init script
     LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
+	scriptRoot->setOutPutEncode(E_SRC_CODE_UTF_8);
     nd_assert(scriptRoot);
     LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
     nd_message_set_script_engine(pConn->GetHandle(), (void*)&parser, ClientMsgHandler::apollo_cli_msg_script_entry);
@@ -122,7 +98,7 @@ static bool init_apollo_object(NDIConn *pConn, const char*script_file)
     pConn->SetUserData(&parser);
 
     if (0 != scriptRoot->LoadScript(script_file, &scriptRoot->getGlobalParser())){
-        nd_logerror("加载脚本出错！\n");
+        nd_logerror("load script error！\n");
         return false;
     }
     ClientMsgHandler::InstallDftClientHandler(pConn);
@@ -168,13 +144,10 @@ ConnectDialog::ConnectDialog(QWidget *parent) :
 
     ui->gmMsgButton->setEnabled(false);
 
-    //__g_loginDlg = this ;
     InitNet();
 
 	__glogWrapper = ND_LOG_WRAPPER_NEW(ConnectDialog);
 
-    //__oldFunc = ndSetLogoutFunc((void*)out_log);
-    //ndxml_initroot(&m_message_define);
 
     //get init setting
     QSettings settings("duanxiuyun", "ApolloEditor");
@@ -189,11 +162,6 @@ ConnectDialog::ConnectDialog(QWidget *parent) :
     SET_EDIT_DFTVAL(passwd, "test123") ;
 
 #undef SET_EDIT_DFTVAL
-    //init edit box
-    //ui->hostEdit->setText("192.168.8.55");
-    //ui->portEdit->setText("6600");
-    //ui->nameEdit->setText("tRobort1");
-    //ui->passwdEdit->setText("test123");
 }
 
 ConnectDialog::~ConnectDialog()
@@ -203,13 +171,7 @@ ConnectDialog::~ConnectDialog()
         delete timer ;
 	
     destroy_apollo_object(m_pConn);
-    //ClientMsgHandler::destroyDftClientMsgHandler(m_pConn);
-
-//     ndSetLogoutFunc((void*)__oldFunc);
-//     __g_loginDlg = NULL;
-
-    //destroyUserDefData(m_dataTypeDef);
-
+   
 	if (m_pConn){
 		DestroyConnectorObj(m_pConn);
 	}
@@ -246,42 +208,7 @@ void ConnectDialog::ClearLog()
 
 void ConnectDialog::WriteLog(const char *logText)
 {
-	/*
-	static char s_line_buf[4096] = { 0 };
-	char *pstrart = strlen(s_line_buf) + s_line_buf;
-	const char *p = logText;
 	
-
-	while (p && *p)	{
-		int size = s_line_buf + 4096 - pstrart;
-		p = ndstr_nstr_end(p, pstrart, '\n', size);
-		if (p && *p) {
-			ui->logEdit->append(QString(s_line_buf));
-			ui->logEdit->moveCursor(QTextCursor::End);
-			pstrart = s_line_buf;
-			*pstrart = 0;
-			++p;
-		}
-		else if (strlen(s_line_buf) >= sizeof(s_line_buf) - 1) {
-			ui->logEdit->append(QString(s_line_buf));
-			ui->logEdit->moveCursor(QTextCursor::End);
-			pstrart = s_line_buf;
-			*pstrart = 0;
-		}
-		else {
-			break;
-		}	
-
-	} 
-	*/
-
-	/*
-#ifdef WIN32
-	char buf[1024];
-	nd_gbk_to_utf8(logText, buf, sizeof(buf));
-	logText = buf;
-#endif
-	*/
 	QTextEdit *pEdit = ui->logEdit;
 	
 	pEdit->moveCursor(QTextCursor::End, QTextCursor::KeepAnchor);
