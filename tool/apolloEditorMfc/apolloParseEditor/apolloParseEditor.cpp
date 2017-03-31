@@ -85,7 +85,7 @@ BOOL CapolloParseEditorApp::InitInstance()
 	nd_common_init();
 	nd_setxml_log(_xml_error_output);
 	nd_log_no_file(1);
-	nd_log_no_time(1);
+	nd_log_no_date(1);
 	ndstr_set_code(E_SRC_CODE_GBK);
 	// 创建 shell 管理器，以防对话框包含
 	// 任何 shell 树视图控件或 shell 列表视图控件。

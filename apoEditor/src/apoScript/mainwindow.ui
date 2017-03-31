@@ -36,6 +36,7 @@
     <addaction name="actionCompileAll"/>
     <addaction name="actionRun"/>
     <addaction name="actionClearLog"/>
+    <addaction name="actionTest"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuWindows">
@@ -168,6 +169,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+R, F5</string>
+   </property>
+  </action>
+  <action name="actionTest">
+   <property name="text">
+    <string>Run test</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
  </widget>

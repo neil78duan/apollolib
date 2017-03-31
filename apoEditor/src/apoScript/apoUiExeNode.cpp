@@ -130,7 +130,7 @@ void apoUiExenodeLoop::onInit()
 	int y = E_LINE_HEIGHT * 1.5;
 
 	apoBaseSlotCtrl *ctrl1 = new apoBaseSlotCtrl(QString("{}->"), this);
-	ctrl1->resize(PARAM_CTRL_W * 2, PARAM_CTRL_H);
+	ctrl1->resize(PARAM_CTRL_W * 1.5, PARAM_CTRL_H);
 	ctrl1->setStyleSheet("QLabel{background-color:yellow;}");
 	ctrl1->move(x, y);
 	ctrl1->show();
@@ -233,7 +233,7 @@ void apoUiExenodeBool::onInit()
 		ctrl1->setXmlAnchor(condXml);
 		ctrl1->setXmlAnchorParent(xml);
 
-		ctrl1->resize(PARAM_CTRL_W * 3, PARAM_CTRL_H);
+		ctrl1->resize(PARAM_CTRL_W * 1.5, PARAM_CTRL_H);
 		ctrl1->move(x, y);
 		ctrl1->show();
 		ctrl1->setAttribute(Qt::WA_DeleteOnClose, true);
@@ -295,7 +295,7 @@ void apoUiExenodeValueComp::onInit()
 					//true 
 					apoBaseSlotCtrl *ctrl1 = new apoBaseSlotCtrl(QString("{}->"), this);
 					ctrl1->setStyleSheet("QLabel{background-color:yellow;}");
-					ctrl1->resize(PARAM_CTRL_W * 3, PARAM_CTRL_H);
+					ctrl1->resize(PARAM_CTRL_W * 1.5, PARAM_CTRL_H);
 					ctrl1->move(x, y);
 					ctrl1->show();
 					ctrl1->setAttribute(Qt::WA_DeleteOnClose, true);

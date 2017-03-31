@@ -84,9 +84,11 @@ void MainWindow::ClearLog()
 		QTextEdit *pEdit = pDock->findChild<QTextEdit*>("logTextEdit");
 		if (pEdit)	{
 			pEdit->clear();
+			pEdit->update();
 		}
 	}
 	m_logText.clear();
+	
 }
 
 void MainWindow::WriteLog(const char *logText)
@@ -104,6 +106,7 @@ void MainWindow::WriteLog(const char *logText)
 			pEdit->moveCursor(QTextCursor::End);
 			pEdit->insertPlainText(QString(logText));
 			pEdit->moveCursor(QTextCursor::End, QTextCursor::KeepAnchor);
+			pEdit->update();
 			return;		 
 		}
 	}
@@ -820,8 +823,8 @@ void MainWindow::on_actionClearLog_triggered()
 
 void MainWindow::on_actionRun_triggered()
 {
+	on_actionSave_triggered();
 	ClearLog();
-
 	RunFuncDialog dlg(this) ;
 	dlg.initFunctionList(m_curFile);
 
@@ -865,6 +868,28 @@ void MainWindow::on_actionRun_triggered()
 
 	runFunction(outFile.c_str(), m_filePath.c_str(), argc, (const char**)argv);
 
+}
+
+void MainWindow::on_actionTest_triggered()
+{
+	on_actionSave_triggered();
+	ndxml_root *xml = ndxml_getnode(m_fileRoot, "script_file_manager");
+	if (!xml){
+		return;
+	}
+
+	bool ret = true;
+	int num = ndxml_num(xml);
+	for (int i = 0; i < num; i++) {
+		std::string outFile;
+		ndxml *node = ndxml_getnodei(xml, i);
+		if (!node)
+			continue;
+		if (!compileScript(ndxml_getval(node), outFile,true)) {
+			ret = false;
+			break;
+		}
+	}
 }
 
 
@@ -1106,3 +1131,4 @@ void MainWindow::setCurFileSave(bool isSaved)
 	}
 
 }
+

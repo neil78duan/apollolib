@@ -54,7 +54,7 @@ private:
 
 	void resizeEvent(QResizeEvent *event);
 	int _initShowCtrl();
-	void ShowRow(const char *name, const char *val, ndxml* xmlnode);
+	void ShowRow(const char *name, const char *val, ndxml* xmlnode, const char *attrName=NULL);
 	int ShowXMLValue(ndxml *xml_node, int expand);
 
 
