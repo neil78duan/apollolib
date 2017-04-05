@@ -16,9 +16,7 @@ enum APOLLO_MAX_MSG {
     NETMSG_MAX_LOGIN = ND_MAIN_ID_LOGIN ,       //1 登录消息
     
     NETMSG_MAX_SERVER,                          //服务器之间通信
-	
-	//NETMSG_MAX_ROLE ,							//create role message ...
-	
+		
     NETMSG_MAX_NUMBER
 };
 
@@ -93,6 +91,11 @@ enum ATLANTIS_SERVER_MSG {
 	SERVER_MSG_UPDATE_PVP_DATA, //NetMessage::RolePvpDetail 
 
 	SERVER_MSG_GET_OTHER_ROLE_DATA, //int32:role-id, int8:field-type, int16:callback-msg
+	SERVER_MSG_CLIENT_SESSION_SYNC,//notify worldserver or social server client session changed after the connector re-connect
+
+	SERVER_MSG_TEST_DISCONNECT1 , //test disconnect between game and world 
+	SERVER_MSG_TEST_DISCONNECT2,//test disconnect between game and social
+
 	SERVER_MSG_NUMBER 
 };
 // 

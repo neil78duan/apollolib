@@ -48,6 +48,7 @@ MSG_ENTRY_INSTANCE(broadcast_handler)
 }
 
 
+
 MSG_ENTRY_INSTANCE(unwrap_sendto_player_entry)
 {
 	ND_TRACE_FUNC() ;
@@ -65,30 +66,31 @@ MSG_ENTRY_INSTANCE(unwrap_sendto_player_entry)
 		return 0 ;
 	}
 	
-	nd_logdebug("world translate (%d, %d) length=%d to client %d\n", inmsg.MsgMaxid(), inmsg.MsgMinid(),inmsg.MsgLength(), sid) ;
+	//nd_logdebug("%s wrap message by(%d, %d) length=%d to client %d\n", 		nd_object_get_instname(nethandle), inmsg.MsgMaxid(), inmsg.MsgMinid(), inmsg.MsgLength(), sid);
 	
 	size_t size = inmsg.ReadBin(&realMsg, sizeof(realMsg)) ;
 	if (size < ND_USERMSG_HDRLEN || size!= ND_USERMSG_LEN(&realMsg)) {
-		nd_logerror("recv translated message error length to small size =%d\n", (int)size) ;
+		nd_logerror("recv wrapped message error length to small size =%d\n", (int)size) ;
 		return 0;
 	}
 	
 	PlayerMgr*playerMgr = get_playerMgr() ; 
 	nd_assert(playerMgr) ;
 	
-	if (0==sid) {
-		
-		nd_logdebug("world request broadcast (%d, %d) length = %d\n", ND_USERMSG_MAXID(&realMsg),  ND_USERMSG_MINID(&realMsg), ND_USERMSG_LEN(&realMsg)) ;
+	nd_logdebug("recved (%d,%d ) length = %d from %s wrapped by (%d, %d) direct-to-client session=%d\n",
+		ND_USERMSG_MAXID(&realMsg), ND_USERMSG_MINID(&realMsg), ND_USERMSG_LEN(&realMsg),
+		nd_object_get_instname(nethandle), inmsg.MsgMaxid(), inmsg.MsgMinid(), inmsg.MsgLength(), sid);
+	
+	if (0==sid) {		
+		//nd_logdebug("world request broadcast (%d, %d) length = %d\n", ND_USERMSG_MAXID(&realMsg),  ND_USERMSG_MINID(&realMsg), ND_USERMSG_LEN(&realMsg)) ;
 		playerMgr->BroadCastInHost(&realMsg.msg_hdr, encrypt?true:false) ;
 	}
-	else {
-		
+	else {		
 		if(!h_listen){
 			h_listen = getbase_inst()->GetDeftListener()->GetHandle() ;
 			nd_assert(h_listen) ;
-		}
-		
-		nd_logdebug("world translate to client real message (%d, %d)\n", ND_USERMSG_MAXID(&realMsg), ND_USERMSG_MAXID(&realMsg)) ;
+		}		
+		//nd_logdebug("world translate to client real message (%d, %d)\n", ND_USERMSG_MAXID(&realMsg), ND_USERMSG_MAXID(&realMsg)) ;
 		nd_send_toclient_ex(sid, &realMsg.msg_hdr, h_listen, (int)encrypt) ; 
 	}
 	return 0;
@@ -114,30 +116,27 @@ MSG_ENTRY_INSTANCE(unwrap_call_session_msgproc_entry)
 	}
 
 	
-	nd_logdebug("world translate to client (%d, %d)\n", inmsg.MsgMaxid(), inmsg.MsgMinid()) ;
-	
 	size_t size = inmsg.ReadBin(&realMsg, sizeof(realMsg)) ;
 	if (size < ND_USERMSG_HDRLEN || size!= ND_USERMSG_LEN(&realMsg)) {
-		nd_logerror("recv translated message error length to small\n") ;
+		nd_logerror("recv wrapped message to msg proc error length to small\n") ;
 		return 0;
 	}
 	
 	PlayerMgr*playerMgr = get_playerMgr() ; 
 	nd_assert(playerMgr) ;
 	
-	if (0==sid) {
-		
-		nd_logdebug("world request broadcast (%d, %d) length = %d\n", ND_USERMSG_MAXID(&realMsg),  ND_USERMSG_MINID(&realMsg), ND_USERMSG_LEN(&realMsg)) ;
+	nd_logdebug("recved (%d,%d ) length = %d from %s wrapped by (%d, %d) call-msg-process session=%d\n",
+		ND_USERMSG_MAXID(&realMsg), ND_USERMSG_MINID(&realMsg), ND_USERMSG_LEN(&realMsg),
+		nd_object_get_instname(nethandle), inmsg.MsgMaxid(), inmsg.MsgMinid(), inmsg.MsgLength(), sid);
+	
+	if (0==sid) {		
 		playerMgr->CallMsgProcInHost(&realMsg.msg_hdr) ;
 	}
-	else {
-		
+	else {		
 		if(!h_listen){
 			h_listen = getbase_inst()->GetDeftListener()->GetHandle() ;
 			nd_assert(h_listen) ;
 		}
-		
-		nd_logdebug("world translate call proc real message (%d, %d)\n", ND_USERMSG_MAXID(&realMsg), ND_USERMSG_MINID(&realMsg)) ;
 		nd_netmsg_handle(sid, &realMsg.msg_hdr, h_listen) ; 
 	}
 	return 0;
@@ -161,8 +160,11 @@ MSG_ENTRY_INSTANCE(bridge_to_client_dirctly_entry)
 		nd_assert(h_listen) ;
 	}
 	
-	
-	nd_logdebug("world server direct send to client  (%d, %d)\n", inmsg.MsgMaxid(), inmsg.MsgMinid()) ;
+
+	nd_logdebug("bridge message  (%d,%d ) length = %d from %s to client\n",
+		inmsg.MsgMaxid(), inmsg.MsgMinid(), inmsg.MsgLength(),	nd_object_get_instname(nethandle));
+
+	//nd_logdebug("world server direct send to client  (%d, %d)\n", inmsg.MsgMaxid(), inmsg.MsgMinid()) ;
 	
 	if (0==sid) {
 		PlayerMgr*playerMgr = get_playerMgr() ; 

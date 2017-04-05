@@ -1127,6 +1127,7 @@ do { 			\
 }while(0)
 
 extern int build_CSharp(ndxml_root *xmlID, ndxml_root *xmlMarco, ndxml_root *xmlData, const char *outfile);
+extern int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName);
 int main(int argc, char *argv[])
 {
 	int i ;
@@ -1200,11 +1201,20 @@ int main(int argc, char *argv[])
 	nd_rmdir("./csharp");
 	nd_mkdir("./csharp");
 
+
+	nd_rmdir("./luaOut");
+	nd_mkdir("./luaOut");
+
+
 	if(build_CSharp(&xmlMessage,&xmlMarco , &xmlDatatype, "./csharp/ProtocolMessage.cs") ) {
 		fprintf(stderr, "export CSharp error \n")  ;
 		exit(1) ;
 	}
 	
+	if ( build_luaDataStruct(&xmlDatatype,"./luaOut/dataStruct.lua"))	{
+		fprintf(stderr, "export lua error \n");
+		exit(1);
+	}
 	
 	ndxml_destroy(&xmlMarco); ndxml_destroy(&xmlDatatype); ndxml_destroy(&xmlMessage) ;
 	
