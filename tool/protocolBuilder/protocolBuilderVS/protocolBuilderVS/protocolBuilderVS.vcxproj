@@ -89,6 +89,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\protocolBuilder\buildCS.cpp" />
+    <ClCompile Include="..\..\protocolBuilder\expLua.cpp" />
     <ClCompile Include="..\..\protocolBuilder\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -3,8 +3,12 @@
 <send_msg_list name="发送消息" delete="no" expand_stat="1">
 	<message name="建立工会" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="9" minId="2">0</msgid>
-		<data name="工会名" kinds="string" param="2">my guild</data>
+		<data name="自由加入" kinds="bool" param="3">0</data>
+		<data name="工会名" kinds="string" param="2">testguild1</data>
+		<data name="缩写" kinds="string" param="2">tg1</data>
+		<data name="工会语言" kinds="string" param="2">chinese</data>
 		<data name="工会说明" kinds="string" param="2">this is my guild</data>
+		<data name="旗帜信息" kinds="string" param="2">hello world</data>
 	</message>
 	<message name="加入工会" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="9" minId="4">0</msgid>
@@ -199,5 +203,11 @@
 	</message>
 	<message name="sys_查看服务器版本" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0" minId="0">0</msgid>
+	</message>
+	<message name="gm_game-world断线测试" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="2" minId="18">0</msgid>
+	</message>
+	<message name="gm_game-social断线测试" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="2" minId="19">0</msgid>
 	</message>
 </send_msg_list>
