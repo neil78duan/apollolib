@@ -40,6 +40,7 @@ QWidget(parent), m_editedFunction(0),  m_curDetailNode(0),
 	m_setting = apoEditorSetting::getInstant();
 	m_connectToSlot = NULL;
 	//m_editingToNext = 0;
+	m_scale = 0;
 }
 
 
@@ -87,6 +88,8 @@ void apoUiMainEditor::clearFunction()
 	m_editedFunction = 0;
 	m_startX = 0;
 	m_startY = 0;
+
+	m_scale = 0;
 
 	m_connectToSlot = NULL;
 	m_moveOffset = QPoint(0, 0);
@@ -484,6 +487,18 @@ bool apoUiMainEditor::_getNodePos(ndxml *exeNode, QPoint &pos)
 
 	return false;
 }
+
+void apoUiMainEditor::movedInScale(apoBaseExeNode *exeNode, const QPoint &screenPos)
+{
+	QPoint newPos = screenPos / m_scale;
+
+	exeNode->setOrgPos(exeNode, newPos);
+	//exeNode->move(newPos);
+	//exeNode->getOrgPos(exeNode);	//save org pos
+	exeNode->move(screenPos);
+	
+}
+
 void apoUiMainEditor::savePosition(apoBaseExeNode *exeNode,  const QPoint *pNewPos )
 {
 	if (!exeNode)	{
@@ -496,6 +511,11 @@ void apoUiMainEditor::savePosition(apoBaseExeNode *exeNode,  const QPoint *pNewP
 	else {
 		pos = exeNode->pos();
 		pos -= m_offset;
+	}
+
+	if (m_scale != 0 && m_scale != 1.0f) {
+		pos /= m_scale;
+		exeNode->setOrgPos(exeNode, pos);
 	}
 
 	ndxml *xml = (ndxml *)exeNode->getMyUserData();
@@ -700,6 +720,7 @@ void apoUiMainEditor::popMenuAddnewTrigged()
 		nd_logerror("create %s Exenode Error \n", _GetXmlName(newxml, NULL));
 		return;
 	}
+	
 
 	if (exeNode->getType() == EAPO_EXE_NODE_ModuleInitEntry || exeNode->getType()==EAPO_EXE_NODE_ExceptionEntry){
 	}
@@ -714,25 +735,20 @@ void apoUiMainEditor::popMenuAddnewTrigged()
 		ndxml_disconnect(m_editedFunction, newxml);
 		ndxml_insert(unConnNode, newxml);
 	}
-		
+
+	if (m_scale != 0 && m_scale != 1.0f){
+		movedInScale(exeNode, m_curClicked);
+// 		QPoint orgPos = m_curClicked / m_scale ;
+// 		exeNode->move(orgPos);
+// 		exeNode->getOrgPos(exeNode);
+// 		exeNode->move(m_curClicked);
+		exeNode->setScale(m_scale);
+	}
+
 	savePosition(exeNode);
 	onFileChanged();
 	nd_logmsg("create %s SUCCESS\n", _GetXmlName(newxml, NULL));
 
-	/*
-	apoBaseExeNode *exeNode = g_apoCreateExeNode(newxml, this);
-	if (!exeNode){
-		ndxml_delxml(newxml, NULL);
-		nd_logerror("create %s Exenode Error \n", _GetXmlName(newxml, NULL));
-		return;
-	}
-	ndxml_insert(unConnNode, newxml);
-	exeNode->move(m_curClicked);
-	savePosition(exeNode);
-	exeNode->show(); //must call show functiong	
-	onFileChanged();
-	nd_logmsg("create %s SUCCESS\n", _GetXmlName(newxml, NULL));
-	*/
 }
 
 void apoUiMainEditor::popMenuDeleteTrigged()
@@ -915,13 +931,9 @@ void apoUiMainEditor::mousePressEvent(QMouseEvent *event)
 		m_connectToSlot = NULL;
 		m_dragSrc = w;
 		
-		m_curDragType = E_MOUSE_TYPE_CONNECT_SLOT;
-		
+		m_curDragType = E_MOUSE_TYPE_CONNECT_SLOT;		
 		m_curClicked = event->pos();
 		
-		//apoBaseSlotCtrl *pSlot = (apoBaseSlotCtrl*)w;
-		//pSlot->setInDrag(true);
-
 	}
 	else {
 		m_curDragType = E_MOUSE_TYPE_MOVE_VIEW;
@@ -942,8 +954,17 @@ void apoUiMainEditor::mouseMoveEvent(QMouseEvent *event)
 	}
 	else if (m_curDragType == E_MOUSE_TYPE_MOVE_NODE)	{
 		nd_assert(m_dragSrc);
+
 		QPoint newPos = event->pos() - m_moveOffset;
-		m_dragSrc->move(newPos);
+
+		if (m_scale != 0 && m_scale != 1.0f){
+			movedInScale(dynamic_cast<apoBaseExeNode*>(m_dragSrc), newPos);
+		}
+		else {
+			m_dragSrc->move(newPos);
+		}
+
+
 	}
 	else if (m_curDragType == E_MOUSE_TYPE_CONNECT_SLOT){
 		
@@ -995,8 +1016,6 @@ void apoUiMainEditor::mouseMoveEvent(QMouseEvent *event)
 }
 void apoUiMainEditor::mouseReleaseEvent(QMouseEvent *event)
 {
-	
-
 	if (m_curDragType == E_MOUSE_TYPE_MOVE_VIEW){
 		QPoint offsetPt = event->pos();
 		offsetPt -= m_moveOffset;
@@ -1031,8 +1050,6 @@ void apoUiMainEditor::mouseReleaseEvent(QMouseEvent *event)
 			}
 		}
 		else {
-			//const QPoint *pos = m_dragSrc->pos();
-			//nd_logdebug("node move to(%d,%d) and \n", pos.x(), pos.y());
 			savePosition(dynamic_cast<apoBaseExeNode*>(m_dragSrc));
 		}
 	}
@@ -1049,6 +1066,40 @@ void apoUiMainEditor::mouseReleaseEvent(QMouseEvent *event)
 }
 
 
+void apoUiMainEditor::wheelEvent(QWheelEvent *event)
+{
+	int delta = event->delta();
+	nd_logmsg("mouse wheel deta=%d\n", delta);
+	if (m_scale == 0){
+		// first scale 
+		saveCurPosWithOffset();
+		m_offset = QPoint(0, 0);
+		saveOffset(m_offset);
+		m_scale = 1.0f;
+	}
+
+	float scale = m_scale + (float)delta / 10000.0f;
+	setScale(scale);
+
+// 
+// 	m_scale = scale;
+// 	if (m_scale > 2.0f)	{
+// 		m_scale = 2.0f;
+// 	}
+// 	else if (m_scale < 0.25f) {
+// 		m_scale = 0.25f;
+// 	}
+// 
+// 	QObjectList list = children();
+// 	foreach(QObject *obj, list) {
+// 		apoBaseExeNode *exeNode = qobject_cast<apoBaseExeNode*>(obj);
+// 		if (exeNode ){
+// 			exeNode->setScale(m_scale);
+// 		}
+// 	}
+// 	this->update();
+// 	paintEvent( NULL );
+}
 
 void apoUiMainEditor::paintEvent(QPaintEvent *event)
 {
@@ -1123,6 +1174,31 @@ bool apoUiMainEditor::setCurNodeSlotSelected(ndxml *xmlParam, bool inError)
 	return false;
 
 }
+
+float apoUiMainEditor::setScale(float scale)
+{
+	float oldScale = m_scale;
+	
+	m_scale = scale;
+	if (m_scale > 2.0f)	{
+		m_scale = 2.0f;
+	}
+	else if (m_scale < 0.25f) {
+		m_scale = 0.25f;
+	}
+
+	QObjectList list = children();
+	foreach(QObject *obj, list) {
+		apoBaseExeNode *exeNode = qobject_cast<apoBaseExeNode*>(obj);
+		if (exeNode){
+			exeNode->setScale(m_scale);
+		}
+	}
+	this->update();
+	paintEvent(NULL);
+	return oldScale;
+}
+
 
 void apoUiMainEditor::onCurNodeChanged()
 {

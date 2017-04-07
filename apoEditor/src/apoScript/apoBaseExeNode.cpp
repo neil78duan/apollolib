@@ -10,6 +10,7 @@
 #include "apoBaseExeNode.h"
 #include "apoUiParam.h"
 #include "apoScript/apoEditorSetting.h"
+#include "apoScript/apoUiMainEditor.h"
 #include "logic_parser/logic_compile.h"
 #include "logic_parser/logic_editor_helper.h"
 
@@ -33,6 +34,7 @@ QWidget(parent), m_toNextNode(NULL), m_nodeXml(0), m_outParamAddNew(0),
 	m_selected = false;
 	m_showError = false ;
 	m_disableNewFuncParam = true;
+	m_scale = 1;
 	m_type = 0;
 	m_tips = tips;
 	setNodeInfo(parent, xmlnode);
@@ -53,13 +55,31 @@ QWidget(parent), m_toNextNode(NULL), m_outParamAddNew(0),
 
 	m_selected = false;
 	m_showError =false ;
+
+	m_scale = 1;
 	setAttribute(Qt::WA_DeleteOnClose, true);
 }
 
 apoBaseExeNode::~apoBaseExeNode()
 {
-
+	QObjectList list = children();
+	foreach(QObject *obj, list) {
+		QWidget *widget = qobject_cast<QWidget*>(obj);
+		if (widget){
+			CoordUserData *pData = (CoordUserData *)widget->userData(USERDATA_POS_ID);
+			if (pData){
+				delete pData;
+			}
+			pData = (CoordUserData *)widget->userData(USERDATA_SIZE_ID);
+			if (pData){
+				delete pData;
+			}
+			widget->setUserData(USERDATA_SIZE_ID, NULL);
+			widget->setUserData(USERDATA_POS_ID, NULL);
+		}
+	}
 }
+
 
 QString apoBaseExeNode::getTitleDisplayName()
 {
@@ -291,7 +311,7 @@ void apoBaseExeNode::enableOutParam()
 	m_disableNewFuncParam = false;
 }
 
-void setOutParamNum(int num);
+//void setOutParamNum(int num);
 
 void apoBaseExeNode::setSelected(bool isSelected)
 {
@@ -334,6 +354,44 @@ void apoBaseExeNode::onInputValAddClicked()
 	} 	
 }
 
+
+void apoBaseExeNode::setScale(float scale)
+{
+	QObjectList list = children();
+	foreach(QObject *obj, list) {
+		QWidget *widget = qobject_cast<QWidget*>(obj);
+		if (widget){
+			QSize orgSize = getOrgSize(widget);
+			QPoint orgPos = getOrgPos(widget);
+
+			orgPos *= scale;
+			orgSize *= scale;
+
+			widget->resize(orgSize);
+			widget->move(orgPos);
+		}
+	}
+
+	m_title->adjustSize();
+	m_scale = scale;
+
+
+	this->resize(m_size*m_scale);
+	//get new pos 
+	//////////////////////////////////////////////////////////////////////////
+	QPoint offset;
+	apoUiMainEditor *pMainEditor = dynamic_cast<apoUiMainEditor *>(parent());
+	if (pMainEditor)	{
+		offset = pMainEditor->getExenodeOffset();
+	}
+
+	QPoint orgPos = getOrgPos(this);
+	orgPos *= m_scale;
+	orgPos += offset;
+	move(orgPos);
+
+	this->update();
+}
 
 bool apoBaseExeNode::isMyParam(apoBaseParam *paramCtrl)
 {
@@ -461,7 +519,7 @@ void apoBaseExeNode::onAddFunctionInParam()
 	QString str1;
 	str1.sprintf("In%d >>", m_outParamVct.size() + 1);
 	apoBaseSlotCtrl*pParamCtrl = new apoBaseSlotCtrl(str1,this);	
-	pParamCtrl->resize(PARAM_CTRL_W*2, PARAM_CTRL_H);
+	pParamCtrl->resize(PARAM_CTRL_W * 2, PARAM_CTRL_H);
 	pParamCtrl->setStyleSheet("QLabel{background-color:yellow;}");
 	pParamCtrl->setAttribute(Qt::WA_DeleteOnClose, true);
 
@@ -657,6 +715,52 @@ void apoBaseExeNode::init(const QString &title)
 
 }
 
+
+void apoBaseExeNode::setOrgPos(QWidget *widget, const QPoint &pos)
+{
+	CoordUserData *pData = (CoordUserData *)widget->userData(USERDATA_POS_ID);
+	if (!pData){
+		pData = new  CoordUserData(pos.x(), pos.y());
+		widget->setUserData(USERDATA_POS_ID, pData);
+	}
+	pData->m_point = pos;
+
+}
+
+QPoint apoBaseExeNode::getOrgPos(QWidget *widget, bool withNew )
+{
+	CoordUserData *pData = (CoordUserData *)widget->userData(USERDATA_POS_ID);
+	if (!pData){
+		QPoint pos = widget->pos();
+		if (withNew) {
+			pData = new  CoordUserData(pos.x(), pos.y());
+			widget->setUserData(USERDATA_POS_ID, pData);
+		}		
+		return pos;
+	}
+	return pData->m_point;
+	
+}
+QSize apoBaseExeNode::getOrgSize(QWidget *widget, bool withNew )
+{
+	if (dynamic_cast<apoBaseExeNode*>(widget))	{
+		return ((apoBaseExeNode*)widget)->mySize();
+	}
+	CoordUserData *pData = (CoordUserData *)widget->userData(USERDATA_SIZE_ID);
+	if (!pData){
+		QSize size = widget->size();
+		if (withNew) {
+			pData = new  CoordUserData(size.width(), size.height());
+			widget->setUserData(USERDATA_SIZE_ID, pData);
+		}
+
+		return size;
+	}
+
+	return QSize(pData->m_point.x(), pData->m_point.y());
+}
+
+
 void apoBaseExeNode::onConnected()
 {
 	if (m_runInNode)	{
@@ -707,10 +811,11 @@ void apoBaseExeNode::initParamPos()
 void apoBaseExeNode::paintEvent(QPaintEvent *event)
 {
     //draw frame
-	this->resize(m_size);
-	//this->move(m_pos);
-	
+	//this->resize(m_size);
+	//this->move(m_pos);	
 	QPainter painter(this);	
+
+	_trytoScale(painter);
 
 	painter.setRenderHint(QPainter::Antialiasing, true);
 
@@ -732,7 +837,7 @@ void apoBaseExeNode::paintEvent(QPaintEvent *event)
 	if (m_paramVct.size() > 0) {
 		QFont font1;
 		font1.setFamily(QString::fromUtf8("Times New Roman"));
-		font1.setPointSize(8);
+		font1.setPointSize(8*m_scale);
 		//font3.setBold(true);
 		font1.setWeight(50);
 
@@ -746,8 +851,9 @@ void apoBaseExeNode::paintEvent(QPaintEvent *event)
 				continue;
 			}
 
-			QPoint pos = (*it)->pos();
-			pos.setX(pos.x() + (*it)->size().width() + 2);
+			QPoint pos = getOrgPos(*it,false);//(*it)->pos();
+			QSize size = getOrgSize(*it, false);
+			pos.setX(pos.x() + size.width() + 2);
 			pos.setY(pos.y() + MARGIN_Y -1);
 			painter.drawText(pos, paramInfo);
 
@@ -757,13 +863,14 @@ void apoBaseExeNode::paintEvent(QPaintEvent *event)
 	if (!m_tips.isEmpty()) {
 
 		int x = MARGIN_X ;
-		int y = E_LINE_HEIGHT * 1.5 ;
+		int y = E_LINE_HEIGHT * 1.5  ;
 		
 		painter.setPen(QPen(Qt::lightGray, 2));
 		
 		QFont font1;
 		font1.setFamily(QString::fromUtf8("Harlow Solid Italic"));
-		font1.setPointSize(14);
+		float fontSize = 14 * m_scale;
+		font1.setPointSize((int)fontSize);
 		//font3.setBold(true);
 		font1.setWeight(50);
 		painter.setFont(font1);
@@ -772,6 +879,35 @@ void apoBaseExeNode::paintEvent(QPaintEvent *event)
 	trytoDrawConnectSlot();
 }
 
+
+void apoBaseExeNode::_trytoScale(QPainter &myPainter)
+{
+	if (fabs(m_scale - 1.0f) <= 0.001) {
+		this->resize(m_size);
+		return;
+	}
+
+// 	QPoint offset;
+// 	apoUiMainEditor *pMainEditor = dynamic_cast<apoUiMainEditor *>(parent());
+// 	if (pMainEditor)	{
+// 		offset = pMainEditor->getExenodeOffset();
+// 	}
+// 	QSize newSize = m_size;
+// 	newSize *= m_scale;
+// 	this->resize(newSize);
+// 	
+// 	QPoint orgPos = getOrgPos(this);
+// 	orgPos *= m_scale;
+// 
+// 	orgPos += offset;
+// 	move(orgPos);
+
+	QSize newSize = m_size * m_scale;
+	this->resize(newSize);
+
+	myPainter.setWindow(0, 0, m_size.width(), m_size.height());
+	myPainter.setViewport(0, 0, newSize.width(), newSize.height());
+}
 
 void apoBaseExeNode::trytoDrawConnectSlot()
 {

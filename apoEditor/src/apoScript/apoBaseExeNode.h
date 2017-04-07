@@ -19,14 +19,38 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QString>
+#include <QObjectUserData>
 
+class CoordUserData :public QObjectUserData
+{
+public:
+	CoordUserData() :QObjectUserData()
+	{
+
+	}
+	CoordUserData(int x, int y) :QObjectUserData(), m_point(x,y)
+	{
+
+	}
+	~CoordUserData() 
+	{
+
+	}
+
+	QPoint m_point;
+private:
+
+};
+
+#define USERDATA_POS_ID 111
+#define USERDATA_SIZE_ID 112
 
 #define CREATE_CTRL_OBJECT(_qType,_text, _color, _outputVar) \
 	do		{		\
 		_qType *ctrl1 = new _qType(QString(_text) , this);	\
 		ctrl1->resize(PARAM_CTRL_W, PARAM_CTRL_H);			\
         ctrl1->setStyleSheet("QLabel{background-color:"# _color ";}");	\
-		ctrl1->move(x, y);									\
+		ctrl1->move(x, y);												\
 		ctrl1->show();										\
 		ctrl1->setAttribute(Qt::WA_DeleteOnClose, true);	\
 		_outputVar = ctrl1;									\
@@ -53,6 +77,8 @@ public:
 	void disableConnectIn();
 
 	void enableOutParam();
+
+	void setScale(float scale);
 
 	apoBaseSlotCtrl *toNext() { return m_toNextNode; }
 	apoBaseSlotCtrl *returnVal(){ return m_returnValue; }
@@ -84,6 +110,9 @@ public:
 	void onDisconnected();
 	//void setMyUserData(void *userData) { m_myUserData = userData; }
 
+	void setOrgPos(QWidget *widget, const QPoint &pos);
+	QPoint getOrgPos(QWidget *widget, bool withNew = true);
+	QSize getOrgSize(QWidget *widget, bool withNew = true);
 	enum {
 		PARAM_CTRL_W = 15,
 		PARAM_CTRL_H = 10,
@@ -110,12 +139,15 @@ protected:
 	void mouseDoubleClickEvent(QMouseEvent * event);
 	QString getTitleDisplayName();
 
+	void _trytoScale(QPainter &myPainter);
+
 	void trytoDrawConnectSlot();
 	bool _parseParam(ndxml *xmlnode);
 	apoBaseParam* _param2Ctrl(ndxml *xmlParam, ndxml *parent);
 
 	apoBaseParam* createParam(ndxml *xmlParam, ndxml *parent);
 
+	QSize mySize() { return m_size; }
 
 	virtual void destroy();
 	void init(const QString &title );
@@ -127,6 +159,7 @@ protected:
 
 	virtual void onParamCreated(apoBaseParam *paramCtrl);
 	virtual void onInit();
+
 	
 	bool m_disableRetVar;
 	bool m_disableToNext;
@@ -138,6 +171,7 @@ protected:
 	bool m_showError ;		//show compiled error
 	int m_type;
 
+	float m_scale;
     QPushButton *m_addNewParam;
 	QPushButton *m_outParamAddNew;
 

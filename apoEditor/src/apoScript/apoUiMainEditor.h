@@ -45,6 +45,8 @@ public:
 	bool setCurDetail(ndxml *xmlNode, bool inError= false);
 	bool setCurNodeSlotSelected(ndxml *xmlParam, bool inError=false);
 	
+	QPoint getExenodeOffset() { return m_offset; }
+	float setScale(float scale);
 public slots:
 	//void onExenodeDBClicked(apoBaseExeNode *exeNode, QMouseEvent * event);
 	void onCurNodeChanged();
@@ -54,7 +56,7 @@ signals:
 	void showExenodeSignal(apoBaseExeNode *exeNode);
 
 private:
-
+	void movedInScale(apoBaseExeNode *exeNode, const QPoint &screenPos);
 	void savePosition(apoBaseExeNode *exeNode, const QPoint *pos=NULL);
 	bool _getNodePos(ndxml *exeNode, QPoint &pos);
 	void saveOffset(const QPoint &offset);
@@ -104,6 +106,7 @@ private:
 	void mousePressEvent(QMouseEvent *event);
 	void mouseMoveEvent(QMouseEvent *event);
 	void mouseReleaseEvent(QMouseEvent *event);
+	void wheelEvent(QWheelEvent *event);
 	//void wheelEvent(QWheelEvent *event);
 	void dragTo(const QPoint &offset);	
 	void saveCurPosWithOffset();
@@ -135,6 +138,7 @@ private:
 
 	apoUiBezier *m_drawingBezier;
 
+	float m_scale;
 	QVector<apoUiBezier*> m_beziersVct;
 
 	typedef std::map<std::string, apoBaseExeNode*>varinat_map_t;
