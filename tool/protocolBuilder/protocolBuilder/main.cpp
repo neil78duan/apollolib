@@ -1128,6 +1128,7 @@ do { 			\
 
 extern int build_CSharp(ndxml_root *xmlID, ndxml_root *xmlMarco, ndxml_root *xmlData, const char *outfile);
 extern int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName);
+extern int build_luaMessageID(ndxml_root *xmlfile, const char *out_file);
 int main(int argc, char *argv[])
 {
 	int i ;
@@ -1211,8 +1212,14 @@ int main(int argc, char *argv[])
 		exit(1) ;
 	}
 	
-	if ( build_luaDataStruct(&xmlDatatype,"./luaOut/dataStruct.lua"))	{
+	if ( build_luaDataStruct(&xmlDatatype,"./luaOut/NetDataStruct.lua"))	{
 		fprintf(stderr, "export lua error \n");
+		exit(1);
+	}
+
+
+	if (build_luaMessageID(&xmlMessage, "./luaOut/NetMessageIDDefine.lua")) {
+		fprintf(stderr, "export lua mesage id error \n");
 		exit(1);
 	}
 	
