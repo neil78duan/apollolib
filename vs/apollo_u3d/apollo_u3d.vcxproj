@@ -98,7 +98,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) D:\work\code\client\lghTest\Assets\Plugins</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,7 +117,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) D:\work\code\client\common\Assets\Plugins</Command>
+      <Command>copy $(TargetPath) D:\work\code\client\Guardian\Assets\Scripts\Base\Network\Plugins</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -138,7 +139,8 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) D:\work\code\client\lghTest\Assets\Plugins</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -160,7 +162,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) D:\work\code\client\common\Assets\Plugins</Command>
+      <Command>copy $(TargetPath) D:\work\code\client\Guardian\Assets\Scripts\Base\Network\Plugins</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
