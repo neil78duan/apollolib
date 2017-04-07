@@ -14,6 +14,7 @@
 #include "logic_parser/logic_compile.h"
 #include "logic_parser/logic_editor_helper.h"
 
+#include <math.h>
 #include <QPainter>
 #include <QMessageBox>
 #include <QMouseEvent>
