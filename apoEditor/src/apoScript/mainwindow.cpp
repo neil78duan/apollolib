@@ -893,6 +893,14 @@ void MainWindow::on_actionTest_triggered()
 }
 
 
+void MainWindow::on_actionCancel_scale_triggered()
+{
+	if (m_editorWindow && m_currFunction)	{
+		showCurFunctions();
+	}
+}
+
+
 static int getScriptExpEncodeType(ndxml *scriptXml)
 {
 	ndxml *moduleInfo = ndxml_getnode(scriptXml, "moduleInfo");
@@ -1131,4 +1139,3 @@ void MainWindow::setCurFileSave(bool isSaved)
 	}
 
 }
-

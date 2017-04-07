@@ -47,6 +47,7 @@
     <addaction name="actionViewOutput"/>
     <addaction name="actionFunctionView"/>
     <addaction name="actionDetail"/>
+    <addaction name="actionCancel_scale"/>
    </widget>
    <addaction name="menuHello_world"/>
    <addaction name="menuWindows"/>
@@ -177,6 +178,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="actionCancel_scale">
+   <property name="text">
+    <string>Show 100%</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L, F10</string>
    </property>
   </action>
  </widget>

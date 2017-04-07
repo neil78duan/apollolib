@@ -74,6 +74,8 @@ private slots:
 
     void on_actionTest_triggered();
 
+    void on_actionCancel_scale_triggered();
+
 protected:
 
 	bool openFileView();
