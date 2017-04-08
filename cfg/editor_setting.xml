@@ -148,6 +148,9 @@
 	<list instruction="13" desc="switch -default ,else" >default_collection</list>	
 	<list instruction="13" desc="switch -default ,else" >last_run_collection</list>	
 	<list instruction="14" desc="switch -default ,else" >steps_collection</list>
+	
+	<list instruction="15" desc="label for goto " >op_set_label</list>
+	<list instruction="16" desc="goto cmd" >op_goto_label</list>
 </compile_setting>
 
 <create_template kinds="hide" desc="新建节点的创建模板">
@@ -896,18 +899,18 @@
 	</create_step_false_eixt>
 	
 	
-	
-	<!-- create_label name="创建标签" create_type="1" >
-		<op_set_label name="标签" expand="yes" >
+	<create_label name="创建标签" create_type="1" >
+		<op_set_label name="标签$name$" expand="yes" comp_cond="param">
 			<param name="标签名" kinds="string" delete="no" replace_val="../.name" >none</param>		
 		</op_set_label>
 	</create_label>
 	
 	<create_goto_label name="goto标签" create_type="1" >
-		<op_goto_label name="goto:$label$" expand="yes" >
+		<op_goto_label name="goto:$name$" expand="yes" comp_cond="param">
 			<param name="跳转至" kinds="string" delete="no" replace_val="../.name" >none</param>		
 		</op_goto_label>		
-	</create_goto_label -->
+	</create_goto_label>
+
 	
 	<create_input_param name="创建参数参数" create_type="1" >
 		<param_collect name="参数" expand="yes">
@@ -974,6 +977,9 @@
 		
 		<list>create_step_true_exit</list>	
 		<list>create_step_false_eixt</list>	
+		
+		<list>create_label</list>
+		<list>create_goto_label</list>
 		
 		<list>create_get_arrsize</list>		
 		<list>create_make_var</list>
@@ -1049,6 +1055,11 @@
 		
 		<list>create_step_true_exit</list>	
 		<list>create_step_false_eixt</list>
+		
+		
+		<list>create_label</list>
+		<list>create_goto_label</list>
+		
 		
 		<list>create_get_arrsize</list>
 		

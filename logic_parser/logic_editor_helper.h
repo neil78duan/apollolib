@@ -118,6 +118,15 @@ namespace LogicEditorHelper
 	{
 		return _getXmlParamVal(xml, root, ERT_KEY_VALUE);
 	}
+	
+	inline ndxml *GetCompCond(ndxml *xml)
+	{
+		const char *pCompCondName = ndxml_getattr_val(xml, "comp_cond");
+		if(pCompCondName){
+			return ndxml_getnode(xml, pCompCondName);
+		}
+		return NULL ;
+	}
 
 	template<class TTextList>
 	int _getEnumMembers(ndxml *xml, ndxml_root *config_root, TTextList& texts, eReservedType typeName)

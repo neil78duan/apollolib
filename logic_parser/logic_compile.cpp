@@ -208,6 +208,75 @@ bool logciCompileSetting::onLoad(ndxml &cfgRoot)
 
 /////////////////////////////
 
+
+void LabelMgr::clear()
+{
+	m_labels.clear() ;
+}
+void LabelMgr::pushLabel(const char *name , void *pAimAddr)
+{
+	if (!name || !pAimAddr) {
+		return ;
+	}
+	labelNode_map_t::iterator it = m_labels.find(name) ;
+	if (it != m_labels.end()) {
+		it->second.aimAddr = pAimAddr ;
+	}
+	else {
+		m_labels[name] = labelAddrs(pAimAddr) ;
+	}
+	
+	//nd_logmsg("push label %s addr =%p\n",name, pAimAddr) ;
+}
+
+void LabelMgr::pushJump(const char *name, void *recordSizeAddr)
+{
+	if (!name || !recordSizeAddr) {
+		return ;
+	}
+	labelNode_map_t::iterator it = m_labels.find(name) ;
+	if (it != m_labels.end()) {
+		it->second.fromAddr.push_back(recordSizeAddr) ;
+	}
+	else {
+		labelAddrs tmpLabel(0) ;
+		tmpLabel.fromAddr.push_back(recordSizeAddr) ;
+		
+		m_labels[name] = tmpLabel ;
+	}
+	
+	//nd_logmsg("push jump addr =%p\n", recordSizeAddr) ;
+}
+
+void LabelMgr::fillJumpAddr(int byteOrder)
+{
+	if (0==m_labels.size())	{
+		return;
+	}
+	
+	for (labelNode_map_t::iterator it = m_labels.begin(); it != m_labels.end(); ++it){
+		if (!it->second.aimAddr || it->second.fromAddr.size()==0) {
+			continue;
+		}
+		shortJumpAddr_vct &jumpInfo = it->second.fromAddr ;
+		char *toAddr = (char*)it->second.aimAddr ;
+		
+		for (shortJumpAddr_vct::iterator jump_it= jumpInfo.begin(); jump_it != jumpInfo.end(); ++jump_it) {
+			char *fromAddr = jump_it->addr ;
+			int offset = toAddr - (fromAddr + sizeof(NDUINT32) );
+			lp_write_stream(fromAddr,offset, byteOrder);
+			
+			
+			//nd_logmsg("jump from %p to %p offset =%d\n", fromAddr, toAddr, offset) ;
+			
+		}
+	}
+	
+}
+
+
+/////////////////////////////
+
 LogicCompiler::LogicCompiler() :m_bDebugInfo(false), m_compileStep(0), m_curRoot(0), m_aimByteOrder(ND_L_ENDIAN)
 {
 }
@@ -449,6 +518,7 @@ int LogicCompiler::func2Stream(ndxml *funcNode, char *buf, size_t bufsize)
 	}
 	p += len;
 	
+	m_labelAddr.fillJumpAddr(m_aimByteOrder) ;
 	return  (int)(p - buf);
 }
 
@@ -625,6 +695,9 @@ int LogicCompiler::trytoCompileExceptionHandler(ndxml *funcNode, char *buf, size
 			break ;
 		}
 	}
+	
+	m_labelAddr.fillJumpAddr(m_aimByteOrder) ;
+	m_labelAddr.clear() ;
 	return ret;
 }
 
@@ -671,6 +744,9 @@ int LogicCompiler::trytoCompileInitilizerBlock(ndxml *funcNode,char *buf, size_t
 			break;
 		}
 	}
+	
+	m_labelAddr.fillJumpAddr(m_aimByteOrder) ;
+	m_labelAddr.clear() ;
 	return ret;
 }
 
@@ -743,6 +819,24 @@ int LogicCompiler::stepsCollect2Stream(ndxml *stepsCollection, char *buf, size_t
 		else if (it->second.ins_type == E_INSTRUCT_TYPE_LOOP) {
 			ret = subLoop2Stream(&it->second, xmlStep, p, len);
 		}
+		else if(it->second.ins_type == E_INSTRUCT_TYPE_LABEL) {
+			ndxml *LableXml = GetCompCond(xmlStep) ;
+			if (LableXml) {
+				m_labelAddr.pushLabel(ndxml_getval(LableXml), p) ;
+			}
+			ret = 0 ;
+		}
+		else if(it->second.ins_type ==E_INSTRUCT_TYPE_GOTO) {
+			ndxml *LableXml = GetCompCond(xmlStep) ;
+			char *pStream = p ;
+			if (LableXml) {
+				pStream = lp_write_stream(pStream, (NDUINT32)E_OP_SHORT_JUMP, m_aimByteOrder);
+				m_labelAddr.pushJump(ndxml_getval(LableXml), pStream) ;
+				pStream = lp_write_stream(pStream, (NDUINT32)0, m_aimByteOrder);
+			}
+			ret = pStream - p ;
+		}
+		
 		else {
 			continue;
 		}
@@ -1293,33 +1387,3 @@ ndxml *LogicCompiler::_getRefNode(ndxml*node)
 { 
 	return LogicEditorHelper::_getRefNode(node,ndxml_getval(node));
 }
-// 
-// 
-// int LogicCompiler::compileJumpLabel(const char *labelName, char *cmdStreamAddr, NDUINT32 jumpCmd)
-// {
-// 	char *p = cmdStreamAddr;
-// 	char *jumpAddr = getLable(labelName);
-// 	if (jumpAddr){
-// 		nd_logerror("can not found %s label\n", labelName);
-// 		return -1;
-// 	}
-// 	int offset =(int) (cmdStreamAddr - jumpAddr) + 8;
-// 	//add loop jump instruction 
-// 	p = lp_write_stream(p, (NDUINT32)jumpCmd, m_aimByteOrder);
-// 	p = lp_write_stream(p, (NDUINT32)(-offset), m_aimByteOrder);
-// 
-// 	return (int)(p - cmdStreamAddr);
-// }
-// 
-// void LogicCompiler::setLabel(const char *labelName, char *addr)
-// {
-// 	m_labelAddr[std::string(labelName)] = addr;
-// }
-// char *LogicCompiler::getLable(const char *labelName)
-// {
-// 	label_addr_map::const_iterator it = m_labelAddr.find(labelName);
-// 	if (it == m_labelAddr.end()) {
-// 		return NULL;
-// 	}
-// 	return it->second;
-// }

@@ -33,6 +33,9 @@ enum instructType {
 
 	E_INSTRUCT_TYPE_COLLOCTION,			//multi-step clooection ,can not use break ;
 	
+	E_INSTRUCT_TYPE_LABEL ,
+	E_INSTRUCT_TYPE_GOTO,
+	
 	E_INSTRUCT_TYPE_COMMENT = 100, // MARRK
 
 };
@@ -81,6 +84,7 @@ struct enumTextVct
 //record short jump addr ,after compile ,so it will get the current block size , the short jump need to goto the block-end
 struct shortJumpInfo
 {
+	shortJumpInfo(void *p=0) : addr((char*)p){}
 	char *addr;
 };
 
@@ -126,6 +130,25 @@ typedef std::vector<shortJumpInfo> shortJumpAddr_vct;
 typedef std::map<std::string, streamNode> streamCMD_map_t;
 
 typedef std::vector<int> stackIndex_vct;
+
+//manager for labels which used in goto or jump (short jump)
+class LabelMgr
+{
+	struct labelAddrs
+	{
+		labelAddrs(void *addr=0):aimAddr(addr) {}
+		void *aimAddr ;
+		shortJumpAddr_vct fromAddr ;
+	};
+	
+	typedef std::map<std::string, labelAddrs>  labelNode_map_t ;
+	labelNode_map_t m_labels ;
+public:
+	void clear() ;
+	void pushLabel(const char *name , void *pAimAddr) ;
+	void pushJump(const char *labelName, void *recordSizeAddr) ;
+	void fillJumpAddr(int byteOrder) ;
+};
 
 class LogicCompiler : public logciCompileSetting
 {
@@ -183,10 +206,6 @@ private:
 
 	ndxml *_getRefNode(ndxml*node);
 
-// 	int compileJumpLabel(const char *labelName, char *cmdStreamAddr, NDUINT32 jumpCmd);
-// 	void setLabel(const char *labelName, char *addr);
-// 	char *getLable(const char *labelName);
-
 
 	bool m_bDebugInfo;
 	int m_compileStep;
@@ -198,9 +217,8 @@ private:
 	char *m_pInitBlock;
 
 	shortJumpAddr_vct m_reFillJumpStepSize;
-	typedef std::map<std::string, char*>label_addr_map;
-
-	label_addr_map m_labelAddr;
+	
+	LabelMgr m_labelAddr;
 
 	streamCMD_map_t m_preCMDs;
 	
