@@ -820,13 +820,7 @@ int LogicCompiler::stepsCollect2Stream(ndxml *stepsCollection, char *buf, size_t
 			ret = subLoop2Stream(&it->second, xmlStep, p, len);
 		}
 		else if(it->second.ins_type == E_INSTRUCT_TYPE_LABEL) {
-<<<<<<< HEAD
 			m_labelAddr.pushLabel(ndxml_getval(xmlStep), p);
-
-// 			ndxml *LableXml = GetCompCond(xmlStep) ;
-// 			if (LableXml) {
-// 				m_labelAddr.pushLabel(ndxml_getval(LableXml), p) ;
-// 			}
 			ret = 0 ;
 		}
 		else if(it->second.ins_type ==E_INSTRUCT_TYPE_GOTO) {
@@ -835,29 +829,6 @@ int LogicCompiler::stepsCollect2Stream(ndxml *stepsCollection, char *buf, size_t
 			m_labelAddr.pushJump(ndxml_getval(xmlStep), pStream);
 			pStream = lp_write_stream(pStream, (NDUINT32)0, m_aimByteOrder);
 
-// 			ndxml *LableXml = GetCompCond(xmlStep) ;
-// 			char *pStream = p ;
-// 			if (LableXml) {
-// 				pStream = lp_write_stream(pStream, (NDUINT32)E_OP_SHORT_JUMP, m_aimByteOrder);
-// 				m_labelAddr.pushJump(ndxml_getval(LableXml), pStream) ;
-// 				pStream = lp_write_stream(pStream, (NDUINT32)0, m_aimByteOrder);
-// 			}
-=======
-			ndxml *LableXml = GetCompCond(xmlStep) ;
-			if (LableXml) {
-				m_labelAddr.pushLabel(ndxml_getval(LableXml), p) ;
-			}
-			ret = 0 ;
-		}
-		else if(it->second.ins_type ==E_INSTRUCT_TYPE_GOTO) {
-			ndxml *LableXml = GetCompCond(xmlStep) ;
-			char *pStream = p ;
-			if (LableXml) {
-				pStream = lp_write_stream(pStream, (NDUINT32)E_OP_SHORT_JUMP, m_aimByteOrder);
-				m_labelAddr.pushJump(ndxml_getval(LableXml), pStream) ;
-				pStream = lp_write_stream(pStream, (NDUINT32)0, m_aimByteOrder);
-			}
->>>>>>> eaa2a077f8b9f69e3a4030735b38ea773e8913ab
 			ret = pStream - p ;
 		}
 		
