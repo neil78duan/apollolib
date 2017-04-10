@@ -102,8 +102,22 @@ bool apoUiDetailView::showExeNode(apoBaseExeNode *node)
 	_insertRow(createItem("Node"), createItem("text"), createItem(textName,xml, "name" ));
 	
 	//show comment
-	textName = LogicEditorHelper::_GetNodeComment(xml);
-	_insertRow(createItem("Comment"), createItem("text"), createItem(textName, ndxml_getnode(xml, "comment")));
+	if (ndxml_getnode(xml, "comment"))	{
+		textName = LogicEditorHelper::_GetNodeComment(xml);
+		_insertRow(createItem("Comment"), createItem("text"), createItem(textName, ndxml_getnode(xml, "comment")));
+	}
+
+	ndxml *xmlLabel = ndxml_getnode(xml, "internal_label");
+	if (xmlLabel){
+		_insertRow(createItem("Label"), createItem("text"), createItem(ndxml_getval(xmlLabel), xmlLabel));
+	}
+
+	xmlLabel = ndxml_getnode(xml, "internal_goto");
+	if (xmlLabel){
+		_insertRow(createItem("Goto"), createItem("text"), createItem(ndxml_getval(xmlLabel), xmlLabel));
+	}
+
+
 
 	int num = node->getParamNum();
 	for (int i = 0; i < num; i++){

@@ -73,6 +73,7 @@ public:
 	ndxml_root *getConfig() { return &m_configRoot; }
 
 	ndxml* AddNewXmlNode(ndxml *node, QWidget *parentWindow);//create new xml node from template @need show dialog and get user selected
+	ndxml *AddNewXmlByTempName(ndxml *node, const char *templateName);
 
 	bool loadUserDefEnum(const char *userDefEnumFile);
 	bool loadMessageDefine(const char *messageFile) ;
