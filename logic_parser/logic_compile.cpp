@@ -820,6 +820,29 @@ int LogicCompiler::stepsCollect2Stream(ndxml *stepsCollection, char *buf, size_t
 			ret = subLoop2Stream(&it->second, xmlStep, p, len);
 		}
 		else if(it->second.ins_type == E_INSTRUCT_TYPE_LABEL) {
+<<<<<<< HEAD
+			m_labelAddr.pushLabel(ndxml_getval(xmlStep), p);
+
+// 			ndxml *LableXml = GetCompCond(xmlStep) ;
+// 			if (LableXml) {
+// 				m_labelAddr.pushLabel(ndxml_getval(LableXml), p) ;
+// 			}
+			ret = 0 ;
+		}
+		else if(it->second.ins_type ==E_INSTRUCT_TYPE_GOTO) {
+			char *pStream = p;
+			pStream = lp_write_stream(pStream, (NDUINT32)E_OP_SHORT_JUMP, m_aimByteOrder);
+			m_labelAddr.pushJump(ndxml_getval(xmlStep), pStream);
+			pStream = lp_write_stream(pStream, (NDUINT32)0, m_aimByteOrder);
+
+// 			ndxml *LableXml = GetCompCond(xmlStep) ;
+// 			char *pStream = p ;
+// 			if (LableXml) {
+// 				pStream = lp_write_stream(pStream, (NDUINT32)E_OP_SHORT_JUMP, m_aimByteOrder);
+// 				m_labelAddr.pushJump(ndxml_getval(LableXml), pStream) ;
+// 				pStream = lp_write_stream(pStream, (NDUINT32)0, m_aimByteOrder);
+// 			}
+=======
 			ndxml *LableXml = GetCompCond(xmlStep) ;
 			if (LableXml) {
 				m_labelAddr.pushLabel(ndxml_getval(LableXml), p) ;
@@ -834,6 +857,7 @@ int LogicCompiler::stepsCollect2Stream(ndxml *stepsCollection, char *buf, size_t
 				m_labelAddr.pushJump(ndxml_getval(LableXml), pStream) ;
 				pStream = lp_write_stream(pStream, (NDUINT32)0, m_aimByteOrder);
 			}
+>>>>>>> eaa2a077f8b9f69e3a4030735b38ea773e8913ab
 			ret = pStream - p ;
 		}
 		
@@ -912,17 +936,35 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 		len -= sizeof(NDUINT32);
 	}
 
+	ndxml *xlmLabel = NULL, *xmlGoto = NULL; 
 	for (int i = 0; i < ndxml_getsub_num(stepNode); i++) {
 		ndxml *xmlParam = ndxml_getnodei(stepNode, i);
 		if (!xmlParam) {
 			continue;
 		}
+		compile_setting_t::iterator itparam = m_settings.find(ndxml_getname(xmlParam));
+		if (itparam == m_settings.end()){
+			continue;
+		}
+		compile_setting *paramSetting = &itparam->second;
+
 		const char *pRefOnly = ndxml_getattr_val(xmlParam, "referenced_only");
 		if (pRefOnly && *pRefOnly){
 			if (0 == ndstricmp(pRefOnly, "yes") || 0 == ndstricmp(pRefOnly, "true")){
 				continue;
 			}
 		}
+
+		//add jump ---
+		else if (paramSetting->ins_type == E_INSTRUCT_TYPE_LABEL) {
+			xlmLabel = xmlParam;
+			continue;
+		}
+		else if (paramSetting->ins_type == E_INSTRUCT_TYPE_GOTO) {
+			xmlGoto = xmlParam;
+			continue;
+		}
+		//end jump --
 
 		int ret = param2Stream(xmlParam, stepNode, p, len, &args_num);
 		if (-1==ret)	{
@@ -941,6 +983,18 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 		//*cur_step_size = (NDUINT32)(p - (char*)cur_step_size) - 4;
 		lp_write_stream((lp_stream_t)cur_step_size , (NDUINT32)((p - (char*)cur_step_size) - 4), m_aimByteOrder);
 	}
+
+	//add jump 
+	if (xlmLabel) {
+		m_labelAddr.pushLabel(ndxml_getval(xlmLabel), buf);
+	}
+	if (xmlGoto) {
+		p = lp_write_stream(p, (NDUINT32)E_OP_SHORT_JUMP, m_aimByteOrder);
+		m_labelAddr.pushJump(ndxml_getval(xmlGoto), p);
+		p = lp_write_stream(p, (NDUINT32)0, m_aimByteOrder);
+	}
+	//end jump
+
 	return (int)(p - buf);
 }
 

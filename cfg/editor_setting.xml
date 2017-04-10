@@ -150,7 +150,9 @@
 	<list instruction="14" desc="switch -default ,else" >steps_collection</list>
 	
 	<list instruction="15" desc="label for goto " >op_set_label</list>
+	<list instruction="15" desc="inter label in exe-node" >internal_label</list>
 	<list instruction="16" desc="goto cmd" >op_goto_label</list>
+	<list instruction="16" desc="internal goto" >internal_goto</list>
 </compile_setting>
 
 <create_template kinds="hide" desc="新建节点的创建模板">
@@ -311,14 +313,14 @@
 	</create_step_exit>
 	
 	<create_get_last_error name="获得错误id" create_type="1" expand="yes" >
-		<op_get_last_error name="节点_获得错误号" expand="yes">			
+		<op_get_last_error name="节点_获得错误号" expand="yes" create_label="create_internal_label">			
 			<comment name="功能说明" rw_stat="read">get_last_error()</comment>
 		</op_get_last_error>
 	</create_get_last_error>
 	
 	
 	<create_get_simulate_stat name="得到模拟器状态" create_type="1" expand="yes" >
-		<op_get_simulate_stat name="节点_模拟器状态" expand="yes">			
+		<op_get_simulate_stat name="节点_模拟器状态" expand="yes" create_label="create_internal_label">			
 			<comment name="功能说明" rw_stat="read">check_simulate_stat()</comment>
 		</op_get_simulate_stat>
 	</create_get_simulate_stat>
@@ -364,21 +366,21 @@
 	
 	
 	<create_step_get_time name="得到时间" create_type="1" expand="yes" >
-		<op_get_time name="节点_时间" expand="yes">
+		<op_get_time name="节点_时间" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">get_time()</comment>
 		</op_get_time>
 	</create_step_get_time>
 	
 	
 	<create_step_compile_time name="得到脚本编译时间" create_type="1" expand="yes" >
-		<op_get_compile_time name="节点_获得脚本编译时间" expand="yes">
+		<op_get_compile_time name="节点_获得脚本编译时间" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">get_compile_time()</comment>
 		</op_get_compile_time>
 	</create_step_compile_time>
 	
 	
 	<create_step_time_function name="时间函数" create_type="1" expand="yes">
-		<op_time_function name="节点_时间计算"  expand="yes" >
+		<op_time_function name="节点_时间计算"  expand="yes"  create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">time_fun(cmd, unit, time1, val)</comment>			
 			<varInt name="操作类型"  kinds="reference" reference_type="type_time_cmd" delete="no">0</varInt>
 			<varInt name="时间单位"  kinds="reference" reference_type="type_time_unit" delete="no">0</varInt>			
@@ -408,7 +410,7 @@
 	
 		
 	<create_step_rand name="范围随机数" create_type="1" expand="yes" >
-		<op_rand name="节点_生成随机数" expand="yes">
+		<op_rand name="节点_生成随机数" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">rand(low_limit,hight_limit)</comment>
 			<num name="下限" kinds="numeral" delete="no">0</num>
 			<index name="上限" kinds="numeral" delete="no">100</index>
@@ -416,7 +418,7 @@
 	</create_step_rand>
 	
 	<create_step_read name="对象读取节点" create_type="1" expand="yes" >
-		<op_read name="节点_读取_$name$" expand="yes">
+		<op_read name="节点_读取_$name$" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">op_read(aim,index_name)</comment>
 			<aim kinds="user_define" user_param="internal_object" replace_val="../.name">none</aim>
 			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
@@ -427,7 +429,7 @@
 		</op_read>
 	</create_step_read>
 	<create_step_write name="对象写入节点" create_type="1" desc="创建写入节点">
-		<op_write name="节点_写入_$name$" expand="yes">
+		<op_write name="节点_写入_$name$" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">op_write(aim,index_name,value)</comment>
 			<aim kinds="user_define" user_param="internal_object" delete="no" replace_val="../.name">none</aim>			
 			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
@@ -439,7 +441,7 @@
 		</op_write>
 	</create_step_write>
 	<create_step_add name="对象增加节点" create_type="1" >
-		<op_add name="节点_增加_$name$" expand="yes">
+		<op_add name="节点_增加_$name$" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">op_add(aim,index_name,value)</comment>
 			<aim kinds="user_define" user_param="internal_object" delete="no" replace_val="../.name">none</aim>	
 			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
@@ -452,7 +454,7 @@
 	</create_step_add>
 			
 	<create_step_sub name="对象减少节点" create_type="1" >
-		<op_sub name="节点_减少_$name$" expand="yes">
+		<op_sub name="节点_减少_$name$" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">op_sub(aim,index_name,value)</comment>
 			<aim kinds="user_define" user_param="internal_object" delete="no" replace_val="../.name">none</aim>	
 			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
@@ -465,7 +467,7 @@
 	</create_step_sub>
 	
 	<create_step_test name="对象检测节点" create_type="1" >
-		<op_test name="节点_检测_$name$" expand="yes">
+		<op_test name="节点_检测_$name$" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">op_test(aim,index_name,value)</comment>
 			<aim kinds="user_define" user_param="internal_object" delete="no" replace_val="../.name">none</aim>	
 			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
@@ -478,7 +480,7 @@
 	</create_step_test>
 	
 	<create_step_operate name="对象命令" create_type="1" >
-		<op_operate name="节点_$name$操作" expand="yes">
+		<op_operate name="节点_$name$操作" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">op_cmd(aim,cmd, index,value)</comment>
 			<aim kinds="user_define" user_param="internal_object" replace_val="../.name" delete="no">none</aim>
 			<param name="命令" kinds="string" delete="no">none</param>
@@ -503,7 +505,7 @@
 	</create_make_var>
 	
 	<create_get_arrsize name="获得数组长度" create_type="1" >
-		<op_get_arrsize name="节点_数组$name$长度" expand="yes">
+		<op_get_arrsize name="节点_数组$name$长度" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">size()</comment>
 			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 			<var name="数组名" kinds="string" delete="no" restrict="type" replace_val="../.name">none</var>
@@ -512,7 +514,7 @@
 		
 	
 	<create_math_operate name="数学运算符" create_type="1" >
-		<op_math_operate name="节点_数学运算" expand="yes">
+		<op_math_operate name="节点_数学运算" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">+-*/</comment>
 			<index kinds="enum" enum_value="+,-,*,/,sqrt,max,min,rand"  delete="no">0</index>	
 			<param_collect name="操作数1" expand="yes" expand_stat="1" delete="no">
@@ -527,7 +529,7 @@
 	</create_math_operate>
 	
 	<create_assignin name="赋值操作" create_type="1" >
-		<op_assignin name="节点_赋值" expand="yes">
+		<op_assignin name="节点_赋值" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">var = value</comment>
 			<param name="变量名称" kinds="string" delete="no" restrict="type">none</param>
 			<param_collect name="值" expand="yes" expand_stat="1" delete="no">
@@ -537,7 +539,7 @@
 		</op_assignin>
 	</create_assignin>
 	<create_read_table name="读取excel节点" create_type="1" >
-		<op_read_table name="节点_读取表格" expand="yes">
+		<op_read_table name="节点_读取表格" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">function:read_excel_table(table,col, index)</comment>
 			<tablename name="excel表" kinds="user_define" user_param="dbl_excel" delete="no">none</tablename>
 			<param name="列名" kinds="user_define" user_param="dbl_excel_col" delete="no">none</param>						
@@ -547,7 +549,7 @@
 	</create_read_table>
 	
 	<create_step_calc name="公式" create_type="1" >
-		<op_calc name="节点_公式" expand="yes">
+		<op_calc name="节点_公式" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">run_formulate(formulate_text)</comment>
 			<param name="公式内容" kinds="string"  delete="no">0</param>
 		</op_calc>
@@ -555,28 +557,28 @@
 	
 	
 	<create_step_getother_object name="获得其他对象" create_type="1" >
-		<op_getobj name="节点_获得其他对象:$name$" expand="yes">
+		<op_getobj name="节点_获得其他对象:$name$" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
 			<param name="对象名" kinds="string"  delete="no" replace_val="../.name">0</param>
 		</op_getobj>
 	</create_step_getother_object>
 	
 	<create_step_chdir name="更改目录" create_type="1" >
-		<op_chdir name="节点_更改目录" expand="yes">
+		<op_chdir name="节点_更改目录" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">cd(path_name)</comment>
 			<param name="目录名" kinds="string"  delete="no">0</param>
 		</op_chdir>
 	</create_step_chdir>
 	
 	<create_step_rmfile name="删除文件" create_type="1" >
-		<op_rmfile name="节点_删除文件" expand="yes">
+		<op_rmfile name="节点_删除文件" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">rm(filename)</comment>
 			<param name="文件名" kinds="string" delete="no">0</param>
 		</op_rmfile>
 	</create_step_rmfile>
 	
 	<create_step_mkdir name="创建目录" create_type="1" >
-		<op_mkdir name="节点_公式" expand="yes">
+		<op_mkdir name="节点_公式" expand="yes" create_label="create_internal_label">
 			<comment name="创建目录" rw_stat="read">mkdir(newpath)</comment>
 			<param name="新目录" kinds="string" delete="no">0</param>
 		</op_mkdir>
@@ -584,14 +586,14 @@
 	
 	
 	<create_step_waitevent name="等待事件节点" create_type="1" >
-		<op_waitevent name="节点_等待事件($id$)" create_template="create_input_param" auto_index="0" >
+		<op_waitevent name="节点_等待事件($id$)" create_template="create_input_param" auto_index="0"  create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">wait_event(event_id)</comment>
 			<varInt name="事件名" kinds="user_define" user_param="event_list" delete="no" replace_val="../.name">none</varInt>
 		</op_waitevent>
 	</create_step_waitevent>
 	
 	<create_step_send_event name="产生事件节点" create_type="1" >
-		<op_sendevent name="节点_产生事件($id$)" create_template="create_input_param" auto_index="0" >
+		<op_sendevent name="节点_产生事件($id$)" create_template="create_input_param" auto_index="0"  create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">generate_event(event_id)</comment>
 			<varInt name="事件名" kinds="user_define" user_param="event_list" delete="no" replace_val="../.name">none</varInt>
 		</op_sendevent>
@@ -614,7 +616,7 @@
 	
 	
 	<create_add_timer name="添加定时器" create_type="1" >
-		<op_add_timer name="节点_添加定时器$name$" create_template="create_input_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+		<op_add_timer name="节点_添加定时器$name$" create_template="create_input_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">add_timer(type, tm_interval,name, function,...)</comment>			
 			<msgtype name="类型" kinds="enum" enum_value="局部,全局" delete="no">0</msgtype>					
 			<varInt name="类型" kinds="enum" enum_value="循环,一次性" delete="no">0</varInt>			
@@ -625,7 +627,7 @@
 	</create_add_timer>
 	
 	<create_del_timer name="删除定时器" create_type="1" >
-		<op_del_timer name="节点_删除定时器$name$" expand="yes">
+		<op_del_timer name="节点_删除定时器$name$" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">del_timer(name)</comment>	
 			<index name="类型" kinds="enum" enum_value="局部,全局" delete="no">0</index>			
 			<param name="取名" kinds="string" delete="no" replace_val="../.name">none</param>
@@ -648,26 +650,26 @@
 	
 	
 	<create_step_call_func name="调用函数" create_type="1" >
-		<op_call_func name="节点_调用$Function$" create_template="create_input_param"  auto_index="0" expand_list="comment,func_name">
+		<op_call_func name="节点_调用$Function$" create_template="create_input_param"  auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
 			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name" >none</func_name>
 		</op_call_func>
 	</create_step_call_func>
 	
 	<create_step_print name="打印输出" create_type="1" >
-		<op_print name="节点_打印" create_template="create_input_param" auto_index="0"  expand_list="comment">
+		<op_print name="节点_打印" create_template="create_input_param" auto_index="0"  expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
 		</op_print>
 	</create_step_print>
 	
 	<create_step_log name="写日志" create_type="1" >
-		<op_log name="节点_日志" create_template="create_input_param" auto_index="0" expand_list="comment" >
+		<op_log name="节点_日志" create_template="create_input_param" auto_index="0" expand_list="comment"  create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">log(...)</comment>
 		</op_log>
 	</create_step_log>
 		
 	<create_step_inistall_msg_handler name="安裝网络消息处理器" create_type="1">
-		<op_call_func name="节点_安装消息处理器" expand="yes" expand_list="comment">
+		<op_call_func name="节点_安装消息处理器" expand="yes" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">function_install_msg_handler(netModuleName, scriptName,maxId, minId,privilege)</comment>
 			<func_name name="函数" kinds="hide" delete="no" >apollo_set_message_handler</func_name>
 			<var name="网络接收器" kinds="string" delete="no">listener</var>
@@ -682,7 +684,7 @@
 	</create_step_inistall_msg_handler>
 	
 	<create_step_send_msg name="发送消息" create_type="1">
-		<op_call_func name="节点_发送消息" create_template="create_input_param" auto_index="0" expand_list="comment,varInt,msgtype">
+		<op_call_func name="节点_发送消息" create_template="create_input_param" auto_index="0" expand_list="comment,varInt,msgtype" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">function_send_message(msg_id,...)</comment>
 			<func_name name="函数" kinds="hide" delete="no" >apollo_func_send_msg</func_name>
 			<varInt name="主消息号" kinds="numeral" delete="no" >0</varInt>
@@ -692,7 +694,7 @@
 	
 	<!-- 通过调用外部函数的方法来读取消息 参数1 -->
 	<create_step_read_msg name="读取网络消息" create_type="1">
-		<op_call_func name="节点_读取网络数据" expand="yes" expand_list="comment">
+		<op_call_func name="节点_读取网络数据" expand="yes" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">function_read_message(read_type)</comment>
 			<func_name name="函数" kinds="hide" delete="no" >apollo_func_read_msg</func_name>
 			<param_collect name="参数1_输入消息对象"  kinds="hide" delete="no">
@@ -729,7 +731,7 @@
 	
 	
 	<create_step_read_excel_attr name="从excel读取属性节点" create_type="1" >
-		<op_call_func name="节点_从excel读取属性" expand="yes" expand_list="comment">
+		<op_call_func name="节点_从excel读取属性" expand="yes" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">function_collect_attrs_from_excel(table,index)</comment>
 			<func_name name="函数" kinds="hide" delete="no" >gscript_table_attrs_read</func_name>
 			<var name="excel表" kinds="user_define" user_param="dbl_excel" delete="no">none</var>				
@@ -740,13 +742,13 @@
 	
 	
 	<create_step_check_valid name="检测结果是否有效" create_type="1" >
-		<op_check_valide name="节点_检测结果" expand_list="comment" >			
+		<op_check_valide name="节点_检测结果" expand_list="comment"  create_label="create_internal_label">			
 			<comment name="功能说明" rw_stat="read">check_last_return_value_is_valid()</comment>
 		</op_check_valide>
 	</create_step_check_valid>
 	
 	<create_step_type_transfer name="类型转换" create_type="1" >
-		<op_type_transfer name="节点_类型转换" expand_list="comment,param,index" >			
+		<op_type_transfer name="节点_类型转换" expand_list="comment,param,index" create_label="create_internal_label" >			
 			<comment name="功能说明" rw_stat="read">data.convert( type )</comment>			
 			<param name="变量名" kinds="string" delete="no" restrict="type">none</param>
 			<index name="新类型" kinds="reference" reference_type="type_data_type" delete="no">0</index>
@@ -756,7 +758,7 @@
 	
 	
 	<create_op_comp name="逻辑运算" create_type="1" >
-		<op_comp name="节点_逻辑运算" expand="yes">
+		<op_comp name="节点_逻辑运算" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read"> 大于小于等级 </comment>
 			<index  name="逻辑运算" kinds="reference" reference_type="type_compare_sub_entry" delete="no">0</index>	
 			<param_collect name="操作数1" expand="yes" expand_stat="1" delete="no">
@@ -847,6 +849,10 @@
 				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var kinds="string" delete="no" restrict="type">none</var>	
 			</param_collect>
+			
+			<steps_collection name="loop body" create_template="create_list1" delete="no">
+			</steps_collection>
+			
 		</op_loop_entry>		
 	</create_step_loop_entry>
 		
@@ -901,16 +907,26 @@
 	
 	<create_label name="创建标签" create_type="1" >
 		<op_set_label name="标签$name$" expand="yes" comp_cond="param">
-			<param name="标签名" kinds="string" delete="no" replace_val="../.name" >none</param>		
+			<param name="标签名" kinds="string" delete="no" auto_index_ref="auto_index" replace_val="../.name" >Lab</param>	
 		</op_set_label>
 	</create_label>
 	
 	<create_goto_label name="goto标签" create_type="1" >
 		<op_goto_label name="goto:$name$" expand="yes" comp_cond="param">
-			<param name="跳转至" kinds="string" delete="no" replace_val="../.name" >none</param>		
+			<param name="跳转至" kinds="string" delete="no" auto_index_ref="auto_index" replace_val="../.name">Lab1</param>	
 		</op_goto_label>		
 	</create_goto_label>
-
+	
+	
+	<create_internal_label name="在node中创建标签" create_type="1" >
+		<internal_label name="标签$name$"  kinds="string" replace_val=".name" auto_index_ref="auto_index" >Lab</internal_label>
+	</create_internal_label>
+	
+	
+	<create_internal_goto name="goto标签" create_type="1" >
+		<internal_goto name="goto:$name$" kinds="string" replace_val=".name">Lab1</internal_goto>		
+	</create_internal_goto>
+	
 	
 	<create_input_param name="创建参数参数" create_type="1" >
 		<param_collect name="参数" expand="yes">
@@ -977,10 +993,7 @@
 		
 		<list>create_step_true_exit</list>	
 		<list>create_step_false_eixt</list>	
-		
-		<list>create_label</list>
-		<list>create_goto_label</list>
-		
+				
 		<list>create_get_arrsize</list>		
 		<list>create_make_var</list>
 		<list>create_step_type_transfer</list>
@@ -1056,10 +1069,7 @@
 		<list>create_step_true_exit</list>	
 		<list>create_step_false_eixt</list>
 		
-		
-		<list>create_label</list>
-		<list>create_goto_label</list>
-		
+			
 		
 		<list>create_get_arrsize</list>
 		

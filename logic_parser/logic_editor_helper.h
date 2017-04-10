@@ -68,6 +68,10 @@ namespace LogicEditorHelper
 		ERT_KEY_VALUE,
 		ERT_BE_REF_ONLY,
 		ERT_REPLACE_VAL,
+<<<<<<< HEAD
+		ERT_CREATE_LABEL,
+=======
+>>>>>>> eaa2a077f8b9f69e3a4030735b38ea773e8913ab
 	};
 
 	const char *_GetDataTypeName(eDataType dataType);
