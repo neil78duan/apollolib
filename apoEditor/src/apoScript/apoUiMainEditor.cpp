@@ -1148,7 +1148,7 @@ void apoUiMainEditor::mouseReleaseEvent(QMouseEvent *event)
 void apoUiMainEditor::wheelEvent(QWheelEvent *event)
 {
 	int delta = event->delta();
-	nd_logmsg("mouse wheel deta=%d\n", delta);
+	//nd_logmsg("mouse wheel deta=%d\n", delta);
 	if (m_scale == 0){
 		// first scale 
 		saveCurPosWithOffset();

@@ -5,4 +5,5 @@ dependencies: \
   ../../../ndsdk/include/nd_common/nd_define.h \
   ../../../ndsdk/include/nd_common/nd_comcfg.h \
   ../../../ndsdk/include/nd_common/nd_unix.h \
-  ../../../ndsdk/include/nd_common/nd_atomic.h
+  ../../../ndsdk/include/nd_common/nd_atomic.h \
+  ../../../ndsdk/include/nd_common/nd_str.h
