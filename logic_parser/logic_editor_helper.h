@@ -68,6 +68,7 @@ namespace LogicEditorHelper
 		ERT_KEY_VALUE,
 		ERT_BE_REF_ONLY,
 		ERT_REPLACE_VAL,
+		ERT_CREATE_LABEL,
 	};
 
 	const char *_GetDataTypeName(eDataType dataType);
@@ -117,6 +118,15 @@ namespace LogicEditorHelper
 	inline const char *GetKeyValue(ndxml *xml, ndxml_root *root)
 	{
 		return _getXmlParamVal(xml, root, ERT_KEY_VALUE);
+	}
+	
+	inline ndxml *GetCompCond(ndxml *xml)
+	{
+		const char *pCompCondName = ndxml_getattr_val(xml, "comp_cond");
+		if(pCompCondName){
+			return ndxml_getnode(xml, pCompCondName);
+		}
+		return NULL ;
 	}
 
 	template<class TTextList>

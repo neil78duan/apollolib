@@ -22,7 +22,7 @@ class apoUiBezier
 {
 public:
 	enum eBezierType {
-		LineParam, LineRunSerq
+		LineParam, LineRunSerq,LineGoto
 	};
 	apoUiBezier(QWidget *parent=NULL);
 	apoUiBezier(QWidget *parent, const QPoint &startPos, const QPoint &endPos);

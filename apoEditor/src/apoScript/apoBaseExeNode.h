@@ -68,6 +68,7 @@ public:
 
 	bool renewDisplay();
 	void setSelected(bool isSelected);
+	bool getSelected() { return m_selected; }
 	void setError(bool isError=true) ;
 
 	//call before InitCtrl ;
@@ -116,18 +117,27 @@ public:
 	enum {
 		PARAM_CTRL_W = 15,
 		PARAM_CTRL_H = 10,
-		MARGIN_X = 10,
-		MARGIN_Y = 10,
+		MARGIN_X = 5,
+		MARGIN_Y = 5,
 
-		E_LINE_HEIGHT = 30,
-		E_LINE_WIDTH = 175
+		E_LINE_HEIGHT = 20,
+		E_LINE_WIDTH = 150
 	};
 
+	const char *getLabel();
+	const char *getGotoLabel();
+
+	ndxml *addJumpLabel(const char *name=NULL);
+	ndxml *addGotoNode(const char *name = NULL);
+
+	void delGotoNode();
+	void delLabel();
 
 public slots:
     void onInputValAddClicked() ;
 	void onAddFunctionInParam();
-
+	void onAddLabel();
+	
 signals:
 	void onParamCtrlDBclicked(apoBaseParam *paramCtrl, QMouseEvent * event);
 	void onTitalCtrlDBclicked(QWidget *titleCtrl, QMouseEvent * event);
@@ -160,6 +170,7 @@ protected:
 	virtual void onParamCreated(apoBaseParam *paramCtrl);
 	virtual void onInit();
 
+	void trytoMoveGotoNodeTail();
 	
 	bool m_disableRetVar;
 	bool m_disableToNext;

@@ -512,6 +512,97 @@ apoBaseExeNode *apoBaseExeNode::getMyNextNode()
 	return dynamic_cast<apoBaseExeNode*>(w->parent());
 }
 
+
+const char *apoBaseExeNode::getLabel()
+{
+	ndxml *labxml = ndxml_getnode(m_nodeXml, "internal_label");
+	if (!labxml)	{
+		return NULL;
+	}
+	return ndxml_getval(labxml);
+}
+
+
+const char *apoBaseExeNode::getGotoLabel()
+{
+	ndxml *labxml = ndxml_getnode(m_nodeXml, "internal_goto");
+	if (!labxml)	{
+		return NULL;
+	}
+	return ndxml_getval(labxml);
+}
+
+ndxml *apoBaseExeNode::addJumpLabel(const char *name )
+{
+	const char *labelTempName = LogicEditorHelper::_getXmlParamVal(m_nodeXml, NULL, LogicEditorHelper::ERT_CREATE_LABEL);
+	if (!labelTempName || !*labelTempName){
+		return NULL;
+	}
+	ndxml *labxml = ndxml_getnode(m_nodeXml, "internal_label");
+	if (labxml)	{
+		return labxml;
+	}
+	apoEditorSetting*pSetting = apoEditorSetting::getInstant();
+
+	labxml = pSetting->AddNewXmlByTempName(m_nodeXml, labelTempName);
+
+	if (labxml)	{
+		if (name && *name)	{
+			ndxml_setval(labxml, name);
+		}
+		ndxml_disconnect(m_nodeXml, labxml);
+		ndxml_insert_after(m_nodeXml,labxml,m_nodeXml); //insertNode after brother
+		this->update();
+	}
+	return labxml;
+
+}
+
+ndxml *apoBaseExeNode::addGotoNode(const char *name )
+{
+	ndxml *labxml = ndxml_getnode(m_nodeXml, "internal_goto");
+	if (labxml)	{
+		return labxml;
+	}
+	apoEditorSetting*pSetting = apoEditorSetting::getInstant();
+
+	labxml = pSetting->AddNewXmlByTempName(m_nodeXml, "create_internal_goto");
+	if (labxml)	{
+		if (name && *name)	{
+			ndxml_setval(labxml, name);
+		}
+
+		ndxml_disconnect(m_nodeXml, labxml);
+		ndxml_insert_before(m_nodeXml, labxml, m_nodeXml); //insertNode after brother
+		this->update();
+	}
+	return labxml;
+}
+
+void apoBaseExeNode::trytoMoveGotoNodeTail()
+{
+	ndxml*labxml = ndxml_getnode(m_nodeXml, "internal_goto");
+	if (labxml)	{
+		ndxml_disconnect(m_nodeXml, labxml);
+		ndxml_insert_before(m_nodeXml, labxml, m_nodeXml); //insertNode after brother
+	}
+}
+
+void apoBaseExeNode::delGotoNode()
+{
+	ndxml_delnode(m_nodeXml, "internal_goto");
+}
+
+void apoBaseExeNode::delLabel()
+{
+	ndxml_delnode(m_nodeXml, "internal_label");
+}
+
+
+void apoBaseExeNode::onAddLabel()
+{
+	addJumpLabel(NULL);
+}
 void apoBaseExeNode::onAddFunctionInParam()
 {
 	//apoBaseSlotCtrl*pParamCtrl;
@@ -656,7 +747,7 @@ void apoBaseExeNode::init(const QString &title)
 	label->show();
 	m_title = label;
 
-    y+= E_LINE_HEIGHT * 1.5 ;
+    y+= E_LINE_HEIGHT * 2 ;
 
     //draw param
     x = 0 ;
@@ -855,27 +946,41 @@ void apoBaseExeNode::paintEvent(QPaintEvent *event)
 			QPoint pos = getOrgPos(*it,false);//(*it)->pos();
 			QSize size = getOrgSize(*it, false);
 			pos.setX(pos.x() + size.width() + 2);
-			pos.setY(pos.y() + MARGIN_Y -1);
+			pos.setY(pos.y() + MARGIN_Y +5);
 			painter.drawText(pos, paramInfo);
 
 		}
 	}
-	
-	if (!m_tips.isEmpty()) {
 
-		int x = MARGIN_X ;
-		int y = E_LINE_HEIGHT * 1.5  ;
-		
-		painter.setPen(QPen(Qt::lightGray, 2));
-		
-		QFont font1;
+	QFont font1;
+	QString showTips;
+
+	ndxml *labxml = ndxml_getnode(m_nodeXml, "internal_label");
+	if (labxml)	{
+		font1.setFamily(QString::fromUtf8("Times New Roman"));
+		painter.setPen(QPen(Qt::green, 1));
+
+		showTips = "Label: ";
+		showTips += ndxml_getval(labxml);
+	}
+	else if (!m_tips.isEmpty()) {
 		font1.setFamily(QString::fromUtf8("Harlow Solid Italic"));
-		float fontSize = 14 * m_scale;
+		painter.setPen(QPen(Qt::lightGray, 2));
+		showTips = m_tips;
+	}
+
+	if (showTips.size() > 0){
+
+		int x = MARGIN_X*2;
+		int y = E_LINE_HEIGHT * 2 - MARGIN_Y;
+
+		
+		float fontSize = 12 * m_scale;
 		font1.setPointSize((int)fontSize);
 		//font3.setBold(true);
-		font1.setWeight(50);
+		font1.setWeight(40);
 		painter.setFont(font1);
-		painter.drawText(x, y, m_tips);
+		painter.drawText(x, y, showTips);
 	}
 	trytoDrawConnectSlot();
 }
@@ -888,20 +993,6 @@ void apoBaseExeNode::_trytoScale(QPainter &myPainter)
 		return;
 	}
 
-// 	QPoint offset;
-// 	apoUiMainEditor *pMainEditor = dynamic_cast<apoUiMainEditor *>(parent());
-// 	if (pMainEditor)	{
-// 		offset = pMainEditor->getExenodeOffset();
-// 	}
-// 	QSize newSize = m_size;
-// 	newSize *= m_scale;
-// 	this->resize(newSize);
-// 	
-// 	QPoint orgPos = getOrgPos(this);
-// 	orgPos *= m_scale;
-// 
-// 	orgPos += offset;
-// 	move(orgPos);
 
 	QSize newSize = m_size * m_scale;
 	this->resize(newSize);
@@ -922,12 +1013,7 @@ void apoBaseExeNode::trytoDrawConnectSlot()
 			painter.drawRect((_slot)->geometry());\
 		}								\
 	}
-// 
-// 	if (m_toNextNode){
-// 		QRect rect = m_toNextNode->geometry();
-// 		painter.drawRect(rect);
-// 
-// 	}
+
 	DRAW_RECT(m_runInNode);
 	DRAW_RECT(m_toNextNode);
 	DRAW_RECT(m_returnValue);

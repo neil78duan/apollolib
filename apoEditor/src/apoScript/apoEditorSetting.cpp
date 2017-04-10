@@ -349,6 +349,54 @@ ndxml* apoEditorSetting::AddNewXmlNode(ndxml *xml, QWidget *parentWindow)
 	return new_xml;
 }
 
+ndxml *apoEditorSetting::AddNewXmlByTempName(ndxml *xml, const char *templateName)
+{
+	ndxml *root = getConfig();
+	ndxml *template_root = ndxml_getnode(root,"create_template");
+	if (!template_root)
+		return NULL;
+
+	ndxml *create_template = ndxml_refsub(template_root, templateName);
+	if (!create_template)	{
+		return NULL;
+	}
+
+	int tempType = 0;
+	char *p = (char*)ndxml_getattr_val(create_template, "create_type");
+	if (p)	{
+		tempType = atoi(p);
+	}
+	//begin create
+	ndxml *new_xml = NULL;
+	if (tempType == TEMPLATE_CREAT){
+		new_xml = CreateByTemplate(xml, create_template);
+		if (new_xml) {
+			SetXmlName(new_xml, xml);
+		}
+	}
+	else if (tempType == TEMPLATE_DIRECT) {
+		for (int i = 0; i < ndxml_num(create_template); i++)	{
+			ndxml *sub1 = ndxml_refsubi(create_template, i);
+			new_xml = ndxml_copy(sub1);
+			if (new_xml) {
+				ndxml_insert(xml, new_xml);
+				SetXmlName(new_xml, xml);
+			}
+		}
+	}
+
+	//handle  auto index 
+	if (new_xml){
+		int num = ndxml_getsub_num(new_xml);
+		for (int i = 0; i < num; i++)	{
+			ndxml *sub = ndxml_getnodei(new_xml, i);
+			nd_assert(sub);
+			setXmlValueByAutoIndex(sub, xml);
+		}
+	}
+	return new_xml;
+}
+
 
 int apoEditorSetting::GetCreateName(ndxml *xml_template, char *buf, size_t size)
 {

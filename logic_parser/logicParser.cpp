@@ -859,7 +859,8 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				//int offset = *((*(NDUINT32**)&p)++);
 				int offset;
 				p = lp_read_stream(p, offset, m_cmdByteOrder);
-
+				
+				//nd_logmsg("begin short jump offset=%d\n", offset) ;
 				SHORT_JUMP(p, offset);
 				CHECK_INSTRUCTION_OVER_FLOW();
 				m_registorFlag = true;

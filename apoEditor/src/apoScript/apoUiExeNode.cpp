@@ -138,12 +138,13 @@ void apoUiExenodeLoop::onInit()
 	ctrl1->setSlotType(apoBaseSlotCtrl::SLOT_SUB_ENTRY);
 	m_loopSlot = ctrl1;
 
-	m_loopSlot->setXmlAnchorParent(m_nodeXml);
 	ndxml *anchorXml = ndxml_getnode(m_nodeXml, "steps_collection");
 	if (anchorXml){
 		m_loopSlot->setXmlAnchor(anchorXml);
+		m_loopSlot->setXmlAnchorParent(anchorXml);
 	}
 	else {
+		m_loopSlot->setXmlAnchorParent(m_nodeXml);
 		m_loopSlot->setXmlAnchor(m_nodeXml);
 	}
 
@@ -368,6 +369,8 @@ void apoUiExenodeSwitch::onAddNewBlockClicked()
 
 	m_size.setHeight(m_size.height() + E_LINE_HEIGHT);
 	//emit NodeAddParamSignal(this); 
+
+	trytoMoveGotoNodeTail();
 	return;
 
 }

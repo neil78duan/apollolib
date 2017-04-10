@@ -91,7 +91,8 @@ namespace LogicEditorHelper
 		"key",
 		"value",
 		"referenced_only",
-		"replace_val"
+		"replace_val",
+		"create_label"
 	};
 
 	const char *_GetDataTypeName(eDataType dataType)
@@ -168,7 +169,7 @@ namespace LogicEditorHelper
 		if (pEnumList) {
 			return pEnumList;
 		}
-		else {
+		else if(root) {
 			char *ref_typename = (char*)ndxml_getattr_val(xml, _szReserved[ERT_REF_TYPE]);
 			if (ref_typename) {
 				ndxml *defined_type = getDefinedType(root, ref_typename);

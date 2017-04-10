@@ -86,17 +86,27 @@ private:
 	//disconnect existed connector
 	bool _disconnectRunSerq(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot);
 
+	void _removeGotoConnect(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot);
+
 	void _disConnectParam(apoBaseExeNode *changedNode);
 	void _reConnectParam(apoBaseExeNode *changedNode);
 	bool _removeConnector(apoBaseSlotCtrl *slot);
+	
 
 	bool testBuildConnector(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot);
 	bool trytoBuildConnector(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot);
 	bool buildParamConnector(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot);
 	bool buildRunSerqConnector(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot);
 
+	void buildAllGotoLine();
+	bool trytoBuildGotoConnector(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot);
+
+	apoBaseExeNode *createExenode(const QPoint &pos);
+
     void popMenuAddnewTrigged();
-	void popMenuDeleteTrigged();
+	void popMenuDeleteTrigged(); 
+	void popMenuAddLabelTrigged();
+	void popMenuDelLabelTrigged();
 	void popMenuCloseParamTrigged();
 	void popMenuDisconnectTRigged();
 	void popMenuCenterTrigged(); //move view to center
@@ -110,6 +120,8 @@ private:
 	//void wheelEvent(QWheelEvent *event);
 	void dragTo(const QPoint &offset);	
 	void saveCurPosWithOffset();
+
+
 
 
 	void onFileChanged();
@@ -143,6 +155,9 @@ private:
 
 	typedef std::map<std::string, apoBaseExeNode*>varinat_map_t;
 	varinat_map_t m_varMap;
+	varinat_map_t m_labelsMap;
+	varinat_map_t m_gotoMap;
+
 
 	ndxml *m_editedFunction;
 	//ndxml *m_curDetailXml;
