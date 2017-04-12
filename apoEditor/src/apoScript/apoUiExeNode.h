@@ -72,6 +72,8 @@ public:
 			m_toNextNode->setXmlAnchor(toNextAnchor);
 		}
 		m_toNextNode->setXmlAnchorParent(m_nodeXml);
+
+		m_beDeleted = false;
 	}
 	virtual ~apoUiExenodeFuncEntry(){}
 private:

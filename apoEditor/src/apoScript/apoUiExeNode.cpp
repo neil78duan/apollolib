@@ -278,7 +278,6 @@ apoUiExenodeValueComp::~apoUiExenodeValueComp()
 
 void apoUiExenodeValueComp::onInit()
 {
-	apoEditorSetting* settingRoot = apoEditorSetting::getInstant();
 	//create case ctrl
 	int x = E_LINE_WIDTH - PARAM_CTRL_W;
 	int y = E_LINE_HEIGHT * 1.5;

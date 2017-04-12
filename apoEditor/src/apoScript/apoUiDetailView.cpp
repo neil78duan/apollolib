@@ -145,8 +145,8 @@ bool apoUiDetailView::_insertRow(xmlTableItem *nameItem, xmlTableItem* typeItem,
 	int rows = rowCount();
 	setRowCount(rows + 1);
 
-	UNEDIT_CTRL(nameItem);
-	UNEDIT_CTRL(typeItem);
+	//UNEDIT_CTRL(nameItem);
+	//UNEDIT_CTRL(typeItem);
 
 	setItem(rows, 0, nameItem);
 	setItem(rows, 1, typeItem);

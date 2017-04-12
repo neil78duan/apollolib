@@ -147,7 +147,7 @@ bool apoUiMainEditor::_showBlocks(apoBaseSlotCtrl *fromSlot, ndxml *stepsBlocks)
 		else if (stepInfo->ins_type == E_INSTRUCT_TYPE_EXCEPTION_CATCH) {
 			int tmpx = m_startX;
 			int tmpy = m_startY;
-			ret = _createFuncEntry(xmlStep, QPoint(10, 300));
+			ret = _createFuncEntry(xmlStep, QPoint(10, 200));
 			m_startX = tmpx;
 			m_startY = tmpy;
 		}
@@ -155,7 +155,7 @@ bool apoUiMainEditor::_showBlocks(apoBaseSlotCtrl *fromSlot, ndxml *stepsBlocks)
 
 			int tmpx = m_startX;
 			int tmpy = m_startY;
-			ret = _createFuncEntry(xmlStep, QPoint(10, 500));
+			ret = _createFuncEntry(xmlStep, QPoint(10, 20));
 			m_startX = tmpx;
 			m_startY = tmpy;
 		}
@@ -331,7 +331,7 @@ bool apoUiMainEditor::_createFuncEntry(ndxml *stepsBlocks, const QPoint &default
 		m_startY = defaultPos.y() + Y_STEP;
 		noInidPos = true;
 	}
-	nd_logdebug("begin show function pos(%d,%d), offset(%d,%d)\n", pos.x(), pos.y(), m_offset.x(), m_offset.y());
+	//nd_logdebug("begin show function pos(%d,%d), offset(%d,%d)\n", pos.x(), pos.y(), m_offset.x(), m_offset.y());
 	apoBaseExeNode* pbeginNode = _showExeNode(NULL, stepsBlocks, pos);
 	if (!pbeginNode){
 		return false;
@@ -443,9 +443,9 @@ void apoUiMainEditor::saveOffset(const QPoint &offset)
 		snprintf(buf, sizeof(buf), "%d", offset.y());
 		ndxml_setattrval(pPoint, "offset_y", buf);
 
-		nd_logdebug("save %s pos(%s,%s) offset (%d,%d)\n",_GetXmlName(m_editedFunction,NULL),
-			ndxml_getattr_val(pPoint, "x"), ndxml_getattr_val(pPoint, "y"),
-			offset.x(), offset.y());
+// 		nd_logdebug("save %s pos(%s,%s) offset (%d,%d)\n",_GetXmlName(m_editedFunction,NULL),
+// 			ndxml_getattr_val(pPoint, "x"), ndxml_getattr_val(pPoint, "y"),
+// 			offset.x(), offset.y());
 	}
 
 	onFileChanged();
@@ -779,7 +779,13 @@ void apoUiMainEditor::popMenuAddnewTrigged()
 void apoUiMainEditor::popMenuDeleteTrigged()
 {
 	if (m_popSrc) {
-		_removeExenode(dynamic_cast<apoBaseExeNode*>( m_popSrc));
+		apoBaseExeNode *exeNode = dynamic_cast<apoBaseExeNode*>(m_popSrc);
+		if (exeNode && exeNode->isDeletable())	{
+			_removeExenode(exeNode);
+		}
+		else {
+			nd_logmsg("this node can not be deleted\n");
+		}
 		m_popSrc = NULL;
 	}
 

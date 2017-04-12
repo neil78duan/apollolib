@@ -179,6 +179,10 @@ DBLDataNode *LogicUserDefStruct::ref(size_t index)
 	return NULL;
 }
 
+DBLDataNode *LogicUserDefStruct::ref(const char *name)
+{
+	return fetch(name);
+}
 
 DBLDataNode* LogicUserDefStruct::fetch(const char *name)
 {

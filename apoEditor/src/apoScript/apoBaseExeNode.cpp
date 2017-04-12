@@ -34,6 +34,7 @@ QWidget(parent), m_toNextNode(NULL), m_nodeXml(0), m_outParamAddNew(0),
 	m_disableIn = false;
 	m_selected = false;
 	m_showError = false ;
+	m_beDeleted = true;
 	m_disableNewFuncParam = true;
 	m_scale = 1;
 	m_type = 0;
@@ -55,7 +56,8 @@ QWidget(parent), m_toNextNode(NULL), m_outParamAddNew(0),
 	m_disableIn = false;
 
 	m_selected = false;
-	m_showError =false ;
+	m_showError = false;
+	m_beDeleted = true;
 
 	m_scale = 1;
 	setAttribute(Qt::WA_DeleteOnClose, true);
@@ -714,13 +716,6 @@ void apoBaseExeNode::destroy()
 
 	SAFE_CLOSE(m_title);
 
-	//SAFE_CLOSE(m_name);
-	
-	//for (int i = 0;  i<m_paramVct.size(); i++){
-	//	SAFE_CLOSE(m_paramVct[i]);
-	//}
-
-	//m_paramVct.clear();
 }
 
 void apoBaseExeNode::init(const QString &title)
@@ -775,6 +770,8 @@ void apoBaseExeNode::init(const QString &title)
     m_size.setWidth(x + MARGIN_X);
     m_size.setHeight(y + MARGIN_Y);
 	
+
+	x = E_LINE_WIDTH - PARAM_CTRL_W;
     //init toNext label
 	if (!m_disableToNext) {
 		y = E_LINE_HEIGHT *2 - MARGIN_Y;
@@ -794,7 +791,6 @@ void apoBaseExeNode::init(const QString &title)
 	}
 
 
-	x = E_LINE_WIDTH - PARAM_CTRL_W;
 	if (!m_disableNewFuncParam) {
 		y += E_LINE_HEIGHT;
 		CREATE_CTRL_OBJECT(QPushButton, "+", green, m_outParamAddNew);

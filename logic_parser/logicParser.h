@@ -364,13 +364,17 @@ protected:
 	int _runCmd(runningStack *stack) ;
 	int _makeVar(runningStack *stack, char *pCmdStream); //make variant from instruction 
 	bool _getArg(runningStack *stack, int index, DBLDataNode &outValue);
-	int _storeReg2Var(runningStack *stack, char *pCmdStream);
 	//DBLDataNode* _refVariant(runningStack *stack, char *&pCmdStream);
 	int _getValueFromUserDef(const char *name, DBLDataNode &outValue);
 	int _getValue(runningStack *stack, char *pCmdStream, DBLDataNode &outValue); //get value from instruction
+
 	int _readGameDataTable(runningStack *stack, char *pCmdStream, DBLDataNode &outValue);
 	int _read_string(char *pCmdStream, char *outbuf, size_t size);
+
+	bool _getVarValue(runningStack *stack, const char *varname, DBLDataNode &outValue);
 	DBLDataNode* _getLocalVar(runningStack *stack, const char *varname);
+	bool _getVarRef(runningStack *stack, const char *inputVarName, DBLDataNode &outVarRef);//reference variant or sub variant 
+
 	bool _chdir(const char *curDir);
 	bool _rmfile(const char *filename); 
 	bool _mkdir(const char *curDir);
@@ -424,6 +428,7 @@ protected:
 
 	runningStack *m_curStack;
 	LogicObjectBase *m_owner;
+	DBLDataNode m_loopIndex;
 	vm_cpu	m_vmFormula;
 
 

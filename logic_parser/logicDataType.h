@@ -291,6 +291,13 @@ public:
 
 	static bool setOutHex(bool isHex = true);
 	static bool setOutLua(bool isLua);
+
+// 	DBLDataNode unsafeRefArray(int index) ;
+// 	DBLDataNode unsafeRefMember(const char *name);
+// 	bool unsafeRefOther(DBLDataNode &other);
+// 	bool unsafeSetValue(DBLDataNode &val);
+// 	bool getValFromUnsafe(DBLDataNode &unsafeVal);
+// 	bool isUnsafe() { return m_unsafeRef; }
 protected:
 	DBLDataNode _attrMathAdd(const DBLDataNode &leftval)const ;
 	DBLDataNode _attrMathSub(const DBLDataNode &leftval)const ;
@@ -307,6 +314,12 @@ protected:
 	void _copy(const DBLDataNode &r);
 	int _writeEmptyStream(char *streamBuf, int streamByteOrder)const;
 	bool m_dataOwner; // false needn't release data 
+	
+// 	bool m_unsafeRef; // array element or userdefdata reference parent ,  which _data is 
+// 
+// 	enum eUnsafeType{ UNSAFE_REF_ADDR_REF, UNSAFE_REF_ORGINAL};
+// 	NDUINT8 m_unsafeRefType;
+
 	NDUINT8 m_ele_type;
 	NDUINT8 m_sub_type;
 	dbl_element_base *m_data;

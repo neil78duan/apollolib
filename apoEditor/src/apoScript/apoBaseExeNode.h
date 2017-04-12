@@ -78,8 +78,9 @@ public:
 	void disableConnectIn();
 
 	void enableOutParam();
-
 	void setScale(float scale);
+
+	bool isDeletable() { return m_beDeleted; }
 
 	apoBaseSlotCtrl *toNext() { return m_toNextNode; }
 	apoBaseSlotCtrl *returnVal(){ return m_returnValue; }
@@ -178,6 +179,7 @@ protected:
 	bool m_disableIn;
 	bool m_disableNewFuncParam;
 
+	bool m_beDeleted;
 	bool m_selected;
 	bool m_showError ;		//show compiled error
 	int m_type;

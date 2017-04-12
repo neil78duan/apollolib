@@ -939,7 +939,7 @@ bool MainWindow::runFunction(const char *binFile, const char *srcFile, int argc,
 	scriptRoot->setPrint(ND_LOG_WRAPPER_PRINT(MainWindow), NULL);
 	scriptRoot->setOutPutEncode(E_SRC_CODE_UTF_8);
 
-	if (argc ==0)	{
+	if (argc ==0 )	{
 		scriptRoot->getGlobalParser().setSimulate(true, &apoOwner);
 		if (0 != scriptRoot->LoadScript(binFile, &scriptRoot->getGlobalParser() )){
 			WriteLog("load script error n");
@@ -958,7 +958,7 @@ bool MainWindow::runFunction(const char *binFile, const char *srcFile, int argc,
 	}
 	else {
 		LogicParserEngine &parser = scriptRoot->getGlobalParser();
-		parser.setSimulate(false, &apoOwner);
+		parser.setSimulate(true, &apoOwner);
 
 		if (0 != scriptRoot->LoadScript(binFile,NULL)){
 			WriteLog("load script error n");
