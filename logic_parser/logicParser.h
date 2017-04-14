@@ -310,6 +310,8 @@ public:
 	//CALL IN c++ ARGS must be included args
 	bool runScript(const char *scriptName,  parse_arg_list_t &args, DBLDataNode &result, int encodeType = ND_ENCODE_TYPE);
 	
+	//call function in script
+	bool callFunc(parse_arg_list_t &func_args) { return _callFunction(func_args); }
 	// generate game event in c++
 	bool eventNtf(int event_id, int num, ...);
 	bool eventNtf(int event_id, parse_arg_list_t &args);
@@ -364,13 +366,18 @@ protected:
 	int _runCmd(runningStack *stack) ;
 	int _makeVar(runningStack *stack, char *pCmdStream); //make variant from instruction 
 	bool _getArg(runningStack *stack, int index, DBLDataNode &outValue);
-	int _storeReg2Var(runningStack *stack, char *pCmdStream);
 	//DBLDataNode* _refVariant(runningStack *stack, char *&pCmdStream);
 	int _getValueFromUserDef(const char *name, DBLDataNode &outValue);
+	bool _getValueFromArray(runningStack *stack,const char *name, DBLDataNode &outValue);
 	int _getValue(runningStack *stack, char *pCmdStream, DBLDataNode &outValue); //get value from instruction
+
+	bool _getVarValue(runningStack *stack, const char *varname, DBLDataNode &outValue);
+	DBLDataNode* _getLocalVar(runningStack *stack, const char *varname);
+	bool _getVarEx(runningStack *stack, const char *inputVarName, DBLDataNode &outVar);//reference variant or sub variant 
+
 	int _readGameDataTable(runningStack *stack, char *pCmdStream, DBLDataNode &outValue);
 	int _read_string(char *pCmdStream, char *outbuf, size_t size);
-	DBLDataNode* _getLocalVar(runningStack *stack, const char *varname);
+
 	bool _chdir(const char *curDir);
 	bool _rmfile(const char *filename); 
 	bool _mkdir(const char *curDir);
@@ -397,6 +404,8 @@ protected:
 	void _pushSKipError(int err);
 	bool _checkIsSkip(int err);
 	bool _checkIsSystemError(int err) { return ( err < NDERR_USERDEFINE && err > 0); }
+
+	const LogicUserDefStruct* getUserDataType(const char *name) const;
 	
 	bool m_ownerIsNew;
 	bool m_registorFlag;				// result of step or function return value,false exit
@@ -424,6 +433,7 @@ protected:
 
 	runningStack *m_curStack;
 	LogicObjectBase *m_owner;
+	DBLDataNode m_loopIndex;
 	vm_cpu	m_vmFormula;
 
 

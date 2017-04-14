@@ -17,6 +17,40 @@
 #include "logic_parser/logicStruct.hpp"
 
 
+// such as arr[varUser.arr[1]]  ,read varUser.arr[1]
+static const char *ndstr_fetch_array_index(const char *input, char *output, size_t size)
+{
+	int markNum = 1;
+	const char *p = (char*)strchr(input, _ARRAR_BEGIN_MARK);
+	if (p && *p == _ARRAR_BEGIN_MARK){
+		++p;
+	}
+	else {
+		return NULL;
+	}
+
+	while (*p && size > 0) {
+
+		if (*p == _ARRAR_BEGIN_MARK) {
+			++markNum;
+		}
+		else if (*p == _ARRAR_END_MARK) {
+			--markNum;
+			if (markNum == 0)	{
+				break;
+			}
+		}
+		*output++ = *p++;
+		--size;
+	}
+	*output++ = 0;
+	if (*p == _ARRAR_END_MARK)	{
+		++p;
+	}
+	return p;
+}
+
+
 
 //float LogicObjectBase::opCalc(void *func, int size)
 //{
@@ -1045,28 +1079,33 @@ bool LogicParserEngine::_getArg(runningStack *stack, int index, DBLDataNode &out
 
 	return false;
 }
-// 
-// 
-// int LogicParserEngine::_storeReg2Var(runningStack *stack, char *pCmdStream)
-// {
-// 	char *p = pCmdStream;
-// 	DBLDataNode *pData = _refVariant(stack, p);
-// 	if (pData){
-// 		*pData = m_registerVal;
-// 		return p - pCmdStream;
-// 	}
-// 	else {
-// 		m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
-// 		return -1;
-// 	}	
-// }
+
+
+bool LogicParserEngine::_getVarValue(runningStack *stack, const char *varname, DBLDataNode &outValue)
+{
+	if (ndstr_is_naturalnumber(varname)){
+		outValue.InitSet(atoi(varname));
+		return true;
+	}
+	else if (ndstr_is_numerals(varname)){
+		outValue.InitSet((float)atof(varname));
+		return true;
+	}
+	return _getVarEx(stack, varname, outValue);
+}
 
 DBLDataNode* LogicParserEngine::_getLocalVar(runningStack *stack, const char *varname)
 {
-	if (0==ndstricmp(varname, "$CurValue") || 0==ndstricmp(varname, "$LastValue")) {
+	if (0 == ndstricmp(varname, "$CurValue") || 0 == ndstricmp(varname, "$LastValue") 
+		|| 0 == ndstricmp(varname, "$?")
+		|| 0 == ndstricmp(varname, "$value") ){
 		return &m_registerVal ;
 	}
-	else if (*varname == '$') {
+	else if (0 == ndstricmp(varname, "$index")) {
+		m_loopIndex.InitSet(stack->loopIndex);
+		return &m_loopIndex;
+	}
+	else if (*varname == '$' && (varname[1] >= '0' && varname[1] <= '9') ) {
 		const char *p = varname + 1;
 		int index = atoi(p);
 		if (index>0 && index <stack->params.size())	{
@@ -1082,6 +1121,62 @@ DBLDataNode* LogicParserEngine::_getLocalVar(runningStack *stack, const char *va
 	return NULL;
 }
 
+
+bool LogicParserEngine::_getVarEx(runningStack *stack, const char *inputVarName, DBLDataNode &outVar)
+{
+	char name[128];
+	char subName[128];
+	const char *p = inputVarName;
+	
+	p = ndstr_parse_word(p, name);
+
+	DBLDataNode* pdata = _getLocalVar(stack, name);
+	if (!pdata)	{
+		nd_logerror("var %s not exist\n", name);
+		return false;
+	}
+	//DBLDataNode value = *pdata;
+	DBLDataNode subVar;
+	
+	while (p && *p){		
+		if (*p == _ARRAR_BEGIN_MARK) {
+			p = ndstr_fetch_array_index(p, subName, sizeof(subName));
+			if (!p)	{
+				nd_logerror("get %s var error\n", inputVarName);
+				return false;
+			}
+			DBLDataNode subIndex;
+			if (_getVarValue(stack, subName, subIndex)) {
+				int index = subIndex.GetInt();
+
+				subVar = pdata->GetArray(index);
+				if (!subVar.CheckValid()) {
+					return false;
+				}
+			}
+			else {
+				return false;
+			}
+		}
+		else if (*p == '.') {
+			++p;
+			p = ndstr_parse_word(p, subName);
+
+			//subVar = pdata->unsafeRefMember(subName);
+			subVar = pdata->getUserDefMember(subName);
+			if (!subVar.CheckValid()) {
+				return false;
+			}
+		}
+		else {
+			break;
+		}		
+		pdata = &subVar;
+	}
+
+	outVar = *pdata;
+	return true;
+}
 
 bool LogicParserEngine::_chdir(const char *curDir)
 {
@@ -1103,62 +1198,16 @@ bool LogicParserEngine::_mkdir(const char *curDir)
 {
 	return 0 == nd_mkdir(curDir);
 }
-// 
-// DBLDataNode* LogicParserEngine::_refVariant(runningStack *stack, char *&pCmdStream)
-// {
-// 	//NDUINT16 type = *(NDUINT16*)pCmdStream;
-// 	//pCmdStream += sizeof(NDUINT16);
-// 	NDUINT16 type;
-// 	pCmdStream = lp_read_stream(pCmdStream, type, m_cmdByteOrder);
-// 
-// 	if (OT_VARIABLE == (DBL_ELEMENT_TYPE)type){
-// 		//get data from local vars 
-// 		char name[128];
-// 		int len = _read_string(pCmdStream, name, sizeof(name));
-// 		if (len == -1){
-// 			m_sys_errno = LOGIC_ERR_PARSE_STRING;
-// 			nd_logerror("read var name error \n");
-// 			return NULL;
-// 		}
-// 		pCmdStream += len;
-// 
-// 		DBLDataNode *pdata = _getLocalVar(stack, name);
-// 		if (pdata) {
-// 			return pdata;
-// 		}
-// 
-// 		logcal_variant node;
-// 		node.name = name;
-// 		stack->local_vars.push_back(node);
-// 		return _getLocalVar(stack, name);
-// 
-// 	}
-// 	else if (OT_PARAM == (DBL_ELEMENT_TYPE)type) {
-// 		//int index = *(int*)pCmdStream;
-// 		//pCmdStream += sizeof(index);
-// 		NDUINT32 index;
-// 		pCmdStream = lp_read_stream(pCmdStream, index, m_cmdByteOrder);
-// 
-// 		if (index >0 && index < stack->params.size()){
-// 			return &stack->params[index];
-// 		}
-// 	}
-// 	else if (OT_LAST_RET == (DBL_ELEMENT_TYPE)type) {
-// 		return  &m_registerVal;
-// 	}
-// 	return NULL;
-// }
+
 
 int LogicParserEngine::_getValue(runningStack *stack, char *pCmdStream, DBLDataNode &outValue)
 {
-	//NDUINT16 type = *(NDUINT16*)pCmdStream;
-	//char *p = pCmdStream + sizeof(NDUINT16); 
 	NDUINT16 type;
 	char*p = lp_read_stream(pCmdStream, type, m_cmdByteOrder);
 
 	if (OT_VARIABLE == (DBL_ELEMENT_TYPE)type){
 		//get data from local vars 
-		char name[128];
+		char name[1024];
 		int len = _read_string(p, name, sizeof(name));
 		if (len == -1){
 			m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
@@ -1166,108 +1215,12 @@ int LogicParserEngine::_getValue(runningStack *stack, char *pCmdStream, DBLDataN
 			return -1;
 		}
 		p += len;
-// 
-// 		if (stack->local_vars.size()==0)	{
-// 			m_sys_errno = LOGIC_ERR_VARIANT_NOT_EXIST;
-// 			nd_logerror("var %s not init before used\n", name);
-// 			return (int)(p - pCmdStream);;
-// 		}
-		// get array member
-		if (strchr(name, '[') ) {
-			char arrayName[128] ;
-			char indexName[128];
-			//char arrayIndex[10] ;
-			
-			const char *pElement = ndstr_nstr_end(name, arrayName, '[', sizeof(arrayName)) ;
-			if (!pElement || *pElement!= '[') {
-				nd_logerror("var %s not found ,express-error\n", name);
-				m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
-				return -1 ;
-			}
-			++pElement ;
-			pElement = ndstr_nstr_end(pElement, indexName, ']', sizeof(indexName));
-			
-			if (!pElement || *pElement != ']') {
-				nd_logerror("var %s not found ,express-error\n", name);
-				m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
-				return -1;
-			}
-			pElement = indexName;
-
-
-			int arrIndex = -1;
-			if (0==ndstricmp(pElement,"$index") ) {
-				arrIndex = m_curStack->loopIndex;
-			}
-			else if (IS_NUMERALS(*pElement)) {
-				arrIndex = ndstr_atoi_hex(pElement);
-			}
-			else {
-				DBLDataNode *pData = _getLocalVar(stack, pElement);
-				if (pData) {
-					arrIndex = pData->GetInt();
-				}
-			}
-
-			if (-1==arrIndex)	{
-				nd_logerror("input array index errror : %s\n", name);
-				m_sys_errno = LOGIC_ERR_VARIANT_NOT_EXIST;
-				return (int)(p - pCmdStream);;
-			}
-			
-			
-			DBLDataNode *pData = _getLocalVar(stack, arrayName);
-			if (!pData || pData->GetDataType()!=OT_ARRAY) 	{
-				nd_logerror("var %s data type is not array \n", name);
-				m_sys_errno = LOGIC_ERR_VARIANT_NOT_EXIST;
-				return (int)(p - pCmdStream);;
-			}
-			
-			outValue = pData->GetArray(arrIndex);
-			return (int)(p - pCmdStream);
-		}
-		//get user define data member
-		else if(strchr(name, '.')) {
-			char varName[128] ;
-			
-			const char *pMember = ndstr_nstr_end(name, varName, '.', sizeof(varName)) ;
-			if (!pMember || *pMember!= '.') {
-				nd_logerror("var %s not found ,express-error\n", name);
-				m_sys_errno = LOGIC_ERR_VARIANT_NOT_EXIST;
-				return -1 ;
-			}
-			++pMember ;
-			
-			DBLDataNode *pData = _getLocalVar(stack, varName);
-			if (!pData || pData->GetDataType()!=OT_USER_DEFINED) 	{
-				nd_logerror("var %s data type is not json \n", name);
-				m_sys_errno = LOGIC_ERR_VARIANT_NOT_EXIST;
-				return (int)(p - pCmdStream);;
-			}
-			
-			outValue = pData->getUserDefMember(pMember) ;
-			return (int)(p - pCmdStream);
+		if (!_getVarEx(stack, name, outValue))	{
+			nd_logerror(" var %s not found\n", name);
+			m_sys_errno = LOGIC_ERR_VARIANT_NOT_EXIST;
 		}
 		
-		else {
-			if (0 == ndstricmp(name, "$index")) {
-				outValue.InitSet(m_curStack->loopIndex);
-				return (int)(p - pCmdStream);
-			}
-			DBLDataNode *pData = _getLocalVar(stack, name);
-			if (pData) 	{
-				outValue = *pData;
-				return (int)(p - pCmdStream);
-			}
-			else {
-
-				nd_logerror("var %s NOT FOUND \n", name);
-				m_sys_errno = LOGIC_ERR_VARIANT_NOT_EXIST;
-				return -1;
-			}
-
-		}
-		
+		return (int)(p - pCmdStream);
 		
 	}
 	else if (OT_PARAM == (DBL_ELEMENT_TYPE)type) {
@@ -1286,6 +1239,22 @@ int LogicParserEngine::_getValue(runningStack *stack, char *pCmdStream, DBLDataN
 	}
 	else if (OT_LAST_RET == (DBL_ELEMENT_TYPE)type) {
 		outValue = m_registerVal;
+		return (int)(p - pCmdStream);
+	}
+	else if (OT_USER_DEFINED_ARRAY == (DBL_ELEMENT_TYPE)type) {
+		char name[1024];
+		int len = _read_string(p, name, sizeof(name));
+		if (len == -1){
+			m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
+			nd_logerror("read var name error \n");
+			return -1;
+		}
+		p += len;
+		if (!_getValueFromArray(stack,name, outValue) )	{
+			m_sys_errno = LOGIC_ERR_VARIANT_NOT_EXIST;
+			nd_logerror("make array %s error\n", name);
+			return -1;
+		}
 		return (int)(p - pCmdStream);
 	}
 	else if (OT_USER_DEFINED == (DBL_ELEMENT_TYPE)type) {
@@ -1319,6 +1288,7 @@ int LogicParserEngine::_getValueFromUserDef(const char *inputName, DBLDataNode &
 	char name[128];
 	const char *p = ndstr_nstr_end(inputName, name, '(', sizeof(name));
 	
+	ndstr_to_little(name);
 	UserDefData_map_t::iterator it = m_useDefType.find(name);
 	if (it==m_useDefType.end()) {
 		
@@ -1377,6 +1347,54 @@ int LogicParserEngine::_getValueFromUserDef(const char *inputName, DBLDataNode &
 
 	return 0;
 }
+
+
+bool LogicParserEngine::_getValueFromArray(runningStack *stack, const char *inputText, DBLDataNode &outValue)
+{
+	char name[128];
+	const char *p = ndstr_parse_word(inputText, name);
+
+	const LogicUserDefStruct*pUserType = NULL;
+
+	DBL_ELEMENT_TYPE arrayType = DBLDataNode::getTypeFromName(name);
+	if (arrayType == OT_USER_DEFINED){
+		ndstr_to_little(name);
+		pUserType = getUserDataType(name);
+		if (!pUserType)	{
+			nd_logerror("can not found user define type %s\n", name);
+			return false;
+		}
+	}
+
+
+	int index = 1;
+	p = ndstr_first_valid(p);
+	if (*p == _ARRAR_BEGIN_MARK) {
+		p = ndstr_fetch_array_index(p, name, sizeof(name));
+		if (!p)	{
+			return false;
+		}
+		DBLDataNode subIndex;
+		index = -1;
+		if (_getVarValue(stack, name, subIndex)) {
+			index = subIndex.GetInt();
+		}
+		if (-1 == index)	{
+			nd_logerror("get array size error %s\n", name);
+			return false;
+		}
+	}
+
+	outValue.InitReservedArray(index, arrayType);
+	if (pUserType){
+		for (int i = 0; i < index; i++){
+			outValue.SetArray(*pUserType, i);
+		}
+	}
+
+	return true;
+}
+
 int LogicParserEngine::_read_string(char *pCmdStream, char *outbuf, size_t size)
 {
 	NDUINT16 size16 = 0;
@@ -1552,7 +1570,13 @@ bool LogicParserEngine::_CreateUserDefType(runningStack *runstack, parse_arg_lis
 			userDefData->push_back(name, args[i]);
 		}
 	}
-	m_useDefType[args[0].GetText()] = userDefData;
+
+	const char *pText = args[0].GetText();
+	char name[128];
+	strncpy(name, pText, sizeof(name));
+	ndstr_to_little(name);
+
+	m_useDefType[name] = userDefData;
 	return true;
 
 }
@@ -1624,6 +1648,87 @@ bool LogicParserEngine::_mathOperate(eMathOperate op,const DBLDataNode &var1, co
 
 bool LogicParserEngine::_varAssignin(runningStack *stack,const char *name, DBLDataNode &inputVal)
 {
+	char varname[128];
+	char subName[128];
+	const char *p = name;
+
+	p = ndstr_parse_word(p, varname);
+
+	DBLDataNode* pdata = _getLocalVar(stack, varname);
+	if (!pdata)	{
+		nd_logerror("var %s not exist\n", name);
+		return false;
+	}
+	//DBLDataNode value = *pdata;
+	LogicUserDefStruct *pUserStruct =NULL;
+
+	if (pdata->GetDataType() == OT_USER_DEFINED) {
+		pUserStruct = (LogicUserDefStruct *)pdata->getUserDef();
+		pdata = NULL;
+	}
+
+	while (p && *p){
+		if (*p == _ARRAR_BEGIN_MARK) {
+			if (!pdata)	{
+				nd_logerror(" %s is not array\n",name);
+				return false;
+			}
+			p = ndstr_fetch_array_index(p, subName, sizeof(subName));
+			if (!p)	{
+				nd_logerror("get %s var error\n", name);
+				return false;
+			}
+			DBLDataNode subIndex;
+			if (_getVarValue(stack, subName, subIndex)) {
+				int index = subIndex.GetInt();				
+				if (OT_USER_DEFINED== pdata->GetArrayType()){
+					pUserStruct = (LogicUserDefStruct *)pdata->GetarrayUser(index);
+					pdata = NULL;
+				}
+				else {
+					pdata->SetArray(inputVal, index);
+					return true;
+				}
+			}
+			else {
+				return false;
+			}
+		}
+		else if (*p == '.') {
+			if ( !pUserStruct ){
+				nd_logerror(" %s is not json data\n", name);
+				return false;
+			}
+			++p;
+			p = ndstr_parse_word(p, subName);
+			pdata = pUserStruct->ref(subName);
+			if (!pdata) {
+				nd_logerror("can not found member %s\n", subName);
+				return false;
+			}
+
+			if (pdata->GetDataType() == OT_USER_DEFINED) {
+				pUserStruct = (LogicUserDefStruct *)pdata->getUserDef();
+				pdata = NULL;
+			}
+		}
+		else {
+			break;
+		}
+	}
+
+	if (pdata ){
+		*pdata = inputVal;
+	}
+	else if (pUserStruct && inputVal.GetDataType() == OT_USER_DEFINED && inputVal.getUserDef()) {
+		*pUserStruct = *inputVal.getUserDef();
+	}
+	else {
+		return false;
+	}
+	return true;
+	//return outVarRef.unsafeRefOther(*pdata);
+	/*
 	DBLDataNode *pData = NULL ;
 	
 	if (strchr(name, '[')) {
@@ -1684,7 +1789,7 @@ bool LogicParserEngine::_varAssignin(runningStack *stack,const char *name, DBLDa
 	}
 	
 	return  true ;
-
+	*/
 }
 
 bool LogicParserEngine::_buildUserDefData(runningStack *runstack,parse_arg_list_t &args)
@@ -1934,11 +2039,11 @@ void LogicParserEngine::setErrno(int errcode)
 void LogicParserEngine::setSimulate(bool flag, LogicObjectBase *owner )
 {
 	m_simulate = flag;
-	if (m_simulate) {
-		if (owner){
+	if (m_simulate)	{
+		if (owner)	{
 			m_owner = owner;
 		}
-		else if (!m_owner) {
+		else if (m_owner) {
 			m_owner = new TestLogicObject;
 			m_ownerIsNew = true;
 		}
@@ -2100,6 +2205,17 @@ void LogicParserEngine::_rollbacAffair()
 		delete m_curStack->affairHelper;
 		m_curStack->affairHelper = 0;
 	}
+}
+
+
+
+const LogicUserDefStruct* LogicParserEngine::getUserDataType(const char *name) const
+{
+	UserDefData_map_t::const_iterator it = m_useDefType.find(name);
+	if (it == m_useDefType.end()) {
+		return NULL;
+	}
+	return it->second;
 }
 
 

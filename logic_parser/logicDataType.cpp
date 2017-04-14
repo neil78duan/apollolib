@@ -120,6 +120,23 @@ static bool _userDef_array_init(const LogicUserDefStruct *arr[], int size, dbl_e
 	return true;
 }
 
+DBL_ELEMENT_TYPE DBLDataNode::getTypeFromName(const char *typeName)
+{
+	static const char *_s_typeName[] = {
+		"int",
+		"float",
+		"string",
+		"int8",
+		"int16",
+		"int64"
+	};
+	for (size_t i = 0; i < sizeof(_s_typeName) / sizeof(_s_typeName[0]); i++)	{
+		if (ndstricmp(typeName, _s_typeName[i])==0)	{
+			return (DBL_ELEMENT_TYPE)i;
+		}
+	}
+	return OT_USER_DEFINED;
+}
 
 static bool _check_array(const char *src);
 //////////////////////////////////////////////////////////////////////////
@@ -127,6 +144,10 @@ DBLDataNode::DBLDataNode(dbl_element_base *data, DBL_ELEMENT_TYPE etype, DBL_ELE
 m_ele_type(etype), m_sub_type(sub_etype), m_data(data), m_dataOwner(false)
 {
 	m_dataOwn.isInit = true;
+	//m_refParent = false;
+	//m_unsafeRef = false;
+
+	//m_unsafeRefType = UNSAFE_REF_ADDR_REF;
 }
 DBLDataNode::DBLDataNode(const DBLDataNode &r) 
 {
@@ -149,6 +170,9 @@ DBLDataNode::~DBLDataNode()
 
 void DBLDataNode::init()
 {
+	//m_refParent = false;
+	//m_unsafeRef = false;
+	//m_unsafeRefType = UNSAFE_REF_ADDR_REF;
 	m_ele_type = 0;
 	m_sub_type = 0;
 	m_dataOwn._data = 0 ;
@@ -162,8 +186,10 @@ DBLDataNode &DBLDataNode::operator =(const DBLDataNode &r)
 	if (this == &r){
 		return *this;
 	}
+
 	Destroy();
 	_copy(r);
+
 	return *this;
 }
 
@@ -610,13 +636,15 @@ bool DBLDataNode::SetArray(const DBLDataNode &data, int index)
 		dbl_strarray *paddr = (dbl_strarray *)m_data->_data;
 		if (paddr->data[index])	{
 			free(paddr->data[index]);
+			paddr->data[index] = NULL;
 		}
-		size_t size = strlen(data.GetText()) + 1;
-		if (size <= 1)	{
-			return true;
+		std::string str2 = data.GetString();
+		size_t size = str2.size() + 1;
+		if (str2.size()){			
+			paddr->data[index] = (char*)malloc(size);
+			strncpy(paddr->data[index], str2.c_str(), size);
 		}
-		paddr->data[index] = (char*)malloc(size);
-		strncpy(paddr->data[index], data.GetText(), size);
+		
 
 	}
 	else if (OT_USER_DEFINED == m_sub_type) {
@@ -761,6 +789,185 @@ const LogicUserDefStruct *DBLDataNode::getUserDef() const
 	}
 	return m_data->_userDef ;	
 }
+// 
+// // unsafe reference 
+// DBLDataNode DBLDataNode::unsafeRefArray(int index)
+// {
+// 	if (m_ele_type != OT_ARRAY || index >= m_data->_i_arr->number)	{
+// 		return DBLDataNode();
+// 	}
+// 	DBLDataNode ret;
+// 	ret.init();
+// 
+// 	ret.m_unsafeRef = true;
+// 	ret.m_dataOwner = false;
+// 	ret.m_ele_type = m_sub_type;
+// 
+// 	switch (m_sub_type)
+// 	{
+// 	case OT_STRING:
+// 		ret.m_data->_data = &(m_data->_str_arr->data[index]);
+// 		break;
+// 	case OT_FLOAT:
+// 		ret.m_data->_data = &m_data->_f_arr->data[index];
+// 		break;
+// 
+// 	case OT_INT:
+// 	case OT_BOOL:
+// 	case OT_INT8:
+// 	case OT_INT16:
+// 		ret.m_data->_data = &m_data->_i_arr->data[index];
+// 		break;
+// 
+// 	case OT_USER_DEFINED:
+// 		ret.m_data->_data = &( m_data->_arr_user->data[index]);
+// 		break;
+// 	default:
+//		return DBLDataNode(); 
+//		break;
+// 	}
+// 	return ret;
+// }
+// DBLDataNode DBLDataNode::unsafeRefMember(const char *name)
+// {
+// 	if (m_ele_type != OT_USER_DEFINED || !m_data->_data) {
+// 		return DBLDataNode();
+// 	}
+// 	LogicUserDefStruct *pDataUser = m_data->_userDef;
+// 	if (pDataUser){
+// 		DBLDataNode *pData = pDataUser->ref(name);
+// 		if (!pData) {
+// 			return  DBLDataNode();
+// 		}
+// 		DBLDataNode ret;
+// 		ret.unsafeRefOther(*pData);		//unneed use unsafe 
+// 		return ret;
+// 	}
+// 	return DBLDataNode();
+// 
+// }
+// bool DBLDataNode::unsafeRefOther(DBLDataNode &other)
+// {
+// 	if (!other.CheckValid())	{
+// 		return false;
+// 	}
+// 	m_ele_type = other.m_ele_type;
+// 	m_sub_type = other.m_sub_type;
+// 	m_data = other.m_data;
+// 	m_dataOwner = false;
+// 
+// 	m_dataOwn.isInit = true;
+// 	m_unsafeRef = true;
+// 	if (!other.m_unsafeRef)	{
+// 		m_unsafeRefType = UNSAFE_REF_ORGINAL;
+// 	}
+// 	else {
+// 		m_unsafeRefType = other.m_unsafeRefType;
+// 	}
+// 
+// 	return true;
+// }
+// bool DBLDataNode::unsafeSetValue(DBLDataNode &val)
+// {
+// 	if (!m_unsafeRef){
+// 		*this = val;
+// 		return true;
+// 	}
+// 
+// 	if (m_unsafeRefType == UNSAFE_REF_ORGINAL)	{
+// 		dbl_destroy_data(m_data, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type);
+// 		dbl_data_copy(val.m_data, m_data, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type);
+// 		return;
+// 	}
+// 
+// 	if (!m_data->_data)	{
+// 		return false;
+// 	}
+// 	
+// 	switch (m_sub_type)
+// 	{
+// 	case OT_STRING:
+// 	{
+// 		const char *p = val.GetText();
+// 		if (p && *p)	{
+// 			size_t s = strlen(p) + 1;
+// 			char *addr = (char*)malloc(s);
+// 			char **refAddr = (char **) m_data->_data;			
+// 			strncpy(addr, p, s);
+// 			*refAddr = addr;
+// 			break;
+// 		}
+// 		return false;
+// 		break;
+// 	}
+// 	case OT_FLOAT:
+// 	{
+// 		float *addr = (float*) m_data->_data;
+// 		*addr = val.GetFloat();
+// 	}
+// 		break;
+// 
+// 	case OT_INT:
+// 	case OT_BOOL:
+// 	case OT_INT8:
+// 	case OT_INT16:
+// 	{
+// 		int *addr = (int*)m_data->_data;
+// 		*addr = val.GetInt();
+// 
+// 	}
+// 		break;
+// 
+// 	case OT_USER_DEFINED:
+// 	{
+// 		LogicUserDefStruct **addr = (LogicUserDefStruct **)(m_data->_data);
+// 		if (*addr &&val.m_data->_userDef){
+// 			**addr = *val.m_data->_userDef;
+// 		}
+// 		break;
+// 	}
+// 	default:
+//		return false;
+// 	}
+// 	return true;
+// }
+// 
+// bool DBLDataNode::getValFromUnsafe(DBLDataNode &unsafeVal)
+// {
+// 	if (!unsafeVal.m_data->_data)	{
+// 		return false;
+// 	}
+// 
+// 	switch (m_sub_type)
+// 	{
+// 	case OT_STRING:
+// 		InitSet((char **)m_data->_data);
+// 		break;
+// 	case OT_FLOAT:
+// 		InitSet(*(float*)m_data->_data);
+// 		break;
+// 
+// 	case OT_INT:
+// 	case OT_BOOL:
+// 	case OT_INT8:
+// 	case OT_INT16:
+// 		InitSet(*(int*)m_data->_data);
+// 		break;
+// 	case OT_USER_DEFINED:
+// 	{
+// 		LogicUserDefStruct **addr = (LogicUserDefStruct **)(m_data->_data);
+// 		if (addr && *addr ){
+// 			InitSet(**addr);
+// 		}
+// 		break;
+// 	}
+// 	default:
+//		return false;
+// 	}
+// 	return true;
+// }
+
+//////////////////////////////////////////////////////////////////////////
 
 int DBLDataNode::ReadStream(const char *streamBuf, size_t data_size, int streamByteOrder)
 {
@@ -1949,7 +2156,7 @@ void DBLDataNode::Destroy()
 	m_sub_type = 0;
 	m_data = 0;
 	m_dataOwner = false;
-
+	//m_unsafeRef = false;
 	m_dataOwn.isInit = true;
 }
 

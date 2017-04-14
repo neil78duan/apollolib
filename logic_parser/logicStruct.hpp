@@ -82,6 +82,7 @@ public:
 
 	size_t count() const { return m_members.size(); }
 	DBLDataNode *ref(size_t index);
+	DBLDataNode *ref(const char *name);
 
 protected:
 	//void Destroy();

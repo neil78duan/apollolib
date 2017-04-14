@@ -15,7 +15,7 @@
 <data_type_define kinds="hide" desc="define enum data type">
 	<!-- type_operate_dest kinds="enum" enum_value="无,角色属性,背包,任务,基地,卡牌,附加属性" enum_type="text" enum_text="none,attr,package,task,home,card,addition"/ -->
 	<type_compare_sub_entry kinds="enum" enum_value="其他,等于,小于,大于,小于等于,大于等于"/>
-	<type_data_type kinds="enum" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,time,变量,参数,当前结果,user_define,compile_time,function_name, module_name,binary_data"/>	
+	<type_data_type kinds="enum" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,time,变量,参数,当前结果,user_def,compile_time,func_name, mod_name,bin_data,user_def_array"/>	
 	<type_netmsg_privilege kinds="enum" enum_value="不限制,连接,登录,进入游戏,GM"/>
 	<type_encode kinds="enum" enum_value="ansi,gbk,utf8"/>
 	<type_time_unit kinds="enum" enum_value="秒,分钟,小时,天,月,年,星期"/>
@@ -31,6 +31,7 @@
 	<function_init_block>ModuleInitEntry</function_init_block>
 	<exception_catch_block>ExceptionEntry</exception_catch_block>
 	<op_make_var>NewVar</op_make_var>
+	<op_build_json_data>NewVar</op_build_json_data>	
 	<!--op_build_json_data>NewJson</op_build_json_data>
 	<op_create_struct_type>NewStruct</op_create_struct_type>
 	<op_assignin>Assignment</op_assignin -->
@@ -496,13 +497,28 @@
 	
 	
 	<create_make_var name="申明变量" create_type="1" auto_index_list="param" auto_index_reference="variant_index">
-		<op_make_var name="节点_申明变量$var$" expand="yes">
+		<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
 			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
 			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var</param>
 			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 			<var name="初始值" kinds="string" delete="no" restrict="type">none</var>
 		</op_make_var>
 	</create_make_var>
+	
+	
+	<create_build_json_data name="创建json数据" create_type="1" >
+		<op_build_json_data name="节点_创建json数据$name$" create_template="create_user_def_param" var_name="var" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+			<comment name="功能说明" rw_stat="read">define  name{...}</comment>			
+			<var name="变量名" kinds="string" delete="no" replace_val="../.name">none</var>
+		</op_build_json_data>
+	</create_build_json_data>
+	
+	<create_build_struct_type name="创建新类型" create_type="1" >
+		<op_create_struct_type name="节点_创建新类型$name$" create_template="create_user_def_param" var_name="var" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+			<comment name="功能说明" rw_stat="read">typedef struct{...}</comment>			
+			<var name="类型名" kinds="string" delete="no" replace_val="../.name">none</var>
+		</op_create_struct_type>
+	</create_build_struct_type>
 	
 	<create_get_arrsize name="获得数组长度" create_type="1" >
 		<op_get_arrsize name="节点_数组$name$长度" expand="yes" create_label="create_internal_label">
@@ -633,20 +649,6 @@
 			<param name="取名" kinds="string" delete="no" replace_val="../.name">none</param>
 		</op_del_timer>
 	</create_del_timer>
-	
-	<create_build_json_data name="创建json数据" create_type="1" >
-		<op_build_json_data name="节点_创建json数据$name$" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
-			<comment name="功能说明" rw_stat="read">define  name{...}</comment>			
-			<var name="变量名" kinds="string" delete="no" replace_val="../.name">none</var>
-		</op_build_json_data>
-	</create_build_json_data>
-	
-	<create_build_struct_type name="创建新类型" create_type="1" >
-		<op_create_struct_type name="节点_创建新类型$name$" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
-			<comment name="功能说明" rw_stat="read">typedef struct{...}</comment>			
-			<var name="类型名" kinds="string" delete="no" replace_val="../.name">none</var>
-		</op_create_struct_type>
-	</create_build_struct_type>
 	
 	
 	<create_step_call_func name="调用函数" create_type="1" >

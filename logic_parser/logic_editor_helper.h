@@ -69,6 +69,7 @@ namespace LogicEditorHelper
 		ERT_BE_REF_ONLY,
 		ERT_REPLACE_VAL,
 		ERT_CREATE_LABEL,
+		ERT_VAR_NAME ,
 	};
 
 	const char *_GetDataTypeName(eDataType dataType);

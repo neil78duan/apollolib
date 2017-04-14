@@ -42,13 +42,14 @@ enum DBL_ELEMENT_TYPE
 	OT_FUNCTION_NAME = 0xe, //function name 
 	OT_SCRIPT_MODULE_NAME = 0xf, //function name
 	OT_BINARY_DATA = 0x10,		//binary-data
+	OT_USER_DEFINED_ARRAY =0X11,
 
 	OT_OBJECT_VOID = 0x20,		//game object , c_address of object
-	OT_OBJ_MSGSTREAM =0x21,
+	OT_OBJ_MSGSTREAM =0x21,		//input message stream
 	OT_OBJ_BASE_OBJ= 0x22,
 	OT_OBJ_NDHANDLE = 0x23,
 	OT_OBJ_NDOBJECT = 0x24,
-	//OT_BINARY_DATA = 0x25,
+	OT_OBJ_OUT_MSGSTREAM = 0x25,	//output message
 	OT_ATTR_DATA = 0x26 , //role attribute data
 };
 
@@ -186,6 +187,7 @@ public:
 	DBLDataNode(time_t t) {init() ;InitSet(t);}
 	DBLDataNode(const LogicUserDefStruct &u) {init() ;InitSet(u);}
 	
+	static DBL_ELEMENT_TYPE getTypeFromName(const char *typeName);
 	
 	DBLDataNode &operator =(const DBLDataNode &r);
 	bool operator == (const DBLDataNode &r) const;
@@ -291,6 +293,13 @@ public:
 
 	static bool setOutHex(bool isHex = true);
 	static bool setOutLua(bool isLua);
+
+// 	DBLDataNode unsafeRefArray(int index) ;
+// 	DBLDataNode unsafeRefMember(const char *name);
+// 	bool unsafeRefOther(DBLDataNode &other);
+// 	bool unsafeSetValue(DBLDataNode &val);
+// 	bool getValFromUnsafe(DBLDataNode &unsafeVal);
+// 	bool isUnsafe() { return m_unsafeRef; }
 protected:
 	DBLDataNode _attrMathAdd(const DBLDataNode &leftval)const ;
 	DBLDataNode _attrMathSub(const DBLDataNode &leftval)const ;
@@ -307,6 +316,12 @@ protected:
 	void _copy(const DBLDataNode &r);
 	int _writeEmptyStream(char *streamBuf, int streamByteOrder)const;
 	bool m_dataOwner; // false needn't release data 
+	
+// 	bool m_unsafeRef; // array element or userdefdata reference parent ,  which _data is 
+// 
+// 	enum eUnsafeType{ UNSAFE_REF_ADDR_REF, UNSAFE_REF_ORGINAL};
+// 	NDUINT8 m_unsafeRefType;
+
 	NDUINT8 m_ele_type;
 	NDUINT8 m_sub_type;
 	dbl_element_base *m_data;
