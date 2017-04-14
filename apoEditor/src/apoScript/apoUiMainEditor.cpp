@@ -1451,6 +1451,11 @@ bool apoUiMainEditor::buildParamConnector(apoBaseSlotCtrl *fromSlot, apoBaseSlot
 	if (!toSlot->onConnectIn(fromSlot)) {
 		return false;
 	}
+	
+	apoUiBezier *pBze = toSlot->getConnector();
+	if (pBze){
+		_removeBezier(pBze,false);
+	}
 	_connectSlots(fromSlot, toSlot);
 	apoBaseExeNode *toCtrl = dynamic_cast<apoBaseExeNode*> (toSlot->parent());
 	//apoBaseExeNode *fromCtrl = dynamic_cast<apoBaseExeNode*> (fromSlot->parent());
