@@ -42,13 +42,14 @@ enum DBL_ELEMENT_TYPE
 	OT_FUNCTION_NAME = 0xe, //function name 
 	OT_SCRIPT_MODULE_NAME = 0xf, //function name
 	OT_BINARY_DATA = 0x10,		//binary-data
+	OT_USER_DEFINED_ARRAY =0X11,
 
 	OT_OBJECT_VOID = 0x20,		//game object , c_address of object
-	OT_OBJ_MSGSTREAM =0x21,
+	OT_OBJ_MSGSTREAM =0x21,		//input message stream
 	OT_OBJ_BASE_OBJ= 0x22,
 	OT_OBJ_NDHANDLE = 0x23,
 	OT_OBJ_NDOBJECT = 0x24,
-	//OT_BINARY_DATA = 0x25,
+	OT_OBJ_OUT_MSGSTREAM = 0x25,	//output message
 	OT_ATTR_DATA = 0x26 , //role attribute data
 };
 
@@ -186,6 +187,7 @@ public:
 	DBLDataNode(time_t t) {init() ;InitSet(t);}
 	DBLDataNode(const LogicUserDefStruct &u) {init() ;InitSet(u);}
 	
+	static DBL_ELEMENT_TYPE getTypeFromName(const char *typeName);
 	
 	DBLDataNode &operator =(const DBLDataNode &r);
 	bool operator == (const DBLDataNode &r) const;

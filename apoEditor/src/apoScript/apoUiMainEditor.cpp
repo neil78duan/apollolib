@@ -358,17 +358,6 @@ bool apoUiMainEditor::_createFuncEntry(ndxml *stepsBlocks, const QPoint &default
 }
 
 
-int apoUiMainEditor::_createParams(ndxml *xmlnode, apoBaseExeNode &exeNode)
-{
-
-	for (int i = 0; i < ndxml_getsub_num(xmlnode); i++) {
-		ndxml *xmlParam = ndxml_getnodei(xmlnode, i);
-		if (!xmlParam) {
-			continue;
-		}
-	}
-	return 0;
-}
 apoBaseExeNode* apoUiMainEditor::_showExeNode(apoBaseSlotCtrl *fromSlot, ndxml *exeNode, const QPoint &pos)
 {
 	apoBaseExeNode *nodeCtrl = g_apoCreateExeNode(exeNode, this);
@@ -607,7 +596,12 @@ bool apoUiMainEditor::_connectSlots(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *
 
 	pbezier->setType(type);
 	fromSlot->setConnector(pbezier);
-	toSlot->setConnector(pbezier);
+	if (type != apoUiBezier::LineGoto)	{
+		toSlot->setConnector(pbezier);
+	}
+	else {
+		nd_logdebug("create a goto line \n");
+	}
 
 	pbezier->setAnchor(fromSlot, toSlot);
 	m_beziersVct.push_back(pbezier);
@@ -721,14 +715,17 @@ void apoUiMainEditor::_reConnectParam(apoBaseExeNode *changedNode)
 
 bool apoUiMainEditor::pushVarList(ndxml *xmlNode, apoBaseExeNode*nodeCtrl)
 {
-	ndxml *varName = ndxml_getnode(xmlNode, "param");
-	if (!varName){
-		return false;
+// 	ndxml *varName = ndxml_getnode(xmlNode, "param");
+// 	if (!varName){
+// 		return false;
+// 	}
+// 	const char *pName = ndxml_getval(varName);
+	const char *pName = ((apoUiExenodeNewVar*)nodeCtrl)->getVarName();
+	if (pName) {
+		m_varMap[pName] = nodeCtrl;
+		return true;
 	}
-	const char *pName = ndxml_getval(varName);
-
-	m_varMap[pName] = nodeCtrl;
-	return true;		 
+	return false;
 }
 
 apoBaseExeNode *apoUiMainEditor::createExenode(const QPoint &pos)
@@ -1285,6 +1282,14 @@ float apoUiMainEditor::setScale(float scale)
 }
 
 
+const char *apoUiMainEditor::getEditedFunc()
+{
+	if (m_editedFunction){
+		return ndxml_getattr_val(m_editedFunction, "name");
+	}
+	return NULL;
+}
+
 void apoUiMainEditor::onCurNodeChanged()
 {
 	if (m_curDetailNode && m_curDetailNode->getType() != EAPO_EXE_NODE_Switch){
@@ -1292,6 +1297,7 @@ void apoUiMainEditor::onCurNodeChanged()
 		_reConnectParam(m_curDetailNode);
 		m_curDetailNode->update();
 	}
+	onFileChanged();
 }
 
 void apoUiMainEditor::onNodeAddNewParam(apoBaseExeNode *node)
@@ -1403,6 +1409,11 @@ bool apoUiMainEditor::buildParamConnector(apoBaseSlotCtrl *fromSlot, apoBaseSlot
 		return false;
 	}
 	_connectSlots(fromSlot, toSlot);
+	apoBaseExeNode *toCtrl = dynamic_cast<apoBaseExeNode*> (toSlot->parent());
+	apoBaseExeNode *fromCtrl = dynamic_cast<apoBaseExeNode*> (fromSlot->parent());
+
+	curDetailChanged(toCtrl);
+
 	return true;
 }
 
@@ -1468,8 +1479,17 @@ bool apoUiMainEditor::buildRunSerqConnector(apoBaseSlotCtrl *fromSlot, apoBaseSl
 	ndxml *insertPosXml = fromSlot->getXmlAnchor();
 		
 	while (toXml){
+		ndxml *movedParent = ndxml_get_parent(toXml);
 		ndxml_disconnect(NULL, toXml);
 		if (-1 == ndxml_insert_after(moveInRoot, toXml, insertPosXml)) {
+			if (movedParent){
+				ndxml_insert(movedParent, toXml);
+			}
+			else {
+				ndxml_delxml(toXml, NULL);
+			}
+			nd_assert(0); 
+			nd_logerror("can not connect the node \n");
 			return false;
 		}
 		insertPosXml = toXml;
@@ -1596,7 +1616,18 @@ bool apoUiMainEditor::_disconnectRunSerq(apoBaseSlotCtrl *fromSlot, apoBaseSlotC
 		ndxml * movetoXml = ndxml_addnode(unConnectXml, "steps_collection", NULL);
 		
 		while (toCtrl)	{
+			
+			apoBaseSlotCtrl *_nextSlot = toCtrl->toNext();
 			apoBaseExeNode *next = toCtrl->getMyNextNode();
+
+			if (_nextSlot) {
+				pbze = _nextSlot->getConnector();
+				if (pbze->getType() == apoUiBezier::LineGoto){
+					_removeGotoConnect(fromSlot, toSlot);
+					next = NULL;
+				}
+			}
+
 			ndxml *movxml = (ndxml *)toCtrl->getMyUserData();
 			ndxml_disconnect(NULL, movxml);
 			ndxml_insert(movetoXml, movxml);

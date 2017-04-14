@@ -43,6 +43,7 @@ static bool apollo_str_cmp(LogicParserEngine*parser, parse_arg_list_t &args, DBL
 
 static bool apollo_str_str(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 static bool apollo_str_len(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+static bool apollo_call_script_msgHandler_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 
 //
 //static NDUINT32 _getMsgid(DBLDataNode &data , nd_handle hListen)
@@ -71,6 +72,7 @@ int init_sys_functions(LogicEngineRoot *root)
 	root->installFunc(apollo_func_read_msg, "apollo_func_read_msg", "读取消息(int:数据类型)");
 	root->installFunc(apollo_func_change_time, "apollo_func_change_time", "修改服务器时间(int:add_hours, int:add_minutes)");
 	root->installFunc(apollo_func_read_userData_from_msg, "apollo_func_read_userData_from_msg", "从消息中读取类型(输入消息, 类型名字)");
+	root->installFunc(apollo_call_script_msgHandler_test,"apollo_call_script_msgHandler_test","测试消息处理(script, maxId,minId, data1,data2...)");
 
 	root->installFunc(apollo_func_get_userDataType, "apollo_func_get_userDataType", "获得消息数据类型(类型名字)");
 	root->installFunc(apollo_func_binary_to_userData, "apollo_func_binary_to_userData", "把二进制转换为dataType(binary,类型名字)");
@@ -370,6 +372,52 @@ bool apollo_set_message_handler(LogicParserEngine*parser, parse_arg_list_t &args
 		parser->setErrno(LOGIC_ERR_AIM_OBJECT_NOT_FOUND);
 	}
 	return ret;
+}
+
+//call message-handler write by script for test
+bool apollo_call_script_msgHandler_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+{
+	CHECK_ARGS_NUM(args, 4, parser);
+
+	CHECK_DATA_TYPE(args[1], OT_STRING, parser);
+	const char *pScript = args[1].GetText();
+	int maxId = args[2].GetInt();
+	int minId = args[3].GetInt();
+
+
+	//construct input message 
+	NDOStreamMsg omsg(maxId, minId);
+
+	for (size_t i = 4; i < args.size(); i++) {
+		DBLDataNode &dataMsg = args[i];
+		if (-1 == logicDataWrite(dataMsg, omsg)) {
+			nd_logerror("apollo_func_send_msg args[%d] write to message-buf error \n", i);
+
+			parser->setErrno(NDERR_BAD_GAME_OBJECT);
+			return false;
+		}
+	}
+
+	NDIStreamMsg inmsg(omsg.GetMsgAddr());
+
+	//call function 
+	//DBLDataNode data;
+	parse_arg_list_t params;
+
+	//function name 
+	//data.InitSet(script);
+	params.push_back(DBLDataNode(pScript));
+
+	//receive message user
+	//data.InitSet((void*)pSession, OT_OBJ_BASE_OBJ);
+	params.push_back(DBLDataNode((void*)NULL, OT_OBJ_BASE_OBJ));
+
+	//message object
+	//data.InitSet((void*)&inmsg, OT_OBJ_MSGSTREAM);
+	params.push_back(DBLDataNode((void*)&inmsg, OT_OBJ_MSGSTREAM));
+
+	return parser->callFunc(params);
+
 }
 
 //install event handler

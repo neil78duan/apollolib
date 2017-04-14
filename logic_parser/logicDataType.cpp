@@ -120,6 +120,23 @@ static bool _userDef_array_init(const LogicUserDefStruct *arr[], int size, dbl_e
 	return true;
 }
 
+DBL_ELEMENT_TYPE DBLDataNode::getTypeFromName(const char *typeName)
+{
+	static const char *_s_typeName[] = {
+		"int",
+		"float",
+		"string",
+		"int8",
+		"int16",
+		"int64"
+	};
+	for (size_t i = 0; i < sizeof(_s_typeName) / sizeof(_s_typeName[0]); i++)	{
+		if (ndstricmp(typeName, _s_typeName[i])==0)	{
+			return (DBL_ELEMENT_TYPE)i;
+		}
+	}
+	return OT_USER_DEFINED;
+}
 
 static bool _check_array(const char *src);
 //////////////////////////////////////////////////////////////////////////
@@ -619,13 +636,15 @@ bool DBLDataNode::SetArray(const DBLDataNode &data, int index)
 		dbl_strarray *paddr = (dbl_strarray *)m_data->_data;
 		if (paddr->data[index])	{
 			free(paddr->data[index]);
+			paddr->data[index] = NULL;
 		}
-		size_t size = strlen(data.GetText()) + 1;
-		if (size <= 1)	{
-			return true;
+		std::string str2 = data.GetString();
+		size_t size = str2.size() + 1;
+		if (str2.size()){			
+			paddr->data[index] = (char*)malloc(size);
+			strncpy(paddr->data[index], str2.c_str(), size);
 		}
-		paddr->data[index] = (char*)malloc(size);
-		strncpy(paddr->data[index], data.GetText(), size);
+		
 
 	}
 	else if (OT_USER_DEFINED == m_sub_type) {

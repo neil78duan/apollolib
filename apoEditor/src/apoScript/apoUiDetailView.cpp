@@ -155,6 +155,7 @@ bool apoUiDetailView::_insertRow(xmlTableItem *nameItem, xmlTableItem* typeItem,
 	return true;
 }
 
+/*
 bool apoUiDetailView::onChanged(int row, int column, const char *xmlRealValue)
 {
 	if (column != 1){
@@ -174,11 +175,13 @@ bool apoUiDetailView::onChanged(int row, int column, const char *xmlRealValue)
 	//get type 
 	int type = -1;
 	const char *restrictType = ndxml_getattr_val(xmlval, "restrict");
-	if (restrictType&& 0==ndstricmp(restrictType, ndxml_getname(xmlType) )) {
-		type = ndxml_getval_int(xmlType);
+	ndxml *parent = ndxml_get_parent(xmlval);
+	if (!parent)	{
+		return true;
 	}
-	if (-1==type)	{
-		return false;
+	ndxml *node = ndxml_getnode(parent, restrictType);
+	if (!node || node != xmlType )	{
+		return true;
 	}
 	
 	xmlTableItem *cell = (xmlTableItem*)item(row, column + 1);
@@ -198,14 +201,11 @@ bool apoUiDetailView::onChanged(int row, int column, const char *xmlRealValue)
 	else if (type == OT_INT || type == OT_FLOAT || type == OT_INT64 || type == OT_INT8 || type == OT_INT16) {
 		cell->setText(QString("0"));
 	}
-// 	else if (type == OT_LAST_RET) {
-// 		cell->setText(QString("0"));
-// 	}
 
 	apoUiXmlTableWidget::onChanged(row, column, xmlRealValue);
 	return true;
 }
-
+*/
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 

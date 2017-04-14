@@ -92,7 +92,8 @@ namespace LogicEditorHelper
 		"value",
 		"referenced_only",
 		"replace_val",
-		"create_label"
+		"create_label",
+		"var_name"
 	};
 
 	const char *_GetDataTypeName(eDataType dataType)

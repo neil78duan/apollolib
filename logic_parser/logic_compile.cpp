@@ -1184,6 +1184,7 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 		p = lp_write_stream(p, (NDUINT64)timval, m_aimByteOrder);
 	}	
 		break;
+	case OT_USER_DEFINED_ARRAY:
 	case OT_USER_DEFINED:
 	case OT_STRING:
 	case OT_VARIABLE:
@@ -1236,21 +1237,14 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 					p -= sizeof(NDUINT16);
 				}
 				int size = convertData.WriteStream(p,len, m_aimByteOrder);
-				//////////////////////////////////////////////////////////////////////////
-				//DBLDataNode test1;
-				//int size1 = test1.ReadStream(p);
-				//nd_assert(test1 == convertData);
-				//////////////////////////////////////////////////////////////////////////
 				p += size ;
 			}
 			else {
-				//*((*(NDUINT16**)&p)++) = (NDUINT16)0;
 				p = lp_write_stream(p, (NDUINT16)0, m_aimByteOrder);
 			}
 			
 		}
 		else {
-			//*((*(NDUINT16**)&p)++) = (NDUINT16)0;
 			p = lp_write_stream(p, (NDUINT16)0, m_aimByteOrder);
 		}
 		break;

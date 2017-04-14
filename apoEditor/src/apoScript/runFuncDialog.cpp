@@ -30,7 +30,7 @@ QString RunFuncDialog::getFunc()
 	return ui->comboFunc->currentText();
 }
 
-bool RunFuncDialog::initFunctionList(ndxml *xmlFile)
+bool RunFuncDialog::initFunctionList(ndxml *xmlFile, const char *dftFunc)
 {
 #define INSERT_FUNCTIONS(_xml, _collectName) \
 	do 	{	\
@@ -41,6 +41,10 @@ bool RunFuncDialog::initFunctionList(ndxml *xmlFile)
 	INSERT_FUNCTIONS(xmlFile, "baseFunction");
 	INSERT_FUNCTIONS(xmlFile, "message_handler");
 	INSERT_FUNCTIONS(xmlFile, "baseFunction");
+
+	if (dftFunc){
+		ui->comboFunc->setCurrentText(QString(dftFunc));
+	}
 	return true;
 }
 

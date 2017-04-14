@@ -451,8 +451,8 @@ void MainWindow::onShowExeNodeDetail(apoBaseExeNode *exenode)
 	subwindow->setObjectName("xmlDetailTable");
 	subwindow->showDetail(exenode, m_curFile);
 
-	QObject::connect(subwindow, SIGNAL(xmlDataChanged()),
-		this, SLOT(onFileChanged()));
+	//QObject::connect(subwindow, SIGNAL(xmlDataChanged()),
+	//	this, SLOT(onFileChanged()));
 
 	if (m_editorWindow) {
 		QObject::connect(subwindow, SIGNAL(xmlDataChanged()),
@@ -825,8 +825,10 @@ void MainWindow::on_actionRun_triggered()
 {
 	on_actionSave_triggered();
 	ClearLog();
+
+	const char *curFunc = m_editorWindow ? m_editorWindow->getEditedFunc() : NULL;
 	RunFuncDialog dlg(this) ;
-	dlg.initFunctionList(m_curFile);
+	dlg.initFunctionList(m_curFile,curFunc);
 
 	if (dlg.exec() != QDialog::Accepted) {
 		return ;

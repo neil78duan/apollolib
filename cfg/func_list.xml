@@ -1,5 +1,6 @@
 <?xml  version="1.0" encoding="utf8" ?>
 <func_list>
+	<node desc="测试消息处理(script, maxId,minId, data1,data2...)">CPP.apollo_call_script_msgHandler_test</node>
 	<node desc="导出c函数(filename)">CPP.apollo_export_cpp_api</node>
 	<node desc="导出事件(filename)">CPP.apollo_export_events_list</node>
 	<node desc="把二进制转换为dataType(binary,类型名字)">CPP.apollo_func_binary_to_userData</node>

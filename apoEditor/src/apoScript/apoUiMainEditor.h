@@ -47,6 +47,7 @@ public:
 	
 	QPoint getExenodeOffset() { return m_offset; }
 	float setScale(float scale);
+	const char *getEditedFunc();
 public slots:
 	//void onExenodeDBClicked(apoBaseExeNode *exeNode, QMouseEvent * event);
 	void onCurNodeChanged();
@@ -76,7 +77,6 @@ private:
 
 	apoBaseExeNode* _showExeNode(apoBaseSlotCtrl *fromSlot, ndxml *exeNode, const QPoint &pos);
 
-	int _createParams(ndxml *xmlnode, apoBaseExeNode &exeNode);
 
 	bool pushVarList(ndxml *xmlNode, apoBaseExeNode*nodeCtrl);
 	bool _connectSlots(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot, apoUiBezier::eBezierType type = apoUiBezier:: LineParam );
