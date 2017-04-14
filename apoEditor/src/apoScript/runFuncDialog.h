@@ -19,7 +19,7 @@ public:
 	QString getArgs();
 	QString getFunc();
 
-	bool initFunctionList(ndxml *xmlFile);
+	bool initFunctionList(ndxml *xmlFile,const char *dftFunc=NULL);
 
 private:
 	Ui::RunFuncDialog *ui;

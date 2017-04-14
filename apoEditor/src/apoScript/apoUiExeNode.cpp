@@ -81,7 +81,10 @@ apoUiExenodeNewVar::apoUiExenodeNewVar(QWidget *parent, ndxml *exeNodeXml) :apoB
 {
 	apoBaseExeNode::m_type = EAPO_EXE_NODE_NewVar;
 	//disableReturnVar();
-	disableNewParam();
+	apoEditorSetting* p_setting = apoEditorSetting::getInstant();
+	if (!LogicEditorHelper::GetCreateTemplate(exeNodeXml, p_setting->getConfig()) ){
+		disableNewParam();
+	}
 
 	setNodeInfo(parent, exeNodeXml);
 	m_returnValue->setSlotType(apoBaseSlotCtrl::SLOT_VAR);
@@ -100,6 +103,13 @@ const char *apoUiExenodeNewVar::getVarName()
 	ndxml *node = ndxml_getnode(m_nodeXml,"param");
 	if (node){
 		return ndxml_getval(node);
+	}
+	const char *varName = ndxml_getattr_val(m_nodeXml, "var_name");
+	if (varName){
+		node = ndxml_getnode(m_nodeXml, varName);
+		if (node){
+			return ndxml_getval(node);
+		}
 	}
 	return NULL;
 }
@@ -278,7 +288,6 @@ apoUiExenodeValueComp::~apoUiExenodeValueComp()
 
 void apoUiExenodeValueComp::onInit()
 {
-	apoEditorSetting* settingRoot = apoEditorSetting::getInstant();
 	//create case ctrl
 	int x = E_LINE_WIDTH - PARAM_CTRL_W;
 	int y = E_LINE_HEIGHT * 1.5;
@@ -314,7 +323,7 @@ void apoUiExenodeValueComp::onInit()
 	nd_assert(m_subSlot);
 
 	y += E_LINE_HEIGHT;
-	x = E_LINE_WIDTH;
+	x = E_LINE_WIDTH - PARAM_CTRL_W;
 	m_toNextNode->move(x, y);
 }
 

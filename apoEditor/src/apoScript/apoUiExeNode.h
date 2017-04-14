@@ -72,6 +72,8 @@ public:
 			m_toNextNode->setXmlAnchor(toNextAnchor);
 		}
 		m_toNextNode->setXmlAnchorParent(m_nodeXml);
+
+		m_beDeleted = false;
 	}
 	virtual ~apoUiExenodeFuncEntry(){}
 private:
@@ -129,32 +131,6 @@ private:
 
 };
 
-// 
-// class apoUiExenodeCallFunc : public apoBaseExeNode
-// {
-// public:
-// 	explicit apoUiExenodeCallFunc(QWidget *parent) :apoBaseExeNode()
-// 	{
-// 		apoBaseExeNode::m_type = EAPO_EXE_NODE_CALL_FUNCTION;
-// 
-// 		InitCtrl(parent, "Call", "none", 0);
-// 		setTips(QString("call function"));
-// 	}
-// 	virtual ~apoUiExenodeCallFunc(){}
-// 
-// 
-// 	virtual void paramCtrlDbClicked(apoBaseParam *paramCtrl)
-// 	{
-// 
-// 	}
-// 	virtual void nameCtrlDbClicked()
-// 	{
-// 
-// 	}
-// private:
-// 
-// };
-
 
 class apoUiExenodeNewVar : public apoBaseExeNode
 {
@@ -168,91 +144,6 @@ private:
 
 };
 
-// 
-// class apoUiExenodeNewJson : public apoBaseExeNode
-// {
-// public:
-// 	explicit apoUiExenodeNewJson(QWidget *parent, ndxml *exeNodeXml) :apoBaseExeNode()
-// 	{
-// 		apoBaseExeNode::m_type = EAPO_EXE_NODE_NewJson;
-// 
-// 		setNodeInfo(parent, exeNodeXml);
-// 		//InitCtrl(parent, "JSon",  0);
-// 		setTips(QString("Create Json data"));
-// 	}
-// 	virtual ~apoUiExenodeNewJson(){}
-// 
-// 
-// 	virtual void paramCtrlDbClicked(apoBaseParam * /*paramCtrl*/)
-// 	{
-// 
-// 	}
-// 	virtual void nameCtrlDbClicked()
-// 	{
-// 
-// 	}
-// 	virtual void onParamCreated(apoBaseParam * /*paramCtrl*/)
-// 	{
-// 
-// 	}
-// private:
-// 
-// };
-// 
-// class apoUiExenodeNewStruct : public apoBaseExeNode
-// {
-// public:
-// 	explicit apoUiExenodeNewStruct(QWidget *parent, ndxml *exeNodeXml) :apoBaseExeNode()
-// 	{
-// 		apoBaseExeNode::m_type = EAPO_EXE_NODE_NewStruct;
-// 
-// 		setNodeInfo(parent, exeNodeXml);
-// 		//InitCtrl(parent, "Struct",  0);
-// 		setTips(QString("define struct"));
-// 	}
-// 	virtual ~apoUiExenodeNewStruct(){}
-// 
-// 
-// 	virtual void paramCtrlDbClicked(apoBaseParam * /*paramCtrl*/)
-// 	{
-// 
-// 	}
-// 	virtual void nameCtrlDbClicked()
-// 	{
-// 
-// 	}
-// 	virtual void onParamCreated(apoBaseParam * /*paramCtrl*/)
-// 	{
-// 
-// 	}
-// private:
-// 
-// };
-
-// 
-// class apoUiExenodeAssignment : public apoBaseExeNode
-// {
-// public:
-// 	explicit apoUiExenodeAssignment(QWidget *parent, ndxml *exeNodeXml) :apoBaseExeNode()
-// 	{
-// 		apoBaseExeNode::m_type = EAPO_EXE_NODE_Assignment;
-// 
-// 		disableNewParam();
-// 
-// 		setNodeInfo(parent, exeNodeXml);
-// 		//InitCtrl(parent, "=",  2);
-// 		setTips(QString(" (a = b)"));
-// 	}
-// 	virtual ~apoUiExenodeAssignment(){}
-// 
-// 
-// 	virtual void paramCtrlDbClicked(apoBaseParam * /*paramCtrl*/)
-// 	{
-// 
-// 	}
-// private:
-// 
-// };
 
 
 class apoUiExenodeBreak : public apoBaseExeNode

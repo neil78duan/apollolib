@@ -31,7 +31,7 @@ class apoUiMainEditor : public QWidget
 {
     Q_OBJECT
 public:
-	enum { DEFAULT_START_X = 20, DEFAULT_START_Y = 20 };
+	enum { DEFAULT_START_X = 20, DEFAULT_START_Y = 400 };
 	typedef QVector<QString> text_list_t;
 
     explicit apoUiMainEditor(QWidget *parent = 0);
@@ -47,6 +47,7 @@ public:
 	
 	QPoint getExenodeOffset() { return m_offset; }
 	float setScale(float scale);
+	const char *getEditedFunc();
 public slots:
 	//void onExenodeDBClicked(apoBaseExeNode *exeNode, QMouseEvent * event);
 	void onCurNodeChanged();
@@ -76,7 +77,6 @@ private:
 
 	apoBaseExeNode* _showExeNode(apoBaseSlotCtrl *fromSlot, ndxml *exeNode, const QPoint &pos);
 
-	int _createParams(ndxml *xmlnode, apoBaseExeNode &exeNode);
 
 	bool pushVarList(ndxml *xmlNode, apoBaseExeNode*nodeCtrl);
 	bool _connectSlots(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot, apoUiBezier::eBezierType type = apoUiBezier:: LineParam );

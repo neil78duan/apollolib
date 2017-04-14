@@ -433,6 +433,12 @@ bool apoUiXmlTableWidget::_beginEdit(int nRow, int nCol)
 }
 
 
+void apoUiXmlTableWidget::dataChangedSignal()
+{
+	emit xmlDataChanged();
+	nd_logmsg("detail changed \n");
+}
+
 bool apoUiXmlTableWidget::onChanged(int row, int column, const char *xmlRealValue)
 {
 	xmlTableItem *cell = (xmlTableItem*)item(row, column);

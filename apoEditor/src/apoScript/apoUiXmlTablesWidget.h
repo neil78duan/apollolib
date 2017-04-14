@@ -47,10 +47,7 @@ protected:
 
 	void preShow();
 	void postShow();
-	void dataChangedSignal()
-	{
-		emit xmlDataChanged();
-	}
+	void dataChangedSignal();
 
 	bool _beginEdit(int nRow, int nCol);
 	bool _GetUserDefinData(const char *pUserParam, QString &val);

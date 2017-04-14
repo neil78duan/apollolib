@@ -1406,3 +1406,4 @@ ndxml *LogicCompiler::_getRefNode(ndxml*node)
 { 
 	return LogicEditorHelper::_getRefNode(node,ndxml_getval(node));
 }
+
