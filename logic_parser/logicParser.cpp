@@ -235,8 +235,6 @@ bool LogicParserEngine::_runCmdBuf(const char *moduleName ,const scriptCmdBuf *b
 	}
 
 	runningStack *orgStack = m_curStack;
-	m_curStack = &stack;
-
 	
 	ret = _runCmd(&stack);
 
@@ -323,7 +321,7 @@ bool LogicParserEngine::runFunction(const char *moduleName ,const scriptCmdBuf *
 
 	//bool orgExitFlag = m_OnErrorExit;
 	int orgCount = m_registerCount;
-	m_curStack = &stack;
+
 	if (_runCmd(&stack) != -1) {
 		ret = true;
 		result = m_registerVal;
@@ -364,6 +362,8 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 	LogicObjectBase* objAim = NULL ;
 	DBLDataNode tmpInputVal, tmpIndexVal;
 
+
+	m_curStack = stack; 
 	m_cmdByteOrder = stack->cmd->byteOrder;
 	m_sys_errno = 0;
 

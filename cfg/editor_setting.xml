@@ -975,6 +975,7 @@
 		<list>create_step_getother_object</list>
 		
 		
+		<list>create_step_waitevent</list>
 		<list>create_step_send_event</list>
 		<list>create_install_event</list>
 		<list>create_remove_event</list>
