@@ -269,6 +269,8 @@ apoBaseParam* apoBaseExeNode::createParam(ndxml *xmlParam, ndxml *parent)
 	pParamCtrl->resize(PARAM_CTRL_W, PARAM_CTRL_H);
 	pParamCtrl->setStyleSheet("QLabel{background-color:yellow;}");
 	pParamCtrl->setAttribute(Qt::WA_DeleteOnClose, true);
+
+	pParamCtrl->setXmlDeleteNode(xmlParam);
 	return pParamCtrl;
 }
 
@@ -412,8 +414,8 @@ bool apoBaseExeNode::closeParam(apoBaseSlotCtrl *param)
 	for (QVector<apoBaseParam *>::iterator it = m_paramVct.begin(); it != m_paramVct.end(); it++) {
 		if ((*it) == param)	{			
 			m_paramVct.erase(it);
+			param->onDelete();
 			param->close();
-
 			ret = true;
 			break;
 		}

@@ -1917,9 +1917,9 @@ bool LogicParserEngine::_checkIsSkip(int err)
 	return false;
 }
 
-bool LogicParserEngine::_callFunction(parse_arg_list_t &func_args)
+bool LogicParserEngine::_callFunction(parse_arg_list_t &func_args,const char *moduleName)
 {
-	bool ret = _call(func_args, m_registerVal) ;
+	bool ret = _call(func_args, m_registerVal,moduleName) ;
 	if (m_simulate && !ret )	{
 		if (_checkIsSkip( getErrno())) {
 			DBLDataNode val1;
@@ -1936,7 +1936,7 @@ bool LogicParserEngine::_callFunction(parse_arg_list_t &func_args)
 	return ret;
 }
 
-bool LogicParserEngine::_call( parse_arg_list_t &args, DBLDataNode &result)
+bool LogicParserEngine::_call(parse_arg_list_t &args, DBLDataNode &result, const char *moduleName)
 {
 	LogicEngineRoot *pRoot = LogicEngineRoot::get_Instant() ;
 	nd_assert(pRoot) ;
@@ -1967,8 +1967,8 @@ bool LogicParserEngine::_call( parse_arg_list_t &args, DBLDataNode &result)
 		}
 		return ret;
 	}
-	const char *pModule = NULL;
-	const scriptCmdBuf* pScript = pRoot->getScript(funcName, getCurMoudle(),&pModule) ;
+	const char *pModule = moduleName ? moduleName: getCurMoudle();
+	const scriptCmdBuf* pScript = pRoot->getScript(funcName, pModule ,&pModule) ;
 	if (pScript) {
 		return runFunction(pModule, pScript, args, result) ;
 	}

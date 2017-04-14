@@ -41,7 +41,7 @@ public:
 	void clearFunction();
 	//void setSettingConfig(apoEditorSetting *setting) { m_setting = setting; }
 
-	void curDetailChanged(apoBaseExeNode *exenode);
+	void showNodeDetail(apoBaseExeNode *exenode);
 	bool setCurDetail(ndxml *xmlNode, bool inError= false);
 	bool setCurNodeSlotSelected(ndxml *xmlParam, bool inError=false);
 	
@@ -52,7 +52,7 @@ public slots:
 	//void onExenodeDBClicked(apoBaseExeNode *exeNode, QMouseEvent * event);
 	void onCurNodeChanged();
 	void onNodeAddNewParam(apoBaseExeNode *node);
-
+	void onFuncNameChanged(ndxml *funcXml);
 signals:
 	void showExenodeSignal(apoBaseExeNode *exeNode);
 
@@ -81,14 +81,17 @@ private:
 	bool pushVarList(ndxml *xmlNode, apoBaseExeNode*nodeCtrl);
 	bool _connectSlots(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot, apoUiBezier::eBezierType type = apoUiBezier:: LineParam );
 	bool _connectParam(apoBaseExeNode *preNode, apoBaseExeNode *curNode);
-	bool _removeBezier(apoUiBezier *connector);
+	bool _removeBezier(apoUiBezier *connector,bool bWithDestroy=true);
 	bool _removeExenode(apoBaseExeNode *node);
 	//disconnect existed connector
 	bool _disconnectRunSerq(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot);
 
 	void _removeGotoConnect(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot);
 
-	void _disConnectParam(apoBaseExeNode *changedNode);
+	void _disConnectParam(apoBaseExeNode *changedNode, bool bWithDestroy = true);
+	void _disConnectVar(apoBaseExeNode *varNode);
+	void _disGotoLine(apoBaseExeNode *labelNode);
+
 	void _reConnectParam(apoBaseExeNode *changedNode);
 	bool _removeConnector(apoBaseSlotCtrl *slot);
 	

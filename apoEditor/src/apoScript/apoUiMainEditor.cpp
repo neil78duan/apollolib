@@ -71,7 +71,7 @@ bool apoUiMainEditor::showFunction(ndxml *data, ndxml_root *xmlfile)
 
 	dragTo(init_offset);
 
-	curDetailChanged(m_funcEntry);
+	showNodeDetail(m_funcEntry);
 	//update();
 	return true;
 }
@@ -648,9 +648,11 @@ bool apoUiMainEditor::_connectParam(apoBaseExeNode *preNode, apoBaseExeNode *cur
 	return true;
 }
 
-bool apoUiMainEditor::_removeBezier(apoUiBezier *connector)
+bool apoUiMainEditor::_removeBezier(apoUiBezier *connector, bool bWithDestroy)
 {
-	connector->onRemove();
+	if (bWithDestroy) {
+		connector->onRemove();
+	}
 	QVector<apoUiBezier*>::iterator it = m_beziersVct.begin();
 	for (; it != m_beziersVct.end(); it++)	{
 		if ((*it) == connector) {
@@ -666,6 +668,14 @@ bool apoUiMainEditor::_removeBezier(apoUiBezier *connector)
 bool apoUiMainEditor::_removeExenode(apoBaseExeNode *node)
 {
 	_disConnectParam(node);
+
+	if (node->getType() == EAPO_EXE_NODE_NewVar){
+		_disConnectVar(node);
+	}
+
+	if (node->getGotoLabel()){
+		_disGotoLine(node);
+	}
 
 	apoBaseExeNode *myPre = node->getMyPreNode();
 	apoBaseExeNode *myNext = node->getMyNextNode();
@@ -694,20 +704,52 @@ bool apoUiMainEditor::_removeExenode(apoBaseExeNode *node)
 	return true;
 }
 
-void apoUiMainEditor::_disConnectParam(apoBaseExeNode *changedNode)
+void apoUiMainEditor::_disConnectParam(apoBaseExeNode *changedNode, bool bWithDestroy )
 {
 	for (int i = 0; i < changedNode->getParamNum(); i++) {
 		apoBaseParam *paramCtrl = changedNode->getParam(i);
 		apoUiBezier *pBze = paramCtrl->getConnector();
 		if (pBze) {
-			_removeBezier(pBze);
+			_removeBezier(pBze, bWithDestroy);
 		}
 	}
 }
+
+
+void apoUiMainEditor::_disConnectVar(apoBaseExeNode *varNode)
+{
+	QVector<apoUiBezier*>::iterator it = m_beziersVct.begin();
+	for (; it != m_beziersVct.end(); )	{
+		if ((*it)->getSlot1() == varNode->returnVal())	{
+			(*it)->onRemove();
+			delete *it;
+			it = m_beziersVct.erase(it);
+		}
+		else {
+			++it;
+		}		
+	}
+}
+
+void apoUiMainEditor::_disGotoLine(apoBaseExeNode *labelNode)
+{
+	QVector<apoUiBezier*>::iterator it = m_beziersVct.begin();
+	for (; it != m_beziersVct.end();)	{
+		if ((*it)->getSlot2() == labelNode->inNode())	{
+			(*it)->onRemove();
+			delete *it;
+			it = m_beziersVct.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
+}
+
 void apoUiMainEditor::_reConnectParam(apoBaseExeNode *changedNode)
 {
 	nd_assert(changedNode);
-	_disConnectParam(changedNode);
+	_disConnectParam(changedNode,false);
 
 	//reconnect 
 	_connectParam(changedNode->getMyPreNode(), changedNode);
@@ -762,6 +804,7 @@ apoBaseExeNode *apoUiMainEditor::createExenode(const QPoint &pos)
 	}
 
 	savePosition(exeNode);
+	showNodeDetail(exeNode);
 	onFileChanged();
 	nd_logmsg("create %s SUCCESS\n", _GetXmlName(newxml, NULL));
 	return exeNode;
@@ -794,10 +837,7 @@ void apoUiMainEditor::popMenuAddLabelTrigged()
 		apoBaseExeNode *exeNode = dynamic_cast<apoBaseExeNode *>(m_popSrc);
 		if (exeNode){
 			exeNode->addJumpLabel(NULL);
-
-			if (exeNode == m_curDetailNode){
-				emit showExenodeSignal(m_curDetailNode);
-			}
+			showNodeDetail(exeNode);
 			this->update();
 		}
 	}
@@ -809,9 +849,7 @@ void apoUiMainEditor::popMenuDelLabelTrigged()
 		apoBaseExeNode *exeNode = dynamic_cast<apoBaseExeNode *>(m_popSrc);
 		if (exeNode){
 			exeNode->delLabel();
-			if (exeNode == m_curDetailNode){
-				emit showExenodeSignal(m_curDetailNode);
-			}
+			showNodeDetail(exeNode);
 			this->update();
 		}
 	}
@@ -827,10 +865,8 @@ void apoUiMainEditor::popMenuCloseParamTrigged()
 	}
 	apoBaseExeNode *parent = dynamic_cast<apoBaseExeNode *>(pslot->parent());
 	if (parent)	{
-		//_disConnectParam(parent);
 		parent->closeParam(pslot);
-		//reconnect 
-		//_connectParam(parent->getMyPreNode(), parent);
+		showNodeDetail(parent);
 		this->update();
 		onFileChanged();
 	}
@@ -1128,7 +1164,7 @@ void apoUiMainEditor::mouseReleaseEvent(QMouseEvent *event)
 		if (!m_bInDrag){
 			apoBaseExeNode* clickedNode = dynamic_cast<apoBaseExeNode*>(m_dragSrc);
 			if (clickedNode){
-				curDetailChanged(clickedNode);
+				showNodeDetail(clickedNode);
 			}
 		}
 		else {
@@ -1197,7 +1233,7 @@ void apoUiMainEditor::paintEvent(QPaintEvent *event)
 }
 
 
-void apoUiMainEditor::curDetailChanged(apoBaseExeNode *exenode)
+void apoUiMainEditor::showNodeDetail(apoBaseExeNode *exenode)
 {
 	if (m_curDetailNode){
 		m_curDetailNode->setSelected(false);
@@ -1221,7 +1257,7 @@ bool apoUiMainEditor::setCurDetail(ndxml *xmlNode, bool inError)
 	foreach(QObject *obj, list) {
 		apoBaseExeNode *exeNode = qobject_cast<apoBaseExeNode*>(obj);
 		if (exeNode && exeNode->getMyUserData()==xmlNode){
-			curDetailChanged(exeNode);
+			showNodeDetail(exeNode);
 			if(inError){
 				exeNode->setError(true) ;
 			}
@@ -1303,7 +1339,14 @@ void apoUiMainEditor::onCurNodeChanged()
 void apoUiMainEditor::onNodeAddNewParam(apoBaseExeNode *node)
 {
 	if (node == m_curDetailNode){
-		curDetailChanged(node);
+		showNodeDetail(node);
+	}
+}
+
+void apoUiMainEditor::onFuncNameChanged(ndxml *funcXml)
+{
+	if (m_editedFunction == funcXml && m_funcEntry){
+		m_funcEntry->renewDisplay();
 	}
 }
 
@@ -1410,9 +1453,9 @@ bool apoUiMainEditor::buildParamConnector(apoBaseSlotCtrl *fromSlot, apoBaseSlot
 	}
 	_connectSlots(fromSlot, toSlot);
 	apoBaseExeNode *toCtrl = dynamic_cast<apoBaseExeNode*> (toSlot->parent());
-	apoBaseExeNode *fromCtrl = dynamic_cast<apoBaseExeNode*> (fromSlot->parent());
+	//apoBaseExeNode *fromCtrl = dynamic_cast<apoBaseExeNode*> (fromSlot->parent());
 
-	curDetailChanged(toCtrl);
+	showNodeDetail(toCtrl);
 
 	return true;
 }
@@ -1620,7 +1663,7 @@ bool apoUiMainEditor::_disconnectRunSerq(apoBaseSlotCtrl *fromSlot, apoBaseSlotC
 			apoBaseSlotCtrl *_nextSlot = toCtrl->toNext();
 			apoBaseExeNode *next = toCtrl->getMyNextNode();
 
-			if (_nextSlot) {
+			if (next && _nextSlot) {
 				pbze = _nextSlot->getConnector();
 				if (pbze->getType() == apoUiBezier::LineGoto){
 					_removeGotoConnect(fromSlot, toSlot);

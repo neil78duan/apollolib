@@ -416,7 +416,8 @@ bool apollo_call_script_msgHandler_test(LogicParserEngine*parser, parse_arg_list
 	//data.InitSet((void*)&inmsg, OT_OBJ_MSGSTREAM);
 	params.push_back(DBLDataNode((void*)&inmsg, OT_OBJ_MSGSTREAM));
 
-	return parser->callFunc(params);
+	//message function is global
+	return parser->callFunc(params, GLOBAL_MODULE_NAME);
 
 }
 

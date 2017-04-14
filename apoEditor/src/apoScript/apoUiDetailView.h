@@ -33,7 +33,7 @@ protected:
 	bool showExeNode(apoBaseExeNode *node);
 	void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
-	//virtual bool onChanged(int row, int column, const char *xmlRealValue);
+	virtual bool onChanged(int row, int column, const char *xmlRealValue);
 private:
 	bool _insertRow(xmlTableItem *nameItem, xmlTableItem* typeItem, xmlTableItem *valItem);
 	int _init();

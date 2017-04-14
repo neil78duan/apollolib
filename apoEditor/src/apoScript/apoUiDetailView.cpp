@@ -155,7 +155,6 @@ bool apoUiDetailView::_insertRow(xmlTableItem *nameItem, xmlTableItem* typeItem,
 	return true;
 }
 
-/*
 bool apoUiDetailView::onChanged(int row, int column, const char *xmlRealValue)
 {
 	if (column != 1){
@@ -183,6 +182,10 @@ bool apoUiDetailView::onChanged(int row, int column, const char *xmlRealValue)
 	if (!node || node != xmlType )	{
 		return true;
 	}
+	type = ndxml_getval_int(xmlType);
+	if (type ==-1)	{
+		return true;
+	}
 	
 	xmlTableItem *cell = (xmlTableItem*)item(row, column + 1);
 	if (!cell){
@@ -205,7 +208,7 @@ bool apoUiDetailView::onChanged(int row, int column, const char *xmlRealValue)
 	apoUiXmlTableWidget::onChanged(row, column, xmlRealValue);
 	return true;
 }
-*/
+
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 

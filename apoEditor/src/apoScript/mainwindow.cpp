@@ -92,13 +92,7 @@ void MainWindow::ClearLog()
 }
 
 void MainWindow::WriteLog(const char *logText)
-{
-// #ifdef WIN32
-// 	char buf[1024];
-// 	nd_gbk_to_utf8(logText, buf, sizeof(buf));
-// 	logText = buf;
-// #endif
-	
+{	
 	QDockWidget *pDock = this->findChild<QDockWidget*>("outputView");
 	if (pDock){
 		QTextEdit *pEdit = pDock->findChild<QTextEdit*>("logTextEdit");
@@ -186,7 +180,7 @@ bool MainWindow::openFunctionsView()
 		QObject::connect(subwindow, SIGNAL(xmlNodeDelSignal(ndxml *)),
 			this, SLOT(onXmlNodeDel(ndxml *)));
 
-		QObject::connect(subwindow, SIGNAL(xmlDataChangedSignal()),this, SLOT(onFileChanged()));
+		QObject::connect(subwindow, SIGNAL(xmlNodeDisplayNameChangeSignal(ndxml *)), this, SLOT(onFunctionListChanged(ndxml*)));
 
 		if (m_curFile)	{
 			subwindow->setAlias(&m_editorSetting.getAlias());
@@ -354,7 +348,14 @@ void MainWindow::onXmlNodeDel(ndxml *xmlnode)
 		m_editorWindow->clearFunction();
 	}
 	ndxml_delxml(xmlnode, NULL);
+}
 
+
+void MainWindow::onFunctionListChanged(ndxml *xmlnode)
+{
+	if (m_currFunction == xmlnode && m_editorWindow){
+		m_editorWindow->onFuncNameChanged(xmlnode);
+	}
 }
 
 bool MainWindow::showCurFunctions()
@@ -494,7 +495,7 @@ void MainWindow::onFunctionsTreeCurItemChanged(QTreeWidgetItem *current, QTreeWi
 	else if (0 == ndstricmp(pAction, "detail")) {
 		showCommonDeatil(pxml);
 		if (m_editorWindow) {
-			m_editorWindow->curDetailChanged(NULL);
+			m_editorWindow->showNodeDetail(NULL);
 		}
 	}
 }

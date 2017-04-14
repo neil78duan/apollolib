@@ -311,7 +311,7 @@ public:
 	bool runScript(const char *scriptName,  parse_arg_list_t &args, DBLDataNode &result, int encodeType = ND_ENCODE_TYPE);
 	
 	//call function in script
-	bool callFunc(parse_arg_list_t &func_args) { return _callFunction(func_args); }
+	bool callFunc(parse_arg_list_t &func_args,const char *moduleName =NULL) { return _callFunction(func_args,moduleName); }
 	// generate game event in c++
 	bool eventNtf(int event_id, int num, ...);
 	bool eventNtf(int event_id, parse_arg_list_t &args);
@@ -385,9 +385,9 @@ protected:
 	virtual LogicObjectBase *getLogicObjectMgr(const char *objName);
 
 	virtual bool opCalc(void *func, int size, float *result) ;// run formulate 
-	bool _callFunction(parse_arg_list_t &func_args) ;
+	bool _callFunction(parse_arg_list_t &func_args, const char *moduleName=NULL);
 	// call external function in running script
-	bool _call( parse_arg_list_t &args, DBLDataNode &result);
+	bool _call(parse_arg_list_t &args, DBLDataNode &result, const char *moduleName=NULL);
 	
 	bool _opCmp(DBLDataNode& compVal, DBLDataNode& inval, eParserCompare op);
 	

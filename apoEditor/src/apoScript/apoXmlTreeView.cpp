@@ -142,7 +142,8 @@ void apoXmlTreeView::onItemChanged(QTreeWidgetItem *item, int column)
 		ndxml_setattrval(xml, "name", text1.toStdString().c_str());
 		nd_logmsg("itemchange %s : %s", _GetXmlName(xml,NULL), text1.toStdString().c_str());
 
-		emit xmlDataChangedSignal();
+		emit xmlNodeDisplayNameChangeSignal(xml);
+		//emit xmlDataChangedSignal();
 	}
 }
 
