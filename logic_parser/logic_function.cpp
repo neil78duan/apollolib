@@ -153,8 +153,7 @@ bool apollo_str_len(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNod
 
 	const char *p1 = args[1].GetText();	
 	if (p1 && *p1){
-		int len = strlen(p1);
-		result.InitSet(len);
+		result.InitSet((int)strlen(p1));
 	}
 	return true;
 }
@@ -348,7 +347,7 @@ bool apollo_set_message_handler(LogicParserEngine*parser, parse_arg_list_t &args
 	CHECK_DATA_TYPE(args[2], OT_STRING, parser);
 	int maxId = args[3].GetInt();
 	int minId = args[4].GetInt();
-	const char *pScript = args[2].GetText();
+	//const char *pScript = args[2].GetText();
 
 	bool ret = false;
 	DBLDataNode netHandle;
@@ -1043,8 +1042,8 @@ bool apollo_time_func(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataN
 		{
 			tm _tm1, _tm2;
 			if (localtime_r(&tim1, &_tm1) && localtime_r(&tim2, &_tm2)) {
-				NDUINT64 month1 = _tm1.tm_year * 12 + _tm1.tm_mon;
-				NDUINT64 month2 = _tm2.tm_year * 12 + _tm2.tm_mon;
+				//NDUINT64 month1 = _tm1.tm_year * 12 + _tm1.tm_mon;
+				//NDUINT64 month2 = _tm2.tm_year * 12 + _tm2.tm_mon;
 				val = _tm1.tm_year - _tm2.tm_year;
 			}
 			else {

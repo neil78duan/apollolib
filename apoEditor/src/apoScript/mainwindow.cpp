@@ -9,6 +9,7 @@
 #include "logic_parser/logic_compile.h"
 #include "logic_parser/logicEngineRoot.h"
 #include "logic_parser/logic_editor_helper.h"
+#include "logic_parser/script_event_id.h"
 
 #include "cli_common/dftCliMsgHandler.h"
 
@@ -950,6 +951,8 @@ bool MainWindow::runFunction(const char *binFile, const char *srcFile, int argc,
 			return false;
 		}
 
+		LogicParserEngine &parser = scriptRoot->getGlobalParser();
+		parser.eventNtf(APOLLO_EVENT_SERVER_START, 0) ;
 		WriteLog("start run script...\n");
 		if (0 != scriptRoot->test()){
 			WriteLog("run script error\n");
@@ -958,6 +961,7 @@ bool MainWindow::runFunction(const char *binFile, const char *srcFile, int argc,
 		else {
 			nd_logmsg("!!!!!!!!!!!!!!!!!!!RUN SCRIPT %s  SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n", binFile);
 		}
+		parser.eventNtf(APOLLO_EVENT_SERVER_STOP, 0);
 	}
 	else {
 		LogicParserEngine &parser = scriptRoot->getGlobalParser();
@@ -969,6 +973,7 @@ bool MainWindow::runFunction(const char *binFile, const char *srcFile, int argc,
 			return false;
 		}
 
+		parser.eventNtf(APOLLO_EVENT_SERVER_START, 0);
 		int ret = parser.runCmdline(argc, argv, E_SRC_CODE_UTF_8);
 		if (ret)	{
 			nd_logmsg("run function %s error : %d \n", argv[0], ret);
@@ -977,6 +982,8 @@ bool MainWindow::runFunction(const char *binFile, const char *srcFile, int argc,
 		else {
 			nd_logmsg("run function %s SUCCESS \n", argv[0]);
 		}
+
+		parser.eventNtf(APOLLO_EVENT_SERVER_STOP, 0);
 	}
 	LogicEngineRoot::destroy_Instant();
 

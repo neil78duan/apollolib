@@ -11,8 +11,7 @@
 	<moduleName name="模块名" kinds="string">moduleName</moduleName>	
 	<out_file name="输出文件" kinds="out_file">new-script_out.bin</out_file>
 	<script_with_debug name="调试信息" kinds="bool">0</script_with_debug>
-	<c_func_api name="导入c++函数列表" kinds="in_file">../cfg/func_list.xml</c_func_api>
-	<events_id name="事件列表" kinds="in_file">../cfg/events_id.xml</events_id>	
+	<user_define_enum name="用户定义类型表" kinds="in_file">../cfg/userDefList.xml</user_define_enum>	
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">1</script_out_encode>		
 	<Author name="作者" kinds="string">YourName</Author>
 	<LastMod name="最后修改" kinds="string">2016-1-1</LastMod>

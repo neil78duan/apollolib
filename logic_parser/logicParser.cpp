@@ -235,8 +235,6 @@ bool LogicParserEngine::_runCmdBuf(const char *moduleName ,const scriptCmdBuf *b
 	}
 
 	runningStack *orgStack = m_curStack;
-	m_curStack = &stack;
-
 	
 	ret = _runCmd(&stack);
 
@@ -323,7 +321,7 @@ bool LogicParserEngine::runFunction(const char *moduleName ,const scriptCmdBuf *
 
 	//bool orgExitFlag = m_OnErrorExit;
 	int orgCount = m_registerCount;
-	m_curStack = &stack;
+
 	if (_runCmd(&stack) != -1) {
 		ret = true;
 		result = m_registerVal;
@@ -364,6 +362,8 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 	LogicObjectBase* objAim = NULL ;
 	DBLDataNode tmpInputVal, tmpIndexVal;
 
+
+	m_curStack = stack; 
 	m_cmdByteOrder = stack->cmd->byteOrder;
 	m_sys_errno = 0;
 
@@ -1080,7 +1080,6 @@ bool LogicParserEngine::_getArg(runningStack *stack, int index, DBLDataNode &out
 	return false;
 }
 
-
 bool LogicParserEngine::_getVarValue(runningStack *stack, const char *varname, DBLDataNode &outValue)
 {
 	if (ndstr_is_naturalnumber(varname)){
@@ -1177,6 +1176,7 @@ bool LogicParserEngine::_getVarEx(runningStack *stack, const char *inputVarName,
 	outVar = *pdata;
 	return true;
 }
+
 
 bool LogicParserEngine::_chdir(const char *curDir)
 {
@@ -1348,12 +1348,10 @@ int LogicParserEngine::_getValueFromUserDef(const char *inputName, DBLDataNode &
 	return 0;
 }
 
-
 bool LogicParserEngine::_getValueFromArray(runningStack *stack, const char *inputText, DBLDataNode &outValue)
 {
 	char name[128];
 	const char *p = ndstr_parse_word(inputText, name);
-
 	const LogicUserDefStruct*pUserType = NULL;
 
 	DBL_ELEMENT_TYPE arrayType = DBLDataNode::getTypeFromName(name);
@@ -1688,6 +1686,7 @@ bool LogicParserEngine::_varAssignin(runningStack *stack,const char *name, DBLDa
 				else {
 					pdata->SetArray(inputVal, index);
 					return true;
+
 				}
 			}
 			else {
@@ -2206,7 +2205,6 @@ void LogicParserEngine::_rollbacAffair()
 		m_curStack->affairHelper = 0;
 	}
 }
-
 
 
 const LogicUserDefStruct* LogicParserEngine::getUserDataType(const char *name) const
