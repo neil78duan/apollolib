@@ -37,6 +37,7 @@ public:
 		m_inDrag(false), m_valid(true),m_showError(false),
 		m_slotType(SLOT_UNKNOWN),m_myConnect(0)
 	{
+		m_delNode = 0;
 		m_xmlAnchorParent = 0;
 		m_xmlAnchor = 0;
 		setAttribute(Qt::WA_DeleteOnClose, true);
@@ -47,6 +48,7 @@ public:
 		m_inDrag(false), m_valid(true),m_showError(false),
 		m_slotType(SLOT_UNKNOWN),m_myConnect(0)
 	{
+		m_delNode = 0;
 		m_xmlAnchorParent = 0;
 		m_xmlAnchor = 0;
 		setAttribute(Qt::WA_DeleteOnClose, true);
@@ -81,7 +83,9 @@ public:
 
 	void setXmlAnchorParent(ndxml *xml) {  m_xmlAnchorParent = xml; }
 	void setXmlAnchor(ndxml *xml) { m_xmlAnchor= xml; }
+	void setXmlDeleteNode(ndxml *xml) { m_delNode = xml; }
 
+	void onDelete();
 
 	virtual bool checkConnectIn();
 	virtual bool onConnectIn(apoBaseSlotCtrl*fromSlot);
@@ -101,6 +105,7 @@ protected:
 
 	ndxml *m_xmlAnchorParent;
 	ndxml *m_xmlAnchor;
+	ndxml *m_delNode; //if close this param , remove this from its parent
 private:
 
 };

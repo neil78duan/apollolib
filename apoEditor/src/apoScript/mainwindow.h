@@ -49,6 +49,7 @@ public slots:
 	void onFileChanged();
 	void onXmlNodeDel(ndxml *xmlnode);
 	void onFilelistDel(ndxml *xmlnode);
+	void onFunctionListChanged(ndxml *xmlnode);
 private slots:
 
     void on_actionViewList_triggered();

@@ -44,6 +44,7 @@ public:
 signals:
 	void xmlDataChangedSignal();
 	void xmlNodeDelSignal(ndxml *delxml);
+	void xmlNodeDisplayNameChangeSignal(ndxml *xml);
 
 public slots:
 	void DragCallBack(QTreeWidgetItem* from, QTreeWidgetItem* to);

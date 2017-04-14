@@ -114,7 +114,7 @@ int LogicEngineRoot::LoadScript(const char *scriptStream, LogicParserEngine *ini
 
 	std::string lastFuncName;
 	while (fread(&isGlobal, 1, 1, pf) > 0) {
-		int readSzie = fread(&size, 1, sizeof(size), pf);
+		int readSzie = (int) fread(&size, 1, sizeof(size), pf);
 		size = lp_stream2host(size, byteOrder);
 
 		nd_assert(size < fileSize);

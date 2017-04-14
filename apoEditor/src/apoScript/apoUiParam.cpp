@@ -25,6 +25,17 @@ bool apoBaseSlotCtrl::checkConnectIn()
 	return false;
 
 }
+
+
+void apoBaseSlotCtrl::onDelete()
+{
+	if (m_delNode)	{
+		if (-1 == ndxml_delxml(m_delNode,NULL)) {
+			nd_logmsg("remove and free xmlnode %s error \n", ndxml_getname(m_delNode));
+		}
+	}
+}
+
 bool apoBaseSlotCtrl::onConnectIn(apoBaseSlotCtrl*fromSlot)
 {
 	return true;

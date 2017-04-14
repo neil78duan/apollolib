@@ -1,4 +1,12 @@
 <?xml  version="1.0" encoding="utf-8" ?>
+<blueprint_setting kinds="hide" desc="setting for blueprint editor" is_file_info="true">
+	<hide_children>
+		<node>msg_handler_node</node>
+		<node>func_node</node>
+		<node>event_callback_node</node>
+		<node>moduleInfo</node>
+	</hide_children>
+</blueprint_setting>
 <moduleInfo name="模块信息" expand="yes">
 	<moduleName name="模块名" kinds="string">moduleName</moduleName>	
 	<out_file name="输出文件" kinds="out_file">new-script_out.bin</out_file>
