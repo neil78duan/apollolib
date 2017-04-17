@@ -291,7 +291,20 @@ namespace LogicEditorHelper
 		ndxml *template_root = ndxml_getnode(root, _szReserved[ERT_TEMPLATE]);
 		if (!template_root)
 			return NULL;
-		return ndxml_refsub(template_root, template_name);
+
+		ndxml *create_template = ndxml_refsub(template_root, template_name);
+		
+		while (create_template) {
+			const char *pRef = ndxml_getattr_val(create_template, "ref_from");
+			if (pRef && (0 == ndstricmp(pRef, "yes") || 0 == ndstricmp(pRef, "true")))	{
+				create_template = LogicEditorHelper::_getRefNode(create_template, ndxml_getval(create_template));
+			}
+			else {
+				break;
+			}
+		}
+
+		return create_template;
 	}
 	/////////////////////////////////////////////////////////////////////////////
 
@@ -330,7 +343,8 @@ namespace LogicEditorHelper
 
 	ndxml *_getRefNode(ndxml*node, const char *xmlPath)
 	{
-		//const char *p = ndxml_getval(node);
+		return ndxml_recursive_ref(node, xmlPath);
+		/*
 		const char *p = xmlPath;
 		char nodeName[128];
 
@@ -371,11 +385,13 @@ namespace LogicEditorHelper
 		}
 
 		return retXml;
+		*/
 	}
 
-	const char *_getRefNodeAttrName(ndxml *node, const char *xmlPath)
+	const char *_getRefNodeAttrName(/*ndxml *node,*/ const char *xmlPath)
 	{
-		//const char *start = ndxml_getval(node);
+		return nd_file_ext_name(xmlPath);
+		/*
 		const char *start = xmlPath;
 		size_t size = strlen(start);
 		const char *p = start + size;
@@ -397,5 +413,40 @@ namespace LogicEditorHelper
 			return p + 1;
 		}
 		return NULL;
+		*/
+	}
+
+
+	ndtime_t getScriptChangedTime(ndxml_root *xmlFile)
+	{
+		//char buf[64];
+		ndxml *xmlModule = ndxml_getnode(xmlFile, "moduleInfo");
+		if (xmlModule)	{
+			ndxml *valxml = ndxml_getnode(xmlModule, "LastMod");
+			if (valxml) {
+				//snprintf(buf, sizeof(buf), "%lld", )
+				const char *pVal = ndxml_getval(valxml);
+				if (pVal){
+					return (ndtime_t) atoll(pVal);
+				}
+			}
+		}
+		return time(NULL);
+		
+	}
+	void setScriptChangedTime(ndxml_root *xmlFile, ndtime_t changedTime)
+	{
+		char buf[64];
+		ndxml *xmlModule = ndxml_getnode(xmlFile, "moduleInfo");
+		if (xmlModule)	{
+			snprintf(buf, sizeof(buf), "%lld", (NDUINT64)changedTime);
+			ndxml *valxml = ndxml_getnode(xmlModule, "LastMod");
+			if (valxml) {
+				ndxml_setval(valxml, buf);
+			}
+			else {
+				ndxml_addnode(xmlModule,"LastMod",buf);
+			}
+		}
 	}
 }

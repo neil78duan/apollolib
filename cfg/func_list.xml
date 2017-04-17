@@ -19,8 +19,11 @@
 	<node desc="合成文件名(path,filename)">CPP.apollo_make_full_path</node>
 	<node desc="运行测试(test_output_path)">CPP.apollo_run_test</node>
 	<node desc="处理消息(str:listener, str:func, int maxId, int minId, int privilege)">CPP.apollo_set_message_handler</node>
+	<node desc="字符串相加(str1, str2)">CPP.apollo_str_add</node>
 	<node desc="字符串比较(str1,str2)">CPP.apollo_str_cmp</node>
+	<node desc="字符串插入(aim_str, insert_pos, inserted_text)">CPP.apollo_str_insert</node>
 	<node desc="字符串长度(str1)">CPP.apollo_str_len</node>
+	<node desc="字符串替换(aim_str, replaced, new_text)">CPP.apollo_str_replace</node>
 	<node desc="字符串查找(str1,str2)">CPP.apollo_str_str</node>
 	<node desc="写入文件(filename,var1,var2...)">CPP.apollo_write_file</node>
 	<node desc="系统广播(内容,...)">CPP.gscript_broad_syste_notice</node>

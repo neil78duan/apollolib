@@ -82,7 +82,7 @@
 	<list instruction="1" ins_id="27" size="4" >op_get_time</list>
 	<list instruction="1" ins_id="19" size="4" >op_commit_affair</list>
 	<list instruction="1" ins_id="29" size="4" >op_begin_affair</list>
-	<list instruction="1" ins_id="30" size="4" >op_get_compile_time</list>
+	<list instruction="1" ins_id="30" size="4" >op_get_last_changed_time</list>
 	<list instruction="1" ins_id="31" size="0" record_param_num="1">op_time_function</list>
 	<list instruction="1" ins_id="33" size="8" >op_throw</list>
 	<list instruction="1" ins_id="34" size="0" >op_install_event</list>
@@ -373,11 +373,11 @@
 	</create_step_get_time>
 	
 	
-	<create_step_compile_time name="得到脚本编译时间" create_type="1" expand="yes" >
-		<op_get_compile_time name="节点_获得脚本编译时间" expand="yes" create_label="create_internal_label">
+	<create_step_changed_time name="得到脚本修改时间" create_type="1" expand="yes" >
+		<op_get_last_changed_time name="节点_脚本修改时间" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">get_compile_time()</comment>
-		</op_get_compile_time>
-	</create_step_compile_time>
+		</op_get_last_changed_time>
+	</create_step_changed_time>
 	
 	
 	<create_step_time_function name="时间函数" create_type="1" expand="yes">
@@ -1010,11 +1010,15 @@
 		
 		<list>create_step_inistall_msg_handler</list>
 		<list>create_step_send_msg</list>	
+		
+		<list>create_step_read_msg</list>	
+		<list>create_step_read_datatype_msg</list>
+		
 		<list>create_step_print</list>
 		<list>create_step_log</list>
 		<list>create_step_rand</list>
 		<list>create_step_get_time</list>
-		<list>create_step_compile_time</list>
+		<list>create_step_changed_time</list>
 		<list>create_step_time_function</list>
 		
 		<list>create_step_begin_affair</list>
@@ -1025,84 +1029,6 @@
 		<list>create_step_chdir</list>		
 		<list>create_step_rmfile</list>		
 		<list>create_step_mkdir</list>				
-	</create_list1>
-		
-		
-	<create_list2 name="create_message_handler" create_type="2">
-		<list>create_step_exit</list>
-		<list>create_get_last_error</list>
-		<list>create_skip_error</list>
-		<list>create_get_simulate_stat</list>		
-		
-		<list>create_step_error_catch_block</list>
-		<list>create_function_init_block</list>
-		<list>create_error_continue</list>
-		<list>create_step_throw</list>
-		<list>create_step_read</list>
-		<list>create_step_write</list>
-		<list>create_step_add</list>
-		<list>create_step_sub</list>
-		<list>create_step_test</list>	
-		<list>create_step_operate</list>	
-		
-		<list>create_read_table</list>
-		<list>create_step_calc</list>
-		
-		<list>create_step_getother_object</list>
-		
-		<list>create_step_waitevent</list>
-		<list>create_step_send_event</list>			
-		<list>create_install_event</list>
-		<list>create_remove_event</list>
-		<list>create_add_timer</list>
-		<list>create_del_timer</list>
-		<list>create_step_call_func</list>
-		<list>create_op_comp</list>
-		
-		<list>create_step_check_valid</list>
-		<list>create_step_bool_entry</list>
-		<list>create_step_loop_entry</list>
-		<list>create_comp_steps</list>
-		<list>create_switch_case</list>
-		
-		<list>create_break</list>
-		<list>create_success_break</list>		
-		<list>op_error_break</list>	
-		
-		<list>create_step_true_exit</list>	
-		<list>create_step_false_eixt</list>
-		
-			
-		
-		<list>create_get_arrsize</list>
-		
-		
-		<list>create_make_var</list>
-		<list>create_step_type_transfer</list>
-		<!-- list>create_set_var</list>	
-		<list>create_set_result</list -->	
-		<list>create_build_json_data</list>
-		<list>create_build_struct_type</list>
-		<list>create_step_get_user_data_type</list>		
-		<list>create_math_operate</list>
-		<list>create_assignin</list>
-		
-		<list>create_step_inistall_msg_handler</list>
-		<list>create_step_send_msg</list>	
-		<list>create_step_read_msg</list>	
-		<list>create_step_read_datatype_msg</list>
-		
-		<list>create_step_print</list>
-		<list>create_step_log</list>
-		<list>create_step_rand</list>
-		<list>create_step_get_time</list>
-		<list>create_step_compile_time</list>
-		<list>create_step_time_function</list>		
-		<list>create_step_begin_affair</list>
-		<list>create_step_commit_affair</list>
-		<list>create_step_read_excel_attr</list>
-		<list>create_step_chdir</list>		
-		<list>create_step_rmfile</list>		
-		<list>create_step_mkdir</list>
-	</create_list2>
+	</create_list1>		
+	<create_list2 name="create_message_handler" create_type="2" ref_from="yes">../create_list1</create_list2>
 </create_template>

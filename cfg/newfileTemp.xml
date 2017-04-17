@@ -14,7 +14,7 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">../cfg/userDefList.xml</user_define_enum>	
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">1</script_out_encode>		
 	<Author name="作者" kinds="string">YourName</Author>
-	<LastMod name="最后修改" kinds="string">2016-1-1</LastMod>
+	<LastMod name="最后修改" kinds="hide">1492403624</LastMod>
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_func" auto_index="0" expand_stat="0">	
 </baseFunction>

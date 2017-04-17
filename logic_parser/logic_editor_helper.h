@@ -194,7 +194,7 @@ namespace LogicEditorHelper
 	const char *_GetXmlDesc(ndxml *xml);
 
 	ndxml *_getRefNode(ndxml*node,const char *xmlPath);
-	const char *_getRefNodeAttrName(ndxml *node, const char *xmlPath);
+	const char *_getRefNodeAttrName(/*ndxml *node,*/ const char *xmlPath);
 
 	//检测节点是否隐藏
 	bool CheckHide(ndxml *xml);
@@ -207,6 +207,9 @@ namespace LogicEditorHelper
 	//检测是否是扩展显示所有子节点
 	bool CheckReadOnly(ndxml *xml);
 	ndxml *GetCreateTemplate(ndxml *xml, ndxml_root *root);
+
+	ndtime_t getScriptChangedTime(ndxml_root *xmlFile);
+	void setScriptChangedTime(ndxml_root *xmlFile, ndtime_t changedTime);
 
 	const char *getRealValFromStr(const char *pInput, char *outpub, size_t bufsize);
 	const char *getDisplayNameFromStr(const char *pInput, char *outpub, size_t bufsize);

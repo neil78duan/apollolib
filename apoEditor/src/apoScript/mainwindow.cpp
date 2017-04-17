@@ -320,6 +320,8 @@ void MainWindow::onFileChanged()
 {
 	m_isChangedCurFile = true;
 	setCurFileSave(false);
+
+	LogicEditorHelper::setScriptChangedTime(m_curFile, time(NULL));
 }
 
 
@@ -349,6 +351,7 @@ void MainWindow::onXmlNodeDel(ndxml *xmlnode)
 		m_editorWindow->clearFunction();
 	}
 	ndxml_delxml(xmlnode, NULL);
+	onFileChanged();
 }
 
 
@@ -666,12 +669,19 @@ void MainWindow::on_actionFileNew_triggered()
 		QMessageBox::warning(NULL, "Error", "SAVE File Error!!!", QMessageBox::Ok);
 		return;
 	}
+	ndxml_root newFileXml;
+	if (0 == ndxml_load(buf, &newFileXml)) {
+		LogicEditorHelper::setScriptChangedTime(&newFileXml,time(NULL)) ;
+		ndxml_destroy(&newFileXml);
+	}
+
 	ndxml *newNode = ndxml_addnode(xml, "file", buf);
 	if (newNode){
 		const char *fileName = nd_filename(buf);
 		char moduleName[128];
 		ndstr_nstr_end(fileName, moduleName, '.', 128);
 		ndxml_addattrib(newNode, "name", moduleName);
+
 	}
 
 	ndxml_save(m_fileRoot, m_fileRootPath.c_str());

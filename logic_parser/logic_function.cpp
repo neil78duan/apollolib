@@ -43,6 +43,14 @@ static bool apollo_str_cmp(LogicParserEngine*parser, parse_arg_list_t &args, DBL
 
 static bool apollo_str_str(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 static bool apollo_str_len(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+
+//return (str1 + str2) ;
+static bool apollo_str_add(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+//str_insert(aim_str, insert_pos, inserted_text)
+static bool apollo_str_insert(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+//str_insert(aim_str, replaced_text)
+static bool apollo_str_replace(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+
 static bool apollo_call_script_msgHandler_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 
 //
@@ -92,6 +100,11 @@ int init_sys_functions(LogicEngineRoot *root)
 	root->installFunc(apollo_str_cmp, "apollo_str_cmp", "字符串比较(str1,str2)");
 	root->installFunc(apollo_str_str, "apollo_str_str", "字符串查找(str1,str2)");
 	root->installFunc(apollo_str_len, "apollo_str_len", "字符串长度(str1)");
+
+
+	root->installFunc(apollo_str_add, "apollo_str_add", "字符串相加(str1, str2)");
+	root->installFunc(apollo_str_insert, "apollo_str_insert", "字符串插入(aim_str, insert_pos, inserted_text)");
+	root->installFunc(apollo_str_replace, "apollo_str_replace", "字符串替换(aim_str, replaced, new_text)");
 
 
 	return 0;
@@ -157,6 +170,81 @@ bool apollo_str_len(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNod
 	}
 	return true;
 }
+
+//return (str1 + str2) ;
+bool apollo_str_add(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+{
+	CHECK_ARGS_NUM_ONLY(args, 3, parser);
+	std::string str1 = args[1].GetText();
+	const char *pText = args[2].GetText(); 
+	if (pText &&*pText){
+		str1 += pText;
+	}
+	result.InitSet(str1.c_str());
+	return true;
+
+}
+
+//str_insert(aim_str, insert_pos, inserted_text)
+bool apollo_str_insert(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+{
+	CHECK_ARGS_NUM_ONLY(args, 4, parser);
+	std::string str1 = args[1].GetText();
+	size_t index = args[2].GetInt();
+	const char *pReplace = args[3].GetText();
+	if (str1.size() == 0 || !pReplace || !*pReplace){
+		return false;
+	}
+
+	str1.insert(index, pReplace);
+	result.InitSet(str1.c_str());
+	return true;
+}
+
+//str_insert(src,replaced_str, new_str)
+bool apollo_str_replace(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+{
+
+	CHECK_ARGS_NUM_ONLY(args, 4, parser);
+	const char*pSrc = args[1].GetText();
+	const char *compStr = args[2].GetText();
+	const char *pReplace = args[3].GetText();
+
+	if (!pSrc || !*pSrc || !compStr || !*compStr){
+		return false;
+	}
+	size_t s =  strlen(compStr);
+
+	std::string val1;
+	const char *p = pSrc;
+	while (p && *p ) {
+		char *start = (char *)ndstristr(p, compStr);
+		if (start){
+			char ch = *start;
+			*start = 0;
+
+			val1 += p;
+
+			if (pReplace && *pReplace){
+				val1 += pReplace;
+			}
+
+			*start = ch;
+
+			p = start + s;
+		}
+		else{
+			val1 += p;
+			break;
+		}
+
+	}
+	result.InitSet(val1.c_str());
+
+	return true;
+
+}
+
 
 bool apollo_get_dbl_name(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 {

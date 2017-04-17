@@ -822,15 +822,13 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				m_registorFlag = true;
 			}
 				break;
-			case E_OP_GET_COMPILE_TM:
+			case E_OP_GET_LAST_CHANGED_TM:
 			{
 				LogicEngineRoot *root = LogicEngineRoot::get_Instant();
-				if (root){
-					root->getCompileTime(m_registerVal);
-					m_registorFlag = true;
-				}
-				else {
-					m_sys_errno = LOGIC_ERR_NOT_INIT;
+				nd_assert(root);
+				m_registorFlag = root->getModuleChangedTime(NULL, m_registerVal);
+				if (!m_registorFlag) {
+					m_sys_errno = LOGIC_ERR_AIM_OBJECT_NOT_FOUND;
 				}
 			}
 				break;
