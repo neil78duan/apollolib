@@ -360,6 +360,16 @@ ndxml *apoEditorSetting::AddNewXmlByTempName(ndxml *xml, const char *templateNam
 	if (!create_template)	{
 		return NULL;
 	}
+	while (create_template) {
+		const char *pRef = ndxml_getattr_val(create_template, "ref_from");
+		if (pRef && (0 == ndstricmp(pRef, "yes") || 0 == ndstricmp(pRef, "true")))	{
+			create_template = LogicEditorHelper::_getRefNode(create_template, ndxml_getval(create_template));
+		}
+		else {
+			break;
+		}
+	}
+	
 
 	int tempType = 0;
 	char *p = (char*)ndxml_getattr_val(create_template, "create_type");

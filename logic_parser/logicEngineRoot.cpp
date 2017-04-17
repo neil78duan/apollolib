@@ -41,7 +41,7 @@ LogicEngineRoot::~LogicEngineRoot()
 
 int LogicEngineRoot::Init()
 {
-	m_compileTm = time(NULL);
+	//m_compileTm = time(NULL);
 	return init_sys_functions(this);
 }
 void LogicEngineRoot::Destroy()
@@ -87,7 +87,7 @@ int LogicEngineRoot::LoadScript(const char *scriptStream, LogicParserEngine *ini
 
 	fread(&compileTm, sizeof(compileTm), 1, pf);
 	
-	m_compileTm = lp_stream2host(compileTm, byteOrder);
+	//m_compileTm = lp_stream2host(compileTm, byteOrder);
 	
 	
 	fread(&moduleSize, sizeof(moduleSize), 1, pf);
@@ -103,6 +103,9 @@ int LogicEngineRoot::LoadScript(const char *scriptStream, LogicParserEngine *ini
 	}
 	
 	moudleName[moduleSize] = 0 ;
+
+	m_moduleChangedTime[moudleName] = compileTm;
+
 	NDUINT8 isGlobal = 0;
 	script_func_map *pscripts = new script_func_map;
 	if (!pscripts){
@@ -433,12 +436,28 @@ int LogicEngineRoot::test()
 	return 0;
 }
 
-const char *LogicEngineRoot::getCompileTime(DBLDataNode &result)
+bool LogicEngineRoot::getModuleChangedTime(const char *moduleName, DBLDataNode &result)
 {
-	char buf[128];	
-	nd_get_datetimestr_ex(m_compileTm, buf, 128);
-	result.InitSet(buf);
-	return result.GetText();
+	if (moduleName && *moduleName)	{
+
+		module_changed_tm_map::iterator it = m_moduleChangedTime.find(moduleName); 
+		if (it != m_moduleChangedTime.end()){
+			result.InitSet(it->second);
+			return true;
+		}
+		
+	}
+	else {
+
+		module_changed_tm_map::iterator it = m_moduleChangedTime.find(m_dftScriptModule);
+		if (it != m_moduleChangedTime.end()){
+			result.InitSet(it->second);
+			return true;
+		}
+	}
+	time_t now = time(NULL);
+	result.InitSet(now);
+	return false;
 }
 
 logic_print LogicEngineRoot::setPrint(logic_print func, void *outfile)

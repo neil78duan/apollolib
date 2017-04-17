@@ -386,7 +386,8 @@ bool LogicCompiler::compileXml(const char *xmlFile, const char *outStreamFile, i
 	fwrite(&valbit1, sizeof(valbit1), 1, pf);
 
 	//write compile time 
-	NDUINT64 compile_t64 = (NDUINT64)time(NULL);
+	//NDUINT64 compile_t64 = (NDUINT64)time(NULL);
+	NDUINT64 compile_t64 = getScriptChangedTime(&xmlroot);
 	compile_t64 = lp_host2stream(compile_t64, m_aimByteOrder);
 
 	fwrite(&compile_t64, sizeof(compile_t64), 1, pf);

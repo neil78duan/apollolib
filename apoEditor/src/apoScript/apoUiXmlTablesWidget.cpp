@@ -468,7 +468,7 @@ bool apoUiXmlTableWidget::onChanged(int row, int column, const char *xmlRealValu
 	if (!repXml){
 		return true;
 	}
-	const char *attrName = LogicEditorHelper::_getRefNodeAttrName(xml, pReplacePath);
+	const char *attrName = LogicEditorHelper::_getRefNodeAttrName( pReplacePath);
 
 	char buf[1024];
 	const char *val = NULL;

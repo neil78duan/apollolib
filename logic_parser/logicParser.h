@@ -87,7 +87,7 @@ enum eParserOperator{
 	E_OP_GET_TIME,	//get system time 
 	E_OP_HEADER_INFO, //compile function/file header info  16bit size + text
 	E_OP_BEGIN_AFFAIR, //  begin affair
-	E_OP_GET_COMPILE_TM,
+	E_OP_GET_LAST_CHANGED_TM,
 	E_OP_TIME_CMD,		//time function ( op_type, op_unit, src_time:datatype:time, val)
 	E_OP_EXCEPTION_BLOCK, //instruct exception block INT32:size
 	E_OP_THROW ,		// throw exception error: id 

@@ -58,7 +58,7 @@ public:
 	const char* _convertFuncName(const char *text, int inputEncodeType);
 	
 	//int run_init_script( );
-	const char *getCompileTime(DBLDataNode &result);
+	bool getModuleChangedTime(const char *moduleName, DBLDataNode &result);
 	int GetEncodeType() {
 		return m_scriptEncodeType;
 	}
@@ -78,9 +78,9 @@ public:
 private:
 
 	//static LogicEngineRoot *s_root;
-	typedef std::map<std::string, scriptCmdBuf*> script_func_map;
+	typedef std::map<std::string, scriptCmdBuf*> script_func_map;	
 	typedef std::map<std::string, script_func_map*>script_module_map;
-
+	typedef std::map<std::string, time_t>module_changed_tm_map;
 	typedef std::map<std::string, func_cpp_info> cpp_func_map;
 	typedef std::map<int, std::string> event_table_map;
 
@@ -92,11 +92,12 @@ private:
 
 	int m_displayEncodeType;
 	int m_scriptEncodeType;
-	time_t m_compileTm;
+	//time_t m_compileTm;
 	//script_func_map m_scripts;
 	script_module_map m_modules;
 	cpp_func_map m_c_funcs;
 	event_table_map m_event_entry;
+	module_changed_tm_map m_moduleChangedTime;
 
 	LogicParserEngine m_globalParser;
 	std::string m_dftScriptModule ; //default run script module if undefine module
