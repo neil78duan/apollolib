@@ -48,7 +48,7 @@ public:
 	logicParser_func getCPPFunc(const char *funcName) const;
 
 	// set api function . call in c++ . 
-	void installFunc(logicParser_func func, const char *name, const char *dispName);
+	static void installFunc(logicParser_func func, const char *name, const char *dispName);
 	void installEvent(int event_id, const char *event_func);
 	
 	//export c++ function to xml
@@ -95,7 +95,7 @@ private:
 	//time_t m_compileTm;
 	//script_func_map m_scripts;
 	script_module_map m_modules;
-	cpp_func_map m_c_funcs;
+	static cpp_func_map m_c_funcs;
 	event_table_map m_event_entry;
 	module_changed_tm_map m_moduleChangedTime;
 
@@ -148,4 +148,28 @@ private:
 		nd_logerror(#_data " is NULL \n");	\
 		return false;						\
 			}
+
+
+
+struct logicFuncInstallHelper
+{
+	logicFuncInstallHelper(logicParser_func expFunction, const char *name, const char *comment)
+	{
+		LogicEngineRoot::installFunc(expFunction, name, comment);
+	}
+
+};
+
+#define APOLLO_SCRIPT_API_DEF(_FUNC_NAME, _COMMENT) \
+static bool _FUNC_NAME(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result) ;		\
+static logicFuncInstallHelper __s_installer_helper##_FUNC_NAME(_FUNC_NAME,#_FUNC_NAME, _COMMENT) ;	\
+bool _FUNC_NAME(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+
+
+#define APOLLO_SCRIPT_API_DEF_GLOBAL(_FUNC_NAME, _COMMENT) \
+bool _FUNC_NAME(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result) ;		\
+static logicFuncInstallHelper __s_installer_helper##_FUNC_NAME(_FUNC_NAME,#_FUNC_NAME, _COMMENT) ;	\
+bool _FUNC_NAME(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+
+
 #endif 

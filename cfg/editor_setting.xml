@@ -231,7 +231,7 @@
 				<comment name="功能说明" rw_stat="read">skip_error(value)</comment>
 				<num name="错误类型" kinds="user_define" user_param="error_list" delete="no">_realval=47&_dispname=system(NDERR_VARIANT_NOT_EXIST):variant not found</num>
 			</op_skip_error>		
-			<op_begin_affair name="节点_出错时回滚角色数据" expand="yes" expand_stat="1">
+			<op_begin_affair name="节点_出错时自动恢复数据" expand="yes" expand_stat="1">
 				<comment name="功能说明" rw_stat="read">player_affair_rollback()</comment>
 			</op_begin_affair>
 						
@@ -398,13 +398,13 @@
 	
 	
 	<create_step_begin_affair name="打开角色事务" create_type="1" expand="yes" >
-		<op_begin_affair name="节点_打开事务_若出错回滚" expand="yes">
+		<op_begin_affair name="节点_出错时自动恢复数据" expand="yes">
 			<comment name="功能说明" rw_stat="read">player_affair_rollback()</comment>
 		</op_begin_affair>
 	</create_step_begin_affair>
 	
 	<create_step_commit_affair name="提交角色事务" create_type="1" expand="yes" >
-		<op_commit_affair name="节点_提交事务_写入改动数据" expand="yes">
+		<op_commit_affair name="节点_提交数据改动" expand="yes">
 			<comment name="功能说明" rw_stat="read">player_commit_rollback()</comment>
 		</op_commit_affair>
 	</create_step_commit_affair>

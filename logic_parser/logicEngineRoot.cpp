@@ -16,6 +16,8 @@
 //bool apollo_printf(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 
 //LogicEngineRoot *LogicEngineRoot::s_root= NULL;
+
+LogicEngineRoot::cpp_func_map LogicEngineRoot::m_c_funcs;
 LogicEngineRoot *LogicEngineRoot::get_Instant()
 {
 	return NDSingleton<LogicEngineRoot>::Get();
@@ -42,12 +44,13 @@ LogicEngineRoot::~LogicEngineRoot()
 int LogicEngineRoot::Init()
 {
 	//m_compileTm = time(NULL);
-	return init_sys_functions(this);
+	//return init_sys_functions(this);
+	return 0;
 }
 void LogicEngineRoot::Destroy()
 {
 	unloadScript();
-	m_c_funcs.clear();
+	//m_c_funcs.clear();
 	m_event_entry.clear();
 }
 
@@ -213,6 +216,7 @@ int LogicEngineRoot::unloadScript()
 	}
 	m_modules.clear();
 	m_dftScriptModule.clear();
+	m_moduleChangedTime.clear();
 	return 0;
 }
 
