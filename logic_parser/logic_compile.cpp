@@ -754,6 +754,7 @@ int LogicCompiler::trytoCompileInitilizerBlock(ndxml *funcNode,char *buf, size_t
 int LogicCompiler::blockSteps2Stream(ndxml *blockNode, char *buf, size_t bufsize)
 {
 	shortJumpAddr_vct  jumpAddrBack = m_reFillJumpStepSize;
+	m_reFillJumpStepSize.clear();
 	int ret = stepsCollect2Stream(blockNode, buf,bufsize);
 	if (-1==ret){
 		return ret;
@@ -765,10 +766,8 @@ int LogicCompiler::blockSteps2Stream(ndxml *blockNode, char *buf, size_t bufsize
 		return -1;
 	}
 
-	if (jumpAddrBack.size() > 0){
-		m_reFillJumpStepSize = jumpAddrBack;
-	}
-
+	m_reFillJumpStepSize = jumpAddrBack;
+	
 	return ret;
 }
 
