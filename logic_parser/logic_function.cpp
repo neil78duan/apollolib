@@ -17,101 +17,8 @@
 #include <stdarg.h>
 
 
-//send message api apollo_func_send_msg
-
-static bool apollo_set_message_handler(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-static bool apollo_func_install_event_handler(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-static bool apollo_func_send_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-static bool apollo_func_read_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-static bool apollo_func_change_time(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-//static bool apollo_func_exit(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-
-static bool apollo_func_read_userData_from_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-static bool apollo_func_get_userDataType(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-
-static bool apollo_func_binary_to_userData(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-
-static bool apollo_load_script_file(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-static bool apollo_export_cpp_api(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-static bool apollo_make_full_path(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-static bool apollo_export_events_list(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-static bool apollo_run_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-
-static bool apollo_get_dbl_name(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-static bool apollo_str_cmp(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-
-
-static bool apollo_str_str(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-static bool apollo_str_len(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-
-//return (str1 + str2) ;
-static bool apollo_str_add(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-//str_insert(aim_str, insert_pos, inserted_text)
-static bool apollo_str_insert(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-//str_insert(aim_str, replaced_text)
-static bool apollo_str_replace(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-
-static bool apollo_call_script_msgHandler_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
-
-//
-//static NDUINT32 _getMsgid(DBLDataNode &data , nd_handle hListen)
-//{
-//	NDUINT32 msgID = -1;
-//
-//	msgID = nd_msgentry_get_id(hListen, data.GetText());
-//	if ((NDUINT32)-1 == msgID) {
-//		msgID = NetMessage::getIDByName(data.GetText()) ;
-//		if((NDUINT32)-1 == msgID) {
-//			nd_logerror("get message id %s msg not found \n", data.GetText());
-//		}
-//	}
-//	return msgID;
-//}
-
-
-
-int init_sys_functions(LogicEngineRoot *root)
-{
-	
-	// install c api
-	root->installFunc(apollo_set_message_handler, "apollo_set_message_handler", "处理消息(str:listener, str:func, int maxId, int minId, int privilege)");
-	root->installFunc(apollo_func_install_event_handler, "apollo_func_install_event_handler", "安装事件处理器(str:function, int:event_id)");
-	root->installFunc(apollo_func_send_msg, "apollo_func_send_msg", "发送消息(int:maxID,int:minId, msg_varlist...)");
-	root->installFunc(apollo_func_read_msg, "apollo_func_read_msg", "读取消息(int:数据类型)");
-	root->installFunc(apollo_func_change_time, "apollo_func_change_time", "修改服务器时间(int:add_hours, int:add_minutes)");
-	root->installFunc(apollo_func_read_userData_from_msg, "apollo_func_read_userData_from_msg", "从消息中读取类型(输入消息, 类型名字)");
-	root->installFunc(apollo_call_script_msgHandler_test,"apollo_call_script_msgHandler_test","测试消息处理(script, maxId,minId, data1,data2...)");
-
-	root->installFunc(apollo_func_get_userDataType, "apollo_func_get_userDataType", "获得消息数据类型(类型名字)");
-	root->installFunc(apollo_func_binary_to_userData, "apollo_func_binary_to_userData", "把二进制转换为dataType(binary,类型名字)");
-		
-	
-	root->installFunc(apollo_load_script_file, "apollo_load_script_file", "加载脚本(scriptn_name)");
-
-	root->installFunc(apollo_run_test, "apollo_run_test", "运行测试(test_output_path)");
-	root->installFunc(apollo_export_cpp_api, "apollo_export_cpp_api", "导出c函数(filename)");
-	root->installFunc(apollo_export_events_list, "apollo_export_events_list", "导出事件(filename)");
-	
-
-	root->installFunc(apollo_load_file_data, "apollo_load_file_data", "读取整个文件(filename)");
-	root->installFunc(apollo_write_file, "apollo_write_file", "写入文件(filename,var1,var2...)");
-	root->installFunc(apollo_make_full_path, "apollo_make_full_path", "合成文件名(path,filename)");
-	root->installFunc(apollo_get_dbl_name, "apollo_get_dbl_name", "获得dbl信息()");	
-	root->installFunc(apollo_str_cmp, "apollo_str_cmp", "字符串比较(str1,str2)");
-	root->installFunc(apollo_str_str, "apollo_str_str", "字符串查找(str1,str2)");
-	root->installFunc(apollo_str_len, "apollo_str_len", "字符串长度(str1)");
-
-
-	root->installFunc(apollo_str_add, "apollo_str_add", "字符串相加(str1, str2)");
-	root->installFunc(apollo_str_insert, "apollo_str_insert", "字符串插入(aim_str, insert_pos, inserted_text)");
-	root->installFunc(apollo_str_replace, "apollo_str_replace", "字符串替换(aim_str, replaced, new_text)");
-
-
-	return 0;
-}
-
-
-bool apollo_str_cmp(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_str_cmp(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_str_cmp, "字符串比较(str1,str2)")
 {
 	CHECK_ARGS_NUM_ONLY(args, 3, parser);
 	//CHECK_DATA_TYPE(args[1], OT_STRING, parser);
@@ -130,8 +37,9 @@ bool apollo_str_cmp(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNod
 	return true;
 }
 
-
-bool apollo_str_str(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//"字符串查找(str1,str2)"
+//bool apollo_str_str(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_str_str, "字符串查找(str1,str2)")
 {
 	CHECK_ARGS_NUM_ONLY(args, 3, parser);
 	//CHECK_DATA_TYPE(args[1], OT_STRING, parser);
@@ -154,7 +62,9 @@ bool apollo_str_str(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNod
 	return true;
 }
 
-bool apollo_str_len(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//"字符串长度(str1)"
+//bool apollo_str_len(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_str_len, "字符串长度(str1)")
 {
 	CHECK_ARGS_NUM_ONLY(args, 2, parser);
 	//CHECK_DATA_TYPE(args[1], OT_STRING, parser);
@@ -172,7 +82,8 @@ bool apollo_str_len(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNod
 }
 
 //return (str1 + str2) ;
-bool apollo_str_add(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_str_add(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_str_add, "字符串相加(str1, str2)")
 {
 	CHECK_ARGS_NUM_ONLY(args, 3, parser);
 	std::string str1 = args[1].GetText();
@@ -186,7 +97,8 @@ bool apollo_str_add(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNod
 }
 
 //str_insert(aim_str, insert_pos, inserted_text)
-bool apollo_str_insert(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_str_insert(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_str_insert, "字符串插入(aim_str, insert_pos, inserted_text)")
 {
 	CHECK_ARGS_NUM_ONLY(args, 4, parser);
 	std::string str1 = args[1].GetText();
@@ -202,7 +114,8 @@ bool apollo_str_insert(LogicParserEngine*parser, parse_arg_list_t &args, DBLData
 }
 
 //str_insert(src,replaced_str, new_str)
-bool apollo_str_replace(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_str_replace(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_str_replace, "字符串替换(aim_str, replaced, new_text)")
 {
 
 	CHECK_ARGS_NUM_ONLY(args, 4, parser);
@@ -246,7 +159,49 @@ bool apollo_str_replace(LogicParserEngine*parser, parse_arg_list_t &args, DBLDat
 }
 
 
-bool apollo_get_dbl_name(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//str_insert(src_str,erased_str)
+//bool apollo_str_erase(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_str_erase, "字符串删除(aim_str, erased_str)")
+{
+	CHECK_ARGS_NUM_ONLY(args, 3, parser);
+	const char*pSrc = args[1].GetText();
+	const char *eraseStr = args[2].GetText();
+
+	if (!pSrc || !*pSrc || !eraseStr || !*eraseStr){
+		return false;
+	}
+	size_t s = strlen(eraseStr);
+
+	std::string val1;
+	const char *p = pSrc;
+	while (p && *p) {
+		char *start = (char *)ndstristr(p, eraseStr);
+		if (start){
+			char ch = *start;
+			*start = 0;
+
+			val1 += p;
+
+
+			*start = ch;
+
+			p = start + s;
+		}
+		else{
+			val1 += p;
+			break;
+		}
+
+	}
+	result.InitSet(val1.c_str());
+
+	return true;
+
+}
+
+
+//bool apollo_get_dbl_name(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_get_dbl_name, "获得dbl信息()")
 {
 	DBLDatabase *pdbl = DBLDatabase::get_Instant();
 	if (!pdbl) {
@@ -258,7 +213,8 @@ bool apollo_get_dbl_name(LogicParserEngine*parser, parse_arg_list_t &args, DBLDa
 	return true;
 }
 
-bool apollo_run_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_run_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_run_test, "测试数据导出(test_output_path)")
 {
 
 	CHECK_ARGS_NUM(args, 2, parser);
@@ -288,7 +244,9 @@ bool apollo_run_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNo
 
 	return true;
 }
-bool apollo_load_script_file(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+
+//bool apollo_load_script_file(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_load_script_file, "加载脚本(scriptn_name)")
 {
 	
 	CHECK_ARGS_NUM(args, 2, parser);
@@ -305,7 +263,8 @@ bool apollo_load_script_file(LogicParserEngine*parser, parse_arg_list_t &args, D
 }
 
 
-bool apollo_export_cpp_api(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_export_cpp_api(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_export_cpp_api, "导出c函数(filename)")
 {
 	
 	CHECK_ARGS_NUM(args, 2, parser);
@@ -369,7 +328,8 @@ int common_export_event_id_descript(const char *outfile)
 }
 
 
-bool apollo_export_events_list(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_export_events_list(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_export_events_list, "导出事件(filename)")
 {
 
 	CHECK_ARGS_NUM(args, 2, parser);
@@ -427,7 +387,8 @@ int common_export_error_list(const char *outfile)
 	return ndxml_save(&xmlroot, outfile);
 }
 //////////////////////////////////
-bool apollo_set_message_handler(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_set_message_handler(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_set_message_handler, "安装消息处理器(str:listener, str:func, int maxId, int minId, int privilege)")
 {
 	CHECK_ARGS_NUM(args, 6, parser);
 
@@ -462,7 +423,8 @@ bool apollo_set_message_handler(LogicParserEngine*parser, parse_arg_list_t &args
 }
 
 //call message-handler write by script for test
-bool apollo_call_script_msgHandler_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_call_script_msgHandler_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_call_script_msgHandler_test, "测试消息处理(script, maxId,minId, data1,data2...)")
 {
 	CHECK_ARGS_NUM(args, 4, parser);
 
@@ -509,7 +471,8 @@ bool apollo_call_script_msgHandler_test(LogicParserEngine*parser, parse_arg_list
 }
 
 //install event handler
-bool apollo_func_install_event_handler(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_func_install_event_handler(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_func_install_event_handler, "安装事件处理器(str:function, int:event_id)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 	CHECK_DATA_TYPE(args[1], OT_STRING, parser);
@@ -521,7 +484,8 @@ bool apollo_func_install_event_handler(LogicParserEngine*parser, parse_arg_list_
 }
 
 //send message api apollo_func_send_msg
-bool apollo_func_send_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_func_send_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_func_send_msg, "发送消息(int:maxID,int:minId, msg_varlist...)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 
@@ -566,7 +530,8 @@ bool apollo_func_send_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLD
 }
 
 //send message api
-bool apollo_func_read_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_func_read_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_func_read_msg, "读取消息(int:数据类型)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 		
@@ -622,7 +587,8 @@ static bool _get_format_type(LogicParserEngine*parser, const char *typeName, DBL
 }
 
 //get data type
-bool apollo_func_get_userDataType(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_func_get_userDataType(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_func_get_userDataType, "获得消息数据类型(类型名字)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
 	CHECK_DATA_TYPE(args[1], OT_STRING, parser);
@@ -641,7 +607,8 @@ bool apollo_func_get_userDataType(LogicParserEngine*parser, parse_arg_list_t &ar
 	return true;
 }
 
-bool apollo_func_read_userData_from_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_func_read_userData_from_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_func_read_userData_from_msg, "从消息中读UserDef类型(输入消息, 类型名字)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 	CHECK_DATA_TYPE(args[2], OT_STRING, parser);
@@ -675,7 +642,8 @@ bool apollo_func_read_userData_from_msg(LogicParserEngine*parser, parse_arg_list
 }
 
 
-bool apollo_func_binary_to_userData(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_func_binary_to_userData(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_func_binary_to_userData,"二进制转dataType(binary,类型名字)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 	CHECK_DATA_TYPE(args[1], OT_BINARY_DATA, parser);
@@ -709,7 +677,8 @@ bool apollo_func_binary_to_userData(LogicParserEngine*parser, parse_arg_list_t &
 
 }
 //change server time 
-bool apollo_func_change_time(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_func_change_time(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_func_change_time,"修改时间(int:add_hours, int:add_minutes)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 
@@ -726,7 +695,8 @@ bool apollo_func_change_time(LogicParserEngine*parser, parse_arg_list_t &args, D
 	return true;
 }
 
-bool apollo_load_file_data(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_load_file_data(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_load_file_data, "读取整个文件(filename)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
 
@@ -750,7 +720,8 @@ bool apollo_load_file_data(LogicParserEngine*parser, parse_arg_list_t &args, DBL
 }
 
 //send message api apollo_write_file(filename,var1,var2...
-bool apollo_write_file(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_write_file(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_write_file, "写入文件(filename,var1,var2...)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
 
@@ -779,7 +750,8 @@ bool apollo_write_file(LogicParserEngine*parser, parse_arg_list_t &args, DBLData
 	return true;
 }
 
-bool apollo_make_full_path(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+//bool apollo_make_full_path(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+APOLLO_SCRIPT_API_DEF(apollo_make_full_path, "合成文件名(path,filename)")
 {
 	char buf[ND_FILE_PATH_SIZE];
 	CHECK_ARGS_NUM(args, 3, parser);
@@ -794,20 +766,6 @@ bool apollo_make_full_path(LogicParserEngine*parser, parse_arg_list_t &args, DBL
 	result.InitSet(nd_full_path(path, file, buf, sizeof(buf)));
 	return true;
 }
-
-//// houst eixt
-//bool apollo_func_exit(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-//{
-//	NDInstanceBase *pInst= getbase_inst();
-//	if (pInst){
-//		nd_logmsg("the host shutdown now\n");
-//		nd_host_eixt();
-//		//pInst->Destroy(0);
-//		//nd_instance_exit(0);
-//	}
-//	//inst.End(0);
-//	return true;
-//}
 
 
 

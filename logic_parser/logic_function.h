@@ -15,7 +15,7 @@
 class LogicEngineRoot;
 class LogicParserEngine;
 //install c-api
-int init_sys_functions(LogicEngineRoot *root);
+//int init_sys_functions(LogicEngineRoot *root);
 
 int common_export_c_api_descript(const char *outfile);
 
