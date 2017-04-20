@@ -18,5 +18,24 @@
 			<node desc="附加属性">addition</node>
 		</internal_object>
 	</data_list>
+	<data_list dataName="external_objects" src_type="list" desc="其他对象" >
+		<external_objects>	
+			<node desc="脚本宿主">self</node>			
+			<node desc="宿主名字">SelfName</node>			
+			<node desc="网络监听器">listener</node>
+			<node desc="网络会话器">session</node>
+			<node desc="网络连接">connector</node>
+			<node desc="worldServer连接器">world-connector</node>			
+			<node desc="socialServer连接器">social-connector</node>
+			<node desc="输出目录">WritablePath</node>
+			<node desc="程序信息">machineInfo</node>
+			<node desc="日志文件">LogFile</node>
+			<node desc="日志目录">LogPath</node>			
+			<node desc="网络消息数据格式">FormatMsgData</node>			
+			<node desc="消息名字ID对照表">msgIdNameFormat</node>		
+		</external_objects>
+	</data_list>
+	
+
 </userData>
 

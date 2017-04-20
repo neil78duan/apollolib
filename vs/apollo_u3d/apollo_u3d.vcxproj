@@ -231,6 +231,7 @@
     <ClInclude Include="..\..\logic_parser\objectBaseMgr.h" />
     <ClInclude Include="..\..\plugin_u3d\apoCliApi.h" />
     <ClInclude Include="..\..\plugin_u3d\apoClientU3d.h" />
+    <ClInclude Include="..\..\plugin_u3d\apoFormula.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_datatransfer.cpp" />
@@ -310,6 +311,7 @@
     <ClCompile Include="..\..\logic_parser\objectBaseMgr.cpp" />
     <ClCompile Include="..\..\plugin_u3d\apoCliApi.cpp" />
     <ClCompile Include="..\..\plugin_u3d\apoClientU3d.cpp" />
+    <ClCompile Include="..\..\plugin_u3d\apoFormula.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\logic_parser\Makefile" />

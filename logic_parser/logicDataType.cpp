@@ -1200,7 +1200,8 @@ bool DBLDataNode::GetBool() const
 	else if (OT_STRING == m_ele_type) {
 		if (m_data->str_val && m_data->str_val[0]){
 			if (0 == ndstricmp(m_data->str_val, "no") || 0 == ndstricmp(m_data->str_val, "none")
-				|| 0 == ndstricmp(m_data->str_val, "false") || 0 == ndstricmp(m_data->str_val, "0")) {
+				|| 0 == ndstricmp(m_data->str_val, "false") || 0 == ndstricmp(m_data->str_val, "0")
+				|| 0 == ndstricmp(m_data->str_val, "error")) {
 				return false; 
 			}
 			return true;

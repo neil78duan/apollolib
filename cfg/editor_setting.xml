@@ -114,7 +114,7 @@
 	
 	<!-- param type description 'need_type_stream' will wirte 16 bit data type before data-value  -->
 	<!-- datatype 0 int 1 float 2 string-->
-	<list instruction="0" size="4" datatype="2" >aim</list>
+	<list instruction="0" size="0" datatype="2" >aim</list>
 	<list instruction="0" size="4" datatype="0" >index</list>
 	<list instruction="0" size="4" datatype="1" >val</list>
 	<list instruction="0" size="4" datatype="0" >num</list>
@@ -320,8 +320,8 @@
 	</create_get_last_error>
 	
 	
-	<create_get_simulate_stat name="得到模拟器状态" create_type="1" expand="yes" >
-		<op_get_simulate_stat name="节点_模拟器状态" expand="yes" create_label="create_internal_label">			
+	<create_get_simulate_stat name="检测模拟状态" create_type="1" expand="yes" >
+		<op_get_simulate_stat name="节点_检测模拟状态" expand="yes" create_label="create_internal_label">			
 			<comment name="功能说明" rw_stat="read">check_simulate_stat()</comment>
 		</op_get_simulate_stat>
 	</create_get_simulate_stat>
@@ -397,7 +397,7 @@
 	</create_step_time_function>
 	
 	
-	<create_step_begin_affair name="打开角色事务" create_type="1" expand="yes" >
+	<create_step_begin_affair name="开始角色数据事务" create_type="1" expand="yes" >
 		<op_begin_affair name="节点_出错时自动恢复数据" expand="yes">
 			<comment name="功能说明" rw_stat="read">player_affair_rollback()</comment>
 		</op_begin_affair>
@@ -496,6 +496,13 @@
 	
 	
 	
+	<create_step_getother_object name="获得其他对象" create_type="1" >
+		<op_getobj name="节点_获得其他对象:$name$" expand="yes" create_label="create_internal_label">
+			<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
+			<param name="对象名" kinds="user_define" user_param="external_objects"  delete="no" replace_val="../.name">none</param>
+		</op_getobj>
+	</create_step_getother_object>
+	
 	<create_make_var name="申明变量" create_type="1" auto_index_list="param" auto_index_reference="variant_index">
 		<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
 			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
@@ -571,13 +578,6 @@
 		</op_calc>
 	</create_step_calc>
 	
-	
-	<create_step_getother_object name="获得其他对象" create_type="1" >
-		<op_getobj name="节点_获得其他对象:$name$" expand="yes" create_label="create_internal_label">
-			<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
-			<param name="对象名" kinds="string"  delete="no" replace_val="../.name">0</param>
-		</op_getobj>
-	</create_step_getother_object>
 	
 	<create_step_chdir name="更改目录" create_type="1" >
 		<op_chdir name="节点_更改目录" expand="yes" create_label="create_internal_label">
