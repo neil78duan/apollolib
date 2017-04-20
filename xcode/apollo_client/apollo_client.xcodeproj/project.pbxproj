@@ -31,6 +31,10 @@
 		074D85101D6C2DE600201121 /* nd_time.c in Sources */ = {isa = PBXBuildFile; fileRef = 074D850D1D6C2C2A00201121 /* nd_time.c */; };
 		07533A2C1D6EF0B9004DD290 /* dftCliMsgHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07533A2A1D6EF0B9004DD290 /* dftCliMsgHandler.cpp */; };
 		07533A2D1D6EF0F2004DD290 /* dftCliMsgHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07533A2A1D6EF0B9004DD290 /* dftCliMsgHandler.cpp */; };
+		075A8E7C1EA77BAD00710AEA /* apoFormula.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 075A8E791EA77BAD00710AEA /* apoFormula.cpp */; };
+		075A8E7D1EA77BAD00710AEA /* apoFormula.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 075A8E791EA77BAD00710AEA /* apoFormula.cpp */; };
+		075A8E7E1EA77BAD00710AEA /* apoFormula.h in Headers */ = {isa = PBXBuildFile; fileRef = 075A8E7A1EA77BAD00710AEA /* apoFormula.h */; };
+		075A8E7F1EA77CC900710AEA /* apoFormula.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 075A8E791EA77BAD00710AEA /* apoFormula.cpp */; };
 		0764F6991D631C1600E91673 /* nd_asm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6941D631C1600E91673 /* nd_asm.c */; };
 		0764F69A1D631C1600E91673 /* nd_formula.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6951D631C1600E91673 /* nd_formula.c */; };
 		0764F69B1D631C1600E91673 /* nd_vm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6961D631C1600E91673 /* nd_vm.c */; };
@@ -290,6 +294,9 @@
 		074D850F1D6C2C3500201121 /* nd_time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nd_time.h; sourceTree = "<group>"; };
 		07533A2A1D6EF0B9004DD290 /* dftCliMsgHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dftCliMsgHandler.cpp; path = ../../../cli_common/dftCliMsgHandler.cpp; sourceTree = "<group>"; };
 		07533A2B1D6EF0B9004DD290 /* dftCliMsgHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dftCliMsgHandler.h; path = ../../../cli_common/dftCliMsgHandler.h; sourceTree = "<group>"; };
+		075A8E791EA77BAD00710AEA /* apoFormula.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apoFormula.cpp; sourceTree = "<group>"; };
+		075A8E7A1EA77BAD00710AEA /* apoFormula.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apoFormula.h; sourceTree = "<group>"; };
+		075A8E7B1EA77BAD00710AEA /* FormulaParser.cs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FormulaParser.cs; sourceTree = "<group>"; };
 		0764F6941D631C1600E91673 /* nd_asm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_asm.c; path = nd_vm/src/nd_asm.c; sourceTree = "<group>"; };
 		0764F6951D631C1600E91673 /* nd_formula.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_formula.c; path = nd_vm/src/nd_formula.c; sourceTree = "<group>"; };
 		0764F6961D631C1600E91673 /* nd_vm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_vm.c; path = nd_vm/src/nd_vm.c; sourceTree = "<group>"; };
@@ -549,6 +556,9 @@
 		0776F8F01E31BECD005DCB69 /* plugin_u3d */ = {
 			isa = PBXGroup;
 			children = (
+				075A8E791EA77BAD00710AEA /* apoFormula.cpp */,
+				075A8E7A1EA77BAD00710AEA /* apoFormula.h */,
+				075A8E7B1EA77BAD00710AEA /* FormulaParser.cs */,
 				0776F95D1E31E88F005DCB69 /* apoClientU3d.cpp */,
 				0776F8F11E31BECD005DCB69 /* apoCliApi.cpp */,
 				0776F8F21E31BECD005DCB69 /* apoCliApi.h */,
@@ -903,6 +913,7 @@
 			files = (
 				0776F8FA1E31BECD005DCB69 /* apoCliApi.h in Headers */,
 				0776F8FB1E31BECD005DCB69 /* apoClientU3d.h in Headers */,
+				075A8E7E1EA77BAD00710AEA /* apoFormula.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1015,6 +1026,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				075A8E7F1EA77CC900710AEA /* apoFormula.cpp in Sources */,
 				0776F95C1E31C265005DCB69 /* logicStruct.hpp in Sources */,
 				0776F94C1E31C1DF005DCB69 /* attr_mgr.cpp in Sources */,
 				0776F94D1E31C1DF005DCB69 /* roleattr_help.cpp in Sources */,
@@ -1145,6 +1157,7 @@
 				0764F69B1D631C1600E91673 /* nd_vm.c in Sources */,
 				07EC86241D54400400C32925 /* udt_socket.c in Sources */,
 				07EC86501D54400400C32925 /* nd_connector.c in Sources */,
+				075A8E7C1EA77BAD00710AEA /* apoFormula.cpp in Sources */,
 				074C8FA11D66A88500590A34 /* logic_editor_helper.cpp in Sources */,
 				07EC86071D54400400C32925 /* md2c.c in Sources */,
 				07EC85F61D54400400C32925 /* nd_iconv.c in Sources */,
@@ -1201,6 +1214,7 @@
 				074C8FB11D66A8BB00590A34 /* logic_function.cpp in Sources */,
 				074C8FB31D66A8BB00590A34 /* logicDataType.cpp in Sources */,
 				074C8FB61D66A8BB00590A34 /* logicEngineRoot.cpp in Sources */,
+				075A8E7D1EA77BAD00710AEA /* apoFormula.cpp in Sources */,
 				074C8FB81D66A8BB00590A34 /* logicParser.cpp in Sources */,
 				074C8FBA1D66A8BB00590A34 /* logicStruct.cpp in Sources */,
 				074C8FBD1D66A8BB00590A34 /* objectBaseMgr.cpp in Sources */,
@@ -1475,6 +1489,7 @@
 				0776F9071E31C128005DCB69 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		07EC84851D543B8400C32925 /* Build configuration list for PBXProject "apollo_client" */ = {
 			isa = XCConfigurationList;

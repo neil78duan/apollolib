@@ -84,6 +84,8 @@ LOCAL_SRC_FILES := ../../../ndsdk/src/nd_common/src/bintree.c \
 ../../attribute/roleattr_help.cpp \
 ../../plugin_u3d/apoCliApi.cpp	\
 ../../plugin_u3d/apoClientU3d.cpp	\
+../../plugin_u3d/apoFormula.cpp	\
+
 
 LOCAL_CFLAGS := -D__ND_ADNROID__
 LOCAL_CPPFLAGS := -D__ND_ANDROID__
