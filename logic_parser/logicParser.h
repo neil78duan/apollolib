@@ -111,7 +111,7 @@ enum eParserOperator{
 	E_OP_GET_LAST_ERROR,	//get last error before exception
 	E_OP_CHECK_IS_SIMULATE, // get current simulate status , true run in simulate , false run in real game env.
 	E_OP_FILE_INFO,			//record file info like E_OP_DEBUG_INFO 
-
+	E_OP_GLOBAL_VAR,		//declare global 
 };
 
 //compare operate
@@ -208,6 +208,8 @@ struct logcal_variant {
 	DBLDataNode var;
 };
 typedef std::vector <logcal_variant> LogicData_vct; //local variant list
+typedef std::map<std::string, LogicUserDefStruct*> UserDefData_map_t; //user defined data type , like c-struct
+
 struct runningStack
 {
 	runningStack() :cmd(0), cur_point(0),  exception_addr(0)
@@ -364,7 +366,7 @@ protected:
 	bool _delTimer(bool isGlobal,const char *timername);
 
 	int _runCmd(runningStack *stack) ;
-	int _makeVar(runningStack *stack, char *pCmdStream); //make variant from instruction 
+	int _makeVar(runningStack *stack, char *pCmdStream,bool isLocal=true); //make variant from instruction 
 	bool _getArg(runningStack *stack, int index, DBLDataNode &outValue);
 	//DBLDataNode* _refVariant(runningStack *stack, char *&pCmdStream);
 	int _getValueFromUserDef(const char *name, DBLDataNode &outValue);
@@ -422,14 +424,13 @@ protected:
 	typedef std::vector<SendEventNode> send_event_list_t;
 	typedef std::list<eventHandler> event_handler_list_t;
 	typedef std::list<logicParserTimer> timer_list_t;
-	typedef std::map<std::string, LogicUserDefStruct*> UserDefData_map_t;
 		
 	event_list_t m_events ;
 	send_event_list_t m_needHandleEvents;
 	event_handler_list_t m_hanlers;
 	timer_list_t m_timer;
 
-	UserDefData_map_t m_useDefType;
+	//UserDefData_map_t &m_useDefType;
 
 	runningStack *m_curStack;
 	LogicObjectBase *m_owner;

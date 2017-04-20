@@ -166,8 +166,11 @@ bool apoUiMainEditor::_showBlocks(apoBaseSlotCtrl *fromSlot, ndxml *stepsBlocks)
 			if (!pExenode){
 				ret = false;
 			}
-			else {				
-				fromSlot = pExenode->toNext();
+			else {
+				//skip connector when this node is newvar
+				if (pExenode->getType() != EAPO_EXE_NODE_NewVar){
+					fromSlot = pExenode->toNext();
+				}
 				ret = true;
 			}
 		}
@@ -365,7 +368,6 @@ apoBaseExeNode* apoUiMainEditor::_showExeNode(apoBaseSlotCtrl *fromSlot, ndxml *
 		return NULL;
 	}
 
-	
 	//change current ditail show view
 	QObject::connect(nodeCtrl, SIGNAL(NodeAddParamSignal(apoBaseExeNode *)),
 		this, SLOT(onNodeAddNewParam(apoBaseExeNode *)));
@@ -376,7 +378,7 @@ apoBaseExeNode* apoUiMainEditor::_showExeNode(apoBaseSlotCtrl *fromSlot, ndxml *
 	
 	apoBaseSlotCtrl *connectIn = nodeCtrl->inNode();
 	
-	if (connectIn && fromSlot) {
+	if (connectIn && fromSlot && nodeCtrl->getType() != EAPO_EXE_NODE_NewVar) {
 		_connectSlots(fromSlot, connectIn, apoUiBezier::LineRunSerq);
 	}
 	if (fromSlot){
@@ -770,6 +772,32 @@ bool apoUiMainEditor::pushVarList(ndxml *xmlNode, apoBaseExeNode*nodeCtrl)
 	return false;
 }
 
+
+apoBaseExeNode *apoUiMainEditor::createNewVarNode(const QPoint &pos)
+{
+	ndxml *newxml = m_setting->AddNewXmlByTempName(m_editedFunction, "create_make_var");
+
+	apoBaseExeNode *exeNode = _showExeNode(NULL, newxml, pos);
+	if (!exeNode || exeNode->getType() != EAPO_EXE_NODE_NewVar){
+		ndxml_delxml(newxml, NULL);
+		nd_logerror("create %s Exenode Error \n", _GetXmlName(newxml, NULL));
+		return NULL;
+	}
+	ndxml_disconnect(m_editedFunction, newxml);
+	ndxml_insert_after(m_editedFunction, newxml, m_editedFunction);
+
+	if (m_scale != 0 && m_scale != 1.0f){
+		movedInScale(exeNode, pos);
+		exeNode->setScale(m_scale);
+	}
+
+	savePosition(exeNode);
+	showNodeDetail(exeNode);
+	onFileChanged();
+	nd_logmsg("create %s SUCCESS\n", _GetXmlName(newxml, NULL));
+	return exeNode;
+}
+
 apoBaseExeNode *apoUiMainEditor::createExenode(const QPoint &pos)
 {
 	ndxml *newxml = m_setting->AddNewXmlNode(m_editedFunction, this);
@@ -786,6 +814,10 @@ apoBaseExeNode *apoUiMainEditor::createExenode(const QPoint &pos)
 	}
 
 	if (exeNode->getType() == EAPO_EXE_NODE_ModuleInitEntry || exeNode->getType() == EAPO_EXE_NODE_ExceptionEntry){
+	}
+	else if (exeNode->getType() == EAPO_EXE_NODE_NewVar){
+		ndxml_disconnect(m_editedFunction, newxml);
+		ndxml_insert_after(m_editedFunction, newxml,m_editedFunction);
 	}
 	else {
 		ndxml *unConnNode = getUnconnectRoot(m_editedFunction);
@@ -1141,15 +1173,37 @@ void apoUiMainEditor::mouseReleaseEvent(QMouseEvent *event)
 			}
 		}
 		else {
-			apoBaseExeNode *newExeNode = createExenode(event->pos());
-			if (newExeNode)	{
-
-				apoBaseSlotCtrl *fromSlot = dynamic_cast<apoBaseSlotCtrl*>(m_dragSrc);
-				if (trytoBuildConnector(fromSlot, newExeNode->inNode())) {
-					onFileChanged();
+			apoBaseSlotCtrl *fromSlot = dynamic_cast<apoBaseSlotCtrl*>(m_dragSrc);
+			if (!fromSlot){
+				return;
+			}
+			if (fromSlot->slotType() == apoBaseSlotCtrl::SLOT_RUN_OUT || fromSlot->slotType() == apoBaseSlotCtrl::SLOT_SUB_ENTRY) {
+				apoBaseExeNode *newExeNode = createExenode(event->pos());
+				if (newExeNode)	{
+					if (trytoBuildConnector(fromSlot, newExeNode->inNode())) {
+						onFileChanged();
+					}
 				}
-				else {
-					//_removeExenode(newExeNode);
+			}
+			else if (fromSlot->slotType() == apoBaseSlotCtrl::SLOT_RETURN_VALUE ||
+				fromSlot->slotType() == apoBaseSlotCtrl::SLOT_VAR||
+				fromSlot->slotType() == apoBaseSlotCtrl::SLOT_FUNCTION_PARAM ) {
+				
+				apoBaseExeNode *newExeNode = createNewVarNode(event->pos());
+				if (newExeNode)	{
+					if (trytoBuildConnector(fromSlot, newExeNode->getParam(1))) {
+						onFileChanged();
+					}
+				}
+			}
+			
+			else if (fromSlot->slotType() == apoBaseSlotCtrl::SLOT_NODE_INPUUT_PARAM) {
+
+				apoBaseExeNode *newExeNode = createNewVarNode(event->pos());
+				if (newExeNode)	{
+					if (trytoBuildConnector(newExeNode->returnVal() ,fromSlot)) {
+						onFileChanged();
+					}
 				}
 			}
 		}
@@ -1458,7 +1512,39 @@ bool apoUiMainEditor::buildParamConnector(apoBaseSlotCtrl *fromSlot, apoBaseSlot
 	}
 	_connectSlots(fromSlot, toSlot);
 	apoBaseExeNode *toCtrl = dynamic_cast<apoBaseExeNode*> (toSlot->parent());
-	//apoBaseExeNode *fromCtrl = dynamic_cast<apoBaseExeNode*> (fromSlot->parent());
+	//
+	//change order
+	apoBaseExeNode *fromCtrl = dynamic_cast<apoBaseExeNode*> (fromSlot->parent());
+	ndxml *fromXml = (ndxml *) fromCtrl->getMyUserData();
+	ndxml *toXml = (ndxml *)toCtrl->getMyUserData();
+
+	int fromIndex = ndxml_get_index(ndxml_get_parent(fromXml), fromXml);
+	int toIndex = ndxml_get_index(ndxml_get_parent(toXml), toXml);
+
+	if (fromCtrl->getType() == EAPO_EXE_NODE_NewVar){
+		if (ndxml_get_parent(fromXml) == ndxml_get_parent(toXml) ) 	{
+			if (toIndex < fromIndex) {
+				ndxml_disconnect(NULL, fromXml);
+				ndxml_insert_before(ndxml_get_parent(toXml), fromXml, toXml);
+			}
+		}
+	}
+
+	else if (toCtrl->getType() == EAPO_EXE_NODE_NewVar){
+		
+		if (ndxml_get_parent(fromXml) == ndxml_get_parent(toXml)) 	{
+			if (toIndex < fromIndex) {
+				ndxml_disconnect(NULL, toXml);
+				ndxml_insert_after(ndxml_get_parent(fromXml), toXml,fromXml);
+			}
+		}
+		else if (fromSlot->slotType() == apoBaseSlotCtrl::SLOT_RETURN_VALUE) {
+
+			ndxml_disconnect(NULL, toXml);
+			ndxml_insert_after(ndxml_get_parent(fromXml), toXml, fromXml);
+		}
+	}
+	//---end order changed
 
 	showNodeDetail(toCtrl);
 

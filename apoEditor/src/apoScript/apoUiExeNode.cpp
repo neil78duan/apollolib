@@ -80,6 +80,10 @@ apoBaseExeNode *g_apoCreateExeNode(int index, ndxml *xml, QWidget *parent)
 apoUiExenodeNewVar::apoUiExenodeNewVar(QWidget *parent, ndxml *exeNodeXml) :apoBaseExeNode()
 {
 	apoBaseExeNode::m_type = EAPO_EXE_NODE_NewVar;
+
+	disableToNext();
+	disableConnectIn();
+
 	//disableReturnVar();
 	apoEditorSetting* p_setting = apoEditorSetting::getInstant();
 	if (!LogicEditorHelper::GetCreateTemplate(exeNodeXml, p_setting->getConfig()) ){
@@ -120,12 +124,12 @@ const char *apoUiExenodeNewVar::getVarName()
 apoUiExenodeLoop::apoUiExenodeLoop(QWidget *parent, ndxml *exeNodeXml) :apoBaseExeNode()
 {
 	apoBaseExeNode::m_type = EAPO_EXE_NODE_Loop;
-
+	disableReturnVar();
 	disableNewParam();
 	setNodeInfo(parent, exeNodeXml);
 	//InitCtrl(parent, "Loop",  1);
 	setTips(QString("Loop {}"));
-
+	
 
 }
 apoUiExenodeLoop::~apoUiExenodeLoop()
@@ -170,7 +174,7 @@ void apoUiExenodeLoop::onInit()
 apoUiExenodeBool::apoUiExenodeBool(QWidget *parent, ndxml *exeNodeXml) :apoBaseExeNode()
 {
 	apoBaseExeNode::m_type = EAPO_EXE_NODE_Bool;
-
+	
 	disableNewParam();
 	disableReturnVar();
 

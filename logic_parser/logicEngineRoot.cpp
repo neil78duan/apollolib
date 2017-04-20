@@ -45,6 +45,17 @@ int LogicEngineRoot::Init()
 {
 	//m_compileTm = time(NULL);
 	//return init_sys_functions(this);
+
+	UserDefData_map_t::iterator it;
+	for (it = m_useDefType.begin(); it != m_useDefType.end(); it++)	{
+		if (it->second)	{
+			delete (it->second);
+			it->second = 0;
+		}
+	}
+	m_useDefType.clear();
+
+	m_global_vars.clear();
 	return 0;
 }
 void LogicEngineRoot::Destroy()
@@ -52,6 +63,17 @@ void LogicEngineRoot::Destroy()
 	unloadScript();
 	//m_c_funcs.clear();
 	m_event_entry.clear();
+	m_global_vars.clear();
+
+	UserDefData_map_t::iterator it;
+	for (it = m_useDefType.begin(); it != m_useDefType.end(); it++)	{
+		if (it->second)	{
+			delete it->second;
+			it->second = 0;
+		}
+	}
+	m_useDefType.clear();
+
 }
 
 
@@ -470,4 +492,16 @@ logic_print LogicEngineRoot::setPrint(logic_print func, void *outfile)
 	m_screen_out_func = func;
 	m_print_file = outfile;
 	return ret;
+}
+
+
+DBLDataNode *LogicEngineRoot::getVar(const char *name)
+{
+	LogicData_vct::iterator it = m_global_vars.begin(); 
+	for (; it != m_global_vars.end(); it++)	{
+		if (0==ndstricmp(it->name.c_str(), name) )	{
+			return &(it->var);
+		}
+	}
+	return NULL;
 }

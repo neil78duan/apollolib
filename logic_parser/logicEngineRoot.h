@@ -75,6 +75,13 @@ public:
 
 	void setOutPutEncode(int encode) { m_displayEncodeType = encode; }
 	int getOutPutEncode() { return m_displayEncodeType; }
+
+
+	LogicData_vct* getGlobalVars() { return  &m_global_vars; }
+
+	DBLDataNode *getVar(const char *name);
+
+	UserDefData_map_t &getUserDefType() { return m_useDefType; }
 private:
 
 	//static LogicEngineRoot *s_root;
@@ -101,6 +108,10 @@ private:
 
 	LogicParserEngine m_globalParser;
 	std::string m_dftScriptModule ; //default run script module if undefine module
+
+	LogicData_vct m_global_vars; 
+
+	UserDefData_map_t m_useDefType;
 };
 
 

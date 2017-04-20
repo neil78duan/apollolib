@@ -60,7 +60,7 @@ class LogicUserDefStruct
 public:
 	LogicUserDefStruct(const LogicUserDefStruct &orgData) ;
 	LogicUserDefStruct() ;
-
+	~LogicUserDefStruct();
 
 	int FromStream(void *data, size_t size, int byteOrder = 1);
 	int ToStream(void *buf, size_t bufsize, int byteOrder = 1) const;

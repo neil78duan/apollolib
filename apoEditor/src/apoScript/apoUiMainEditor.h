@@ -105,6 +105,8 @@ private:
 	bool trytoBuildGotoConnector(apoBaseSlotCtrl *fromSlot, apoBaseSlotCtrl *toSlot);
 
 	apoBaseExeNode *createExenode(const QPoint &pos);
+	apoBaseExeNode *createNewVarNode(const QPoint &pos);
+
 
     void popMenuAddnewTrigged();
 	void popMenuDeleteTrigged(); 
@@ -123,8 +125,6 @@ private:
 	//void wheelEvent(QWheelEvent *event);
 	void dragTo(const QPoint &offset);	
 	void saveCurPosWithOffset();
-
-
 
 
 	void onFileChanged();

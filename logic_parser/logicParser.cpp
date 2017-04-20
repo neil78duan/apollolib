@@ -60,7 +60,8 @@ static const char *ndstr_fetch_array_index(const char *input, char *output, size
 //
 //LogicParserEngine::script_func_map LogicParserEngine::s_func_table;
 
-LogicParserEngine::LogicParserEngine() :m_registorFlag(false), m_simulate(false), m_owner(NULL), m_cmdByteOrder(0)
+LogicParserEngine::LogicParserEngine() :m_registorFlag(false), m_simulate(false), 
+m_owner(NULL), m_cmdByteOrder(0)
 {
 	m_curStack = NULL;
 	m_ownerIsNew = false;
@@ -74,7 +75,8 @@ LogicParserEngine::LogicParserEngine() :m_registorFlag(false), m_simulate(false)
 	}
 }
 
-LogicParserEngine::LogicParserEngine(LogicObjectBase *owner) : m_registorFlag(false), m_simulate(false), m_owner(owner), m_cmdByteOrder(0)
+LogicParserEngine::LogicParserEngine(LogicObjectBase *owner) : m_registorFlag(false), m_simulate(false),
+m_owner(owner), m_cmdByteOrder(0)
 {
 	m_curStack = NULL;
 	m_ownerIsNew = false;
@@ -93,14 +95,7 @@ LogicParserEngine::~LogicParserEngine()
 		delete m_owner;
 		m_owner = NULL;
 	}
-	UserDefData_map_t::iterator it;
-	for (it = m_useDefType.begin(); it != m_useDefType.end(); it++)	{
-		if (it->second)	{
-			delete it->second;
-			it->second = 0;
-		}
-	}	
-	m_useDefType.clear();
+	
 }
 
 
@@ -718,6 +713,16 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 					m_sys_errno = LOGIC_ERR_AIM_OBJECT_NOT_FOUND;
 				}
 				break ;
+			case E_OP_GLOBAL_VAR:		//  make local variant	 name + DBLDataNode-stream
+				readlen = _makeVar(stack, p,false);
+				if (readlen > 0){
+					p += readlen;
+					m_registorFlag = true;
+				}
+				else {
+					m_sys_errno = LOGIC_ERR_AIM_OBJECT_NOT_FOUND;
+				}
+				break;
 			case E_OP_MATH_OPERATE:
 				p = lp_read_stream(p, opAim, m_cmdByteOrder);
 				
@@ -1034,7 +1039,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 	
 }
 
-int LogicParserEngine::_makeVar(runningStack *runstack, char *pCmdStream)//make variant from instruction 
+int LogicParserEngine::_makeVar(runningStack *runstack, char *pCmdStream, bool isLocal )//make variant from instruction 
 {
 	char*p = pCmdStream;
 	char name[128];
@@ -1053,11 +1058,26 @@ int LogicParserEngine::_makeVar(runningStack *runstack, char *pCmdStream)//make 
 		m_sys_errno = LOGIC_ERR_READ_STREAM;
 		return -1;
 	}
+	
 	p += len;
 
 	node.name = name;
-	runstack->local_vars.push_back(node);
-
+	LogicData_vct *pVarMgr = NULL;
+	if (isLocal){
+		pVarMgr = &runstack->local_vars;
+	}
+	else {
+		LogicEngineRoot *root = LogicEngineRoot::get_Instant();
+		pVarMgr = root->getGlobalVars();		
+	}
+	
+	for (LogicData_vct::iterator it = pVarMgr->begin(); it != pVarMgr->end(); it++)	{
+		if (ndstricmp((char*)it->name.c_str(), (char*)name) == 0) {
+			it->var = node.var;
+			return (int)(p - pCmdStream);
+		}
+	}
+	pVarMgr->push_back(node);
 	return (int)(p - pCmdStream);
 }
 
@@ -1129,8 +1149,14 @@ bool LogicParserEngine::_getVarEx(runningStack *stack, const char *inputVarName,
 
 	DBLDataNode* pdata = _getLocalVar(stack, name);
 	if (!pdata)	{
-		nd_logerror("var %s not exist\n", name);
-		return false;
+
+		LogicEngineRoot *root = LogicEngineRoot::get_Instant();
+		pdata = root->getVar(name);
+		if (!pdata)	{
+			nd_logerror("var %s not exist\n", name);
+			return false;
+		}
+
 	}
 	//DBLDataNode value = *pdata;
 	DBLDataNode subVar;
@@ -1283,6 +1309,7 @@ int LogicParserEngine::_getValue(runningStack *stack, char *pCmdStream, DBLDataN
 // get user define from text , format : userDataType(arg,....) ;
 int LogicParserEngine::_getValueFromUserDef(const char *inputName, DBLDataNode &outValue)
 {
+	UserDefData_map_t &m_useDefType =LogicEngineRoot::get_Instant()->getUserDefType();
 	char name[128];
 	const char *p = ndstr_nstr_end(inputName, name, '(', sizeof(name));
 	
@@ -1572,6 +1599,7 @@ bool LogicParserEngine::_CreateUserDefType(runningStack *runstack, parse_arg_lis
 	strncpy(name, pText, sizeof(name));
 	ndstr_to_little(name);
 
+	UserDefData_map_t &m_useDefType = LogicEngineRoot::get_Instant()->getUserDefType();
 	m_useDefType[name] = userDefData;
 	return true;
 
@@ -1652,8 +1680,13 @@ bool LogicParserEngine::_varAssignin(runningStack *stack,const char *name, DBLDa
 
 	DBLDataNode* pdata = _getLocalVar(stack, varname);
 	if (!pdata)	{
-		nd_logerror("var %s not exist\n", name);
-		return false;
+		LogicEngineRoot *root = LogicEngineRoot::get_Instant();
+		pdata = root->getVar(varname);
+		if (!pdata)	{
+			nd_logerror("var %s not exist\n", name);
+			return false;
+		}
+
 	}
 	//DBLDataNode value = *pdata;
 	LogicUserDefStruct *pUserStruct =NULL;
@@ -2207,6 +2240,7 @@ void LogicParserEngine::_rollbacAffair()
 
 const LogicUserDefStruct* LogicParserEngine::getUserDataType(const char *name) const
 {
+	UserDefData_map_t &m_useDefType = LogicEngineRoot::get_Instant()->getUserDefType();
 	UserDefData_map_t::const_iterator it = m_useDefType.find(name);
 	if (it == m_useDefType.end()) {
 		return NULL;

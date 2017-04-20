@@ -36,6 +36,11 @@ LogicUserDefStruct::LogicUserDefStruct()
 }
 
 
+LogicUserDefStruct::~LogicUserDefStruct()
+{
+
+}
+
 int LogicUserDefStruct::FromStream(void *data, size_t size, int byteOrder )
 {
 	const char *p = (const char*)data;

@@ -152,7 +152,7 @@ public:
 	explicit apoUiExenodeBreak(QWidget *parent, ndxml *exeNodeXml) :apoBaseExeNode()
 	{
 		apoBaseExeNode::m_type = EAPO_EXE_NODE_Break;
-
+		disableReturnVar();
 		disableNewParam();
 		disableToNext();
 
@@ -173,7 +173,7 @@ public:
 	explicit apoUiExenodeTrueBreak(QWidget *parent, ndxml *exeNodeXml) :apoBaseExeNode()
 	{
 		apoBaseExeNode::m_type = EAPO_EXE_NODE_TrueBreak;
-
+		disableReturnVar();
 		disableNewParam();
 
 		setNodeInfo(parent, exeNodeXml,false);
@@ -192,7 +192,7 @@ public:
 	explicit apoUiExenodeFalseBreak(QWidget *parent, ndxml *exeNodeXml) :apoBaseExeNode()
 	{
 		apoBaseExeNode::m_type = EAPO_EXE_NODE_FalseBreak;
-
+		disableReturnVar();
 		disableNewParam();
 		setNodeInfo(parent, exeNodeXml,false);
 		//InitCtrl(parent, "Break-false",  2);
@@ -213,7 +213,7 @@ public:
 	explicit apoUiExenodeQuit(QWidget *parent, ndxml *exeNodeXml) :apoBaseExeNode()
 	{
 		apoBaseExeNode::m_type = EAPO_EXE_NODE_Quit;
-
+		disableReturnVar();
 		disableNewParam();
 		disableToNext();
 

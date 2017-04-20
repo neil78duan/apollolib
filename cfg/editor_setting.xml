@@ -31,6 +31,8 @@
 	<function_init_block>ModuleInitEntry</function_init_block>
 	<exception_catch_block>ExceptionEntry</exception_catch_block>
 	<op_make_var>NewVar</op_make_var>
+	<op_global_var>NewVar</op_global_var>
+	
 	<op_build_json_data>NewVar</op_build_json_data>	
 	<!--op_build_json_data>NewJson</op_build_json_data>
 	<op_create_struct_type>NewStruct</op_create_struct_type>
@@ -104,6 +106,7 @@
 	<list instruction="1" ins_id="50" size="8" >op_set_loop_index</list>
 	<list instruction="1" ins_id="51" size="4" >op_get_last_error</list>
 	<list instruction="1" ins_id="52" size="4" >op_get_simulate_stat</list>
+	<list instruction="1" ins_id="54" size="4" >op_global_var</list>
 	
 	<!-- list instruction="1" ins_id="24" size="0" >op_set_loops</list>	
 	<list instruction="1" ins_id="25" size="0" >op_count_jump</list -->	
@@ -511,6 +514,15 @@
 			<var name="初始值" kinds="string" delete="no" restrict="type">none</var>
 		</op_make_var>
 	</create_make_var>
+	
+	<create_global_var name="全局变量" create_type="1" auto_index_list="param" auto_index_reference="variant_index">
+		<op_global_var name="节点_全局变量$var$" expand="yes" var_name="param">
+			<comment name="功能说明" rw_stat="read">global_variant(name,value)</comment>
+			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">g_var</param>
+			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+			<var name="初始值" kinds="string" delete="no" restrict="type">none</var>
+		</op_global_var>
+	</create_global_var>
 	
 	
 	<create_build_json_data name="创建json数据" create_type="1" >
@@ -999,6 +1011,8 @@
 				
 		<list>create_get_arrsize</list>		
 		<list>create_make_var</list>
+		<list>create_global_var</list>
+		
 		<list>create_step_type_transfer</list>
 		
 		<list>create_build_json_data</list>
