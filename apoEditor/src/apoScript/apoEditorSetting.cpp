@@ -227,8 +227,10 @@ bool apoEditorSetting::loadUserdefDisplayList(ndxml_root &xmlNameList, const cha
 
 bool apoEditorSetting::addDisplayNameList(const char *name, apoEditorSetting::text_vct_t &text_list)
 {
-	std::pair< text_map_t::iterator, bool> ret = m_userDefineList.insert(std::make_pair(std::string(name), text_list));
-	return ret.second;
+	m_userDefineList[name] = text_list;
+	return true;
+	//std::pair< text_map_t::iterator, bool> ret = m_userDefineList.insert(std::make_pair(std::string(name), text_list));
+	//return ret.second;
 }
 
 const apoEditorSetting::text_vct_t* apoEditorSetting::getUserdefList(const char *name) const

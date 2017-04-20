@@ -159,7 +159,7 @@ void apoUiExenodeLoop::onInit()
 	}
 
 	y += E_LINE_HEIGHT;
-	x = E_LINE_WIDTH;
+	x = E_LINE_WIDTH - PARAM_CTRL_W;
 	m_toNextNode->move(x, y);
 
 }
@@ -199,7 +199,7 @@ void apoUiExenodeBool::onInit()
 	apoEditorSetting* settingRoot = apoEditorSetting::getInstant();
 
 	//create if ctrl
-	int x = E_LINE_WIDTH - PARAM_CTRL_W * 2;
+	int x = E_LINE_WIDTH - PARAM_CTRL_W ;
 	int y = E_LINE_HEIGHT * 1.5;
 
 	int num = ndxml_getsub_num(m_nodeXml);
@@ -252,8 +252,8 @@ void apoUiExenodeBool::onInit()
 		y += E_LINE_HEIGHT;
 	}
 
-	y += E_LINE_HEIGHT;
-	x = E_LINE_WIDTH;
+	//y += E_LINE_HEIGHT;
+	x = E_LINE_WIDTH - PARAM_CTRL_W;
 	m_toNextNode->move(x, y);
 
 }
