@@ -939,10 +939,50 @@ static bool getScriptExpDebugInfo(ndxml *scriptXml)
 	return false;
 }
 
+
+class DeguggerScriptOwner :public  ClientMsgHandler::ApoConnectScriptOwner
+{
+public:
+	bool getOtherObject(const char*objName, DBLDataNode &val)
+	{
+		if (0 == ndstricmp(objName, "LogFunction")) {
+			val.InitSet((void*)ND_LOG_WRAPPER_PRINT(MainWindow));
+			return true;
+		}
+		else if (0 == ndstricmp(objName, "LogFile")) {
+			val.InitSet("ndlog.log");
+			return true;
+		}
+		else if (0 == ndstricmp(objName, "LogPath")) {
+			val.InitSet("../../log");
+			return true;
+		}
+		else if (0 == ndstricmp(objName, "WritablePath")) {
+			val.InitSet("../../log");
+			return true;
+		}
+
+		else if (0 == ndstricmp(objName, "SelfName")) {
+			val.InitSet("apoDebugger");
+			return true;
+		}
+		else if (0 == ndstricmp(objName, "self")) {
+			val.InitSet((void*)this, OT_OBJ_BASE_OBJ);
+			return true;
+		}
+
+		bool ret = ClientMsgHandler::ApoConnectScriptOwner::getOtherObject(objName, val);
+		if (ret) {
+			return ret;
+		}
+		return false;
+	}
+};
+
 bool MainWindow::runFunction(const char *binFile, const char *srcFile, int argc, const char* argv[])
 {
 	bool ret = true;
-	ClientMsgHandler::ApoConnectScriptOwner apoOwner;
+	DeguggerScriptOwner apoOwner;
 	if (!apoOwner.loadDataType(m_editorSetting.getIoConfigValue("net_data_def"))) {
 		WriteLog("load data type error\n");
 		return false;
