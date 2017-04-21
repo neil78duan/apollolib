@@ -857,6 +857,10 @@ void apoBaseExeNode::onConnected()
 		m_runInNode->setXmlAnchor(m_nodeXml);
 		m_runInNode->setXmlAnchorParent(ndxml_get_parent(m_nodeXml));
 	}
+	if (m_toNextNode){
+		m_toNextNode->setXmlAnchor(m_nodeXml);
+		m_toNextNode->setXmlAnchorParent(ndxml_get_parent(m_nodeXml));
+	}
 }
 void apoBaseExeNode::onDisconnected()
 {
@@ -864,6 +868,10 @@ void apoBaseExeNode::onDisconnected()
 	if (m_runInNode)	{
 		m_runInNode->setXmlAnchor(m_nodeXml);
 		m_runInNode->setXmlAnchorParent(ndxml_get_parent(m_nodeXml));
+	}
+	if (m_toNextNode){
+		m_toNextNode->setXmlAnchor(m_nodeXml);
+		m_toNextNode->setXmlAnchorParent(ndxml_get_parent(m_nodeXml));
 	}
 }
 
