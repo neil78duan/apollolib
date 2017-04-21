@@ -93,7 +93,8 @@ namespace LogicEditorHelper
 		"referenced_only",
 		"replace_val",
 		"create_label",
-		"var_name"
+		"var_name",
+		"connect_in_seq"
 	};
 
 	const char *_GetDataTypeName(eDataType dataType)
@@ -386,6 +387,21 @@ namespace LogicEditorHelper
 
 		return retXml;
 		*/
+	}
+
+
+	bool _CheckIsChild(ndxml *childXml, const char *parentName)
+	{
+		ndxml *parent = ndxml_get_parent(childXml);
+
+		while (parent)	{
+			const char *name =ndxml_getname(parent);
+			if (0==ndstricmp(name,parentName) )	{
+				return true;
+			}
+			parent = ndxml_get_parent(parent);
+		}
+		return false;
 	}
 
 	const char *_getRefNodeAttrName(/*ndxml *node,*/ const char *xmlPath)

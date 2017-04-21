@@ -123,6 +123,7 @@
 	<list instruction="0" size="4" datatype="0" >num</list>
 	<list instruction="0" size="0" datatype="2" >param</list>
 	<list instruction="0" size="0" datatype="2" >tablename</list>
+	<list instruction="0" size="0" datatype="2" >varname</list>
 	<list instruction="0" size="0" datatype="2" need_type_stream="1">func_name</list>
 	<list instruction="0" size="0" datatype="2" need_type_stream="1" >var</list>
 	<list instruction="0" size="0" datatype="0" need_type_stream="1" >msgtype</list>
@@ -516,7 +517,7 @@
 	</create_make_var>
 	
 	<create_global_var name="全局变量" create_type="1" auto_index_list="param" auto_index_reference="variant_index">
-		<op_global_var name="节点_全局变量$var$" expand="yes" var_name="param">
+		<op_global_var name="节点_全局变量$var$" expand="yes" var_name="param" connect_in_seq="yes">
 			<comment name="功能说明" rw_stat="read">global_variant(name,value)</comment>
 			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">g_var</param>
 			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
@@ -547,6 +548,25 @@
 		</op_get_arrsize>
 	</create_get_arrsize>
 		
+	<create_assignin name="赋值操作" create_type="1" >
+		<op_assignin name="节点_赋值" expand="yes" create_label="create_internal_label">
+			<comment name="功能说明" rw_stat="read">var = value</comment>
+			<varname name="变量名" kinds="string" delete="no" restrict="type">none</varname>
+			<param_collect name="值" expand="yes" expand_stat="1" delete="no">
+				<type name="赋值类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>
+		</op_assignin>
+	</create_assignin>
+	
+	<create_step_type_transfer name="类型转换" create_type="1" >
+		<op_type_transfer name="节点_类型转换" expand_list="comment,varname,index" create_label="create_internal_label" >			
+			<comment name="功能说明" rw_stat="read">data.convert( type )</comment>			
+			<varname name="变量名" kinds="string" delete="no" restrict="type">none</varname>
+			<index name="新类型" kinds="reference" reference_type="type_data_type" delete="no">0</index>
+		</op_type_transfer>
+	</create_step_type_transfer>
+	
 	
 	<create_math_operate name="数学运算符" create_type="1" >
 		<op_math_operate name="节点_数学运算" expand="yes" create_label="create_internal_label">
@@ -563,16 +583,6 @@
 		</op_math_operate>
 	</create_math_operate>
 	
-	<create_assignin name="赋值操作" create_type="1" >
-		<op_assignin name="节点_赋值" expand="yes" create_label="create_internal_label">
-			<comment name="功能说明" rw_stat="read">var = value</comment>
-			<param name="变量名称" kinds="string" delete="no" restrict="type">none</param>
-			<param_collect name="值" expand="yes" expand_stat="1" delete="no">
-				<type name="赋值类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="值" kinds="string" delete="no" restrict="type">none</var>
-			</param_collect>
-		</op_assignin>
-	</create_assignin>
 	<create_read_table name="读取excel节点" create_type="1" >
 		<op_read_table name="节点_读取表格" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">function:read_excel_table(table,col, index)</comment>
@@ -760,16 +770,7 @@
 			<comment name="功能说明" rw_stat="read">check_last_return_value_is_valid()</comment>
 		</op_check_valide>
 	</create_step_check_valid>
-	
-	<create_step_type_transfer name="类型转换" create_type="1" >
-		<op_type_transfer name="节点_类型转换" expand_list="comment,param,index" create_label="create_internal_label" >			
-			<comment name="功能说明" rw_stat="read">data.convert( type )</comment>			
-			<param name="变量名" kinds="string" delete="no" restrict="type">none</param>
-			<index name="新类型" kinds="reference" reference_type="type_data_type" delete="no">0</index>
-		</op_type_transfer>
-	</create_step_type_transfer>
-	
-	
+		
 	
 	<create_op_comp name="逻辑运算" create_type="1" >
 		<op_comp name="节点_逻辑运算" expand="yes" create_label="create_internal_label">

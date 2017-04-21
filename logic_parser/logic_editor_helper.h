@@ -70,6 +70,7 @@ namespace LogicEditorHelper
 		ERT_REPLACE_VAL,
 		ERT_CREATE_LABEL,
 		ERT_VAR_NAME ,
+		ERT_RUN_SEQ_LINE,
 	};
 
 	const char *_GetDataTypeName(eDataType dataType);
@@ -195,6 +196,8 @@ namespace LogicEditorHelper
 
 	ndxml *_getRefNode(ndxml*node,const char *xmlPath);
 	const char *_getRefNodeAttrName(/*ndxml *node,*/ const char *xmlPath);
+
+	bool _CheckIsChild(ndxml *childXml, const char *parentName);
 
 	//¼ì²â½ÚµãÊÇ·ñÒþ²Ø
 	bool CheckHide(ndxml *xml);

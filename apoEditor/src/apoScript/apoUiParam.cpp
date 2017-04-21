@@ -190,9 +190,15 @@ int apoBaseParam::getParamType()
 		type = ndxml_getval_int(m_reference);
 	}
 	else {
-		const compile_setting*pStepSetting = rootSetting->getStepConfig(ndxml_getname(m_xml));
-		if (pStepSetting){
-			type = pStepSetting->data_type;
+		const char *name = ndxml_getname(m_xml);
+		if (0==ndstricmp(name, "varname")) {
+			type = OT_VARIABLE;
+		}
+		else {
+			const compile_setting*pStepSetting = rootSetting->getStepConfig(ndxml_getname(m_xml));
+			if (pStepSetting){
+				type = pStepSetting->data_type;
+			}
 		}
 	}
 
@@ -299,6 +305,11 @@ bool apoBaseParam::checkConnectIn()
 	if (m_reference) {
 		return true;
 	}
+	const char *name = ndxml_getname(m_xml);
+	if (0 == ndstricmp(name, "varname")) {
+		return true;
+	}
+
 	return false;
 
 }
@@ -331,8 +342,9 @@ bool apoBaseParam::onConnectIn(apoBaseSlotCtrl*fromSlot)
 		if (!varName){
 			return false;
 		}
-
-		ndxml_setval_int(m_reference, (int)OT_VARIABLE);
+		if (m_reference) {
+			ndxml_setval_int(m_reference, (int)OT_VARIABLE);
+		}
 		ndxml_setval(m_xml, varName);
 	}
 	else if (type == SLOT_RETURN_VALUE)	{

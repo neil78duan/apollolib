@@ -747,6 +747,10 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 					DBLDataNode*pData = _getLocalVar(stack, name);
 					if (pData) {
 						m_registorFlag = pData->TransferType((DBL_ELEMENT_TYPE)opAim);
+						if (m_registorFlag) {
+							m_registerVal = *pData;
+						}
+
 					}
 				}
 				if (!m_registorFlag)	{

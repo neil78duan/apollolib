@@ -168,7 +168,7 @@ bool apoUiMainEditor::_showBlocks(apoBaseSlotCtrl *fromSlot, ndxml *stepsBlocks)
 			}
 			else {
 				//skip connector when this node is newvar
-				if (pExenode->getType() != EAPO_EXE_NODE_NewVar){
+				if (pExenode->toNext() ){
 					fromSlot = pExenode->toNext();
 				}
 				ret = true;
@@ -378,7 +378,7 @@ apoBaseExeNode* apoUiMainEditor::_showExeNode(apoBaseSlotCtrl *fromSlot, ndxml *
 	
 	apoBaseSlotCtrl *connectIn = nodeCtrl->inNode();
 	
-	if (connectIn && fromSlot && nodeCtrl->getType() != EAPO_EXE_NODE_NewVar) {
+	if (connectIn && fromSlot ) {
 		_connectSlots(fromSlot, connectIn, apoUiBezier::LineRunSerq);
 	}
 	if (fromSlot){
@@ -652,12 +652,14 @@ bool apoUiMainEditor::_connectParam(apoBaseExeNode *preNode, apoBaseExeNode *cur
 
 bool apoUiMainEditor::_removeBezier(apoUiBezier *connector, bool bWithDestroy)
 {
-	if (bWithDestroy) {
-		connector->onRemove();
-	}
 	QVector<apoUiBezier*>::iterator it = m_beziersVct.begin();
 	for (; it != m_beziersVct.end(); it++)	{
 		if ((*it) == connector) {
+
+			if (bWithDestroy) {
+				connector->onRemove();
+			}
+
 			delete *it;
 			m_beziersVct.erase(it);
 			return true;
@@ -815,7 +817,7 @@ apoBaseExeNode *apoUiMainEditor::createExenode(const QPoint &pos)
 
 	if (exeNode->getType() == EAPO_EXE_NODE_ModuleInitEntry || exeNode->getType() == EAPO_EXE_NODE_ExceptionEntry){
 	}
-	else if (exeNode->getType() == EAPO_EXE_NODE_NewVar){
+	else if (exeNode->getType() == EAPO_EXE_NODE_NewVar && !exeNode->inNode()){
 		ndxml_disconnect(m_editedFunction, newxml);
 		ndxml_insert_after(m_editedFunction, newxml,m_editedFunction);
 	}
@@ -913,6 +915,7 @@ void apoUiMainEditor::popMenuDisconnectTRigged()
 	}
 	if (_removeConnector(pslot)) {
 		this->update();
+		onFileChanged();
 	}
 }
 
@@ -1521,24 +1524,26 @@ bool apoUiMainEditor::buildParamConnector(apoBaseSlotCtrl *fromSlot, apoBaseSlot
 	int fromIndex = ndxml_get_index(ndxml_get_parent(fromXml), fromXml);
 	int toIndex = ndxml_get_index(ndxml_get_parent(toXml), toXml);
 
-	if (fromCtrl->getType() == EAPO_EXE_NODE_NewVar){
+	if (fromCtrl->getType() == EAPO_EXE_NODE_NewVar&& !fromCtrl->toNext() ){
 		if (ndxml_get_parent(fromXml) == ndxml_get_parent(toXml) ) 	{
 			if (toIndex < fromIndex) {
 				ndxml_disconnect(NULL, fromXml);
 				ndxml_insert_before(ndxml_get_parent(toXml), fromXml, toXml);
 			}
 		}
+		else if (_CheckIsChild(fromXml, "unConnect")) {
+			ndxml_disconnect(NULL, fromXml);
+			ndxml_insert_before(ndxml_get_parent(toXml), fromXml, toXml);
+		}
 	}
 
-	else if (toCtrl->getType() == EAPO_EXE_NODE_NewVar){
+	else if (toCtrl->getType() == EAPO_EXE_NODE_NewVar && !toCtrl->inNode() ){
 		
 		if (ndxml_get_parent(fromXml) == ndxml_get_parent(toXml)) 	{
-			if (toIndex < fromIndex) {
-				ndxml_disconnect(NULL, toXml);
-				ndxml_insert_after(ndxml_get_parent(fromXml), toXml,fromXml);
-			}
+			ndxml_disconnect(NULL, toXml);
+			ndxml_insert_after(ndxml_get_parent(fromXml), toXml, fromXml);
 		}
-		else if (fromSlot->slotType() == apoBaseSlotCtrl::SLOT_RETURN_VALUE) {
+		else if (fromSlot->slotType() == apoBaseSlotCtrl::SLOT_RETURN_VALUE || _CheckIsChild(toXml, "unConnect")) {
 
 			ndxml_disconnect(NULL, toXml);
 			ndxml_insert_after(ndxml_get_parent(fromXml), toXml, fromXml);

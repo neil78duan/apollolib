@@ -81,8 +81,14 @@ apoUiExenodeNewVar::apoUiExenodeNewVar(QWidget *parent, ndxml *exeNodeXml) :apoB
 {
 	apoBaseExeNode::m_type = EAPO_EXE_NODE_NewVar;
 
-	disableToNext();
-	disableConnectIn();
+	const char *runSeq = ndxml_getattr_val(exeNodeXml, "connect_in_seq");
+	if (runSeq && (0 == ndstricmp(runSeq, "yes") || 0 == ndstricmp(runSeq, "true")))	{
+	}
+	else {
+		disableToNext();
+		disableConnectIn();
+	}
+
 
 	//disableReturnVar();
 	apoEditorSetting* p_setting = apoEditorSetting::getInstant();
