@@ -1,6 +1,6 @@
 <?xml  version="1.0" encoding="utf8" ?>
 <event_list>
-	<node desc="空事件">0</node>
+	<node desc="update">0</node>
 	<node desc="程序启动()">1</node>
 	<node desc="程序关闭()">2</node>
 	<node desc="角色登录(player)">3</node>
