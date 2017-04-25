@@ -323,6 +323,32 @@ bool apoUiMainEditor::_showSWitch(apoBaseExeNode *entryNode, ndxml *stepsBlocks)
 	return true;
 }
 
+bool apoUiMainEditor::_showBTSelector(apoBaseExeNode *entryNode, ndxml *stepsBlocks)
+{
+	apoUiExenodeSelector*pNode = dynamic_cast<apoUiExenodeSelector*>(entryNode);
+	if (!pNode){
+		return false;
+	}
+
+	int subX = m_startX;
+	int subY = m_startY;
+
+	int num = pNode->getSubBlockNum();
+	for (int i = 0; i < num; i++){
+		m_startY = (subY - 200) + i * 200;
+		m_startX = subX;
+		bool ret = _showSubByslot(pNode->getSubSlot(i));
+		if (!ret)	{
+			return false;
+		}
+	}
+
+	m_startX = subX;
+	m_startY = subY;
+	return true;
+
+}
+
 bool apoUiMainEditor::_createFuncEntry(ndxml *stepsBlocks, const QPoint &defaultPos)
 {
 	bool noInidPos = false;
@@ -401,7 +427,9 @@ apoBaseExeNode* apoUiMainEditor::_showExeNode(apoBaseSlotCtrl *fromSlot, ndxml *
 	else if (nodeCtrl->getType() == EAPO_EXE_NODE_Switch) {
 		ret = _showSWitch(nodeCtrl, exeNode);
 	}
-
+	else if (nodeCtrl->getType() == EAPO_EXE_NODE_Selector) {
+		ret = _showBTSelector(nodeCtrl, exeNode);
+	}
 
 	if (!ret) {		
 		nodeCtrl->close();
@@ -671,7 +699,7 @@ bool apoUiMainEditor::_removeBezier(apoUiBezier *connector, bool bWithDestroy)
 
 bool apoUiMainEditor::_removeExenode(apoBaseExeNode *node)
 {
-	_disConnectParam(node);
+	//_disConnectParam(node);
 
 	if (node->getType() == EAPO_EXE_NODE_NewVar){
 		_disConnectVar(node);
@@ -713,7 +741,7 @@ void apoUiMainEditor::_disConnectParam(apoBaseExeNode *changedNode, bool bWithDe
 	for (int i = 0; i < changedNode->getParamNum(); i++) {
 		apoBaseParam *paramCtrl = changedNode->getParam(i);
 		apoUiBezier *pBze = paramCtrl->getConnector();
-		if (pBze) {
+		if (pBze && pBze->getType() == apoUiBezier::LineParam) {
 			_removeBezier(pBze, bWithDestroy);
 		}
 	}
@@ -810,8 +838,8 @@ apoBaseExeNode *apoUiMainEditor::createExenode(const QPoint &pos)
 
 	apoBaseExeNode *exeNode = _showExeNode(NULL, newxml, pos);
 	if (!exeNode){
-		ndxml_delxml(newxml, NULL);
 		nd_logerror("create %s Exenode Error \n", _GetXmlName(newxml, NULL));
+		ndxml_delxml(newxml, NULL);
 		return NULL;
 	}
 

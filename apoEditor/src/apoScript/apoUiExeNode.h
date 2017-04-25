@@ -321,5 +321,33 @@ private:
 	apoBaseSlotCtrl * m_defaultBlock;
 };
 
+//////////////////////////////////////////////////////////////////////////
+
+class apoUiExenodeSelector : public apoBaseExeNode
+{
+	Q_OBJECT
+public:
+	explicit apoUiExenodeSelector(QWidget *parent, ndxml *exeNodeXml);
+	virtual ~apoUiExenodeSelector();
+
+	virtual void onInit();
+
+	virtual bool closeParam(apoBaseSlotCtrl *param);
+
+	int getSubBlockNum(){ return m_caseParam.size(); }
+	apoBaseParam *getSubSlot(int index);
+
+	apoBaseSlotCtrl *getDefault() { return  m_defaultBlock; }
+
+	public slots:
+	void onAddNewBlockClicked();
+	//apoBaseSlotCtrl *getSubSlot() { return m_subSlot; }
+private:
+	apoBaseParam *createSubBlock(ndxml *subBlockXml);
+	//apoBaseSlotCtrl *m_subSlot;
+	param_vct_t m_caseParam;
+
+	apoBaseSlotCtrl * m_defaultBlock;
+};
 
 #endif // _APOUI_EXENODE_H_

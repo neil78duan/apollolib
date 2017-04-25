@@ -74,6 +74,7 @@ private:
 	bool _showLoop(apoBaseExeNode *entryNode, ndxml *stepsBlocks);
 	bool _showValueComp(apoBaseExeNode *entryNode, ndxml *stepsBlocks);
 	bool _showSWitch(apoBaseExeNode *entryNode, ndxml *stepsBlocks);
+	bool _showBTSelector(apoBaseExeNode *entryNode, ndxml *stepsBlocks);
 
 	apoBaseExeNode* _showExeNode(apoBaseSlotCtrl *fromSlot, ndxml *exeNode, const QPoint &pos);
 

@@ -1032,7 +1032,7 @@ bool MainWindow::runFunction(const char *binFile, const char *srcFile, int argc,
 		else {
 			nd_logmsg("run function %s SUCCESS \n", argv[0]);
 		}
-
+		//parser.eventNtf(APOLLO_EVENT_UPDATE, 0);
 		parser.eventNtf(APOLLO_EVENT_SERVER_STOP, 0);
 	}
 	LogicEngineRoot::destroy_Instant();

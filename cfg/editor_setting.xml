@@ -46,6 +46,9 @@
 	<steps_block_valcomp>ValueComp</steps_block_valcomp>
 	<op_throw>Throw</op_throw>
 	<steps_switch_case>Switch</steps_switch_case>
+	<steps_bt_selector>Selector</steps_bt_selector>
+	<steps_bt_sequence>Selector</steps_bt_sequence>
+	
 </blueprint_node_name>
 
 
@@ -107,6 +110,9 @@
 	<list instruction="1" ins_id="51" size="4" >op_get_last_error</list>
 	<list instruction="1" ins_id="52" size="4" >op_get_simulate_stat</list>
 	<list instruction="1" ins_id="54" size="4" >op_global_var</list>
+	<list instruction="1" ins_id="57" size="4" >op_check_user_error</list>
+	<list instruction="1" ins_id="58" size="4" >op_clear_error</list>
+	<list instruction="1" ins_id="59" size="8" >op_set_error</list>
 	
 	<!-- list instruction="1" ins_id="24" size="0" >op_set_loops</list>	
 	<list instruction="1" ins_id="25" size="0" >op_count_jump</list -->	
@@ -140,8 +146,11 @@
 	<list instruction="6" size="0" datatype="2">is_open_role_affair</list>
 	<list instruction="7" size="0" >exception_catch_block</list>
 	<list instruction="8" size="0" >function_init_block</list>
+	<list instruction="9" >steps_block</list>
 	<list instruction="9" >steps_block_valcomp</list>
 	<list instruction="9" >steps_switch_case</list>
+	<list instruction="9" >steps_bt_selector</list>
+	<list instruction="9" >steps_bt_sequence</list>
 	
 	<list instruction="9" >function_filter</list>
 	<list instruction="10" desc="if-else sub entry" >op_sub_comp_entry</list>	
@@ -323,6 +332,12 @@
 		</op_get_last_error>
 	</create_get_last_error>
 	
+	<create_step_set_error name="设置错误" create_type="1" expand="yes" >
+		<op_set_error name="节点_设置错误$id$" expand="yes">			
+			<comment name="功能说明" rw_stat="read">set_error(id)</comment>
+			<num name="错误好" kinds="numeral" delete="no" replace_val="../.name" >0</num>
+		</op_set_error>
+	</create_step_set_error>	
 	
 	<create_get_simulate_stat name="检测模拟状态" create_type="1" expand="yes" >
 		<op_get_simulate_stat name="节点_检测模拟状态" expand="yes" create_label="create_internal_label">			
@@ -943,6 +958,84 @@
 	</create_internal_goto>
 	
 	
+	<!--- selector -->		
+	<create_bt_selector name="BT-Selector" create_type="1" >
+		<steps_bt_selector name="BT-Selector" auto_index="0"  >
+			<comment name="功能说明" rw_stat="read">run until one of children success </comment>
+			
+			<op_set_label name="标签$name$" kinds="hide" expand="yes" comp_cond="param"  delete="no">
+				<param name="标签名" kinds="string" delete="no" auto_index_ref="auto_index" replace_val="../.name" >_SelectAutoLab</param>	
+			</op_set_label>
+			<steps_collection name="selector-children"  create_template="create_bt_selector_child" delete="no">
+			</steps_collection>
+		
+			<op_waitevent name="节点_等待0" kinds="hide"  delete="no">
+				<varInt name="事件名" >0</varInt>
+			</op_waitevent>
+			<op_goto_label name="goto:$name$" expand="yes" comp_cond="ref_from" kinds="hide"  delete="no">
+				<ref_from name="跳转地址" >../../op_set_label/param</ref_from>
+			</op_goto_label>			
+		</steps_bt_selector>
+	</create_bt_selector>
+		
+	<create_bt_selector_child name="select-entry" create_type="1">
+		<steps_collection name="selector-node">
+			<param name="subSelect" kinds="string" delete="no" auto_index_ref="auto_index"  referenced_only="yes" >Node</param>				
+			<op_clear_error name="清除错误,非系统错误" ></op_clear_error>
+			<steps_collection name="selector-node-entry" create_template="create_list1" delete="no">
+			</steps_collection>	
+			<op_check_user_error name="检测是否出错"  kinds="hide" delete="no"></op_check_user_error>	
+			<op_error_short_jump name="节点_break"  kinds="hide" expand_list="comment"  >
+				<comment name="功能说明" rw_stat="read">break when last error</comment>
+				<jumpOffset kinds="hide" delete="no" >0</jumpOffset>
+			</op_error_short_jump>			
+		</steps_collection>
+	</create_bt_selector_child>	
+	<!--- -->
+		
+	<create_bt_sequence name="BT-Sequence" create_type="1" >
+		<steps_bt_sequence name="BT-Sequence" auto_index="0"  >
+			<comment name="功能说明" rw_stat="read">run until one of children success </comment>
+			
+			<op_clear_error name="清除错误,非系统错误" kinds="hide" >
+				<internal_label name="标签$name$"  kinds="string" replace_val=".name" auto_index_ref="auto_index" >_sequenceStartLab</internal_label>
+			</op_clear_error>
+			
+			<steps_collection name="selector-children"  create_template="create_bt_sequence_child" delete="no">
+			</steps_collection>
+			
+			<op_short_jump name="break" kinds="hide" expand_list="comment in any-case"  >
+				<jumpOffset kinds="hide" delete="no" >0</jumpOffset>
+			</op_short_jump>
+			
+			<op_set_label name="标签$name$" kinds="hide" expand="yes" comp_cond="param"  delete="no">
+				<param name="标签名" kinds="string" delete="no" auto_index_ref="auto_index" replace_val="../.name" >_sequenceEndLab</param>	
+			</op_set_label>				
+			
+			<op_waitevent name="节点_等待0" kinds="hide"  delete="no">
+				<varInt name="事件名" >0</varInt>
+			</op_waitevent>			
+			<op_goto_label name="goto:$name$" expand="yes" comp_cond="ref_from" kinds="hide"  delete="no">
+				<ref_from name="跳转地址" >../../op_clear_error/internal_label</ref_from>
+			</op_goto_label>		
+			
+		</steps_bt_sequence>
+	</create_bt_sequence>
+		
+	<create_bt_sequence_child name="sequence-entry" create_type="1">
+		<steps_collection name="sequence-node">
+			<param name="subSequence" kinds="string" delete="no" auto_index_ref="auto_index"  referenced_only="yes" >Node</param>
+			<steps_collection name="sequence-node-entry" create_template="create_list1" delete="no">
+			</steps_collection>			
+			<op_check_user_error name="检测是否出错"  kinds="hide" delete="no"></op_check_user_error>					
+			<op_goto_label name="test-success-jump:$name$" expand="yes" comp_cond="ref_from" kinds="hide" value="18" delete="no">
+				<ref_from name="跳转地址" >../../../../op_set_label/param</ref_from>
+			</op_goto_label>	
+		
+		</steps_collection>
+	</create_bt_sequence_child>	
+	<!-- -->
+	
 	<create_input_param name="创建参数参数" create_type="1" >
 		<param_collect name="参数" expand="yes">
 			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
@@ -967,7 +1060,9 @@
 	
 	<create_list1 name="create_base_function" create_type="2">
 		<list>create_step_exit</list>
-		<list>create_get_last_error</list>		
+		<list>create_get_last_error</list>	
+		<list>create_step_set_error</list>	
+		
 		<list>create_skip_error</list>
 		<list>create_get_simulate_stat</list>
 		<list>create_step_error_catch_block</list>
@@ -1041,9 +1136,11 @@
 		
 		<list>create_step_read_excel_attr</list>
 		
-		<list>create_step_chdir</list>		
-		<list>create_step_rmfile</list>		
-		<list>create_step_mkdir</list>				
+		<list>create_step_chdir</list>
+		<list>create_step_rmfile</list>	
+		<list>create_step_mkdir</list>	
+		<list>create_bt_selector</list>
+		<list>create_bt_sequence</list>
 	</create_list1>		
 	<create_list2 name="create_message_handler" create_type="2" ref_from="yes">../create_list1</create_list2>
 </create_template>

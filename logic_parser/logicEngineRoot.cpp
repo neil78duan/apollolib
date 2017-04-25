@@ -483,7 +483,7 @@ bool LogicEngineRoot::getModuleChangedTime(const char *moduleName, DBLDataNode &
 	}
 	time_t now = time(NULL);
 	result.InitSet(now);
-	return false;
+	return true;
 }
 
 logic_print LogicEngineRoot::setPrint(logic_print func, void *outfile)

@@ -29,4 +29,5 @@ APOUI_NODE_ID(Bool)
 APOUI_NODE_ID(ValueComp)
 APOUI_NODE_ID(Throw)
 APOUI_NODE_ID(Switch)
+APOUI_NODE_ID(Selector)
 
