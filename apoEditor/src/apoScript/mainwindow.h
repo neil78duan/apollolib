@@ -61,21 +61,17 @@ private slots:
 	void on_actionFileClose_triggered();
     void on_actionCompile_triggered();
     void on_actionSave_triggered();
-    void on_actionExit_triggered();
+	void on_actionExit_triggered();
+	void on_actionCompileAll_triggered();
+	void on_actionClearLog_triggered();
+	void on_actionRun_triggered();
+	void on_actionTest_triggered();
+	void on_actionCancel_scale_triggered();
 
 
 	void onFunctionsTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 	void onFilesTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
-	void on_actionCompileAll_triggered();
-
-    void on_actionClearLog_triggered();
-
-    void on_actionRun_triggered();
-
-    void on_actionTest_triggered();
-
-    void on_actionCancel_scale_triggered();
 
 protected:
 

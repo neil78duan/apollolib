@@ -427,10 +427,11 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 		GET_VAR_FROM_STREAM(stack, p, tmpInputVal);		\
 		objAim = getLogicObjectMgr(name);				\
 		if (objAim) {									\
-			m_registorFlag = objAim->_opfunc(tmpIndexVal, tmpInputVal);	\
-			if(!m_registorFlag) {						\
+			m_registorCtrl = objAim->_opfunc(tmpIndexVal, tmpInputVal);	\
+			if(!m_registorCtrl) {						\
 				m_sys_errno = objAim->getError();		\
 				nd_logdebug(#_opfunc" run on %s error code =%d\n",name, m_sys_errno ) ; \
+				if (!m_curStack->error_continue){m_registorFlag = false;}				\
 			}			\
 		}				\
 		else {			\
@@ -480,6 +481,12 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				m_registorCtrl = m_simulate;
 				m_registorFlag = true;
 				break;
+
+			case  E_OP_SET_ERROR:
+				p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
+				m_registorFlag = true;
+				m_sys_errno = index;
+				break;
 			case E_OP_GET_LAST_ERROR:
 				if (inException) {
 					m_registerVal.InitSet((int)errorBeforeException);
@@ -489,6 +496,19 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				}
 				m_registorFlag = true;
 				break;
+
+			case E_OP_CHECK_IN_USER_ERROR:
+				m_registorCtrl = false;
+				if (m_sys_errno)	{
+					m_registorCtrl = !_checkIsSystemError(m_sys_errno);
+				}
+				m_registorFlag = true;
+				break;
+			case E_OP_CLEAR_ERROR_CODE:
+				m_sys_errno = 0;
+				m_registorFlag = true;
+				break;
+
 			case E_OP_DEBUG_INFO:
 				isdebug_step = true;
 				p = lp_read_stream(p, m_dbg_cur_node_index, m_cmdByteOrder);
@@ -549,9 +569,12 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				GET_VAR_FROM_STREAM(stack, p, tmpIndexVal);
 				objAim = getLogicObjectMgr(name);
 				if (objAim) {
-					m_registorFlag = objAim->opRead(tmpIndexVal, m_registerVal);
-					if (!m_registorFlag) {
+					m_registorCtrl = objAim->opRead(tmpIndexVal, m_registerVal);
+					if (!m_registorCtrl) {
 						m_sys_errno = objAim->getError();
+						if (!m_curStack->error_continue){
+							m_registorFlag = false;
+						}
 					}
 				}
 				else {
@@ -585,9 +608,12 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				objAim = getLogicObjectMgr(name);
 
 				if (objAim) {
-					m_registorFlag = objAim->opOperate(cmd_buf, tmpIndexVal, tmpInputVal);
-					if (!m_registorFlag) {
+					m_registorCtrl = objAim->opOperate(cmd_buf, tmpIndexVal, tmpInputVal);
+					if (!m_registorCtrl) {
 						m_sys_errno = objAim->getError();
+						if (!m_curStack->error_continue){
+							m_registorFlag = false;
+						}
 					}
 					else {
 						m_registerVal = tmpInputVal;
@@ -689,6 +715,35 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
 				m_registorFlag =true;
 				m_curStack->loopIndex = index;
+				break;
+
+			case E_OP_PUSH_LOOP_INDEX:
+				m_curStack->loopIndexStack.push_back(m_curStack->loopIndex);
+				m_curStack->loopCountStack.push_back(m_registerCount);
+				m_registorFlag = true;
+				break;
+
+			case E_OP_POP_LOOP_INDEX:
+				if (m_curStack->loopIndexStack.size() > 0){
+					m_curStack->loopIndex = m_curStack->loopIndexStack[m_curStack->loopIndexStack.size() - 1];
+					m_curStack->loopIndexStack.pop_back();
+					m_registorFlag = true;
+				}
+				else {
+					nd_logerror("loop index stack over flow\n");
+					m_registorFlag = false;
+					break;
+				}
+
+				if (m_curStack->loopCountStack.size() > 0){
+					m_registerCount = m_curStack->loopCountStack[m_curStack->loopCountStack.size() - 1];
+					m_curStack->loopCountStack.pop_back();
+					m_registorFlag = true;
+				}
+				else {
+					nd_logerror("loop count register stack over flow\n");
+					m_registorFlag = false;
+				}
 				break;
 
 			case E_OP_GET_ARRAY_SIZE:
@@ -804,7 +859,9 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 					m_registorCtrl = false;
 				}
 				m_registorFlag = true;
-				break;				
+				break;	
+
+
 			case E_OP_CALC:	 		//	公式计算 NDUINT32 + BUF
 			{
 				float result = 0;
@@ -1481,15 +1538,21 @@ int LogicParserEngine::_readGameDataTable(runningStack *stack, char *pCmdStream,
 void LogicParserEngine::onEvent(int event, parse_arg_list_t &params)
 {
 	//continue function that waiting event
-	for (event_list_t::iterator it=m_events.begin(); it!=m_events.end(); ) {
+	event_list_t evenRunning;
+	evenRunning.merge(m_events) ;
+
+	for (event_list_t::iterator it = evenRunning.begin(); it != evenRunning.end();) {
 		if (checkEventOk(event,params,it->eventid, it->event_params)) {
 			_continueEvent(&(*it));
-			it = m_events.erase(it) ;
+			it = evenRunning.erase(it);
 		}
 		else {
 			++it ;
 		}
 	}
+
+	m_events.merge(evenRunning);
+
 	//call local event handler
 	if (m_hanlers.size() == 0){
 		return;
@@ -1536,6 +1599,8 @@ void LogicParserEngine::update(ndtime_t interval)
 		}
 		++it;		
 	}
+	parse_arg_list_t args;
+	onEvent(0, args);		//event 0 is update event
 }
 
 bool LogicParserEngine::waitEvent(runningStack *stack, int event, parse_arg_list_t &params)
@@ -2102,8 +2167,7 @@ bool LogicParserEngine::checkEventOk(int event, parse_arg_list_t &params, int wa
 	if (waited_params.size() > params.size()){
 		return false;
 	}
-	for (size_t i = 0; i < waited_params.size(); i++)
-	{
+	for (size_t i = 0; i < waited_params.size(); i++){
 		if (waited_params[i] != params[i])	{
 			return false;
 		}

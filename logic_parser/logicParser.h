@@ -112,6 +112,13 @@ enum eParserOperator{
 	E_OP_CHECK_IS_SIMULATE, // get current simulate status , true run in simulate , false run in real game env.
 	E_OP_FILE_INFO,			//record file info like E_OP_DEBUG_INFO 
 	E_OP_GLOBAL_VAR,		//declare global 
+	E_OP_PUSH_LOOP_INDEX ,	// Push count register and loopindex to stack
+	E_OP_POP_LOOP_INDEX,
+	E_OP_CHECK_IN_USER_ERROR,	//check current error is on ,and error is userdef
+	E_OP_CLEAR_ERROR_CODE,	//CLEAR error
+	E_OP_SET_ERROR ,		//set error
+
+
 };
 
 //compare operate
@@ -190,6 +197,7 @@ enum eSendMsgDataThype{
 
 
 typedef std::vector<DBLDataNode> parse_arg_list_t;
+typedef std::vector<int>IntVal_vct;
 
 struct scriptCmdBuf
 {
@@ -235,11 +243,10 @@ struct runningStack
 	parse_arg_list_t params ;
 	LogicData_vct local_vars;
 	LogicObjAffairHelper *affairHelper;
-
-	//NDUINT16 dbg_cur_node_index;
-	//char dbg_node[128];
-	//char dbg_fileInfo[64];
 	
+	IntVal_vct loopIndexStack;
+	IntVal_vct loopCountStack;
+
 	std::string curModuleName ;		//current script file name
 	std::string workingPath;		//the host work direct
 
@@ -255,6 +262,10 @@ struct StackWaitEventNode
 		
 	}
 	
+	bool operator<(const StackWaitEventNode &r)const
+	{
+		return eventid < r.eventid;
+	}
 	runningStack stack ;
 	int eventid ;
 	

@@ -546,3 +546,182 @@ apoBaseParam *apoUiExenodeSwitch::createSubBlock(ndxml *subBlockXml)
 	m_paramVct.push_back(ctrl1);
 	return ctrl1;
 }
+//////////////////////////////////////////////////////////////////////////
+//-- selector 
+
+apoUiExenodeSelector::apoUiExenodeSelector(QWidget *parent, ndxml *exeNodeXml)
+{
+	apoBaseExeNode::m_type = EAPO_EXE_NODE_Selector;
+	m_defaultBlock = NULL;
+	disableNewParam();
+	disableReturnVar();
+
+	setNodeInfo(parent, exeNodeXml, true);
+	setTips(QString("Selector"));
+}
+
+apoUiExenodeSelector::~apoUiExenodeSelector()
+{
+
+}
+
+
+apoBaseParam *apoUiExenodeSelector::getSubSlot(int index)
+{
+	if (index >= 0 && index < m_caseParam.size())	{
+		return m_caseParam[index];
+	}
+	return NULL;
+}
+
+void apoUiExenodeSelector::onAddNewBlockClicked()
+{
+	apoEditorSetting*pSetting = apoEditorSetting::getInstant();
+	ndxml *subEntry = ndxml_getnode(m_nodeXml, "steps_collection");
+	if (!subEntry)	{
+		nd_logerror("create new param error,can not get entry\n");
+		return;
+	}
+	ndxml *newxml = pSetting->AddNewXmlNode(subEntry, (QWidget*) this->parent());
+	if (!newxml){
+		nd_logerror("create new param error\n");
+		return;
+	}
+
+	apoBaseParam *pNewSub = createSubBlock(newxml);
+	if (!pNewSub){
+		return;
+	}
+	QPoint pos = m_outParamAddNew->pos();
+	pNewSub->move(pos);
+
+	pos.setY(pos.y() + E_LINE_HEIGHT);
+
+	m_outParamAddNew->move(pos);
+
+	m_caseParam.push_back(pNewSub);
+
+	m_size.setHeight(m_size.height() + E_LINE_HEIGHT);
+	return;
+
+}
+
+bool apoUiExenodeSelector::closeParam(apoBaseSlotCtrl *slot)
+{
+	apoBaseParam *paramSlot = dynamic_cast<apoBaseParam*>(slot);
+
+	if (paramSlot == m_defaultBlock || paramSlot == NULL)	{
+		return false;
+	}
+	ndxml *delNode = paramSlot->getParentXml();
+	if (!delNode){
+		return false;
+	}
+
+	param_vct_t::iterator delit = m_caseParam.end();
+	for (param_vct_t::iterator it = m_caseParam.begin(); it != m_caseParam.end(); ++it) {
+		if ((*it) == paramSlot)	{
+			delit = it;
+		}
+		else if (delit != m_caseParam.end())	{
+			QPoint pos = (*it)->pos();
+			pos.setY(pos.y() - E_LINE_HEIGHT);
+			(*it)->move(pos);
+		}
+	}
+
+
+	if (delit != m_caseParam.end()) {
+		m_caseParam.erase(delit);
+		ndxml_delxml(delNode, NULL);
+		slot->close();
+
+		m_size.setHeight(m_size.height() - E_LINE_HEIGHT);
+
+		QPoint pos = m_outParamAddNew->pos();
+		pos.setY(pos.y() - E_LINE_HEIGHT);
+		m_outParamAddNew->move(pos);
+
+		for (param_vct_t::iterator it = m_paramVct.begin(); it != m_paramVct.end(); ++it) {
+			if ((*it) == paramSlot)	{
+				m_paramVct.erase(it);
+				break;
+			}
+		}
+	}
+
+	return true;
+}
+
+void apoUiExenodeSelector::onInit()
+{
+	apoEditorSetting* settingRoot = apoEditorSetting::getInstant();
+	//create case ctrl
+	int x = E_LINE_WIDTH - PARAM_CTRL_W*1.5;
+	int y = E_LINE_HEIGHT * 3;
+
+	ndxml *childrenEntry = ndxml_getnode(m_nodeXml, "steps_collection");
+	if (!childrenEntry)	{
+		return;
+	}
+	int num = ndxml_getsub_num(childrenEntry);
+
+	for (int i = 0; i < num; i++){
+		ndxml *xml = ndxml_getnodei(childrenEntry, i);
+		const compile_setting* compileSetting = settingRoot->getStepConfig(ndxml_getname(xml));
+		if (!compileSetting){
+			continue;
+		}
+		else if (E_INSTRUCT_TYPE_COLLOCTION == compileSetting->ins_type){
+			apoBaseParam *caseCtrl = createSubBlock(xml);
+			if (!caseCtrl)	{
+				continue;
+			}
+			caseCtrl->move(x, y);
+			m_caseParam.push_back(caseCtrl);
+			y += E_LINE_HEIGHT;
+		}
+	}
+
+	CREATE_CTRL_OBJECT(QPushButton, "+", green, m_outParamAddNew);
+	connect(m_outParamAddNew, SIGNAL(clicked()), this, SLOT(onAddNewBlockClicked()));
+
+	//resize exenode size 
+	m_size.setHeight(y + E_LINE_HEIGHT);
+}
+
+apoBaseParam *apoUiExenodeSelector::createSubBlock(ndxml *subBlockXml)
+{
+	ndxml *cmpNode = ndxml_getnode(subBlockXml, "param");
+	if (!cmpNode) {
+		return NULL;
+	}
+	apoBaseParam *ctrl1 = createParam(cmpNode, subBlockXml);
+	if (!ctrl1)	{
+		return NULL;
+	}
+
+	ndxml *typexml = ctrl1->getTypeXml();
+	ndxml *varxml = ctrl1->getValueXml();
+	ctrl1->setParam(subBlockXml, varxml, typexml, subBlockXml);
+
+	ctrl1->setText(QString("{}->"));
+
+	ctrl1->resize(PARAM_CTRL_W * 2, PARAM_CTRL_H);
+	ctrl1->show();
+	ctrl1->setSlotType(apoBaseSlotCtrl::SLOT_SUB_ENTRY);
+
+	//get anchor 
+	ndxml *sublEntry = ndxml_getnode(subBlockXml, "steps_collection");
+	if (!sublEntry)	{
+		ctrl1->close();
+		return NULL;
+	}
+
+	ctrl1->setXmlAnchor(sublEntry);
+	ctrl1->setXmlAnchorParent(sublEntry);
+
+	m_paramVct.push_back(ctrl1);
+	return ctrl1;
+
+}
