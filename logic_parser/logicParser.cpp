@@ -1538,20 +1538,23 @@ int LogicParserEngine::_readGameDataTable(runningStack *stack, char *pCmdStream,
 void LogicParserEngine::onEvent(int event, parse_arg_list_t &params)
 {
 	//continue function that waiting event
-	event_list_t evenRunning;
-	evenRunning.merge(m_events) ;
+	if (m_events.size()  > 0){
+		event_list_t runningList;
 
-	for (event_list_t::iterator it = evenRunning.begin(); it != evenRunning.end();) {
-		if (checkEventOk(event,params,it->eventid, it->event_params)) {
-			_continueEvent(&(*it));
-			it = evenRunning.erase(it);
+		for (event_list_t::iterator it = m_events.begin(); it != m_events.end();) {
+			if (checkEventOk(event, params, it->eventid, it->event_params)) {
+				runningList.push_back(*it);
+				it = m_events.erase(it);
+			}
+			else {
+				++it;
+			}
 		}
-		else {
-			++it ;
+
+		for (event_list_t::iterator it = runningList.begin(); it != runningList.end(); ++it) {
+			_continueEvent(&(*it));
 		}
 	}
-
-	m_events.merge(evenRunning);
 
 	//call local event handler
 	if (m_hanlers.size() == 0){

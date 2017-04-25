@@ -46,6 +46,8 @@ APOLLO_CLI_API APO_RESULT_T apoCli_sendMsg(int messageId, void *messageBody, int
 APOLLO_CLI_API int apoCli_recv(char *bufferFram, int bufsize, int timeOutMS);
 APOLLO_CLI_API int apoCli_recvMsg(int *messageId, char *msgBody, int bufsize, int timeOutMS);
 
+APOLLO_CLI_API int apoCli_getConnStat(); //0 unconnect ,1 connected, 2 login, 3 ingame ,4 GM
+
 APOLLO_CLI_API APO_RESULT_T apoCli_ReloginBackground(const char *host, int port, const char *dev_udid);
 APOLLO_CLI_API APO_RESULT_T apoCli_TrytoRelogin();
 APOLLO_CLI_API APO_RESULT_T apoCli_LoginAccount(const char *account, const char *passwd);
