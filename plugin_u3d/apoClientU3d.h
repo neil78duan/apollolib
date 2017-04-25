@@ -85,6 +85,7 @@ public:
 
 	time_t getServerTime();
 	void setServerTime(time_t srvTime);
+
 private:
 	void onInit();
 	void onLogin();

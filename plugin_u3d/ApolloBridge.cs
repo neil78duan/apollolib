@@ -49,7 +49,9 @@ public class apoClient {
     [DllImport (APO_DLL_NAME)]
 	private static extern RESULT_T apoCli_GetLastError();
 
-    
+    [DllImport (APO_DLL_NAME)]
+	private static extern int apoCli_getConnStat(); //0 unconnect ,1 connected, 2 login, 3 ingame ,4 GM
+
     [DllImport (APO_DLL_NAME)]
 	private static extern  RESULT_T apoCli_ReloginBackground(string host, int port, string dev_udid);
     

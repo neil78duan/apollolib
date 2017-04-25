@@ -129,6 +129,15 @@ RESULT_T apoCli_GetLastError()
 	return (RESULT_T) nd_object_lasterror(h);
 }
 
+int apoCli_getConnStat()
+{
+	nd_handle h = (nd_handle)get_NDNetObject();
+	if (!h) {
+		return 0;
+	}
+	return (RESULT_T)nd_connect_level_get(h);
+}
+
 // 
 // RESULT_T apoCli_recv(void *recvObject, int waitTime)
 // {
