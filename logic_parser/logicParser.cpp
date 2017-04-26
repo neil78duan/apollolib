@@ -452,10 +452,12 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 		switch (opCmd) {
 			case E_OP_EXIT:
 				//index = *((*(operator_index_t**)&p)++);
-				p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
+				//p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
+
+				GET_VAR_FROM_STREAM(stack, p, tmpIndexVal);
 				m_registorFlag= (index==0) ? true: false ;
 				p = (char*) (stack->cmd->buf + stack->cmd->size);
-				m_sys_errno = index;
+				m_sys_errno = tmpIndexVal.GetInt();
 				break ;
 			case E_OP_EXCEPTION_BLOCK:
 			{
@@ -471,20 +473,37 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 			}
 				break;
 			case E_OP_THROW:
-				p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
-				if (!inException) {
-					m_registorFlag = false;
-					m_sys_errno = index + LOGIC_ERR_USER_DEFINE_ERROR;
+				//p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
+
+				GET_VAR_FROM_STREAM(stack, p, tmpIndexVal);
+				index = tmpIndexVal.GetInt();
+
+				if (inException){
+					//already in exception
+					break;
 				}
-				break;
+				//jump to exception 
+				p = (char*)exception_addr;
+				inException = true;
+				errorBeforeException = index;
+				m_sys_errno = index;
+				m_registorFlag = true;
+				stack->cur_point = p;
+
+				continue;
+
 			case  E_OP_CHECK_IS_SIMULATE:
 				m_registorCtrl = m_simulate;
 				m_registorFlag = true;
 				break;
 
 			case  E_OP_SET_ERROR:
-				p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
-				m_registorFlag = true;
+				//p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
+
+				GET_VAR_FROM_STREAM(stack, p, tmpIndexVal);
+				index = tmpIndexVal.GetInt();
+
+				m_registorFlag = false;
 				m_sys_errno = index;
 				break;
 			case E_OP_GET_LAST_ERROR:
@@ -551,8 +570,14 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				break;
 			
 			case E_OP_RAND:
-				p = lp_read_stream(p, opAim, m_cmdByteOrder);
-				p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
+
+				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);
+				opAim = tmpInputVal.GetInt();
+				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);
+				index = tmpInputVal.GetInt();
+
+				//p = lp_read_stream(p, opAim, m_cmdByteOrder);
+				//p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
 
 				val = (operator_value_t)logic_rand(opAim, index);
 				m_registorFlag = true;
@@ -660,27 +685,10 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 					m_sys_errno = LOGIC_ERR_FILE_NOT_EXIST;
 				}
 				break;
-			case E_OP_DEL_TIMER:
-			{
-				//opAim = *((*(NDUINT32**)&p)++);
-				p = lp_read_stream(p, opAim, m_cmdByteOrder);
-
-				readlen = _read_string(p, name, sizeof(name));
-				if (readlen <= 0){
-					m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
-					break;
-				}
-
-				p += readlen;
-				m_registorFlag = _delTimer(opAim!=0 , name);
-			}
-				break;
 			case E_OP_EVENT_REMOVE:
 			case E_OP_EVENT_INSTALL:
 			{
-				//index = *((*(operator_index_t**)&p)++);
-				p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
-
+				p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);				
 				int readlne = _read_string(p, name, sizeof(name ));
 				if (readlne <= 0){
 					m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
@@ -700,21 +708,18 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				break;
 
 			case E_OP_SET_COUNT_REG:
-				readlen = _getValue(stack, p, tmpInputVal);
-				if (readlen > 0)	{
-					p += readlen;
-					m_registerCount = tmpInputVal.GetInt();
-					m_registorFlag = true;
-				}
-				else {
-					m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
-				}
+
+				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);
+				m_registerCount = tmpInputVal.GetInt();
+				m_registorFlag = true;
 				break;
 			
 			case E_OP_SET_LOOP_INDEX:
-				p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
-				m_registorFlag =true;
-				m_curStack->loopIndex = index;
+
+				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);
+				//p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
+				//m_registorFlag =true;
+				m_curStack->loopIndex = tmpInputVal.GetInt();
 				break;
 
 			case E_OP_PUSH_LOOP_INDEX:
@@ -747,15 +752,11 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				break;
 
 			case E_OP_GET_ARRAY_SIZE:
-				readlen = _getValue(stack, p, tmpInputVal);
-				if (readlen > 0)	{
-					p += readlen;
-					m_registorFlag = true;
-					m_registerVal.InitSet(tmpInputVal.GetArraySize());
-				}
-				else {
-					m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
-				}
+
+				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);
+				m_registorFlag = true;
+				m_registerVal.InitSet(tmpInputVal.GetArraySize());
+
 				break;
 				
 			case E_OP_MAKE_VAR:		//  make local variant	 name + DBLDataNode-stream
@@ -786,8 +787,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				//m_registerVal.InitSet(tmpIndexVal.)
 				m_registorFlag = _mathOperate((eMathOperate)opAim,tmpIndexVal,tmpInputVal) ;
 				break ;
-			case E_OP_ASSIGNIN:
-				
+			case E_OP_ASSIGNIN:				
 				GET_TEXT_FROM_STREAM(name, sizeof(name), p);
 				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);
 				m_registorFlag = _varAssignin(stack,name, tmpInputVal );
@@ -830,11 +830,6 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				if (readlen>0){
 					p += readlen;
 					m_registorFlag = true;
-// 					if (m_registerVal.CheckValid())	{						
-// 					}
-// 					else {
-// 						m_sys_errno = LOGIC_ERR_AIM_OBJECT_NOT_FOUND;
-// 					}
 				}
 				else {
 					m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
@@ -901,10 +896,26 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 			
 			case E_OP_ADD_TIMER:
 				BEGIN_GET_FUNC_ARGS(stack, p);
-				m_registorFlag =  _addTimer(args);
+				m_registorFlag = _addTimer(args);
 				END_GET_FUNC_ARGS();
 				break;
 
+			case E_OP_DEL_TIMER:
+				p = lp_read_stream(p, opAim, m_cmdByteOrder);
+
+				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);
+				/*
+				readlen = _read_string(p, name, sizeof(name));
+				if (readlen <= 0){
+					m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
+					break;
+				}
+
+				p += readlen;
+				*/
+				m_registorFlag = _delTimer(opAim != 0, tmpInputVal.GetText());
+
+			break;
 			case E_OP_SEND_EVENT:
 				BEGIN_GET_FUNC_ARGS(stack, p);
 				int eventID = args[0].GetInt();

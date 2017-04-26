@@ -138,6 +138,93 @@ DBL_ELEMENT_TYPE DBLDataNode::getTypeFromName(const char *typeName)
 	return OT_USER_DEFINED;
 }
 
+
+DBL_ELEMENT_TYPE DBLDataNode::getTypeFromValue(const char *valText)
+{
+	const char *p = ndstr_first_valid(valText);
+	if (!p)	{
+		return OT_INT;
+	}
+	if (ndstr_is_numerals(p) ){
+		if (ndstr_is_naturalnumber(p)){
+			return OT_INT;
+		}
+		return OT_FLOAT;
+	}
+
+	int subType = OT_STRING;
+	return (DBL_ELEMENT_TYPE)DBLDataNode::getCellType(p, subType);
+}
+
+
+int DBLDataNode::getCellType(const char *celltext, int &subType)
+{
+	bool isFloat = false;
+	//bool isArray2d = false;
+	subType = 0;
+	const char *p = ndstr_first_valid(celltext);
+	if (!p || *p == 0) {
+		return OT_OBJECT_VOID;
+	}
+
+	if (*p == _ARRAR_BEGIN_MARK) {
+		int left = 1, right = 0;
+		subType = OT_INT;
+		++p;
+		while (*p){
+			char a = *p++;
+			if (a == _ARRAR_BEGIN_MARK)	{
+				left++;
+			}
+			else if (a == _ARRAR_END_MARK)	{
+				right++;
+			}
+			else if (IS_NUMERALS(a) || a == ' ' || a == ',' || a == '.' || a == '-') {
+				if (a == '.') {
+					subType = NDMAX(OT_FLOAT, subType);
+				}
+			}
+			else {
+				subType = OT_STRING;
+			}
+		}
+		if (left > 1) {
+			subType = OT_STRING;
+		}
+		if (left != right) {
+			nd_logwarn("parse data error ( and ) not match: %s\n", celltext);
+		}
+		return OT_ARRAY;
+
+	}
+	else if (*p == '0' && p[1] && p[1] != '.') {
+		return OT_STRING;
+	}
+	else if (IS_NUMERALS(*p) || *p == '-') {
+		//check is number
+		int dotNum = 0;
+
+		while (*(++p)) {
+			if (IS_NUMERALS(*p) || *p == '.') {
+				if (*p == '.') {
+					dotNum++;
+					isFloat = true;
+					if (dotNum > 1)
+						return -1;
+				}
+				continue;
+			}
+			else {
+				return OT_STRING;
+			}
+		}
+		return isFloat ? OT_FLOAT : OT_INT;
+	}
+	else {
+		return OT_STRING;
+	}
+
+}
 static bool _check_array(const char *src);
 //////////////////////////////////////////////////////////////////////////
 DBLDataNode::DBLDataNode(dbl_element_base *data, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype) :
@@ -2485,7 +2572,7 @@ int _dbl_data_2binStream(dbl_element_base *indata, DBL_ELEMENT_TYPE etype, DBL_E
 			length = size;
 			_tryto_change_order_short(size, changeByteOrder);
 			_stream_func(&size, 1, sizeof(size), pf);
-			_stream_func(indata->str_val, 1, length, pf);
+			_stream_func(indata->str_val, 1, (int)length, pf);
 		}
 		break;
 
@@ -2502,7 +2589,7 @@ int _dbl_data_2binStream(dbl_element_base *indata, DBL_ELEMENT_TYPE etype, DBL_E
 			_tryto_change_order_short(size, changeByteOrder);
 
 			_stream_func(&size, 1, sizeof(size), pf);
-			_stream_func(indata->_bin->data, 1, length, pf);
+			_stream_func(indata->_bin->data, 1, (int)length, pf);
 		}
 		break;
 	case OT_ARRAY:
@@ -2522,7 +2609,7 @@ int _dbl_data_2binStream(dbl_element_base *indata, DBL_ELEMENT_TYPE etype, DBL_E
 					length = size;
 					_tryto_change_order_short(size, changeByteOrder);
 					_stream_func(&size, 1, sizeof(size), pf);
-					_stream_func(indata->_str_arr->data[i], 1, length, pf);
+					_stream_func(indata->_str_arr->data[i], 1, (int)length, pf);
 				}
 				else {
 					size = 0;
@@ -2531,7 +2618,7 @@ int _dbl_data_2binStream(dbl_element_base *indata, DBL_ELEMENT_TYPE etype, DBL_E
 			}
 		}
 		else if (sub_etype == OT_FLOAT) {
-			_stream_func(indata->_f_arr->data, 1, sizeof(float)*length, pf);
+			_stream_func(indata->_f_arr->data, 1, (int)(sizeof(float)*length), pf);
 		}
 		else if (sub_etype == OT_USER_DEFINED) {
 
@@ -2814,43 +2901,20 @@ int dbl_data_copy(const dbl_element_base *input, dbl_element_base *output, DBL_E
 		}
 		if (sub_etype == OT_INT) {
 			if (input->_i_arr->number) {
-				_int_array_init(input->_i_arr->data, input->_i_arr->number, output);
-// 				size_t size = sizeof(dbl_intarray) + (input->_i_arr->number - 1) * sizeof(int);
-// 				output->_data = malloc(size);
-// 				memcpy(output->_data, input->_data, size);
-// 				output->_i_arr->capacity = input->_i_arr->number;
+				_int_array_init(input->_i_arr->data, (int)input->_i_arr->number, output);
 			}
 		}
 		else if (sub_etype == OT_FLOAT) {
 			if (input->_f_arr->number) {
-				_float_array_init(input->_f_arr->data, input->_f_arr->number, output);
-// 				size_t size = sizeof(dbl_floatarray) + (input->_i_arr->number - 1) * sizeof(float);
-// 				output->_data = malloc(size);
-// 				memcpy(output->_data, input->_data, size);
-// 
-// 				output->_i_arr->capacity = input->_i_arr->number;
+				_float_array_init(input->_f_arr->data, (int)input->_f_arr->number, output);
 			}
 		}
 		else if (sub_etype == OT_STRING  ) {
-			_str_array_init((const char**)input->_str_arr->data, input->_str_arr->number, output);
+			_str_array_init((const char**)input->_str_arr->data, (int)input->_str_arr->number, output);
 		}
 		else if (sub_etype == OT_USER_DEFINED) {
-			_userDef_array_init((const LogicUserDefStruct **)input->_arr_user->data, input->_arr_user->number, output);
-// 			size_t mem_len = sizeof(dbl_userDefArray) + (input->_arr_user->capacity - 1) * sizeof(char*);
-// 			dbl_userDefArray *paddr = (dbl_userDefArray*)malloc(mem_len);
-// 			if (!paddr){
-// 				return false;
-// 			}
-// 			paddr->capacity = input->_arr_user->capacity;
-// 			//memset(paddr, 0, mem_len);
-// 
-// 			for (int i = 0; i < input->_arr_user->number; i++) {
-// 				if (input->_arr_user->data[i]) {
-// 					paddr->data[i] = new LogicUserDefStruct(*(input->_arr_user->data[i]) );
-// 					paddr->number++;
-// 				}				
-// 			}
-// 			output->_arr_user = paddr;
+			_userDef_array_init((const LogicUserDefStruct **)input->_arr_user->data, (int)input->_arr_user->number, output);
+
 		}
 
 		break;
