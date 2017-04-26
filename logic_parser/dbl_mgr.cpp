@@ -421,74 +421,6 @@ int DBLTable::GetCols()
 }
 
 
-int getCellType(const char *celltext, int &subType)
-{
-	bool isFloat = false ;
-	//bool isArray2d = false;
-	subType = 0 ;
-	const char *p = ndstr_first_valid(celltext);
-	if (!p || *p == 0) {
-		return OT_OBJECT_VOID;
-	}
-	
-	if (*p == _ARRAR_BEGIN_MARK) {
-		int left = 1, right = 0;
-		subType = OT_INT;
-		++p;
-		while (*p){
-			char a = *p++;
-			if (a == _ARRAR_BEGIN_MARK)	{
-				left++;
-			}
-			else if (a == _ARRAR_END_MARK)	{
-				right++;
-			}
-			else if (IS_NUMERALS(a) || a == ' ' || a == ',' || a == '.' || a == '-') {
-				if (a == '.') {
-					subType = NDMAX(OT_FLOAT, subType);
-				}
-			}
-			else {
-				subType = OT_STRING;
-			}
-		}
-		if (left > 1) {
-			subType = OT_STRING;
-		}
-		if (left != right) {
-			nd_logwarn("parse data error ( and ) not match: %s\n", celltext);
-		}
-		return OT_ARRAY;
-		
-	}
-	else if (*p=='0' && p[1] && p[1] != '.' ) {
-		return OT_STRING;
-	}
-	else if (IS_NUMERALS(*p) || *p == '-') {
-		//check is number
-		int dotNum = 0;
-
-		while (*(++p)) {
-			if (IS_NUMERALS(*p) || *p == '.' ) {
-				if (*p == '.') {
-					dotNum++;
-					isFloat = true;
-					if (dotNum > 1)
-						return -1;
-				}
-				continue;
-			}
-			else {
-				return OT_STRING;
-			}
-		}
-		return isFloat ? OT_FLOAT : OT_INT;
-	}
-	else {
-		return OT_STRING;
-	}
-
-}
 
 //scan file to get table info 
 int DBLTable::parseTableTypeInfo(FILE *pf, int encodeType)
@@ -560,7 +492,7 @@ int DBLTable::parseTableTypeInfo(FILE *pf, int encodeType)
 						continue;
 					}
 					int subType = OT_INT ;
-					int type = getCellType(record[i].c_str(), subType);
+					int type = DBLDataNode::getCellType(record[i].c_str(), subType);
 					if (OT_OBJECT_VOID == type) {
 						continue;
 					}

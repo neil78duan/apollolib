@@ -620,6 +620,10 @@ int LogicCompiler::subLoop2Stream(compile_setting *setting, ndxml *loopSteps, ch
 	//write index count
 	p = lp_write_stream(p, (NDUINT32)E_OP_SET_LOOP_INDEX, m_aimByteOrder);
 	len -= sizeof(NDUINT32);
+
+	p = lp_write_stream(p, (NDUINT16)OT_INT, m_aimByteOrder);
+	len -= sizeof(NDUINT32);
+
 	p = lp_write_stream(p, (NDUINT32)0, m_aimByteOrder);
 	len -= sizeof(NDUINT32);
 
@@ -1165,10 +1169,7 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 		_makeErrorStack(xmlParam);
 		return -1;
 	}
-
-	//const char *pValOrg = ndxml_getval(xmlParam);	
-	//const char *pVal = getRealValFromStr(pValOrg, tmpbuf, sizeof(tmpbuf));
-	
+		
 	if (type < OT_LAST_RET || type == OT_TIME)	{
 		if (0 == ndstricmp(pVal, "none") || 0 == ndstricmp(pVal, "null")) {
 			nd_logerror("%s string value not none or null\n", paramName);
@@ -1176,6 +1177,9 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 			_makeErrorStack(xmlParam);
 			return -1;
 		}
+	}
+	else if (type == OT_AUTO) {
+		type = DBLDataNode::getTypeFromValue(pVal);
 	}
 
 	if (paramSetting->need_type_stream){
