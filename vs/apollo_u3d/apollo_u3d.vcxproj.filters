@@ -240,6 +240,9 @@
     <ClInclude Include="..\..\plugin_u3d\apoFormula.h">
       <Filter>apollo</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\logic_parser\logic_debugger.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp">
@@ -475,6 +478,9 @@
     </ClCompile>
     <ClCompile Include="..\..\plugin_u3d\apoFormula.cpp">
       <Filter>apollo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\logic_debugger.cpp">
+      <Filter>apollo\logicParser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

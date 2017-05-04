@@ -4,6 +4,9 @@
 #include "nd_common/nd_common.h"
 #include "apoScript/apoEditorSetting.h"
 #include "logic_parser/logic_compile.h"
+#include "logic_parser/logic_debugger.h"
+
+#include "cli_common/dftCliMsgHandler.h"
 
 #include <string>
 
@@ -17,6 +20,16 @@
 
 class apoBaseExeNode;
 class apoUiMainEditor;
+
+
+class DeguggerScriptOwner :public  ClientMsgHandler::ApoConnectScriptOwner
+{
+public:
+	DeguggerScriptOwner();
+	virtual ~DeguggerScriptOwner();
+
+	bool getOtherObject(const char*objName, DBLDataNode &val);
+};
 
 namespace Ui {
 class MainWindow;
@@ -68,9 +81,16 @@ private slots:
 	void on_actionTest_triggered();
 	void on_actionCancel_scale_triggered();
 
+	void on_actionRunDebug_triggered();
+	void on_actionStepIn_triggered();
+	void on_actionContinue_triggered();
+	void on_actionStepOut_triggered();
+	void on_actionAttach_triggered();
+	void on_actionDeattch_triggered();
 
 	void onFunctionsTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 	void onFilesTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+
 
 
 protected:
@@ -83,7 +103,10 @@ protected:
 	bool showCommonDeatil(ndxml *xmldata);
 	void closeDetail();
 	bool runFunction(const char *binFile,const char *srcFile, int argc, const char* argv[]);
-	bool compileScript(const char *scriptFile,std::string &outFile, bool bWithRun=false);
+	bool compileScript(const char *scriptFile, std::string &outFile, bool bWithRun = false, bool bDebug=false);
+	bool StartDebug(const char *binFile, const char *srcFile, int argc, const char* argv[]);
+	void EndDebug(bool bSuccess);
+	bool Run(bool bIsDebug);
 
 	bool loadScriptFile(const char *scriptFile);
 	const char *getScriptSetting(ndxml *scriptXml, const char *settingName);
@@ -94,6 +117,11 @@ protected:
 	bool saveCurFile();
 	bool checkNeedSave();
 	void closeCurFile();
+
+	bool isDebugging() { return m_localDebugOwner != NULL; }
+
+	void onDebugStart();
+	void onDebugEnd();
 
 	//QWidget *getMainEditor();
 
@@ -120,6 +148,8 @@ private:
 	QString m_logText;
 	apoUiMainEditor *m_editorWindow;
 	apoEditorSetting &m_editorSetting;
+
+	DeguggerScriptOwner *m_localDebugOwner;
 };
 
 #endif // MAINWINDOW_H

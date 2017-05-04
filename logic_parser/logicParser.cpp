@@ -65,6 +65,7 @@ m_owner(NULL), m_cmdByteOrder(0)
 {
 	m_curStack = NULL;
 	m_ownerIsNew = false;
+	m_bStepMode = false;
 
 	m_dbg_cur_node_index = 0;
 	m_dbg_node[0]= 0;
@@ -80,6 +81,7 @@ m_owner(owner), m_cmdByteOrder(0)
 {
 	m_curStack = NULL;
 	m_ownerIsNew = false;
+	m_bStepMode = false;
 
 	m_dbg_cur_node_index = 0;
 	m_dbg_node[0] = 0;
@@ -150,7 +152,9 @@ bool LogicParserEngine::runScript(const char *scriptName, parse_arg_list_t &args
 			result = getValue() ;
 			return  true ;
 		}
-		nd_logerror("run %s script error %d: %s\n", scriptName, getErrno(),nd_error_desc(getErrno()));
+		else if (m_sys_errno != NDERR_WOULD_BLOCK) {
+			nd_logerror("run %s script error %d: %s\n", scriptName, getErrno(), nd_error_desc(getErrno()));
+		}
 		
 	}
 	else {
@@ -204,6 +208,36 @@ bool LogicParserEngine::eventNtf(int event_id, parse_arg_list_t &args)
 	return runScript(script_name, params, result);
 }
 
+
+bool LogicParserEngine::runStep()
+{
+	if (!isStepModeRunning()){
+		//m_sys_errno = NDERR_NOT_INIT;
+		m_sys_errno = 0;
+		return true;
+	}
+	parse_arg_list_t args;
+	onEvent(-1,args);
+	return true;
+}
+void LogicParserEngine::setStepMode(bool bStep )
+{
+	m_bStepMode = bStep;
+}
+bool LogicParserEngine::isStepModeRunning()
+{
+	if (m_bStepMode){
+		if (m_events.size() > 0){			
+			for (event_list_t::iterator it = m_events.begin(); it != m_events.end();) {
+				if (it->eventid == -1){
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
 LogicObjectBase *LogicParserEngine::getLogicObjectMgr(const char *objname)
 {
 	if (m_owner){
@@ -218,8 +252,7 @@ bool LogicParserEngine::_runCmdBuf(const char *moduleName ,const scriptCmdBuf *b
 	runningStack stack;
 
 	Reset();
-	stack.params = params;
-	
+	stack.params = params;	
 	stack.cur_point = buf->buf;
 	stack.cmd = buf;
 	if (moduleName && *moduleName){
@@ -228,10 +261,10 @@ bool LogicParserEngine::_runCmdBuf(const char *moduleName ,const scriptCmdBuf *b
 	else {
 		stack.curModuleName.clear();
 	}
-
-	runningStack *orgStack = m_curStack;
+	//runningStack *orgStack = m_curStack;
 	
-	ret = _runCmd(&stack);
+	ret = callScript(&stack);
+	//ret = _runCmd(&stack);
 
 	int funcError = m_sys_errno;
 	handleScriptGenEvent();
@@ -246,13 +279,13 @@ bool LogicParserEngine::_runCmdBuf(const char *moduleName ,const scriptCmdBuf *b
 			stack.affairHelper = NULL;
 		}		
 	}
-	else {		
+	else if (m_sys_errno != NDERR_WOULD_BLOCK) {		
 		if (stack.affairHelper)	{
 			delete stack.affairHelper;
 			stack.affairHelper = NULL;
 		}
 	}
-	m_curStack = orgStack;
+	//m_curStack = orgStack;
 	return ret == 0;
 }
 bool LogicParserEngine::_runCmdBuf(const char *moduleName,const scriptCmdBuf *buf, int param_num, ...)
@@ -303,50 +336,93 @@ bool LogicParserEngine::getFuncHeader(const scriptCmdBuf *cmd, char *buf, size_t
 }
 bool LogicParserEngine::runFunction(const char *moduleName ,const scriptCmdBuf *buf, parse_arg_list_t &args, DBLDataNode &result)
 {
-	bool ret = false;
+	//bool ret = false;
 	runningStack stack;
-	ResetStep();
-	runningStack *beforeCall = m_curStack;
+
 	stack.params = args;
 	stack.cur_point = buf->buf;
 	stack.cmd = ( scriptCmdBuf *) buf;
 	stack.curModuleName = moduleName;
 
-	//fetchModuleName(buf->cmdname, stack.curModuleName) ;
-
-	//bool orgExitFlag = m_OnErrorExit;
-	int orgCount = m_registerCount;
-
-	if (_runCmd(&stack) != -1) {
-		ret = true;
-		result = m_registerVal;
-
-
+	if (-1 == callScript(&stack)) {
+		return false;
 	}
-	if (stack.affairHelper)	{
-		if (ret ==false ) {
-			stack.affairHelper->Rollback();
-		}
-		delete stack.affairHelper;
-		stack.affairHelper = NULL;
-	}
+	return true;
 
-	//m_OnErrorExit = orgExitFlag;
-	m_curStack = beforeCall;
-	m_registerCount = orgCount ;
-	return ret ;
+// 	fetchModuleName(buf->cmdname, stack.curModuleName) ;
+// 	
+// 		//bool orgExitFlag = m_OnErrorExit;
+// 		int orgCount = m_registerCount;
+// 	
+// 		if (_runCmd(&stack) != -1) {
+// 			ret = true;
+// 			result = m_registerVal;
+// 	
+// 	
+// 		}
+// 		if (stack.affairHelper)	{
+// 			if (ret ==false ) {
+// 				stack.affairHelper->Rollback();
+// 			}
+// 			delete stack.affairHelper;
+// 			stack.affairHelper = NULL;
+// 		}
+// 	
+// 		//m_OnErrorExit = orgExitFlag;
+// 		//m_curStack = beforeCall;
+// 		m_registerCount = orgCount ;
+	//return ret ;
 }
 
 
-int LogicParserEngine::_runCmd(runningStack *stack)
+int LogicParserEngine::_reEntryScriptFunction(runningStack *stack)
+{
+	return _baseCallScript(stack);
+}
+
+int LogicParserEngine::callScript(runningStack *stack)
+{
+	if (m_curStack) {
+		m_curStack->curRegisterCount = m_registerCount; 
+		m_curStack->curRegisterCtrl = m_registorCtrl;
+	}
+	stack->curRegisterCount = m_registerCount;
+	stack->curRegisterCtrl = m_registorCtrl;
+
+	m_runningStacks.push_back(*stack);
+	CallingStack_list::reverse_iterator it = m_runningStacks.rbegin(); 
+	nd_assert(it != m_runningStacks.rend());
+
+
+	int ret = _baseCallScript(&(*it));
+
+	m_runningStacks.pop_back();
+	
+	if (m_runningStacks.size() > 0)	{
+		m_curStack = &(*(m_runningStacks.rbegin()));
+	}
+	else {
+		m_curStack = NULL;
+	}
+
+	m_registerCount = stack->curRegisterCount ;
+	m_registorCtrl = stack->curRegisterCtrl ;
+
+
+	
+	return ret;
+}
+
+//int LogicParserEngine::_runCmd(runningStack *stack)
+int LogicParserEngine::_baseCallScript(runningStack *stack)
 {
 	int readlen = 0;
 	char *p = (char *) stack->cur_point ;
 	NDUINT32 opCmd , opAim = 0 ;
-	bool isdebug_step = false;
+	//bool isdebug_step = false;
 	bool inException = false;
 	NDUINT32 cur_step_size = -1;
-	char *step_start = 0 ;
+	//char *step_start = 0 ;
 	const char *exception_addr = stack->exception_addr;
 	
 	operator_value_t val ;
@@ -361,6 +437,9 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 	m_curStack = stack; 
 	m_cmdByteOrder = stack->cmd->byteOrder;
 	m_sys_errno = 0;
+
+	m_registerCount = stack->curRegisterCount;
+	m_registorCtrl = stack->curRegisterCtrl;
 
 	for (size_t i = 0; i < LOGIC_ERR_NUMBER; i++){
 		if (m_curStack->skipErrors[i] != 0) {
@@ -427,11 +506,10 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 		GET_VAR_FROM_STREAM(stack, p, tmpInputVal);		\
 		objAim = getLogicObjectMgr(name);				\
 		if (objAim) {									\
-			m_registorCtrl = objAim->_opfunc(tmpIndexVal, tmpInputVal);	\
-			if(!m_registorCtrl) {						\
+			m_registorFlag = objAim->_opfunc(tmpIndexVal, tmpInputVal);	\
+			if(!m_registorFlag) {						\
 				m_sys_errno = objAim->getError();		\
 				nd_logdebug(#_opfunc" run on %s error code =%d\n",name, m_sys_errno ) ; \
-				if (!m_curStack->error_continue){m_registorFlag = false;}				\
 			}			\
 		}				\
 		else {			\
@@ -444,16 +522,13 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 		char name[128];
 		name[0] = 0;
 
-		isdebug_step = false;
+		//isdebug_step = false;
 		ResetStep() ;
 		//opCmd = *((*(NDUINT32**)&p)++) ;
 		p = lp_read_stream(p, opCmd, m_cmdByteOrder);
 		
 		switch (opCmd) {
 			case E_OP_EXIT:
-				//index = *((*(operator_index_t**)&p)++);
-				//p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
-
 				GET_VAR_FROM_STREAM(stack, p, tmpIndexVal);
 				m_registorFlag= (index==0) ? true: false ;
 				p = (char*) (stack->cmd->buf + stack->cmd->size);
@@ -463,7 +538,6 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 			{
 				NDUINT16 len;
 				p = lp_read_stream(p, len, m_cmdByteOrder);
-
 				if (0 == exception_addr) {
 					exception_addr = p;
 					stack->exception_addr = exception_addr ;
@@ -473,11 +547,8 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 			}
 				break;
 			case E_OP_THROW:
-				//p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
-
 				GET_VAR_FROM_STREAM(stack, p, tmpIndexVal);
 				index = tmpIndexVal.GetInt();
-
 				if (inException){
 					//already in exception
 					break;
@@ -498,11 +569,8 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				break;
 
 			case  E_OP_SET_ERROR:
-				//p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
-
 				GET_VAR_FROM_STREAM(stack, p, tmpIndexVal);
 				index = tmpIndexVal.GetInt();
-
 				m_registorFlag = false;
 				m_sys_errno = index;
 				break;
@@ -529,19 +597,26 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				break;
 
 			case E_OP_DEBUG_INFO:
-				isdebug_step = true;
+				//isdebug_step = true;
 				p = lp_read_stream(p, m_dbg_cur_node_index, m_cmdByteOrder);
 				GET_TEXT_FROM_STREAM(m_dbg_node, sizeof(m_dbg_node),p);
 				
 				p = lp_read_stream(p, cur_step_size, m_cmdByteOrder);
-				step_start = p;
+				//step_start = p;
 				CHECK_INSTRUCTION_OVER_FLOW();
-				apollo_script_printf("logic_script %s: %s %d\n", stack->cmd->cmdname, m_dbg_node, m_dbg_cur_node_index);				
+				//apollo_script_printf("logic_script %s: %s %d\n", stack->cmd->cmdname, m_dbg_node, m_dbg_cur_node_index);
+				m_registorFlag = true;
+				/*if (_checkInStep()) {
+					stack->cur_point = p;
+					_leaveStep(stack);
+					return -1;
+				}*/				
 				break;
 			case E_OP_FILE_INFO:
 				GET_TEXT_FROM_STREAM(m_dbg_fileInfo, sizeof(m_dbg_fileInfo), p);
 				CHECK_INSTRUCTION_OVER_FLOW();
-				apollo_script_printf("logic_script %s:read file info :\n", stack->cmd->cmdname, m_dbg_fileInfo);
+				m_registorFlag = true;
+				//apollo_script_printf("logic_script %s:read file info :\n", stack->cmd->cmdname, m_dbg_fileInfo);
 				break; 
 			case E_OP_HEADER_INFO:
 			{
@@ -568,21 +643,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 			case E_OP_BEGIN_AFFAIR:
 				m_registorFlag = _beginHelper();
 				break;
-			
-			case E_OP_RAND:
 
-				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);
-				opAim = tmpInputVal.GetInt();
-				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);
-				index = tmpInputVal.GetInt();
-
-				//p = lp_read_stream(p, opAim, m_cmdByteOrder);
-				//p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
-
-				val = (operator_value_t)logic_rand(opAim, index);
-				m_registorFlag = true;
-				m_registerVal.InitSet((int)val);
-				break;
 			case E_OP_SKIP_ERROR:
 				p = lp_read_stream(p, opAim, m_cmdByteOrder);
 				_pushSKipError(opAim);
@@ -594,12 +655,9 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				GET_VAR_FROM_STREAM(stack, p, tmpIndexVal);
 				objAim = getLogicObjectMgr(name);
 				if (objAim) {
-					m_registorCtrl = objAim->opRead(tmpIndexVal, m_registerVal);
-					if (!m_registorCtrl) {
+					m_registorFlag = objAim->opRead(tmpIndexVal, m_registerVal);
+					if (!m_registorFlag) {
 						m_sys_errno = objAim->getError();
-						if (!m_curStack->error_continue){
-							m_registorFlag = false;
-						}
 					}
 				}
 				else {
@@ -633,12 +691,9 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 				objAim = getLogicObjectMgr(name);
 
 				if (objAim) {
-					m_registorCtrl = objAim->opOperate(cmd_buf, tmpIndexVal, tmpInputVal);
-					if (!m_registorCtrl) {
+					m_registorFlag = objAim->opOperate(cmd_buf, tmpIndexVal, tmpInputVal);
+					if (!m_registorFlag) {
 						m_sys_errno = objAim->getError();
-						if (!m_curStack->error_continue){
-							m_registorFlag = false;
-						}
 					}
 					else {
 						m_registerVal = tmpInputVal;
@@ -718,7 +773,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 
 				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);
 				//p = lp_read_stream(p, (NDUINT32&)index, m_cmdByteOrder);
-				//m_registorFlag =true;
+				m_registorFlag =true;
 				m_curStack->loopIndex = tmpInputVal.GetInt();
 				break;
 
@@ -931,7 +986,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 					int eventID = args[0].GetInt();
 					args.erase(args.begin());
 					m_registorFlag = waitEvent(stack, eventID, args);
-					return 0;
+					return -1;
 				}
 				END_GET_FUNC_ARGS();
 				break;
@@ -959,6 +1014,7 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 
 			case E_OP_CALL_FUNC:			//  调用外部函数 string(function_name) + string1 + string2	
 				BEGIN_GET_FUNC_ARGS(stack, p);
+				stack->cur_point = p;
 				m_registorFlag = _callFunction(args);
 				END_GET_FUNC_ARGS();
 				break;
@@ -1057,26 +1113,29 @@ int LogicParserEngine::_runCmd(runningStack *stack)
 		stack->cur_point = p ;
 
 		//check step size 
-		if (isdebug_step == false){
-			if (cur_step_size != -1 && step_start)	{
-				NDUINT32 ss = (NDUINT32)(p - step_start);
-				if (cur_step_size != ss) {
-					apollo_script_printf("%s :run step errror %s node-index=%d compile-size=%d, parser-size=%d",
-						stack->cmd->cmdname, m_dbg_node, m_dbg_cur_node_index, cur_step_size, ss);
-				}
-				else {
-					apollo_script_printf("%s :cmd %d step %s node-index=%d size=%d %s\n",
-						stack->cmd->cmdname, opCmd, m_dbg_node, m_dbg_cur_node_index, cur_step_size,
-						m_registorFlag?"success":"failed");
-				}
-			}
-			cur_step_size = -1;
-			step_start = 0;
-		}
+// 		if (isdebug_step == false){
+// 			if (cur_step_size != -1 && step_start)	{
+// 				NDUINT32 ss = (NDUINT32)(p - step_start);
+// 				if (cur_step_size != ss) {
+// 					apollo_script_printf("%s :run step errror %s node-index=%d compile-size=%d, parser-size=%d",
+// 						stack->cmd->cmdname, m_dbg_node, m_dbg_cur_node_index, cur_step_size, ss);
+// 				}
+// 				else {
+// 					apollo_script_printf("%s :cmd %d step %s node-index=%d size=%d %s\n",
+// 						stack->cmd->cmdname, opCmd, m_dbg_node, m_dbg_cur_node_index, cur_step_size,
+// 						m_registorFlag?"success":"failed");
+// 				}
+// 			}
+// 			cur_step_size = -1;
+// 			step_start = 0;
+// 		}
 
 		
 		if (m_registorFlag==false ) {
-			if (m_simulate && _checkIsSkip(m_sys_errno)) {
+			if (m_sys_errno == NDERR_WOULD_BLOCK)	{
+				return -1;
+			}
+			else if (m_simulate && _checkIsSkip(m_sys_errno)) {
 				continue;
 			}
 			if (inException == true){
@@ -1621,19 +1680,29 @@ bool LogicParserEngine::waitEvent(runningStack *stack, int event, parse_arg_list
 {
 	StackWaitEventNode node ;
 	
-	node.stack = *stack ;
+	m_curStack->curRegisterCtrl = m_registorCtrl;
+	m_curStack->curRegisterCount = m_registerCount;
+
+	//node.stack = *stack ;
 	
-	node.stack.affairHelper = 0;
+	//node.stack.affairHelper = 0;
 	node.eventid = event ;	
 	node.event_params = params;	
 	node.preRegisterVal = m_registerVal;
-	node.preFlag = m_registorFlag ;
-	node.preCtrl = m_registorCtrl;
+	//node.preFlag = m_registorFlag ;
+	//node.preCtrl = m_registorCtrl;
 	//node.preOnErrorExit = m_OnErrorExit;
-	node.preRegCount = m_registerCount;
+	//node.preRegCount = m_registerCount;
 
+	node.stacks = m_runningStacks;
 	m_events.push_back(node) ;
 	setErrno(LOGIC_ERR_WOULD_BLOCK);
+
+	event_list_t::reverse_iterator  it = m_events.rbegin();
+	nd_assert(it != m_events.rend());
+
+	//m_curStack = &(it->stack);
+
 	return true ;
 }
 
@@ -1738,12 +1807,10 @@ bool LogicParserEngine::_mathOperate(eMathOperate op,const DBLDataNode &var1, co
 		}
 		case E_MATH_RAND:
 		{
-
-			float fv1 = var1.GetFloat();
-			float fv2 = var2.GetFloat();
-			float val = ((float)rand() / ((float)RAND_MAX) * (fv2 - fv1) + fv1);
+			int val = logic_rand(var1.GetInt(), var2.GetInt());
 			m_registerVal.InitSet(val);
 			break;
+
 		}
 		default:
 			m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
@@ -2004,6 +2071,9 @@ bool LogicParserEngine::handleScriptGenEvent()
 
 void LogicParserEngine::_pushSKipError(int err)
 {
+	if (err == NDERR_WOULD_BLOCK) {
+		return;
+	}
 	for (size_t i = 0; i < LOGIC_ERR_NUMBER; i++){
 		if (m_curStack->skipErrors[i] == 0 ) {
 			m_curStack->skipErrors[i] = err;
@@ -2023,6 +2093,9 @@ void LogicParserEngine::_pushSKipError(int err)
 bool LogicParserEngine::_checkIsSkip(int err)
 {
 	for (size_t i = 0; i < LOGIC_ERR_NUMBER; i++){
+		if (m_skipErrors[i]==0)	{
+			break;
+		}
 		if (m_skipErrors[i] == err) {
 			return true;
 		}
@@ -2043,8 +2116,7 @@ bool LogicParserEngine::_callFunction(parse_arg_list_t &func_args,const char *mo
 			apollo_logic_out_put("success \n");
 			m_registerVal.InitSet((const char*)buf);
 			ret = true;
-		}
-			
+		}	
 	}
 	return ret;
 }
@@ -2191,12 +2263,16 @@ bool LogicParserEngine::checkEventOk(int event, parse_arg_list_t &params, int wa
 
 int LogicParserEngine::_continueEvent(StackWaitEventNode *eventNode)
 {
-	m_registorCtrl = eventNode->preCtrl;
+	m_OnErrorExit = eventNode->preOnErrorExit;
 	m_registerVal = eventNode->preRegisterVal;
-	//m_OnErrorExit = eventNode->preOnErrorExit;
-	m_registorFlag = eventNode->preFlag;
-	m_registerCount = eventNode->preRegCount;
-	return _runCmd(&eventNode->stack);
+
+	for (CallingStack_list::reverse_iterator it = eventNode->stacks.rbegin(); it != eventNode->stacks.rend(); ++it) {
+		int ret = _reEntryScriptFunction(&(*it));
+		if (ret != 0){
+			return ret;
+		}
+	}
+	return 0;
 }
 
 //static __ndthread vm_cpu *__cur_vm = NULL;
@@ -2330,6 +2406,18 @@ const LogicUserDefStruct* LogicParserEngine::getUserDataType(const char *name) c
 	return it->second;
 }
 
+
+bool LogicParserEngine::_checkInStep()
+{
+	return m_bStepMode;
+}
+
+bool LogicParserEngine::_leaveStep(runningStack *stack)
+{
+	parse_arg_list_t args;
+	m_sys_errno = LOGIC_ERR_WOULD_BLOCK;
+	return waitEvent(stack, -1, args);
+}
 
 int logic_rand(NDUINT32 val1, NDUINT32 val2)
 {

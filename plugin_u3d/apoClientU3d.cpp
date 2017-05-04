@@ -98,6 +98,7 @@ static void myInitAccCreateInfo(account_base_info &acc, int accType, const char 
 
 }
 
+#ifndef WITHOUT_LOGIC_PARSER
 
 class ApoScriptOwner : public  ClientMsgHandler::ApoConnectScriptOwner
 {
@@ -165,6 +166,7 @@ private:
 };
 static ApoScriptOwner  __scriptObjOwner;
 
+#endif
 
 #define _SEND_AND_WAIT(_conn, _omsg, _rmsg_buf,_wait_maxid, _wait_minid,_sendflag) \
 	if(0!=ndSendAndWaitMessage(_conn,_omsg.GetMsgAddr(),_rmsg_buf,_wait_maxid, _wait_minid,_sendflag,WAITMSG_TIMEOUT) ) {	\
@@ -249,95 +251,30 @@ void ApoClient::setServerTime(time_t srvTime)
 	m_serverTm = srvTime;
 }
 
-// 
-// bool ApoClient::_moveFileToWritable(const char *infileName, const char*outFileName)
-// {
-// 	cocos2d::FileUtils *fileUtilInst = cocos2d::FileUtils::getInstance();
-// 	std::string mypath = fileUtilInst->fullPathForFilename(infileName);
-// 
-// 	cocos2d::Data data = fileUtilInst->getDataFromFile(mypath.c_str());
-// 	if (!data.isNull()) {
-// 
-// 		std::string outpath = _getWritableFile(outFileName);
-// 		FILE *pf = fopen(outpath.c_str(), "wb");
-// 		if (pf)	{
-// 			fwrite(data.getBytes(), 1, data.getSize(), pf);
-// 			fclose(pf);
-// 			return true;
-// 		}
-// 
-// 		nd_logerror("open file  %s error %s\n", infileName, nd_last_error()) ;
-// 	}
-// 	else {
-// 		nd_logerror("load file empty %s\n", infileName);
-// 
-// 	}
-// 	return false;
-// }
-// std::string ApoClient::_getWritableFile(const char *file)
-// {
-// 	std::string outpath = cocos2d::FileUtils::getInstance()->getWritablePath();
-// 	outpath += file;
-// 	return outpath;
-// }
+
 
 int ApoClient::Init()
 {
-	//char logfilePath[ND_FILE_PATH_SIZE] ;
 	
-// 	//get write path
-// 	m_path=cocos2d::FileUtils::getInstance()->getWritablePath();
-// 	nd_full_path(m_path.c_str(),APO_LOG_FILE_NAME, logfilePath, sizeof(logfilePath)) ;
-// 	nd_log_set_file( logfilePath ) ;
-// 
-// 	//move file to writable path 
-// #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-// 	_moveFileToWritable(APO_EXCEL_DATA_FILE_ORG, APO_EXCEL_DATA_FILE_TMP);
-// 	_moveFileToWritable(APO_SCRIPT_FILE_ORG, APO_SCRIPT_FILE_TMP);
-// #endif 
-// 	
-// 	
-// 	cocos2d::FileUtils *fileUtilInst = cocos2d::FileUtils::getInstance();
-// 	//load data
-// 	std::string mypath = fileUtilInst->fullPathForFilename(APO_EXCEL_DATA_FILE);
-// 	if (fileUtilInst->isFileExist(mypath.c_str())) {
-// 		if (DBLDatabase::get_Instant()->LoadBinStream(mypath.c_str())) {
-// 			cocos2d::log("load excel data error \n");
-// 		}
-// 	}
-// 	else {		
-// 		cocos2d::log("cehua_data file %s not exists. current working path is %s\n", mypath.c_str(), nd_getcwd());
-// 	}
-
+#ifndef WITHOUT_LOGIC_PARSER
 	//init message script handler
 	LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
 	nd_assert(scriptRoot);
 	
 	LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
 	parser.setOwner(&__scriptObjOwner);
-	scriptRoot->getGlobalParser().setSimulate(false);
-	
+	scriptRoot->getGlobalParser().setSimulate(false);	
 	scriptRoot->setPrint(apoPrintf, NULL);
-// 	
-// 	//load script 
-// 	mypath = cocos2d::FileUtils::getInstance()->fullPathForFilename(APO_SCRIPT_FILE);
-// 	if (0 != scriptRoot->LoadScript(mypath.c_str())){
-// 		cocos2d::log("load script error \n");
-// 	}
-// 	else {
-// 		//install script-export-c function
-// 		scriptRoot->installFunc(apollo_load_file_data_cocos, "apollo_load_file_data", "读取整个文件(filename)");
-// 	}
 
-	ndInitNet();
-	
+	ndInitNet();	
 	m_pconn = nd_object_create("tcp-connector");
-	//m_pconn = CreateConnectorObj(NULL);
-	//m_pconn->SetUserData(&parser) ;
-	__scriptObjOwner.setConn(m_pconn);
-	
+	__scriptObjOwner.setConn(m_pconn);	
 	parser.eventNtf(APOLLO_EVENT_SERVER_START, 0); //program start up
-	
+#else 
+	ndInitNet();
+	m_pconn = nd_object_create("tcp-connector");
+#endif 
+
 	//onInit();
 
 	return 0;
@@ -347,6 +284,9 @@ DBLDatabase *ApoClient::getExcelDatabase()
 {
 	return DBLDatabase::get_Instant();
 }
+
+#ifndef WITHOUT_LOGIC_PARSER
+
 LogicParserEngine *ApoClient::getScriptParser()
 {
 	return &(LogicEngineRoot::get_Instant()->getGlobalParser());
@@ -355,6 +295,7 @@ LogicEngineRoot *ApoClient::getScriptRoot()
 {
 	return LogicEngineRoot::get_Instant();
 }
+#endif 
 
 
 
@@ -385,11 +326,12 @@ RESULT_T ApoClient::Open(const char *host, int port, const char *dev_udid)
 		nd_connector_set_crypt(m_pconn, NULL, 0);
 	}
 	if (!host || !*host){
+		nd_logerror("connect to host error, input host name is NULL\n");
 		return NDSYS_ERR_INVALID_INPUT;
 	}
 	m_host = host;
 	m_port = port;
-	m_udid = (dev_udid && *dev_udid) ? dev_udid: "unknow-udid-for-unity" ;
+	m_udid = (dev_udid && *dev_udid) ? dev_udid: "unknown-udid-for-unity" ;
 	
 	return ESERVER_ERR_SUCCESS ;
 	
@@ -397,6 +339,11 @@ RESULT_T ApoClient::Open(const char *host, int port, const char *dev_udid)
 
 RESULT_T ApoClient::_connectHost(const char *host, int port)
 {
+
+	if (!host || !*host){
+		nd_logerror("connect to host error, input host name is NULL\n");
+		return NDSYS_ERR_INVALID_INPUT;
+	}
 	
 	CHECK_CONN_VALID(m_pconn) ;
 	
@@ -431,7 +378,13 @@ RESULT_T ApoClient::_connectHost(const char *host, int port)
 
 RESULT_T ApoClient::CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email)
 {
-	// in login 
+
+	if (!userName || !*userName){
+		nd_logerror("create account error, input account name is NULL\n");
+		return NDSYS_ERR_INVALID_INPUT;
+	}
+
+	// in login
 	if (IsLoginOk()){
 		return NDSYS_ERR_ALREADY_LOGIN;
 	}
@@ -443,8 +396,12 @@ RESULT_T ApoClient::CreateAccount(const char *userName, const char *passwd, cons
 
 	m_runningUpdate = ERUN_UP_STOP;
 	myInitAccCreateInfo(acc, ACC_APOLLO, userName, passwd);
-	strncpy((char*)acc.email, email, sizeof(acc.email));
-	strncpy((char*)acc.phone, phone, sizeof(acc.phone));
+	if (email && *email)	{
+		strncpy((char*)acc.email, email, sizeof(acc.email));
+	}
+	if (phone && *phone)	{
+		strncpy((char*)acc.phone, phone, sizeof(acc.phone));
+	}
 
 	int ret = m_login->CreateAccount(&acc);
 	if (-1 == ret) {
@@ -641,7 +598,7 @@ RESULT_T ApoClient::createRole(const char *roleName)
 RESULT_T ApoClient::testOneKeyLogin(const char *host, int port, const char *user, const char *passwd)
 {
 	RESULT_T res ;
-	res = Open(host, port, "unknow-device") ;
+	res = Open(host, port, "unknown-device") ;
 	
 	if(res) {
 		return res ;
@@ -660,6 +617,10 @@ RESULT_T ApoClient::testOneKeyLogin(const char *host, int port, const char *user
 
 void ApoClient::Logout()
 {
+	if (!m_login)	{
+		nd_logerror("you are not login\n");
+		return;
+	}
 	m_login->Logout();
 	//m_pconn->Close(0);
 	nd_connector_close(m_pconn, 0);

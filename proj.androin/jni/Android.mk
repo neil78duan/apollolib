@@ -87,8 +87,8 @@ LOCAL_SRC_FILES := ../../../ndsdk/src/nd_common/src/bintree.c \
 ../../plugin_u3d/apoFormula.cpp	\
 
 
-LOCAL_CFLAGS := -D__ND_ADNROID__
-LOCAL_CPPFLAGS := -D__ND_ANDROID__
+LOCAL_CFLAGS := -D__ND_ADNROID__ -DWITHOUT_LOGIC_PARSER
+LOCAL_CPPFLAGS := -D__ND_ANDROID__  -DWITHOUT_LOGIC_PARSER
 
 ifeq ($(apo_debug),1)
 	LOCAL_CFLAGS += --debug  -DND_DEBUG -DDEBUG

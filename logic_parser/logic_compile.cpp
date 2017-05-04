@@ -523,6 +523,21 @@ int LogicCompiler::func2Stream(ndxml *funcNode, char *buf, size_t bufsize)
 	return  (int)(p - buf);
 }
 
+#define _FILL_DEBUG_INFO(_xmlStep, _stepName, _stream, _size)	\
+if (m_bDebugInfo) {		\
+	int ret = writeDebugInfo(_xmlStep, _stepName, _stream, _size);\
+	if (ret > 0){		\
+		_size -= ret;	\
+		_stream += ret;	\
+		_stream = lp_write_stream(_stream, (NDUINT32)0xffffffff, m_aimByteOrder);	\
+		_size -= sizeof(NDUINT32);	\
+	}					\
+	else {				\
+		return -1;		\
+	}					\
+}
+
+
 int LogicCompiler::subEntry2Stream(compile_setting *stepSetting, ndxml *subEntryNode, char *buf, size_t bufsize)
 {
 	char *p = buf;
@@ -531,6 +546,8 @@ int LogicCompiler::subEntry2Stream(compile_setting *stepSetting, ndxml *subEntry
 	
 	shortJumpAddr_vct jumpLeave;
 	//void LogicCompiler::_pushReFillJumpAddr(char *addr, shortJumpAddr_vct *jumpAddrList);
+
+	_FILL_DEBUG_INFO(subEntryNode, "op_bool", p, size);
 
 	for (int i = 0; i < ndxml_getsub_num(subEntryNode); i++) {
 		int no_comp = 0;
@@ -558,6 +575,7 @@ int LogicCompiler::subEntry2Stream(compile_setting *stepSetting, ndxml *subEntry
 
 		//insert jump to current lock end size cmd
 		if (cmp_instruct){
+
 			//test false and jump next block
 			p = lp_write_stream(p, (NDUINT32)E_OP_TEST_FALSE_SHORT_JUMP, m_aimByteOrder);
 
@@ -595,8 +613,7 @@ int LogicCompiler::subLoop2Stream(compile_setting *setting, ndxml *loopSteps, ch
 	int ret = 0;
 	char *p = buf;
 	int len = (int)bufsize;
-
-
+	
 	const char *pCompCondName = ndxml_getattr_val(loopSteps, "comp_cond");
 	if (!pCompCondName)	{
 		nd_logerror("loop need loop times setting\n");
@@ -612,6 +629,23 @@ int LogicCompiler::subLoop2Stream(compile_setting *setting, ndxml *loopSteps, ch
 		_makeErrorStack(loopSteps);
 		return -1;
 	}
+
+	_FILL_DEBUG_INFO(loopSteps, "op_loop", p, len);
+
+// 	if (m_bDebugInfo) {
+// 		int ret = writeDebugInfo(loopSteps, "op_bool", p, len);
+// 		if (ret > 0){
+// 			len -= ret;
+// 			p += ret;
+// 			p = lp_write_stream(p, (NDUINT32)0xffffffff, m_aimByteOrder);
+// 			len -= sizeof(NDUINT32);
+// 		}
+// 		else {
+// 			return -1;
+// 		}
+// 	}
+
+
 	//write save count-register 
 	p = lp_write_stream(p, (NDUINT32)E_OP_PUSH_LOOP_INDEX, m_aimByteOrder);
 	len -= sizeof(NDUINT32);
@@ -768,6 +802,7 @@ int LogicCompiler::blockSteps2Stream(ndxml *blockNode, char *buf, size_t bufsize
 {
 	shortJumpAddr_vct  jumpAddrBack = m_reFillJumpStepSize;
 	m_reFillJumpStepSize.clear();
+
 	int ret = stepsCollect2Stream(blockNode, buf,bufsize);
 	if (-1==ret){
 		return ret;
@@ -824,6 +859,8 @@ int LogicCompiler::stepsCollect2Stream(ndxml *stepsCollection, char *buf, size_t
 			ret = stepsCollect2Stream (xmlStep, p, len);
 		}
 		else if (it->second.ins_type == E_INSTRUCT_TYPE_STEP_BLOCK) {
+
+			_FILL_DEBUG_INFO(xmlStep, "block", p, len);
 			ret = blockSteps2Stream(xmlStep, p, len);
 		}
 		else if (it->second.ins_type == E_INSTRUCT_TYPE_SUB_ENTRY) 	{
@@ -916,7 +953,7 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 {
 	char *p = buf;
 	int len = (int)bufsize;
-	lp_stream_t cur_step_size = 0; //record this step size in debug block 
+	//lp_stream_t cur_step_size = 0; //record this step size in debug block 
 
 
 	//get current step name 
@@ -931,25 +968,27 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 		}
 	}
 	m_cur_step = pStepName;
+	_FILL_DEBUG_INFO(stepNode, pStepName, p, len)
 
-	if (m_bDebugInfo) {
-		int ret = writeDebugInfo(stepNode, pStepName, p, len);
-		if (ret > 0){
-			len -= ret;
-			p += ret;
-			cur_step_size = p;
-			//*((*(NDUINT32**)&p)++) = 0;
-			p = lp_write_stream(p, (NDUINT32)0, m_aimByteOrder);
-
-			len -= sizeof(NDUINT32);
-
-		}
-		else {
-			nd_logerror("wirte debug info error :%s\n", pStepName);
-			_makeErrorStack(stepNode);
-			return -1;
-		}
-	}
+// 
+// 	if (m_bDebugInfo) {
+// 		int ret = writeDebugInfo(stepNode, pStepName, p, len);
+// 		if (ret > 0){
+// 			len -= ret;
+// 			p += ret;
+// 			//cur_step_size = p;
+// 			//*((*(NDUINT32**)&p)++) = 0;
+// 			p = lp_write_stream(p, (NDUINT32)0xffffffff, m_aimByteOrder);
+// 
+// 			len -= sizeof(NDUINT32);
+// 
+// 		}
+// 		else {
+// 			nd_logerror("wirte debug info error :%s\n", pStepName);
+// 			_makeErrorStack(stepNode);
+// 			return -1;
+// 		}
+// 	}
 
 	//*((*(NDUINT32**)&p)++) = (NDUINT32)stepSetting->ins_id;
 	p = lp_write_stream(p, (NDUINT32)stepSetting->ins_id, m_aimByteOrder);
@@ -1005,10 +1044,10 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 	}
 
 
-	if (cur_step_size) {
-		//*cur_step_size = (NDUINT32)(p - (char*)cur_step_size) - 4;
-		lp_write_stream((lp_stream_t)cur_step_size , (NDUINT32)((p - (char*)cur_step_size) - 4), m_aimByteOrder);
-	}
+// 	if (cur_step_size) {
+// 		//*cur_step_size = (NDUINT32)(p - (char*)cur_step_size) - 4;
+// 		lp_write_stream((lp_stream_t)cur_step_size , (NDUINT32)((p - (char*)cur_step_size) - 4), m_aimByteOrder);
+// 	}
 
 	//add jump 
 	if (xlmLabel) {

@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>400</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHello_world">
@@ -49,8 +49,22 @@
     <addaction name="actionDetail"/>
     <addaction name="actionCancel_scale"/>
    </widget>
+   <widget class="QMenu" name="menuDebug">
+    <property name="title">
+     <string>Debug</string>
+    </property>
+    <addaction name="actionRunDebug"/>
+    <addaction name="actionStepOver"/>
+    <addaction name="actionStepIn"/>
+    <addaction name="actionStepOut"/>
+    <addaction name="actionContinue"/>
+    <addaction name="separator"/>
+    <addaction name="actionAttach"/>
+    <addaction name="actionDeattch"/>
+   </widget>
    <addaction name="menuHello_world"/>
    <addaction name="menuWindows"/>
+   <addaction name="menuDebug"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionFileNew">
@@ -104,9 +118,6 @@
    <property name="toolTip">
     <string>View output window</string>
    </property>
-   <property name="shortcut">
-    <string>F5</string>
-   </property>
   </action>
   <action name="actionFunctionView">
    <property name="text">
@@ -144,9 +155,6 @@
    <property name="text">
     <string>CompileThis</string>
    </property>
-   <property name="shortcut">
-    <string>F7</string>
-   </property>
   </action>
   <action name="actionCompileAll">
    <property name="text">
@@ -159,9 +167,6 @@
   <action name="actionClearLog">
    <property name="text">
     <string>ClearLog</string>
-   </property>
-   <property name="shortcut">
-    <string>F6</string>
    </property>
   </action>
   <action name="actionRun">
@@ -186,6 +191,56 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="actionRunDebug">
+   <property name="text">
+    <string>RunDebug</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+  </action>
+  <action name="actionStepIn">
+   <property name="text">
+    <string>StepIn</string>
+   </property>
+   <property name="shortcut">
+    <string>F7</string>
+   </property>
+  </action>
+  <action name="actionStepOver">
+   <property name="text">
+    <string>StepOver</string>
+   </property>
+   <property name="shortcut">
+    <string>F6</string>
+   </property>
+  </action>
+  <action name="actionContinue">
+   <property name="text">
+    <string>Continue</string>
+   </property>
+   <property name="shortcut">
+    <string>F9</string>
+   </property>
+  </action>
+  <action name="actionStepOut">
+   <property name="text">
+    <string>StepOut</string>
+   </property>
+   <property name="shortcut">
+    <string>F8</string>
+   </property>
+  </action>
+  <action name="actionAttach">
+   <property name="text">
+    <string>Attach</string>
+   </property>
+  </action>
+  <action name="actionDeattch">
+   <property name="text">
+    <string>Deattch</string>
    </property>
   </action>
  </widget>

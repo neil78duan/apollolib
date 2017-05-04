@@ -7,6 +7,7 @@
  */
 
 #include "logic_parser/logicEndian.h"
+#include "logic_parser/logicStruct.hpp"
 #include "logic_parser/logicEngineRoot.h"
 #include <stdarg.h>
 #include "nd_net/byte_order.h"
@@ -15,9 +16,9 @@
 //bool apollo_log(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 //bool apollo_printf(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 
-//LogicEngineRoot *LogicEngineRoot::s_root= NULL;
 
-LogicEngineRoot::cpp_func_map LogicEngineRoot::m_c_funcs;
+cpp_func_map* LogicEngineRoot:: m_c_funcs = NULL;
+
 LogicEngineRoot *LogicEngineRoot::get_Instant()
 {
 	return NDSingleton<LogicEngineRoot>::Get();
@@ -28,12 +29,15 @@ void LogicEngineRoot::destroy_Instant()
 	NDSingleton<LogicEngineRoot>::Destroy();
 }
 
-LogicEngineRoot::LogicEngineRoot()
+LogicEngineRoot::LogicEngineRoot() : m_globalDebugger(&m_globalParser,NULL)
 {
 	m_screen_out_func = 0;
 	m_print_file = 0;
 	m_scriptEncodeType = E_SRC_CODE_ANSI;
 	m_displayEncodeType = ND_ENCODE_TYPE;
+	if (!m_c_funcs)	{
+		m_c_funcs = new cpp_func_map;
+	}
 }
 
 LogicEngineRoot::~LogicEngineRoot()
@@ -295,8 +299,8 @@ logicParser_func LogicEngineRoot::getCPPFunc(const char *funcName) const
 	}
 	
 	//find in c-function-list
-	cpp_func_map::const_iterator it =  m_c_funcs.find(realName);
-	if (it!=m_c_funcs.end()) {
+	cpp_func_map::const_iterator it =  m_c_funcs->find(realName);
+	if (it!=m_c_funcs->end()) {
 		
 		return it->second.func;
 	}
@@ -321,13 +325,17 @@ void LogicEngineRoot::installFunc(logicParser_func func, const char *name, const
 	node.comment = comment;
 	node.func = func;
 	
+	if (!m_c_funcs){
+		m_c_funcs = new cpp_func_map;
+	}
 	if (strncmp(name, "CPP.", 4)!=0) {
 		std::string realName = "CPP." ;
 		realName += name ;
-		m_c_funcs[realName] = node;
+		(*m_c_funcs)[realName] = node;
 	}
+
 	else {
-		m_c_funcs[std::string(name)] = node;
+		(*m_c_funcs)[std::string(name)] = node;
 	}
 }
 
@@ -402,7 +410,7 @@ int LogicEngineRoot::dumbCPPfunc(const char *outXmlfile)
 	if (!xml_funcs)	{
 		return -1;
 	}
-	for (cpp_func_map::iterator it = m_c_funcs.begin(); it != m_c_funcs.end(); it++) {
+	for (cpp_func_map::iterator it = m_c_funcs->begin(); it != m_c_funcs->end(); it++) {
 
 		ndxml *xmlsub = ndxml_addnode(xml_funcs, "node", it->first.c_str());
 		if (xmlsub)	{

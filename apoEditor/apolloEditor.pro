@@ -122,7 +122,8 @@ SOURCES += \
     $$apolib_dir/logic_parser/dbl_mgr.cpp \
     $$apolib_dir/logic_parser/logic_function.cpp \
     $$apolib_dir/logic_parser/dbldata2netstream.cpp \
-    $$apolib_dir/logic_parser/logicStruct.cpp
+    $$apolib_dir/logic_parser/logicStruct.cpp \
+    $$apolib_dir/logic_parser/logic_debugger.cpp
 
 HEADERS  += $$apolib_dir/logic_parser/dbl_mgr.h \
     $$apolib_dir/logic_parser/logicDataType.h \
@@ -133,7 +134,8 @@ HEADERS  += $$apolib_dir/logic_parser/dbl_mgr.h \
     $$apolib_dir/logic_parser/objectBaseMgr.h \
     $$apolib_dir/logic_parser/logic_function.h \
     $$apolib_dir/logic_parser/dbldata2netstream.h \
-    $$apolib_dir/logic_parser/logicStruct.hpp
+    $$apolib_dir/logic_parser/logicStruct.hpp\
+    $$apolib_dir/logic_parser/logic_debugger.h
 
 #cli-common
 SOURCES += \

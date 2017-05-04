@@ -80,8 +80,8 @@
 	<!-- list instruction="1" ins_id="19" size="0" >op_save_register</list>	
 	<list instruction="1" ins_id="18" size="0" >op_set_result</list -->
 	<list instruction="1" ins_id="21" size="0" record_param_num="1">op_print</list>	
-	<list instruction="1" ins_id="22" size="0" record_param_num="1">op_log</list>	
-	<list instruction="1" ins_id="23" size="12" >op_rand</list>	
+	<list instruction="1" ins_id="22" size="0" record_param_num="1">op_log</list>
+	<list instruction="1" ins_id="23" size="8" >op_set_error</list>
 	<list instruction="1" ins_id="24" size="0" >op_set_count_register</list>
 	<list instruction="1" ins_id="26" size="0" record_param_num="1">op_sendevent</list>
 	<list instruction="1" ins_id="27" size="4" >op_get_time</list>
@@ -112,7 +112,6 @@
 	<list instruction="1" ins_id="54" size="4" >op_global_var</list>
 	<list instruction="1" ins_id="57" size="4" >op_check_user_error</list>
 	<list instruction="1" ins_id="58" size="4" >op_clear_error</list>
-	<list instruction="1" ins_id="59" size="8" >op_set_error</list>
 	
 	<!-- list instruction="1" ins_id="24" size="0" >op_set_loops</list>	
 	<list instruction="1" ins_id="25" size="0" >op_count_jump</list -->	
@@ -437,24 +436,6 @@
 			<comment name="功能说明" rw_stat="read">player_commit_rollback()</comment>
 		</op_commit_affair>
 	</create_step_commit_affair>
-	
-		
-	<create_step_rand name="范围随机数" create_type="1" expand="yes" >
-		<op_rand name="节点_生成随机数" expand="yes" create_label="create_internal_label">
-			<comment name="功能说明" rw_stat="read">rand(low_limit,hight_limit)</comment>
-			
-			<param_collect name="下限" expand="yes" expand_stat="1" delete="no">
-				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="索引值" kinds="string" delete="no" restrict="type">0</var>
-			</param_collect>
-			
-			<param_collect name="上限" expand="yes" expand_stat="1" delete="no">
-				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="索引值" kinds="string" delete="no" restrict="type">100</var>
-			</param_collect>
-			
-		</op_rand>
-	</create_step_rand>
 	
 	<create_step_read name="对象读取节点" create_type="1" expand="yes" >
 		<op_read name="节点_读取_$name$" expand="yes" create_label="create_internal_label">
@@ -1152,7 +1133,6 @@
 		
 		<list>create_step_print</list>
 		<list>create_step_log</list>
-		<list>create_step_rand</list>
 		<list>create_step_get_time</list>
 		<list>create_step_changed_time</list>
 		<list>create_step_time_function</list>

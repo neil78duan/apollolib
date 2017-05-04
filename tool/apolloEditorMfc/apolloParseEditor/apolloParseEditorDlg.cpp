@@ -594,7 +594,8 @@ bool CapolloParseEditorDlg::expExcel()
 		std::string strWinPack = package_file;
 		strWinPack += ".gbk";
 
-		
+		ndstr_set_code(E_SRC_CODE_GBK);
+
 		DBLDatabase dbwin;
 		if (0 != dbwin.LoadFromText(text_path, excel_list, encodeName, "gbk")) {
 			nd_logerror("打包数据错误:不能从txt文件中读取数据\n");
@@ -606,6 +607,7 @@ bool CapolloParseEditorDlg::expExcel()
 		}
 		dbwin.Destroy();
 		
+
 		//for test
 		DBLDatabase *pdbl = DBLDatabase::get_Instant();
 		nd_assert(pdbl);
@@ -630,6 +632,7 @@ bool CapolloParseEditorDlg::expExcel()
 
 	} while (0);
 	
+	ndstr_set_code(nd_get_encode_val(encodeName));
 
 	DBLDatabase dbtmp;
 	if (0 != dbtmp.LoadFromText(text_path, excel_list, encodeName, encodeName)) {

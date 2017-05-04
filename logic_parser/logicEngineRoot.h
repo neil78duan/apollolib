@@ -11,7 +11,7 @@
 
 #include "logic_parser/logicParser.h"
 #include "logic_parser/logic_function.h"
-
+#include "logic_parser/logic_debugger.h"
 
 #define  DEFAULT_LOAD_INITILIZER_FUNC "_module_init_entry" 
 #define GLOBAL_MODULE_NAME "_global"
@@ -26,6 +26,9 @@ struct func_cpp_info
 	std::string comment;
 	logicParser_func func;
 };
+
+
+typedef std::map<std::string, func_cpp_info> cpp_func_map;
 
 class LogicEngineRoot
 {
@@ -70,6 +73,8 @@ public:
 	LogicParserEngine &getGlobalParser() {
 		return m_globalParser;
 	}
+	LocalDebugger &getGlobalDebugger() { return  m_globalDebugger; }
+
 	const char *getDftScriptModule() const {return m_dftScriptModule.c_str();}
 	void setDftScriptModule(const char *script) ;
 
@@ -88,7 +93,6 @@ private:
 	typedef std::map<std::string, scriptCmdBuf*> script_func_map;	
 	typedef std::map<std::string, script_func_map*>script_module_map;
 	typedef std::map<std::string, time_t>module_changed_tm_map;
-	typedef std::map<std::string, func_cpp_info> cpp_func_map;
 	typedef std::map<int, std::string> event_table_map;
 
 	int unloadScript();
@@ -102,11 +106,12 @@ private:
 	//time_t m_compileTm;
 	//script_func_map m_scripts;
 	script_module_map m_modules;
-	static cpp_func_map m_c_funcs;
+	static cpp_func_map *m_c_funcs;
 	event_table_map m_event_entry;
 	module_changed_tm_map m_moduleChangedTime;
 
 	LogicParserEngine m_globalParser;
+	LocalDebugger m_globalDebugger;
 	std::string m_dftScriptModule ; //default run script module if undefine module
 
 	LogicData_vct m_global_vars; 
@@ -171,6 +176,17 @@ struct logicFuncInstallHelper
 
 };
 
+#ifdef WITHOUT_LOGIC_PARSER
+
+#define APOLLO_SCRIPT_API_DEF(_FUNC_NAME, _COMMENT) \
+bool _FUNC_NAME(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+
+
+#define APOLLO_SCRIPT_API_DEF_GLOBAL(_FUNC_NAME, _COMMENT) \
+bool _FUNC_NAME(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+
+#else 
+
 #define APOLLO_SCRIPT_API_DEF(_FUNC_NAME, _COMMENT) \
 static bool _FUNC_NAME(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result) ;		\
 static logicFuncInstallHelper __s_installer_helper##_FUNC_NAME(_FUNC_NAME,#_FUNC_NAME, _COMMENT) ;	\
@@ -181,6 +197,8 @@ bool _FUNC_NAME(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &r
 bool _FUNC_NAME(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result) ;		\
 static logicFuncInstallHelper __s_installer_helper##_FUNC_NAME(_FUNC_NAME,#_FUNC_NAME, _COMMENT) ;	\
 bool _FUNC_NAME(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
+
+#endif 
 
 
 #endif 

@@ -80,7 +80,7 @@ enum eParserOperator{
 	E_OP_DEBUG_INFO,	// the following info is debug (int16-nodeindex, string node name)
 	E_OP_OUT_PUT ,		// out put var info 
 	E_OP_LOG,		// out put var info 
-	E_OP_RAND,		// GET RANDOM [MIN, MAX] 
+	E_OP_SET_ERROR,		//set error
 	E_OP_SET_COUNT_REG, //SET COUNT REGISTER
 	E_OP_TEST_COUNT_JUMP , //JUMP until count register is zero
 	E_OP_SEND_EVENT,	//  eParserEventId + int(argc) + operator_value_t[...]
@@ -116,7 +116,7 @@ enum eParserOperator{
 	E_OP_POP_LOOP_INDEX,
 	E_OP_CHECK_IN_USER_ERROR,	//check current error is on ,and error is userdef
 	E_OP_CLEAR_ERROR_CODE,	//CLEAR error
-	E_OP_SET_ERROR ,		//set error
+	
 
 
 };
@@ -222,20 +222,18 @@ struct runningStack
 {
 	runningStack() :cmd(0), cur_point(0),  exception_addr(0)
 	{
-		//dbg_cur_node_index = (0),
-		//dbg_node[0] = 0;
-		//dbg_fileInfo[0] = 0;
 		affairHelper = 0;
 		for (int i = 0; i < LOGIC_ERR_NUMBER; i++)	{
 			skipErrors[i] = 0;
 		}
 		skipErrors[0] = LOGIC_ERR_AIM_OBJECT_NOT_FOUND;
 		skipErrors[1] = LOGIC_ERR_FUNCTION_NOT_FOUND;
-		//skipErrors[2] = LOGIC_ERR_VARIANT_NOT_EXIST;
-		//skipErrors[3] = LOGIC_ERR_VARIANT_NOT_EXIST;
 		loopIndex = 0;
 		error_continue = false;
+		curRegisterCtrl = false;
+		curRegisterCount = 0;
 	}
+	bool curRegisterCtrl;
 	bool error_continue;
 	const scriptCmdBuf *cmd ;
 	const char *cur_point ;
@@ -251,13 +249,17 @@ struct runningStack
 	std::string workingPath;		//the host work direct
 
 	int loopIndex;
+	int curRegisterCount;
+	 
 	int skipErrors[LOGIC_ERR_NUMBER];
 };
+
+typedef std::list<runningStack>CallingStack_list;
 
 //script wait event and continue run
 struct StackWaitEventNode
 {
-	StackWaitEventNode() :  eventid(0), preFlag(false)
+	StackWaitEventNode() :  eventid(0)//, preFlag(false)
 	{
 		
 	}
@@ -266,13 +268,14 @@ struct StackWaitEventNode
 	{
 		return eventid < r.eventid;
 	}
-	runningStack stack ;
+	CallingStack_list stacks;
+	//runningStack stack ;
 	int eventid ;
 	
-	bool preFlag;				
-	bool preCtrl;
+	//bool preFlag;				
+	//bool preCtrl;
 	bool preOnErrorExit;
-	int preRegCount;
+	//int preRegCount;
 	DBLDataNode preRegisterVal;
 
 	parse_arg_list_t event_params;
@@ -328,6 +331,12 @@ public:
 	// generate game event in c++
 	bool eventNtf(int event_id, int num, ...);
 	bool eventNtf(int event_id, parse_arg_list_t &args);
+
+	//for debug 
+	bool runStep();
+	void setStepMode(bool bStep = true);
+	bool getStepMode() { return m_bStepMode; }
+	bool isStepModeRunning();
 	
 	void update(ndtime_t interval) ;
 	void Reset() ;
@@ -376,7 +385,10 @@ protected:
 	bool _addTimer(int type, int interval, const char *timername,  parse_arg_list_t &params);
 	bool _delTimer(bool isGlobal,const char *timername);
 
-	int _runCmd(runningStack *stack) ;
+	int callScript(runningStack *stack);
+	int _baseCallScript(runningStack *stack) ;
+	int _reEntryScriptFunction(runningStack *stack);
+
 	int _makeVar(runningStack *stack, char *pCmdStream,bool isLocal=true); //make variant from instruction 
 	bool _getArg(runningStack *stack, int index, DBLDataNode &outValue);
 	//DBLDataNode* _refVariant(runningStack *stack, char *&pCmdStream);
@@ -418,6 +430,9 @@ protected:
 	bool _checkIsSkip(int err);
 	bool _checkIsSystemError(int err) { return ( err < NDERR_USERDEFINE && err > 0); }
 
+	bool _checkInStep();
+	bool _leaveStep(runningStack *stack);
+
 	const LogicUserDefStruct* getUserDataType(const char *name) const;
 	
 	bool m_ownerIsNew;
@@ -425,10 +440,12 @@ protected:
 	bool m_registorCtrl;				// compare and jump registor
 	bool m_OnErrorExit;
 	bool m_simulate;					//run simulate or test
+	bool m_bStepMode;
 	int m_sys_errno;
 	int m_registerCount;
 	int m_cmdByteOrder;
 
+	friend class LocalDebugger;
 	DBLDataNode m_registerVal; //this is common register 
 
 	typedef std::list<StackWaitEventNode> event_list_t ;
@@ -442,6 +459,8 @@ protected:
 	timer_list_t m_timer;
 
 	//UserDefData_map_t &m_useDefType;
+
+	CallingStack_list m_runningStacks;
 
 	runningStack *m_curStack;
 	LogicObjectBase *m_owner;
