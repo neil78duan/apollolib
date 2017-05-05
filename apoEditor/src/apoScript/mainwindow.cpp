@@ -11,8 +11,6 @@
 #include "logic_parser/logic_editor_helper.h"
 #include "logic_parser/script_event_id.h"
 
-#include "cli_common/dftCliMsgHandler.h"
-
 
 #include "nd_common/nd_common.h"
 #include "ndlib.h"
@@ -29,9 +27,57 @@ ND_LOG_WRAPPER_IMPLEMENTION(MainWindow, __glogWrapper);
 #include <QFileDialog>
 #include <QMessageBox>
 
+DeguggerScriptOwner::DeguggerScriptOwner()
+{
+	LogicEngineRoot * root =LogicEngineRoot::get_Instant();
+	root->getGlobalDebugger().setOwner(this);
+}
+
+DeguggerScriptOwner::~DeguggerScriptOwner()
+{
+	LogicEngineRoot * root = LogicEngineRoot::get_Instant();
+	root->getGlobalDebugger().setOwner(NULL);
+}
+
+bool DeguggerScriptOwner::getOtherObject(const char*objName, DBLDataNode &val)
+{
+	if (0 == ndstricmp(objName, "LogFunction")) {
+		val.InitSet((void*)ND_LOG_WRAPPER_PRINT(MainWindow));
+		return true;
+	}
+	else if (0 == ndstricmp(objName, "LogFile")) {
+		val.InitSet("ndlog.log");
+		return true;
+	}
+	else if (0 == ndstricmp(objName, "LogPath")) {
+		val.InitSet("../../log");
+		return true;
+	}
+	else if (0 == ndstricmp(objName, "WritablePath")) {
+		val.InitSet("../../log");
+		return true;
+	}
+
+	else if (0 == ndstricmp(objName, "SelfName")) {
+		val.InitSet("apoDebugger");
+		return true;
+	}
+	else if (0 == ndstricmp(objName, "self")) {
+		val.InitSet((void*)this, OT_OBJ_BASE_OBJ);
+		return true;
+	}
+
+	bool ret = ClientMsgHandler::ApoConnectScriptOwner::getOtherObject(objName, val);
+	if (ret) {
+		return ret;
+	}
+	return false;
+}
+
+
 MainWindow::MainWindow(QWidget *parent) :
 QMainWindow(parent), m_editorSetting(*apoEditorSetting::getInstant()), m_editorWindow(0),
-	m_fileRoot(0), m_curFile(0), m_currFunction(0), 
+	m_fileRoot(0), m_curFile(0), m_currFunction(0), m_localDebugOwner(NULL),
     ui(new Ui::MainWindow)
 {
 	m_isChangedCurFile = false;
@@ -838,49 +884,7 @@ void MainWindow::on_actionRun_triggered()
 	on_actionSave_triggered();
 	ClearLog();
 
-	const char *curFunc = m_editorWindow ? m_editorWindow->getEditedFunc() : NULL;
-	RunFuncDialog dlg(this) ;
-	dlg.initFunctionList(m_curFile,curFunc);
-
-	if (dlg.exec() != QDialog::Accepted) {
-		return ;
-	}
-	QString qfuncName = dlg.getFunc();
-	QString qargs = dlg.getArgs();
-	if (qfuncName.isEmpty()) {
-		nd_logerror("run function name is NULL\n");
-		return;
-	}
-	
-	int argc=0;
-	char argbuf[10][64];
-	char *argv[10];
-
-	for (int i = 0; i < 10; i++){
-		argv[i] = argbuf[i];
-	}
-
-	//get func 
-	std::string funcName = qfuncName.toStdString();
-	std::string input_arg = qargs.toStdString();
-
-	strncpy(argbuf[0], funcName.c_str(), sizeof(argbuf[0]));
-	
-	if ( input_arg.size() > 0)	{
-		nd_logmsg("begin run %s %s\n", funcName.c_str(), input_arg.c_str());
-		argc = ndstr_parse_command(input_arg.c_str(), &argv[1], 64, 9);
-	}
-	else {
-		nd_logmsg("begin run %s\n", funcName.c_str());
-	}
-	++argc;
-	
-	std::string outFile;
-	if (!compileScript(m_filePath.c_str(), outFile)) {
-		return;
-	}
-
-	runFunction(outFile.c_str(), m_filePath.c_str(), argc, (const char**)argv);
+	Run(false);
 
 }
 
@@ -914,6 +918,38 @@ void MainWindow::on_actionCancel_scale_triggered()
 	}
 }
 
+void MainWindow::on_actionRunDebug_triggered()
+{
+	on_actionSave_triggered();
+	ClearLog();
+	Run(true);
+}
+
+void MainWindow::on_actionStepIn_triggered()
+{
+
+}
+
+void MainWindow::on_actionContinue_triggered()
+{
+
+}
+
+void MainWindow::on_actionStepOut_triggered()
+{
+
+}
+
+void MainWindow::on_actionAttach_triggered()
+{
+
+}
+
+void MainWindow::on_actionDeattch_triggered()
+{
+
+}
+
 
 static int getScriptExpEncodeType(ndxml *scriptXml)
 {
@@ -939,45 +975,6 @@ static bool getScriptExpDebugInfo(ndxml *scriptXml)
 	return false;
 }
 
-
-class DeguggerScriptOwner :public  ClientMsgHandler::ApoConnectScriptOwner
-{
-public:
-	bool getOtherObject(const char*objName, DBLDataNode &val)
-	{
-		if (0 == ndstricmp(objName, "LogFunction")) {
-			val.InitSet((void*)ND_LOG_WRAPPER_PRINT(MainWindow));
-			return true;
-		}
-		else if (0 == ndstricmp(objName, "LogFile")) {
-			val.InitSet("ndlog.log");
-			return true;
-		}
-		else if (0 == ndstricmp(objName, "LogPath")) {
-			val.InitSet("../../log");
-			return true;
-		}
-		else if (0 == ndstricmp(objName, "WritablePath")) {
-			val.InitSet("../../log");
-			return true;
-		}
-
-		else if (0 == ndstricmp(objName, "SelfName")) {
-			val.InitSet("apoDebugger");
-			return true;
-		}
-		else if (0 == ndstricmp(objName, "self")) {
-			val.InitSet((void*)this, OT_OBJ_BASE_OBJ);
-			return true;
-		}
-
-		bool ret = ClientMsgHandler::ApoConnectScriptOwner::getOtherObject(objName, val);
-		if (ret) {
-			return ret;
-		}
-		return false;
-	}
-};
 
 bool MainWindow::runFunction(const char *binFile, const char *srcFile, int argc, const char* argv[])
 {
@@ -1025,12 +1022,12 @@ bool MainWindow::runFunction(const char *binFile, const char *srcFile, int argc,
 
 		parser.eventNtf(APOLLO_EVENT_SERVER_START, 0);
 		int ret = parser.runCmdline(argc, argv, E_SRC_CODE_UTF_8);
-		if (ret)	{
+		if (ret && parser.getErrno() != NDERR_WOULD_BLOCK)	{
 			nd_logmsg("run function %s error : %d \n", argv[0], ret);
 			ret = false;
 		}
 		else {
-			nd_logmsg("run function %s SUCCESS \n", argv[0]);
+			//nd_logmsg("run function %s SUCCESS \n", argv[0]);
 		}
 		//parser.eventNtf(APOLLO_EVENT_UPDATE, 0);
 		parser.eventNtf(APOLLO_EVENT_SERVER_STOP, 0);
@@ -1050,7 +1047,141 @@ bool MainWindow::runFunction(const char *binFile, const char *srcFile, int argc,
 	return ret;
 }
 
-bool MainWindow::compileScript(const char *scriptFile, std::string &outputFile, bool bWithRun)
+bool MainWindow::StartDebug(const char *binFile, const char *srcFile, int argc, const char* argv[])
+{
+	//bool ret = true;
+	
+	m_localDebugOwner = new DeguggerScriptOwner();
+	DeguggerScriptOwner &apoOwner = *m_localDebugOwner;
+	//DeguggerScriptOwner apoOwner;
+	if (!apoOwner.loadDataType(m_editorSetting.getIoConfigValue("net_data_def"))) {
+		WriteLog("load data type error\n");
+		return false;
+	}
+
+	LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
+	nd_assert(scriptRoot);
+	scriptRoot->setPrint(ND_LOG_WRAPPER_PRINT(MainWindow), NULL);
+	scriptRoot->setOutPutEncode(E_SRC_CODE_UTF_8);
+
+	LogicParserEngine &parser = scriptRoot->getGlobalParser();
+	parser.setSimulate(true, m_localDebugOwner);
+
+	LocalDebugger &debugger = scriptRoot->getGlobalDebugger();
+
+	if (0 != scriptRoot->LoadScript(binFile, NULL)){
+		WriteLog("load script error n");
+		LogicEngineRoot::destroy_Instant();
+		return false;
+	}
+
+	onDebugStart();
+	parser.eventNtf(APOLLO_EVENT_SERVER_START, 0);
+
+	int ret = debugger.runCmdline(argc, argv, E_SRC_CODE_UTF_8);
+// 	if (-1==ret && debugger.isDebugging() )	{
+// 		onDebugEnd();
+// 	}
+// 	else {
+// 		EndDebug(ret == 0);
+// 	}
+
+	return true;
+}
+
+void MainWindow::EndDebug(bool bSuccess)
+{
+	if (m_localDebugOwner)	{
+		LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
+		nd_assert(scriptRoot);
+		LogicParserEngine &parser = scriptRoot->getGlobalParser();
+
+		if (bSuccess){
+			parser.eventNtf(APOLLO_EVENT_SERVER_STOP, 0);
+		}
+		else {
+			const char *lastError = parser.getLastErrorNode();
+			if (lastError)	{
+				nd_logerror("run in %s\n", lastError);
+				showRuntimeError(m_filePath.c_str(), lastError);
+			}
+		}
+
+		delete m_localDebugOwner;
+		m_localDebugOwner = NULL;
+
+
+		LogicEngineRoot::destroy_Instant();
+	}
+	onDebugEnd();
+
+}
+
+void MainWindow::onDebugStart()
+{
+
+}
+
+void MainWindow::onDebugEnd()
+{
+
+}
+
+bool MainWindow::Run(bool bIsDebug)
+{
+
+	const char *curFunc = m_editorWindow ? m_editorWindow->getEditedFunc() : NULL;
+	RunFuncDialog dlg(this);
+	dlg.initFunctionList(m_curFile, curFunc);
+
+	if (dlg.exec() != QDialog::Accepted) {
+		return false;
+	}
+	QString qfuncName = dlg.getFunc();
+	QString qargs = dlg.getArgs();
+	if (qfuncName.isEmpty()) {
+		nd_logerror("run function name is NULL\n");
+		return false;
+	}
+
+	int argc = 0;
+	char argbuf[10][64];
+	char *argv[10];
+
+	for (int i = 0; i < 10; i++){
+		argv[i] = argbuf[i];
+	}
+
+	//get func 
+	std::string funcName = qfuncName.toStdString();
+	std::string input_arg = qargs.toStdString();
+
+	strncpy(argbuf[0], funcName.c_str(), sizeof(argbuf[0]));
+
+	if (input_arg.size() > 0)	{
+		nd_logmsg("begin run %s %s\n", funcName.c_str(), input_arg.c_str());
+		argc = ndstr_parse_command(input_arg.c_str(), &argv[1], 64, 9);
+	}
+	else {
+		nd_logmsg("begin run %s\n", funcName.c_str());
+	}
+	++argc;
+
+	std::string outFile;
+	if (!compileScript(m_filePath.c_str(), outFile,false, bIsDebug)) {
+		return false;
+	}
+
+	if (bIsDebug) {
+		return StartDebug(outFile.c_str(), m_filePath.c_str(), argc, (const char**)argv);		
+	}
+	else {
+		return runFunction(outFile.c_str(), m_filePath.c_str(), argc, (const char**)argv);
+	}
+
+}
+
+bool MainWindow::compileScript(const char *scriptFile, std::string &outputFile, bool bWithRun, bool bDebug )
 {
 	ndxml_root xmlScript;
 	ndxml_initroot(&xmlScript);
@@ -1068,7 +1199,10 @@ bool MainWindow::compileScript(const char *scriptFile, std::string &outputFile, 
 	outputFile = outFile;
 
 	int outEncode = getScriptExpEncodeType(&xmlScript);
-	bool withDebug = getScriptExpDebugInfo(&xmlScript);
+	bool withDebug = bDebug;
+	if (!withDebug)	{
+		withDebug = getScriptExpDebugInfo(&xmlScript);
+	}
 	std::string outPath = outFile;
 	ndxml_destroy(&xmlScript);
 
