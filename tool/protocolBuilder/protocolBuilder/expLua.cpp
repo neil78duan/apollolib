@@ -147,8 +147,8 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 						"\tself.%sCount = dataStream:ReadUint16()\n"
 						"\tfor i = 1, self.%sCount do\n"
 						"\t\tlocal val = dataStream:Read%s()\n"
-						"\t\ttable.insert(self.datas, i, val)\n\tend\n\n",
-						pValName, pValName,realOp);
+						"\t\ttable.insert(self.%s, i, val)\n\tend\n\n",
+						pValName, pValName,realOp,pValName);
 					pReadStream += size;
 
 
@@ -156,8 +156,8 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 					size = snprintf(pWriteStream, sizeof(buf_write_func) - (pWriteStream - buf_write_func),
 						"\tsize = size + dataStream:WriteUint16(self.%sCount)\n"
 						"\tfor i = 1, self.%sCount do\n"
-						"\t\tsize = size + dataStream : Write%s(self.datas[i])\n\tend\n",
-						pValName, pValName, realOp);
+						"\t\tsize = size + dataStream : Write%s(self.%s[i])\n\tend\n",
+						pValName, pValName, realOp, pValName);
 
 				}
 				else {
@@ -167,8 +167,8 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 						"\tfor i = 1, self.%sCount do\n"
 						"\t\tlocal val = %s:New(nil)\n"
 						"\t\tval:Read(dataStream)\n"
-						"\t\ttable.insert(self.datas, i, val)\n\tend\n\n",
-						pValName, pValName, pType);
+						"\t\ttable.insert(self.%s, i, val)\n\tend\n\n",
+						pValName, pValName, pType,pValName);
 					pReadStream += size;
 
 
@@ -176,7 +176,7 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 					size = snprintf(pWriteStream, sizeof(buf_write_func) - (pWriteStream - buf_write_func),
 						"\tsize = size + dataStream:WriteUint16(self.%sCount)\n"
 						"\tfor i = 1, self.%sCount do\n"
-						"\t\tsize = size + %s:Write(dataStream)\n\tend\n",
+						"\t\tsize = size + self.%s[i]:Write(dataStream)\n\tend\n",
 						pValName, pValName, pValName);
 					
 				}

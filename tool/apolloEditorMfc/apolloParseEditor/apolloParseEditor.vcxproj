@@ -130,6 +130,7 @@
     <ClInclude Include="..\..\..\logic_parser\logicParser.h" />
     <ClInclude Include="..\..\..\logic_parser\logicStruct.hpp" />
     <ClInclude Include="..\..\..\logic_parser\logic_compile.h" />
+    <ClInclude Include="..\..\..\logic_parser\logic_debugger.h" />
     <ClInclude Include="..\..\..\logic_parser\logic_editor_helper.h" />
     <ClInclude Include="..\..\..\logic_parser\logic_function.h" />
     <ClInclude Include="..\..\..\logic_parser\objectBaseMgr.h" />
@@ -180,6 +181,7 @@
     <ClCompile Include="..\..\..\logic_parser\logicParser.cpp" />
     <ClCompile Include="..\..\..\logic_parser\logicStruct.cpp" />
     <ClCompile Include="..\..\..\logic_parser\logic_compile.cpp" />
+    <ClCompile Include="..\..\..\logic_parser\logic_debugger.cpp" />
     <ClCompile Include="..\..\..\logic_parser\logic_editor_helper.cpp" />
     <ClCompile Include="..\..\..\logic_parser\logic_function.cpp" />
     <ClCompile Include="..\..\..\logic_parser\objectBaseMgr.cpp" />

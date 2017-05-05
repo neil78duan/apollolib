@@ -213,7 +213,7 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 
 					size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
 						"\t\t\t\t%s[i] = dataStream.Read%s();\n\t\t\t}\n"
-						, pValName, realType ? realType : pType, pValName, realOp );
+						, pValName, realOp );
 					pReadStream += size;
 
 					size = snprintf(pWriteStream, sizeof(buf_write_func) - (pWriteStream - buf_write_func),

@@ -50,9 +50,11 @@ public:
 	LoginBase *getLoginObj() { return m_login; }
 	std::string getPath() { return m_path; }
 	DBLDatabase *getExcelDatabase();
+#ifndef WITHOUT_LOGIC_PARSER
+
 	LogicParserEngine *getScriptParser();
 	LogicEngineRoot *getScriptRoot();
-
+#endif
 	////
 	RESULT_T Open(const char *host, int port, const char *dev_udid);
 

@@ -1302,6 +1302,7 @@
 					"$(inherited)",
 					__ND_MAC__,
 					WITHOUT_ICONV,
+					WITHOUT_LOGIC_PARSER,
 				);
 				INFOPLIST_FILE = apollo_u3d_mac/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
@@ -1327,6 +1328,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					__ND_MAC__,
 					WITHOUT_ICONV,
+					WITHOUT_LOGIC_PARSER,
 				);
 				INFOPLIST_FILE = apollo_u3d_mac/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
@@ -1410,6 +1412,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -1430,6 +1433,7 @@
 					"$(inherited)",
 					ND_DEBUG,
 					__ND_IOS__,
+					WITHOUT_LOGIC_PARSER,
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1441,7 +1445,10 @@
 		07EC84951D543B8400C32925 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = __ND_IOS__;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					__ND_IOS__,
+					WITHOUT_LOGIC_PARSER,
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
