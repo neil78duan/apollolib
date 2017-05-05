@@ -606,6 +606,11 @@ int LogicParserEngine::_baseCallScript(runningStack *stack)
 				CHECK_INSTRUCTION_OVER_FLOW();
 				//apollo_script_printf("logic_script %s: %s %d\n", stack->cmd->cmdname, m_dbg_node, m_dbg_cur_node_index);
 				m_registorFlag = true;
+				
+				if (-1 == _enterDebugMode()) {
+					m_registorFlag = false;
+				}
+
 				/*if (_checkInStep()) {
 					stack->cur_point = p;
 					_leaveStep(stack);
@@ -2407,6 +2412,15 @@ const LogicUserDefStruct* LogicParserEngine::getUserDataType(const char *name) c
 }
 
 
+int LogicParserEngine::_enterDebugMode()
+{
+	LogicEngineRoot *root = LogicEngineRoot::get_Instant();
+	LocalDebugger &debugger = root->getGlobalDebugger();
+	
+	return debugger.onEnterStep(m_curStack->cmd->cmdname, m_dbg_node);
+}
+
+/*
 bool LogicParserEngine::_checkInStep()
 {
 	return m_bStepMode;
@@ -2417,7 +2431,7 @@ bool LogicParserEngine::_leaveStep(runningStack *stack)
 	parse_arg_list_t args;
 	m_sys_errno = LOGIC_ERR_WOULD_BLOCK;
 	return waitEvent(stack, -1, args);
-}
+}*/
 
 int logic_rand(NDUINT32 val1, NDUINT32 val2)
 {

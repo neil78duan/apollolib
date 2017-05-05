@@ -30,6 +30,45 @@ struct func_cpp_info
 
 typedef std::map<std::string, func_cpp_info> cpp_func_map;
 
+class ParserCmdLine
+{
+public:
+	ParserCmdLine() :argc(0)
+	{
+	}
+	ParserCmdLine(int in_argc, const char *in_argv[]) 
+	{
+		argc = 0;
+		for (int i = 0; i < in_argc; i++)	{
+			pushParam(in_argv[i]);
+		}
+	}
+
+	~ParserCmdLine()
+	{
+		for (int i = 0; i < argc; i++)	{
+			free(argv[i]);
+		}
+	}
+
+	bool pushParam(const char *param)
+	{
+		if (argc < 10)	{
+			size_t s = strlen(param) + 1;
+
+			argv[argc] = (char*) malloc(s);
+			strncpy(argv[argc], param, s);
+			argc++;
+			return true;
+		}
+		return false;
+	}
+
+public:
+	int argc;
+	char *argv[10];
+};
+
 class LogicEngineRoot
 {
 public:

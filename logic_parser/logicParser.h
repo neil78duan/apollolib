@@ -430,8 +430,10 @@ protected:
 	bool _checkIsSkip(int err);
 	bool _checkIsSystemError(int err) { return ( err < NDERR_USERDEFINE && err > 0); }
 
-	bool _checkInStep();
-	bool _leaveStep(runningStack *stack);
+	int _enterDebugMode();
+	//bool _checkInStep();
+	//bool _leaveStep(runningStack *stack);
+
 
 	const LogicUserDefStruct* getUserDataType(const char *name) const;
 	

@@ -1079,33 +1079,11 @@ bool MainWindow::StartDebug(const char *binFile, const char *srcFile, int argc, 
 	parser.eventNtf(APOLLO_EVENT_SERVER_START, 0);
 
 	int ret = debugger.runCmdline(argc, argv, E_SRC_CODE_UTF_8);
-	if (-1==ret && debugger.isDebugging() )	{
-		onDebugEnd();
-	}
-	else {
-		EndDebug(ret == 0);
-	}
-
-// 	int ret = parser.runCmdline(argc, argv, E_SRC_CODE_UTF_8);
-// 	if (ret)	{
-// 		nd_logmsg("run function %s error : %d \n", argv[0], ret);
-// 		ret = false;
+// 	if (-1==ret && debugger.isDebugging() )	{
+// 		onDebugEnd();
 // 	}
 // 	else {
-// 		nd_logmsg("run function %s SUCCESS \n", argv[0]);
-// 	}
-	//parser.eventNtf(APOLLO_EVENT_UPDATE, 0);
-	
-// 
-// 
-// 	if (ret == false)	{
-// 		LogicParserEngine &parser = scriptRoot->getGlobalParser();
-// 		const char *lastError = parser.getLastErrorNode();
-// 		if (lastError)	{
-// 			nd_logerror("run in %s\n", lastError);
-// 			showRuntimeError(srcFile, lastError);
-// 
-// 		}
+// 		EndDebug(ret == 0);
 // 	}
 
 	return true;
