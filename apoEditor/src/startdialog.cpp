@@ -90,64 +90,6 @@ const char *startDialog::_getFromIocfg(const char *cfgName)
 
 }
 
-// void startDialog::_beginEdit(const char *script_file, const char *title)
-// {
-// 	const char *filename;
-// 	ClearLog();
-// 
-//     WriteLog("begin editor.....\n");
-// 
-// 	filename = script_file;
-//     _LOAD_XML(xml_script, filename, "utf8", 1);
-// 
-// 	filename = getNetProtocol();
-// 	_LOAD_XML(xml_net_protocol, filename, "utf8", 0);
-// 
-// 	XMLDialog xmlDlg(this);
-// 	xmlDlg.SetXML(&m_editor_setting, &xml_script,title);
-// 	
-// 	//load user define enum 
-// 	common_export_error_list("./.error_list.xml");
-// 	filename = getScriptSetting(&xml_script, "user_define_enum");
-// 	if (!_loadUserDefEnum(filename, &xmlDlg)) {
-// 		nd_logmsg("load user define dlg error \n");
-// 		return;
-// 	}
-// 
-// 	ndxml *funcroot = ndxml_getnode(&xml_net_protocol, "MessageDefine");
-// 	if (funcroot) {
-// 		char buf[256];
-// 		text_list_t messageList;
-// 		for (int i = 0; i < ndxml_num(funcroot); i++){
-// 			ndxml *fnode = ndxml_getnodei(funcroot, i);
-// 			const char *pDispname = ndxml_getattr_val(fnode, "comment");
-// 			const char *pRealVal = ndxml_getattr_val(fnode, "id");
-// 			const char *p = buildDisplaNameValStr(pRealVal, pDispname, buf, sizeof(buf));
-// 			messageList.push_back(QString(p));
-// 		}
-// 		xmlDlg.addDisplayNameList("msg_list", messageList);
-// 	}
-// 
-// 	const char *package_file = _getFromIocfg("game_data_package_file");
-// 	DBLDatabase::get_Instant()->LoadBinStream(package_file);
-// 
-// 	if (xmlDlg.exec() == QDialog::Accepted) {
-// 		nd_chdir(nd_getcwd());
-// 		ndxml_save(&xml_script, script_file);
-// 		WriteLog("save script ok\n");
-// 	}
-// 	else {
-// 		WriteLog("script unedited\n");
-// 	}
-// 
-// 	ndxml_destroy(&xml_script);
-// 	//ndxml_destroy(&xml_cpp_func);
-// 	ndxml_destroy(&xml_net_protocol);
-// 	//ndxml_destroy(&xml_events_id);
-// 	DBLDatabase::destroy_Instant();
-// }
-
-
 
 const char *startDialog::getScriptSetting(ndxml *scriptXml, const char *settingName)
 {
@@ -437,6 +379,20 @@ bool startDialog::expExcel()
     return true;
 }
 
+
+bool startDialog::loadDataBase()
+{
+
+	const char *package_file = _getFromIocfg("game_data_package_file");
+	DBLDatabase *pdbl = DBLDatabase::get_Instant();
+	if (pdbl){
+		if (0 == pdbl->LoadBinStream(package_file)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 bool startDialog::expLua(const char *outPath, const DBLDatabase &db)
 {
 	nd_mkdir(outPath);
@@ -570,7 +526,9 @@ void startDialog::on_ScriptEdit_clicked()
 	pMain->setHostWidget(this);
 	pMain->setAttribute(Qt::WA_DeleteOnClose, true);
 
-
+	if (!loadDataBase()) {
+		nd_logerror("load database error\n");
+	}
 	if (pMain->myInit()) {
 		this->setVisible(false);
 		pMain->showMaximized();

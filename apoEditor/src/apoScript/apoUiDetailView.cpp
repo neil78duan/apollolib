@@ -98,6 +98,7 @@ bool apoUiDetailView::showExeNode(apoBaseExeNode *node)
 	if (!xml) {
 		return false;
 	}
+	m_editedNode = xml;
 	const char *textName = LogicEditorHelper::_GetXmlName(xml, NULL);
 	_insertRow(createItem("Node"), createItem("text"), createItem(textName,xml, "name" ));
 	

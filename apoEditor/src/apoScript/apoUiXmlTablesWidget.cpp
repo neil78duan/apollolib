@@ -107,11 +107,23 @@ bool apoUiXmlTableWidget::_GetUserDefinData(const char *pUserParam, QString &val
 			nd_logerror("need load excel data");
 			return false;
 		}
+		int encode = pdbl->GetEncodeType();
+
 		apoEditorSetting::text_vct_t  texts;
 		DBLDatabase::table_vct_t::iterator it = pdbl->m_tables.begin();
 		for (; it != pdbl->m_tables.end(); it++)	{
 
-			texts.push_back(QString(it->first.c_str()));
+			if (encode != E_SRC_CODE_UTF_8)	{
+				DBLDataNode data;
+				data.InitSet(it->first.c_str());
+				data.ConvertEncode(encode, E_SRC_CODE_UTF_8);
+
+				texts.push_back(QString(data.GetText()));
+			}
+			else {
+				texts.push_back(QString(it->first.c_str()));
+
+			}
 		}
 		return _GetUserSelEnumVal(texts, val);
 	}
@@ -131,6 +143,9 @@ bool apoUiXmlTableWidget::_GetUserDefinData(const char *pUserParam, QString &val
 			nd_logerror(" excel table data");
 			return false;
 		}
+
+		int encode = pdbl->GetEncodeType();
+
 		const char *pname = ndxml_getval(tablexml);
 		if (0 == ndstricmp((char*)pname, (char*)"none"))	{
 
@@ -146,14 +161,26 @@ bool apoUiXmlTableWidget::_GetUserDefinData(const char *pUserParam, QString &val
 		apoEditorSetting::text_vct_t  texts;
 		int total = ptable->GetCols();
 		for (int i = 0; i < total; i++)	{
-			if (pdbl->GetEncodeType() == E_SRC_CODE_UTF_8) {
-				char buf[128];
-				nd_utf8_to_gbk(ptable->GetColName(i), buf, sizeof(buf));
-				texts.push_back(QString(buf));
+			if (encode != E_SRC_CODE_UTF_8)	{
+				DBLDataNode data;
+				data.InitSet(ptable->GetColName(i));
+				data.ConvertEncode(encode, E_SRC_CODE_UTF_8);
+
+				texts.push_back(QString(data.GetText()));
 			}
 			else {
 				texts.push_back(QString(ptable->GetColName(i)));
+
 			}
+
+// 			if (pdbl->GetEncodeType() == E_SRC_CODE_UTF_8) {
+// 				char buf[128];
+// 				nd_utf8_to_gbk(ptable->GetColName(i), buf, sizeof(buf));
+// 				texts.push_back(QString(buf));
+// 			}
+// 			else {
+// 				texts.push_back(QString(ptable->GetColName(i)));
+// 			}
 		}
 
 		return _GetUserSelEnumVal(texts, val);

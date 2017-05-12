@@ -7,6 +7,7 @@
 #include "logic_parser/logic_debugger.h"
 
 #include "cli_common/dftCliMsgHandler.h"
+#include "apoScript/apoUiDebugger.h"
 
 #include <string>
 
@@ -22,14 +23,6 @@ class apoBaseExeNode;
 class apoUiMainEditor;
 
 
-class DeguggerScriptOwner :public  ClientMsgHandler::ApoConnectScriptOwner
-{
-public:
-	DeguggerScriptOwner();
-	virtual ~DeguggerScriptOwner();
-
-	bool getOtherObject(const char*objName, DBLDataNode &val);
-};
 
 namespace Ui {
 class MainWindow;
@@ -63,6 +56,12 @@ public slots:
 	void onXmlNodeDel(ndxml *xmlnode);
 	void onFilelistDel(ndxml *xmlnode);
 	void onFunctionListChanged(ndxml *xmlnode);
+
+	// debugger 
+	void onDebugTerminate();
+	void onDebugStep(const char *func, const char* node);
+	void onDebugCmdAck();
+
 private slots:
 
     void on_actionViewList_triggered();
@@ -91,8 +90,6 @@ private slots:
 	void onFunctionsTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 	void onFilesTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
-
-
 protected:
 
 	bool openFileView();
@@ -101,6 +98,7 @@ protected:
 	bool openDetailView();
 
 	bool showCommonDeatil(ndxml *xmldata);
+	bool showDebugInfo(ndxml *xmldata);
 	void closeDetail();
 	bool runFunction(const char *binFile,const char *srcFile, int argc, const char* argv[]);
 	bool compileScript(const char *scriptFile, std::string &outFile, bool bWithRun = false, bool bDebug=false);
@@ -118,15 +116,10 @@ protected:
 	bool checkNeedSave();
 	void closeCurFile();
 
-	bool isDebugging() { return m_localDebugOwner != NULL; }
+	bool isDebugging() { return m_debuggerCli != NULL; }
 
 	void onDebugStart();
 	void onDebugEnd();
-
-	//QWidget *getMainEditor();
-
-	//bool loadUserdefDisplayList(ndxml_root &xmlNameList, const char *name);
-
 
 	//ndxml_root *m_config; //editor cconfig 
 	bool m_isChangedCurFile;
@@ -137,9 +130,9 @@ protected:
 	std::string m_filePath;			//current edited file path
 	ndxml_root *m_curFile;			//current edited file 
 	ndxml *m_currFunction;			//current edited function 
+	ndxml *m_debugInfo;
 	
 	std::string m_fileTemplate;		// new-file template
-	//std::string m_messageFile ;		// message file-path
 	std::string m_confgiFile;		// config file-path
 private:
 
@@ -150,6 +143,8 @@ private:
 	apoEditorSetting &m_editorSetting;
 
 	DeguggerScriptOwner *m_localDebugOwner;
+
+	ApoDebugger *m_debuggerCli;
 };
 
 #endif // MAINWINDOW_H

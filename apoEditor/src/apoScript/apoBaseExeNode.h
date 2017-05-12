@@ -89,6 +89,10 @@ public:
 	apoBaseExeNode *getMyPreNode();
 	apoBaseExeNode *getMyNextNode();
 
+	ndxml *getBreakPointAnchor();
+	bool insertBreakPoint();
+	bool delBreakPoint();
+	bool isBreakPoint();
 
 	//void setName(const QString &name);
 	void setTitle(const QString &title);

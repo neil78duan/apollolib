@@ -54,6 +54,8 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_checkBox16Hex_clicked();
+
 private:
     Ui::ConnectDialog *ui;
     QTimer *timer ;

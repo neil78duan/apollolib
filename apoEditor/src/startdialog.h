@@ -87,6 +87,7 @@ private:
 
     bool runTest();
     bool expExcel();
+	bool loadDataBase();
 
 	bool expLua(const char *outPath, const DBLDatabase &db);
 
