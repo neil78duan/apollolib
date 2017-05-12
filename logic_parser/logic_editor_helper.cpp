@@ -94,8 +94,11 @@ namespace LogicEditorHelper
 		"replace_val",
 		"create_label",
 		"var_name",
-		"connect_in_seq"
+		"connect_in_seq",
+		"breakPointAnchor",
+		"onlyForDebug"
 	};
+
 
 	const char *_GetDataTypeName(eDataType dataType)
 	{
@@ -433,7 +436,7 @@ namespace LogicEditorHelper
 	}
 
 
-	ndtime_t getScriptChangedTime(ndxml_root *xmlFile)
+	time_t getScriptChangedTime(ndxml_root *xmlFile)
 	{
 		//char buf[64];
 		ndxml *xmlModule = ndxml_getnode(xmlFile, "moduleInfo");
@@ -450,7 +453,7 @@ namespace LogicEditorHelper
 		return time(NULL);
 		
 	}
-	void setScriptChangedTime(ndxml_root *xmlFile, ndtime_t changedTime)
+	void setScriptChangedTime(ndxml_root *xmlFile, time_t changedTime)
 	{
 		char buf[64];
 		ndxml *xmlModule = ndxml_getnode(xmlFile, "moduleInfo");
@@ -464,5 +467,19 @@ namespace LogicEditorHelper
 				ndxml_addnode(xmlModule,"LastMod",buf);
 			}
 		}
+	}
+
+	bool getBoolValue(const char *value)
+	{
+		if (!value || !*value)	{
+			return false;
+		}
+		if (ndstricmp(value, "no") == 0 || ndstricmp(value, "false") == 0 || 
+			ndstricmp(value, "disable") == 0 || ndstricmp(value, "failed") == 0 ||
+			ndstricmp(value, "error") == 0 || ndstricmp(value, "0") == 0  )
+		{
+			return false;
+		}
+		return true;
 	}
 }

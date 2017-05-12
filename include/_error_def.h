@@ -71,6 +71,7 @@ ErrorElement(ESERVER_ERR_SHORT_STUFF, "缺少材料"),
 
 ErrorElement(ESERVER_ERR_NO_SOLDIER, "没有兵种"),
 ErrorElement(ESERVER_ERR_BUILDING_IN_CREATE, "建筑在建造升級中"),
+ErrorElement(ESERVER_ERR_BUILDING_CREATE_SUCCESS, "建筑已经升级成功"),
 
 ErrorElement(ESERVER_ERR_NO_GUILD, "工会不存在"),
 ErrorElement(ESERVER_ERR_DISAGREE, "对方不同意"),

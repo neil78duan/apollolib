@@ -116,6 +116,7 @@ enum eParserOperator{
 	E_OP_POP_LOOP_INDEX,
 	E_OP_CHECK_IN_USER_ERROR,	//check current error is on ,and error is userdef
 	E_OP_CLEAR_ERROR_CODE,	//CLEAR error
+	E_OP_IDLE,				//idle instruct nothing to be done
 	
 
 
@@ -333,10 +334,10 @@ public:
 	bool eventNtf(int event_id, parse_arg_list_t &args);
 
 	//for debug 
-	bool runStep();
-	void setStepMode(bool bStep = true);
-	bool getStepMode() { return m_bStepMode; }
-	bool isStepModeRunning();
+// 	bool runStep();
+// 	void setStepMode(bool bStep = true);
+// 	bool getStepMode() { return m_bStepMode; }
+// 	bool isStepModeRunning();
 	
 	void update(ndtime_t interval) ;
 	void Reset() ;

@@ -155,7 +155,7 @@ int LogicEngineRoot::LoadScript(const char *scriptStream, LogicParserEngine *ini
 			scriptCmdBuf *pcmdbuf = (scriptCmdBuf*)malloc(sizeof(scriptCmdBuf) + size);
 			if (pcmdbuf) {
 				char *p = (char*)(pcmdbuf + 1);
-				int read_buflen = (int)fread(p, 1, size, pf);
+				/*int read_buflen = (int)*/fread(p, 1, size, pf);
 
 				pcmdbuf->cmdname = p;
 				size_t namesize = strlen(p) + 1;

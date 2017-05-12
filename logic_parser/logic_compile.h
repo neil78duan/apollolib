@@ -204,6 +204,11 @@ private:
 	void _makeErrorStack(ndxml *xmlError) ;
 	bool _getFuncStackInfo(ndxml *curNode,char *buf, size_t size) ;
 
+	bool _isForDebug(ndxml *xml);
+	bool _isBreakPoint(ndxml *xml);
+	
+	bool _trytoAddBreakPoint(ndxml *xml);
+
 	ndxml *_getRefNode(ndxml*node);
 
 

@@ -77,7 +77,7 @@ int RloginTrylogin(const char*udid,nd_handle h,int accType, const char *userName
 int loginAndCreate(const char*udid,nd_handle h,int accType, const char *userName, const char *passwd,const char *save_session_file, NDUINT32 *accID) 
 {
 	int ret = 0;
-	bool bSaveSession = (save_session_file && save_session_file[0]) ? true : false;
+	//bool bSaveSession = (save_session_file && save_session_file[0]) ? true : false;
 	LoginApollo login((nd_handle)h,  save_session_file,udid); //for debug tool ,maybe it would open too many connectors
 		
 	ret = login.Login(userName, passwd, (ACCOUNT_TYPE)accType) ;

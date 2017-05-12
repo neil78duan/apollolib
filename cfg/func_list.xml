@@ -29,6 +29,8 @@
 	<node desc="写入文件(filename,var1,var2...)">CPP.apollo_write_file</node>
 	<node desc="系统广播(内容,...)">CPP.gscript_broad_syste_notice</node>
 	<node desc="字符数组转换为属性格式([string]:attrname_id)">CPP.gscript_convert_data_to_attr</node>
+	<node desc="转换成attrNode(name, value)">CPP.gscript_convert_to_attr</node>
+	<node desc="根据CD读取系数(types, CDs)">CPP.gscript_get_clear_cd_rate</node>
 	<node desc="发送错误通知(errorId)">CPP.gscript_send_client_error</node>
 	<node desc="发公告给当前用户(arg1, ...)">CPP.gscript_send_player_notice</node>
 	<node desc="关服()">CPP.gscript_shutdown_server</node>

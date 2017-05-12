@@ -112,6 +112,7 @@
 	<list instruction="1" ins_id="54" size="4" >op_global_var</list>
 	<list instruction="1" ins_id="57" size="4" >op_check_user_error</list>
 	<list instruction="1" ins_id="58" size="4" >op_clear_error</list>
+	<list instruction="1" ins_id="59" size="4" >op_idle</list>
 	
 	<!-- list instruction="1" ins_id="24" size="0" >op_set_loops</list>	
 	<list instruction="1" ins_id="25" size="0" >op_count_jump</list -->	
@@ -140,6 +141,7 @@
 	<list instruction="3" size="0">formula_text</list>
 	<list instruction="100" size="0">comment</list>
 	<list instruction="100" size="0">apoEditorPos</list>
+	<list instruction="100" size="0">breakPointInfo</list>	
 	<list instruction="5" size="0">user_define_function</list>
 	<list instruction="6" size="0" datatype="2">function_info</list>	
 	<list instruction="6" size="0" datatype="2">is_open_role_affair</list>
@@ -328,6 +330,9 @@
 			</param_collect>
 		</op_exit>
 	</create_step_exit>
+	
+	<op_idle name="idle"> </op_idle>
+	<breakPointInfo kinds="hide">yes</breakPointInfo>
 	
 	<create_get_last_error name="获得错误id" create_type="1" expand="yes" >
 		<op_get_last_error name="节点_获得错误号" expand="yes" create_label="create_internal_label">			
@@ -822,7 +827,7 @@
 	</create_step_bool_entry>
 	
 	<create_comp_steps name="数值比较分支" create_type="1" >
-		<steps_block_valcomp name="节点_数值比较分支" auto_index="0">	
+		<steps_block_valcomp name="节点_数值比较分支" auto_index="0" breakPointAnchor="op_comp">	
 			<op_comp name="比较运行" expand="yes"  delete="no">
 				<comment name="功能说明" rw_stat="read"> 大于小于等级 </comment>
 				<index  name="逻辑运算" kinds="reference" reference_type="type_compare_sub_entry" delete="no">0</index>	
@@ -844,8 +849,9 @@
 	</create_comp_steps>
 	
 	<create_switch_case name="switc-case" create_type="1" >
-		<steps_switch_case name="switch-case" auto_index="0"  create_template="create_case_entry" >
+		<steps_switch_case name="switch-case" auto_index="0"  create_template="create_case_entry"  breakPointAnchor="op_idle">
 			<comment name="功能说明" rw_stat="read">switch()-case </comment>
+			<op_idle name="idle"  kinds="hide" onlyForDebug="yes"></op_idle>			
 			<param_collect name="输入条件" expand="yes" expand_stat="1" delete="no" referenced_only="yes">
 				<type name="类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var name="数值" kinds="string" delete="no" restrict="type">none</var>
@@ -879,13 +885,13 @@
 	</create_case_entry>
 			
 	<create_step_loop_entry name="循环分支" create_type="1" >
-		<op_loop_entry name="节点_循环" expand_list="param_collect" auto_index="1" comp_cond="param_collect" expand_stat="0">
+		<op_loop_entry name="节点_循环" expand_list="param_collect" auto_index="1" comp_cond="param_collect" expand_stat="0" breakPointAnchor="op_idle">
 			<comment name="功能说明" rw_stat="read">loop{}</comment>
 			<param_collect name="次数" expand="yes" expand_stat="1" delete="no" referenced_only="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var kinds="string" delete="no" restrict="type">none</var>	
-			</param_collect>
-			
+			</param_collect>						
+			<op_idle name="idle"  kinds="hide" onlyForDebug="yes"></op_idle>			
 			<steps_collection name="loop body" create_template="create_list1" delete="no">
 			</steps_collection>
 			
@@ -966,8 +972,9 @@
 	
 	<!--- selector -->		
 	<create_bt_selector name="BT-Selector" create_type="1" >
-		<steps_bt_selector name="BT-Selector" auto_index="0"  >
+		<steps_bt_selector name="BT-Selector" auto_index="0" breakPointAnchor="op_idle" >
 			<comment name="功能说明" rw_stat="read">run until one of children success </comment>
+			<op_idle name="idle"  kinds="hide" onlyForDebug="yes"></op_idle>
 			
 			<op_set_label name="标签$name$" kinds="hide" expand="yes" comp_cond="param"  delete="no">
 				<param name="标签名" kinds="string" delete="no" auto_index_ref="auto_index" replace_val="../.name" >_SelectAutoLab</param>	
@@ -1000,8 +1007,9 @@
 	<!--- -->
 		
 	<create_bt_sequence name="BT-Sequence" create_type="1" >
-		<steps_bt_sequence name="BT-Sequence" auto_index="0"  >
+		<steps_bt_sequence name="BT-Sequence" auto_index="0" breakPointAnchor="op_idle" >
 			<comment name="功能说明" rw_stat="read">run until one of children success </comment>
+			<op_idle name="idle"  kinds="hide" onlyForDebug="yes"></op_idle>
 			
 			<op_clear_error name="清除错误,非系统错误" kinds="hide" >
 				<internal_label name="标签$name$"  kinds="string" replace_val=".name" auto_index_ref="auto_index" >_sequenceStartLab</internal_label>

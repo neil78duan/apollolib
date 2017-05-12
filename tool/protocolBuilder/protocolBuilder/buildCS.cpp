@@ -120,6 +120,39 @@ int build_csMessageID(ndxml_root *xmlfile, FILE *pf)
 	return 0 ;
 }
 
+
+static int exp_enum(ndxml *node, FILE *pf)
+{
+	int total = (int)ndxml_getsub_num(node);
+	for (int i = 0; i < total; ++i) {
+		ndxml *sub = ndxml_getnodei(node, i);
+		nd_assert(sub);
+
+		const char *pcomment = ndxml_getattr_val(sub, "comment");
+		if (pcomment) {
+			fprintf(pf, "// %s \n", pcomment);
+		}
+
+		fprintf(pf, "\tpublic enum %s { \n", ndxml_getname(sub));
+		for (int x = 0; x < ndxml_getsub_num(sub); ++x) {
+			ndxml *element = ndxml_getnodei(sub, x);
+			pcomment = ndxml_getattr_val(element, "comment");
+			const char *pvalue = ndxml_getattr_val(element, "value");
+
+			if (pvalue && pvalue[0]) {
+				fprintf(pf, "\t\t%s =%s,//%s\n", ndxml_getname(element), pvalue, pcomment ? pcomment : "\t ");
+			}
+			else {
+				fprintf(pf, "\t\t%s,//%s\n", ndxml_getname(element), pcomment ? pcomment : "\t ");
+			}
+		}
+
+		fprintf(pf, "\t};\n\n\n");
+	}
+
+	return 0;
+}
+
 int build_csMarco(ndxml_root *xmlfile, FILE *pf)
 {
 	ndxml *xnode = ndxml_getnode(xmlfile, "MarcoDefine") ;
@@ -135,6 +168,12 @@ int build_csMarco(ndxml_root *xmlfile, FILE *pf)
 	}
 	
 	fprintf(pf,"\t}\n#endregion\n\n") ;
+
+
+	ndxml *pEnumXml = ndxml_getnode(xmlfile, "EnumDefine");
+	if (pEnumXml) {
+		exp_enum(pEnumXml, pf);
+	}
 	return 0 ;
 }
 

@@ -87,6 +87,11 @@ struct attr_node_buf
 			buf[i].val = deta;
 		}
 	}
+	size_t getBinSize()
+	{
+
+		return sizeof(attr_node_buf) - sizeof(this->buf) + this->number * sizeof(this->buf[0]);
+	}
 };
 // 
 // struct base_attr_t

@@ -79,22 +79,22 @@ public:
 protected :
 	
 	//状态改变后通知函数
-	virtual void OnChange(statfieldid_t statid, statval_t newval) {}
+	virtual void OnChange(statfieldid_t /*statid*/, statval_t /*newval*/) {}
 
 	//进入状态通知函数
-	virtual void OnEnter(statindex_t st_index) {}
+	virtual void OnEnter(statindex_t /*st_index*/) {}
 
 	//离开状态通知函数
-	virtual void OnLeave(statindex_t st_index) {}
+	virtual void OnLeave(statindex_t /*st_index*/) {}
 
 	//进入禁止列表通知函数
-	virtual void OnEnterForbid(int forbidid){}
+	virtual void OnEnterForbid(int /*forbidid*/){}
 
 	//离开禁止通知函数
-	virtual void OnLeaveForbid(int forbidid){}
+	virtual void OnLeaveForbid(int /*forbidid*/){}
 
 	//得到状态域属性的默认值
-	virtual statval_t GetDefvalue(statfieldid_t statid) {return 0;}	
+	virtual statval_t GetDefvalue(statfieldid_t /*statid*/) {return 0;}	
 
 
 	//状态被设置的回调函数(给禁止列表加1)

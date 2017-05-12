@@ -263,7 +263,7 @@ void LabelMgr::fillJumpAddr(int byteOrder)
 		
 		for (shortJumpAddr_vct::iterator jump_it= jumpInfo.begin(); jump_it != jumpInfo.end(); ++jump_it) {
 			char *fromAddr = jump_it->addr ;
-			int offset = toAddr - (fromAddr + sizeof(NDUINT32) );
+			int offset = (int)(toAddr - (fromAddr + sizeof(NDUINT32) ));
 			lp_write_stream(fromAddr,offset, byteOrder);
 			
 			
@@ -920,7 +920,7 @@ int LogicCompiler::stepsCollect2Stream(ndxml *stepsCollection, char *buf, size_t
 			if (jumpLable)	{
 				m_labelAddr.pushJump(jumpLable, pStream);
 				pStream = lp_write_stream(pStream, (NDUINT32)0, m_aimByteOrder);
-				ret = pStream - p;
+				ret =(int)( pStream - p);
 			}
 		}
 		
@@ -955,7 +955,6 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 	int len = (int)bufsize;
 	//lp_stream_t cur_step_size = 0; //record this step size in debug block 
 
-
 	//get current step name 
 	m_cur_node_index++;
 	const char *pStepName = ndxml_getattr_val(stepNode, "name");
@@ -968,7 +967,15 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 		}
 	}
 	m_cur_step = pStepName;
-	_FILL_DEBUG_INFO(stepNode, pStepName, p, len)
+
+	if (m_bDebugInfo)	{
+		_trytoAddBreakPoint(stepNode);
+		_FILL_DEBUG_INFO(stepNode, pStepName, p, len)
+
+	}
+	else if (_isForDebug(stepNode)){
+		return 0;
+	}
 
 // 
 // 	if (m_bDebugInfo) {
@@ -1501,8 +1508,47 @@ bool LogicCompiler::_getFuncStackInfo(ndxml *curNode,char *buf, size_t size)
 }
 
 
+bool LogicCompiler::_isForDebug(ndxml *xml)
+{
+
+	//ERT_BREAK_ANCHOR,
+		//ERT_ONLY_DEBUG,
+	const char *pVal = _getXmlParamVal(xml, NULL, ERT_ONLY_DEBUG);
+	if (pVal) {
+		return getBoolValue(pVal);
+	}
+	return false;
+}
+
+bool LogicCompiler::_isBreakPoint(ndxml *xml)
+{
+	return 0 == ndstricmp(ndxml_getname(xml), "breakPointInfo");
+}
+
 ndxml *LogicCompiler::_getRefNode(ndxml*node)
 { 
 	return LogicEditorHelper::_getRefNode(node,ndxml_getval(node));
+}
+
+bool LogicCompiler::_trytoAddBreakPoint(ndxml *xml)
+{
+	ndxml *breakXml = ndxml_getnode(xml, "breakPointInfo");
+	if (!breakXml)	{
+		return false;
+	}
+	if (getBoolValue(ndxml_getval(breakXml)) ) {
+		LocalDebugger &debugger = LogicEngineRoot::get_Instant()->getGlobalDebugger();
+
+
+		char debugInfo[1024];
+		char *start = debugInfo;
+		int len = snprintf(debugInfo, sizeof(debugInfo), "%s", m_cur_step.c_str());
+		start += len;
+		_getFuncStackInfo(xml, start, sizeof(debugInfo) - len);
+
+		debugger.addBreakPoint(m_cur_function.c_str(), debugInfo);
+		return true;
+	}
+	return false;
 }
 

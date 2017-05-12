@@ -152,9 +152,9 @@ bool LogicParserEngine::runScript(const char *scriptName, parse_arg_list_t &args
 			result = getValue() ;
 			return  true ;
 		}
-		else if (m_sys_errno != NDERR_WOULD_BLOCK) {
-			nd_logerror("run %s script error %d: %s\n", scriptName, getErrno(), nd_error_desc(getErrno()));
-		}
+		//else if (m_sys_errno != NDERR_WOULD_BLOCK) {
+		//	nd_logerror("run %s script error %d: %s\n", scriptName, getErrno(), nd_error_desc(getErrno()));
+		//}
 		
 	}
 	else {
@@ -208,7 +208,7 @@ bool LogicParserEngine::eventNtf(int event_id, parse_arg_list_t &args)
 	return runScript(script_name, params, result);
 }
 
-
+/*
 bool LogicParserEngine::runStep()
 {
 	if (!isStepModeRunning()){
@@ -237,6 +237,7 @@ bool LogicParserEngine::isStepModeRunning()
 	}
 	return false;
 }
+*/
 
 LogicObjectBase *LogicParserEngine::getLogicObjectMgr(const char *objname)
 {
@@ -264,27 +265,32 @@ bool LogicParserEngine::_runCmdBuf(const char *moduleName ,const scriptCmdBuf *b
 	//runningStack *orgStack = m_curStack;
 	
 	ret = callScript(&stack);
-	//ret = _runCmd(&stack);
 
 	int funcError = m_sys_errno;
 	handleScriptGenEvent();
 	m_sys_errno = funcError;
 
-	if (m_simulate == false)	{		
-		if (stack.affairHelper)	{
-			if (ret != 0 || !m_registorFlag ) {
-				stack.affairHelper->Rollback();
-			}
-			delete stack.affairHelper;
-			stack.affairHelper = NULL;
-		}		
-	}
-	else if (m_sys_errno != NDERR_WOULD_BLOCK) {		
-		if (stack.affairHelper)	{
-			delete stack.affairHelper;
-			stack.affairHelper = NULL;
-		}
-	}
+	//ret = _runCmd(&stack);
+// 
+// 	int funcError = m_sys_errno;
+// 	handleScriptGenEvent();
+// 	m_sys_errno = funcError;
+// 
+// 	if (m_simulate == false)	{		
+// 		if (m_curStack && m_curStack->affairHelper)	{
+// 			if (ret != 0 || !m_registorFlag ) {
+// 				m_curStack->affairHelper->Rollback();
+// 			}
+// 			delete m_curStack->affairHelper;
+// 			m_curStack->affairHelper = NULL;
+// 		}		
+// 	}
+// 	else if (m_sys_errno != NDERR_WOULD_BLOCK) {		
+// 		if (stack.affairHelper)	{
+// 			delete stack.affairHelper;
+// 			stack.affairHelper = NULL;
+// 		}
+// 	}
 	//m_curStack = orgStack;
 	return ret == 0;
 }
@@ -395,6 +401,22 @@ int LogicParserEngine::callScript(runningStack *stack)
 
 
 	int ret = _baseCallScript(&(*it));
+	
+	if (m_simulate == false)	{
+		if (m_curStack && m_curStack->affairHelper)	{
+			if (ret != 0 || !m_registorFlag) {
+				m_curStack->affairHelper->Rollback();
+			}
+			delete m_curStack->affairHelper;
+			m_curStack->affairHelper = NULL;
+		}
+	}
+	else if (m_sys_errno != NDERR_WOULD_BLOCK) {
+		if (m_curStack && m_curStack->affairHelper)	{
+			delete m_curStack->affairHelper;
+			m_curStack->affairHelper = NULL;
+		}
+	}
 
 	m_runningStacks.pop_back();
 	
@@ -530,10 +552,14 @@ int LogicParserEngine::_baseCallScript(runningStack *stack)
 		switch (opCmd) {
 			case E_OP_EXIT:
 				GET_VAR_FROM_STREAM(stack, p, tmpIndexVal);
+				index = tmpIndexVal.GetInt();
 				m_registorFlag= (index==0) ? true: false ;
 				p = (char*) (stack->cmd->buf + stack->cmd->size);
 				m_sys_errno = tmpIndexVal.GetInt();
 				break ;
+			case E_OP_IDLE:
+				m_registorFlag = true;
+				break;
 			case E_OP_EXCEPTION_BLOCK:
 			{
 				NDUINT16 len;
@@ -610,13 +636,8 @@ int LogicParserEngine::_baseCallScript(runningStack *stack)
 				if (-1 == _enterDebugMode()) {
 					m_registorFlag = false;
 				}
-
-				/*if (_checkInStep()) {
-					stack->cur_point = p;
-					_leaveStep(stack);
-					return -1;
-				}*/				
 				break;
+
 			case E_OP_FILE_INFO:
 				GET_TEXT_FROM_STREAM(m_dbg_fileInfo, sizeof(m_dbg_fileInfo), p);
 				CHECK_INSTRUCTION_OVER_FLOW();
@@ -1143,23 +1164,27 @@ int LogicParserEngine::_baseCallScript(runningStack *stack)
 			else if (m_simulate && _checkIsSkip(m_sys_errno)) {
 				continue;
 			}
-			if (inException == true){
-				//on error when exception-handle
-				m_sys_errno = errorBeforeException;
-				return -1;
-			}
-			else if (!_checkIsSystemError(m_sys_errno) && m_curStack->error_continue) {				
+			
+			else if (!_checkIsSystemError(m_sys_errno) && m_curStack->error_continue) {
 				continue;
 			}
+			else if (inException == true){
+				//on error when exception-handle
+				m_sys_errno = errorBeforeException;
+				nd_logerror("%s error : %s  run in Exception handler \n", stack->cmd->cmdname, nd_error_desc(m_sys_errno));
+				return -1;
+			} 
 			else if (exception_addr)	{
 				//jump to exception 
 				p = (char*)exception_addr;
 				inException = true;
 				errorBeforeException = m_sys_errno;
 				m_registorFlag = true;
-				nd_logerror("run %s script error : %s \n", stack->cmd->cmdname, nd_error_desc(m_sys_errno)) ;
+
+				nd_logerror("%s catch exception : %s \n", stack->cmd->cmdname, nd_error_desc(m_sys_errno));
 			}
 			else {
+				nd_logerror(" %s script error : %s \n", stack->cmd->cmdname, nd_error_desc(m_sys_errno));
 				return -1;
 			}
 			

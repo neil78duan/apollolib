@@ -71,17 +71,25 @@ enum parserDebugInputCmd
 	E_DBG_INPUT_CMD_RUN_TO_CURSOR,
 	E_DBG_INPUT_CMD_DEL_BREAKPOINT,
 	E_DBG_INPUT_CMD_TERMINATED,
-
+	E_DBG_INPUT_CMD_ADD_TEMP_BREAKPOINT,
+	E_DBG_OUTPUT_CMD_HIT_BREAKPOINT,
+	E_DBG_OUTPUT_CMD_STEP,
+	E_DBG_OUTPUT_CMD_TERMINATED,
+	E_DBG_OUTPUT_CMD_HANDLE_ACK,
 };
 
 struct processHeaderInfo 
 {
 	NDUINT32 processId;		//nd_processid()
+	NDUINT32 debuggerProcessId; 
 	ndatomic_t runStat;		//0 common/not-run , 1 running, 2 wait-debug, 3 terminate 
 	ndatomic_t inputCmd;	//0 none , 1 input break point, 2 run-step, 3 run-continue , 4 run-to-current-node
+	ndatomic_t outputCmd;	// parse output command
 	char processName[PROCESS_NAME_SIZE];
 	char shareMemName[PROCESS_NAME_SIZE];
 	char semName[PROCESS_NAME_SIZE];
+	char semClient[PROCESS_NAME_SIZE];
+
 	char cmdBuf[1024];
 };
 
@@ -114,22 +122,62 @@ public:
 
 	nd_filemap_t m_outPutMem;
 	ndsem_t m_RunningSem;
+	ndsem_t m_cliSem;
+};
+
+struct LogicRunningProcess
+{
+	NDUINT32 pId; 
+	std::string name;
+};
+
+typedef std::vector<LogicRunningProcess> Process_vct_t;
+
+class LogicDebugClient
+{
+public:
+	LogicDebugClient();
+	virtual ~LogicDebugClient();
+
+	//command for client
+	int localStrat(LogicParserEngine *parser, int argc, const char *argv[], int encodeType = ND_ENCODE_TYPE);
+	int Attach(NDUINT32 processId);
+
+	int runStep(); //return  0 success ,renturn -1 error , error== would_block , in step-debug
+	int runContinue();
+	int runTo(const char *funcName, const char *nodeName);
+	int stopDebug();
+	int addBreakPoint(const char *funcName, const char *nodeName, bool isTemp = false);
+	int delBreakPoint(const char *funcName, const char *nodeName);
+
+	virtual bool onEnterStep(const char *function, const char *node);
+	virtual void onTerminate();
+	virtual void onCommandOk();
+
+	ndxml *getParserInfo();
+
+	static bool getRunningProcess(Process_vct_t &processes);
+
+protected:
+
+	int waitEvent();
+	int inputCmd(int cmdId);
+	int inputCmd(int cmdId, const char *func, const char *nodeName);
+
+	NDUINT32 m_aimProcessId;
+	bool m_isAttached;
 };
 
 //////////////////////////////////////////////////////////////////////////
 
+//debug host
 class LocalDebugger
 {
 public:
 	LocalDebugger(LogicParserEngine *parser,LogicObjectBase *owner=NULL);
 	~LocalDebugger();
 
-	//command for client
 	int runCmdline(int argc, const char *argv[], int encodeType = ND_ENCODE_TYPE); 
-	int runStep(); //return  0 success ,renturn -1 error , error== would_block , in step-debug
-	int runContinue();	
-	int runTo(const char *funcName, const char *nodeName);
-	int stopDebug();
 	int addBreakPoint(const char *funcName, const char *nodeName,bool isTemp=false);
 	int delBreakPoint(const char *funcName, const char *nodeName);
 
@@ -139,30 +187,28 @@ public:
 	ndxml_root & getParserInfo();
 	int getLastError() { return m_parser->getErrno(); }
 
-
-	LogicObjectBase *getOwner() { return m_owner; }
-	void setOwner(LogicObjectBase *owner) { m_owner = owner; }
 	LogicParserEngine *getParser() { return m_parser; }
-	bool isDebugging();
+	void setParser(LogicParserEngine *parser) { m_parser = parser; }
 	int getEncodeType() { return m_encodeType; }
-private:
-	int inputCmd(int cmdId);
-	int inputCmd(int cmdId, const char *func, const char *nodeName);
 
-	int waitEvent();
+	void setClient(LogicDebugClient *client) { m_client = client; }
+private:
+
+	int waitEvent(const char *funcName, const char *nodeName);
+	int ntfClient(int cmd, const char *funcName, const char *nodeName);
 
 	int m_encodeType;
-	NDUINT32 m_aimProcessId;
-	bool m_isAttached;
+	bool m_bStep;
 	bool isBreakPoint(const char *func, const char *node, bool bTrytoDel=false);
 	bool makeParserInfo();
 	bool getParamFromInput(std::string &funcName, std::string &nodeName);
 
 	LogicParserEngine *m_parser;
-	LogicObjectBase *m_owner;
 	ndxml_root m_parserInfo;
 
 	breakPoint_vct m_breakPoints;
+
+	LogicDebugClient *m_client;
 
 };
 
