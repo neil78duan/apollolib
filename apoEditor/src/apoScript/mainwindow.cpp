@@ -27,52 +27,6 @@ ND_LOG_WRAPPER_IMPLEMENTION(MainWindow, __glogWrapper);
 #include <QFileDialog>
 #include <QMessageBox>
 
-DeguggerScriptOwner::DeguggerScriptOwner()
-{
-	LogicEngineRoot * root =LogicEngineRoot::get_Instant();
-	root->getGlobalDebugger().setOwner(this);
-}
-
-DeguggerScriptOwner::~DeguggerScriptOwner()
-{
-	LogicEngineRoot * root = LogicEngineRoot::get_Instant();
-	root->getGlobalDebugger().setOwner(NULL);
-}
-
-bool DeguggerScriptOwner::getOtherObject(const char*objName, DBLDataNode &val)
-{
-	if (0 == ndstricmp(objName, "LogFunction")) {
-		val.InitSet((void*)ND_LOG_WRAPPER_PRINT(MainWindow));
-		return true;
-	}
-	else if (0 == ndstricmp(objName, "LogFile")) {
-		val.InitSet("ndlog.log");
-		return true;
-	}
-	else if (0 == ndstricmp(objName, "LogPath")) {
-		val.InitSet("../../log");
-		return true;
-	}
-	else if (0 == ndstricmp(objName, "WritablePath")) {
-		val.InitSet("../../log");
-		return true;
-	}
-
-	else if (0 == ndstricmp(objName, "SelfName")) {
-		val.InitSet("apoDebugger");
-		return true;
-	}
-	else if (0 == ndstricmp(objName, "self")) {
-		val.InitSet((void*)this, OT_OBJ_BASE_OBJ);
-		return true;
-	}
-
-	bool ret = ClientMsgHandler::ApoConnectScriptOwner::getOtherObject(objName, val);
-	if (ret) {
-		return ret;
-	}
-	return false;
-}
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -80,6 +34,8 @@ QMainWindow(parent), m_editorSetting(*apoEditorSetting::getInstant()), m_editorW
 	m_fileRoot(0), m_curFile(0), m_currFunction(0), m_localDebugOwner(NULL),
     ui(new Ui::MainWindow)
 {
+	m_debugInfo = NULL;
+	m_debuggerCli = NULL;
 	m_isChangedCurFile = false;
     ui->setupUi(this);
 
@@ -408,6 +364,39 @@ void MainWindow::onFunctionListChanged(ndxml *xmlnode)
 	}
 }
 
+void MainWindow::onDebugTerminate()
+{
+	EndDebug(true);
+}
+void MainWindow::onDebugStep(const char *func, const char* node)
+{
+	showRuntimeError(m_filePath.c_str(), node);
+	if (m_debugInfo){
+		delete m_debugInfo;
+		m_debugInfo = NULL;
+	}
+	if (m_debuggerCli)	{
+		m_debugInfo = m_debuggerCli->getParserInfo();
+		if (m_debugInfo)		{
+			showDebugInfo(m_debugInfo);
+		}
+	}
+}
+void MainWindow::onDebugCmdAck()
+{
+	if (m_debugInfo){
+		delete m_debugInfo;
+		m_debugInfo = NULL;
+	}
+	if (m_debuggerCli)	{
+		m_debugInfo = m_debuggerCli->getParserInfo();
+		if (m_debugInfo)		{
+			showDebugInfo(m_debugInfo);
+		}
+	}
+}
+
+
 bool MainWindow::showCurFunctions()
 {	
 	bool ret = m_editorWindow->showFunction(m_currFunction, m_curFile);
@@ -473,6 +462,38 @@ bool MainWindow::showCommonDeatil(ndxml *xmldata)
 	
 	return true;
 }
+
+
+bool MainWindow::showDebugInfo(ndxml *xmldata)
+{
+	QDockWidget *pDock = this->findChild<QDockWidget*>("DebugView");
+	if (pDock)	{
+		QWidget *w = pDock->findChild<QWidget*>("xmlDebugTable");
+		if (w)	{
+			w->close();
+		}
+	}
+	else {
+		pDock = new QDockWidget(tr("Debug"), this);
+		pDock->setObjectName("DebugView");
+		pDock->setAttribute(Qt::WA_DeleteOnClose, true);
+	}
+
+	apoUiCommonXmlView *subwindow = new apoUiCommonXmlView();
+	subwindow->setAttribute(Qt::WA_DeleteOnClose, true);
+	subwindow->setObjectName("xmlDebugTable");
+
+	subwindow->showDetail(xmldata, m_curFile);
+
+	QObject::connect(subwindow, SIGNAL(xmlDataChanged()),
+		this, SLOT(onFileChanged()));
+
+	pDock->setWidget(subwindow);
+	addDockWidget(Qt::BottomDockWidgetArea, pDock);
+
+	return true;
+}
+
 
 void MainWindow::closeDetail()
 {
@@ -927,17 +948,30 @@ void MainWindow::on_actionRunDebug_triggered()
 
 void MainWindow::on_actionStepIn_triggered()
 {
-
+	if (m_debuggerCli)	{
+		if (m_debuggerCli->runStep() == -1) {
+			EndDebug(false);
+		}
+	}
 }
 
 void MainWindow::on_actionContinue_triggered()
 {
-
+	if (m_debuggerCli)	{
+		if (m_debuggerCli->runContinue() == -1) {
+			EndDebug(false);
+		}
+	}
 }
 
 void MainWindow::on_actionStepOut_triggered()
 {
 
+	if (m_debuggerCli)	{
+		if (m_debuggerCli->runStep() == -1) {
+			EndDebug(false);
+		}
+	}
 }
 
 void MainWindow::on_actionAttach_triggered()
@@ -1049,11 +1083,12 @@ bool MainWindow::runFunction(const char *binFile, const char *srcFile, int argc,
 
 bool MainWindow::StartDebug(const char *binFile, const char *srcFile, int argc, const char* argv[])
 {
-	//bool ret = true;
-	
+	//bool ret = true;	
 	m_localDebugOwner = new DeguggerScriptOwner();
+	m_debuggerCli = new ApoDebugger();
+
 	DeguggerScriptOwner &apoOwner = *m_localDebugOwner;
-	//DeguggerScriptOwner apoOwner;
+
 	if (!apoOwner.loadDataType(m_editorSetting.getIoConfigValue("net_data_def"))) {
 		WriteLog("load data type error\n");
 		return false;
@@ -1067,31 +1102,38 @@ bool MainWindow::StartDebug(const char *binFile, const char *srcFile, int argc, 
 	LogicParserEngine &parser = scriptRoot->getGlobalParser();
 	parser.setSimulate(true, m_localDebugOwner);
 
-	LocalDebugger &debugger = scriptRoot->getGlobalDebugger();
 
 	if (0 != scriptRoot->LoadScript(binFile, NULL)){
 		WriteLog("load script error n");
-		LogicEngineRoot::destroy_Instant();
+		EndDebug(false);
 		return false;
 	}
+
+
+	QObject::connect(&m_debuggerCli->m_obj, SIGNAL(stepSignal(const char *, const char *)),
+		this, SLOT(onDebugStep(const char *, const char* )));
+
+	QObject::connect(&m_debuggerCli->m_obj, SIGNAL(terminateSignal()),
+		this, SLOT(onDebugTerminate()));
+	QObject::connect(&m_debuggerCli->m_obj, SIGNAL(commondOkSignal()),
+		this, SLOT(onDebugCmdAck));
+
 
 	onDebugStart();
 	parser.eventNtf(APOLLO_EVENT_SERVER_START, 0);
 
-	int ret = debugger.runCmdline(argc, argv, E_SRC_CODE_UTF_8);
-// 	if (-1==ret && debugger.isDebugging() )	{
-// 		onDebugEnd();
-// 	}
-// 	else {
-// 		EndDebug(ret == 0);
-// 	}
+	int ret = m_debuggerCli->localStrat(&parser,argc, argv, E_SRC_CODE_UTF_8);
+	if (-1==ret) {
+		EndDebug(false);
+	}
+
 
 	return true;
 }
 
 void MainWindow::EndDebug(bool bSuccess)
 {
-	if (m_localDebugOwner)	{
+	if (m_debuggerCli)	{
 		LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
 		nd_assert(scriptRoot);
 		LogicParserEngine &parser = scriptRoot->getGlobalParser();
@@ -1110,6 +1152,8 @@ void MainWindow::EndDebug(bool bSuccess)
 		delete m_localDebugOwner;
 		m_localDebugOwner = NULL;
 
+		delete m_debuggerCli;
+		m_debuggerCli = NULL;
 
 		LogicEngineRoot::destroy_Instant();
 	}

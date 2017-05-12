@@ -1728,7 +1728,7 @@ DBLDataNode  DBLDataNode::operator/(const DBLDataNode &r) const
 		val = f1;
 	}
 	else {
-		val = f1 * f2;
+		val = f1 / f2;
 	}
 	
 	switch (m_ele_type)

@@ -333,20 +333,34 @@ void ConnectDialog::on_loginButton_clicked()
 void ConnectDialog::on_msgWriteButton_clicked()
 {
     if (ui->radioButton->isChecked()){
-        int a = ui->msgDataEdit->text().toInt();
-        __sendMsg.Write((NDUINT8)a);
+		QString qs = ui->msgDataEdit->text();
+		if (qs.size() > 0) {
+			int a = ndstr_atoi_hex(qs.toStdString().c_str());//ui->msgDataEdit->text().toInt();
+			__sendMsg.Write((NDUINT8)a);
+		}
     }
     else if (ui->radioButton_2->isChecked()){
-        int a = ui->msgDataEdit->text().toInt();
-        __sendMsg.Write((NDUINT16)a);
+		QString qs = ui->msgDataEdit->text();
+		if (qs.size() > 0) {
+			int a = ndstr_atoi_hex(qs.toStdString().c_str());//ui->msgDataEdit->text().toInt();
+			__sendMsg.Write((NDUINT16)a);
+		}
     }
     else if (ui->radioButton_3->isChecked()){
-        int a = ui->msgDataEdit->text().toInt();
-        __sendMsg.Write((NDUINT32)a);
+
+		QString qs = ui->msgDataEdit->text();
+		if (qs.size() > 0) {
+			int a = ndstr_atoi_hex(qs.toStdString().c_str());//ui->msgDataEdit->text().toInt();
+			__sendMsg.Write((NDUINT32)a);
+		}
     }
     else if (ui->radioButton_4->isChecked()){
-        NDUINT64 a = ui->msgDataEdit->text().toLongLong();
-        __sendMsg.Write(a);
+
+		QString qs = ui->msgDataEdit->text();
+		if (qs.size() > 0) {
+			NDUINT64 a = ndstr_atoll_hex(qs.toStdString().c_str());//ui->msgDataEdit->text().toInt();
+			__sendMsg.Write(a);
+		}
     }
     else if (ui->radioButton_5->isChecked()){
         float a = ui->msgDataEdit->text().toFloat();
@@ -726,7 +740,21 @@ void ConnectDialog::on_gmMsgButton_clicked()
 
 void ConnectDialog::on_pushButton_clicked()
 {
-    int a = ui->msgDataEdit->text().toInt();
+    QString qs = ui->msgDataEdit->text();
+	if (qs.size() > 0) {
+		int a = ndstr_atoi_hex(qs.toStdString().c_str());//ui->msgDataEdit->text().toInt();
+		nd_logmsg("error[%d]: %s\n", a, apollo_error(a));
+	}
 
-	nd_logmsg("error[%d]: %s\n", a, apollo_error(a));
+}
+
+void ConnectDialog::on_checkBox16Hex_clicked()
+{
+	if (ui->checkBox16Hex->checkState() == Qt::Checked)  {
+		DBLDataNode::setOutHex(true);
+	}
+	else {
+		DBLDataNode::setOutHex(false);
+	}
+	//ui->checkBox16Hex
 }

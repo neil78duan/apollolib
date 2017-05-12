@@ -453,7 +453,7 @@ int UserDefFormatFromMessage(userDefineDataType_map_t &userDataRoot, NDIStreamMs
 		if (s == 0) {
 			break;
 		}
-		len = inmsg.ReadBin(buf, sizeof(buf));
+		len = (int)inmsg.ReadBin(buf, sizeof(buf));
 		if (len > 0) {
 			LogicUserDefStruct val;
 			if (-1 == val.FromStream(buf, len)) {

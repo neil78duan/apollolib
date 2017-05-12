@@ -116,6 +116,8 @@ private:
 	void popMenuCloseParamTrigged();
 	void popMenuDisconnectTRigged();
 	void popMenuCenterTrigged(); //move view to center
+	void popMenuAddBreakPointTrigged();
+	void popMenuDelBreakPointTrigged();
 
     void paintEvent(QPaintEvent *event);
 	void contextMenuEvent(QContextMenuEvent *event);
@@ -170,6 +172,7 @@ private:
 	apoBaseExeNode *m_funcEntry;
 	apoBaseExeNode *m_curDetailNode;
 	apoEditorSetting *m_setting;
+
 
 	//editing info
 	//apoBaseSlotCtrl *m_editingToNext;  //connector to next exe node 

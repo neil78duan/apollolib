@@ -961,28 +961,42 @@ void apoUiMainEditor::popMenuCenterTrigged()
 	//nd_logdebug("center ()\n");
 }
 
+
+void apoUiMainEditor::popMenuAddBreakPointTrigged()
+{
+	if (m_popSrc) {
+		apoBaseExeNode *exeNode = dynamic_cast<apoBaseExeNode *>(m_popSrc);
+		if (exeNode){
+			exeNode->insertBreakPoint();
+			this->update();
+		}
+	}
+
+	//nd_logdebug("insert break\n");
+}
+
+void apoUiMainEditor::popMenuDelBreakPointTrigged()
+{
+	if (m_popSrc) {
+		apoBaseExeNode *exeNode = dynamic_cast<apoBaseExeNode *>(m_popSrc);
+		if (exeNode){
+			exeNode->delBreakPoint();
+			showNodeDetail(exeNode);
+			this->update();
+		}
+	}
+
+	//nd_logdebug("insert break\n");
+}
+
+
 void apoUiMainEditor::contextMenuEvent(QContextMenuEvent *event)
 {
-#define SHOW_POP_MENU(_TITLE, _FUNCNAME) \
+#define ADD_MENT_MENU(_POP_MENU,_TITLE, _FUNCNAME) \
 	do 	{	\
-		QMenu *popMenu = new QMenu(this);		\
 		QAction *add_node = new QAction(_TITLE, this);	\
-		popMenu->addAction(add_node);			\
+		_POP_MENU->addAction(add_node);			\
 		connect(add_node, &QAction::triggered, this, &_FUNCNAME);	\
-		popMenu->exec(QCursor::pos());			\
-	} while ( 0 )
-
-#define SHOW_POP_MENU2(_TITLE, _FUNCNAME,_TITLE2, _FUNCNAME2) \
-	do 	{	\
-		QMenu *popMenu = new QMenu(this);		\
-		QAction *add_node = new QAction(this);	\
-		add_node->setText(_TITLE);				\
-		popMenu->addAction(add_node);			\
-		connect(add_node, &QAction::triggered, this, &_FUNCNAME);	\
-		QAction *add_node1 = new QAction(_TITLE2, this);			\
-		popMenu->addAction(add_node1);			\
-		connect(add_node1, &QAction::triggered, this, &_FUNCNAME2);	\
-		popMenu->exec(QCursor::pos());			\
 	} while ( 0 )
 
 	m_popSrc = NULL;
@@ -991,42 +1005,54 @@ void apoUiMainEditor::contextMenuEvent(QContextMenuEvent *event)
 	if (w == NULL) {
 		m_curClicked = event->pos();
 		
-		SHOW_POP_MENU2(QString("New"), apoUiMainEditor::popMenuAddnewTrigged, QString("Moveto default"), apoUiMainEditor::popMenuCenterTrigged);
+		QMenu *popMenu = new QMenu(this);
+		popMenu->setAttribute(Qt::WA_DeleteOnClose, true);
+
+		ADD_MENT_MENU(popMenu, QString("New"), apoUiMainEditor::popMenuAddnewTrigged);
+		ADD_MENT_MENU(popMenu, QString("Moveto default"), apoUiMainEditor::popMenuCenterTrigged);
 	}
 	else {
-		QString title;
-		apoBaseExeNode*pDelNode = dynamic_cast<apoBaseExeNode*>(w);
+		apoBaseExeNode*pDelNode = dynamic_cast<apoBaseExeNode*>(w);		
+
 		if (pDelNode) {
 			m_popSrc = w;
-			title = "Remove ";
-			//title += pDelNode->getTitle();
+			QMenu *popMenu = new QMenu(this); 
+			popMenu->setAttribute(Qt::WA_DeleteOnClose, true);
+
+			ADD_MENT_MENU(popMenu, QString("Remove"), apoUiMainEditor::popMenuDeleteTrigged);
+
 
 			ndxml *xmlNode = (ndxml *) pDelNode->getMyUserData();
-			if (pDelNode->getLabel()) {
-				SHOW_POP_MENU2(title, apoUiMainEditor::popMenuDeleteTrigged, QString("Remove label"), apoUiMainEditor::popMenuDelLabelTrigged);
+			if (pDelNode->getLabel()) {				
+				ADD_MENT_MENU(popMenu, QString("Remove label"), apoUiMainEditor::popMenuDelLabelTrigged);
 			}
 			else if (LogicEditorHelper::_getXmlParamVal(xmlNode, NULL, LogicEditorHelper::ERT_CREATE_LABEL)) {
-				SHOW_POP_MENU2(title, apoUiMainEditor::popMenuDeleteTrigged, QString("Add label"), apoUiMainEditor::popMenuAddLabelTrigged);				
+				ADD_MENT_MENU(popMenu, QString("Add label"), apoUiMainEditor::popMenuAddLabelTrigged);
+			}
+
+			// check break point
+			if (pDelNode->isBreakPoint()) {
+				ADD_MENT_MENU(popMenu, QString("BreakPoint del"), apoUiMainEditor::popMenuDelBreakPointTrigged);
 			}
 			else {
-				SHOW_POP_MENU(title, apoUiMainEditor::popMenuDeleteTrigged);
-
+				ADD_MENT_MENU(popMenu, QString("New BreakPoint"), apoUiMainEditor::popMenuAddBreakPointTrigged);
 			}
+			popMenu->exec(QCursor::pos());
 		}
 		else if (dynamic_cast<apoBaseSlotCtrl*>(w))	{
 			apoBaseSlotCtrl *pslot = (apoBaseSlotCtrl*)w;
 			m_popSrc = w;
 
+			QMenu *popMenu = new QMenu(this);
+			popMenu->setAttribute(Qt::WA_DeleteOnClose, true);
+
 			if (pslot->getConnector())	{
-				title = "Disconnect";
-				SHOW_POP_MENU(title, apoUiMainEditor::popMenuDisconnectTRigged);
+				ADD_MENT_MENU(popMenu, QString("Disconnect"), apoUiMainEditor::popMenuDisconnectTRigged);
 			}
 			else if (pslot->isDelete())	{
-				title = "Close ";
-				title += pslot->text();
-				SHOW_POP_MENU(title, apoUiMainEditor::popMenuCloseParamTrigged);
+				ADD_MENT_MENU(popMenu, QString("Close"), apoUiMainEditor::popMenuCloseParamTrigged);
 			}
-
+			popMenu->exec(QCursor::pos());
 		}
 	}
 	
@@ -1598,7 +1624,7 @@ bool apoUiMainEditor::buildRunSerqConnector(apoBaseSlotCtrl *fromSlot, apoBaseSl
 		nd_logmsg("alread in connector!\n");
 		return false;
 	}
-	//apoBaseExeNode *fromCtrl = dynamic_cast<apoBaseExeNode*> ();
+	apoBaseExeNode *fromCtrl = dynamic_cast<apoBaseExeNode*> (fromSlot->parent());
 	apoBaseExeNode *toCtrl = dynamic_cast<apoBaseExeNode*> (toSlot->parent());
 
 	//can not connect self
@@ -1644,6 +1670,20 @@ bool apoUiMainEditor::buildRunSerqConnector(apoBaseSlotCtrl *fromSlot, apoBaseSl
 	//build new connection
 	ndxml *moveInRoot = fromSlot->getXmlAnchorParent();// ndxml_get_parent(fromXml);
 	ndxml *insertPosXml = fromSlot->getXmlAnchor();
+
+	//insert after  new var
+	if (fromCtrl->returnVal()){
+		apoBaseSlotCtrl *slotRet = fromCtrl->returnVal();
+		apoUiBezier *pBzeRet = slotRet->getConnector();
+		if (pBzeRet && pBzeRet->getSlot2() ){
+			apoBaseSlotCtrl *slotNextTo = (apoBaseSlotCtrl *) pBzeRet->getSlot2();
+
+			apoUiExenodeNewVar *newVar = dynamic_cast<apoUiExenodeNewVar*> (slotNextTo->parent());
+			if (newVar)	{
+				insertPosXml = (ndxml*) newVar->getMyUserData();
+			}
+		}
+	}
 		
 	while (toXml){
 		ndxml *movedParent = ndxml_get_parent(toXml);

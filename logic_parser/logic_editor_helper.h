@@ -71,6 +71,8 @@ namespace LogicEditorHelper
 		ERT_CREATE_LABEL,
 		ERT_VAR_NAME ,
 		ERT_RUN_SEQ_LINE,
+		ERT_BREAK_ANCHOR,
+		ERT_ONLY_DEBUG,
 	};
 
 	const char *_GetDataTypeName(eDataType dataType);
@@ -211,11 +213,13 @@ namespace LogicEditorHelper
 	bool CheckReadOnly(ndxml *xml);
 	ndxml *GetCreateTemplate(ndxml *xml, ndxml_root *root);
 
-	ndtime_t getScriptChangedTime(ndxml_root *xmlFile);
-	void setScriptChangedTime(ndxml_root *xmlFile, ndtime_t changedTime);
+	time_t getScriptChangedTime(ndxml_root *xmlFile);
+	void setScriptChangedTime(ndxml_root *xmlFile, time_t changedTime);
 
 	const char *getRealValFromStr(const char *pInput, char *outpub, size_t bufsize);
 	const char *getDisplayNameFromStr(const char *pInput, char *outpub, size_t bufsize);
 	const char *buildDisplaNameValStr(const char *val, const char*dispName, char *outpub, size_t bufsize);
+
+	bool getBoolValue(const char *value);
 }
 #endif

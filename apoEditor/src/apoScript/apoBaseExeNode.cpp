@@ -517,6 +517,66 @@ apoBaseExeNode *apoBaseExeNode::getMyNextNode()
 }
 
 
+ndxml *apoBaseExeNode::getBreakPointAnchor()
+{
+	if (!m_nodeXml)	{
+		return NULL;
+	}
+	const char *pVal = LogicEditorHelper::_getXmlParamVal(m_nodeXml, NULL, LogicEditorHelper::ERT_BREAK_ANCHOR);
+	if (pVal) {
+		return ndxml_recursive_ref(m_nodeXml, pVal);
+	}
+	return m_nodeXml;
+}
+
+bool apoBaseExeNode::insertBreakPoint()
+{
+	ndxml *xmlNode = getBreakPointAnchor();
+	if (!xmlNode)	{
+		return false;
+	}
+	//	<breakPointInfo kinds = "hide">yes< / breakPointInfo>
+	ndxml *bNode = ndxml_getnode(xmlNode, "breakPointInfo");
+	if (bNode)	{
+		ndxml_setval(bNode, "yes");
+	}
+	else {
+		bNode = ndxml_addnode(xmlNode, "breakPointInfo", "yes");
+		if (bNode)	{
+			ndxml_addattrib(bNode, "kinds", "hide");
+		}
+	}
+	return true;
+}
+
+bool apoBaseExeNode::delBreakPoint()
+{
+	ndxml *xmlNode = getBreakPointAnchor();
+	if (!xmlNode)	{
+		return true;
+	}
+	ndxml_delnode(xmlNode, "breakPointInfo");
+	return true;
+}
+
+
+bool apoBaseExeNode::isBreakPoint()
+{
+	ndxml *xmlNode = getBreakPointAnchor();
+	if (!xmlNode)	{
+		return false;
+	}
+	ndxml *bNode = ndxml_getnode(xmlNode, "breakPointInfo");
+	if (!bNode)	{
+		return false;
+	}
+	else {
+		return LogicEditorHelper::getBoolValue(ndxml_getval(bNode));
+	}
+
+}
+
+
 const char *apoBaseExeNode::getLabel()
 {
 	ndxml *labxml = ndxml_getnode(m_nodeXml, "internal_label");
@@ -919,7 +979,13 @@ void apoBaseExeNode::paintEvent(QPaintEvent *event)
 
 	painter.setPen(QPen(Qt::red, 1));
 	painter.drawLine(QPoint(1, E_LINE_HEIGHT), QPoint(m_size.width() - 3, E_LINE_HEIGHT));
-	
+
+
+	if (isBreakPoint())	{
+		painter.setPen(QPen(Qt::darkRed, 5));
+		painter.drawEllipse(5, m_size.height() - 10, 5, 5);
+	}
+
 	if(m_showError) {
 		painter.setPen(QPen(Qt::black, 2));
 	}
@@ -930,6 +996,8 @@ void apoBaseExeNode::paintEvent(QPaintEvent *event)
 		painter.setPen(QPen(Qt::red, 2));
 	}
 	painter.drawRect(1, 1, m_size.width() - 2, m_size.height() - 2);
+
+
 
 	//show param value 
 	if (m_paramVct.size() > 0) {
@@ -989,6 +1057,8 @@ void apoBaseExeNode::paintEvent(QPaintEvent *event)
 		painter.drawText(x, y, showTips);
 	}
 	trytoDrawConnectSlot();
+
+
 }
 
 

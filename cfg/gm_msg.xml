@@ -34,9 +34,15 @@
 	</message>
 	<message name="新建建筑" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="4" minId="0">0</msgid>
-		<data name="建筑类型ID" kinds="numeral" param="0">12001</data>
-		<data name="坐标X" kinds="numeral" param="4">160</data>
+		<data name="建筑类型ID" kinds="numeral" param="0">13201</data>
+		<data name="坐标X" kinds="numeral" param="4">10</data>
 		<data name="坐标X" kinds="numeral" param="4">180</data>
+	</message>
+	<message name="秒CD" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="6" minId="26">0</msgid>
+		<data name="对象id" kinds="numeral" param="0">142073</data>
+		<data name="使用物品" kinds="numeral" param="0">45001</data>
+		<data name="数量" kinds="numeral" param="4">1</data>
 	</message>
 	<message name="移动建筑" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="4" minId="2">0</msgid>
@@ -82,8 +88,8 @@
 	</message>
 	<message name="卡牌升星" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="5" minId="14">0</msgid>
-		<data name="卡牌ID" kinds="numeral" param="0">3473809</data>
-		<data name="卡牌数量" kinds="numeral" param="4">4</data>
+		<data name="卡牌ID" kinds="numeral" param="0">0x65209</data>
+		<data name="卡牌数量" kinds="numeral" param="4">0</data>
 		<data name="卡牌材料" kinds="numeral" param="0">1</data>
 		<data name="卡牌材料" kinds="numeral" param="0">2</data>
 		<data name="卡牌材料" kinds="numeral" param="0">3</data>
@@ -141,11 +147,11 @@
 	</message>
 	<message name="GM_改等级" expand="yes" delete="no">
 		<msgid kinds="hide">1796</msgid>
-		<data name="新等级" kinds="numeral" param="0">3</data>
+		<data name="新等级" kinds="numeral" param="0">50</data>
 	</message>
 	<message name="GM_加物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="6">0</msgid>
-		<data name="物品编号" kinds="numeral" param="0">3104</data>
+		<data name="物品编号" kinds="numeral" param="0">3101</data>
 		<data name="数量" kinds="numeral" param="0">10</data>
 	</message>
 	<message name="GM_增加卡牌" expand="yes" delete="no">

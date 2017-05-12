@@ -169,7 +169,7 @@ static inline void _tryto_change_order_long64(NDUINT64 &val)
 static char * getTextLine(char *buf, size_t size, FILE *pf, int encodeType)
 {
 	if (encodeType == DBL_DATE_ENCODE_TYPE) {
-		return fgets(buf, size, pf);
+		return fgets(buf, (int)size, pf);
 	}
 	else {
 		char *p;
@@ -713,7 +713,7 @@ int DBLTable::Dump(void *pfile )
 		//write this line valid flag 
 		for(int i=0; i<m_cols; i++) {
 			NDUINT8 isInit = pRecord->m_data_buf[i].isInit ? 1 : 0; 
-			ret = crypt_fwrite(&isInit, 1, 1, pf);
+			ret =(int) crypt_fwrite(&isInit, 1, 1, pf);
 			nd_assert(ret);
 			if (isInit)	{
 				ret = dbl_data_2streamfile(&pRecord->m_data_buf[i], m_pcols[i].type, m_pcols[i].sub_type, (FILE*)pf, (dbl_stream_fwrite)crypt_fwrite, DBLDatabase::s_data_needChangeOrder);
@@ -790,7 +790,7 @@ int DBLTable::LoadBinStream(void *pfile)
 
 		for(int i=0; i<m_cols; i++) {
 			NDUINT8 isInit = 0;
-			ret = crypt_fread(&isInit, 1, 1, pf);
+			ret =(int) crypt_fread(&isInit, 1, 1, pf);
 			nd_assert(ret);
 			if (isInit){
 				if (-1 == dbl_read_streamfile(pRecord->GetOrgVal(i), m_pcols[i].type, m_pcols[i].sub_type, (FILE*)pf, (dbl_stream_fread)crypt_fread, DBLDatabase::s_data_needChangeOrder)) {
@@ -1354,8 +1354,8 @@ int DBLDatabase::Test(const char *outPath)
 	
 	
 	//load from text 
-	int type = DBLDatabase::GetEncodeType();
-	const char *encode = nd_get_encode_name(type);
+	//int type = DBLDatabase::GetEncodeType();
+	//const char *encode = nd_get_encode_name(type);
 
 	DBLDatabase dbtmp;
 	
