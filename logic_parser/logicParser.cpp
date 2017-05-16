@@ -82,6 +82,7 @@ m_owner(owner), m_cmdByteOrder(0)
 	m_curStack = NULL;
 	m_ownerIsNew = false;
 	m_bStepMode = false;
+	m_bLastIsCalled = false;
 
 	m_dbg_cur_node_index = 0;
 	m_dbg_node[0] = 0;
@@ -443,6 +444,8 @@ int LogicParserEngine::_baseCallScript(runningStack *stack)
 	NDUINT32 opCmd , opAim = 0 ;
 	//bool isdebug_step = false;
 	bool inException = false;
+
+	bool bLastIsCalled = false;		//last step is call function
 	NDUINT32 cur_step_size = -1;
 	//char *step_start = 0 ;
 	const char *exception_addr = stack->exception_addr;
@@ -636,6 +639,7 @@ int LogicParserEngine::_baseCallScript(runningStack *stack)
 				if (-1 == _enterDebugMode()) {
 					m_registorFlag = false;
 				}
+				m_bLastIsCalled = false;
 				break;
 
 			case E_OP_FILE_INFO:
@@ -2185,7 +2189,9 @@ bool LogicParserEngine::_call(parse_arg_list_t &args, DBLDataNode &result, const
 	const char *pModule = moduleName ? moduleName: getCurMoudle();
 	const scriptCmdBuf* pScript = pRoot->getScript(funcName, pModule ,&pModule) ;
 	if (pScript) {
-		return runFunction(pModule, pScript, args, result) ;
+		bool ret = runFunction(pModule, pScript, args, result);
+		m_bLastIsCalled = true;
+		return ret;
 	}
 	setErrno(LOGIC_ERR_FUNCTION_NOT_FOUND);
 	nd_logerror("script function %s not found\n", funcName) ;

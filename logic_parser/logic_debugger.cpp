@@ -13,8 +13,8 @@
 static nd_filemap_t g_debugHeader = { 0 };
 ShareProcessLists::ShareProcessLists()
 {
-	m_RunningSem = 0;
-	m_cliSem = 0;
+	//m_RunningSem = 0;
+	//m_cliSem = 0;
 
 }
 
@@ -36,13 +36,7 @@ void ShareProcessLists::Destroy()
 	if (nd_mem_share_addr(&g_debugHeader)) {
 		nd_mem_share_close(&g_debugHeader);
 	}
-	if (m_RunningSem) {
-		nd_sem_destroy(m_RunningSem);
-	}
-
-	if (m_cliSem) {
-		nd_sem_destroy(m_cliSem);
-	}
+	
 }
 
 
@@ -61,20 +55,25 @@ processHeaderInfo *ShareProcessLists::createProcessInfo(NDUINT32 processId, cons
 	snprintf(pAddr->semName, PROCESS_NAME_SIZE, "%s_sem", procName);
 	snprintf(pAddr->semClient, PROCESS_NAME_SIZE, "%s_semCli", procName);
 
-	int ret = nd_mem_share_create(pAddr->shareMemName, 1024 * 1024, &m_outPutMem);
-	if (-1 == ret) {
-		return NULL;
-	}
-
-	m_RunningSem = nd_sem_open(pAddr->semName);
-	if (!m_RunningSem) {
-		return NULL;
-	}
-
-	m_cliSem = nd_sem_open(pAddr->semClient);
-	if (!m_cliSem) {
-		return NULL;
-	}
+	pAddr->runStat = E_RUN_DBG_STAT_NONE;
+	pAddr->inputCmd = 0;
+	pAddr->outputCmd = 0;
+	
+// 
+// 	int ret = nd_mem_share_create(pAddr->shareMemName, 1024 * 1024, &m_outPutMem);
+// 	if (-1 == ret) {
+// 		return NULL;
+// 	}
+// 
+// 	m_RunningSem = nd_sem_open(pAddr->semName);
+// 	if (!m_RunningSem) {
+// 		return NULL;
+// 	}
+// 
+// 	m_cliSem = nd_sem_open(pAddr->semClient);
+// 	if (!m_cliSem) {
+// 		return NULL;
+// 	}
 	return pAddr;
 }
 
@@ -85,7 +84,7 @@ void ShareProcessLists::delProcess(NDUINT32 processId)
 		return;
 	}
 
-	nd_mem_share_close(&m_outPutMem);
+	//nd_mem_share_close(&m_outPutMem);
 	//nd_sem_destroy(m_RunningSem);
 	proceInfo->processId = 0;
 }
@@ -103,19 +102,6 @@ processHeaderInfo *ShareProcessLists::getProcessInfo(NDUINT32 processId)
 		}
 	}
 	return NULL;
-}
-
-
-bool ShareProcessLists::OutPutInfo(ndxml *dataInfo)
-{
-	if (!nd_mem_share_addr(&m_outPutMem)) {
-		return false;
-	}
-	size_t size = ndxml_to_buf(dataInfo, (char *)nd_mem_share_addr(&m_outPutMem), (int) nd_mem_share_size(&m_outPutMem));
-	if (size ==0)	{
-		return false;
-	}
-	return true;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -150,10 +136,11 @@ void* parseThreadRun(void* param)
 	delete pcmdInfo;
 
 	proceInfo->runStat = E_RUN_DBG_STAT_TERMINATE;
-
 	proceInfo->outputCmd = E_DBG_OUTPUT_CMD_TERMINATED;
-	nd_sem_post(pProcessRoot->m_cliSem);
-	pProcessRoot->delProcess(processId);
+
+	ndsem_t  sem = debugger.getClientSem();
+	nd_sem_post(sem);
+	//pProcessRoot->delProcess(processId);
 
 	if (0 == ret)	{
 		return (void*)0;
@@ -177,18 +164,10 @@ LogicDebugClient::~LogicDebugClient()
 
 int LogicDebugClient::localStrat(LogicParserEngine *parser, int argc, const char *argv[], int encodeType)
 {
-	m_aimProcessId = nd_processid();
-
-	ShareProcessLists *pProcessRoot = ShareProcessLists::get_Instant();
-	processHeaderInfo * proceInfo = pProcessRoot->createProcessInfo(m_aimProcessId, nd_process_name());
-	if (!proceInfo)	{
-		nd_logerror("create debug info for %d process error\n", m_aimProcessId);
-		return -1;
-	}
+ 	m_aimProcessId = nd_processid();
 
 	LocalDebugger & debuggerHost = LogicEngineRoot::get_Instant()->getGlobalDebugger();
 	debuggerHost.setParser(parser);
-	debuggerHost.setClient(this);
 	if (-1 == debuggerHost.runCmdline(argc, argv, encodeType)) {
 		return -1;
 	}
@@ -213,35 +192,12 @@ int LogicDebugClient::Attach(NDUINT32 processId)
 	pAddr->debuggerProcessId = nd_processid();
 
 	LocalDebugger & debuggerHost = LogicEngineRoot::get_Instant()->getGlobalDebugger();
-	debuggerHost.setClient(this);
 
 	return 0;
 }
 
 
-int LogicDebugClient::runStep()
-{
-	return inputCmd(E_DBG_INPUT_CMD_STEP_RUN);
-}
-
-
-int LogicDebugClient::runContinue()
-{
-	return inputCmd(E_DBG_INPUT_CMD_CONTINUE);
-}
-
-
-int LogicDebugClient::stopDebug()
-{
-	return inputCmd(E_DBG_INPUT_CMD_TERMINATED);
-}
-
-int LogicDebugClient::runTo(const char *func, const char *node)
-{
-	return inputCmd(E_DBG_INPUT_CMD_RUN_TO_CURSOR, func, node);
-}
-
-int LogicDebugClient::addBreakPoint(const char *funcName, const char *nodeName, bool isTemp)
+int LogicDebugClient::cmdAddBreakPoint(const char *funcName, const char *nodeName, bool isTemp)
 {
 	if (m_isAttached) {
 		return inputCmd(isTemp ? E_DBG_INPUT_CMD_ADD_TEMP_BREAKPOINT:E_DBG_INPUT_CMD_NEW_BREAKPOINT, funcName, nodeName);
@@ -253,7 +209,7 @@ int LogicDebugClient::addBreakPoint(const char *funcName, const char *nodeName, 
 	return 0;
 }
 
-int LogicDebugClient::delBreakPoint(const char *funcName, const char *nodeName)
+int LogicDebugClient::cmdDelBreakPoint(const char *funcName, const char *nodeName)
 {
 	if (m_isAttached) {
 		return inputCmd(E_DBG_INPUT_CMD_DEL_BREAKPOINT, funcName, nodeName);
@@ -265,6 +221,12 @@ int LogicDebugClient::delBreakPoint(const char *funcName, const char *nodeName)
 	return 0;
 }
 
+int LogicDebugClient::postEndDebug()
+{
+	LocalDebugger & debuggerHost = LogicEngineRoot::get_Instant()->getGlobalDebugger();
+	debuggerHost.postEndDebug();
+	return 0;
+}
 int LogicDebugClient::waitEvent()
 {
 	int ret = 0;
@@ -275,14 +237,10 @@ int LogicDebugClient::waitEvent()
 		return 0;
 	}
 
-	ndsem_t sem = nd_sem_open(proceInfo->semClient);
-	if (!sem){
-		return -1;
-	}
+	ndsem_t sem = getClientSem();
 
 RE_WIAT:
 
-	//m_client->onEnterStep(runningFunc, runningNode);
 	ret = nd_sem_wait(sem, INFINITE);
 	if (0 != ret)	{
 		nd_sem_destroy(sem);
@@ -315,7 +273,7 @@ RE_WIAT:
 		break;
 	}
 
-	nd_sem_destroy(sem);
+	//nd_sem_destroy(sem);
 	return 0;
 }
 
@@ -328,15 +286,12 @@ int LogicDebugClient::inputCmd(int cmdId)
 
 	proceInfo->inputCmd = cmdId;
 
-	ndsem_t sem = nd_sem_open(proceInfo->semName);
-	if (!sem)	{
-		return -1;
-	}
+	ndsem_t sem = getHostSem();
 
 	nd_sem_post(sem);
-	nd_sem_destroy(sem);
-	return 0;
+	return waitEvent();
 }
+
 int LogicDebugClient::inputCmd(int cmdId, const char *func, const char *nodeName)
 {
 	processHeaderInfo * proceInfo = ShareProcessLists::get_Instant()->getProcessInfo(m_aimProcessId);
@@ -348,15 +303,23 @@ int LogicDebugClient::inputCmd(int cmdId, const char *func, const char *nodeName
 
 	snprintf(proceInfo->cmdBuf, sizeof(proceInfo->cmdBuf), "<node func=\"%s\" exenode=\"%s\" />", func, nodeName);
 
-	ndsem_t sem = nd_sem_open(proceInfo->semName);
-	if (!sem)	{
-		return -1;
-	}
-
+	ndsem_t sem = getHostSem();
 	nd_sem_post(sem);
-	nd_sem_destroy(sem);
+	return waitEvent();
+}
 
-	return 0;
+
+ndsem_t LogicDebugClient::getHostSem()
+{
+	LocalDebugger &debugger = LogicEngineRoot::get_Instant()->getGlobalDebugger();
+	return debugger.m_RunningSem;
+
+}
+ndsem_t LogicDebugClient::getClientSem()
+{
+
+	LocalDebugger &debugger = LogicEngineRoot::get_Instant()->getGlobalDebugger();
+	return debugger.m_cliSem;
 }
 
 bool LogicDebugClient::onEnterStep(const char *function, const char *node)
@@ -408,15 +371,24 @@ bool LogicDebugClient::getRunningProcess(Process_vct_t &processes)
 
 LocalDebugger::LocalDebugger(LogicParserEngine *parser, LogicObjectBase *owner) :m_parser(parser)
 {
-	m_client = NULL;
+	//m_client = NULL;
 	//m_isAttached = false;
 	m_bStep = false;
+	m_bRunOut = false;
 	m_encodeType = ND_ENCODE_TYPE;
+	
+	m_RunningSem = NULL;
+	m_cliSem = NULL;
+	memset(&m_outPutMem, 0, sizeof(m_outPutMem));
+
 	ndxml_initroot(&m_parserInfo);
 }
 
 LocalDebugger::~LocalDebugger()
 {
+	if (m_RunningSem){
+		postEndDebug();
+	}
 }
 
 // debug function, return 0 success ,renturn -1 error , error== would_block , in step-debug
@@ -425,6 +397,11 @@ int LocalDebugger::runCmdline(int argc, const char *argv[], int encodeType )
 	nd_assert(m_parser);
 
 	ParserCmdLine *cmdLine = new ParserCmdLine(argc, argv);
+
+	if (!preStartDebug(0)) {
+		return -1;
+	}
+
 	ndthread_t thId = 0;
 	ndth_handle h = nd_createthread(parseThreadRun, (void*)cmdLine, &thId, 0);
 	if (h){
@@ -450,17 +427,79 @@ int LocalDebugger::delBreakPoint(const char *funcName, const char *nodeName)
 			break;
 		}
 	}
-
 	return 0;
+}
+
+
+void LocalDebugger::clearBreakpoint()
+{
+	m_breakPoints.clear();
+}
+
+bool LocalDebugger::preStartDebug(NDUINT32 processId)
+{
+	processHeaderInfo * proceInfo = NULL;
+	ShareProcessLists *pProcessRoot = ShareProcessLists::get_Instant();
+	if (processId == 0)	{
+
+		NDUINT32 myProcessId = nd_processid();
+		proceInfo = pProcessRoot->createProcessInfo(myProcessId, nd_process_name());
+	}
+	else {
+		proceInfo = pProcessRoot->getProcessInfo(processId);
+
+	}
+	if (!proceInfo)	{
+		nd_logerror("create debug info for %d process error\n", processId);
+		return false;
+	}
+
+
+	int ret = nd_mem_share_create(proceInfo->shareMemName, 1024 * 1024, &m_outPutMem);
+	if (-1 == ret) {
+		return false;
+	}
+
+	m_RunningSem = nd_sem_open(proceInfo->semName);
+	if (!m_RunningSem) {
+		return false;
+	}
+
+	m_cliSem = nd_sem_open(proceInfo->semClient);
+	if (!m_cliSem) {
+		return false;
+	}
+	return true;
+}
+bool LocalDebugger::postEndDebug()
+{
+	ShareProcessLists *root = ShareProcessLists::get_Instant();
+	root->delProcess( nd_processid() ); 
+	if (m_RunningSem) {
+		nd_sem_destroy(m_RunningSem);
+		m_RunningSem = 0;
+	}
+
+	if (m_cliSem) {
+		nd_sem_destroy(m_cliSem);
+		m_cliSem = 0;
+	}
+
+	if (nd_mem_share_addr(&m_outPutMem))	{
+		nd_mem_share_close(&m_outPutMem);
+	}
+	return true;
 }
 
 //run on parser
 int LocalDebugger::onEnterStep(const char *funcName, const char *nodeName)
 {
 	if (isBreakPoint(funcName, nodeName, true) || m_bStep){
-		if (m_client){
-			return waitEvent(funcName, nodeName);
-		}
+		return waitEvent(funcName, nodeName);
+	}
+	else if (m_bRunOut && m_parser->checkLastStepIsCall()) {
+		m_bRunOut = false;
+		return waitEvent(funcName, nodeName);
 	}
 	return 0;
 }
@@ -494,7 +533,7 @@ int LocalDebugger::ntfClient(int cmd, const char *func, const char *nodeName)
 	if (func && nodeName) {
 		snprintf(proceInfo->cmdBuf, sizeof(proceInfo->cmdBuf), "<node func=\"%s\" exenode=\"%s\" />", func, nodeName);
 	}
-	nd_sem_post(processList->m_cliSem);
+	nd_sem_post(m_cliSem);
 	return 0;
 }
 
@@ -514,8 +553,8 @@ int LocalDebugger::waitEvent(const char *runningFunc, const char *runningNode)
 
 	ndxml_root &parserInfo = getParserInfo();
 
-	void *outAddr = nd_mem_share_addr(&processList->m_outPutMem);
-	size_t outSize = (size_t)nd_mem_share_size(&processList->m_outPutMem);
+	void *outAddr = nd_mem_share_addr(&m_outPutMem);
+	size_t outSize = (size_t)nd_mem_share_size(&m_outPutMem);
 	ndxml_to_buf(&parserInfo,(char*)outAddr , outSize);
 
 	if (-1 == ntfClient(E_DBG_OUTPUT_CMD_STEP, runningFunc, runningNode)) {
@@ -526,7 +565,7 @@ int LocalDebugger::waitEvent(const char *runningFunc, const char *runningNode)
 RE_WIAT:
 
 	//m_client->onEnterStep(runningFunc, runningNode);
-	ret = nd_sem_wait(processList->m_RunningSem, INFINITE);
+	ret = nd_sem_wait(m_RunningSem, INFINITE);
 	if (0!=ret)	{
 		return -1;
 	}
@@ -560,6 +599,10 @@ RE_WIAT:
 			addBreakPoint(funcName.c_str(), nodeName.c_str(),true);
 		}
 		break;
+	case E_DBG_INPUT_CMD_RUN_OUT:
+		m_bStep = false;
+		m_bRunOut = true;
+		break;
 	case E_DBG_INPUT_CMD_DEL_BREAKPOINT:
 		if (getParamFromInput(funcName, nodeName)) {
 			delBreakPoint(funcName.c_str(), nodeName.c_str());
@@ -583,6 +626,20 @@ ndxml_root & LocalDebugger::getParserInfo()
 {
 	makeParserInfo();
 	return m_parserInfo;
+}
+
+
+
+bool LocalDebugger::OutPutInfo(ndxml *dataInfo)
+{
+	if (!nd_mem_share_addr(&m_outPutMem)) {
+		return false;
+	}
+	size_t size = ndxml_to_buf(dataInfo, (char *)nd_mem_share_addr(&m_outPutMem), (int)nd_mem_share_size(&m_outPutMem));
+	if (size == 0)	{
+		return false;
+	}
+	return true;
 }
 
 
@@ -614,7 +671,7 @@ bool LocalDebugger::makeParserInfo()
 	len = snprintf(p, sizeof(buf), "%s(", stack->cmd->cmdname);
 	p += len;
 
-	for (int  i = 0; i < stack->params.size(); i++)	{
+	for (int  i = 1; i < stack->params.size(); i++)	{
 		len = stack->params[i].Sprint(p, sizeof(buf) - (p - buf));
 		p += len;
 	}
@@ -631,13 +688,14 @@ bool LocalDebugger::makeParserInfo()
 	ndxml_addnode(xmlInfo, "instruct_flag", m_parser->m_registorFlag? "true": "false");
 	ndxml_addnode(xmlInfo, "control_flag", m_parser->m_registorCtrl ? "true" : "false");
 
-	const char *val = m_parser->m_registerVal.GetText();
-	ndxml_addnode(xmlInfo, "$curValue", val ? val: "0");
+	
+	len = m_parser->m_registerVal.Sprint(buf, sizeof(buf));
+	ndxml_addnode(xmlInfo, "$curValue", len>0 ? buf : "0");
 
 
 	for (int i = 0; i < stack->local_vars.size(); i++)	{
-		const char *val = stack->local_vars[i].var.GetText();
-		ndxml_addnode(xmlInfo, stack->local_vars[i].name.c_str(), val ? val : "0");
+		len = stack->local_vars[i].var.Sprint(buf, sizeof(buf));
+		ndxml_addnode(xmlInfo, stack->local_vars[i].name.c_str(), len>0 ? buf : "0");
 	}
 	return true;
 }

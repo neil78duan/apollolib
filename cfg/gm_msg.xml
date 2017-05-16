@@ -152,7 +152,7 @@
 	<message name="GM_加物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="6">0</msgid>
 		<data name="物品编号" kinds="numeral" param="0">3101</data>
-		<data name="数量" kinds="numeral" param="0">10</data>
+		<data name="数量" kinds="numeral" param="0">50</data>
 	</message>
 	<message name="GM_增加卡牌" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="7">0</msgid>

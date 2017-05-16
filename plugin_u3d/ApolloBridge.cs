@@ -110,6 +110,11 @@ public class apoClient {
     }
     public unsafe int Send(int messageId, NDMsgStream body) 
     {
+        if (body == null)
+        {
+            Debug.LogError("message body is NULL \n");
+            return -1;
+        }
         return Send(messageId, body.ToArray());
     }
 
