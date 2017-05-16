@@ -69,6 +69,7 @@ enum parserDebugInputCmd
 	E_DBG_INPUT_CMD_STEP_RUN,
 	E_DBG_INPUT_CMD_CONTINUE,
 	E_DBG_INPUT_CMD_RUN_TO_CURSOR,
+	E_DBG_INPUT_CMD_RUN_OUT,
 	E_DBG_INPUT_CMD_DEL_BREAKPOINT,
 	E_DBG_INPUT_CMD_TERMINATED,
 	E_DBG_INPUT_CMD_ADD_TEMP_BREAKPOINT,
@@ -117,12 +118,8 @@ public:
 
 	processHeaderInfo *getProcessInfo(NDUINT32 processId);
 
-	bool OutPutInfo(ndxml *dataInfo);
 public:
 
-	nd_filemap_t m_outPutMem;
-	ndsem_t m_RunningSem;
-	ndsem_t m_cliSem;
 };
 
 struct LogicRunningProcess
@@ -142,13 +139,18 @@ public:
 	//command for client
 	int localStrat(LogicParserEngine *parser, int argc, const char *argv[], int encodeType = ND_ENCODE_TYPE);
 	int Attach(NDUINT32 processId);
+	int postEndDebug();
+	
 
-	int runStep(); //return  0 success ,renturn -1 error , error== would_block , in step-debug
-	int runContinue();
-	int runTo(const char *funcName, const char *nodeName);
-	int stopDebug();
-	int addBreakPoint(const char *funcName, const char *nodeName, bool isTemp = false);
-	int delBreakPoint(const char *funcName, const char *nodeName);
+
+	int cmdStep(){ return inputCmd(E_DBG_INPUT_CMD_STEP_RUN); }
+	int cmdContinue(){ return inputCmd(E_DBG_INPUT_CMD_CONTINUE); }
+	int cmdStopDebug(){ return inputCmd(E_DBG_INPUT_CMD_TERMINATED); }
+	int cmdRunOut(){ return inputCmd(E_DBG_INPUT_CMD_RUN_OUT); }
+	int cmdRunTo(const char *func, const char *node){ return inputCmd(E_DBG_INPUT_CMD_RUN_TO_CURSOR, func, node); }
+
+	int cmdAddBreakPoint(const char *funcName, const char *nodeName, bool isTemp = false);
+	int cmdDelBreakPoint(const char *funcName, const char *nodeName);
 
 	virtual bool onEnterStep(const char *function, const char *node);
 	virtual void onTerminate();
@@ -160,12 +162,16 @@ public:
 
 protected:
 
+	ndsem_t getHostSem();
+	ndsem_t getClientSem();
+
 	int waitEvent();
 	int inputCmd(int cmdId);
 	int inputCmd(int cmdId, const char *func, const char *nodeName);
 
 	NDUINT32 m_aimProcessId;
 	bool m_isAttached;
+
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -173,6 +179,7 @@ protected:
 //debug host
 class LocalDebugger
 {
+	friend class LogicDebugClient;
 public:
 	LocalDebugger(LogicParserEngine *parser,LogicObjectBase *owner=NULL);
 	~LocalDebugger();
@@ -180,6 +187,10 @@ public:
 	int runCmdline(int argc, const char *argv[], int encodeType = ND_ENCODE_TYPE); 
 	int addBreakPoint(const char *funcName, const char *nodeName,bool isTemp=false);
 	int delBreakPoint(const char *funcName, const char *nodeName);
+	void clearBreakpoint();
+
+	bool preStartDebug(NDUINT32 processId);
+	bool postEndDebug();
 
 	//run on parser
 	int onEnterStep(const char *funcName, const char *nodeName);
@@ -191,7 +202,8 @@ public:
 	void setParser(LogicParserEngine *parser) { m_parser = parser; }
 	int getEncodeType() { return m_encodeType; }
 
-	void setClient(LogicDebugClient *client) { m_client = client; }
+	//void setClient(LogicDebugClient *client) { m_client = client; }
+	ndsem_t getClientSem() { return m_cliSem; }
 private:
 
 	int waitEvent(const char *funcName, const char *nodeName);
@@ -199,16 +211,22 @@ private:
 
 	int m_encodeType;
 	bool m_bStep;
+	bool m_bRunOut;		//run leave function-and-break
 	bool isBreakPoint(const char *func, const char *node, bool bTrytoDel=false);
 	bool makeParserInfo();
 	bool getParamFromInput(std::string &funcName, std::string &nodeName);
+	bool OutPutInfo(ndxml *dataInfo);
 
 	LogicParserEngine *m_parser;
 	ndxml_root m_parserInfo;
-
 	breakPoint_vct m_breakPoints;
 
-	LogicDebugClient *m_client;
+	//LogicDebugClient *m_client;
+
+	//debug runtime object
+	nd_filemap_t m_outPutMem;
+	ndsem_t m_RunningSem;
+	ndsem_t m_cliSem; // the client thread wait this sem
 
 };
 

@@ -158,6 +158,8 @@ public:
 	bool compileXml(const char *xmlFile, const char *outStreamFile, int outEncodeType = 0, bool withDgbInfo = false, int byteOrder=1);
 	stackIndex_vct &getErrorStack() { return m_curCompileStack; }
 	//bool setConfigFile(const char *config);
+
+	static bool getFuncStackInfo(ndxml *curNode, char *buf, size_t size);
 private:
 	
 	bool compileFuncs(ndxml *funcsCollect, FILE *pf);
@@ -195,6 +197,8 @@ private:
 	bool _fillJumpLengthInblock(const char *blockStart, size_t blockSize, shortJumpAddr_vct *jumpAddrList = NULL);
 
 
+	//bool _getFuncStackInfo(ndxml *curNode, char *buf, size_t size)	{ return LogicCompiler::getFuncStackInfo(curNode, buf, size); };
+
 	int _trutoFillPreCmd(ndxml *funcNode, char *buf, size_t bufsize);
 
 	bool _compilePreCmd(ndxml *xmlroot);
@@ -202,7 +206,6 @@ private:
 	void _pushStack(int stackIndex) ;
 	void _popStac();
 	void _makeErrorStack(ndxml *xmlError) ;
-	bool _getFuncStackInfo(ndxml *curNode,char *buf, size_t size) ;
 
 	bool _isForDebug(ndxml *xml);
 	bool _isBreakPoint(ndxml *xml);

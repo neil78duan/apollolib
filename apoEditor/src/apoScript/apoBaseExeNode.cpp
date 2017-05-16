@@ -36,6 +36,7 @@ QWidget(parent), m_toNextNode(NULL), m_nodeXml(0), m_outParamAddNew(0),
 	m_showError = false ;
 	m_beDeleted = true;
 	m_disableNewFuncParam = true;
+	m_bInDebug = false;
 	m_scale = 1;
 	m_type = 0;
 	m_tips = tips;
@@ -58,6 +59,7 @@ QWidget(parent), m_toNextNode(NULL), m_outParamAddNew(0),
 	m_selected = false;
 	m_showError = false;
 	m_beDeleted = true;
+	m_bInDebug = false;
 
 	m_scale = 1;
 	setAttribute(Qt::WA_DeleteOnClose, true);
@@ -321,11 +323,37 @@ void apoBaseExeNode::enableOutParam()
 void apoBaseExeNode::setSelected(bool isSelected)
 {
 	m_selected = isSelected;
+	if (isSelected)	{
+		m_showError = false;
+	}
 }
 
 void apoBaseExeNode::setError(bool isError)
 {
 	m_showError = isError ;
+	if (isError){
+		m_selected = false;
+	}
+
+}
+
+
+void apoBaseExeNode::setDebug(bool isDebug )
+{
+	m_bInDebug = isDebug;
+	if (isDebug)	{
+		m_showError = false;
+		m_selected = false;
+	}
+
+	apoBaseSlotCtrl *pInSlot = inNode();
+	if (pInSlot)	{
+		apoUiBezier *pbze = pInSlot->getConnector();
+		if (pbze)	{
+			pbze->setDebug(isDebug);
+		}
+	}
+		
 }
 
 void apoBaseExeNode::setTitle(const QString &title)
@@ -991,6 +1019,9 @@ void apoBaseExeNode::paintEvent(QPaintEvent *event)
 	}
 	else if (m_selected)	{
 		painter.setPen(QPen(Qt::green, 2));
+	}
+	else if (m_bInDebug) {
+		painter.setPen(QPen(Qt::darkYellow, 2));
 	}
 	else {
 		painter.setPen(QPen(Qt::red, 2));

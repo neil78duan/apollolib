@@ -39,22 +39,26 @@ public:
 
 	bool showFunction(ndxml *data, ndxml_root *xmlfile);
 	void clearFunction();
-	//void setSettingConfig(apoEditorSetting *setting) { m_setting = setting; }
 
 	void showNodeDetail(apoBaseExeNode *exenode);
 	bool setCurDetail(ndxml *xmlNode, bool inError= false);
+	bool setDebugNode(ndxml *xmlNode);
 	bool setCurNodeSlotSelected(ndxml *xmlParam, bool inError=false);
 	
 	QPoint getExenodeOffset() { return m_offset; }
 	float setScale(float scale);
 	const char *getEditedFunc();
+
+	apoBaseExeNode *getCurDebugNode() { return m_debugNode; }
+
 public slots:
-	//void onExenodeDBClicked(apoBaseExeNode *exeNode, QMouseEvent * event);
 	void onCurNodeChanged();
 	void onNodeAddNewParam(apoBaseExeNode *node);
 	void onFuncNameChanged(ndxml *funcXml);
+
 signals:
 	void showExenodeSignal(apoBaseExeNode *exeNode);
+	void breakPointSignal(const char *function, const char *node, bool isAdd);
 
 private:
 	void movedInScale(apoBaseExeNode *exeNode, const QPoint &screenPos);
@@ -145,7 +149,6 @@ private:
 
 	bool m_bInDrag;
 	eDragType m_curDragType; //move subNode or connect-line
-	//ePopMenuType m_popMenuType;
 
 	apoBaseSlotCtrl *m_connectToSlot;
 	QWidget *m_dragSrc;
@@ -171,6 +174,7 @@ private:
 
 	apoBaseExeNode *m_funcEntry;
 	apoBaseExeNode *m_curDetailNode;
+	apoBaseExeNode *m_debugNode;
 	apoEditorSetting *m_setting;
 
 

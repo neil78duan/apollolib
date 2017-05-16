@@ -977,27 +977,6 @@ int LogicCompiler::step2Strem(compile_setting *stepSetting, ndxml *stepNode, cha
 		return 0;
 	}
 
-// 
-// 	if (m_bDebugInfo) {
-// 		int ret = writeDebugInfo(stepNode, pStepName, p, len);
-// 		if (ret > 0){
-// 			len -= ret;
-// 			p += ret;
-// 			//cur_step_size = p;
-// 			//*((*(NDUINT32**)&p)++) = 0;
-// 			p = lp_write_stream(p, (NDUINT32)0xffffffff, m_aimByteOrder);
-// 
-// 			len -= sizeof(NDUINT32);
-// 
-// 		}
-// 		else {
-// 			nd_logerror("wirte debug info error :%s\n", pStepName);
-// 			_makeErrorStack(stepNode);
-// 			return -1;
-// 		}
-// 	}
-
-	//*((*(NDUINT32**)&p)++) = (NDUINT32)stepSetting->ins_id;
 	p = lp_write_stream(p, (NDUINT32)stepSetting->ins_id, m_aimByteOrder);
 
 	lp_stream_t pArgNum = NULL;
@@ -1123,11 +1102,8 @@ int LogicCompiler::writeDebugInfo(ndxml *stepNode, const char*stepName, char *bu
 	char *p = buf;
 	
 	char debugInfo[1024] ;
-	char *start = debugInfo ;
-	int len = snprintf(debugInfo, sizeof(debugInfo), "%s", stepName) ;
-	start += len;
 	
-	_getFuncStackInfo(stepNode,start, sizeof(debugInfo) - len) ;
+	getFuncStackInfo(stepNode,debugInfo, sizeof(debugInfo) ) ;
 	stepName = debugInfo ;
 
 	p = lp_write_stream(p, (NDUINT32)E_OP_DEBUG_INFO, m_aimByteOrder);
@@ -1478,7 +1454,7 @@ void LogicCompiler::_makeErrorStack(ndxml *xmlError)
 	m_curCompileStack.insert(m_curCompileStack.begin(), stackIndex.rbegin(), stackIndex.rend()) ;
 }
 
-bool LogicCompiler::_getFuncStackInfo(ndxml *curNode,char *buf, size_t size)
+bool LogicCompiler::getFuncStackInfo(ndxml *curNode,char *buf, size_t size)
 {
 	stackIndex_vct stackIndex ;
 	ndxml *parent = ndxml_get_parent(curNode) ;
@@ -1498,8 +1474,13 @@ bool LogicCompiler::_getFuncStackInfo(ndxml *curNode,char *buf, size_t size)
 	}
 	char *p = buf ;
 	*p = 0 ;
+
+	int len = snprintf(p, size, "%s",_GetXmlName(curNode,NULL));
+	p += len;
+	size -= len;
+
 	for (stackIndex_vct::reverse_iterator it =stackIndex.rbegin() ; it!=stackIndex.rend(); ++it) {
-		int len = snprintf(p, size, ".%d", (*it)) ;
+		len = snprintf(p, size, ".%d", (*it)) ;
 		p+= len ;
 		size -= len ;
 	}
@@ -1541,10 +1522,7 @@ bool LogicCompiler::_trytoAddBreakPoint(ndxml *xml)
 
 
 		char debugInfo[1024];
-		char *start = debugInfo;
-		int len = snprintf(debugInfo, sizeof(debugInfo), "%s", m_cur_step.c_str());
-		start += len;
-		_getFuncStackInfo(xml, start, sizeof(debugInfo) - len);
+		getFuncStackInfo(xml, debugInfo, sizeof(debugInfo) );
 
 		debugger.addBreakPoint(m_cur_function.c_str(), debugInfo);
 		return true;

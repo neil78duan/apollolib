@@ -38,6 +38,7 @@ public:
 	apoUiBezier &operator=(const apoUiBezier &r);
 
 	void setColor(Qt::GlobalColor color){ m_color = color; }
+	void setDebug(bool bDebug = false);
 	void setWidth(int wid) { m_lineWid = wid; }
 	void setType(eBezierType type) { m_type = type; }
 	eBezierType getType() { return m_type; }

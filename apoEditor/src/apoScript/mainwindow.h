@@ -44,13 +44,17 @@ public:
 	void WriteLog(const char *logText);
 
 protected:
+	enum eSelNodeStat{ E_SELECTED_NODE_ERROR, E_SELECTED_NODE_DEBUG};
+	bool getStackFromName(const char *nodeInfo, stackIndex_vct &stackIndex);
 	void showAllView();
 	bool setFileRoot(const char *rootFile);
 	bool setDefaultFile(const char *lastEditfile);
 	bool showCompileError(const char *xmlFile, stackIndex_vct &errorStack);
+	bool showDebugNode(const char *nodeInfo);
 	void setCurFileSave(bool isSaved=false);
 
 public slots:
+	void onBreakPointEdited(const char *function, const char *node, bool isAdd);
 	void onShowExeNodeDetail(apoBaseExeNode *exenode);
 	void onFileChanged();
 	void onXmlNodeDel(ndxml *xmlnode);
@@ -81,6 +85,7 @@ private slots:
 	void on_actionCancel_scale_triggered();
 
 	void on_actionRunDebug_triggered();
+    void on_actionStepOver_triggered();
 	void on_actionStepIn_triggered();
 	void on_actionContinue_triggered();
 	void on_actionStepOut_triggered();
@@ -89,6 +94,7 @@ private slots:
 
 	void onFunctionsTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 	void onFilesTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+
 
 protected:
 
@@ -99,6 +105,7 @@ protected:
 
 	bool showCommonDeatil(ndxml *xmldata);
 	bool showDebugInfo(ndxml *xmldata);
+	void closeDebugInfo();
 	void closeDetail();
 	bool runFunction(const char *binFile,const char *srcFile, int argc, const char* argv[]);
 	bool compileScript(const char *scriptFile, std::string &outFile, bool bWithRun = false, bool bDebug=false);

@@ -350,6 +350,7 @@ public:
 	void setOwner(LogicObjectBase *owner) { m_owner = owner; }
 	runningStack *getCurStack() { return m_curStack; }
 	const char *getLastErrorNode() { return m_dbg_node; }
+	bool checkLastStepIsCall() { return m_bLastIsCalled; }
 
 private:
 	friend class LogicEngineRoot;
@@ -443,7 +444,9 @@ protected:
 	bool m_registorCtrl;				// compare and jump registor
 	bool m_OnErrorExit;
 	bool m_simulate;					//run simulate or test
-	bool m_bStepMode;
+	bool m_bStepMode;	
+	bool m_bLastIsCalled;		//last step is call function
+
 	int m_sys_errno;
 	int m_registerCount;
 	int m_cmdByteOrder;

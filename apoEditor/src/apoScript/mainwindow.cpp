@@ -47,9 +47,15 @@ QMainWindow(parent), m_editorSetting(*apoEditorSetting::getInstant()), m_editorW
 
 	QObject::connect(m_editorWindow, SIGNAL(showExenodeSignal(apoBaseExeNode*)),
 		this, SLOT(onShowExeNodeDetail(apoBaseExeNode *)));
+
+	QObject::connect(m_editorWindow, SIGNAL(breakPointSignal(const char *, const char *, bool)),
+		this, SLOT(onBreakPointEdited(const char *, const char *, bool)));
+
 	setCentralWidget(m_editorWindow);
 
 	__glogWrapper = ND_LOG_WRAPPER_NEW(MainWindow);
+
+	onDebugEnd();
 }
 
 MainWindow::~MainWindow()
@@ -261,6 +267,8 @@ bool MainWindow::loadScriptFile(const char *scriptFile)
 		delete m_curFile;
 	}
 
+	LogicEngineRoot::get_Instant()->getGlobalDebugger().clearBreakpoint();
+
 	MY_LOAD_XML_AND_NEW(m_curFile, scriptFile, m_editorSetting.m_encodeName.c_str(), return true);
 
 	//load user define enum 
@@ -367,10 +375,13 @@ void MainWindow::onFunctionListChanged(ndxml *xmlnode)
 void MainWindow::onDebugTerminate()
 {
 	EndDebug(true);
+	this->update();
 }
 void MainWindow::onDebugStep(const char *func, const char* node)
 {
-	showRuntimeError(m_filePath.c_str(), node);
+	nd_logdebug("recv step in %s : %s\n", func, node);
+	showDebugNode(node);
+
 	if (m_debugInfo){
 		delete m_debugInfo;
 		m_debugInfo = NULL;
@@ -381,6 +392,7 @@ void MainWindow::onDebugStep(const char *func, const char* node)
 			showDebugInfo(m_debugInfo);
 		}
 	}
+	this->update();
 }
 void MainWindow::onDebugCmdAck()
 {
@@ -394,6 +406,7 @@ void MainWindow::onDebugCmdAck()
 			showDebugInfo(m_debugInfo);
 		}
 	}
+	this->update();
 }
 
 
@@ -489,17 +502,36 @@ bool MainWindow::showDebugInfo(ndxml *xmldata)
 		this, SLOT(onFileChanged()));
 
 	pDock->setWidget(subwindow);
-	addDockWidget(Qt::BottomDockWidgetArea, pDock);
+	addDockWidget(Qt::RightDockWidgetArea, pDock);
 
 	return true;
 }
 
+void MainWindow::closeDebugInfo()
+{
+	QDockWidget *pDock = this->findChild<QDockWidget*>("DebugView");
+	if (pDock)	{
+		pDock->close();
+	}
+}
 
 void MainWindow::closeDetail()
 {
 	QDockWidget *pDock = this->findChild<QDockWidget*>("DetailView");
 	if (pDock)	{
 		pDock->close();
+	}
+}
+
+void MainWindow::onBreakPointEdited(const char *func, const char *node, bool isAdd)
+{
+	if (m_debuggerCli){
+		if (isAdd)	{
+			m_debuggerCli->cmdAddBreakPoint(func, node);
+		}
+		else{
+			m_debuggerCli->cmdDelBreakPoint(func, node);
+		}
 	}
 }
 
@@ -943,13 +975,50 @@ void MainWindow::on_actionRunDebug_triggered()
 {
 	on_actionSave_triggered();
 	ClearLog();
+	closeDetail();
+
 	Run(true);
 }
+
+void MainWindow::on_actionStepOver_triggered()
+{
+	if (m_debuggerCli)	{
+		bool bExeed = false;
+		int ret = -1;
+		//run to next node 
+		apoBaseExeNode *pDbgNode = m_editorWindow->getCurDebugNode();
+		if (pDbgNode)	{
+			apoBaseExeNode *aimNode = pDbgNode->getMyNextNode();
+			if (aimNode)	{
+				ndxml *xmlnode = aimNode->getBreakPointAnchor();
+				if (xmlnode){
+					char buf[1024];
+					if (LogicCompiler::getFuncStackInfo(xmlnode, buf, sizeof(buf))) {
+
+						bExeed = true;
+						ret = m_debuggerCli->cmdRunTo(LogicEditorHelper::_GetXmlName(m_currFunction,NULL), buf);
+					}
+				}
+			}
+		}
+
+
+		if (!bExeed ) {
+			ret = m_debuggerCli->cmdStep();
+		}
+
+		if (ret == -1)	{
+			EndDebug(false);
+		}
+
+	}
+}
+
 
 void MainWindow::on_actionStepIn_triggered()
 {
 	if (m_debuggerCli)	{
-		if (m_debuggerCli->runStep() == -1) {
+		if (m_debuggerCli->cmdStep() == -1) {
 			EndDebug(false);
 		}
 	}
@@ -958,7 +1027,7 @@ void MainWindow::on_actionStepIn_triggered()
 void MainWindow::on_actionContinue_triggered()
 {
 	if (m_debuggerCli)	{
-		if (m_debuggerCli->runContinue() == -1) {
+		if (m_debuggerCli->cmdContinue() == -1) {
 			EndDebug(false);
 		}
 	}
@@ -968,7 +1037,7 @@ void MainWindow::on_actionStepOut_triggered()
 {
 
 	if (m_debuggerCli)	{
-		if (m_debuggerCli->runStep() == -1) {
+		if (m_debuggerCli->cmdRunOut() == -1) {
 			EndDebug(false);
 		}
 	}
@@ -983,7 +1052,6 @@ void MainWindow::on_actionDeattch_triggered()
 {
 
 }
-
 
 static int getScriptExpEncodeType(ndxml *scriptXml)
 {
@@ -1122,6 +1190,8 @@ bool MainWindow::StartDebug(const char *binFile, const char *srcFile, int argc, 
 	onDebugStart();
 	parser.eventNtf(APOLLO_EVENT_SERVER_START, 0);
 
+
+	nd_logmsg("======== Begin deubg %s ...==========\n", argv[0]);
 	int ret = m_debuggerCli->localStrat(&parser,argc, argv, E_SRC_CODE_UTF_8);
 	if (-1==ret) {
 		EndDebug(false);
@@ -1133,6 +1203,7 @@ bool MainWindow::StartDebug(const char *binFile, const char *srcFile, int argc, 
 
 void MainWindow::EndDebug(bool bSuccess)
 {
+	onDebugEnd();
 	if (m_debuggerCli)	{
 		LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
 		nd_assert(scriptRoot);
@@ -1149,6 +1220,8 @@ void MainWindow::EndDebug(bool bSuccess)
 			}
 		}
 
+		m_debuggerCli->postEndDebug();
+
 		delete m_localDebugOwner;
 		m_localDebugOwner = NULL;
 
@@ -1157,17 +1230,39 @@ void MainWindow::EndDebug(bool bSuccess)
 
 		LogicEngineRoot::destroy_Instant();
 	}
-	onDebugEnd();
 
+	nd_logmsg("----------Debug end----------\n");
 }
 
 void MainWindow::onDebugStart()
 {
 
+	ui->actionRunDebug->setDisabled(true);
+	ui->actionAttach->setDisabled(true);
+
+	ui->actionStepIn->setDisabled(false);
+	ui->actionStepOver->setDisabled(false);
+	ui->actionContinue->setDisabled(false);
+	ui->actionStepOut->setDisabled(false);
+	ui->actionDeattch->setDisabled(false);
 }
 
 void MainWindow::onDebugEnd()
 {
+	closeDebugInfo();
+	if (m_editorWindow)	{
+		m_editorWindow->setDebugNode(NULL);
+	}
+
+	
+	ui->actionRunDebug->setDisabled(false);
+	ui->actionAttach->setDisabled(false);
+
+	ui->actionStepIn->setDisabled(true);
+	ui->actionStepOver->setDisabled(true);
+	ui->actionContinue->setDisabled(true);
+	ui->actionStepOut->setDisabled(true);
+	ui->actionDeattch->setDisabled(true);
 
 }
 
@@ -1297,11 +1392,12 @@ bool MainWindow::showCompileError(const char *xmlFile, stackIndex_vct &errorStac
 		nd_logerror("can not load %s file\n", xmlFile);
 		return false;
 	}
+
 	ndxml *xmlroot = m_curFile;
 	for (size_t i = 0; i < errorStack.size(); i++){
 		int index = errorStack[i];
 		ndxml *node = ndxml_getnodei(xmlroot, index);
-		xmlroot = node ;
+		xmlroot = node;
 
 		const char *pAction = m_editorSetting.getDisplayAction(ndxml_getname(node));
 		if (pAction && 0 == ndstricmp(pAction, "function")) {
@@ -1311,19 +1407,55 @@ bool MainWindow::showCompileError(const char *xmlFile, stackIndex_vct &errorStac
 
 
 		const compile_setting* compileSetting = m_editorSetting.getStepConfig(ndxml_getname(node));
-		if(!compileSetting) {
+		if (!compileSetting) {
 			continue;
 		}
-			
+
 		if (compileSetting->ins_type == E_INSTRUCT_TYPE_CMD){
-			if (!m_editorWindow->setCurDetail(node,true)) {
+			if (!m_editorWindow->setCurDetail(node, true)) {
 				nd_logerror("can not show current detail node \n");
 				return false;
 			}
 		}
 		else if (compileSetting->ins_type == E_INSTRUCT_TYPE_PARAM) {
-			if (!m_editorWindow->setCurNodeSlotSelected(node,true))	{
+			if (!m_editorWindow->setCurNodeSlotSelected(node, true))	{
 				nd_logerror("can not show current param\n");
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+
+bool MainWindow::showDebugNode(const char *nodeInfo)
+{
+	stackIndex_vct debugStack;
+	getStackFromName(nodeInfo, debugStack);
+
+	ndxml *xmlroot = m_curFile;
+	for (size_t i = 0; i < debugStack.size(); i++){
+		int index = debugStack[i];
+		ndxml *node = ndxml_getnodei(xmlroot, index);
+		xmlroot = node;
+
+		const char *pAction = m_editorSetting.getDisplayAction(ndxml_getname(node));
+		if (pAction && 0 == ndstricmp(pAction, "function")) {
+			if (m_currFunction != node)	{
+				m_currFunction = node;
+				showCurFunctions();
+			}
+		}
+
+
+		const compile_setting* compileSetting = m_editorSetting.getStepConfig(ndxml_getname(node));
+		if (!compileSetting) {
+			continue;
+		}
+
+		if (compileSetting->ins_type == E_INSTRUCT_TYPE_CMD){
+			if (!m_editorWindow->setDebugNode(node)) {
+				nd_logerror("can not show current debug node \n");
 				return false;
 			}
 		}
@@ -1334,7 +1466,26 @@ bool MainWindow::showCompileError(const char *xmlFile, stackIndex_vct &errorStac
 bool  MainWindow::showRuntimeError(const char *scriptFile, const char *errNodeInfo)
 {
 	stackIndex_vct stackIndex;
-	const char *p = strchr(errNodeInfo, '.');
+	getStackFromName(errNodeInfo, stackIndex);
+// 	const char *p = strchr(errNodeInfo, '.');
+// 
+// 	while (p && *p) {
+// 		if (*p == '.') {
+// 			++p;
+// 		}
+// 		char buf[10];
+// 		buf[0] = 0;
+// 		p = ndstr_nstr_ansi(p, buf,'.', 10);
+// 		if (buf[0])	{
+// 			stackIndex.push_back(atoi(buf));
+// 		}
+// 	}
+	return showCompileError(scriptFile, stackIndex);
+}
+
+bool MainWindow::getStackFromName(const char *nodeInfo, stackIndex_vct &stackIndex)
+{
+	const char *p = strchr(nodeInfo, '.');
 
 	while (p && *p) {
 		if (*p == '.') {
@@ -1342,13 +1493,15 @@ bool  MainWindow::showRuntimeError(const char *scriptFile, const char *errNodeIn
 		}
 		char buf[10];
 		buf[0] = 0;
-		p = ndstr_nstr_ansi(p, buf,'.', 10);
+		p = ndstr_nstr_ansi(p, buf, '.', 10);
 		if (buf[0])	{
 			stackIndex.push_back(atoi(buf));
 		}
 	}
-	return showCompileError(scriptFile, stackIndex);
+
+	return true;
 }
+
 void MainWindow::setCurFileSave(bool isSaved)
 {
 	QDockWidget *pDock = this->findChild<QDockWidget*>("FunctionView");
