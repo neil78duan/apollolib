@@ -70,6 +70,7 @@ public:
 	void setSelected(bool isSelected);
 	bool getSelected() { return m_selected; }
 	void setError(bool isError=true) ;
+	void setDebug(bool isDdebug = true);
 
 	//call before InitCtrl ;
 	void disableReturnVar();
@@ -186,6 +187,7 @@ protected:
 	bool m_beDeleted;
 	bool m_selected;
 	bool m_showError ;		//show compiled error
+	bool m_bInDebug;		// in debug
 	int m_type;
 
 	float m_scale;

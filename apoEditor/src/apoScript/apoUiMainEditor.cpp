@@ -33,6 +33,7 @@ apoUiMainEditor::apoUiMainEditor(QWidget *parent) :
 QWidget(parent), m_editedFunction(0),  m_curDetailNode(0),
 	m_dragSrc(NULL), m_drawingBezier(NULL), m_popSrc(0)
 {
+	m_debugNode = NULL;
 	m_curDragType = E_MOUSE_TYPE_NONE;
 	//m_popMenuType = E_POP_DEL;
 	m_scriptFileXml = 0;
@@ -109,6 +110,7 @@ void apoUiMainEditor::clearFunction()
 	m_funcEntry = NULL;
 	m_scriptFileXml = NULL;
 	m_curDetailNode = NULL;
+	m_debugNode = NULL;
 
 
 	QObjectList list = children();
@@ -969,6 +971,15 @@ void apoUiMainEditor::popMenuAddBreakPointTrigged()
 		if (exeNode){
 			exeNode->insertBreakPoint();
 			this->update();
+
+			ndxml *xmlnode = exeNode->getBreakPointAnchor();
+			if (xmlnode){
+				char buf[1024];
+				if (LogicCompiler::getFuncStackInfo(xmlnode, buf, sizeof(buf))) {
+					emit breakPointSignal(LogicEditorHelper::_GetXmlName(m_editedFunction,NULL), buf, true);
+				}
+			}
+
 		}
 	}
 
@@ -983,6 +994,14 @@ void apoUiMainEditor::popMenuDelBreakPointTrigged()
 			exeNode->delBreakPoint();
 			showNodeDetail(exeNode);
 			this->update();
+
+			ndxml *xmlnode = exeNode->getBreakPointAnchor();
+			if (xmlnode){
+				char buf[1024];
+				if (LogicCompiler::getFuncStackInfo(xmlnode, buf, sizeof(buf))) {
+					emit breakPointSignal(LogicEditorHelper::_GetXmlName(m_editedFunction,NULL), buf, false);
+				}
+			}
 		}
 	}
 
@@ -1032,10 +1051,10 @@ void apoUiMainEditor::contextMenuEvent(QContextMenuEvent *event)
 
 			// check break point
 			if (pDelNode->isBreakPoint()) {
-				ADD_MENT_MENU(popMenu, QString("BreakPoint del"), apoUiMainEditor::popMenuDelBreakPointTrigged);
+				ADD_MENT_MENU(popMenu, QString("Del breakPoint"), apoUiMainEditor::popMenuDelBreakPointTrigged);
 			}
 			else {
-				ADD_MENT_MENU(popMenu, QString("New BreakPoint"), apoUiMainEditor::popMenuAddBreakPointTrigged);
+				ADD_MENT_MENU(popMenu, QString("New breakPoint"), apoUiMainEditor::popMenuAddBreakPointTrigged);
 			}
 			popMenu->exec(QCursor::pos());
 		}
@@ -1363,7 +1382,6 @@ void apoUiMainEditor::showNodeDetail(apoBaseExeNode *exenode)
 
 bool apoUiMainEditor::setCurDetail(ndxml *xmlNode, bool inError)
 {
-
 	QObjectList list = children();
 	foreach(QObject *obj, list) {
 		apoBaseExeNode *exeNode = qobject_cast<apoBaseExeNode*>(obj);
@@ -1376,6 +1394,31 @@ bool apoUiMainEditor::setCurDetail(ndxml *xmlNode, bool inError)
 		}
 	}
 	return false;
+}
+
+bool apoUiMainEditor::setDebugNode(ndxml *xmlNode)
+{
+	if (!xmlNode)	{
+		if (m_debugNode){
+			m_debugNode->setDebug(false);
+		}
+		m_debugNode = NULL;
+		return true;
+	}
+	QObjectList list = children();
+	foreach(QObject *obj, list) {
+		apoBaseExeNode *exeNode = qobject_cast<apoBaseExeNode*>(obj);
+		if (exeNode && exeNode->getBreakPointAnchor() == xmlNode){
+			exeNode->setDebug(true);
+			if (m_debugNode){
+				m_debugNode->setDebug(false);
+			}
+			m_debugNode = exeNode;
+			return true;
+		}
+	}
+	return false;
+
 }
 
 bool apoUiMainEditor::setCurNodeSlotSelected(ndxml *xmlParam, bool inError)

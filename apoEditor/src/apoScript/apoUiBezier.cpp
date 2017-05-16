@@ -61,6 +61,18 @@ apoUiBezier &apoUiBezier::operator=(const apoUiBezier &r)
 	return *this;
 }
 
+void apoUiBezier::setDebug(bool bDebug )
+{
+	if (bDebug) {
+
+		m_color = Qt::yellow;
+	}
+	else {
+
+		m_color = Qt::red;
+	}
+
+}
 
 void apoUiBezier::setAnchor(QWidget *fromCtrl, QWidget *toCtrl)
 {
