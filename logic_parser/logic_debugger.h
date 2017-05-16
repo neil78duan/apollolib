@@ -22,7 +22,7 @@ struct BreakPointInfo
 	std::string functionName;
 	std::string nodeName;
 
-	BreakPointInfo(const char *func, const char *node,bool bTemp) :functionName(func), nodeName(node), tempBreak(bTemp)
+	BreakPointInfo(const char *func, const char *node,bool bTemp) :tempBreak(bTemp),functionName(func), nodeName(node)
 	{
 
 	}
