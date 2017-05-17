@@ -271,28 +271,6 @@ bool LogicParserEngine::_runCmdBuf(const char *moduleName ,const scriptCmdBuf *b
 	handleScriptGenEvent();
 	m_sys_errno = funcError;
 
-	//ret = _runCmd(&stack);
-// 
-// 	int funcError = m_sys_errno;
-// 	handleScriptGenEvent();
-// 	m_sys_errno = funcError;
-// 
-// 	if (m_simulate == false)	{		
-// 		if (m_curStack && m_curStack->affairHelper)	{
-// 			if (ret != 0 || !m_registorFlag ) {
-// 				m_curStack->affairHelper->Rollback();
-// 			}
-// 			delete m_curStack->affairHelper;
-// 			m_curStack->affairHelper = NULL;
-// 		}		
-// 	}
-// 	else if (m_sys_errno != NDERR_WOULD_BLOCK) {		
-// 		if (stack.affairHelper)	{
-// 			delete stack.affairHelper;
-// 			stack.affairHelper = NULL;
-// 		}
-// 	}
-	//m_curStack = orgStack;
 	return ret == 0;
 }
 bool LogicParserEngine::_runCmdBuf(const char *moduleName,const scriptCmdBuf *buf, int param_num, ...)
@@ -356,29 +334,6 @@ bool LogicParserEngine::runFunction(const char *moduleName ,const scriptCmdBuf *
 	}
 	return true;
 
-// 	fetchModuleName(buf->cmdname, stack.curModuleName) ;
-// 	
-// 		//bool orgExitFlag = m_OnErrorExit;
-// 		int orgCount = m_registerCount;
-// 	
-// 		if (_runCmd(&stack) != -1) {
-// 			ret = true;
-// 			result = m_registerVal;
-// 	
-// 	
-// 		}
-// 		if (stack.affairHelper)	{
-// 			if (ret ==false ) {
-// 				stack.affairHelper->Rollback();
-// 			}
-// 			delete stack.affairHelper;
-// 			stack.affairHelper = NULL;
-// 		}
-// 	
-// 		//m_OnErrorExit = orgExitFlag;
-// 		//m_curStack = beforeCall;
-// 		m_registerCount = orgCount ;
-	//return ret ;
 }
 
 
@@ -419,6 +374,11 @@ int LogicParserEngine::callScript(runningStack *stack)
 		}
 	}
 
+	//notify debugger run script success
+	if (m_runningStacks.size()==1){
+		onScriptRunCompleted();
+	}
+
 	m_runningStacks.pop_back();
 	
 	if (m_runningStacks.size() > 0)	{
@@ -445,7 +405,7 @@ int LogicParserEngine::_baseCallScript(runningStack *stack)
 	//bool isdebug_step = false;
 	bool inException = false;
 
-	bool bLastIsCalled = false;		//last step is call function
+	//bool bLastIsCalled = false;		//last step is call function
 	NDUINT32 cur_step_size = -1;
 	//char *step_start = 0 ;
 	const char *exception_addr = stack->exception_addr;
@@ -1768,9 +1728,6 @@ bool LogicParserEngine::_removeHandler(int ev, const char *funcname)
 
 bool LogicParserEngine::_CreateUserDefType(runningStack *runstack, parse_arg_list_t &args)
 {
-	//logcal_variant node;
-	//node.name = args[0].GetText();
-
 	LogicUserDefStruct *userDefData = new LogicUserDefStruct();
 	for (int i = 1; i < args.size(); ++i) {
 		const char *name = args[i].GetText();
@@ -1941,69 +1898,7 @@ bool LogicParserEngine::_varAssignin(runningStack *stack,const char *name, DBLDa
 		return false;
 	}
 	return true;
-	//return outVarRef.unsafeRefOther(*pdata);
-	/*
-	DBLDataNode *pData = NULL ;
 	
-	if (strchr(name, '[')) {
-		char arrayName[128] ;
-		//char arrayIndex[10] ;
-		
-		const char *pElement = ndstr_nstr_end(name, arrayName, '[', sizeof(arrayName)) ;
-		if (!pElement || *pElement!= '[') {
-			nd_logerror("var %s not found ,express-error\n", name);
-			m_sys_errno = LOGIC_ERR_VARIANT_NOT_EXIST;
-			return false ;
-		}
-		++pElement ;
-		int arrIndex = ndstr_atoi_hex(pElement);
-		pData = _getLocalVar(stack, arrayName);
-		if (pData->GetArrayType() != OT_ARRAY) {
-			nd_logerror("var %s not array\n", name);
-			m_sys_errno = LOGIC_ERR_VARIANT_NOT_EXIST;
-			return  false ;
-		}
-		
-		pData->SetArray(inputVal, arrIndex) ;
-	}
-	//get user define data member
-	else if(strchr(name, '.')) {
-		char varName[128] ;
-		
-		const char *pMember = ndstr_nstr_end(name, varName, '.', sizeof(varName)) ;
-		if (!pMember || *pMember!= '.') {
-			nd_logerror("var %s not found ,express-error\n", name);
-			m_sys_errno = LOGIC_ERR_VARIANT_NOT_EXIST;
-			return false;
-		}
-		++pMember ;
-		
-		pData = _getLocalVar(stack, varName);
-		if (!pData || pData->GetDataType()!=OT_USER_DEFINED) 	{
-			nd_logerror("var %s data type is not json \n", name);
-			m_sys_errno = LOGIC_ERR_VARIANT_NOT_EXIST;
-			return false;
-		}
-		
-		pData->setUserDefMember(pMember,inputVal) ;
-	}
-	
-	else {
-		DBLDataNode *pData = _getLocalVar(stack, name);
-		if (pData) 	{
-			*pData = inputVal ;
-		}
-		else {
-			logcal_variant node;
-			node.name = name;
-			node.var = inputVal;
-			stack->local_vars.push_back(node);
-		}
-		
-	}
-	
-	return  true ;
-	*/
 }
 
 bool LogicParserEngine::_buildUserDefData(runningStack *runstack,parse_arg_list_t &args)
@@ -2448,21 +2343,19 @@ int LogicParserEngine::_enterDebugMode()
 	LogicEngineRoot *root = LogicEngineRoot::get_Instant();
 	LocalDebugger &debugger = root->getGlobalDebugger();
 	
-	return debugger.onEnterStep(m_curStack->cmd->cmdname, m_dbg_node);
+	return debugger.onEnterStep(this,m_curStack->cmd->cmdname, m_dbg_node);
 }
 
-/*
-bool LogicParserEngine::_checkInStep()
+
+int LogicParserEngine::onScriptRunCompleted()
 {
-	return m_bStepMode;
+	LogicEngineRoot *root = LogicEngineRoot::get_Instant();
+	LocalDebugger &debugger = root->getGlobalDebugger();
+
+	return debugger.ScriptRunOk(this);
 }
 
-bool LogicParserEngine::_leaveStep(runningStack *stack)
-{
-	parse_arg_list_t args;
-	m_sys_errno = LOGIC_ERR_WOULD_BLOCK;
-	return waitEvent(stack, -1, args);
-}*/
+
 
 int logic_rand(NDUINT32 val1, NDUINT32 val2)
 {

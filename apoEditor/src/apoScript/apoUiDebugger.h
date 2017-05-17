@@ -42,6 +42,7 @@ signals:
 	void stepSignal(const char *funcName, const char *nodeName);
 	void terminateSignal();
 	void commondOkSignal();
+	void scriptRunOKSignal();
 
 };
 
@@ -57,6 +58,10 @@ private:
 	virtual bool onEnterStep(const char *func, const char *node);
 	virtual void onTerminate();
 	virtual void onCommandOk();
+	virtual void onScriptRunOk();
+
+	std::string m_stepFunc;
+	std::string m_stepNode;
 
 };
 

@@ -83,7 +83,9 @@ ApoDebugger::~ApoDebugger()
 
 bool ApoDebugger::onEnterStep(const char *func, const char *node)
 {
-	emit m_obj.stepSignal(func, node);
+	m_stepFunc = func;
+	m_stepNode = node;
+	emit m_obj.stepSignal(m_stepNode.c_str(), m_stepNode.c_str());
 	return true;
 }
 
@@ -96,5 +98,10 @@ void ApoDebugger::onCommandOk()
 	emit m_obj.commondOkSignal();
 }
 
+
+void ApoDebugger::onScriptRunOk()
+{
+	emit m_obj.scriptRunOKSignal();
+}
 
 

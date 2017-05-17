@@ -56,10 +56,10 @@ typedef std::vector<BreakPointInfo> breakPoint_vct;
 
 enum parserRunStat
 {
-	E_RUN_DBG_STAT_NONE,
+	E_RUN_DBG_STAT_TERMINATE,
 	E_RUN_DBG_STAT_RUNNING,
 	E_RUN_DBG_STAT_WAIT_CMD,
-	E_RUN_DBG_STAT_TERMINATE
+	
 };
 
 enum parserDebugInputCmd
@@ -77,6 +77,7 @@ enum parserDebugInputCmd
 	E_DBG_OUTPUT_CMD_STEP,
 	E_DBG_OUTPUT_CMD_TERMINATED,
 	E_DBG_OUTPUT_CMD_HANDLE_ACK,
+	E_DBG_OUTPUT_CMD_SCRIPT_RUN_OK,
 };
 
 struct processHeaderInfo 
@@ -86,13 +87,26 @@ struct processHeaderInfo
 	ndatomic_t runStat;		//0 common/not-run , 1 running, 2 wait-debug, 3 terminate 
 	ndatomic_t inputCmd;	//0 none , 1 input break point, 2 run-step, 3 run-continue , 4 run-to-current-node
 	ndatomic_t outputCmd;	// parse output command
+	NDUINT32 cmdEncodeType;
 	char processName[PROCESS_NAME_SIZE];
 	char shareMemName[PROCESS_NAME_SIZE];
 	char semName[PROCESS_NAME_SIZE];
 	char semClient[PROCESS_NAME_SIZE];
 
+	char semCMDth[PROCESS_NAME_SIZE];	//the command receiver thread would block this.
+
 	char cmdBuf[1024];
 };
+
+struct LogicRunningProcess
+{
+	NDUINT32 pId;
+	std::string name;
+	LogicRunningProcess(NDUINT32 pid, const char *inname) :pId(pid), name(inname)
+	{}
+};
+
+typedef std::vector<LogicRunningProcess> Process_vct_t;
 
 class ShareProcessLists
 {
@@ -118,17 +132,12 @@ public:
 
 	processHeaderInfo *getProcessInfo(NDUINT32 processId);
 
+	bool getProcesses(Process_vct_t &proVct);
+
 public:
 
 };
 
-struct LogicRunningProcess
-{
-	NDUINT32 pId; 
-	std::string name;
-};
-
-typedef std::vector<LogicRunningProcess> Process_vct_t;
 
 class LogicDebugClient
 {
@@ -138,16 +147,17 @@ public:
 
 	//command for client
 	int localStrat(LogicParserEngine *parser, int argc, const char *argv[], int encodeType = ND_ENCODE_TYPE);
-	int Attach(NDUINT32 processId);
+	int Attach(NDUINT32 processId, int cmdEncodeType );
+	int Deattach();
+
 	int postEndDebug();
 	
-
-
 	int cmdStep(){ return inputCmd(E_DBG_INPUT_CMD_STEP_RUN); }
 	int cmdContinue(){ return inputCmd(E_DBG_INPUT_CMD_CONTINUE); }
 	int cmdStopDebug(){ return inputCmd(E_DBG_INPUT_CMD_TERMINATED); }
 	int cmdRunOut(){ return inputCmd(E_DBG_INPUT_CMD_RUN_OUT); }
 	int cmdRunTo(const char *func, const char *node){ return inputCmd(E_DBG_INPUT_CMD_RUN_TO_CURSOR, func, node); }
+	int cmdTerminate();
 
 	int cmdAddBreakPoint(const char *funcName, const char *nodeName, bool isTemp = false);
 	int cmdDelBreakPoint(const char *funcName, const char *nodeName);
@@ -155,23 +165,26 @@ public:
 	virtual bool onEnterStep(const char *function, const char *node);
 	virtual void onTerminate();
 	virtual void onCommandOk();
+	virtual void onScriptRunOk();
 
 	ndxml *getParserInfo();
 
 	static bool getRunningProcess(Process_vct_t &processes);
 
+	int waitEvent();
 protected:
 
 	ndsem_t getHostSem();
 	ndsem_t getClientSem();
 
-	int waitEvent();
 	int inputCmd(int cmdId);
 	int inputCmd(int cmdId, const char *func, const char *nodeName);
+	int inputToCmThread(int cmdId, const char *func, const char *nodeName);
 
 	NDUINT32 m_aimProcessId;
 	bool m_isAttached;
-
+	ndsem_t m_cmdSem;	//wait client cmd , that debugger-host thread wait it
+	ndth_handle m_thCmdRecver;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -185,15 +198,14 @@ public:
 	~LocalDebugger();
 
 	int runCmdline(int argc, const char *argv[], int encodeType = ND_ENCODE_TYPE); 
+	int runHost();
 	int addBreakPoint(const char *funcName, const char *nodeName,bool isTemp=false);
 	int delBreakPoint(const char *funcName, const char *nodeName);
 	void clearBreakpoint();
-
-	bool preStartDebug(NDUINT32 processId);
-	bool postEndDebug();
-
+	
 	//run on parser
-	int onEnterStep(const char *funcName, const char *nodeName);
+	int onEnterStep(LogicParserEngine *parser,const char *funcName, const char *nodeName);
+	int ScriptRunOk(LogicParserEngine *parser);
 
 	ndxml_root & getParserInfo();
 	int getLastError() { return m_parser->getErrno(); }
@@ -204,7 +216,12 @@ public:
 
 	//void setClient(LogicDebugClient *client) { m_client = client; }
 	ndsem_t getClientSem() { return m_cliSem; }
+	int waitClientCmd();
 private:
+
+	bool preStartDebug(NDUINT32 processId);
+	bool postEndDebug();
+	bool startCMDRecvTh();
 
 	int waitEvent(const char *funcName, const char *nodeName);
 	int ntfClient(int cmd, const char *funcName, const char *nodeName);
@@ -212,6 +229,7 @@ private:
 	int m_encodeType;
 	bool m_bStep;
 	bool m_bRunOut;		//run leave function-and-break
+
 	bool isBreakPoint(const char *func, const char *node, bool bTrytoDel=false);
 	bool makeParserInfo();
 	bool getParamFromInput(std::string &funcName, std::string &nodeName);
@@ -227,7 +245,7 @@ private:
 	nd_filemap_t m_outPutMem;
 	ndsem_t m_RunningSem;
 	ndsem_t m_cliSem; // the client thread wait this sem
-
+	ndsem_t m_cmdSem;	//wait client cmd
 };
 
 

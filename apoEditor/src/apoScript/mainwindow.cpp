@@ -60,6 +60,10 @@ QMainWindow(parent), m_editorSetting(*apoEditorSetting::getInstant()), m_editorW
 
 MainWindow::~MainWindow()
 {
+	if (m_debuggerCli)	{
+		m_debuggerCli->cmdTerminate();
+		delete m_debuggerCli;
+	}
 	closeCurFile();
 	if (m_fileRoot){
 		ndxml_save(m_fileRoot, m_fileRootPath.c_str());
@@ -406,6 +410,19 @@ void MainWindow::onDebugCmdAck()
 			showDebugInfo(m_debugInfo);
 		}
 	}
+	this->update();
+}
+
+void MainWindow::onScriptRunOK()
+{
+	nd_logdebug("script run completed\n");
+	if (m_debuggerCli)	{
+		m_debugInfo = m_debuggerCli->getParserInfo();
+		if (m_debugInfo)		{
+			showDebugInfo(m_debugInfo);
+		}
+	}
+	m_editorWindow->setDebugNode(NULL);
 	this->update();
 }
 
@@ -1045,12 +1062,67 @@ void MainWindow::on_actionStepOut_triggered()
 
 void MainWindow::on_actionAttach_triggered()
 {
+	Process_vct_t processes;
+	if (!ApoDebugger::getRunningProcess(processes)) {
+		nd_logerror("no process could be attached\n");
+		return;
+	}
+
+	ListDialog dlg(this);
+
+	for (Process_vct_t::iterator it = processes.begin(); it != processes.end() ; it++)	{		
+		dlg.m_selList.push_back(QString(it->name.c_str()));
+	}
+
+	dlg.InitList();
+	if (dlg.exec() != QDialog::Accepted) {
+		return ;
+	}
+
+	int seled = dlg.GetSelect();
+	if (seled == -1) {
+		return ;
+	}
+
+	if (seled >= processes.size()) {
+		return;
+	}
+	
+
+	NDUINT32 pId = processes[seled].pId;
+
+	m_debuggerCli = new ApoDebugger;
+
+
+	QObject::connect(&m_debuggerCli->m_obj, SIGNAL(stepSignal(const char *, const char *)),
+		this, SLOT(onDebugStep(const char *, const char*)));
+
+	QObject::connect(&m_debuggerCli->m_obj, SIGNAL(terminateSignal()),
+		this, SLOT(onDebugTerminate()));
+
+	QObject::connect(&m_debuggerCli->m_obj, SIGNAL(commondOkSignal()),
+		this, SLOT(onDebugCmdAck()));
+
+
+	QObject::connect(&m_debuggerCli->m_obj, SIGNAL(scriptRunOKSignal()),
+		this, SLOT(onScriptRunOK()));
+
+	
+	m_debuggerCli->Attach(pId,E_SRC_CODE_UTF_8);
+	onDebugStart();
 
 }
 
 void MainWindow::on_actionDeattch_triggered()
 {
+	onDebugEnd();
+	if (m_debuggerCli)	{
+		m_debuggerCli->Deattach();		
+		delete m_debuggerCli;
+		m_debuggerCli = NULL;
+	}
 
+	nd_logmsg("----------Deattached----------\n");
 }
 
 static int getScriptExpEncodeType(ndxml *scriptXml)
@@ -1184,7 +1256,10 @@ bool MainWindow::StartDebug(const char *binFile, const char *srcFile, int argc, 
 	QObject::connect(&m_debuggerCli->m_obj, SIGNAL(terminateSignal()),
 		this, SLOT(onDebugTerminate()));
 	QObject::connect(&m_debuggerCli->m_obj, SIGNAL(commondOkSignal()),
-		this, SLOT(onDebugCmdAck));
+		this, SLOT(onDebugCmdAck()));
+
+	QObject::connect(&m_debuggerCli->m_obj, SIGNAL(scriptRunOKSignal()),
+		this, SLOT(onScriptRunOK()));
 
 
 	onDebugStart();
@@ -1245,6 +1320,8 @@ void MainWindow::onDebugStart()
 	ui->actionContinue->setDisabled(false);
 	ui->actionStepOut->setDisabled(false);
 	ui->actionDeattch->setDisabled(false);
+
+	closeDetail();
 }
 
 void MainWindow::onDebugEnd()
