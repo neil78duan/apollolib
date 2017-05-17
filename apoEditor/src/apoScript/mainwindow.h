@@ -65,6 +65,7 @@ public slots:
 	void onDebugTerminate();
 	void onDebugStep(const char *func, const char* node);
 	void onDebugCmdAck();
+	void onScriptRunOK();
 
 private slots:
 
