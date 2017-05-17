@@ -1475,7 +1475,7 @@ bool LogicCompiler::getFuncStackInfo(ndxml *curNode,char *buf, size_t size)
 	char *p = buf ;
 	*p = 0 ;
 
-	int len = snprintf(p, size, "%s",_GetXmlName(curNode,NULL));
+	int len = snprintf(p, size, "%s",ndxml_getname(curNode));
 	p += len;
 	size -= len;
 

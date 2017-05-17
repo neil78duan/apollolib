@@ -332,13 +332,7 @@ public:
 	// generate game event in c++
 	bool eventNtf(int event_id, int num, ...);
 	bool eventNtf(int event_id, parse_arg_list_t &args);
-
-	//for debug 
-// 	bool runStep();
-// 	void setStepMode(bool bStep = true);
-// 	bool getStepMode() { return m_bStepMode; }
-// 	bool isStepModeRunning();
-	
+		
 	void update(ndtime_t interval) ;
 	void Reset() ;
 	void setErrno(int errcode);
@@ -433,6 +427,8 @@ protected:
 	bool _checkIsSystemError(int err) { return ( err < NDERR_USERDEFINE && err > 0); }
 
 	int _enterDebugMode();
+
+	int onScriptRunCompleted();
 	//bool _checkInStep();
 	//bool _leaveStep(runningStack *stack);
 
