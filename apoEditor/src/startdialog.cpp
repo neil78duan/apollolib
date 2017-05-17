@@ -355,11 +355,13 @@ bool startDialog::expExcel()
     }
 
 	const char *exp_luapath = _getFromIocfg("lua_data_out_path");
-	if (!expLua(exp_luapath, dbtmp)) {
-		nd_logmsg("Êä³öluaÊý¾Ý´íÎó£¡");
-		dbtmp.Destroy();
-		DBLDatabase::destroy_Instant();
-		return false;
+	if (exp_luapath && *exp_luapath ) {
+		if (!expLua(exp_luapath, dbtmp)) {
+			nd_logmsg("export lua error");
+			dbtmp.Destroy();
+			DBLDatabase::destroy_Instant();
+			return false;
+		}
 	}
 
     dbtmp.Destroy();
