@@ -60,6 +60,7 @@ public slots:
 	void onXmlNodeDel(ndxml *xmlnode);
 	void onFilelistDel(ndxml *xmlnode);
 	void onFunctionListChanged(ndxml *xmlnode);
+	void onFileModuleNameChanged(ndxml *xmlnode);
 
 	// debugger 
 	void onDebugTerminate();
@@ -97,6 +98,8 @@ private slots:
 	void onFilesTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
 
+    void on_actionExit_without_save_triggered();
+
 protected:
 
 	bool openFileView();
@@ -109,11 +112,12 @@ protected:
 	void closeDebugInfo();
 	void closeDetail();
 	bool runFunction(const char *binFile,const char *srcFile, int argc, const char* argv[]);
-	bool compileScript(const char *scriptFile, std::string &outFile, bool bWithRun = false, bool bDebug=false);
+	bool compileScript(const char *scriptFile, std::string &outFile, bool bWithRun = false, bool bDebug=false,int outEncodeType= -1);
 	bool StartDebug(const char *binFile, const char *srcFile, int argc, const char* argv[]);
 	void EndDebug(bool bSuccess);
 	bool Run(bool bIsDebug);
 
+	bool loadScriptFromModule(const char *moduleName);
 	bool loadScriptFile(const char *scriptFile);
 	const char *getScriptSetting(ndxml *scriptXml, const char *settingName);
 	bool showCurFile();
@@ -128,6 +132,10 @@ protected:
 
 	void onDebugStart();
 	void onDebugEnd();
+
+	void onAttached(const char *moduleName);
+	void onDeattched();
+
 
 	//ndxml_root *m_config; //editor cconfig 
 	bool m_isChangedCurFile;

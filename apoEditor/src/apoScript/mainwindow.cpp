@@ -150,6 +150,8 @@ bool MainWindow::openFileView()
 	QObject::connect(subwindow, SIGNAL(xmlNodeDelSignal(ndxml *)),
 		this, SLOT(onFilelistDel(ndxml *)));
 
+	QObject::connect(subwindow, SIGNAL(xmlNodeDisplayNameChangeSignal(ndxml *)), this, SLOT(onFileModuleNameChanged(ndxml*)));
+
 	if (m_fileRoot)	{
 		subwindow->setAlias(&m_editorSetting.getAlias());
 		ndxml *xmlFiles = ndxml_getnode(m_fileRoot, "script_file_manager");
@@ -258,6 +260,28 @@ const char *MainWindow::getScriptSetting(ndxml *scriptXml, const char *settingNa
 		}
 	}
 	return NULL;
+}
+
+
+bool MainWindow::loadScriptFromModule(const char *moduleName)
+{
+	if (!moduleName || !*moduleName)	{
+		return false;
+	}
+	ndxml *fileroot = ndxml_getnode(m_fileRoot, "script_file_manager");
+	if (!fileroot){
+		return false;		
+	}
+
+	for (int i = 0; i < ndxml_getsub_num(fileroot); i++) {
+		ndxml *node = ndxml_getnodei(fileroot, i);
+		const char *fileName = ndxml_getattr_val(node, "name");
+		if (0 == ndstricmp(fileName, moduleName))	{
+			m_fileMoudleName = ndxml_getattr_val(node, "name");
+			return loadScriptFile(ndxml_getval(node));
+		}
+	}
+	return false;
 }
 
 bool MainWindow::loadScriptFile(const char *scriptFile)
@@ -375,6 +399,36 @@ void MainWindow::onFunctionListChanged(ndxml *xmlnode)
 		m_editorWindow->onFuncNameChanged(xmlnode);
 	}
 }
+
+
+void MainWindow::onFileModuleNameChanged(ndxml *xmlnode)
+{
+	const char *fileName = ndxml_getval(xmlnode);
+	const char *moduleName = ndxml_getattr_val(xmlnode, "name");
+	if (moduleName && *moduleName && fileName){
+
+		if (0 == ndstricmp(m_filePath.c_str(), fileName)) {
+			m_fileMoudleName = moduleName;
+			ndxml *xml = ndxml_getnode(m_fileRoot, "script_file_manager");
+			if (xml){
+				ndxml_setattrval(xml, "last_edited", moduleName);
+			}
+			if (m_curFile){
+				LogicEditorHelper::setModuleName(m_curFile, moduleName);
+			}
+			onFileChanged();
+		}
+		else {
+			ndxml_root scriptFile;
+			if (0==ndxml_load_ex(fileName,&scriptFile,"utf8") )	{
+				LogicEditorHelper::setModuleName(&scriptFile, moduleName);
+				ndxml_destroy(&scriptFile);
+			}
+		}
+
+	}
+}
+
 
 void MainWindow::onDebugTerminate()
 {
@@ -912,6 +966,13 @@ void MainWindow::on_actionExit_triggered()
 	close();
 }
 
+void MainWindow::on_actionExit_without_save_triggered()
+{
+	setCurFileSave(true);
+	close();
+
+}
+
 
 void MainWindow::on_actionCompileAll_triggered()
 {
@@ -1109,13 +1170,13 @@ void MainWindow::on_actionAttach_triggered()
 
 	
 	m_debuggerCli->Attach(pId,E_SRC_CODE_UTF_8);
-	onDebugStart();
+	onAttached(processes[seled].scriptModule.c_str());
 
 }
 
 void MainWindow::on_actionDeattch_triggered()
 {
-	onDebugEnd();
+	onDeattched();
 	if (m_debuggerCli)	{
 		m_debuggerCli->Deattach();		
 		delete m_debuggerCli;
@@ -1342,6 +1403,32 @@ void MainWindow::onDebugEnd()
 	ui->actionDeattch->setDisabled(true);
 
 }
+void MainWindow::onAttached(const char *moduleName)
+{
+	bool ret = loadScriptFromModule(moduleName);
+	if (ret){
+		std::string outFile;
+		LocalDebugger & debuggerHost = LogicEngineRoot::get_Instant()->getGlobalDebugger();
+		debuggerHost.clearBreakpoint();
+
+		if (compileScript(m_filePath.c_str(), outFile,false,true, E_SRC_CODE_UTF_8)) {
+			breakPoint_vct  breakpoints = debuggerHost.getBreakPoints();
+			for (breakPoint_vct::iterator it = breakpoints.begin(); it != breakpoints.end(); it++){
+				if (it->tempBreak)	{
+					continue;
+				}
+				m_debuggerCli->cmdAddBreakPoint(it->functionName.c_str(), it->nodeName.c_str());
+			}
+		}
+	}
+	onDebugStart();
+}
+
+void MainWindow::onDeattched()
+{
+	onDebugEnd();
+}
+
 
 bool MainWindow::Run(bool bIsDebug)
 {
@@ -1397,7 +1484,7 @@ bool MainWindow::Run(bool bIsDebug)
 
 }
 
-bool MainWindow::compileScript(const char *scriptFile, std::string &outputFile, bool bWithRun, bool bDebug )
+bool MainWindow::compileScript(const char *scriptFile, std::string &outputFile, bool bWithRun, bool bDebug, int outEncodeType)
 {
 	ndxml_root xmlScript;
 	ndxml_initroot(&xmlScript);
@@ -1414,7 +1501,10 @@ bool MainWindow::compileScript(const char *scriptFile, std::string &outputFile, 
 	}
 	outputFile = outFile;
 
-	int outEncode = getScriptExpEncodeType(&xmlScript);
+	int outEncode = outEncodeType;
+	if (outEncode == -1){
+		getScriptExpEncodeType(&xmlScript);
+	}
 	bool withDebug = bDebug;
 	if (!withDebug)	{
 		withDebug = getScriptExpDebugInfo(&xmlScript);

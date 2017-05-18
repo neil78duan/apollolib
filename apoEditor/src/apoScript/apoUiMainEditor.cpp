@@ -1029,6 +1029,7 @@ void apoUiMainEditor::contextMenuEvent(QContextMenuEvent *event)
 
 		ADD_MENT_MENU(popMenu, QString("New"), apoUiMainEditor::popMenuAddnewTrigged);
 		ADD_MENT_MENU(popMenu, QString("Moveto default"), apoUiMainEditor::popMenuCenterTrigged);
+		popMenu->exec(QCursor::pos());
 	}
 	else {
 		apoBaseExeNode*pDelNode = dynamic_cast<apoBaseExeNode*>(w);		

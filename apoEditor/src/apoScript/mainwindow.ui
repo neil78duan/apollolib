@@ -38,6 +38,7 @@
     <addaction name="actionClearLog"/>
     <addaction name="actionTest"/>
     <addaction name="actionExit"/>
+    <addaction name="actionExit_without_save"/>
    </widget>
    <widget class="QMenu" name="menuWindows">
     <property name="title">
@@ -241,6 +242,11 @@
   <action name="actionDeattch">
    <property name="text">
     <string>Deattch</string>
+   </property>
+  </action>
+  <action name="actionExit_without_save">
+   <property name="text">
+    <string>Exit without save</string>
    </property>
   </action>
  </widget>
