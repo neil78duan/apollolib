@@ -132,8 +132,11 @@ int LogicEngineRoot::LoadScript(const char *scriptStream, LogicParserEngine *ini
 	}
 	
 	moudleName[moduleSize] = 0 ;
-
 	m_moduleChangedTime[moudleName] = compileTm;
+
+	if (m_mainModule.size() ==0){
+		m_mainModule = moudleName;
+	}
 
 	NDUINT8 isGlobal = 0;
 	script_func_map *pscripts = new script_func_map;
@@ -243,6 +246,7 @@ int LogicEngineRoot::unloadScript()
 	m_modules.clear();
 	m_dftScriptModule.clear();
 	m_moduleChangedTime.clear();
+	m_mainModule.clear();
 	return 0;
 }
 

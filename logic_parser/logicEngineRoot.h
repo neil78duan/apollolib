@@ -126,6 +126,7 @@ public:
 	DBLDataNode *getVar(const char *name);
 
 	UserDefData_map_t &getUserDefType() { return m_useDefType; }
+	const char *getMainModuleName() { return m_mainModule.c_str(); }
 private:
 
 	//static LogicEngineRoot *s_root;
@@ -152,6 +153,7 @@ private:
 	LogicParserEngine m_globalParser;
 	LocalDebugger m_globalDebugger;
 	std::string m_dftScriptModule ; //default run script module if undefine module
+	std::string m_mainModule;
 
 	LogicData_vct m_global_vars; 
 

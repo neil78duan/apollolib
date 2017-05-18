@@ -98,6 +98,8 @@ private slots:
 	void onFilesTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
 
+    void on_actionExit_without_save_triggered();
+
 protected:
 
 	bool openFileView();

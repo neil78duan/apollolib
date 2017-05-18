@@ -482,4 +482,37 @@ namespace LogicEditorHelper
 		}
 		return true;
 	}
+
+	const char *getModuleName(ndxml_root *scriptXml)
+	{
+		ndxml *xmlModule = ndxml_getnode(scriptXml, "moduleInfo");
+		if (!xmlModule) {
+			return NULL;
+		}
+		ndxml *node = ndxml_getnode(xmlModule, "moduleName");
+		if (node) {
+			return ndxml_getval(node);
+		}
+		return NULL;
+	}
+
+	bool setModuleName(ndxml_root *scriptXml, const char *moduleName)
+	{
+		ndxml *xmlModule = ndxml_getnode(scriptXml, "moduleInfo");
+		if (!xmlModule) {
+			return false;
+		}
+		ndxml *node = ndxml_getnode(xmlModule, "moduleName");
+		if (node) {
+			ndxml_setval(node, moduleName);
+		}
+		else {
+			ndxml *xml = ndxml_addnode(xmlModule, "moduleName", moduleName);
+			if (!xml)	{
+				return false;
+			}
+			ndxml_addattrib(xml, "kinds", "hide");
+		}
+		return true;
+	}
 }

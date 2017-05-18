@@ -966,6 +966,13 @@ void MainWindow::on_actionExit_triggered()
 	close();
 }
 
+void MainWindow::on_actionExit_without_save_triggered()
+{
+	setCurFileSave(true);
+	close();
+
+}
+
 
 void MainWindow::on_actionCompileAll_triggered()
 {

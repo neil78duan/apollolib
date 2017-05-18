@@ -46,6 +46,7 @@ processHeaderInfo *ShareProcessLists::createProcessInfo(NDUINT32 processId, cons
 	if (!pAddr){
 		return NULL;
 	}
+	LogicEngineRoot *root = LogicEngineRoot::get_Instant();
 
 	pAddr->processId = processId;
 	pAddr->debuggerProcessId = 0;
@@ -55,7 +56,11 @@ processHeaderInfo *ShareProcessLists::createProcessInfo(NDUINT32 processId, cons
 	snprintf(pAddr->semName, PROCESS_NAME_SIZE, "%s_sem", procName);
 	snprintf(pAddr->semClient, PROCESS_NAME_SIZE, "%s_semCli", procName);
 	snprintf(pAddr->semCMDth, PROCESS_NAME_SIZE, "%s_cmdSem", procName);
-
+	pAddr->scriptModule[0] = 0;
+	const char *scriptName = root->getMainModuleName();
+	if (scriptName && *scriptName)	{
+		strncpy(pAddr->scriptModule,scriptName, sizeof(pAddr->scriptModule));
+	}
 
 	pAddr->runStat = E_RUN_DBG_STAT_TERMINATE;
 	pAddr->inputCmd = 0;
@@ -99,7 +104,7 @@ bool ShareProcessLists::getProcesses(Process_vct_t &proVct)
 	processHeaderInfo *proHeader = (processHeaderInfo *)nd_mem_share_addr(&g_debugHeader);
 	for (int i = 0; i < LOGIC_MAX_PROCESS; i++){
 		if (proHeader[i].processId)	{
-			proVct.push_back(LogicRunningProcess(proHeader[i].processId, proHeader[i].processName));
+			proVct.push_back(LogicRunningProcess(proHeader[i].processId, proHeader[i].processName,proHeader[i].scriptModule));
 		}
 	}
 	return true;
@@ -239,6 +244,8 @@ int LogicDebugClient::Attach(NDUINT32 processId, int cmdEncodeType )
 		return -1;
 	}
 
+	inputToCmThread(E_DBG_INPUT_CMD_ATTACHED, NULL, NULL);
+
 	return 0;
 }
 
@@ -247,6 +254,9 @@ int LogicDebugClient::Deattach( )
 	if (!m_aimProcessId) {
 		return -1;
 	}
+
+	inputToCmThread(E_DBG_INPUT_CMD_DEATTACHED, NULL, NULL);
+
 	processHeaderInfo *pAddr = ShareProcessLists::get_Instant()->getProcessInfo(m_aimProcessId);
 	if (pAddr)	{
 		//cmdContinue();
@@ -565,6 +575,7 @@ int LocalDebugger::addBreakPoint(const char *funcName, const char *nodeName, boo
 {
 	if (!isBreakPoint(funcName, nodeName))	{
 		m_breakPoints.push_back(BreakPointInfo(funcName, nodeName, isTemp));
+		nd_logdebug("add break points %s %s\n", funcName, nodeName);
 	}
 	return 0;
 }
@@ -574,6 +585,8 @@ int LocalDebugger::delBreakPoint(const char *funcName, const char *nodeName)
 		if (0 == ndstricmp(it->functionName.c_str(), funcName) &&
 			0 == ndstricmp(it->nodeName.c_str(), nodeName))	{
 			m_breakPoints.erase(it);
+
+			nd_logdebug("Remove break points %s %s\n", funcName, nodeName);
 			break;
 		}
 	}
@@ -867,6 +880,16 @@ int LocalDebugger::waitClientCmd()
 			break;
 		case  E_DBG_INPUT_CMD_TERMINATED:
 			return 0;
+
+		case E_DBG_INPUT_CMD_ATTACHED:
+			if (proceInfo->debuggerProcessId == 0)	{
+				nd_logerror("attached error , debugger process id = 0\n");
+			}
+			break;
+		case E_DBG_INPUT_CMD_DEATTACHED:
+			nd_logdebug("deattached debug \n");
+			clearBreakpoint();
+			break;
 		default:
 			break;
 		}
