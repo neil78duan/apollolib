@@ -1730,6 +1730,21 @@ bool apoUiMainEditor::buildRunSerqConnector(apoBaseSlotCtrl *fromSlot, apoBaseSl
 	}
 		
 	while (toXml){
+		//the next node is newVar
+		ndxml *retNewVar = NULL;
+		apoBaseSlotCtrl *slotRet = toCtrl->returnVal();
+		apoUiBezier *pBzeRet = slotRet->getConnector();
+		if (pBzeRet && pBzeRet->getSlot2()){
+			apoBaseSlotCtrl *slotNextTo = (apoBaseSlotCtrl *)pBzeRet->getSlot2();
+
+			apoUiExenodeNewVar *newVar = dynamic_cast<apoUiExenodeNewVar*> (slotNextTo->parent());
+			if (newVar)	{
+				retNewVar = (ndxml*)newVar->getMyUserData();
+				ndxml_disconnect(NULL, retNewVar);
+			}
+		}
+		///----
+
 		ndxml *movedParent = ndxml_get_parent(toXml);
 		ndxml_disconnect(NULL, toXml);
 		if (-1 == ndxml_insert_after(moveInRoot, toXml, insertPosXml)) {
@@ -1744,6 +1759,10 @@ bool apoUiMainEditor::buildRunSerqConnector(apoBaseSlotCtrl *fromSlot, apoBaseSl
 			return false;
 		}
 		insertPosXml = toXml;
+		if (retNewVar)	{
+			ndxml_insert_after(moveInRoot, retNewVar, insertPosXml);
+			insertPosXml = retNewVar;
+		}
 		toCtrl->onConnected();
 
 		toXml = NULL;
@@ -1871,6 +1890,20 @@ bool apoUiMainEditor::_disconnectRunSerq(apoBaseSlotCtrl *fromSlot, apoBaseSlotC
 			apoBaseSlotCtrl *_nextSlot = toCtrl->toNext();
 			apoBaseExeNode *next = toCtrl->getMyNextNode();
 
+			//return value is new-var
+			apoBaseSlotCtrl *slotRet = toCtrl->returnVal();
+			ndxml *nextNewVar = NULL;
+			if (slotRet && slotRet->getConnector())	{
+				apoBaseSlotCtrl *retToNewVar = (apoBaseSlotCtrl *) slotRet->getConnector()->getSlot2();
+				if (retToNewVar){
+					apoUiExenodeNewVar *newVarCtrl = dynamic_cast<apoUiExenodeNewVar*> (retToNewVar->parent());
+					if (newVarCtrl)	{
+						nextNewVar = (ndxml *)newVarCtrl->getMyUserData();
+					}
+				}
+			}
+
+
 			if (next && _nextSlot) {
 				pbze = _nextSlot->getConnector();
 				if (pbze->getType() == apoUiBezier::LineGoto){
@@ -1882,6 +1915,12 @@ bool apoUiMainEditor::_disconnectRunSerq(apoBaseSlotCtrl *fromSlot, apoBaseSlotC
 			ndxml *movxml = (ndxml *)toCtrl->getMyUserData();
 			ndxml_disconnect(NULL, movxml);
 			ndxml_insert(movetoXml, movxml);
+
+			if (nextNewVar)	{
+				ndxml_disconnect(NULL, nextNewVar);
+				ndxml_insert(movetoXml, nextNewVar);
+			}
+
 
 			toCtrl->onDisconnected();
 			toCtrl = next;
