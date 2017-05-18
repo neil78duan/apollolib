@@ -73,6 +73,10 @@ enum parserDebugInputCmd
 	E_DBG_INPUT_CMD_DEL_BREAKPOINT,
 	E_DBG_INPUT_CMD_TERMINATED,
 	E_DBG_INPUT_CMD_ADD_TEMP_BREAKPOINT,
+
+	E_DBG_INPUT_CMD_ATTACHED,
+	E_DBG_INPUT_CMD_DEATTACHED,
+
 	E_DBG_OUTPUT_CMD_HIT_BREAKPOINT,
 	E_DBG_OUTPUT_CMD_STEP,
 	E_DBG_OUTPUT_CMD_TERMINATED,
@@ -94,6 +98,7 @@ struct processHeaderInfo
 	char semClient[PROCESS_NAME_SIZE];
 
 	char semCMDth[PROCESS_NAME_SIZE];	//the command receiver thread would block this.
+	char scriptModule[128];
 
 	char cmdBuf[1024];
 };
@@ -102,7 +107,8 @@ struct LogicRunningProcess
 {
 	NDUINT32 pId;
 	std::string name;
-	LogicRunningProcess(NDUINT32 pid, const char *inname) :pId(pid), name(inname)
+	std::string scriptModule;
+	LogicRunningProcess(NDUINT32 pid, const char *inname, const char *module) :pId(pid), name(inname), scriptModule(module)
 	{}
 };
 
@@ -217,6 +223,8 @@ public:
 	//void setClient(LogicDebugClient *client) { m_client = client; }
 	ndsem_t getClientSem() { return m_cliSem; }
 	int waitClientCmd();
+	breakPoint_vct getBreakPoints() { return m_breakPoints; }
+
 private:
 
 	bool preStartDebug(NDUINT32 processId);

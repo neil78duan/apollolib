@@ -221,5 +221,8 @@ namespace LogicEditorHelper
 	const char *buildDisplaNameValStr(const char *val, const char*dispName, char *outpub, size_t bufsize);
 
 	bool getBoolValue(const char *value);
+
+	const char *getModuleName(ndxml_root *scriptXml);
+	bool setModuleName(ndxml_root *scriptXml, const char *moduleName);
 }
 #endif
