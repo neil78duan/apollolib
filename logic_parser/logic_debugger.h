@@ -50,9 +50,16 @@ typedef std::vector<BreakPointInfo> breakPoint_vct;
 //////////////////////////////////////////////////////////////////////////
 
 // processHeaderInfo[LOGIC_MAX_PROCESS] stored in share memory name "apoLogicDebugHeader"
+
+#if defined(__ND_WIN__)
 #define PROCESS_NAME_SIZE 64
 #define LOGIC_MAX_PROCESS 10
 #define LOGIC_DEBUGER_HEADER_NAME "apoLogicDebugHeader"
+#else
+#define PROCESS_NAME_SIZE 128
+#define LOGIC_MAX_PROCESS 10
+#define LOGIC_DEBUGER_HEADER_NAME "/tmp/apoLogicDebugHeader"
+#endif
 
 enum parserRunStat
 {
@@ -82,6 +89,8 @@ enum parserDebugInputCmd
 	E_DBG_OUTPUT_CMD_TERMINATED,
 	E_DBG_OUTPUT_CMD_HANDLE_ACK,
 	E_DBG_OUTPUT_CMD_SCRIPT_RUN_OK,
+	
+	E_DBG_OUTPUT_CMD_DEATTACHED,
 };
 
 struct processHeaderInfo 
