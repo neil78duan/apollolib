@@ -14,6 +14,6 @@
 	<bin_data_byte_order name="输出字节顺序" kinds="enum" enum_value="big-end, little-end">1</bin_data_byte_order>
 	<role_attr_table name="角色属性表" kinds="string">role_attr_config.xlsx</role_attr_table>
 	<gm_send_msg name="gm消息配置表" kinds="in_file">../cfg/gm_msg.xml</gm_send_msg>
-	<compiled_rum_cmd name="编译后输出命令" kinds="string"></compiled_rum_cmd>
-	<packeaged_rum_cmd name="打包后输出命令" kinds="string"></packeaged_rum_cmd>
+	<compiled_rum_cmd name="编译后输出命令" kinds="string"/>
+	<packeaged_rum_cmd name="打包后输出命令" kinds="string"/>
 </setting_config>
