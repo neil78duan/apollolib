@@ -15,7 +15,7 @@ using RESULT_T=System.Int32;
 
 public class apoClient {	
 	/* Interface to native implementation */
-#if UNITY_IPHONE || UNITY_XBOX360
+#if (UNITY_IPHONE || UNITY_XBOX360) && !UNITY_EDITOR
 
 	const string APO_DLL_NAME = "__Internal";
 
