@@ -47,7 +47,7 @@ QWidget(parent), m_toNextNode(NULL), m_nodeXml(0), m_outParamAddNew(0),
 
 
 apoBaseExeNode::apoBaseExeNode(QWidget *parent) :
-QWidget(parent), m_toNextNode(NULL), m_outParamAddNew(0),
+QWidget(parent), m_toNextNode(NULL), m_nodeXml(0), m_outParamAddNew(0),
 	m_returnValue(NULL), m_title(NULL), m_addNewParam(NULL), m_runInNode(NULL)
 {
 	m_type = 0;
@@ -551,7 +551,7 @@ ndxml *apoBaseExeNode::getBreakPointAnchor()
 		return NULL;
 	}
 	const char *pVal = LogicEditorHelper::_getXmlParamVal(m_nodeXml, NULL, LogicEditorHelper::ERT_BREAK_ANCHOR);
-	if (pVal) {
+	if (pVal && *pVal) {
 		return ndxml_recursive_ref(m_nodeXml, pVal);
 	}
 	return m_nodeXml;
