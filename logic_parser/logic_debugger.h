@@ -142,7 +142,7 @@ public:
 	int Init();
 	void Destroy();
 
-	processHeaderInfo *createProcessInfo(NDUINT32 processId, const char *procName);
+	processHeaderInfo *createProcessInfo(NDUINT32 processId, const char *procName,const char *moduleName);
 	void delProcess(NDUINT32 processId);
 
 	processHeaderInfo *getProcessInfo(NDUINT32 processId);

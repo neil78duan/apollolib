@@ -40,13 +40,34 @@ void ShareProcessLists::Destroy()
 }
 
 
-processHeaderInfo *ShareProcessLists::createProcessInfo(NDUINT32 processId, const char *procName)
+processHeaderInfo *ShareProcessLists::createProcessInfo(NDUINT32 processId, const char *procName, const char *moduleName)
 {
-	processHeaderInfo *pAddr = getProcessInfo(0);
-	if (!pAddr){
+	if (!nd_mem_share_addr(&g_debugHeader)) {
+		nd_logerror("The program not be init success\n");
 		return NULL;
 	}
-	LogicEngineRoot *root = LogicEngineRoot::get_Instant();
+
+	processHeaderInfo* pAddr = NULL;
+	processHeaderInfo *proHeader = (processHeaderInfo *)nd_mem_share_addr(&g_debugHeader);
+	for (int i = 0; i < LOGIC_MAX_PROCESS; i++){
+		if (proHeader[i].processId == processId){
+			pAddr = &proHeader[i];
+			break;
+		}
+		else if (0 == ndstricmp(proHeader[i].processName, procName) && 
+			0 == ndstricmp(proHeader[i].scriptModule, moduleName)) {
+			pAddr = &proHeader[i];
+			pAddr->processId = processId;
+			break;
+		}
+	}
+	if (!pAddr)	{
+		pAddr = getProcessInfo(0);
+		if (!pAddr)	{
+			return NULL;
+		}
+	}
+	
 
 	pAddr->processId = processId;
 	pAddr->debuggerProcessId = 0;
@@ -61,10 +82,8 @@ processHeaderInfo *ShareProcessLists::createProcessInfo(NDUINT32 processId, cons
 	snprintf(pAddr->semClient, PROCESS_NAME_SIZE, "%s_semCli", procName);
 	snprintf(pAddr->semCMDth, PROCESS_NAME_SIZE, "%s_cmdSem", procName);
 	pAddr->scriptModule[0] = 0;
-	const char *scriptName = root->getMainModuleName();
-	if (scriptName && *scriptName)	{
-		strncpy(pAddr->scriptModule,scriptName, sizeof(pAddr->scriptModule));
-	}
+
+	strncpy(pAddr->scriptModule, moduleName, sizeof(pAddr->scriptModule));
 
 	pAddr->runStat = E_RUN_DBG_STAT_TERMINATE;
 	pAddr->inputCmd = 0;
@@ -624,8 +643,9 @@ bool LocalDebugger::preStartDebug(NDUINT32 processId)
 	ShareProcessLists *pProcessRoot = ShareProcessLists::get_Instant();
 	if (processId == 0)	{
 
+		LogicEngineRoot *root = LogicEngineRoot::get_Instant();
 		NDUINT32 myProcessId = nd_processid();
-		proceInfo = pProcessRoot->createProcessInfo(myProcessId, nd_process_name());
+		proceInfo = pProcessRoot->createProcessInfo(myProcessId, nd_process_name(), root->getMainModuleName());
 	}
 	else {
 		proceInfo = pProcessRoot->getProcessInfo(processId);

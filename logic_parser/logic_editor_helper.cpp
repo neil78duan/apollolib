@@ -96,7 +96,8 @@ namespace LogicEditorHelper
 		"var_name",
 		"connect_in_seq",
 		"breakPointAnchor",
-		"onlyForDebug"
+		"onlyForDebug",
+		"breakPoint"
 	};
 
 

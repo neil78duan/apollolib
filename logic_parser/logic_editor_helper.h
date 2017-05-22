@@ -73,6 +73,7 @@ namespace LogicEditorHelper
 		ERT_RUN_SEQ_LINE,
 		ERT_BREAK_ANCHOR,
 		ERT_ONLY_DEBUG,
+		ERT_BREAKPOINT,
 	};
 
 	const char *_GetDataTypeName(eDataType dataType);

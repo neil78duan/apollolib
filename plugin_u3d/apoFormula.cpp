@@ -70,6 +70,12 @@ bool apoFormulaSetValue(int id, float value)
 
 }
 
+void apoFromulaResetValue()
+{
+	for (size_t i = 0; i < APO_ATTR_CAPACITY; i++)	{
+		apoAttrValue[i] = 0;
+	}
+}
 //static __ndthread vm_cpu *__cur_vm = NULL;
 //find var address
 static int place_name_runtime(const char *input, char *buf, int size, void *user_data)
