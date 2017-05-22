@@ -563,17 +563,7 @@ bool apoBaseExeNode::insertBreakPoint()
 	if (!xmlNode)	{
 		return false;
 	}
-	//	<breakPointInfo kinds = "hide">yes< / breakPointInfo>
-	ndxml *bNode = ndxml_getnode(xmlNode, "breakPointInfo");
-	if (bNode)	{
-		ndxml_setval(bNode, "yes");
-	}
-	else {
-		bNode = ndxml_addnode(xmlNode, "breakPointInfo", "yes");
-		if (bNode)	{
-			ndxml_addattrib(bNode, "kinds", "hide");
-		}
-	}
+	ndxml_setattrval(xmlNode, "breakPoint", "yes");
 	return true;
 }
 
@@ -583,7 +573,7 @@ bool apoBaseExeNode::delBreakPoint()
 	if (!xmlNode)	{
 		return true;
 	}
-	ndxml_delnode(xmlNode, "breakPointInfo");
+	ndxml_delattrib(xmlNode, "breakPoint");
 	return true;
 }
 
@@ -594,14 +584,7 @@ bool apoBaseExeNode::isBreakPoint()
 	if (!xmlNode)	{
 		return false;
 	}
-	ndxml *bNode = ndxml_getnode(xmlNode, "breakPointInfo");
-	if (!bNode)	{
-		return false;
-	}
-	else {
-		return LogicEditorHelper::getBoolValue(ndxml_getval(bNode));
-	}
-
+	return LogicEditorHelper::getBoolValue(ndxml_getattr_val(xmlNode,"breakPoint"));
 }
 
 

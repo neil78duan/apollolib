@@ -170,6 +170,12 @@ void apoBaseParam::setParam(ndxml *parent, ndxml *param, ndxml *paramRef, ndxml 
 	m_reference = paramRef;
 	m_varName = varname;
 
+#ifdef ND_DEBUG
+	if (param) {
+		const char *name = ndxml_getname(param);
+		nd_assert(0 != ndstricmp(name, "param_collect"));		
+	}
+#endif
 }
 
 
