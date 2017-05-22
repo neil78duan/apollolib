@@ -8,23 +8,26 @@ using System.Runtime.InteropServices;
 
 
 public class apoFormula {	
-#if UNITY_IPHONE || UNITY_XBOX360
+#if (UNITY_IPHONE || UNITY_XBOX360) && !UNITY_EDITOR
 	const string APO_DLL_NAME = "__Internal";
 #else    
     const string APO_DLL_NAME = "apollo_u3d";
 #endif
 
     [DllImport (APO_DLL_NAME)]
-	private static extern bool apoFormulaNameInit(int id, string name, string alias);
+	public static extern bool apoFormulaNameInit(int id, string name, string alias);
 	
 	[DllImport (APO_DLL_NAME)]
-	private static extern void apoFormulaSetEncode(string encodeName);
+	public static extern void apoFormulaSetEncode(string encodeName);
     
     [DllImport (APO_DLL_NAME)]
-	private static extern  bool apoFormulaSetValue(int id, float value);
+	public static extern  bool apoFormulaSetValue(int id, float value);
     
     [DllImport (APO_DLL_NAME)]
-	private static extern unsafe bool apoFormulaRun(string formulaText, float *result);
+	public static extern unsafe bool apoFormulaRun(string formulaText, float *result);
+	
+    [DllImport (APO_DLL_NAME)]
+	public static extern unsafe void apoFromulaResetValue();
 	
 	public unsafe bool runTestFormula() 
     {

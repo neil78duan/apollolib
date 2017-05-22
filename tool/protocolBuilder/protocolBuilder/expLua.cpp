@@ -135,8 +135,8 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 				//construct function 
 
 				size = snprintf(pConstructStream, sizeof(buf_constrct_func) - (pConstructStream - buf_constrct_func),
-					"\tself.%sCount = 0\n"
-					"\tself.%s = {}\n",
+					"\to.%sCount = 0\n"
+					"\to.%s = {}\n",
 					pValName, pValName);
 				pConstructStream += size;
 
@@ -190,7 +190,7 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 				if (realOp)	{
 					//construct
 					size = snprintf(pConstructStream, sizeof(buf_constrct_func) - (pConstructStream - buf_constrct_func),
-						"\tself.%s = %s\n",
+						"\to.%s = %s\n",
 						pValName, bIsString ? "\"\"" : "0" );
 					pConstructStream += size;
 
@@ -207,7 +207,7 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 				else {
 					//construct
 					size = snprintf(pConstructStream, sizeof(buf_constrct_func) - (pConstructStream - buf_constrct_func),
-						"\tself.%s = %s:New(nil)\n",	pValName, pType);
+						"\to.%s = %s:New(nil)\n",	pValName, pType);
 					pConstructStream += size;
 
 					//readstream
