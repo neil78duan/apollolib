@@ -472,7 +472,7 @@ APOLLO_SCRIPT_API_DEF(apollo_call_script_msgHandler_test, "测试消息处理(sc
 
 //install event handler
 //bool apollo_func_install_event_handler(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_func_install_event_handler, "安装事件处理器(str:function, int:event_id)")
+APOLLO_SCRIPT_API_DEF(apollo_func_install_event_handler, "安装全局事件处理器(str:function, int:event_id)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 	CHECK_DATA_TYPE(args[1], OT_STRING, parser);

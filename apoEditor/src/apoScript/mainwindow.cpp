@@ -512,6 +512,15 @@ void MainWindow::closeCurFile()
 	m_isChangedCurFile = false;
 }
 
+void MainWindow::closeCurFunction()
+{
+	if (m_editorWindow) {
+		m_editorWindow->clearFunction();
+		m_editorWindow->update();
+	}
+	m_currFunction = NULL;
+}
+
 bool MainWindow::checkNeedSave()
 {
 	return m_isChangedCurFile && m_curFile;
@@ -1168,7 +1177,8 @@ void MainWindow::on_actionAttach_triggered()
 	QObject::connect(&m_debuggerCli->m_obj, SIGNAL(scriptRunOKSignal()),
 		this, SLOT(onScriptRunOK()));
 
-	
+	closeCurFunction();
+
 	m_debuggerCli->Attach(pId,E_SRC_CODE_UTF_8);
 	onAttached(processes[seled].scriptModule.c_str());
 
@@ -1609,6 +1619,7 @@ bool MainWindow::showDebugNode(const char *nodeInfo)
 		const char *pAction = m_editorSetting.getDisplayAction(ndxml_getname(node));
 		if (pAction && 0 == ndstricmp(pAction, "function")) {
 			if (m_currFunction != node)	{
+				closeCurFunction();
 				m_currFunction = node;
 				showCurFunctions();
 			}

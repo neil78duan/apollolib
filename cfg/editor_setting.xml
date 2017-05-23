@@ -113,6 +113,7 @@
 	<list instruction="1" ins_id="57" size="4" >op_check_user_error</list>
 	<list instruction="1" ins_id="58" size="4" >op_clear_error</list>
 	<list instruction="1" ins_id="59" size="4" >op_idle</list>
+	<list instruction="1" ins_id="60" size="0" >op_bit_operate</list>
 	
 	<!-- list instruction="1" ins_id="24" size="0" >op_set_loops</list>	
 	<list instruction="1" ins_id="25" size="0" >op_count_jump</list -->	
@@ -603,6 +604,24 @@
 		</op_math_operate>
 	</create_math_operate>
 	
+	<create_bit_operate name="逻辑运算符" create_type="1" >
+		<op_bit_operate name="节点_逻辑运算" expand="yes" create_label="create_internal_label">
+			<comment name="功能说明" rw_stat="read">and_or_not</comment>
+			<index kinds="enum" enum_value="AND,OR,XOR,NOT,LEFT_MOVE,RIGHT_MOVE"  delete="no">0</index>	
+			<param_collect name="操作数1" expand="yes" expand_stat="1" delete="no">
+				<type name="操作数1类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="操作数1值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>
+			<param_collect name="操作数2" expand="yes" expand_stat="1" delete="no">
+				<type name="操作数2类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="操作数2值" kinds="string" delete="no" restrict="type">none</var>
+			</param_collect>
+		</op_bit_operate>
+	</create_bit_operate>
+	
+	
+	
+	
 	<create_read_table name="读取excel节点" create_type="1" >
 		<op_read_table name="节点_读取表格" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">function:read_excel_table(table,col, index)</comment>
@@ -658,14 +677,14 @@
 	</create_step_send_event>
 	
 	<create_install_event name="安装本地事件处理器" create_type="1" >
-		<op_install_event name="节点_安装事件处理器" expand="yes">
+		<op_install_event name="节点_安装本地事件处理器" expand="yes">
 			<comment name="功能说明" rw_stat="read">install_local_event_handler(event_id, function)</comment>			
 			<index name="事件名" kinds="user_define" user_param="event_list" delete="no">none</index>			
 			<param name="函数名" kinds="user_define" user_param="func_list" delete="no">none</param>			
 		</op_install_event>
 	</create_install_event>
 	<create_remove_event name="移除本地事件处理器" create_type="1" >
-		<op_remove_event name="节点_移除事件处理器" expand="yes">
+		<op_remove_event name="节点_移除本地事件处理器" expand="yes">
 			<comment name="功能说明" rw_stat="read">install_local_event_handler(event_id, function)</comment>			
 			<index name="事件名" kinds="user_define" user_param="event_list" delete="no">none</index>			
 			<param name="函数名" kinds="user_define" user_param="func_list" delete="no">none</param>			
@@ -1131,6 +1150,8 @@
 		<list>create_step_get_user_data_type</list>
 		
 		<list>create_math_operate</list>
+		<list>create_bit_operate</list>
+		
 		<list>create_assignin</list>
 		
 		<list>create_step_inistall_msg_handler</list>

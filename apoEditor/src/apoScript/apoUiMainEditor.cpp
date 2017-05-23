@@ -971,7 +971,7 @@ void apoUiMainEditor::popMenuAddBreakPointTrigged()
 		if (exeNode){
 			exeNode->insertBreakPoint();
 			this->update();
-
+			onFileChanged();
 			ndxml *xmlnode = exeNode->getBreakPointAnchor();
 			if (xmlnode){
 				char buf[1024];
@@ -995,6 +995,7 @@ void apoUiMainEditor::popMenuDelBreakPointTrigged()
 			showNodeDetail(exeNode);
 			this->update();
 
+			onFileChanged();
 			ndxml *xmlnode = exeNode->getBreakPointAnchor();
 			if (xmlnode){
 				char buf[1024];

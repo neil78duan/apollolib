@@ -132,6 +132,10 @@
 		0776F95E1E31E88F005DCB69 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0776F95D1E31E88F005DCB69 /* apoClientU3d.cpp */; };
 		0776F95F1E31E88F005DCB69 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0776F95D1E31E88F005DCB69 /* apoClientU3d.cpp */; };
 		0776F9601E31E88F005DCB69 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0776F95D1E31E88F005DCB69 /* apoClientU3d.cpp */; };
+		079181B01ED2F53F00E44B0C /* logic_debugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 079181AE1ED2F53F00E44B0C /* logic_debugger.cpp */; };
+		079181B11ED2F53F00E44B0C /* logic_debugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 079181AE1ED2F53F00E44B0C /* logic_debugger.cpp */; };
+		079181B21ED2F53F00E44B0C /* logic_debugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 079181AE1ED2F53F00E44B0C /* logic_debugger.cpp */; };
+		079181B31ED2F53F00E44B0C /* logic_debugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 079181AF1ED2F53F00E44B0C /* logic_debugger.h */; };
 		07EC85F01D54400400C32925 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07EC851E1D54400300C32925 /* Makefile */; };
 		07EC85F11D54400400C32925 /* bintree.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85201D54400300C32925 /* bintree.c */; };
 		07EC85F21D54400400C32925 /* callstack.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85211D54400300C32925 /* callstack.c */; };
@@ -315,6 +319,8 @@
 		0776F9021E31C128005DCB69 /* apollo_u3d_mac.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = apollo_u3d_mac.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		0776F9041E31C128005DCB69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0776F95D1E31E88F005DCB69 /* apoClientU3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apoClientU3d.cpp; sourceTree = "<group>"; };
+		079181AE1ED2F53F00E44B0C /* logic_debugger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logic_debugger.cpp; sourceTree = "<group>"; };
+		079181AF1ED2F53F00E44B0C /* logic_debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logic_debugger.h; sourceTree = "<group>"; };
 		07EC848A1D543B8400C32925 /* libapollo_client_ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libapollo_client_ios.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		07EC84A81D543E6200C32925 /* libapollo_client_mac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libapollo_client_mac.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		07EC84AF1D54400300C32925 /* _nderr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _nderr.h; sourceTree = "<group>"; };
@@ -502,6 +508,8 @@
 		074C8F721D66A88500590A34 /* logic_parser */ = {
 			isa = PBXGroup;
 			children = (
+				079181AE1ED2F53F00E44B0C /* logic_debugger.cpp */,
+				079181AF1ED2F53F00E44B0C /* logic_debugger.h */,
 				074C8F7E1D66A88500590A34 /* dbl_mgr.cpp */,
 				074C8F7F1D66A88500590A34 /* dbl_mgr.h */,
 				074C8F801D66A88500590A34 /* dbldata2netstream.cpp */,
@@ -911,6 +919,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				079181B31ED2F53F00E44B0C /* logic_debugger.h in Headers */,
 				0776F8FA1E31BECD005DCB69 /* apoCliApi.h in Headers */,
 				0776F8FB1E31BECD005DCB69 /* apoClientU3d.h in Headers */,
 				075A8E7E1EA77BAD00710AEA /* apoFormula.h in Headers */,
@@ -1081,6 +1090,7 @@
 				0776F9441E31C1AE005DCB69 /* nd_connector.c in Sources */,
 				0776F9451E31C1AE005DCB69 /* nd_exch_key.cpp in Sources */,
 				0776F9461E31C1AE005DCB69 /* nd_client.cpp in Sources */,
+				079181B21ED2F53F00E44B0C /* logic_debugger.cpp in Sources */,
 				0776F9481E31C1AE005DCB69 /* apoCliApi.cpp in Sources */,
 				0776F90E1E31C18C005DCB69 /* nd_time.c in Sources */,
 				0776F90F1E31C18C005DCB69 /* bintree.c in Sources */,
@@ -1192,6 +1202,7 @@
 				07EC861B1D54400400C32925 /* nd_netobj.c in Sources */,
 				07EC86101D54400400C32925 /* r_stdlib.c in Sources */,
 				07EC86051D54400400C32925 /* desc.c in Sources */,
+				079181B01ED2F53F00E44B0C /* logic_debugger.cpp in Sources */,
 				07EC86231D54400400C32925 /* udt_net.c in Sources */,
 				07EC85FD1D54400400C32925 /* nd_unix.c in Sources */,
 				074C8FA01D66A88500590A34 /* logic_compile.cpp in Sources */,
@@ -1282,6 +1293,7 @@
 				07EC86971D54433800C32925 /* nd_exch_key.cpp in Sources */,
 				07EC86981D54433800C32925 /* nd_client.cpp in Sources */,
 				07EC86991D54433800C32925 /* login_apollo.cpp in Sources */,
+				079181B11ED2F53F00E44B0C /* logic_debugger.cpp in Sources */,
 				07EC869A1D54433800C32925 /* netui_atl.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

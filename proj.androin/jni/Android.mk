@@ -80,6 +80,7 @@ LOCAL_SRC_FILES := ../../../ndsdk/src/nd_common/src/bintree.c \
 ../../logic_parser/logic_compile.cpp	\
 ../../logic_parser/logicEngineRoot.cpp	\
 ../../logic_parser/logic_editor_helper.cpp \
+../../logic_parser/logic_debugger.cpp \
 ../../attribute/attr_mgr.cpp \
 ../../attribute/roleattr_help.cpp \
 ../../plugin_u3d/apoCliApi.cpp	\

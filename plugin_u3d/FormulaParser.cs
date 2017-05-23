@@ -35,7 +35,9 @@ public class apoFormula {
 		//init role attribute list 
 		apoFormulaNameInit(1, @"attack", @"攻击力");
 		apoFormulaNameInit(2, @"def", @"防御力");
-		
+
+		apoFromulaResetValue();
+
 		//set new value
 		apoFormulaSetValue(1, 100);
 		apoFormulaSetValue(2, 50);
