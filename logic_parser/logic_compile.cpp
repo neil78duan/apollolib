@@ -1513,17 +1513,10 @@ ndxml *LogicCompiler::_getRefNode(ndxml*node)
 
 bool LogicCompiler::_trytoAddBreakPoint(ndxml *xml)
 {
-	ndxml *breakXml = ndxml_getnode(xml, "breakPointInfo");
-	if (!breakXml)	{
-		return false;
-	}
-	if (getBoolValue(ndxml_getval(breakXml)) ) {
+	if (LogicEditorHelper::getBoolValue(ndxml_getattr_val(xml,"breakPoint")) )	{
 		LocalDebugger &debugger = LogicEngineRoot::get_Instant()->getGlobalDebugger();
-
-
 		char debugInfo[1024];
-		getFuncStackInfo(xml, debugInfo, sizeof(debugInfo) );
-
+		getFuncStackInfo(xml, debugInfo, sizeof(debugInfo));
 		debugger.addBreakPoint(m_cur_function.c_str(), debugInfo);
 		return true;
 	}

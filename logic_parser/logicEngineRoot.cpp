@@ -345,10 +345,15 @@ void LogicEngineRoot::installFunc(logicParser_func func, const char *name, const
 
 void LogicEngineRoot::installEvent(int event_id, const char *event_func)
 {
-	if (!event_func || !event_func[0] || !event_id){
+	if (!event_id){
 		return;
 	}
-	m_event_entry[event_id] = std::string(event_func);
+	if (!event_func || !event_func[0]){
+		m_event_entry.erase(event_id);
+	}
+	else {
+		m_event_entry[event_id] = std::string(event_func);
+	}
 }
 
 

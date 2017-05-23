@@ -7,7 +7,7 @@
 	<node desc="修改时间(int:add_hours, int:add_minutes)">CPP.apollo_func_change_time</node>
 	<node desc="发送掉落包(maxid,minid, ...)">CPP.apollo_func_drop_msg</node>
 	<node desc="获得消息数据类型(类型名字)">CPP.apollo_func_get_userDataType</node>
-	<node desc="安装事件处理器(str:function, int:event_id)">CPP.apollo_func_install_event_handler</node>
+	<node desc="安装全局事件处理器(str:function, int:event_id)">CPP.apollo_func_install_event_handler</node>
 	<node desc="获得主机信息()">CPP.apollo_func_machine_version</node>
 	<node desc="读取消息(int:数据类型)">CPP.apollo_func_read_msg</node>
 	<node desc="从消息中读UserDef类型(输入消息, 类型名字)">CPP.apollo_func_read_userData_from_msg</node>

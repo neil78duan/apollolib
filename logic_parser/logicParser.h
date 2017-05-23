@@ -117,7 +117,7 @@ enum eParserOperator{
 	E_OP_CHECK_IN_USER_ERROR,	//check current error is on ,and error is userdef
 	E_OP_CLEAR_ERROR_CODE,	//CLEAR error
 	E_OP_IDLE,				//idle instruct nothing to be done
-	
+	E_OP_BITS_OPERATE, // & | ^ ~ << >> REF eBitOperate
 
 
 };
@@ -143,6 +143,16 @@ enum eMathOperate
 	E_MATH_MIN,
 	E_MATH_RAND,
 } ;
+
+enum eBitOperate
+{
+	E_BIT_AND,
+	E_BIT_OR,
+	E_BIT_XOR,
+	E_BIT_NOT,
+	E_BIT_LEFT_MOVE,
+	E_BIT_RIGHT_MOVE
+};
 
 enum eLogicSystemError
 {
@@ -373,6 +383,8 @@ protected:
 	
 	bool _buildUserDefData(runningStack *runstack,parse_arg_list_t &args) ;
 	
+
+	bool _bitOperate(eBitOperate op, const DBLDataNode &var1, const DBLDataNode &var2);
 	bool _mathOperate(eMathOperate op,const DBLDataNode &var1,const DBLDataNode &var2);
 	bool _varAssignin(runningStack *runstack,const char *varName, DBLDataNode &inputVal);
 

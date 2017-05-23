@@ -832,6 +832,14 @@ int LogicParserEngine::_baseCallScript(runningStack *stack)
 				//m_registerVal.InitSet(tmpIndexVal.)
 				m_registorFlag = _mathOperate((eMathOperate)opAim,tmpIndexVal,tmpInputVal) ;
 				break ;
+			case E_OP_BITS_OPERATE: // & | ^ ~ << >>
+				p = lp_read_stream(p, opAim, m_cmdByteOrder);
+				GET_VAR_FROM_STREAM(stack, p, tmpIndexVal);
+				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);
+				//m_registerVal.InitSet(tmpIndexVal.)
+				m_registorFlag = _bitOperate((eBitOperate)opAim, tmpIndexVal, tmpInputVal);
+
+				break;
 			case E_OP_ASSIGNIN:				
 				GET_TEXT_FROM_STREAM(name, sizeof(name), p);
 				GET_VAR_FROM_STREAM(stack, p, tmpInputVal);
@@ -1747,7 +1755,67 @@ bool LogicParserEngine::_CreateUserDefType(runningStack *runstack, parse_arg_lis
 	return true;
 
 }
+template<class T>
+bool bitOperateExe(eBitOperate op, T lv, T rv, DBLDataNode &result)
+{
+	T val;
+	switch (op)
+	{
+	case E_BIT_AND:
+		val = lv & rv;
+		break;
+	case E_BIT_OR:
+		val = lv | rv;
+		break;
+	case E_BIT_XOR:
+		val = lv ^ rv;
+		break;
+	case E_BIT_NOT:
+		val = ~lv ;
+		break;
+	case E_BIT_LEFT_MOVE:
+		val = lv << rv;
+		break;
+	case E_BIT_RIGHT_MOVE:
+		val = lv >> rv;
+		break;
+	default:
+		return false;
+		break;
+	}
 
+	result.InitSet(val);
+
+	return true;
+}
+
+bool LogicParserEngine::_bitOperate(eBitOperate op, const DBLDataNode &var1, const DBLDataNode &var2)
+{
+
+	DBL_ELEMENT_TYPE  dtype = var1.GetDataType();
+	NDUINT64 leftVal = var1.GetInt64();
+	NDUINT64 rightVal = var2.GetInt64();
+	if (dtype == OT_INT ) { 
+		return  bitOperateExe(op, (int)leftVal, (int)rightVal, m_registerVal);
+	}
+
+	else if (dtype == OT_INT8) {
+		return  bitOperateExe(op, (NDUINT8)leftVal, (NDUINT8)rightVal, m_registerVal);
+
+	}
+	else if (dtype == OT_INT16) {
+		return  bitOperateExe(op, (NDUINT16)leftVal, (NDUINT16)rightVal, m_registerVal);
+
+	}
+	else if (dtype == OT_INT64) {
+		return  bitOperateExe(op, (NDUINT64)leftVal, (NDUINT64)rightVal, m_registerVal);
+
+	}
+	else {
+		return false;
+	}
+	
+}
 
 bool LogicParserEngine::_mathOperate(eMathOperate op,const DBLDataNode &var1, const DBLDataNode &var2)
 {
