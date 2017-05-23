@@ -127,6 +127,7 @@ protected:
 	bool saveCurFile();
 	bool checkNeedSave();
 	void closeCurFile();
+	void closeCurFunction();
 
 	bool isDebugging() { return m_debuggerCli != NULL; }
 
