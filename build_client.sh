@@ -10,15 +10,15 @@
 workDir=`pwd`
 
 #-----build android
-#cd proj.androin
-#ndk-build clean
+cd proj.androin
+ndk-build clean
 #ndk-build clean apo_debug=1
 
 #ndk-build apo_debug=1
 #[ $? == 0 ] || exit 1
 
-#ndk-build
-#[ $? == 0 ] || exit 1
+ndk-build
+[ $? == 0 ] || exit 1
 
 
 cd $workDir
