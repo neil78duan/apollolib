@@ -75,9 +75,10 @@ typedef NDUINT64 hostid_t;
 
 typedef NDUINT32 itemInst_t ; //ITEM instant id
 typedef NDUINT32 itemType_t ; //ITEM instant id
-typedef NDUINT16 skillId_t ;
-typedef NDUINT16 weaponId_t;
-typedef NDUINT16 dragonId_t;
+typedef NDUINT16 designTypeId_t;
+typedef designTypeId_t skillId_t;
+//typedef NDUINT16 weaponId_t;
+//typedef NDUINT16 dragonId_t;
 typedef NDUINT16 taskId_t;
 
 #define HOST_ID_MAKE(_ip, _port, session_id)  	ND_MAKE_QWORD(_ip, ND_MAKE_DWORD(_port, session_id) )

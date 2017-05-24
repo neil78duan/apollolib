@@ -234,7 +234,7 @@
 				</op_get_last_error>
 				<op_call_func name="节点_调用: send_error()" create_template="create_input_param" auto_index="1" expand_list="comment,func_name" expand_stat="0">
 					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-					<func_name kinds="user_define" user_param="func_list">_realval=CPP.gscript_send_client_error&_dispname=发送错误通知(errorId)</func_name>
+					<func_name kinds="user_define" user_param="func_list">_realval=CPP.gscript_send_client_error&amp;_dispname=发送错误通知(errorId)</func_name>
 					<param_collect name="参数_错误号" expand="yes" expand_stat="1">
 						<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
 						<var kinds="string" delete="no" restrict="type">0</var>
@@ -244,7 +244,7 @@
 			
 			<op_skip_error name="节点_忽略错误_for_test"  kinds="hide" expand="yes">
 				<comment name="功能说明" rw_stat="read">skip_error(value)</comment>
-				<num name="错误类型" kinds="user_define" user_param="error_list" delete="no">_realval=47&_dispname=system(NDERR_VARIANT_NOT_EXIST):variant not found</num>
+				<num name="错误类型" kinds="user_define" user_param="error_list" delete="no">_realval=47&amp;_dispname=system(NDERR_VARIANT_NOT_EXIST):variant not found</num>
 			</op_skip_error>		
 			<op_begin_affair name="节点_出错时自动恢复数据" expand="yes" expand_stat="1">
 				<comment name="功能说明" rw_stat="read">player_affair_rollback()</comment>
