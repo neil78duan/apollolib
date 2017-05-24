@@ -271,6 +271,8 @@ bool startDialog::expExcel()
 
     WriteLog("==============Begin export excel===============");
 
+	DBLDatabase::destroy_Instant();
+
 	const char *exp_cmd = _getFromIocfg("game_data_export_cmd");
 	const char *excel_path = _getFromIocfg("excel_data_in_path");
 	const char *text_path = _getFromIocfg("text_data_out_path");
