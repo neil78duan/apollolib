@@ -82,5 +82,10 @@ ErrorElement(ESERVER_ERR_MASTER_NOT_LEAVE, "先转让会长才能离开"),
 ErrorElement(ESERVER_ERR_NOT_GUILD_MANAGER, "不是管理员"),
 ErrorElement(ESERVER_ERR_GUILD_FULL, "人满"),
 
+ErrorElement(ESERVER_ERR_MINE_EXIST, "已经有矿产"),
+ErrorElement(ESERVER_ERR_NO_MINE, "没有矿产"),
+ErrorElement(ESERVER_ERR_MINE_LEVEL_LOW, "矿产等级不够"),
+ErrorElement(ESERVER_ERR_MINE_IN_UPLEVEL, "矿产升级中"),
+
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),
