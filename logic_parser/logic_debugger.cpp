@@ -361,6 +361,7 @@ int LogicDebugClient::cmdAddBreakPointBatch(ndxml *breakPointXml)
 		nd_sem_post(m_cmdSemToSrvHost);
 	}
 
+	return 0;
 }
 
 int LogicDebugClient::postEndDebug()
