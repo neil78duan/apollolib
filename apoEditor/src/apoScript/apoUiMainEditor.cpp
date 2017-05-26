@@ -1719,13 +1719,15 @@ bool apoUiMainEditor::buildRunSerqConnector(apoBaseSlotCtrl *fromSlot, apoBaseSl
 	//insert after  new var
 	if (fromCtrl->returnVal()){
 		apoBaseSlotCtrl *slotRet = fromCtrl->returnVal();
-		apoUiBezier *pBzeRet = slotRet->getConnector();
-		if (pBzeRet && pBzeRet->getSlot2() ){
-			apoBaseSlotCtrl *slotNextTo = (apoBaseSlotCtrl *) pBzeRet->getSlot2();
+		if (slotRet){
+			apoUiBezier *pBzeRet = slotRet->getConnector();
+			if (pBzeRet && pBzeRet->getSlot2()){
+				apoBaseSlotCtrl *slotNextTo = (apoBaseSlotCtrl *)pBzeRet->getSlot2();
 
-			apoUiExenodeNewVar *newVar = dynamic_cast<apoUiExenodeNewVar*> (slotNextTo->parent());
-			if (newVar)	{
-				insertPosXml = (ndxml*) newVar->getMyUserData();
+				apoUiExenodeNewVar *newVar = dynamic_cast<apoUiExenodeNewVar*> (slotNextTo->parent());
+				if (newVar)	{
+					insertPosXml = (ndxml*)newVar->getMyUserData();
+				}
 			}
 		}
 	}
@@ -1734,14 +1736,16 @@ bool apoUiMainEditor::buildRunSerqConnector(apoBaseSlotCtrl *fromSlot, apoBaseSl
 		//the next node is newVar
 		ndxml *retNewVar = NULL;
 		apoBaseSlotCtrl *slotRet = toCtrl->returnVal();
-		apoUiBezier *pBzeRet = slotRet->getConnector();
-		if (pBzeRet && pBzeRet->getSlot2()){
-			apoBaseSlotCtrl *slotNextTo = (apoBaseSlotCtrl *)pBzeRet->getSlot2();
+		if (slotRet){
+			apoUiBezier *pBzeRet = slotRet->getConnector();
+			if (pBzeRet && pBzeRet->getSlot2()){
+				apoBaseSlotCtrl *slotNextTo = (apoBaseSlotCtrl *)pBzeRet->getSlot2();
 
-			apoUiExenodeNewVar *newVar = dynamic_cast<apoUiExenodeNewVar*> (slotNextTo->parent());
-			if (newVar)	{
-				retNewVar = (ndxml*)newVar->getMyUserData();
-				ndxml_disconnect(NULL, retNewVar);
+				apoUiExenodeNewVar *newVar = dynamic_cast<apoUiExenodeNewVar*> (slotNextTo->parent());
+				if (newVar)	{
+					retNewVar = (ndxml*)newVar->getMyUserData();
+					ndxml_disconnect(NULL, retNewVar);
+				}
 			}
 		}
 		///----
