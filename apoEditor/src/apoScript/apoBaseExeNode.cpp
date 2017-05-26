@@ -436,6 +436,20 @@ bool apoBaseExeNode::isMyParam(apoBaseParam *paramCtrl)
 	return false;
 }
 
+bool apoBaseExeNode::isUnConnected()
+{
+	if (m_nodeXml){
+		ndxml *myParent = m_nodeXml;
+		while (myParent){
+			myParent = ndxml_get_parent(myParent);
+			if (myParent && 0==ndstricmp(ndxml_getname(myParent),"unConnect") ) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 bool apoBaseExeNode::closeParam(apoBaseSlotCtrl *param)
 {
 	bool ret = false;
@@ -1005,6 +1019,9 @@ void apoBaseExeNode::paintEvent(QPaintEvent *event)
 	}
 	else if (m_bInDebug) {
 		painter.setPen(QPen(Qt::darkYellow, 2));
+	}
+	else if (isUnConnected()) {
+		painter.setPen(QPen(Qt::lightGray, 2));
 	}
 	else {
 		painter.setPen(QPen(Qt::red, 2));
