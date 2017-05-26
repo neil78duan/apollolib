@@ -437,7 +437,7 @@ void MainWindow::onDebugTerminate()
 }
 void MainWindow::onDebugStep(const char *func, const char* node)
 {
-	nd_logdebug("recv step in %s : %s\n", func, node);
+	//nd_logdebug("recv step in %s : %s\n", func, node);
 	showDebugNode(node);
 
 	if (m_debugInfo){
@@ -1421,13 +1421,23 @@ void MainWindow::onAttached(const char *moduleName)
 		LocalDebugger & debuggerHost = LogicEngineRoot::get_Instant()->getGlobalDebugger();
 		debuggerHost.clearBreakpoint();
 
-		if (compileScript(m_filePath.c_str(), outFile,false,true, E_SRC_CODE_UTF_8)) {
+		if (compileScript(m_filePath.c_str(), outFile,false,true)) {
 			breakPoint_vct  breakpoints = debuggerHost.getBreakPoints();
-			for (breakPoint_vct::iterator it = breakpoints.begin(); it != breakpoints.end(); it++){
-				if (it->tempBreak)	{
-					continue;
+			if (breakpoints.size()> 0)	{
+				ndxml *nodes = ndxml_from_text("<nodes/>");
+				nd_assert(nodes);
+				for (breakPoint_vct::iterator it = breakpoints.begin(); it != breakpoints.end(); it++){
+					if (it->tempBreak)	{
+						continue;
+					}
+					ndxml *node = ndxml_addnode(nodes, "node", NULL);
+					if (node )	{
+						ndxml_addattrib(node, "func", it->functionName.c_str());
+						ndxml_addattrib(node, "exenode", it->nodeName.c_str());
+					}
 				}
-				m_debuggerCli->cmdAddBreakPoint(it->functionName.c_str(), it->nodeName.c_str());
+				m_debuggerCli->cmdAddBreakPointBatch(nodes);
+				ndxml_free(nodes);
 			}
 		}
 	}

@@ -60,57 +60,58 @@
 	<node desc="system(NDERR_FEW_PARAMS):脚本参数太少">57</node>
 	<node desc="system(NDERR_PARAM_TYPE_NOT_MATCH):参数类型不匹配">58</node>
 	<node desc="system(NDERR_PARAM_INVALID):参数无效">59</node>
-	<node desc="UNKNOW_ERRORgame(ESERVER_ESERVER_ERR_GAME_CONFIG):策划数据配错了">1025</node>
-	<node desc="game(ESERVER_ESERVER_ERR_IN_CD):CD中">1026</node>
-	<node desc="game(ESERVER_ESERVER_ERR_SHORT_ITEM):物品不足">1027</node>
-	<node desc="game(ESERVER_ESERVER_ERR_NO_ITEM):沒有需要的物品">1028</node>
-	<node desc="game(ESERVER_ESERVER_ERR_ATTR_NOT_ENOUGH):属性不足">1029</node>
-	<node desc="game(ESERVER_ESERVER_ERR_ATTR_TOO_MUCH):属性太高">1030</node>
-	<node desc="game(ESERVER_ESERVER_ERR_LEVEL_LOW):等级太低">1031</node>
-	<node desc="game(ESERVER_ESERVER_ERR_SHORT_MONEY):游戏币不足">1032</node>
-	<node desc="game(ESERVER_ESERVER_ERR_MAX_LEVEL):已经是最高级">1033</node>
-	<node desc="game(ESERVER_ESERVER_ERR_NO_BUILDING):沒有建筑物">1034</node>
-	<node desc="game(ESERVER_ESERVER_ERR_BUILDING_LEVEL_LOW):建筑物等级不够">1035</node>
-	<node desc="game(ESERVER_ESERVER_ERR_BUILDING_SWITCH_TYPE):建筑替换类型不匹配">1036</node>
-	<node desc="game(ESERVER_ESERVER_ERR_PACKAGE_FULL):背包已满">1037</node>
-	<node desc="game(ESERVER_ESERVER_ERR_SHOP_NOT_EXIST):商店不存在">1038</node>
-	<node desc="game(ESERVER_ESERVER_ERR_ITEM_OUT_SALE):物品售完">1039</node>
-	<node desc="game(ESERVER_ESERVER_ERR_SIGNED_IN):已经签到">1040</node>
-	<node desc="game(ESERVER_ESERVER_ERR_TOO_ROLES):角色过多不能创建">1041</node>
-	<node desc="game(ESERVER_ESERVER_ERR_INVITE_CODE_INVALID):无效的邀请码">1042</node>
-	<node desc="game(ESERVER_ESERVER_ERR_INVITE_BE_INVITED):已经被邀请过">1043</node>
-	<node desc="game(ESERVER_ESERVER_ERR_INVITE_NOT_BE_INVITED):不能被邀请">1044</node>
-	<node desc="game(ESERVER_ESERVER_ERR_FREE_TIME_OVER):免费次数用完">1045</node>
-	<node desc="game(ESERVER_ESERVER_ERR_AWARDS_GOT):奖励已经领取">1046</node>
-	<node desc="game(ESERVER_ESERVER_ERR_CANNOT_GET_THIS_TASK):不能领取该任务">1047</node>
-	<node desc="game(ESERVER_ESERVER_ERR_NO_THIS_TASK):任务不存在">1048</node>
-	<node desc="game(ESERVER_ESERVER_ERR_TASK_NOT_COMPLETED):任务没有完成">1049</node>
-	<node desc="game(ESERVER_ESERVER_ERR_ACHIEVMENT_NOT_COMPLETED):成就没有达成">1050</node>
-	<node desc="game(ESERVER_ESERVER_ERR_TASK_IN_RUNNING):任务执行中">1051</node>
-	<node desc="game(ESERVER_ESERVER_ERR_AIM_ROLE_NOT_EXIST):目标用户不存在">1052</node>
-	<node desc="game(ESERVER_ESERVER_ERR_NEED_PASS_MAP):需要先通关地图">1053</node>
-	<node desc="game(ESERVER_ESERVER_ERR_POS_ERROR):位置错误">1054</node>
-	<node desc="game(ESERVER_ESERVER_ERR_BUILDING_GRID_IN_USING):建筑格子被占用">1055</node>
-	<node desc="game(ESERVER_ESERVER_ERR_NO_SKILL):技能不存在">1056</node>
-	<node desc="game(ESERVER_ESERVER_ERR_NO_CARD):卡牌不存在">1057</node>
-	<node desc="game(ESERVER_ESERVER_ERR_NO_EQUIP):装备不存在">1058</node>
-	<node desc="game(ESERVER_ESERVER_ERR_NOT_IN_MAP):没有在当前地图">1059</node>
-	<node desc="game(ESERVER_ESERVER_ERR_CARD_PART_NOT_STRENGTHEN):需要先强化子部位">1060</node>
-	<node desc="game(ESERVER_ESERVER_ERR_NEED_COMPLETED_MAP):需要完成指定地图">1061</node>
-	<node desc="game(ESERVER_ESERVER_ERR_NEED_UNLOCK_ZONE):需要解锁指定区域">1062</node>
-	<node desc="game(ESERVER_ESERVER_ERR_SHORT_STUFF):缺少材料">1063</node>
-	<node desc="game(ESERVER_ESERVER_ERR_NO_SOLDIER):没有兵种">1064</node>
-	<node desc="game(ESERVER_ESERVER_ERR_BUILDING_IN_CREATE):建筑在建造升級中">1065</node>
-	<node desc="game(ESERVER_ESERVER_ERR_BUILDING_CREATE_SUCCESS):建筑已经升级成功">1066</node>
-	<node desc="game(ESERVER_ESERVER_ERR_NO_GUILD):工会不存在">1067</node>
-	<node desc="game(ESERVER_ESERVER_ERR_DISAGREE):对方不同意">1068</node>
-	<node desc="game(ESERVER_ESERVER_ERR_ALREADY_IN_GUILD):已经加入工会">1069</node>
-	<node desc="game(ESERVER_ESERVER_ERR_NOT_GUILD_MASTER):不是会长">1070</node>
-	<node desc="game(ESERVER_ESERVER_ERR_MASTER_NOT_LEAVE):先转让会长才能离开">1071</node>
-	<node desc="game(ESERVER_ESERVER_ERR_NOT_GUILD_MANAGER):不是管理员">1072</node>
-	<node desc="game(ESERVER_ESERVER_ERR_GUILD_FULL):人满">1073</node>
-	<node desc="game(ESERVER_ESERVER_ERR_MINE_EXIST):已经有矿产">1074</node>
-	<node desc="game(ESERVER_ESERVER_ERR_NO_MINE):没有矿产">1075</node>
-	<node desc="game(ESERVER_ESERVER_ERR_MINE_LEVEL_LOW):矿产等级不够">1076</node>
-	<node desc="game(ESERVER_ESERVER_ERR_MINE_IN_UPLEVEL):矿产升级中">1077</node>
+	<node desc="Error code =1025">1025</node>
+	<node desc="Error code =1026">1026</node>
+	<node desc="Error code =1027">1027</node>
+	<node desc="Error code =1028">1028</node>
+	<node desc="Error code =1029">1029</node>
+	<node desc="Error code =1030">1030</node>
+	<node desc="Error code =1031">1031</node>
+	<node desc="Error code =1032">1032</node>
+	<node desc="Error code =1033">1033</node>
+	<node desc="Error code =1034">1034</node>
+	<node desc="Error code =1035">1035</node>
+	<node desc="Error code =1036">1036</node>
+	<node desc="Error code =1037">1037</node>
+	<node desc="Error code =1038">1038</node>
+	<node desc="Error code =1039">1039</node>
+	<node desc="Error code =1040">1040</node>
+	<node desc="Error code =1041">1041</node>
+	<node desc="Error code =1042">1042</node>
+	<node desc="Error code =1043">1043</node>
+	<node desc="Error code =1044">1044</node>
+	<node desc="Error code =1045">1045</node>
+	<node desc="Error code =1046">1046</node>
+	<node desc="Error code =1047">1047</node>
+	<node desc="Error code =1048">1048</node>
+	<node desc="Error code =1049">1049</node>
+	<node desc="Error code =1050">1050</node>
+	<node desc="Error code =1051">1051</node>
+	<node desc="Error code =1052">1052</node>
+	<node desc="Error code =1053">1053</node>
+	<node desc="Error code =1054">1054</node>
+	<node desc="Error code =1055">1055</node>
+	<node desc="Error code =1056">1056</node>
+	<node desc="Error code =1057">1057</node>
+	<node desc="Error code =1058">1058</node>
+	<node desc="Error code =1059">1059</node>
+	<node desc="Error code =1060">1060</node>
+	<node desc="Error code =1061">1061</node>
+	<node desc="Error code =1062">1062</node>
+	<node desc="Error code =1063">1063</node>
+	<node desc="Error code =1064">1064</node>
+	<node desc="Error code =1065">1065</node>
+	<node desc="Error code =1066">1066</node>
+	<node desc="Error code =1067">1067</node>
+	<node desc="Error code =1068">1068</node>
+	<node desc="Error code =1069">1069</node>
+	<node desc="Error code =1070">1070</node>
+	<node desc="Error code =1071">1071</node>
+	<node desc="Error code =1072">1072</node>
+	<node desc="Error code =1073">1073</node>
+	<node desc="Error code =1074">1074</node>
+	<node desc="Error code =1075">1075</node>
+	<node desc="Error code =1076">1076</node>
+	<node desc="Error code =1077">1077</node>
+	<node desc="Error code =1078">1078</node>
 </error_list>

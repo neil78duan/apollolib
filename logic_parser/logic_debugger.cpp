@@ -88,6 +88,7 @@ processHeaderInfo *ShareProcessLists::createProcessInfo(NDUINT32 processId, cons
 	pAddr->runStat = E_RUN_DBG_STAT_TERMINATE;
 	pAddr->inputCmd = 0;
 	pAddr->outputCmd = 0;
+	pAddr->srvHostCmd = 0;
 	pAddr->cmdEncodeType = ND_ENCODE_TYPE;
 	
 	return pAddr;
@@ -160,14 +161,14 @@ void* parseThreadRun(void* param)
 
 	proceInfo->debuggerProcessId = nd_processid();
 	proceInfo->runStat = 1;
-	proceInfo->inputCmd = E_RUN_DBG_STAT_RUNNING;
+	nd_atomic_set(&proceInfo->inputCmd, E_RUN_DBG_STAT_RUNNING);
 
 	int ret = parser->runCmdline(pcmdInfo->argc, (const char**)pcmdInfo->argv, debugger.getEncodeType());
 
 	delete pcmdInfo;
 
 	proceInfo->runStat = E_RUN_DBG_STAT_TERMINATE;
-	proceInfo->outputCmd = E_DBG_OUTPUT_CMD_TERMINATED;
+	nd_atomic_set(&proceInfo->outputCmd, E_DBG_OUTPUT_CMD_TERMINATED);
 
 	ndsem_t  sem = debugger.getClientSem();
 	nd_sem_post(sem);
@@ -206,7 +207,7 @@ void* cliCmdReveiverTh(void* param)
 
 LogicDebugClient::LogicDebugClient()
 {
-	m_cmdSem = 0;
+	m_cmdSemToSrvHost = 0;
 	m_aimProcessId = 0;
 	m_isAttached = 0 ;
 }
@@ -215,9 +216,9 @@ LogicDebugClient::~LogicDebugClient()
 	if (m_isAttached) {
 		Deattach();
 	}
-	if (m_cmdSem){
-		nd_sem_destroy(m_cmdSem);
-		m_cmdSem = NULL;
+	if (m_cmdSemToSrvHost){
+		nd_sem_destroy(m_cmdSemToSrvHost);
+		m_cmdSemToSrvHost = NULL;
 	}
 
 }
@@ -247,8 +248,8 @@ int LogicDebugClient::Attach(NDUINT32 processId, int cmdEncodeType )
 		return -1;
 	}
 
-	m_cmdSem = nd_sem_open(pAddr->semCMDth);
-	if (!m_cmdSem)	{
+	m_cmdSemToSrvHost = nd_sem_open(pAddr->semCMDth);
+	if (!m_cmdSemToSrvHost)	{
 		return -1;
 	}
 
@@ -292,13 +293,13 @@ int LogicDebugClient::Deattach( )
 	pAddr->debuggerProcessId = 0;
 	
 	//notify script-host-thread running
-	pAddr->inputCmd = E_DBG_INPUT_CMD_CONTINUE;
+	nd_atomic_set(&pAddr->inputCmd, E_DBG_INPUT_CMD_CONTINUE);
 	ndsem_t sem = getHostSem();
 	nd_sem_post(sem);
 	
 	
 	if(m_thCmdRecver) {
-		pAddr->outputCmd = E_DBG_OUTPUT_CMD_DEATTACHED ;
+		nd_atomic_set(&pAddr->outputCmd, E_DBG_OUTPUT_CMD_DEATTACHED);
 		ndsem_t cliThSem = getClientSem();
 		nd_sem_post(cliThSem);
 		
@@ -306,22 +307,18 @@ int LogicDebugClient::Deattach( )
 		m_thCmdRecver = 0;
 	}
 	
-	
-	
 	LocalDebugger & debuggerHost = LogicEngineRoot::get_Instant()->getGlobalDebugger();
 	debuggerHost.postEndDebug();
 	m_aimProcessId = 0;
 	m_isAttached = false;
-	if (m_cmdSem)	{
-		nd_sem_destroy(m_cmdSem);
-		m_cmdSem = NULL;
+	if (m_cmdSemToSrvHost)	{
+		nd_sem_destroy(m_cmdSemToSrvHost);
+		m_cmdSemToSrvHost = NULL;
 	}
 	
 	return 0;
 
 }
-
-
 
 int LogicDebugClient::cmdAddBreakPoint(const char *funcName, const char *nodeName, bool isTemp)
 {
@@ -345,6 +342,25 @@ int LogicDebugClient::cmdDelBreakPoint(const char *funcName, const char *nodeNam
 		debuggerHost.delBreakPoint(funcName, nodeName);
 	}
 	return 0;
+}
+
+
+int LogicDebugClient::cmdAddBreakPointBatch(ndxml *breakPointXml)
+{
+	if (m_isAttached){
+		processHeaderInfo * proceInfo = ShareProcessLists::get_Instant()->getProcessInfo(m_aimProcessId);
+		if (!proceInfo)	{
+			return -1;
+		}
+
+		nd_atomic_set(&proceInfo->srvHostCmd, E_DBG_INPUT_CMD_ADD_BREAKPOINT_BATCH);
+
+		ndxml_to_buf(breakPointXml, proceInfo->cmdBuf, sizeof(proceInfo->cmdBuf));
+		//snprintf(proceInfo->cmdBuf, sizeof(proceInfo->cmdBuf), "<node func=\"%s\" exenode=\"%s\" />", func, nodeName);
+
+		nd_sem_post(m_cmdSemToSrvHost);
+	}
+
 }
 
 int LogicDebugClient::postEndDebug()
@@ -375,7 +391,7 @@ int LogicDebugClient::waitEvent()
 	}
 
 	ndsem_t sem = getClientSem();
-
+	ndatomic_t recvCmd = 0;
 RE_WIAT:
 
 	ret = nd_sem_wait(sem, INFINITE);
@@ -383,9 +399,10 @@ RE_WIAT:
 		nd_sem_destroy(sem);
 		return -1;
 	}
-
+	recvCmd = nd_atomic_read(&proceInfo->outputCmd);
+	proceInfo->outputCmd = E_DBG_INPUT_CMD_NONE;
 	//handler event 
-	switch (proceInfo->outputCmd)
+	switch (recvCmd)
 	{
 	case E_DBG_OUTPUT_CMD_HIT_BREAKPOINT:
 	case 	E_DBG_OUTPUT_CMD_STEP:
@@ -403,6 +420,10 @@ RE_WIAT:
 		break;
 	case E_DBG_OUTPUT_CMD_TERMINATED:
 		onTerminate();
+		
+		if (m_isAttached){
+			return -1;
+		}
 		break; 
 	case E_DBG_OUTPUT_CMD_HANDLE_ACK:
 		onCommandOk();
@@ -427,7 +448,7 @@ int LogicDebugClient::inputCmd(int cmdId)
 		return -1;
 	}
 
-	proceInfo->inputCmd = cmdId;
+	nd_atomic_set(&proceInfo->inputCmd, cmdId);
 
 	ndsem_t sem = getHostSem();
 	nd_sem_post(sem);
@@ -445,7 +466,7 @@ int LogicDebugClient::inputCmd(int cmdId, const char *func, const char *nodeName
 		return -1;
 	}
 
-	proceInfo->inputCmd = cmdId;
+	nd_atomic_set(&proceInfo->inputCmd, cmdId);
 
 	snprintf(proceInfo->cmdBuf, sizeof(proceInfo->cmdBuf), "<node func=\"%s\" exenode=\"%s\" />", func, nodeName);
 
@@ -465,14 +486,14 @@ int LogicDebugClient::inputToCmThread(int cmdId, const char *func, const char *n
 		return -1;
 	}
 
-	proceInfo->inputCmd = cmdId;
+	nd_atomic_set(&proceInfo->srvHostCmd, cmdId);
 	snprintf(proceInfo->cmdBuf, sizeof(proceInfo->cmdBuf), "<node func=\"%s\" exenode=\"%s\" />", func, nodeName);
 
-	nd_sem_post(m_cmdSem);
-
-	if (!m_isAttached)	{
-		return waitEvent();
-	}
+	nd_sem_post(m_cmdSemToSrvHost);
+// 
+// 	if (!m_isAttached)	{
+// 		return waitEvent();
+// 	}
 	return 0;
 
 }
@@ -553,6 +574,7 @@ LocalDebugger::LocalDebugger(LogicParserEngine *parser, LogicObjectBase *owner) 
 	m_RunningSem = NULL;
 	m_cliSem = NULL;
 	m_cmdSem = NULL;
+	m_thHost = NULL;
 
 	memset(&m_outPutMem, 0, sizeof(m_outPutMem));
 
@@ -561,16 +583,7 @@ LocalDebugger::LocalDebugger(LogicParserEngine *parser, LogicObjectBase *owner) 
 
 LocalDebugger::~LocalDebugger()
 {
-	if (m_cmdSem){
-		ShareProcessLists *processList = ShareProcessLists::get_Instant();
-		processHeaderInfo * proceInfo = processList->getProcessInfo(nd_processid());
-		if (proceInfo)	{
-			proceInfo->inputCmd = E_DBG_INPUT_CMD_TERMINATED;
-		}
-		nd_sem_post(m_cmdSem);
-		nd_sem_destroy(m_cmdSem);
-		m_cmdSem = NULL;
-	}
+	stopHost();
 
 	if (m_RunningSem){
 		postEndDebug();
@@ -607,6 +620,25 @@ int LocalDebugger::runHost()
 	}
 
 	return 0;
+}
+
+void LocalDebugger::stopHost()
+{
+	if (m_cmdSem){
+		ShareProcessLists *processList = ShareProcessLists::get_Instant();
+		processHeaderInfo * proceInfo = processList->getProcessInfo(nd_processid());
+		if (proceInfo)	{
+			nd_atomic_set(&proceInfo->srvHostCmd, E_DBG_INPUT_CMD_TERMINATED);
+		}
+		nd_sem_post(m_cmdSem);
+
+		if (m_thHost){
+			nd_waitthread(m_thHost);
+			m_thHost = 0;
+		}
+		nd_sem_destroy(m_cmdSem);
+		m_cmdSem = NULL;
+	}
 }
 
 int LocalDebugger::addBreakPoint(const char *funcName, const char *nodeName, bool isTemp)
@@ -711,8 +743,8 @@ bool LocalDebugger::startCMDRecvTh()
 	}
 
 	ndthread_t thId = 0;
-	ndth_handle h = nd_createthread(cmdReceiverThread, (void*)this, &thId, 0);
-	if (!h){
+	m_thHost = nd_createthread(cmdReceiverThread, (void*)this, &thId, 0);
+	if (!m_thHost){
 		return false;
 	}
 
@@ -742,7 +774,7 @@ int LocalDebugger::ScriptRunOk(LogicParserEngine *parser)
 	if (!m_cliSem){
 		return 0;
 	}
-	int ret = 0;
+	//int ret = 0;
 	NDUINT32 processId = nd_processid();
 	ShareProcessLists *processList = ShareProcessLists::get_Instant();
 	processHeaderInfo * proceInfo = processList->getProcessInfo(processId);
@@ -824,7 +856,7 @@ int LocalDebugger::waitEvent(const char *runningFunc, const char *runningNode)
 		nd_logerror("notify debugger client error\n");
 		return 0;
 	}
-	
+	ndatomic_t recvCmd = 0;
 RE_WIAT:
 	proceInfo->runStat = E_RUN_DBG_STAT_WAIT_CMD;
 	//m_client->onEnterStep(runningFunc, runningNode);
@@ -837,7 +869,11 @@ RE_WIAT:
 	
 	proceInfo = processList->getProcessInfo(processId);
 	//handler event 
-	switch (proceInfo->inputCmd)
+
+	recvCmd = nd_atomic_read(&proceInfo->inputCmd);
+	proceInfo->inputCmd = E_DBG_INPUT_CMD_NONE;
+	//handler event 
+	switch (recvCmd)
 	{
 	case E_DBG_INPUT_CMD_NONE:
 		goto RE_WIAT;
@@ -904,7 +940,11 @@ int LocalDebugger::waitClientCmd()
 			return -1;
 		}
 		//handler event 
-		switch (proceInfo->inputCmd)
+
+		ndatomic_t recvCmd = nd_atomic_read(&proceInfo->srvHostCmd);
+		proceInfo->srvHostCmd = E_DBG_INPUT_CMD_NONE;
+		//handler event 
+		switch (recvCmd)
 		{
 		case E_DBG_INPUT_CMD_NEW_BREAKPOINT:
 			if (getParamFromInput(funcName, nodeName)) {
@@ -916,9 +956,12 @@ int LocalDebugger::waitClientCmd()
 			if (getParamFromInput(funcName, nodeName)) {
 				delBreakPoint(funcName.c_str(), nodeName.c_str());
 			}
-			ntfClient(E_DBG_OUTPUT_CMD_HANDLE_ACK, NULL, NULL);		
+			ntfClient(E_DBG_OUTPUT_CMD_HANDLE_ACK, NULL, NULL);	
 			break;
 		case  E_DBG_INPUT_CMD_TERMINATED:
+			if (proceInfo->debuggerProcessId) {
+				ntfClient(E_DBG_OUTPUT_CMD_TERMINATED, NULL, NULL);
+			}
 			return 0;
 
 		case E_DBG_INPUT_CMD_ATTACHED:
@@ -930,11 +973,15 @@ int LocalDebugger::waitClientCmd()
 			nd_logdebug("deattached debug \n");
 			clearBreakpoint();
 			break;
+		case E_DBG_INPUT_CMD_ADD_BREAKPOINT_BATCH:
+			getInputBreakpoints();
+			break;
 		default:
 			break;
 		}
 
 	} while (1);
+
 	return 0;
 }
 
@@ -984,6 +1031,34 @@ bool LocalDebugger::getParamFromInput(std::string &funcName, std::string &nodeNa
 		return true;
 	}
 	return false;	
+}
+
+
+bool LocalDebugger::getInputBreakpoints()
+{
+	NDUINT32 processId = nd_processid();
+	ShareProcessLists *processList = ShareProcessLists::get_Instant();
+	processHeaderInfo * proceInfo = processList->getProcessInfo(processId);
+
+	ndxml *xml = ndxml_from_text(proceInfo->cmdBuf);
+	if (xml  ){
+		nd_assert(0 == ndstricmp(ndxml_getname(xml), "nodes"));
+		LogicEngineRoot *root = LogicEngineRoot::get_Instant();
+		int count = ndxml_getsub_num(xml);
+		for (int i = 0; i < count; i++)	{
+			ndxml *subNode = ndxml_getnodei(xml, i);
+			nd_assert(subNode);
+
+			const char *funcName = ndxml_getattr_val(subNode, "func");
+			const char *nodeName = ndxml_getattr_val(subNode, "exenode");
+			if (funcName && nodeName && *nodeName){
+				root->getGlobalDebugger().addBreakPoint(funcName, nodeName);
+			}
+		}
+		ndxml_free(xml);
+		return true;
+	}
+	return false;
 }
 
 bool LocalDebugger::makeParserInfo()

@@ -2250,14 +2250,14 @@ void DBLDataNode::Destroy()
 
 //math operate 
 
-static float getValAttr(_attrDataBin *pattr, NDUINT8 id)
+static float getValAttr(_attrDataBin *pattr, NDUINT8 id, float defVal )
 {
 	for (int i = 0; i < pattr->count; i++)	{
 		if (id == pattr->datas[i].aid) {
 			return pattr->datas[i].val;
 		}
 	}
-	return 0;
+	return defVal;
 }
 
 DBLDataNode DBLDataNode::_attrMathAdd(const DBLDataNode &leftval)const
@@ -2276,7 +2276,7 @@ DBLDataNode DBLDataNode::_attrMathAdd(const DBLDataNode &leftval)const
 		}
 
 		for (int i = 0; i < pattr->count; i++)	{
-			pattr->datas[i].val += getValAttr(left_attr, pattr->datas[i].aid);
+			pattr->datas[i].val += getValAttr(left_attr, pattr->datas[i].aid, 0);
 		}
 
 	}
@@ -2307,7 +2307,7 @@ DBLDataNode DBLDataNode::_attrMathSub(const DBLDataNode &leftval)const
 		}
 
 		for (int i = 0; i < pattr->count; i++)	{
-			pattr->datas[i].val -= getValAttr(left_attr, pattr->datas[i].aid);
+			pattr->datas[i].val -= getValAttr(left_attr, pattr->datas[i].aid, 0);
 		}
 
 	}
@@ -2338,7 +2338,7 @@ DBLDataNode DBLDataNode::_attrMathMul(const DBLDataNode &leftval)const
 		}
 
 		for (int i = 0; i < pattr->count; i++)	{
-			pattr->datas[i].val *= getValAttr(left_attr, pattr->datas[i].aid);
+			pattr->datas[i].val *= getValAttr(left_attr, pattr->datas[i].aid, 1.0);
 		}
 
 	}
@@ -2366,7 +2366,7 @@ DBLDataNode DBLDataNode::_attrMathDiv(const DBLDataNode &leftval)const
 		}
 
 		for (int i = 0; i < pattr->count; i++)	{
-			float divval = getValAttr(left_attr, pattr->datas[i].aid);
+			float divval = getValAttr(left_attr, pattr->datas[i].aid, 1.0);
 			if (divval != 0)	{
 				pattr->datas[i].val /= divval;
 			}

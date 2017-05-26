@@ -83,7 +83,7 @@ LogicObjectBase *LogicObjectBase::getObjectMgr(const char* destName)
 }
 int LogicObjectBase::Print(logic_print f, void *pf)
 {
-	return f(pf, "unknow object\n");
+	return f(pf, "[LogicObjectBase]");
 }
 
 //affaie function
