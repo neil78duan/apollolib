@@ -87,5 +87,6 @@ ErrorElement(ESERVER_ERR_NO_MINE, "没有矿产"),
 ErrorElement(ESERVER_ERR_MINE_LEVEL_LOW, "矿产等级不够"),
 ErrorElement(ESERVER_ERR_MINE_IN_UPLEVEL, "矿产升级中"),
 
+ErrorElement(ESERVER_ERR_SKILL_LEVEL_REACH_HERO, "技能达到英雄等级"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

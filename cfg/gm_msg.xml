@@ -158,6 +158,10 @@
 		<msgid kinds="hide" maxId="7" minId="7">0</msgid>
 		<data name="编号" kinds="numeral" param="0">3</data>
 	</message>
+	<message name="GM_卡牌升级" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="7" minId="25">0</msgid>
+		<data name="编号" kinds="numeral" param="0">21061</data>
+	</message>
 	<message name="GM_增加装备" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="20">0</msgid>
 		<data name="编号" kinds="numeral" param="0">101</data>

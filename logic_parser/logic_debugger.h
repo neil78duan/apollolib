@@ -80,9 +80,11 @@ enum parserDebugInputCmd
 	E_DBG_INPUT_CMD_DEL_BREAKPOINT,
 	E_DBG_INPUT_CMD_TERMINATED,
 	E_DBG_INPUT_CMD_ADD_TEMP_BREAKPOINT,
+	E_DBG_INPUT_CMD_ADD_BREAKPOINT_BATCH,
 
 	E_DBG_INPUT_CMD_ATTACHED,
 	E_DBG_INPUT_CMD_DEATTACHED,
+
 
 	E_DBG_OUTPUT_CMD_HIT_BREAKPOINT,
 	E_DBG_OUTPUT_CMD_STEP,
@@ -91,6 +93,7 @@ enum parserDebugInputCmd
 	E_DBG_OUTPUT_CMD_SCRIPT_RUN_OK,
 	
 	E_DBG_OUTPUT_CMD_DEATTACHED,
+
 };
 
 struct processHeaderInfo 
@@ -99,6 +102,8 @@ struct processHeaderInfo
 	NDUINT32 debuggerProcessId; 
 	ndatomic_t runStat;		//0 common/not-run , 1 running, 2 wait-debug, 3 terminate 
 	ndatomic_t inputCmd;	//0 none , 1 input break point, 2 run-step, 3 run-continue , 4 run-to-current-node
+	ndatomic_t srvHostCmd;	//debug host thread host cmd flag
+
 	ndatomic_t outputCmd;	// parse output command
 	NDUINT32 cmdEncodeType;
 	char processName[PROCESS_NAME_SIZE];
@@ -109,7 +114,7 @@ struct processHeaderInfo
 	char semCMDth[PROCESS_NAME_SIZE];	//the command receiver thread would block this.
 	char scriptModule[128];
 
-	char cmdBuf[1024];
+	char cmdBuf[4096];
 };
 
 struct LogicRunningProcess
@@ -176,6 +181,7 @@ public:
 
 	int cmdAddBreakPoint(const char *funcName, const char *nodeName, bool isTemp = false);
 	int cmdDelBreakPoint(const char *funcName, const char *nodeName);
+	int cmdAddBreakPointBatch(ndxml *breakPointXml);
 
 	virtual bool onEnterStep(const char *function, const char *node);
 	virtual void onTerminate();
@@ -198,7 +204,7 @@ protected:
 
 	NDUINT32 m_aimProcessId;
 	bool m_isAttached;
-	ndsem_t m_cmdSem;	//wait client cmd , that debugger-host thread wait it
+	ndsem_t m_cmdSemToSrvHost;	//wait client cmd , that debugger-host thread wait it
 	ndth_handle m_thCmdRecver;
 };
 
@@ -214,6 +220,8 @@ public:
 
 	int runCmdline(int argc, const char *argv[], int encodeType = ND_ENCODE_TYPE); 
 	int runHost();
+	void stopHost();
+
 	int addBreakPoint(const char *funcName, const char *nodeName,bool isTemp=false);
 	int delBreakPoint(const char *funcName, const char *nodeName);
 	void clearBreakpoint();
@@ -250,6 +258,7 @@ private:
 	bool isBreakPoint(const char *func, const char *node, bool bTrytoDel=false);
 	bool makeParserInfo();
 	bool getParamFromInput(std::string &funcName, std::string &nodeName);
+	bool getInputBreakpoints();
 	bool OutPutInfo(ndxml *dataInfo);
 
 	LogicParserEngine *m_parser;
@@ -263,6 +272,7 @@ private:
 	ndsem_t m_RunningSem;
 	ndsem_t m_cliSem; // the client thread wait this sem
 	ndsem_t m_cmdSem;	//wait client cmd
+	ndth_handle m_thHost;
 };
 
 

@@ -1206,6 +1206,17 @@ int main(int argc, char *argv[])
 	nd_rmdir("./luaOut");
 	nd_mkdir("./luaOut");
 
+	//load for utf8
+	ndxml_destroy(&xmlMarco);
+	ndxml_destroy(&xmlDatatype);
+	ndxml_destroy(&xmlMessage);
+
+
+	ndstr_set_code(E_SRC_CODE_UTF_8);
+	LOAD_XML_FROM_FILE(&xmlMarco, _input_dir, "/marco.xml", "utf8");
+	LOAD_XML_FROM_FILE(&xmlMessage, _input_dir, "/message.xml", "utf8");
+	LOAD_XML_FROM_FILE(&xmlDatatype, _input_dir, "/datatype.xml", "utf8");
+
 
 	if(build_CSharp(&xmlMessage,&xmlMarco , &xmlDatatype, "./csharp/ProtocolMessage.cs") ) {
 		fprintf(stderr, "export CSharp error \n")  ;
