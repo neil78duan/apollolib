@@ -931,8 +931,8 @@
 		</op_error_short_jump>
 	</op_error_break>
 	
-	<create_success_break name="break-on-sucess" create_type="1" >
-		<op_success_short_jump name="节点_break" expand_list="comment"  >
+	<create_success_break name="break-on-success" create_type="1" >
+		<op_success_short_jump name="节点_break_on_success" expand_list="comment"  >
 			<comment name="功能说明" rw_stat="read">break when last success</comment>
 			<jumpOffset kinds="hide" delete="no" >0</jumpOffset>
 		</op_success_short_jump>
@@ -940,7 +940,7 @@
 	
 	
 	<create_step_true_exit name="true时返回" create_type="1" >
-		<op_bool_entry name="节点_结果true时返回" expand_list="comment" >			
+		<op_bool_entry name="节点_return_on_success" expand_list="comment" >			
 			<comment name="功能说明" rw_stat="read">if($curval==true)exit</comment>
 			<op_sub_comp_entry name="上一步true时执行" kinds="hide" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
 				<condition no_comp="1" kinds="hide" delete="no">1</condition>
@@ -953,7 +953,7 @@
 	</create_step_true_exit>
 	
 	<create_step_false_eixt name="false时返回" create_type="1" >
-		<op_bool_entry name="节点_结果false时返回" expand_list="comment" >			
+		<op_bool_entry name="节点_return_on_error" expand_list="comment" >			
 			<comment name="功能说明" rw_stat="read">if($curval==false)exit</comment>
 			<op_sub_comp_entry name="上一步false时执行" kinds="hide" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
 				<condition no_comp="1" kinds="hide"  delete="no">0</condition>				
