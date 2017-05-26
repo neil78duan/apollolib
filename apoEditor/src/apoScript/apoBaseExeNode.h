@@ -110,6 +110,7 @@ public:
 	int getFunctionParamIndex(apoBaseSlotCtrl* slot);
 	
 	bool isMyParam(apoBaseParam *paramCtrl);
+	bool isUnConnected();
 
 	virtual bool closeParam(apoBaseSlotCtrl *param);
 
