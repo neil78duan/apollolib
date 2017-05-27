@@ -44,6 +44,10 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 
 cd %workDir%
 
+@rem exoprt lua version file , if you don't like to export remark id 
+call getSvnVer.bat  %inputPath% > %outputPath%\version.txt
+@rem --end
+
 @set READEXCL=xls2txt.py
 
 
