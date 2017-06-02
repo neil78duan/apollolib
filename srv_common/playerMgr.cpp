@@ -13,6 +13,10 @@
 
 //extern BattleInstance &get_instance() ;
 extern NDConnector &getWorldConnect() ;
+extern NDConnector &getSyncServerConnector();
+
+#define USE_SOCIAL_SYNC_MESSAGE  1
+
 
 PlayerMgr::PlayerMgr() 
 {
@@ -139,9 +143,9 @@ int PlayerMgr::BroadCastInWorld(nd_usermsghdr_t *msghdr,bool encrypt)
 	ND_TRACE_FUNC() ;
 	
 	wrapToWorld(msghdr, ND_MAIN_ID_SYS, ND_MSG_SYS_DIRECTLY_TO_CLIENT_WRAPPER, 0,encrypt) ;
-
+#ifndef USE_SOCIAL_SYNC_MESSAGE
 	BroadCastInHost(msghdr,encrypt);
-	
+#endif 
 	return 0;
 
 }
@@ -160,7 +164,9 @@ int PlayerMgr::CallMsgProcInWorld(nd_usermsghdr_t *msghdr)
 	ND_TRACE_FUNC() ;	
 	
 	wrapToWorld(msghdr, ND_MAIN_ID_SYS, ND_MSG_SYS_CALL_SESSION_MSGPROC_WRAPPER, 0) ; 
+#ifndef USE_SOCIAL_SYNC_MESSAGE
 	CallMsgProcInHost(msghdr);
+#endif 
 	return 0;
 }
 
@@ -178,6 +184,9 @@ int PlayerMgr::wrapToWorld(nd_usermsghdr_t *msg, int wrap_maxID, int wrap_minID,
 	omsg.Write((NDUINT8)(ecnrypt ? 1: 0)) ;
 	omsg.WriteBin(msg, size) ;	
 	nd_logdebug("using (%d,%d)  wrap message (%d, %d) length =%d \n",  wrap_maxID, wrap_minID, ND_USERMSG_MAXID(msg),ND_USERMSG_MINID(msg),ND_USERMSG_LEN(msg) );
+#ifdef USE_SOCIAL_SYNC_MESSAGE
+	return getSyncServerConnector().SendMsg(omsg);
+#else 
 	return getWorldConnect().SendMsg(omsg) ;
-	
+#endif 
 }

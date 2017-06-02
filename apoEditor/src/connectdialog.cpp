@@ -421,7 +421,13 @@ int ConnectDialog::_connectHost(const char *host, int port)
 
 
     //initApolloGameMessage(m_pConn);
-    init_apollo_object(m_pConn, m_scriptFile);
+	if (!init_apollo_object(m_pConn, m_scriptFile)) {
+
+		nd_logmsg("Load script %s error\n", m_scriptFile);
+		DestroyConnectorObj(pConn);
+
+		return -1;
+	}
 	//initApolloGameMessage(m_pConn);
     //ClientMsgHandler::initDftClientMsgHandler(m_pConn, m_scriptFile, m_dataTypeDef, &m_message_define, out_print);
     return 0;

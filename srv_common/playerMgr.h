@@ -58,6 +58,7 @@ private:
 
 extern PlayerMgr *get_playerMgr() ; 
 extern NDConnector &getWorldConnect() ;
+extern NDConnector &getSyncServerConnector();
 
 
 #endif /* defined(__gameHall__playerMgr__) */
