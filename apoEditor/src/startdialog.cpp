@@ -576,12 +576,23 @@ void startDialog::on_ExportExcel_clicked()
 
     const char *packaged_cmd = _getFromIocfg("packeaged_rum_cmd");
     if (packaged_cmd && *packaged_cmd)	{
-        //snprintf(path, sizeof(path), "cmd.exe /c %s ", packaged_cmd);
-        int ret = system(packaged_cmd);
+		char cmdbuf[1024];
+		const char *p = packaged_cmd;
+		while (p && *p) {
+			cmdbuf[0] = 0;
+			p = ndstr_nstr_end(p, cmdbuf, ';', sizeof(cmdbuf));
+			if (p && *p == ';')	{
+				++p;
+			}
 
-        if (0 != ret)	{
-            nd_logerror("run command error %s %d\n",packaged_cmd, ret);
-        }
+			if (cmdbuf[0])	{
+				int ret = system(cmdbuf);
+				if (0 != ret)	{
+					nd_logerror("‘À––√¸¡Ó %s %d\n", cmdbuf, ret);
+					break;
+				}
+			}
+		}
     }
 }
 
