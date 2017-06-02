@@ -488,7 +488,11 @@ int gmToolDlg::_connectHost(const char *host, int port)
 		return 0;
 	}
 
-	init_apollo_object(pConn, m_scriptFile);
+	if (!init_apollo_object(pConn, m_scriptFile)) {
+		out_print("load script %s error \n", m_scriptFile);
+		DestroyConnectorObj(pConn);
+		return -1;
+	}
 
 	if (-1 == pConn->Open(host, port, "tcp-connector", NULL)) {
 		out_print( "connect %s:%d ERROR \n", host, port);

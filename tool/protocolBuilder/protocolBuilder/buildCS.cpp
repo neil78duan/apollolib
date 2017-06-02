@@ -182,9 +182,9 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 	ndxml *xnode = ndxml_getnode(xmlfile, "DataType") ;
 	
 	
-	fprintf(pf,"#region StructFileString \n \tpublic class MessageDataBase\n\t{\n" ) ;
-	fprintf(pf,"\t\tpublic virtual void Read(NDMsgStream dataStream){} \n" ) ;
-	fprintf(pf,"\t\tpublic virtual int Write(NDMsgStream dataStream){return 0;}\n\t}\n") ;
+	fprintf(pf,"#region StructFileString \n \tpublic interface MessageDataBase\n\t{\n" ) ;
+	fprintf(pf, "\t\tvoid Read(NDMsgStream dataStream);\n");
+	fprintf(pf, "\t\tint Write(NDMsgStream dataStream);\n\t}\n");
 	
 	
 	int total = ndxml_getsub_num(xnode) ;
@@ -198,7 +198,7 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 		if (!isNeedBuild(sub)){
 			continue;
 		}
-		fprintf(pf, "\tpublic class %s : MessageDataBase \n\t{\n ", pName) ;		
+		fprintf(pf, "\tpublic struct %s : MessageDataBase \n\t{\n ", pName) ;		
 		char buf_read_func[40960] ;
 		char buf_write_func[40960] ;
 		char buf_constrct_func[40960] ;		
@@ -311,14 +311,14 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 		
 		//output funciont
 		//construct
-		fprintf(pf, "\n\t\tpublic %s() \n\t\t{\n\t\t}\n", pName) ;
+		//fprintf(pf, "\n\t\tpublic %s() \n\t\t{\n\t\t}\n", pName) ;
 		
 		//read stream
-		fprintf(pf, "\n\t\tpublic override void Read(NDMsgStream dataStream)\n"
+		fprintf(pf, "\n\t\tpublic void Read(NDMsgStream dataStream)\n"
 				"\t\t{\n%s\n\t\t}\n", buf_read_func ) ;
 		
 		//write strea
-		fprintf(pf, "\n\t\tpublic override int Write(NDMsgStream dataStream)\n"
+		fprintf(pf, "\n\t\tpublic int Write(NDMsgStream dataStream)\n"
 				"\t\t{\n\t\t\tint size = 0;\n"
 				"%s\n\t\t\treturn size;\n\t\t}\n", buf_write_func ) ;
 		

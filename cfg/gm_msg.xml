@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <type_data_type name="数据类型" kinds="hide" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,2维数组,变量,参数,上一步结果,time"/>
 <send_msg_list name="发送消息" delete="no" expand_stat="1">
+	<message name="邀请玩家打副本" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="10" minId="0">0</msgid>
+		<data name="玩家id" kinds="numeral" param="0">3</data>
+		<data name="地图id" kinds="numeral" param="4">1100</data>
+	</message>
 	<message name="建立工会" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="9" minId="2">0</msgid>
 		<data name="自由加入" kinds="bool" param="3">0</data>
@@ -201,7 +206,7 @@
 	</message>
 	<message name="GM_通过名字获得ID" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="18">0</msgid>
-		<data name="玩家名字" kinds="string" param="2" desc="name">domo</data>
+		<data name="玩家名字" kinds="string" param="2" desc="name">ddtest</data>
 	</message>
 	<message name="GM_查询其他玩家设置" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="21">0</msgid>

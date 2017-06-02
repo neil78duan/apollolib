@@ -7,6 +7,7 @@
 //
 
 #include "srv_common/gameRole.h"
+#include "srv_common/playerMgr.h"
 
 
 Role::Role () 
@@ -42,4 +43,32 @@ void Role::SetName(const char *name)
 		strncpy((char*)m_nick, name, sizeof(m_nick));
 	}
 }
+
+int Role::Send(NDOStreamMsg &omsg, int flag)
+{
+	nd_assert(m_mySession);
+	return m_mySession->SendMsg(omsg, flag);
+}
+int Role::Send(nd_usermsgbuf_t *msgBuf, int flag)
+{
+	nd_assert(m_mySession);
+	return m_mySession->SendMsg(&msgBuf->msg_hdr, flag);
+}
+int Role::SendtoOther(roleid_t roleId, NDOStreamMsg &omsg)
+{
+	return get_playerMgr()->Send(roleId, omsg);
+}
+int Role::SendtoOther(roleid_t roleId, nd_usermsgbuf_t *msgBuf)
+{
+	return get_playerMgr()->Send(roleId, &msgBuf->msg_hdr);
+}
+int Role::CallMsgProc(roleid_t playerid, nd_usermsgbuf_t *msgBuf)
+{
+	return get_playerMgr()->CallMsgProc(playerid, &msgBuf->msg_hdr);
+}
+int Role::CallMsgProc(roleid_t playerid, NDOStreamMsg &omsg)
+{
+	return get_playerMgr()->CallMsgProc(playerid, omsg);
+}
+
 

@@ -47,37 +47,37 @@ public class apoClient {
     private static extern unsafe int apoCli_recv(IntPtr bufferFram, int bufsize, int timeOutMS);
 
     [DllImport (APO_DLL_NAME)]
-	private static extern RESULT_T apoCli_GetLastError();
+	public static extern RESULT_T apoCli_GetLastError();
 
     [DllImport (APO_DLL_NAME)]
-	private static extern int apoCli_getConnStat(); //0 unconnect ,1 connected, 2 login, 3 ingame ,4 GM
+	public static extern int apoCli_getConnStat(); //0 unconnect ,1 connected, 2 login, 3 ingame ,4 GM
 
     [DllImport (APO_DLL_NAME)]
-	private static extern  RESULT_T apoCli_ReloginBackground(string host, int port, string dev_udid);
+	public static extern  RESULT_T apoCli_ReloginBackground(string host, int port, string dev_udid);
     
     [DllImport (APO_DLL_NAME)]
-	private static extern  RESULT_T apoCli_TrytoRelogin();
+	public static extern  RESULT_T apoCli_TrytoRelogin();
 
     [DllImport (APO_DLL_NAME)]
-	private static extern  RESULT_T apoCli_LoginAccount(string account, string passwd);
+	public static extern  RESULT_T apoCli_LoginAccount(string account, string passwd);
 
     [DllImport (APO_DLL_NAME)]
-	private static extern  RESULT_T apoCli_CreateAccount(string userName, string passwd, string phone, string email);
+	public static extern  RESULT_T apoCli_CreateAccount(string userName, string passwd, string phone, string email);
 
     [DllImport (APO_DLL_NAME)]
-	private static extern  RESULT_T apoCli_testOneKeyLogin(string host, int port, string user, string passwd);
+	public static extern  RESULT_T apoCli_testOneKeyLogin(string host, int port, string user, string passwd);
 
     [DllImport (APO_DLL_NAME)]
-	private static extern  void apoCli_Logout();
+	public static extern  void apoCli_Logout();
 
     [DllImport (APO_DLL_NAME)]
-	private static extern  void apoCli_ClearLoginHistory();
+	public static extern  void apoCli_ClearLoginHistory();
 
     [DllImport (APO_DLL_NAME)]
-	private static extern  uint apoCli_GetCurAccId();
+	public static extern  uint apoCli_GetCurAccId();
 
     [DllImport (APO_DLL_NAME)]
-	private static extern  uint apoCli_GetCurRoleId();
+	public static extern  uint apoCli_GetCurRoleId();
         
     ///    
     [DllImport (APO_DLL_NAME)]

@@ -40,6 +40,14 @@ public:
 	void SetId(roleid_t rid);
 	void SetName(const char *name);
 
+	int Send(NDOStreamMsg &omsg, int flag = ESF_NORMAL);
+	int Send(nd_usermsgbuf_t *msgBuf, int flag = ESF_NORMAL);
+	int SendtoOther(roleid_t roleId, NDOStreamMsg &omsg);
+	int SendtoOther(roleid_t roleId, nd_usermsgbuf_t *msgBuf);
+	int CallMsgProc(roleid_t playerid, nd_usermsgbuf_t *msghdr);
+	int CallMsgProc(roleid_t playerid, NDOStreamMsg &omsg);
+
+
 	virtual LogicParserEngine *getScriptHandler() { return NULL; }
 	//userdata_info *GetUserData() {return &m_userData ;}
 	
