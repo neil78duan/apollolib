@@ -91,7 +91,10 @@ ErrorElement(ESERVER_ERR_SKILL_LEVEL_REACH_HERO, "技能达到英雄等级"),
 
 
 ErrorElement(ESERVER_ERR_IN_INVITING, "只能邀请一个人"),
-ErrorElement(ESERVER_ERR_REJECTED, "对方不同意"),
 ErrorElement(ESERVER_ERR_IN_INVITED, "已经被别人邀请了"),
+
+ErrorElement(ESERVER_ERR_KILLED, "团灭"),
+
+ErrorElement(ESERVER_ERR_MAP_NOT_EXIST, "地图不存在"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),
