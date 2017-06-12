@@ -20,6 +20,7 @@
 #include <QContextMenuEvent>
 #include <QBoxLayout>
 #include <QDockWidget>
+#include <QMessageBox>
 
 using namespace LogicEditorHelper;
 /*
@@ -370,12 +371,11 @@ bool apoUiMainEditor::_createFuncEntry(ndxml *stepsBlocks, const QPoint &default
 	if (noInidPos){
 		savePosition(pbeginNode, &pos);
 	}
-	//show unconnected nodes
-	_showUnConnectBlocks(stepsBlocks);
 
 	if (!m_funcEntry && dynamic_cast<apoUiExenodeFuncEntry*>(pbeginNode))	{
 		m_funcEntry = pbeginNode;
 	}
+
 	m_labelsMap.clear();
 	m_gotoMap.clear();
 	bool ret = _showBlocks(pbeginNode->toNext(), stepsBlocks);
@@ -385,6 +385,10 @@ bool apoUiMainEditor::_createFuncEntry(ndxml *stepsBlocks, const QPoint &default
 
 	m_labelsMap.clear();
 	m_gotoMap.clear();
+
+	//show unconnected nodes
+	_showUnConnectBlocks(stepsBlocks);
+
 	return ret;
 }
 
@@ -883,14 +887,22 @@ void apoUiMainEditor::popMenuAddnewTrigged()
 void apoUiMainEditor::popMenuDeleteTrigged()
 {
 	if (m_popSrc) {
-		apoBaseExeNode *exeNode = dynamic_cast<apoBaseExeNode*>(m_popSrc);
-		if (exeNode && exeNode->isDeletable())	{
-			_removeExenode(exeNode);
+		int ret = QMessageBox::question(this, tr("Question"), tr("Do you want delete it ?"),
+			QMessageBox::Yes | QMessageBox::No ,
+			QMessageBox::No);
+
+		if (QMessageBox::Yes == ret) {
+
+			apoBaseExeNode *exeNode = dynamic_cast<apoBaseExeNode*>(m_popSrc);
+			if (exeNode && exeNode->isDeletable())	{
+				_removeExenode(exeNode);
+			}
+			else {
+				nd_logmsg("this node can not be deleted\n");
+			}
+			m_popSrc = NULL;
 		}
-		else {
-			nd_logmsg("this node can not be deleted\n");
-		}
-		m_popSrc = NULL;
+
 	}
 
 }

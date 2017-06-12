@@ -183,8 +183,8 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 	
 	
 	fprintf(pf,"#region StructFileString \n \tpublic interface MessageDataBase\n\t{\n" ) ;
-	fprintf(pf, "\t\tvoid Read(NDMsgStream dataStream);\n");
-	fprintf(pf, "\t\tint Write(NDMsgStream dataStream);\n\t}\n");
+	fprintf(pf, "\t\tvoid Read(ref NDMsgStream dataStream);\n");
+	fprintf(pf, "\t\tint Write(ref NDMsgStream dataStream);\n\t}\n");
 	
 	
 	int total = ndxml_getsub_num(xnode) ;
@@ -267,14 +267,14 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 
 					size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
 						"\t\t\t\t%s[i] = new %s();\n"
-						"\t\t\t\t%s[i].Read(dataStream);\n\t\t\t}\n"
+						"\t\t\t\t%s[i].Read(ref dataStream);\n\t\t\t}\n"
 						, pValName, realType ? realType : pType, pValName);
 					pReadStream += size;
 
 					size = snprintf(pWriteStream, sizeof(buf_write_func) - (pWriteStream - buf_write_func),
 						"\t\t\tsize += dataStream.WriteUint16(%sCount);\n"
 						"\t\t\tfor(int i=0; i<%sCount;++i) {\n"
-						"\t\t\t\tsize += %s[i].Write(dataStream);\n\t\t\t} \n",
+						"\t\t\t\tsize += %s[i].Write(ref dataStream);\n\t\t\t} \n",
 						pValName, pValName, pValName);
 					pWriteStream += size;
 
@@ -299,11 +299,11 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 				else {
 					//readstream
 					size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
-						"\t\t\t%s.Read(dataStream);\n", pValName);
+						"\t\t\t%s.Read(ref dataStream);\n", pValName);
 					pReadStream += size;
 					//write stream
 					size = snprintf(pWriteStream, sizeof(buf_write_func) - (pWriteStream - buf_write_func),
-						"\t\t\tsize += %s.Write(dataStream);\n", pValName);
+						"\t\t\tsize += %s.Write(ref dataStream);\n", pValName);
 					pWriteStream += size;
 				}				
 			}			
@@ -314,11 +314,11 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 		//fprintf(pf, "\n\t\tpublic %s() \n\t\t{\n\t\t}\n", pName) ;
 		
 		//read stream
-		fprintf(pf, "\n\t\tpublic void Read(NDMsgStream dataStream)\n"
+		fprintf(pf, "\n\t\tpublic void Read(ref NDMsgStream dataStream)\n"
 				"\t\t{\n%s\n\t\t}\n", buf_read_func ) ;
 		
 		//write strea
-		fprintf(pf, "\n\t\tpublic int Write(NDMsgStream dataStream)\n"
+		fprintf(pf, "\n\t\tpublic int Write(ref NDMsgStream dataStream)\n"
 				"\t\t{\n\t\t\tint size = 0;\n"
 				"%s\n\t\t\treturn size;\n\t\t}\n", buf_write_func ) ;
 		

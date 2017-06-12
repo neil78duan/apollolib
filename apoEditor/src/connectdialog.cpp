@@ -677,7 +677,7 @@ static bool gmdlgSend(QDialog *curDlg)
         const char *maxId = ndxml_getattr_val(msgXML, "maxId");
         const char *minId = ndxml_getattr_val(msgXML, "minId");
         if (maxId && minId)	{
-            msgid = ND_MAKE_WORD(atoi(maxId), atoi(minId));
+			msgid = ND_MAKE_WORD(ndstr_atoi_hex(maxId), ndstr_atoi_hex(minId));
         }
         else {
             msgid = ndxml_getval_int(msgXML);

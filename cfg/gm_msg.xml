@@ -3,8 +3,36 @@
 <send_msg_list name="发送消息" delete="no" expand_stat="1">
 	<message name="邀请玩家打副本" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="10" minId="0">0</msgid>
-		<data name="玩家id" kinds="numeral" param="0">3</data>
-		<data name="地图id" kinds="numeral" param="4">1100</data>
+		<data name="玩家id" kinds="numeral" param="0">81</data>
+		<data name="地图id" kinds="numeral" param="4">901</data>
+	</message>
+	<message name="co-boss准备就绪" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="10" minId="5">0</msgid>
+	</message>
+	<message name="co-boss选中队伍" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="10" minId="8">0</msgid>
+		<data name="单位数量" kinds="numeral" param="4">1</data>
+		<data name="类型ID" kinds="numeral" param="4">21061</data>
+		<data name="实例ID" kinds="numeral" param="3">1</data>
+		<data name="HP" kinds="numeral" param="0">10000</data>
+	</message>
+	<message name="co-boss伤血" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="10" minId="16">0</msgid>
+		<data name="boss实例ID" kinds="numeral" param="3">201</data>
+		<data name="hurtHP" kinds="numeral" param="0">20000</data>
+	</message>
+	<message name="co-boss单位被杀死" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="10" minId="18">0</msgid>
+		<data name="单位数量" kinds="numeral" param="4">1</data>
+		<data name="实例ID" kinds="numeral" param="3">1</data>
+	</message>
+	<message name="co-boss放技能" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="10" minId="21">0</msgid>
+		<data name="英雄实例ID" kinds="numeral" param="3">1</data>
+		<data name="朝向" kinds="numeral" param="3">0</data>
+		<data name="skillid" kinds="numeral" param="4">10</data>
+		<data name="x" kinds="numeral" param="4">100</data>
+		<data name="y" kinds="numeral" param="4">100</data>
 	</message>
 	<message name="建立工会" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="9" minId="2">0</msgid>
@@ -42,6 +70,11 @@
 		<data name="建筑类型ID" kinds="numeral" param="0">13201</data>
 		<data name="坐标X" kinds="numeral" param="4">40</data>
 		<data name="坐标X" kinds="numeral" param="4">180</data>
+	</message>
+	<message name="升级建筑" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="4" minId="7">0</msgid>
+		<data name="建筑ID" kinds="numeral" param="0">142073</data>
+		<data name="是否秒CD" kinds="bool" param="3">1</data>
 	</message>
 	<message name="秒CD" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="26">0</msgid>
@@ -102,14 +135,18 @@
 	</message>
 	<message name="穿装备" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="5" minId="8">0</msgid>
-		<data name="卡牌ID" kinds="numeral" param="0">3342637</data>
-		<data name="装备ID" kinds="numeral" param="0">3765663</data>
+		<data name="卡牌ID" kinds="numeral" param="0">21001</data>
+		<data name="装备ID" kinds="numeral" param="0">0x1379e3</data>
 		<data name="装备部位" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="脱装备" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="5" minId="10">0</msgid>
 		<data name="卡牌ID" kinds="numeral" param="0">3342637</data>
 		<data name="装备ID" kinds="numeral" param="0">3765663</data>
+	</message>
+	<message name="装备强化" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="5" minId="0x15">0</msgid>
+		<data name="装备ID" kinds="numeral" param="0">424317</data>
 	</message>
 	<message name="开宝箱" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="4">0</msgid>
@@ -143,8 +180,14 @@
 	</message>
 	<message name="GM_修改游戏时间" expand="yes" delete="no" need_confirm="yes">
 		<msgid kinds="hide">1797</msgid>
-		<data name="加快小时" kinds="numeral" param="0">1</data>
-		<data name="加快分钟" kinds="numeral" param="0">0</data>
+		<data name="加快小时" kinds="numeral" param="0">0</data>
+		<data name="加快分钟" kinds="numeral" param="0">3</data>
+	</message>
+	<message name="GM_打印消息" expand="yes" delete="no" need_confirm="yes">
+		<msgid kinds="hide" maxId="0" minId="15">0</msgid>
+		<data name="主消息号" kinds="numeral" param="4">4</data>
+		<data name="次消息号" kinds="numeral" param="4">30</data>
+		<data name="是否打开" kinds="bool" param="3">1</data>
 	</message>
 	<message name="GM_给自己加经验" expand="yes" delete="no">
 		<msgid kinds="hide">1795</msgid>
@@ -152,7 +195,7 @@
 	</message>
 	<message name="GM_改等级" expand="yes" delete="no">
 		<msgid kinds="hide">1796</msgid>
-		<data name="新等级" kinds="numeral" param="0">10</data>
+		<data name="新等级" kinds="numeral" param="0">20</data>
 	</message>
 	<message name="GM_加物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="6">0</msgid>
@@ -163,13 +206,18 @@
 		<msgid kinds="hide" maxId="7" minId="7">0</msgid>
 		<data name="编号" kinds="numeral" param="0">3</data>
 	</message>
+	<message name="GM_建筑升级" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="7" minId="27">0</msgid>
+		<data name="编号" kinds="numeral" param="0">0x42ee1</data>
+		<data name="新等级" kinds="numeral" param="0">10</data>
+	</message>
 	<message name="GM_卡牌升级" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="25">0</msgid>
 		<data name="编号" kinds="numeral" param="0">21061</data>
 	</message>
 	<message name="GM_增加装备" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="20">0</msgid>
-		<data name="编号" kinds="numeral" param="0">101</data>
+		<data name="编号" kinds="numeral" param="0">31203</data>
 	</message>
 	<message name="GM_增加属性" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="8">0</msgid>
