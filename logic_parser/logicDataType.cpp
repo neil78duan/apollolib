@@ -2899,7 +2899,7 @@ int dbl_data_copy(const dbl_element_base *input, dbl_element_base *output, DBL_E
 		if (!input->_data) {
 			break;
 		}
-		if (sub_etype == OT_INT) {
+		if (sub_etype == OT_INT || sub_etype == OT_INT8 || sub_etype == OT_INT16 || sub_etype == OT_BOOL) {
 			if (input->_i_arr->number) {
 				_int_array_init(input->_i_arr->data, (int)input->_i_arr->number, output);
 			}
