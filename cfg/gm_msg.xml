@@ -3,7 +3,7 @@
 <send_msg_list name="发送消息" delete="no" expand_stat="1">
 	<message name="邀请玩家打副本" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="10" minId="0">0</msgid>
-		<data name="玩家id" kinds="numeral" param="0">81</data>
+		<data name="玩家id" kinds="numeral" param="0">3</data>
 		<data name="地图id" kinds="numeral" param="4">901</data>
 	</message>
 	<message name="co-boss准备就绪" expand="yes" delete="no">
@@ -33,6 +33,11 @@
 		<data name="skillid" kinds="numeral" param="4">10</data>
 		<data name="x" kinds="numeral" param="4">100</data>
 		<data name="y" kinds="numeral" param="4">100</data>
+	</message>
+	<message name="兵种强化" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="5" minId="17">0</msgid>
+		<data name="兵种类型" kinds="numeral" param="3">1</data>
+		<data name="强化ID" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="建立工会" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="9" minId="2">0</msgid>
@@ -73,8 +78,8 @@
 	</message>
 	<message name="升级建筑" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="4" minId="7">0</msgid>
-		<data name="建筑ID" kinds="numeral" param="0">142073</data>
-		<data name="是否秒CD" kinds="bool" param="3">1</data>
+		<data name="建筑ID" kinds="numeral" param="0">0x22af9</data>
+		<data name="是否秒CD" kinds="bool" param="3">0</data>
 	</message>
 	<message name="秒CD" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="26">0</msgid>
@@ -101,17 +106,17 @@
 	<message name="开始打副本" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="3" minId="21">0</msgid>
 		<data name="是否是据点" kinds="bool" param="3">0</data>
-		<data name="副本编号" kinds="numeral" param="0">1002</data>
+		<data name="副本编号" kinds="numeral" param="0">1001</data>
 	</message>
 	<message name="打副本结束" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="3" minId="23">0</msgid>
 		<data name="是否是据点" kinds="bool" param="3">0</data>
-		<data name="副本编号" kinds="numeral" param="0">1002</data>
+		<data name="副本编号" kinds="numeral" param="0">1001</data>
 		<data name="是否成功" kinds="numeral" param="3">1</data>
 		<data name="玩家消耗的能量" kinds="numeral" param="0">100</data>
 		<data name="玩家获得的能量" kinds="numeral" param="0">100</data>
 		<data name="出战卡牌数" kinds="numeral" param="4">1</data>
-		<data name="卡牌1" kinds="numeral" param="0">3604981</data>
+		<data name="卡牌1" kinds="numeral" param="0">21061</data>
 		<data name="卡牌2" kinds="numeral" param="0">0</data>
 		<data name="卡牌3" kinds="numeral" param="0">0</data>
 		<data name="卡牌3" kinds="numeral" param="0">0</data>
