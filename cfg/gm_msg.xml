@@ -34,10 +34,19 @@
 		<data name="x" kinds="numeral" param="4">100</data>
 		<data name="y" kinds="numeral" param="4">100</data>
 	</message>
+	<message name="穿神器" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="5" minId="0x1f">0</msgid>
+		<data name="英雄" kinds="numeral" param="0">21001</data>
+		<data name="神器ID" kinds="numeral" param="0">1217649</data>
+	</message>
+	<message name="神器强化" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="5" minId="0x21">0</msgid>
+		<data name="英雄" kinds="numeral" param="0">21001</data>
+	</message>
 	<message name="兵种强化" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="5" minId="17">0</msgid>
 		<data name="兵种类型" kinds="numeral" param="3">1</data>
-		<data name="强化ID" kinds="numeral" param="3">1</data>
+		<data name="强化ID" kinds="numeral" param="3">2</data>
 	</message>
 	<message name="建立工会" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="9" minId="2">0</msgid>
@@ -72,16 +81,20 @@
 	</message>
 	<message name="新建建筑" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="4" minId="0">0</msgid>
-		<data name="建筑类型ID" kinds="numeral" param="0">13201</data>
+		<data name="建筑类型ID" kinds="numeral" param="0">12101</data>
 		<data name="坐标X" kinds="numeral" param="4">40</data>
 		<data name="坐标X" kinds="numeral" param="4">180</data>
 	</message>
 	<message name="升级建筑" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="4" minId="7">0</msgid>
-		<data name="建筑ID" kinds="numeral" param="0">0x22af9</data>
-		<data name="是否秒CD" kinds="bool" param="3">0</data>
+		<data name="建筑ID" kinds="numeral" param="0">1191749</data>
+		<data name="是否秒CD" kinds="bool" param="3">1</data>
 	</message>
-	<message name="秒CD" expand="yes" delete="no">
+	<message name="金币秒CD" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="6" minId="25">0</msgid>
+		<data name="对象id" kinds="numeral" param="0">0</data>
+	</message>
+	<message name="使用物品秒CD" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="26">0</msgid>
 		<data name="对象id" kinds="numeral" param="0">142073</data>
 		<data name="使用物品" kinds="numeral" param="0">45001</data>
@@ -186,7 +199,7 @@
 	<message name="GM_修改游戏时间" expand="yes" delete="no" need_confirm="yes">
 		<msgid kinds="hide">1797</msgid>
 		<data name="加快小时" kinds="numeral" param="0">0</data>
-		<data name="加快分钟" kinds="numeral" param="0">3</data>
+		<data name="加快分钟" kinds="numeral" param="0">1</data>
 	</message>
 	<message name="GM_打印消息" expand="yes" delete="no" need_confirm="yes">
 		<msgid kinds="hide" maxId="0" minId="15">0</msgid>

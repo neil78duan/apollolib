@@ -15,7 +15,8 @@
 			<node desc="技能">skill</node>
 			<node desc="兵种">soldier</node>			
 			<node desc="矿产">mines</node>
-			<node desc="角色对象">role</node>			
+			<node desc="角色对象">role</node>	
+			<node desc="神器">artifact</node>
 			<node desc="附加属性">addition</node>
 		</internal_object>
 	</data_list>

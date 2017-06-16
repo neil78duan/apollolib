@@ -75,6 +75,15 @@ struct dbl_floatarray
 	size_t capacity;
 	float data[1];
 };
+
+//浮点数组
+struct dbl_int64array
+{
+	size_t number;
+	size_t capacity;
+	NDUINT64 data[1];
+};
+
 //文本数组
 struct dbl_strarray
 {
@@ -149,6 +158,7 @@ struct dbl_element_base
 		dbl_intarray *_i_arr;
 		dbl_floatarray *_f_arr;
 		dbl_strarray *_str_arr;
+		dbl_int64array *_int64_arr;
 		//dbl_intarray2d *_arr_2d;
 		//dbl_float2d *_arr_float_2d;
 		dbl_binary *_bin;
@@ -178,6 +188,7 @@ public:
 	DBLDataNode(const char *str1)  {init() ;InitSet(str1);}
 	DBLDataNode(int *arr, int size) {init() ;InitSet(arr, size);}
 	DBLDataNode(float *arr, int size) {init() ;InitSet(arr, size);}
+	DBLDataNode(NDUINT64 *arr, int size) { init(); InitSet(arr, size); }
 	DBLDataNode(const char *arr[], int size) { init(); InitSet(arr, size); }
 
 	DBLDataNode(void *object, DBL_ELEMENT_TYPE type = OT_OBJECT_VOID)  {init() ;InitSet(object, type);}
@@ -206,6 +217,7 @@ public:
 	void InitSet(int *arr, int size);
 	void InitSet(float *arr, int size);
 	void InitSet(const char *arr[], int size);
+	void InitSet(NDUINT64 *arr, int size);
 	void InitSet(const LogicUserDefStruct *arr[], int size);
 	void InitSet(void *object, DBL_ELEMENT_TYPE type = OT_OBJECT_VOID);
 	void InitSet(void *binary, size_t size, DBL_ELEMENT_TYPE eleType = OT_BINARY_DATA);
@@ -248,6 +260,7 @@ public:
 	int GetarrayInt(int index) const;
 	bool GetarrayBool(int index) const;
 	float GetarrayFloat(int index) const;
+	NDUINT64 GetarrayInt64(int index) const;
 	const char *GetarrayText(int index) const;
 	const LogicUserDefStruct *GetarrayUser(int index) const;
 

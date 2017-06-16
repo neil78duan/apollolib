@@ -53,6 +53,24 @@ static bool _int_array_init(int *arr, int size, dbl_element_base * eledata)
 	return true;
 }
 
+static bool _int64_array_init(NDUINT64 *arr, int size, dbl_element_base * eledata)
+{
+	size_t mem_len = sizeof(dbl_int64array) + (size - 1) * sizeof(NDUINT64);
+	eledata->_data = malloc(mem_len);
+	if (!eledata->_data){
+		return false;
+	}
+
+	memset(eledata->_data, 0, mem_len);
+	eledata->_int64_arr->capacity = size;
+
+	for (int i = 0; i < size; i++) {
+		eledata->_int64_arr->data[i] = arr[i];
+	}
+	eledata->_int64_arr->number = size;
+	return true;
+}
+
 static bool _float_array_init(float *arr, int size, dbl_element_base * eledata)
 {
 	size_t mem_len = sizeof(dbl_intarray) + (size - 1) * sizeof(float);
@@ -322,6 +340,17 @@ bool DBLDataNode::operator < (const DBLDataNode &r) const
 					return ret < 0;
 				}
 			}
+
+			if (m_sub_type == OT_INT64)	{
+				NDINT64 ret = (NDINT64)( GetarrayInt64(i) - r.GetarrayInt64(i));
+				if (0 == ret)	{
+					continue;
+				}
+				else {
+					return ret < 0;
+				}
+			}
+
 			else if (m_sub_type == OT_FLOAT) {
 				float ret = GetarrayFloat(i) - r.GetarrayFloat(i);
 				if (0 == ret)	{
@@ -388,6 +417,11 @@ bool DBLDataNode::operator == (const DBLDataNode &r) const
 		for (int i = 0; i < GetArraySize(); i++)	{
 			if (m_sub_type == OT_INT)	{
 				if (GetarrayInt(i) != ((DBLDataNode&)r).GetarrayInt(i))	{
+					return false;
+				}
+			}
+			else if (m_sub_type == OT_INT64)	{
+				if (GetarrayInt64(i) != ((DBLDataNode&)r).GetarrayInt64(i))	{
 					return false;
 				}
 			}
@@ -570,6 +604,17 @@ void DBLDataNode::InitSet(const char *arr[], int size)
 	}
 }
 
+void DBLDataNode::InitSet(NDUINT64 *arr, int size)
+{
+	Destroy();
+	if (size > 0) {
+		m_ele_type = OT_ARRAY;
+		m_sub_type = OT_INT64;
+		m_dataOwner = true;
+		m_data = &m_dataOwn;
+		_int64_array_init(arr, size, &m_dataOwn);
+	}
+}
 
 void DBLDataNode::InitSet(const LogicUserDefStruct *arr[], int size)
 {
@@ -664,6 +709,22 @@ bool DBLDataNode::InitReservedArray(size_t size, int attay_type)
 		m_dataOwn._data = paddr;
 
 	}
+
+	else if (OT_INT64 == m_sub_type){
+		size_t mem_len = sizeof(dbl_int64array) + (size - 1) * sizeof(NDUINT64);
+		dbl_int64array *paddr = (dbl_int64array*)malloc(mem_len);
+		if (!paddr){
+			return false;
+		}
+
+		for (int i = 0; i < size; i++) {
+			paddr->data[i] = 0;
+		}
+		paddr->number = 0;
+		paddr->capacity = size;
+		m_dataOwn._data = paddr;
+	}
+
 	else if (OT_FLOAT == m_sub_type){
 		size_t mem_len = sizeof(dbl_floatarray) + (size - 1) * sizeof(float);
 		dbl_floatarray *paddr = (dbl_floatarray*)malloc(mem_len);
@@ -714,6 +775,11 @@ bool DBLDataNode::SetArray(const DBLDataNode &data, int index)
 		paddr->data[index] = data.GetInt();
 
 	}
+	else if (OT_INT64 == m_sub_type){
+		dbl_int64array *paddr = (dbl_int64array *)m_data->_data;
+		paddr->data[index] = data.GetInt64();
+	}
+
 	else if (OT_FLOAT == m_sub_type){
 		dbl_floatarray *paddr = (dbl_floatarray *)m_data->_data;
 		paddr->data[index] = data.GetFloat();
@@ -1401,9 +1467,13 @@ DBLDataNode DBLDataNode::GetArray(int index)const
 		return *this;
 	}
 	if (m_sub_type == OT_INT || m_sub_type == OT_BOOL || m_sub_type == OT_INT8 || 
-		m_sub_type == OT_INT16 || OT_INT64 == m_sub_type || OT_TIME == m_sub_type)	{
+		m_sub_type == OT_INT16 ||  OT_TIME == m_sub_type)	{
 		return DBLDataNode(GetarrayInt(index), m_sub_type);
 	}
+	else if (OT_INT64 == m_sub_type){
+		return DBLDataNode(GetarrayInt64(index));
+	}
+
 	else if (OT_FLOAT == m_sub_type){
 		return DBLDataNode(GetarrayFloat(index));
 	}
@@ -1437,9 +1507,14 @@ int DBLDataNode::GetarrayInt(int index) const
 	}
 	if (OT_ARRAY == m_ele_type){
 		if (m_sub_type == OT_INT || m_sub_type == OT_BOOL || m_sub_type == OT_INT8 ||
-			m_sub_type == OT_INT16 || OT_INT64 == m_sub_type || OT_TIME == m_sub_type){
+			m_sub_type == OT_INT16 || OT_TIME == m_sub_type){
 			return m_data->_i_arr->data[index];
 		}
+
+		else if (OT_INT64 == m_sub_type) {
+			return (int)m_data->_int64_arr->data[index];
+		}
+
 		else if (OT_FLOAT == m_sub_type) {
 			return (int)m_data->_f_arr->data[index];
 		}
@@ -1480,9 +1555,14 @@ bool DBLDataNode::GetarrayBool(int index) const
 	}
 	if (OT_ARRAY == m_ele_type){
 		if (m_sub_type == OT_INT || m_sub_type == OT_BOOL || m_sub_type == OT_INT8 ||
-			m_sub_type == OT_INT16 || OT_INT64 == m_sub_type || OT_TIME == m_sub_type)	{
+			m_sub_type == OT_INT16 ||  OT_TIME == m_sub_type)	{
 			return m_data->_i_arr->data[index] ? true : false;
 		}
+
+		else if (OT_INT64 == m_sub_type) {
+			return (int)m_data->_int64_arr->data[index] ? true :false;
+		}
+
 		else if (OT_FLOAT == m_sub_type) {
 			return m_data->_f_arr->data[index] == 0 ? true : false;
 		}
@@ -1523,9 +1603,14 @@ float DBLDataNode::GetarrayFloat(int index) const
 	}
 	if (OT_ARRAY == m_ele_type){
 		if (m_sub_type == OT_INT || m_sub_type == OT_BOOL || m_sub_type == OT_INT8 ||
-			m_sub_type == OT_INT16 || OT_INT64 == m_sub_type || OT_TIME == m_sub_type)	{
+			m_sub_type == OT_INT16 || OT_TIME == m_sub_type)	{
 			return(float)m_data->_i_arr->data[index];
 		}
+
+		else if (OT_INT64 == m_sub_type) {
+			return (float)m_data->_int64_arr->data[index] ;
+		}
+
 		else if (OT_FLOAT == m_sub_type) {
 			return m_data->_f_arr->data[index];
 		}
@@ -1542,6 +1627,54 @@ float DBLDataNode::GetarrayFloat(int index) const
 				}
 			}
 
+			return 0;
+		}
+	}
+
+	return 0;
+}
+
+NDUINT64 DBLDataNode::GetarrayInt64(int index) const
+{
+	if (!CheckArray(index)){
+		if (m_ele_type == OT_STRING)	{
+			DBLDataNode tmp;
+			if (tmp.StringToArrayInt(GetText())) {
+				return tmp.GetarrayInt64(index);
+			}
+		}
+
+		if (index == 0){
+			return GetInt64();
+		}
+		return 0;
+	}
+	if (OT_ARRAY == m_ele_type){
+		if (m_sub_type == OT_INT || m_sub_type == OT_BOOL || m_sub_type == OT_INT8 ||
+			m_sub_type == OT_INT16 || OT_TIME == m_sub_type){
+			return m_data->_i_arr->data[index];
+		}
+
+		else if (OT_INT64 == m_sub_type) {
+			return m_data->_int64_arr->data[index];
+		}
+
+		else if (OT_FLOAT == m_sub_type) {
+			return (NDUINT64)m_data->_f_arr->data[index];
+		}
+		else if (OT_STRING == m_sub_type) {
+			if (m_data->_str_arr->data[index])	{
+				const char *pText = m_data->_str_arr->data[index];
+				if (pText && *pText)  {
+					DBLDataNode tmpdata;
+					if (tmpdata.StringToArrayInt(pText)){
+						return tmpdata.GetarrayInt(0);
+					}
+					return ndstr_atoi_hex(pText);
+				}
+
+				//return atoi(m_data->_str_arr->data[index]);
+			}
 			return 0;
 		}
 	}
@@ -2135,12 +2268,21 @@ int DBLDataNode::Print(logic_print print_func, void *pf) const
 		ret += print_func(pf, "%c", IS_OUT_LUA()?'{': _ARRAR_BEGIN_MARK);
 		for (int x = 0; x < GetArraySize(); x++) {
 			if (m_sub_type == OT_INT || m_sub_type == OT_INT8 || m_sub_type == OT_INT16 || m_sub_type == OT_BOOL||
-				m_sub_type == OT_INT64 || m_sub_type == OT_TIME) {
+				m_sub_type == OT_TIME) {
 				if (IS_OUT_HEX()) {
 					ret += print_func(pf, "%x", GetarrayInt(x));
 				}
 				else{
 					ret += print_func(pf, "%d", GetarrayInt(x));
+				}
+			}
+
+			else if (OT_INT64 == m_sub_type) {
+				if (IS_OUT_HEX()) {
+					ret += print_func(pf, "0x%llx", GetarrayInt64(x));
+				}
+				else {
+					ret += print_func(pf, "%lld", GetarrayInt64(x));
 				}
 			}
 
@@ -2402,6 +2544,16 @@ DBLDataNode DBLDataNode::_arrayMathAdd(const DBLDataNode &leftval)const
 			parray->data[i] += leftval.GetarrayInt(i);
 		}
 	}
+	break;
+	case OT_INT64:
+	{
+
+		dbl_int64array *parray = val.m_data->_int64_arr;
+		for (int i = 0; i < parray->number; i++){
+			parray->data[i] += leftval.GetarrayInt64(i);
+		}
+	}
+	break;
 	case OT_FLOAT:
 	{
 		dbl_floatarray *parray = val.m_data->_f_arr;
@@ -2409,6 +2561,7 @@ DBLDataNode DBLDataNode::_arrayMathAdd(const DBLDataNode &leftval)const
 			parray->data[i] += leftval.GetarrayFloat(i);
 		}
 	}
+	break;
 	}
 	
 	return val;
@@ -2427,6 +2580,15 @@ DBLDataNode DBLDataNode::_arrayMathSub(const DBLDataNode &leftval)const
 			parray->data[i] -= leftval.GetarrayInt(i);
 		}
 	}
+	break;
+	case OT_INT64:
+	{
+		dbl_int64array *parray = val.m_data->_int64_arr;
+		for (int i = 0; i < parray->number; i++){
+			parray->data[i] -= leftval.GetarrayInt64(i);
+		}
+	}
+	break;
 	case OT_FLOAT:
 	{
 		dbl_floatarray *parray = val.m_data->_f_arr;
@@ -2434,6 +2596,7 @@ DBLDataNode DBLDataNode::_arrayMathSub(const DBLDataNode &leftval)const
 			parray->data[i] -= leftval.GetarrayFloat(i);
 		}
 	}
+	break;
 	}
 
 	return val;
@@ -2454,6 +2617,17 @@ DBLDataNode DBLDataNode::_arrayMathMul(const DBLDataNode &leftval)const
 			parray->data[i] *= leftval.GetarrayInt(i);
 		}
 	}
+	break;
+
+	case OT_INT64:
+	{
+
+		dbl_int64array *parray = val.m_data->_int64_arr;
+		for (int i = 0; i < parray->number; i++){
+			parray->data[i] *= leftval.GetarrayInt64(i);
+		}
+	}
+	break;
 	case OT_FLOAT:
 	{
 		dbl_floatarray *parray = val.m_data->_f_arr;
@@ -2461,6 +2635,7 @@ DBLDataNode DBLDataNode::_arrayMathMul(const DBLDataNode &leftval)const
 			parray->data[i] *= leftval.GetarrayFloat(i);
 		}
 	}
+	break;
 	}
 
 	return val;
@@ -2482,6 +2657,22 @@ DBLDataNode DBLDataNode::_arrayMathDiv(const DBLDataNode &leftval)const
 			}
 		}
 	}
+	break;
+
+	case OT_INT64:
+	{
+
+		dbl_int64array *parray = val.m_data->_int64_arr;
+		for (int i = 0; i < parray->number; i++){
+			NDUINT64 divval = leftval.GetarrayInt64(i);
+			if (divval != 0) {
+				parray->data[i] /= divval;
+			}
+		}
+
+	}
+	break;
+
 	case OT_FLOAT:
 	{
 		dbl_floatarray *parray = val.m_data->_f_arr;
@@ -2494,6 +2685,7 @@ DBLDataNode DBLDataNode::_arrayMathDiv(const DBLDataNode &leftval)const
 
 		}
 	}
+	break;
 	}
 
 	return val;
@@ -2622,6 +2814,13 @@ int _dbl_data_2binStream(dbl_element_base *indata, DBL_ELEMENT_TYPE etype, DBL_E
 		}
 		else if (sub_etype == OT_USER_DEFINED) {
 
+		}
+		else if (sub_etype == OT_INT64) {
+			for (size_t i = 0; i < length; i++)	{
+				NDUINT64 a = indata->_int64_arr->data[i];
+				_tryto_change_order_long64(a, changeByteOrder);
+				_stream_func(&a, 1, sizeof(a), pf);
+			}
 		}
 		else {
 			for (size_t i = 0; i < length; i++)	{
@@ -2757,6 +2956,19 @@ int dbl_read_from_binStream(dbl_element_base *indata, DBL_ELEMENT_TYPE etype, DB
 			parr->number = size;
 			_stream_read(parr->data, 1, sizeof(float)* size, pf);
 			indata->_f_arr = parr;
+		}
+		else if (sub_etype == OT_INT64) {
+			dbl_int64array *parr = (dbl_int64array *)malloc(sizeof(dbl_int64array) + sizeof(NDUINT64)* (size - 1));
+			nd_assert(parr);
+			parr->number = size;
+
+			for (int i = 0; i < size; i++){
+				NDUINT64 a;
+				_stream_read(&a, 1, sizeof(a), pf);
+				_tryto_change_order_long64(a, changeByteOrder);
+				parr->data[i] = a;
+			}
+			indata->_int64_arr = parr;
 		}
 		else {
 			dbl_intarray *parr = (dbl_intarray *)malloc(sizeof(dbl_intarray)+sizeof(int)* (size - 1));
@@ -2907,6 +3119,11 @@ int dbl_data_copy(const dbl_element_base *input, dbl_element_base *output, DBL_E
 		else if (sub_etype == OT_FLOAT) {
 			if (input->_f_arr->number) {
 				_float_array_init(input->_f_arr->data, (int)input->_f_arr->number, output);
+			}
+		}
+		else if (sub_etype == OT_INT64) {
+			if (input->_int64_arr->number) {
+				_int64_array_init(input->_int64_arr->data, (int)input->_int64_arr->number, output);
 			}
 		}
 		else if (sub_etype == OT_STRING  ) {

@@ -604,8 +604,8 @@
 		</op_math_operate>
 	</create_math_operate>
 	
-	<create_bit_operate name="逻辑运算符" create_type="1" >
-		<op_bit_operate name="节点_逻辑运算" expand="yes" create_label="create_internal_label">
+	<create_bit_operate name="位运算符" create_type="1" >
+		<op_bit_operate name="节点_位运算" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">and_or_not</comment>
 			<index kinds="enum" enum_value="AND,OR,XOR,NOT,LEFT_MOVE,RIGHT_MOVE"  delete="no">0</index>	
 			<param_collect name="操作数1" expand="yes" expand_stat="1" delete="no">
