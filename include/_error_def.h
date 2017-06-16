@@ -10,7 +10,7 @@
 ErrorElement(ESERVER_ERR_GAME_CONFIG,"策划数据配错了"),
 ErrorElement(ESERVER_ERR_IN_CD,"CD中"),
 ErrorElement(ESERVER_ERR_SHORT_ITEM, "物品不足"),
-ErrorElement(ESERVER_ERR_NO_ITEM, "沒有需要的物品"),
+ErrorElement(ESERVER_ERR_NO_ITEM, "物品不存在"),
 ErrorElement(ESERVER_ERR_ATTR_NOT_ENOUGH, "属性不足"),
 ErrorElement(ESERVER_ERR_ATTR_TOO_MUCH, "属性太高"),
 ErrorElement(ESERVER_ERR_LEVEL_LOW, "等级太低"),
@@ -87,7 +87,7 @@ ErrorElement(ESERVER_ERR_NO_MINE, "没有矿产"),
 ErrorElement(ESERVER_ERR_MINE_LEVEL_LOW, "矿产等级不够"),
 ErrorElement(ESERVER_ERR_MINE_IN_UPLEVEL, "矿产升级中"),
 
-ErrorElement(ESERVER_ERR_SKILL_LEVEL_REACH_HERO, "技能达到英雄等级"),
+ErrorElement(ESERVER_ERR_LEVEL_REACH_HERO, "不能超过英雄等级"),
 
 
 ErrorElement(ESERVER_ERR_IN_INVITING, "只能邀请一个人"),
@@ -101,5 +101,8 @@ ErrorElement(ESERVER_ERR_INVATATION_INVALID, "邀请失效"),
 
 ErrorElement(ESERVER_ERR_SOLDIER_IN_STENGTHING, "兵种强化中"),
 ErrorElement(ESERVER_ERR_ALREADY_UPLEVEL, "已经升级成功"),
+
+ErrorElement(ESERVER_ERR_NOT_MATCH_HERO, "英雄不匹配"),
+
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

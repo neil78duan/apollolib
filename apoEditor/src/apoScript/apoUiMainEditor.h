@@ -61,6 +61,7 @@ signals:
 	void breakPointSignal(const char *function, const char *node, bool isAdd);
 
 private:
+	void onVarNameChanged(apoBaseExeNode *exeNode);
 	void movedInScale(apoBaseExeNode *exeNode, const QPoint &screenPos);
 	void savePosition(apoBaseExeNode *exeNode, const QPoint *pos=NULL);
 	bool _getNodePos(ndxml *exeNode, QPoint &pos);

@@ -34,6 +34,7 @@ apoUiBezier::apoUiBezier(QWidget *parent) : m_parent(parent)
 
 	m_startCtrl = 0;
 	m_endCtrl = 0;
+
 }
 
 apoUiBezier::~apoUiBezier()

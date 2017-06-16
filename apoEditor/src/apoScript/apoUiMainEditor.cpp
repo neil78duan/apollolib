@@ -1494,13 +1494,50 @@ const char *apoUiMainEditor::getEditedFunc()
 	return NULL;
 }
 
+void apoUiMainEditor::onVarNameChanged(apoBaseExeNode *exeNode)
+{
+	nd_assert(exeNode);
+	apoBaseSlotCtrl *toSlot = exeNode->returnVal();
+	if (!toSlot)	{
+		return;
+	}
+	apoUiExenodeNewVar *varnode = (apoUiExenodeNewVar*)exeNode;
+	const char *pname = varnode->getVarName();
+
+	QVector<apoUiBezier*>::iterator it = m_beziersVct.begin();
+	for (; it != m_beziersVct.end(); it++)	{
+		apoUiBezier* pbze = *it;
+		if (pbze->getSlot1() == toSlot && pbze->getSlot2()) {
+			apoBaseSlotCtrl *toslot = (apoBaseSlotCtrl *)pbze->getSlot2();
+			if (toslot)	{
+				toslot->onConnectIn(toSlot);
+			}
+		}
+	}
+	return;
+}
 void apoUiMainEditor::onCurNodeChanged()
 {
-	if (m_curDetailNode && m_curDetailNode->getType() != EAPO_EXE_NODE_Switch){
-		m_curDetailNode->renewDisplay();
-		_reConnectParam(m_curDetailNode);
-		m_curDetailNode->update();
+	//need handle variant connector 
+
+	//-----------------
+	if (m_curDetailNode){
+		if (m_curDetailNode->getType() == EAPO_EXE_NODE_NewVar)	{
+			apoUiExenodeNewVar *varnode = (apoUiExenodeNewVar*)m_curDetailNode;
+			const char *pname = varnode->getVarName();
+
+			varinat_map_t::iterator it = m_varMap.find(pname);
+			if (it==m_varMap.end())	{
+				onVarNameChanged(m_curDetailNode);
+			}
+		}
+		else if (m_curDetailNode->getType() != EAPO_EXE_NODE_Switch){
+			m_curDetailNode->renewDisplay();
+			_reConnectParam(m_curDetailNode);
+			m_curDetailNode->update();
+		}
 	}
+	
 	onFileChanged();
 }
 
