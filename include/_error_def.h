@@ -104,5 +104,7 @@ ErrorElement(ESERVER_ERR_ALREADY_UPLEVEL, "已经升级成功"),
 
 ErrorElement(ESERVER_ERR_NOT_MATCH_HERO, "英雄不匹配"),
 
+ErrorElement(ESERVER_ERR_HILV_ARTIFACT_INDRESS, "已经穿了高等级的神器"),
+
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

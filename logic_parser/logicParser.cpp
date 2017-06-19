@@ -108,7 +108,7 @@ int LogicParserEngine::runCmdline(int argc, const char *argv[], int encodeType )
 	for (int i = 0; i < argc; i++)	{
 		params.push_back(DBLDataNode(argv[i]));
 	}
-
+	m_bIniativeQuit = false;
 	DBLDataNode result;
 
 	if (runScript(argv[0], params, result, encodeType)) {
@@ -148,6 +148,7 @@ bool LogicParserEngine::runScript(const char *scriptName, parse_arg_list_t &args
 	const char *moduleName = NULL;
 	const scriptCmdBuf *pcmdBuf = pRoot->getScript(pFuncname, NULL, &moduleName);
 	if (pcmdBuf) {
+
 		setErrno(LOGIC_ERR_SUCCESS) ;
 		if (true == _runCmdBuf(moduleName,pcmdBuf, args)) {
 			result = getValue() ;
@@ -264,7 +265,9 @@ bool LogicParserEngine::_runCmdBuf(const char *moduleName ,const scriptCmdBuf *b
 		stack.curModuleName.clear();
 	}
 	//runningStack *orgStack = m_curStack;
-	
+
+	m_bIniativeQuit = false;
+
 	ret = callScript(&stack);
 
 	int funcError = m_sys_errno;
@@ -291,7 +294,8 @@ bool LogicParserEngine::_runCmdBuf(const char *moduleName,const scriptCmdBuf *bu
 		params.push_back(data1);
 	}
 	va_end (arg);
-	
+
+	m_bIniativeQuit = false;
 	return _runCmdBuf(moduleName, buf, params);
 }
 
@@ -519,6 +523,10 @@ int LogicParserEngine::_baseCallScript(runningStack *stack)
 				m_registorFlag= (index==0) ? true: false ;
 				p = (char*) (stack->cmd->buf + stack->cmd->size);
 				m_sys_errno = tmpIndexVal.GetInt();
+				
+				if (!inException){
+					m_bIniativeQuit = true;
+				}
 				break ;
 			case E_OP_IDLE:
 				m_registorFlag = true;
@@ -549,6 +557,7 @@ int LogicParserEngine::_baseCallScript(runningStack *stack)
 				m_sys_errno = index;
 				m_registorFlag = true;
 				stack->cur_point = p;
+				m_bIniativeQuit = true;
 
 				continue;
 
@@ -2168,11 +2177,13 @@ bool LogicParserEngine::opCalc(void *func, int size, float *result)
 	return false ;
 }
 
+//only compare number data 
 bool LogicParserEngine::_opCmp(DBLDataNode& compValData, DBLDataNode& invalData, eParserCompare op)
 {
 	if (!compValData.CheckValid() || !invalData.CheckValid()) {
 		return false;
 	}
+
 	float compVal = compValData.GetFloat();
 	float inval = invalData.GetFloat();
 
@@ -2200,7 +2211,7 @@ bool LogicParserEngine::_opCmp(DBLDataNode& compValData, DBLDataNode& invalData,
 		default:
 			break ;
 	}
-	m_sys_errno = LOGIC_ERR_PARAM_NOT_EXIST;
+	m_sys_errno = LOGIC_ERR_PARSE_STRING;
 
 	return false ;
 }

@@ -817,8 +817,8 @@
 	</create_step_check_valid>
 		
 	
-	<create_op_comp name="逻辑运算" create_type="1" >
-		<op_comp name="节点_逻辑运算" expand="yes" create_label="create_internal_label">
+	<create_op_comp name="数值比较" create_type="1" >
+		<op_comp name="节点_数值比较" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read"> 大于小于等级 </comment>
 			<index  name="逻辑运算" kinds="reference" reference_type="type_compare_sub_entry" delete="no">0</index>	
 			<param_collect name="操作数1" expand="yes" expand_stat="1" delete="no">
