@@ -460,6 +460,9 @@ int LogicEngineRoot::test()
 		for (script_func_map::const_iterator it_script = funcs.begin(); it_script != funcs.end(); it_script++){
 			bool ret = tmpEngine._runCmdBuf(it->first.c_str(), it_script->second, 0);
 			if (!ret)	{
+				if (tmpEngine.isInitiativeQuit())	{
+					continue;
+				}
 				int runerror = tmpEngine.getErrno();
 				if (runerror == LOGIC_ERR_AIM_OBJECT_NOT_FOUND || runerror == LOGIC_ERR_WOULD_BLOCK || runerror >= LOGIC_ERR_USER_DEFINE_ERROR) {
 					continue;

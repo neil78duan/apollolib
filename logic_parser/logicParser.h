@@ -355,6 +355,7 @@ public:
 	runningStack *getCurStack() { return m_curStack; }
 	const char *getLastErrorNode() { return m_dbg_node; }
 	bool checkLastStepIsCall() { return m_bLastIsCalled; }
+	bool isInitiativeQuit() {	return m_bIniativeQuit;	}
 
 private:
 	friend class LogicEngineRoot;
@@ -454,10 +455,12 @@ protected:
 	bool m_simulate;					//run simulate or test
 	bool m_bStepMode;	
 	bool m_bLastIsCalled;		//last step is call function
+	bool m_bIniativeQuit;
 
 	int m_sys_errno;
 	int m_registerCount;
 	int m_cmdByteOrder;
+
 
 	friend class LocalDebugger;
 	DBLDataNode m_registerVal; //this is common register 
