@@ -239,8 +239,8 @@
 	</message>
 	<message name="GM_增加属性" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="8">0</msgid>
-		<data name="编号" kinds="numeral" param="2">wood</data>
-		<data name="属性增加值" kinds="numeral" param="1">1</data>
+		<data name="编号" kinds="numeral" param="2">vitality</data>
+		<data name="属性增加值" kinds="numeral" param="1">-40</data>
 	</message>
 	<message name="GM_发布系统公告" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="10">0</msgid>
