@@ -810,8 +810,8 @@
 	</create_step_read_excel_attr>
 	
 	
-	<create_step_check_valid name="检测结果是否有效" create_type="1" >
-		<op_check_valide name="节点_检测结果" expand_list="comment"  create_label="create_internal_label">			
+	<create_step_check_valid name="测试返回值" create_type="1" >
+		<op_check_valide name="节点_测试返回值" expand_list="comment"  create_label="create_internal_label">			
 			<comment name="功能说明" rw_stat="read">check_last_return_value_is_valid()</comment>
 		</op_check_valide>
 	</create_step_check_valid>

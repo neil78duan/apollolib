@@ -37,7 +37,7 @@
 	<message name="穿神器" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="5" minId="0x1f">0</msgid>
 		<data name="英雄" kinds="numeral" param="0">21001</data>
-		<data name="神器ID" kinds="numeral" param="0">1217649</data>
+		<data name="神器ID" kinds="numeral" param="0">1610866</data>
 	</message>
 	<message name="神器强化" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="5" minId="0x21">0</msgid>
@@ -217,8 +217,8 @@
 	</message>
 	<message name="GM_加物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="6">0</msgid>
-		<data name="物品编号" kinds="numeral" param="0">3101</data>
-		<data name="数量" kinds="numeral" param="0">50</data>
+		<data name="物品编号" kinds="numeral" param="0">42002</data>
+		<data name="数量" kinds="numeral" param="0">10</data>
 	</message>
 	<message name="GM_增加卡牌" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="7">0</msgid>
