@@ -12,7 +12,8 @@
 #include "ndapplib/applib.h"
 #include "common_inc.h"
 //#include "srv_define.h"
-#include "logic_parser/logicEngineRoot.h"
+//#include "logic_parser/logicEngineRoot.h"
+#include "srv_common/apoGameObj.h"
 
 //class NDSession ;
 class Role;
@@ -26,7 +27,7 @@ public:
 
 
 
-class Role : public LogicObjectBase
+class Role : public ApoGameObj
 {
 public:
 	
@@ -47,10 +48,6 @@ public:
 	int CallMsgProc(roleid_t playerid, nd_usermsgbuf_t *msghdr);
 	int CallMsgProc(roleid_t playerid, NDOStreamMsg &omsg);
 
-
-	virtual LogicParserEngine *getScriptHandler() { return NULL; }
-	//userdata_info *GetUserData() {return &m_userData ;}
-	
 protected:
 	roleid_t m_roleID ;	
 	NDUINT8 m_nick[USER_NAME_SIZE];

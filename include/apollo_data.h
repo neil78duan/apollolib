@@ -77,6 +77,7 @@ typedef NDUINT32 itemInst_t ; //ITEM instant id
 typedef NDUINT32 itemType_t ; //ITEM instant id
 typedef NDUINT16 designTypeId_t;
 typedef designTypeId_t skillId_t;
+typedef designTypeId_t talentId_t;
 //typedef NDUINT16 weaponId_t;
 //typedef NDUINT16 dragonId_t;
 typedef NDUINT16 taskId_t;

@@ -17,6 +17,7 @@
 			<node desc="矿产">mines</node>
 			<node desc="角色对象">role</node>	
 			<node desc="神器">artifact</node>
+			<node desc="天赋">talent</node>
 			<node desc="附加属性">addition</node>
 		</internal_object>
 	</data_list>
