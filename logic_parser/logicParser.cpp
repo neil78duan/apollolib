@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 duanxiuyun. All rights reserved.
 //
 
-#include <stdarg.h>
 #include <math.h>
 
 #include "logic_parser/logicEndian.h"
@@ -2183,34 +2182,59 @@ bool LogicParserEngine::_opCmp(DBLDataNode& compValData, DBLDataNode& invalData,
 	if (!compValData.CheckValid() || !invalData.CheckValid()) {
 		return false;
 	}
+	if (compValData.GetDataType() == OT_STRING &&  invalData.GetDataType()== OT_STRING){
+		const char *p1 = compValData.GetText();
+		const char *p2 = invalData.GetText();
+		if (!p1 || p2)	{
+			return false;
+		}
+		int ret = ndstricmp(p1, p2);
+		switch (op) {
+		case ECMP_EQ:  			// =
+			return ret == 0;
+		case ECMP_LT:  			// <
+			return ret < 0;
+		case ECMP_BT:  			// >
+			return ret > 0;
+		case ECMP_ELT: 			// <=
+			return !(ret > 0);
+		case ECMP_EBT: 			// >=
+			return !(ret < 0);
+		default:
+			break;
+		}
+	}
+	else {
 
-	float compVal = compValData.GetFloat();
-	float inval = invalData.GetFloat();
+		float compVal = compValData.GetFloat();
+		float inval = invalData.GetFloat();
 
-	switch (op) {
-		case ECMP_EQ :  			// =
+		switch (op) {
+		case ECMP_EQ:  			// =
 			return compVal == inval;
 			//return regval == cmpval;
-		case ECMP_LT :  			// <
+		case ECMP_LT:  			// <
 			return  compVal < inval;
-		case ECMP_BT :  			// >
+		case ECMP_BT:  			// >
 			if (compVal == inval)	{
 				return false;
 			}
 			return !(compVal < inval);
-		case ECMP_ELT : 			// <=
+		case ECMP_ELT: 			// <=
 			if (compVal == inval)	{
 				return true;
 			}
 			return  compVal < inval;
-		case ECMP_EBT : 			// >=
+		case ECMP_EBT: 			// >=
 			if (compVal == inval)	{
 				return true;
 			}
 			return  !(compVal < inval);
 		default:
-			break ;
+			break;
+		}
 	}
+
 	m_sys_errno = LOGIC_ERR_PARSE_STRING;
 
 	return false ;

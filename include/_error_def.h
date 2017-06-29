@@ -55,6 +55,7 @@ ErrorElement(ESERVER_ERR_BUILDING_GRID_IN_USING, "建筑格子被占用"),
 
 ErrorElement(ESERVER_ERR_NO_SKILL, "技能不存在"),
 
+
 ErrorElement(ESERVER_ERR_NO_CARD, "卡牌不存在"),
 
 ErrorElement(ESERVER_ERR_NO_EQUIP, "装备不存在"),
@@ -106,5 +107,17 @@ ErrorElement(ESERVER_ERR_NOT_MATCH_HERO, "英雄不匹配"),
 
 ErrorElement(ESERVER_ERR_HILV_ARTIFACT_INDRESS, "已经穿了高等级的神器"),
 
+ErrorElement(ESERVER_ERR_NO_TALENT, "天赋不存在"),
+ErrorElement(ESERVER_ERR_NONEED_TALENT, "不满足前置天赋要求"),
+ErrorElement(ESERVER_ERR_NOHAVE_TALENT, "天赋点数不够"),
+ErrorElement(ESERVER_ERR_BACK_TALENT_POINT, "返还天赋点数量不一致"),
+ErrorElement(ESERVER_ERR_TALENT_RECAL, "天赋属性计算出错"),
+ErrorElement(ESERVER_ERR_PLAYER_FORCE_QUIT, "玩家强制退出"),
+
+ErrorElement(ESERVER_ERR_BUILDING_HERO_GARRSION, "该哨所已经驻防了该英雄"),
+ErrorElement(ESERVER_ERR_BUILDING_GARRSION, "该哨所已经有英雄驻防了"),
+ErrorElement(ESERVER_ERR_BUILDING_CANNOT_GARRSION, "该建筑不能驻防英雄"),
+
+ErrorElement(ESERVER_ERR_STOVE_FULL, "熔炉已满"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

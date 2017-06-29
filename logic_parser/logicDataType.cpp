@@ -10,7 +10,6 @@
 #include "logic_parser/objectBaseMgr.h"
 #include "logic_parser/logicStruct.hpp"
 #include <math.h>
-#include <stdarg.h>
 
 
 NDUINT8 DBLDataNode::s_bOutHex = 0;

@@ -7,10 +7,7 @@
 //
 
 #include "nd_common/nd_common.h"
-#include <stdlib.h>
-#include <stdio.h>
 #include <string>
-
 #include <vector>
 
 struct type_name_info

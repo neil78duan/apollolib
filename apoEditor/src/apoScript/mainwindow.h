@@ -17,7 +17,7 @@
 #include <QTreeWidgetItem>
 #include <QString>
 #include <QTableWidget>
-
+#include <QFileSystemWatcher>
 
 class apoBaseExeNode;
 class apoUiMainEditor;
@@ -67,6 +67,8 @@ public slots:
 	void onDebugStep(const char *func, const char* node);
 	void onDebugCmdAck();
 	void onScriptRunOK();
+
+	void onFileChangedExternal(const QString &path);
 
 private slots:
 
@@ -152,7 +154,7 @@ protected:
 	std::string m_fileTemplate;		// new-file template
 	std::string m_confgiFile;		// config file-path
 private:
-
+	QFileSystemWatcher m_filesWatcher;
     Ui::MainWindow *ui;
 	
 	QString m_logText;

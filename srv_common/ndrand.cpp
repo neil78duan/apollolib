@@ -77,14 +77,17 @@ int SamplingSpecial(int prob[], int prob_num, int result[], int res_num)
 		//剩余样本少于结果, 为了保证采样个数,后面都100%
 		if (left_num <= need_num){
 			for(int xx =0 ; xx<left_num; xx++) {
-				result[ret] = i+ret;
+				result[ret] = i+xx;
 				++ret;
 			}
 			return ret ;
 		}
 		int sampled = ndrand_range(0, sum);
-		if (sampled< prob[i]){
+		if (sampled<( prob[i] * res_num)){
 			result[ret++] = i;
+			if (ret >= res_num)	{
+				break;
+			}
 		}
 	}
 	return ret;

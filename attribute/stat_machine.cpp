@@ -7,22 +7,7 @@
  */
 
 #include "attribute/stat_machine.h"
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdarg.h>
-
-
-//
-
-
-#ifdef _MSC_VER
-#ifndef snprintf 
-//#define snprintf _snprintf_s
-#define snprintf(_buf,_s, _format, ...)  _snprintf_s(_buf, _s, _s, _format,__VA_ARGS__)
-#endif
-#endif
-
+#include "nd_common/nd_common.h"
 
 StatMachine::StatMachine()
 {

@@ -9,7 +9,7 @@
 #include "logic_parser/logicEndian.h"
 #include "logic_parser/logicStruct.hpp"
 #include "logic_parser/logicEngineRoot.h"
-#include <stdarg.h>
+
 #include "nd_net/byte_order.h"
 #include "ndapplib/ndsingleton.h"
 
