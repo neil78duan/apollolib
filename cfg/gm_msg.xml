@@ -55,8 +55,8 @@
 	</message>
 	<message name="穿神器" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="5" minId="0x1f">0</msgid>
-		<data name="英雄" kinds="numeral" param="0">21061</data>
-		<data name="神器ID" kinds="numeral" param="0">2200876</data>
+		<data name="英雄" kinds="numeral" param="0">21001</data>
+		<data name="神器ID" kinds="numeral" param="0">38001</data>
 	</message>
 	<message name="神器强化" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="5" minId="0x21">0</msgid>
@@ -65,7 +65,7 @@
 	<message name="兵种强化" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="5" minId="17">0</msgid>
 		<data name="兵种类型" kinds="numeral" param="3">1</data>
-		<data name="强化ID" kinds="numeral" param="3">2</data>
+		<data name="强化ID" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="建立工会" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="9" minId="2">0</msgid>
@@ -100,18 +100,18 @@
 	</message>
 	<message name="新建建筑" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="4" minId="0">0</msgid>
-		<data name="建筑类型ID" kinds="numeral" param="0">12101</data>
+		<data name="建筑类型ID" kinds="numeral" param="0">14101</data>
 		<data name="坐标X" kinds="numeral" param="4">40</data>
-		<data name="坐标X" kinds="numeral" param="4">180</data>
+		<data name="坐标X" kinds="numeral" param="4">200</data>
 	</message>
 	<message name="升级建筑" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="4" minId="7">0</msgid>
-		<data name="建筑ID" kinds="numeral" param="0">1191749</data>
+		<data name="建筑ID" kinds="numeral" param="0">1322821</data>
 		<data name="是否秒CD" kinds="bool" param="3">1</data>
 	</message>
 	<message name="金币秒CD" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="25">0</msgid>
-		<data name="对象id" kinds="numeral" param="0">0</data>
+		<data name="对象id" kinds="numeral" param="0">21061</data>
 	</message>
 	<message name="使用物品秒CD" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="26">0</msgid>
@@ -129,6 +129,11 @@
 		<data name="坐标X" kinds="numeral" param="4">100</data>
 		<data name="坐标X" kinds="numeral" param="4">100</data>
 	</message>
+	<message name="英雄驻防" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="4" minId="0x20">0</msgid>
+		<data name="建筑ID" kinds="numeral" param="0">1718037</data>
+		<data name="英雄ID" kinds="numeral" param="0">333</data>
+	</message>
 	<message name="摆放装饰物" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="4" minId="15">0</msgid>
 		<data name="装饰物ID" kinds="numeral" param="0">18002</data>
@@ -144,14 +149,18 @@
 		<msgid kinds="hide" maxId="3" minId="23">0</msgid>
 		<data name="是否是据点" kinds="bool" param="3">0</data>
 		<data name="副本编号" kinds="numeral" param="0">1001</data>
-		<data name="是否成功" kinds="numeral" param="3">1</data>
+		<data name="错误号" kinds="numeral" param="0">0</data>
 		<data name="玩家消耗的能量" kinds="numeral" param="0">100</data>
 		<data name="玩家获得的能量" kinds="numeral" param="0">100</data>
 		<data name="出战卡牌数" kinds="numeral" param="4">1</data>
-		<data name="卡牌1" kinds="numeral" param="0">21061</data>
-		<data name="卡牌2" kinds="numeral" param="0">0</data>
-		<data name="卡牌3" kinds="numeral" param="0">0</data>
-		<data name="卡牌3" kinds="numeral" param="0">0</data>
+		<data name="英雄1编号" kinds="numeral" param="0">21061</data>
+		<data name="是否死亡" kinds="bool" param="3">1</data>
+		<data name="英雄2编号" kinds="numeral" param="0">0</data>
+		<data name="是否死亡" kinds="bool" param="3">0</data>
+		<data name="英雄3编号" kinds="numeral" param="0">0</data>
+		<data name="是否死亡" kinds="bool" param="3">0</data>
+		<data name="英雄4编号" kinds="numeral" param="0">0</data>
+		<data name="是否死亡" kinds="bool" param="3">0</data>
 	</message>
 	<message name="获得完成的地图" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="3" minId="25">0</msgid>
@@ -187,16 +196,20 @@
 	</message>
 	<message name="天赋升级" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0x0c" minId="0x00">0</msgid>
-		<data name="天赋ID" kinds="numeral" param="3">1</data>
+		<data name="天赋ID" kinds="numeral" param="3">2</data>
 		<data name="升级个数" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="重置天赋" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="0x0c" minId="0x02">0</msgid>
-		<data name="天赋ID" kinds="numeral" param="0">1</data>
+		<msgid kinds="hide" maxId="0x0c" minId="0x04">0</msgid>
+		<data name="天赋ID" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="开宝箱" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="4">0</msgid>
 		<data name="宝箱类型" kinds="numeral" param="4">12</data>
+	</message>
+	<message name="合成物品" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="6" minId="30">0</msgid>
+		<data name="物品ID" kinds="numeral" param="4">42005</data>
 	</message>
 	<message name="使用物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="6">0</msgid>
@@ -245,8 +258,8 @@
 	</message>
 	<message name="GM_加物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="6">0</msgid>
-		<data name="物品编号" kinds="numeral" param="0">38188</data>
-		<data name="数量" kinds="numeral" param="0">1</data>
+		<data name="物品编号" kinds="numeral" param="0">42006</data>
+		<data name="数量" kinds="numeral" param="0">10</data>
 	</message>
 	<message name="GM_增加卡牌" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="7">0</msgid>

@@ -13,8 +13,6 @@
 #include "logic_parser/logic_function.h"
 #include "logic_parser/dbldata2netstream.h"
 #include "logic_parser/dbl_mgr.h"
-//#include "message_inc.h"
-#include <stdarg.h>
 
 
 //bool apollo_str_cmp(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)

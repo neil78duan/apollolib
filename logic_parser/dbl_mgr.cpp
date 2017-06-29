@@ -12,8 +12,8 @@
 #include "logic_parser/dbl_mgr.h"
 #include "nd_common/nd_common.h"
 #include "nd_net/byte_order.h"
-#include <time.h>
-#include <stdlib.h>
+//#include <time.h>
+//#include <stdlib.h>
 // 
 // int text_2file(char *buf, size_t size, const char *file)
 // {

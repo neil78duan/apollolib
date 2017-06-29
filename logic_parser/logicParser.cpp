@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 duanxiuyun. All rights reserved.
 //
 
-#include <stdarg.h>
 #include <math.h>
 
 #include "logic_parser/logicEndian.h"

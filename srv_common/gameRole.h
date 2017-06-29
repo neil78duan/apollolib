@@ -11,8 +11,6 @@
 
 #include "ndapplib/applib.h"
 #include "common_inc.h"
-//#include "srv_define.h"
-//#include "logic_parser/logicEngineRoot.h"
 #include "srv_common/apoGameObj.h"
 
 //class NDSession ;

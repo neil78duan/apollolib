@@ -111,5 +111,13 @@ ErrorElement(ESERVER_ERR_NO_TALENT, "天赋不存在"),
 ErrorElement(ESERVER_ERR_NONEED_TALENT, "不满足前置天赋要求"),
 ErrorElement(ESERVER_ERR_NOHAVE_TALENT, "天赋点数不够"),
 ErrorElement(ESERVER_ERR_BACK_TALENT_POINT, "返还天赋点数量不一致"),
+ErrorElement(ESERVER_ERR_TALENT_RECAL, "天赋属性计算出错"),
+ErrorElement(ESERVER_ERR_PLAYER_FORCE_QUIT, "玩家强制退出"),
+
+ErrorElement(ESERVER_ERR_BUILDING_HERO_GARRSION, "该哨所已经驻防了该英雄"),
+ErrorElement(ESERVER_ERR_BUILDING_GARRSION, "该哨所已经有英雄驻防了"),
+ErrorElement(ESERVER_ERR_BUILDING_CANNOT_GARRSION, "该建筑不能驻防英雄"),
+
+ErrorElement(ESERVER_ERR_STOVE_FULL, "熔炉已满"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

@@ -7,8 +7,6 @@
 //
 
 #include "nd_common/nd_common.h"
-#include <stdlib.h>
-#include <stdio.h>
 #include <string>
 
 #define _OUT_PUT_TIME(_pf) do { \

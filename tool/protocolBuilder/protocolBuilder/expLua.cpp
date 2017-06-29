@@ -9,8 +9,6 @@
 
 
 #include "nd_common/nd_common.h"
-#include <stdlib.h>
-#include <stdio.h>
 #include <string>
 
 
