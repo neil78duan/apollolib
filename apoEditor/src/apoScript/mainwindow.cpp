@@ -31,7 +31,7 @@ ND_LOG_WRAPPER_IMPLEMENTION(MainWindow, __glogWrapper);
 
 MainWindow::MainWindow(QWidget *parent) :
 QMainWindow(parent), m_editorSetting(*apoEditorSetting::getInstant()), m_editorWindow(0),
-	m_fileRoot(0), m_curFile(0), m_currFunction(0), m_localDebugOwner(NULL),
+m_fileRoot(0), m_curFile(0), m_currFunction(0), m_localDebugOwner(NULL), m_filesWatcher(this),
     ui(new Ui::MainWindow)
 {
 	m_debugInfo = NULL;
@@ -50,6 +50,8 @@ QMainWindow(parent), m_editorSetting(*apoEditorSetting::getInstant()), m_editorW
 
 	QObject::connect(m_editorWindow, SIGNAL(breakPointSignal(const char *, const char *, bool)),
 		this, SLOT(onBreakPointEdited(const char *, const char *, bool)));
+
+	QObject::connect(&m_filesWatcher, SIGNAL(fileChanged(const QString &)), this, SLOT(onFileChangedExternal(const QString &)));
 
 	setCentralWidget(m_editorWindow);
 
@@ -289,6 +291,10 @@ bool MainWindow::loadScriptFile(const char *scriptFile)
 	if (!scriptFile)	{
 		return false;
 	}
+	if (!m_filePath.empty()) {
+		m_filesWatcher.removePath(m_filePath.c_str());
+	}
+
 	if (checkNeedSave()){
 		saveCurFile();
 		ndxml_destroy(m_curFile);
@@ -312,6 +318,8 @@ bool MainWindow::loadScriptFile(const char *scriptFile)
 		showCurFile();
 	}
 	m_filePath = scriptFile;
+
+	m_filesWatcher.addPath(scriptFile);
 	return true;
 }
 bool MainWindow::showCurFile()
@@ -480,6 +488,21 @@ void MainWindow::onScriptRunOK()
 	this->update();
 }
 
+
+void MainWindow::onFileChangedExternal(const QString &path)
+{
+	QString text = QString::asprintf("The file %s was changed, do want to reload?", m_filePath.c_str());
+	QMessageBox::StandardButton ret = QMessageBox::question(this, "File changed", text);
+	if (ret == QMessageBox::Yes)	{
+		LogicEngineRoot::get_Instant()->getGlobalDebugger().clearBreakpoint();
+		MY_LOAD_XML_AND_NEW(m_curFile, m_filePath.c_str(), m_editorSetting.m_encodeName.c_str(), return);
+		m_currFunction = NULL;
+		if (!openFunctionsView()) {
+			showCurFile();
+		}
+	}
+	
+}
 
 bool MainWindow::showCurFunctions()
 {	
