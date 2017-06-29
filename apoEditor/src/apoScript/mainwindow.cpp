@@ -291,15 +291,22 @@ bool MainWindow::loadScriptFile(const char *scriptFile)
 	if (!scriptFile)	{
 		return false;
 	}
-	if (!m_filePath.empty()) {
-		m_filesWatcher.removePath(m_filePath.c_str());
-	}
+	
 
 	if (checkNeedSave()){
 		saveCurFile();
+	}
+	
+	if (!m_filePath.empty()) {
+		m_filesWatcher.removePath(m_filePath.c_str());
+
+	}
+	if (m_curFile){
 		ndxml_destroy(m_curFile);
 		delete m_curFile;
+		m_curFile = NULL;
 	}
+
 
 	LogicEngineRoot::get_Instant()->getGlobalDebugger().clearBreakpoint();
 
@@ -518,9 +525,15 @@ bool MainWindow::showCurFunctions()
 bool MainWindow::saveCurFile()
 { 
 	m_isChangedCurFile = false;
+
+	m_filesWatcher.removePath(m_filePath.c_str());
+
 	if (m_curFile){
 		ndxml_save(m_curFile, m_filePath.c_str());
 		nd_logmsg("save %s script ok\n", m_filePath.c_str());
+
+		m_filesWatcher.addPath(m_filePath.c_str());
+
 		return true;
 	}
 	return false;

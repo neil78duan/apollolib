@@ -200,7 +200,7 @@
 		<data name="升级个数" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="重置天赋" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="0x0c" minId="0x05">0</msgid>
+		<msgid kinds="hide" maxId="0x0c" minId="0x04">0</msgid>
 		<data name="天赋ID" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="开宝箱" expand="yes" delete="no">
