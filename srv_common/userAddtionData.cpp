@@ -178,6 +178,10 @@ bool UserAdditionData::opRead(const DBLDataNode& id, DBLDataNode &val)
 		return false;
 	}
 	const DBLDataNode *pdata = getData(name);
+	if (!pdata)	{
+		//m_error = NDSYS_ERR_PROGRAM_OBJ_NOT_FOUND;
+		return false;
+	}
 	val = *pdata;
 	return true;
 }

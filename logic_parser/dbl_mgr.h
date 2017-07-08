@@ -115,6 +115,7 @@ class DBLCursor
 public:
 	DBLCursor(DBLTable *ptb); 
 	DBLCursor(DBLTable *ptb, const char*col_names[], int col_num, int encodeType = E_SRC_CODE_ANSI);
+	DBLCursor(const char *tableName, const char*col_names[], int col_num, int encodeType = E_SRC_CODE_ANSI);
 	DBLCursor();
 	~DBLCursor() ;
 

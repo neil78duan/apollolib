@@ -821,6 +821,19 @@ DBLCursor::DBLCursor(DBLTable *ptb, const char*col_names[], int col_num, int enc
 		}
 	}
 }
+
+
+DBLCursor::DBLCursor(const char *tableName, const char*col_names[], int col_num, int encodeType )
+	: m_bOpen(0),  m_bAllcol(0)
+{
+	m_ptable = DBL_FindTable(tableName);
+	if (m_ptable){
+		for (int i = 0; i < col_num; i++) {
+			m_sel_cols.push_back(m_ptable->GetColIndex(col_names[i], encodeType));
+		}
+	}	
+}
+
 DBLCursor::DBLCursor() :m_bOpen(0), m_ptable(0), m_bAllcol(1)
 {
 }
@@ -880,6 +893,9 @@ int DBLCursor::FetchNext()
 
 int DBLCursor::Fetch(int id) 
 {
+	if (!m_ptable)	{
+		return -1;
+	}
 	m_cur_it = m_ptable->m_rocords.find((NDUINT32)id) ;
 	return _fetch() ;
 }

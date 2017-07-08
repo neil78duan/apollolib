@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <type_data_type name="数据类型" kinds="hide" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,2维数组,变量,参数,上一步结果,time"/>
 <send_msg_list name="发送消息" delete="no" expand_stat="1">
+	<message name="查看任务" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="11" minId="0">0</msgid>
+	</message>
+	<message name="查看任务日志" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="11" minId="2">0</msgid>
+	</message>
+	<message name="领取任务奖励" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="11" minId="4">0</msgid>
+		<data name="任务编号" kinds="numeral" param="4">0</data>
+	</message>
 	<message name="购买普通物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="8" minId="0">0</msgid>
-		<data name="商品编号" kinds="numeral" param="0">1</data>
+		<data name="商品编号" kinds="numeral" param="0">2016</data>
 		<data name="数量" kinds="numeral" param="4">1</data>
 	</message>
 	<message name="查看商店" expand="yes" delete="no">
@@ -100,7 +110,7 @@
 	</message>
 	<message name="新建建筑" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="4" minId="0">0</msgid>
-		<data name="建筑类型ID" kinds="numeral" param="0">14101</data>
+		<data name="建筑类型ID" kinds="numeral" param="0">19001</data>
 		<data name="坐标X" kinds="numeral" param="4">40</data>
 		<data name="坐标X" kinds="numeral" param="4">200</data>
 	</message>
@@ -111,7 +121,7 @@
 	</message>
 	<message name="金币秒CD" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="25">0</msgid>
-		<data name="对象id" kinds="numeral" param="0">21061</data>
+		<data name="对象id" kinds="numeral" param="0">0</data>
 	</message>
 	<message name="使用物品秒CD" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="26">0</msgid>
@@ -132,7 +142,27 @@
 	<message name="英雄驻防" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="4" minId="0x20">0</msgid>
 		<data name="建筑ID" kinds="numeral" param="0">1718037</data>
-		<data name="英雄ID" kinds="numeral" param="0">333</data>
+		<data name="英雄ID" kinds="numeral" param="0">0</data>
+	</message>
+	<message name="查看防守模式信息" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="3" minId="0x2a">0</msgid>
+	</message>
+	<message name="防守模式领取奖励" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="4" minId="0x22">0</msgid>
+		<data name="矿产ID" kinds="numeral" param="0">19001</data>
+		<data name="防守ID" kinds="numeral" param="4">1</data>
+	</message>
+	<message name="熔炉取物品" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="6" minId="40">0</msgid>
+		<data name="物品ID" kinds="numeral" param="0">1718037</data>
+	</message>
+	<message name="个人世界宝箱领取" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="3" minId="0x25">0</msgid>
+		<data name="宝箱id" kinds="numeral" param="0">1704037</data>
+	</message>
+	<message name="增加随机宝箱" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="3" minId="0x27">0</msgid>
+		<data name="id" kinds="numeral" param="0">1007</data>
 	</message>
 	<message name="摆放装饰物" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="4" minId="15">0</msgid>
@@ -154,7 +184,7 @@
 		<data name="玩家获得的能量" kinds="numeral" param="0">100</data>
 		<data name="出战卡牌数" kinds="numeral" param="4">1</data>
 		<data name="英雄1编号" kinds="numeral" param="0">21061</data>
-		<data name="是否死亡" kinds="bool" param="3">1</data>
+		<data name="是否死亡" kinds="bool" param="3">0</data>
 		<data name="英雄2编号" kinds="numeral" param="0">0</data>
 		<data name="是否死亡" kinds="bool" param="3">0</data>
 		<data name="英雄3编号" kinds="numeral" param="0">0</data>
@@ -239,7 +269,7 @@
 	</message>
 	<message name="GM_修改游戏时间" expand="yes" delete="no" need_confirm="yes">
 		<msgid kinds="hide">1797</msgid>
-		<data name="加快小时" kinds="numeral" param="0">9</data>
+		<data name="加快小时" kinds="numeral" param="0">13</data>
 		<data name="加快分钟" kinds="numeral" param="0">1</data>
 	</message>
 	<message name="GM_打印消息" expand="yes" delete="no" need_confirm="yes">
@@ -267,8 +297,8 @@
 	</message>
 	<message name="GM_建筑升级" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="27">0</msgid>
-		<data name="编号" kinds="numeral" param="0">0x42ee1</data>
-		<data name="新等级" kinds="numeral" param="0">10</data>
+		<data name="编号" kinds="numeral" param="0">19001</data>
+		<data name="新等级" kinds="numeral" param="0">1</data>
 	</message>
 	<message name="GM_卡牌升级" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="25">0</msgid>
@@ -322,6 +352,12 @@
 	<message name="GM_获得其他玩家数据" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="23">0</msgid>
 		<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">28</data>
+	</message>
+	<message name="sys_打印收发消息" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="0" minId="15">0</msgid>
+		<data name="MaxID" kinds="numeral" param="4">5</data>
+		<data name="MinID" kinds="numeral" param="4">16</data>
+		<data name="是否显示" kinds="bool" param="3">0</data>
 	</message>
 	<message name="sys_查看服务器版本" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0" minId="0">0</msgid>

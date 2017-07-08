@@ -44,6 +44,7 @@ enum DBL_ELEMENT_TYPE
 	OT_BINARY_DATA = 0x10,		//binary-data
 	OT_USER_DEFINED_ARRAY =0X11,
 	OT_AUTO = 0x12 ,		//auto type export by compile, if not assert string
+	OT_ORG_STREAM = 0x13,	//org net message stream data
 
 	OT_OBJECT_VOID = 0x20,		//game object , c_address of object
 	OT_OBJ_MSGSTREAM =0x21,		//input message stream
