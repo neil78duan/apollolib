@@ -231,10 +231,14 @@
 	</message>
 	<message name="重置天赋" expand="yes" delete="no">
 <<<<<<< HEAD
+<<<<<<< HEAD
 		<msgid kinds="hide" maxId="0x0c" minId="0x04">0</msgid>
 =======
 		<msgid kinds="hide" maxId="0x0c" minId="0x05">0</msgid>
 >>>>>>> 896413723e6cca8a8c239e5f60a3c1dcc0dc55d5
+=======
+		<msgid kinds="hide" maxId="0x0c" minId="0x04">0</msgid>
+>>>>>>> 98dd5da2f71e07728e24d066e18b11cf46ba8b04
 		<data name="天赋ID" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="开宝箱" expand="yes" delete="no">
