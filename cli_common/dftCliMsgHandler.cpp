@@ -406,6 +406,13 @@ namespace ClientMsgHandler
 					++p;
 				}
 				isArray = true;
+				NDUINT16 _arrsize = 0;
+
+				if (-1 == inmsg.Read(_arrsize)) {
+					nd_logerror("can not read array size }\n");
+					return false;
+				}
+				array_size = _arrsize;
 			}
 			else {
 				p = ndstr_nstr_end(p, name, ',', sizeof(name));

@@ -15,7 +15,7 @@
 <data_type_define kinds="hide" desc="define enum data type">
 	<!-- type_operate_dest kinds="enum" enum_value="无,角色属性,背包,任务,基地,卡牌,附加属性" enum_type="text" enum_text="none,attr,package,task,home,card,addition"/ -->
 	<type_compare_sub_entry kinds="enum" enum_value="其他,等于,小于,大于,小于等于,大于等于"/>
-	<type_data_type kinds="enum" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,time,变量,参数,当前结果,user_def,compile_time,func_name, mod_name,bin_data,user_def_array,auto"/>	
+	<type_data_type kinds="enum" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,time,变量,参数,当前结果,user_def,compile_time,func_name, mod_name,bin_data,user_def_array,auto,orgMsgStream"/>	
 	<type_netmsg_privilege kinds="enum" enum_value="不限制,连接,登录,进入游戏,GM"/>
 	<type_encode kinds="enum" enum_value="ansi,gbk,utf8"/>
 	<type_time_unit kinds="enum" enum_value="秒,分钟,小时,天,月,年,星期"/>
@@ -817,8 +817,8 @@
 	</create_step_check_valid>
 		
 	
-	<create_op_comp name="数值比较" create_type="1" >
-		<op_comp name="节点_数值比较" expand="yes" create_label="create_internal_label">
+	<create_op_comp name="比较运算" create_type="1" >
+		<op_comp name="节点_比较运算" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read"> 大于小于等级 </comment>
 			<index  name="逻辑运算" kinds="reference" reference_type="type_compare_sub_entry" delete="no">0</index>	
 			<param_collect name="操作数1" expand="yes" expand_stat="1" delete="no">

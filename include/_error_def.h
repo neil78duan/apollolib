@@ -19,7 +19,7 @@ ErrorElement(ESERVER_ERR_MAX_LEVEL, "已经是最高级"),
 
 ErrorElement(ESERVER_ERR_NO_BUILDING, "沒有建筑物"),
 ErrorElement(ESERVER_ERR_BUILDING_LEVEL_LOW, "建筑物等级不够"),
-ErrorElement(ESERVER_ERR_BUILDING_SWITCH_TYPE, "建筑替换类型不匹配"),
+ErrorElement(ESERVER_ERR_TYPE_NOT_MATCH, "类型不匹配"),
 
 ErrorElement(ESERVER_ERR_PACKAGE_FULL, "背包已满"),
 ErrorElement(ESERVER_ERR_SHOP_NOT_EXIST, "商店不存在"),
@@ -112,12 +112,18 @@ ErrorElement(ESERVER_ERR_NONEED_TALENT, "不满足前置天赋要求"),
 ErrorElement(ESERVER_ERR_NOHAVE_TALENT, "天赋点数不够"),
 ErrorElement(ESERVER_ERR_BACK_TALENT_POINT, "返还天赋点数量不一致"),
 ErrorElement(ESERVER_ERR_TALENT_RECAL, "天赋属性计算出错"),
-ErrorElement(ESERVER_ERR_PLAYER_FORCE_QUIT, "玩家强制退出"),
 
 ErrorElement(ESERVER_ERR_BUILDING_HERO_GARRSION, "该哨所已经驻防了该英雄"),
 ErrorElement(ESERVER_ERR_BUILDING_GARRSION, "该哨所已经有英雄驻防了"),
 ErrorElement(ESERVER_ERR_BUILDING_CANNOT_GARRSION, "该建筑不能驻防英雄"),
 
 ErrorElement(ESERVER_ERR_STOVE_FULL, "熔炉已满"),
+
+ErrorElement(ESERVER_ERR_NO_HAVE_CHEST, "没有找到该宝箱"),
+ErrorElement(ESERVER_ERR_NO_DEFENCE_NPC, "没有该入侵NPC"),
+
+ErrorElement(ESERVER_ERR_PLAYER_FORCE_QUIT, "玩家强制退出"),
+ErrorElement(ESERVER_ERR_TIME_OUT, "你用了太多的时间"), 
+ErrorElement(ESERVER_ERR_NO_NEED_CLEAR_CD, "该物品不需要秒CD"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

@@ -18,7 +18,8 @@
 			<node desc="角色对象">role</node>	
 			<node desc="神器">artifact</node>
 			<node desc="天赋">talent</node>
-			<node desc="附加属性">addition</node>
+			<node desc="附加数据">addition</node>
+			<node desc="熔炉">stove</node>
 		</internal_object>
 	</data_list>
 	<data_list dataName="external_objects" src_type="list" desc="其他对象" >

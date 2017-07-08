@@ -1750,8 +1750,9 @@ DBLDataNode  DBLDataNode::operator + (const DBLDataNode &r) const
 
 		return DBLDataNode(str1.c_str());
 	}
+	case OT_ORG_STREAM:
 	case OT_BINARY_DATA:
-		if (r.m_ele_type==OT_BINARY_DATA){
+		if (r.m_ele_type == OT_BINARY_DATA || r.m_ele_type == OT_ORG_STREAM){
 			size_t s1 = GetBinarySize();
 			if (s1 > 0)	{
 				size_t s2 = r.GetBinarySize();
@@ -2251,6 +2252,17 @@ int DBLDataNode::Print(logic_print print_func, void *pf) const
 		break;
 	case OT_STRING:
 		if (IS_OUT_LUA()) {
+			const char *ptext = GetText();
+			if (ptext && *ptext) {
+				if (ndstricmp(ptext, "true") == 0 ) {
+					ret = print_func(pf, "true", GetBool());
+					break;
+				}
+				else if (0 == ndstricmp(ptext, "false")) {
+					ret = print_func(pf, "false", GetBool());
+					break;
+				}
+			}
 			ret = print_func(pf, "\"%s\"", CheckValid()? GetText():"nil");
 		}
 		else {
@@ -2767,6 +2779,7 @@ int _dbl_data_2binStream(dbl_element_base *indata, DBL_ELEMENT_TYPE etype, DBL_E
 		}
 		break;
 
+	case OT_ORG_STREAM:
 	case OT_ATTR_DATA:
 	case OT_BINARY_DATA :
 		if (!indata->_bin || 0==indata->_bin->size) {
@@ -2900,6 +2913,7 @@ int dbl_read_from_binStream(dbl_element_base *indata, DBL_ELEMENT_TYPE etype, DB
 			indata->str_val[size] = 0;
 		}
 		break;
+	case OT_ORG_STREAM:
 	case OT_ATTR_DATA:
 	case OT_BINARY_DATA:
 		size = 0;
@@ -3042,6 +3056,7 @@ int dbl_destroy_data(dbl_element_base *buf, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_
 #define SAVE_FREE(a) do { if(a) {free(a); (a)=0;}} while (0);
 
 	switch (etype){
+	case OT_ORG_STREAM:
 	case OT_ATTR_DATA:
 	case OT_BINARY_DATA:
 	case OT_STRING:
@@ -3096,6 +3111,7 @@ int dbl_data_copy(const dbl_element_base *input, dbl_element_base *output, DBL_E
 		break;
 	}
 
+	case OT_ORG_STREAM:
 	case OT_ATTR_DATA:
 	case OT_BINARY_DATA:
 		if (input->_bin && input->_bin->size) {

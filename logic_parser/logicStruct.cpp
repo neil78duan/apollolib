@@ -189,6 +189,15 @@ DBLDataNode *LogicUserDefStruct::ref(const char *name)
 	return fetch(name);
 }
 
+
+const char *LogicUserDefStruct::getName(int index)
+{
+	if (index < m_members.size()){
+		return m_members[index].m_name;
+	}
+	return NULL;
+}
+
 DBLDataNode* LogicUserDefStruct::fetch(const char *name)
 {
 	param_vct_t::iterator it ;

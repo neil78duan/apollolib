@@ -549,6 +549,7 @@ APOLLO_SCRIPT_API_DEF(apollo_func_read_msg, "读取消息(int:数据类型)")
 	return true;
 }
 
+
 //send message api
 //apollo_func_read_userData_from_msg(msg_stream, data_name )
 static bool _get_format_type(LogicParserEngine*parser, const char *typeName, DBLDataNode &type)

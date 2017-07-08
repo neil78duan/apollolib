@@ -871,7 +871,8 @@ int LogicParserEngine::_baseCallScript(runningStack *stack)
 				}
 				if (!m_registorFlag)	{
 					nd_logerror("datatype transfer error : read type or name from stream error\n");
-					m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
+					m_sys_errno = LOGIC_ERR_VARIANT_NOT_EXIST;
+					//m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
 				}
 				break;
 			case E_OP_MAKE_USER_DATA:

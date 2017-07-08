@@ -39,6 +39,7 @@ static int _readMsgToUserDef(DBLDataNode &data, NDIStreamMsg &inmsg)
 		DBLDataNode *p = pUserData->ref(i);
 		nd_assert(p);
 		if (0 != logicDataRead(*p, inmsg)){
+			nd_logerror("msgtoUserDef: read %s error\n", pUserData->getName(i));
 			return -1;
 		}
 	}
@@ -79,6 +80,8 @@ int logicDataWrite(DBLDataNode &data, NDOStreamMsg &omsg)
 			ret += logicDataWrite(subdata, omsg);
 		}
 		break;
+	case OT_ORG_STREAM:
+		return omsg.WriteStream((char*)data.GetBinary(), data.GetBinarySize());
 	case OT_BINARY_DATA:
 		return omsg.WriteBin(data.GetBinary(), data.GetBinarySize());
 
@@ -108,6 +111,8 @@ int logicDataRead(DBLDataNode &data, NDIStreamMsg &inmsg)
 	int ret = 0;
 	DBL_ELEMENT_TYPE type = data.GetDataType();
 	DBL_ELEMENT_TYPE sub_type;
+
+	NDUINT8 buf[4096];
 
 #define _READ_FROM_STREAM(_read_type, _msg, _data,_writeType) do { \
 	_read_type a = 0;					\
@@ -145,7 +150,6 @@ int logicDataRead(DBLDataNode &data, NDIStreamMsg &inmsg)
 		return _readMsgToUserDef(data, inmsg);
 	case OT_STRING:
 	{
-		NDUINT8 buf[4096];
 		buf[0] = 0;
 		size_t len = inmsg.Read(buf,size_t(buf) );
 		if (len > sizeof(buf))   {
@@ -177,15 +181,26 @@ int logicDataRead(DBLDataNode &data, NDIStreamMsg &inmsg)
 	}
 
 		break;
+
+	case OT_ORG_STREAM:
+	{
+		buf[0] = 0;
+		size_t len = inmsg.ReadLeftStream((char*)buf, size_t(buf));
+		if (len > sizeof(buf))   {
+			return -1;
+		}
+		data.InitSet((void*)buf, len, type);
+	}
+	break;
+
 	case OT_BINARY_DATA:
 	{
-		NDUINT8 buf[0x10000];
 		buf[0] = 0;
 		size_t len = inmsg.ReadBin((void*)buf, size_t(buf));
 		if (len > sizeof(buf))   {
 			return -1;
 		}
-		data.InitSet((void*)buf, len,OT_BINARY_DATA);
+		data.InitSet((void*)buf, len,type);
 	}
 	break;
 	case  OT_ARRAY:
