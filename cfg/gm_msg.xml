@@ -360,7 +360,11 @@
 		<data name="补偿多少" kinds="numeral" param="1">1</data>
 		<data name="物品编号" kinds="numeral" param="0">30501</data>
 		<data name="物品个数" kinds="numeral" param="4">1</data>
+<<<<<<< HEAD
 		<data name="是否隐藏" kinds="numeral" param="3">0</data>
+=======
+		<data name="是否隐藏" kinds="numeral" param="3">1</data>
+>>>>>>> 2a616946904a2f0dc5eb9cc0edbe684f898e094a
 	</message>
 	<message name="GM_获取玩家日志" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0" minId="22">0</msgid>
