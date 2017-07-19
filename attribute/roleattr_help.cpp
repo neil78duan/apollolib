@@ -104,7 +104,7 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 {
 	const char *attrmax[ROLE_ATTR_CAPACITY][2] = { 0 };
 	const char *pfields[] = { "id", "name", "formula", "save_db", "sync", "min_val", "max_val", 
-		"client_change", "real_name", "forBuilding", "affect_buildings", "forRole", "affect_card", "forCard", "showInGuild"};
+		"client_change", "real_name", "forBuilding", "affect_buildings", "forRole", "affect_card", "forCard", "showInGuild","save_log"};
 	
 	m_wa_num = 0 ;
 	role_attr_description *pwa_desc ;
@@ -155,6 +155,7 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 		pwa_desc->isAffectCard = cursor[12].GetInt();
 		pwa_desc->forCard = cursor[13].GetInt();
 		pwa_desc->showInGuild = cursor[14].GetInt();
+		pwa_desc->islog = cursor[15].GetInt();
 		//pwa_desc->issyncai = cursor[7].GetInt();
 
 		pwa_desc->wa_id = (attrid_t ) aid ;
@@ -515,6 +516,17 @@ bool RoleAttrHelper::check_save(attrid_t wa_id)
 		return m_wahelper_bufs[wa_id].issave? true :false ;
 	}
 	return false ;
+
+}
+bool RoleAttrHelper::check_log(attrid_t wa_id)
+{
+	if (wa_id < (attrid_t)m_wa_num){
+		if (m_wahelper_bufs[wa_id].wa_id == INVALID_ATTR_ID) {
+			return false;
+		}
+		return m_wahelper_bufs[wa_id].islog ? true : false;
+	}
+	return false;
 
 }
 

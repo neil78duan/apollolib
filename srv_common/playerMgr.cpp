@@ -81,7 +81,7 @@ NDUINT16 PlayerMgr::GetSessionID(account_index_t playerid)
 }
 
 
-int PlayerMgr::Send(account_index_t playerid, nd_usermsghdr_t *msghdr, bool encrypt ) 
+int PlayerMgr::Send(account_index_t playerid, nd_usermsghdr_t *msghdr, bool encrypt, bool isSaved)
 {
 	ND_TRACE_FUNC() ;
 	int ret = -1 ;
@@ -92,18 +92,18 @@ int PlayerMgr::Send(account_index_t playerid, nd_usermsghdr_t *msghdr, bool encr
 		ret = nd_send_toclient_ex(session_id, msghdr, inst->GetDeftListener()->GetHandle(),encrypt?1:0) ; 
 	}
 	else {
-		ret = wrapToWorld(msghdr, ND_MAIN_ID_SYS, ND_MSG_SYS_DIRECTLY_TO_CLIENT_WRAPPER, playerid) ;
+		ret = wrapToWorld(msghdr, ND_MAIN_ID_SYS, ND_MSG_SYS_DIRECTLY_TO_CLIENT_WRAPPER, playerid,encrypt,isSaved) ;
 	}
 	return ret ;
 }
 
-int PlayerMgr::Send(account_index_t playerid, NDOStreamMsg &omsg, bool encrypt ) 
+int PlayerMgr::Send(account_index_t playerid, NDOStreamMsg &omsg, bool encrypt, bool isSaved)
 {
 	ND_TRACE_FUNC() ;
-	return Send(playerid,&omsg.GetMsgAddr()->msg_hdr,encrypt);
+	return Send(playerid,&omsg.GetMsgAddr()->msg_hdr,encrypt,isSaved);
 }
 
-int PlayerMgr::CallMsgProc(account_index_t playerid,nd_usermsghdr_t *msghdr)
+int PlayerMgr::CallMsgProc(account_index_t playerid, nd_usermsghdr_t *msghdr, bool isSaved )
 {
 	ND_TRACE_FUNC() ;
 	if (playerid==0) {
@@ -118,15 +118,15 @@ int PlayerMgr::CallMsgProc(account_index_t playerid,nd_usermsghdr_t *msghdr)
 		ret = nd_netmsg_handle(session_id, msghdr, inst->GetDeftListener()->GetHandle()) ; 
 	}
 	else {
-		ret = wrapToWorld(msghdr, ND_MAIN_ID_SYS, ND_MSG_SYS_CALL_SESSION_MSGPROC_WRAPPER, playerid) ;
+		ret = wrapToWorld(msghdr, ND_MAIN_ID_SYS, ND_MSG_SYS_CALL_SESSION_MSGPROC_WRAPPER, playerid,false,isSaved) ;
 	}
 	return ret ;
 }
 
-int PlayerMgr::CallMsgProc(account_index_t playerid,NDOStreamMsg &omsg)
+int PlayerMgr::CallMsgProc(account_index_t playerid, NDOStreamMsg &omsg, bool isSaved)
 {
 	ND_TRACE_FUNC() ;
-	return CallMsgProc( playerid,&omsg.GetMsgAddr()->msg_hdr) ;
+	return CallMsgProc( playerid,&omsg.GetMsgAddr()->msg_hdr,isSaved) ;
 }
 
 int PlayerMgr::BroadCastInHost(nd_usermsghdr_t *msghdr,bool encrypt)
@@ -170,7 +170,7 @@ int PlayerMgr::CallMsgProcInWorld(nd_usermsghdr_t *msghdr)
 	return 0;
 }
 
-int PlayerMgr::wrapToWorld(nd_usermsghdr_t *msg, int wrap_maxID, int wrap_minID, NDUINT32 playerID, bool ecnrypt ) 
+int PlayerMgr::wrapToWorld(nd_usermsghdr_t *msg, int wrap_maxID, int wrap_minID, NDUINT32 playerID , bool ecnrypt, bool isSaved)
 {
 	ND_TRACE_FUNC() ;
 	NDUINT16 wrapId = ND_MAKE_WORD(wrap_maxID, wrap_minID);
@@ -182,6 +182,7 @@ int PlayerMgr::wrapToWorld(nd_usermsghdr_t *msg, int wrap_maxID, int wrap_minID,
 	
 	omsg.Write(playerID) ;
 	omsg.Write((NDUINT8)(ecnrypt ? 1: 0)) ;
+	omsg.Write((NDUINT8)(isSaved ? 1 : 0));
 	omsg.WriteBin(msg, size) ;	
 	nd_logdebug("using (%d,%d)  wrap message (%d, %d) length =%d \n",  wrap_maxID, wrap_minID, ND_USERMSG_MAXID(msg),ND_USERMSG_MINID(msg),ND_USERMSG_LEN(msg) );
 #ifdef USE_SOCIAL_SYNC_MESSAGE

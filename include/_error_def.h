@@ -126,4 +126,6 @@ ErrorElement(ESERVER_ERR_PLAYER_FORCE_QUIT, "玩家强制退出"),
 ErrorElement(ESERVER_ERR_TIME_OUT, "你用了太多的时间"), 
 ErrorElement(ESERVER_ERR_NO_NEED_CLEAR_CD, "该物品不需要秒CD"),
 
+ErrorElement(ESERVER_ERR_STOVE_TIME, "合成时间未到"),
+
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

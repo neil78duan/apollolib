@@ -1,9 +1,9 @@
 {
-    "port":8080,
+    "port":8000,
     "liveUpdateDir":"./uploadversion",
     
     "openGMTool": "yes" ,
-    "gmtoolport": 8000,
+    "gmtoolport": 8080,
     "gm_reliable_ip":["127.0.0.1", "0.0.0.0"],
 	"my_domain_name": "http://localhost",
 

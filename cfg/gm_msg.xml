@@ -13,7 +13,7 @@
 	</message>
 	<message name="购买普通物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="8" minId="0">0</msgid>
-		<data name="商品编号" kinds="numeral" param="0">2016</data>
+		<data name="商品编号" kinds="numeral" param="0">2006</data>
 		<data name="数量" kinds="numeral" param="4">1</data>
 	</message>
 	<message name="查看商店" expand="yes" delete="no">
@@ -110,7 +110,7 @@
 	</message>
 	<message name="新建建筑" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="4" minId="0">0</msgid>
-		<data name="建筑类型ID" kinds="numeral" param="0">19001</data>
+		<data name="建筑类型ID" kinds="numeral" param="0">11001</data>
 		<data name="坐标X" kinds="numeral" param="4">40</data>
 		<data name="坐标X" kinds="numeral" param="4">200</data>
 	</message>
@@ -150,11 +150,11 @@
 	<message name="防守模式领取奖励" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="4" minId="0x22">0</msgid>
 		<data name="矿产ID" kinds="numeral" param="0">19001</data>
-		<data name="防守ID" kinds="numeral" param="4">1</data>
+		<data name="防守ID" kinds="numeral" param="4">2</data>
 	</message>
 	<message name="熔炉取物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="40">0</msgid>
-		<data name="物品ID" kinds="numeral" param="0">1718037</data>
+		<data name="物品ID" kinds="numeral" param="0">40000</data>
 	</message>
 	<message name="个人世界宝箱领取" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="3" minId="0x25">0</msgid>
@@ -231,6 +231,8 @@
 	</message>
 	<message name="重置天赋" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0x0c" minId="0x04">0</msgid>
+		<msgid kinds="hide" maxId="0x0c" minId="0x05">0</msgid>
+		<msgid kinds="hide" maxId="0x0c" minId="0x04">0</msgid>
 		<data name="天赋ID" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="开宝箱" expand="yes" delete="no">
@@ -239,7 +241,16 @@
 	</message>
 	<message name="合成物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="30">0</msgid>
-		<data name="物品ID" kinds="numeral" param="4">42005</data>
+		<data name="物品ID" kinds="numeral" param="4">40000</data>
+	</message>
+	<message name="取消合成物品" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="6" minId="44">0</msgid>
+		<data name="物品ID" kinds="numeral" param="0">1743936</data>
+	</message>
+	<message name="分解物品" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="6" minId="32">0</msgid>
+		<data name="物品ID" kinds="numeral" param="4">1</data>
+		<data name="物品ID" kinds="numeral" param="0">42051</data>
 	</message>
 	<message name="使用物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="6">0</msgid>
@@ -259,6 +270,13 @@
 	</message>
 	<message name="读邮件" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="14">0</msgid>
+	</message>
+	<message name="发送聊天消息" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="6" minId="46">0</msgid>
+		<data name="发送者" kinds="numeral" param="0">0</data>
+		<data name="被发送者" kinds="numeral" param="0">78</data>
+		<data name="类型" kinds="numeral" param="3">0</data>
+		<data name="内容" kinds="string" param="2">地方v</data>
 	</message>
 	<message name="GM_关服" expand="yes" delete="no" need_confirm="yes">
 		<msgid kinds="hide">1794</msgid>
@@ -288,8 +306,8 @@
 	</message>
 	<message name="GM_加物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="6">0</msgid>
-		<data name="物品编号" kinds="numeral" param="0">42006</data>
-		<data name="数量" kinds="numeral" param="0">10</data>
+		<data name="物品编号" kinds="numeral" param="0">31101</data>
+		<data name="数量" kinds="numeral" param="0">100</data>
 	</message>
 	<message name="GM_增加卡牌" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="7">0</msgid>
@@ -328,9 +346,9 @@
 		<data name="属性个数" kinds="hide" param="4">1</data>
 		<data name="补偿类型" kinds="key_value" key="游戏币,钻石,竞技场币,上古之魂" value="2,3,4,5" param="3">2</data>
 		<data name="补偿多少" kinds="numeral" param="1">1</data>
-		<data name="物品个数" kinds="hide" param="4">1</data>
 		<data name="物品编号" kinds="numeral" param="0">30501</data>
 		<data name="物品个数" kinds="numeral" param="4">1</data>
+		<data name="是否隐藏" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="GM_获取玩家日志" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0" minId="22">0</msgid>
