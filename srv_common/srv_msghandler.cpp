@@ -206,7 +206,7 @@ MSG_ENTRY_INSTANCE(resend_playermsg_to_world_handler)
 	NDIStreamMsg inmsg(msg) ;
 	NDOStreamMsg omsg(inmsg.MsgMaxid(), inmsg.MsgMinid()) ;
 	
-	NDSession *pSession =  NDGetSession(nethandle) ;
+	NDSession *pSession = (NDSession *) NDGetSession(nethandle);
 	
 	omsg.Write(pSession->GetSessionID()) ;
 	omsg.Write((NDUINT32)pSession->GetID()) ;
@@ -256,7 +256,7 @@ MSG_ENTRY_INSTANCE(sys_get_error_desc)
 	NDIStreamMsg inmsg(msg);
 	NDOStreamMsg omsg(inmsg.MsgMaxid(), inmsg.MsgMinid());
 
-	NDSession *pSession = NDGetSession(nethandle);
+	NDSession *pSession = (NDSession *) NDGetSession(nethandle);
 
 	NDUINT32 errorId = 0 ;
 

@@ -344,16 +344,21 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 	char buf_toUser_func[4096];
 	char buf_fromUser_func[4096];
 
+	char buf_toJson_func[4096];
+
 	char *pReadStream = buf_read_func;
 	char *pWriteStream = buf_write_func ;
 	char *pTouserStream = buf_toUser_func;
 	char *pFromuserStream = buf_fromUser_func;
+
+	char *pToJsonStream = buf_toJson_func;
 
 	size_t read_size = sizeof(buf_read_func);
 	size_t write_size = sizeof(buf_write_func);
 
 	size_t toUser_size = sizeof(buf_toUser_func);
 	size_t fromUser_size = sizeof(buf_fromUser_func);
+	size_t toJson_size = sizeof(buf_toJson_func);
 
 	int subNodes = ndxml_getsub_num(sub) ;
 	for (int n=0; n<subNodes; ++n) {
@@ -366,6 +371,13 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 		}
 		const char *pArray = ndxml_getattr_val(node1,"isArray") ;
 		const char *pValName = ndxml_getattr_val(node1, "name") ;
+
+// 		if (is_base_type(pType)) {
+// 			int size = snprintf(pToJsonStream, toJson_size, "\t\tJSON_NODE_NEW_LINE(p, outSize);\n");
+// 			pToJsonStream += size;
+// 			toJson_size -= size;
+// 		}
+
 		if (pArray && pArray[0] && pArray[0]=='1') {
 			
 			if (bIsString) {
@@ -391,6 +403,12 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 				size = snprintf(pFromuserStream, fromUser_size, "\t\tFROM_USER_DEF_TEXT(paramUserData, %s, paramInputData, %s);\n", pValName, ndxml_getattr_val(node1, "arrayMarco"));
 				pFromuserStream += size;
 				fromUser_size -= size;
+
+				//to json char *pToJsonStream = buf_toJson_func; 		size_t PrintJson(char *buf, size_t bufsize, const char *name, NDUINT8 &data);
+				size = snprintf(pToJsonStream, toJson_size, "\t\tJSON_BASE_PRINT_TOBUF(p, outSize, \"%s\", (const char*)data.%s);\n", pValName, pValName);
+				pToJsonStream += size;
+				toJson_size -= size;
+
 			}
 			else {
 				
@@ -445,6 +463,10 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 					size = snprintf(pFromuserStream, fromUser_size, "\t\tFROM_USER_DEF_BASE_ARR(paramUserData, %s, paramInputData, %s);\n", pValName, ndxml_getattr_val(node1, "arrayMarco"));
 					pFromuserStream += size;
 					fromUser_size -= size;
+
+					size = snprintf(pToJsonStream, toJson_size, "\t\tJSON_BASEARRAY_PRINT_TOBUF(p, outSize, \"%s\", data.%s,data.%sCount);\n", pValName, pValName, pValName);
+					pToJsonStream += size;
+					toJson_size -= size;
 				}
 				else {
 					size = snprintf(pTouserStream, toUser_size, "\t\tTO_USER_DEF_NODE_ARR(paramUserData, %s, paramInputData);\n", pValName);
@@ -454,7 +476,12 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 					size = snprintf(pFromuserStream, fromUser_size, "\t\tFROM_USER_DEF_NODE_ARR(paramUserData, %s, paramInputData, %s);\n", pValName, ndxml_getattr_val(node1, "arrayMarco"));
 					pFromuserStream += size;
 					fromUser_size -= size;
+
+					size = snprintf(pToJsonStream, toJson_size, "\t\tJSON_ARRAY_PRINT_TOBUF(p, outSize, \"%s\", data.%s,data.%sCount);\n", pValName, pValName, pValName);
+					pToJsonStream += size;
+					toJson_size -= size;
 				}
+
 			}
 		}
 		else {
@@ -479,6 +506,10 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 				size = snprintf(pFromuserStream, fromUser_size, "\t\tFROM_USER_DEF_ELE(paramUserData, %s, paramInputData);\n", pValName);
 				pFromuserStream += size;
 				fromUser_size -= size;
+
+				size = snprintf(pToJsonStream, toJson_size, "\t\tJSON_BASE_PRINT_TOBUF(p, outSize, \"%s\", data.%s);\n", pValName, pValName);
+				pToJsonStream += size;
+				toJson_size -= size;
 			}
 			else {
 				size = snprintf(pTouserStream, toUser_size, "\t\tTO_USER_DEF_NODE(paramUserData, %s, paramInputData);\n", pValName);
@@ -488,9 +519,25 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 				size = snprintf(pFromuserStream, fromUser_size, "\t\tFROM_USER_DEF_NODE(paramUserData, %s, paramInputData);\n", pValName);
 				pFromuserStream += size;
 				fromUser_size -= size;
+
+
+				size = snprintf(pToJsonStream, toJson_size, "\t\tJSON_NODE_PRINT_TOBUF(p, outSize, \"%s\", data.%s);\n", pValName, pValName);
+				pToJsonStream += size;
+				toJson_size -= size;
 			}
+
 		}
 		
+		if (n==subNodes-1) {
+			/*int size = snprintf(pToJsonStream, toJson_size, "\t\tJSON_NODE_NEW_LINE(p, outSize);\n");
+			pToJsonStream += size;
+			toJson_size -= size;*/
+		}
+		else {
+			int size = snprintf(pToJsonStream, toJson_size, "\t\tJSON_NODE_INTERVAL(p, outSize);\n");
+			pToJsonStream += size;
+			toJson_size -= size;
+		}
 	}
 	
 	fprintf(pf, "};\n") ;
@@ -504,6 +551,12 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 	fprintf(pf, "int ReadStream(NDIStreamMsg &inmsg,NetMessage::%s &data);\n", pName) ;
 	fprintf(pf, "int WriteStream(NDOStreamMsg &omsg,const NetMessage::%s &data);\n", pName) ;
 	
+	//write json 	size_t PrintJson(char *buf, size_t bufsize, const char *name, const char*data);
+	fprintf(pf, "size_t PrintJson(char *buf, size_t bufsize, const char *, %s &data);\n", pName);
+	fprintf(pfCpp, "\n\tsize_t PrintJson(char *outBuf, size_t outSize, const char *name, %s &data)\n ", pName);	
+	fprintf(pfCpp, "\t{\n\t\tchar *p = outBuf;\n\t\tJSON_NODE_OUT_BEGIN(p,outSize);\n", pName);
+	fprintf(pfCpp, "%s\n\t\tJSON_NODE_OUT_END(p,outSize);\n\t\treturn (p-outBuf); \n\t}\n", buf_toJson_func);
+
 	//write to user-define data paramUserData, %s, paramInputData
 	fprintf(pfCpp, "#ifndef WITHOUT_LOGIC_PARSER\n");
 	fprintf(pfCpp, "\n\tint ToUserDef(LogicUserDefStruct &paramUserData,const NetMessage::%s &paramInputData)\n\t{\n", pName);

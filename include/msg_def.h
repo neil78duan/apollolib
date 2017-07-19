@@ -94,9 +94,14 @@ enum ATLANTIS_SERVER_MSG {
 	SERVER_MSG_CLIENT_SESSION_SYNC,//notify worldserver or social server client session changed after the connector re-connect
 
 	SERVER_MSG_TEST_DISCONNECT1 , //test disconnect between game and world 
-	SERVER_MSG_TEST_DISCONNECT2,//test disconnect between game and social
+	SERVER_MSG_TEST_DISCONNECT2,  //test disconnect between game and social
+	SERVER_MSG_GM_ADD_NOTICE_REQ,	  //test GM to World Msg
+	SERVER_MSG_GM_ADD_NOTICE_ACK,	  //test GM to World Msg
 
-	SERVER_MSG_NUMBER 
+	SERVER_MSG_GM_FORBIDLIST_REQ,	  //test GM to World Msg
+	SERVER_MSG_GM_FORBIDLIST_ACK,	  //test GM to World Msg
+	SERVER_MSG_GM_FORBIDINFO_SYC,	  //test GM to World Msg
+	SERVER_MSG_NUMBER
 };
 // 
 // //role message

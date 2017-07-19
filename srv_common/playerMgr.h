@@ -33,14 +33,14 @@ public:
 	bool Del(roleid_t playerid) ;
 	NDUINT16 GetSessionID(roleid_t playerid) ;
 	
-	int Send(roleid_t playerid, nd_usermsghdr_t *msghdr, bool encrypt = false) ; 
-	int Send(roleid_t playerid, NDOStreamMsg &omsg, bool encrypt = false) ;
+	int Send(roleid_t playerid, nd_usermsghdr_t *msghdr, bool encrypt = false, bool isSaved = false );
+	int Send(roleid_t playerid, NDOStreamMsg &omsg, bool encrypt = false, bool isSaved = false );
 	
 	int BroadCastInHost(nd_usermsghdr_t *msghdr, bool encrypt = false);	
 	int BroadCastInWorld(nd_usermsghdr_t *msghdr, bool encrypt = false);
 	
-	int CallMsgProc(roleid_t playerid,nd_usermsghdr_t *msghdr);
-	int CallMsgProc(roleid_t playerid,NDOStreamMsg &omsg);
+	int CallMsgProc(roleid_t playerid, nd_usermsghdr_t *msghdr, bool isSaved = false);
+	int CallMsgProc(roleid_t playerid, NDOStreamMsg &omsg, bool isSaved = false);
 	
 	int CallMsgProcInHost(nd_usermsghdr_t *msghdr);	
 	int CallMsgProcInWorld(nd_usermsghdr_t *msghdr);
@@ -48,7 +48,7 @@ public:
 	int GetNumOfPlayers(){ return (int)m_player_map.size(); }
 		
 private:
-	int wrapToWorld(nd_usermsghdr_t *msg, int wrap_maxID, int wrap_minID, NDUINT32 playerID, bool ecnrypt = false) ;
+	int wrapToWorld(nd_usermsghdr_t *msg, int wrap_maxID, int wrap_minID, NDUINT32 playerID, bool ecnrypt = false, bool isSaved = false);
 	typedef std::map<account_index_t ,player_node_info> player_online_map;
 	
 	nd_mutex m_lock;

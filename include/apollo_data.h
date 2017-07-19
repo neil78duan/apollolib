@@ -29,7 +29,7 @@
 #define HOST_NAME_SIZE 64
 #define PHONE_NUMBER_SIZE 20
 #define EMAIL_SIZE 100
-#define USER_DATA_SIZE 16384
+#define USER_DATA_SIZE 0x10000
 #define ADDITION_DATA_SIZE 4096
 #define DEVICE_UDID_SIZE 64
 
@@ -50,13 +50,13 @@ enum eGameStat {
 
 enum eServerType {
 	ESERVER_UNKNOW = 0,
-	ESERVER_MANAGER,
-	ESERVER_GAMEHALL,   //游戏大厅
-	ESERVER_GATE,      //游戏入口
-	ESERVER_BATTLE_ROOM, //对战房间
-	ESERVER_SOCIAL,		//SOCIAL SERVER
-	
-	ESERVER_ACCOUNT
+	ESERVER_MANAGER,	// WorldServer
+	ESERVER_GAMEHALL,   // 游戏大厅
+	ESERVER_GATE,		// 游戏入口
+	ESERVER_BATTLE_ROOM,// 对战房间
+	ESERVER_SOCIAL,		// SOCIAL SERVER
+	ESERVER_ACCOUNT,	//
+	ESERVER_GM,			// GM Server节点
 };
 
 enum eCommonDataSyncCmd
@@ -173,6 +173,9 @@ struct userdata_info
 		size = NDMIN( r.size , sizeof(data));
 		memcpy(data, r.data, size) ;
 		return  *this ;
+	}
+	size_t capacity() {
+		return USER_DATA_SIZE;
 	}
 	void setData(void *indata, size_t len)
 	{

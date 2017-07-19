@@ -2254,7 +2254,11 @@ int DBLDataNode::Print(logic_print print_func, void *pf) const
 		if (IS_OUT_LUA()) {
 			const char *ptext = GetText();
 			if (ptext && *ptext) {
-				if (ndstricmp(ptext, "true") == 0 ) {
+				if ( *ptext == '\"') {
+					ret = print_func(pf, "%s", ptext);
+					break; 
+				}
+				else if (ndstricmp(ptext, "true") == 0 ) {
 					ret = print_func(pf, "true", GetBool());
 					break;
 				}
@@ -2307,7 +2311,13 @@ int DBLDataNode::Print(logic_print print_func, void *pf) const
 						ret += node.Print(print_func, pf);
 					}
 					else {
-						ret += print_func(pf, "\"%s\"", GetarrayText(x));
+						const char *ptext = GetarrayText(x);
+						if (*ptext == '\"') {
+							ret += print_func(pf, "%s", ptext);
+						}
+						else {
+							ret += print_func(pf, "\"%s\"", ptext);
+						}
 					}
 				}
 				else {
@@ -3167,6 +3177,12 @@ int dbl_data_copy(const dbl_element_base *input, dbl_element_base *output, DBL_E
 bool _check_array(const char *src)
 {
 	int left = 0, right = 0;
+
+	src = ndstr_first_valid(src);
+	if (*src != _ARRAR_BEGIN_MARK)	{
+		return false;
+	}
+
 	while (*src){
 		char a = *src++;
 		if (a == _ARRAR_BEGIN_MARK)	{
