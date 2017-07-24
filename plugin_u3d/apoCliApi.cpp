@@ -245,7 +245,7 @@ int apoCli_fetchSessionKey(char *outbuf, int bufsize)
 	if (!pLogin)	{
 		return -1;
 	}
-	return pLogin->GetSessionData(outbuf, bufsize);
+	return (int)pLogin->GetSessionData(outbuf, bufsize);
 }
 // 
 // RESULT_T apoCli_TrytoRelogin()
