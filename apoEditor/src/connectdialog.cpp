@@ -197,6 +197,13 @@ void ConnectDialog::onTimeOut()
             //close
             //m_pConn->Close
         }
+		else {
+			LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
+			if (scriptRoot) {
+				parse_arg_list_t arg;
+				scriptRoot->getGlobalParser().eventNtf(APOLLO_EVENT_UPDATE, arg);
+			}
+		}
     }
 
 }
