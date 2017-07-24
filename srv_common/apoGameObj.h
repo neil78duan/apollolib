@@ -1,0 +1,51 @@
+/*  file apoGameObj.h
+ * implemention of apollo logic parser for game 
+ *
+ * create by duan 
+ *
+ * 2017.6.23
+ */
+
+#ifndef _APO_GAMEOBJ_
+#define _APO_GAMEOBJ_
+
+#include "ndapplib/applib.h"
+#include "logic_parser/logicEngineRoot.h"
+#include "logic_parser/dbldata2netstream.h"
+
+class ApoGameObj : public LogicObjectBase
+{
+public:	
+	ApoGameObj();
+	virtual ~ApoGameObj();
+
+	LogicParserEngine *getScriptHandler() { return &m_logicEngine; }
+	bool RunScript(parse_arg_list_t &args, DBLDataNode &result);
+	bool RunScript(const char *script);
+	bool SendScriptEvent(int event_id, int args, ...);
+	bool SendEvent0(int event);
+	bool SendEvent1(int event, const DBLDataNode &val1);
+	int getScriptError() { return m_logicEngine.getErrno(); }
+
+
+	//LogicObjectBase *getObjectMgr(const char* destName);
+	bool getOtherObject(const char*objName, DBLDataNode &val);
+
+	typedef std::map<std::string, LogicObjectBase*> objectMgr_vct;
+protected:
+	
+	//objectMgr_vct m_objectMgr;
+	LogicParserEngine m_logicEngine;
+};
+
+
+bool apollo_func_machine_version(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+
+extern const char *getGameDataFile();
+extern const char *getGameScriptFile();
+extern userDefineDataType_map_t &get_msgFormat();
+
+
+#endif 
+
+
