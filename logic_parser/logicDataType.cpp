@@ -2852,6 +2852,8 @@ int _dbl_data_2binStream(dbl_element_base *indata, DBL_ELEMENT_TYPE etype, DBL_E
 			}
 		}
 		break;
+	default:
+			break;
 	}
 	return 0;
 #undef _stream_func
