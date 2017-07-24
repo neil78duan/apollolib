@@ -1444,8 +1444,8 @@ int LogicParserEngine::_getValue(runningStack *stack, char *pCmdStream, DBLDataN
 		return outValue.ReadStream(pCmdStream,size, m_cmdByteOrder);
 	}
 
-	m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
-	return -1;
+	//m_sys_errno = (int)LOGIC_ERR_INPUT_INSTRUCT;
+	//return -1;
 }
 
 // get user define from text , format : userDataType(arg,....) ;

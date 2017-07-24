@@ -30,8 +30,11 @@ public class apoClient {
 	private static extern  void apoCli_destroy();    
     
     [DllImport (APO_DLL_NAME)]
-	private static extern  RESULT_T apoCli_open(string host, int port, string dev_udid); 
+	private static extern  RESULT_T apoCli_open(string host, int port, string dev_udid);
 
+
+    [DllImport(APO_DLL_NAME)]
+    private static extern void apoCli_resetConnector();
     
     [DllImport (APO_DLL_NAME)]
     private static extern unsafe RESULT_T apoCli_sendMsg(int messageId, IntPtr messageBody, int bodySize);
@@ -52,11 +55,18 @@ public class apoClient {
     [DllImport (APO_DLL_NAME)]
 	public static extern int apoCli_getConnStat(); //0 unconnect ,1 connected, 2 login, 3 ingame ,4 GM
 
-    [DllImport (APO_DLL_NAME)]
-	public static extern  RESULT_T apoCli_ReloginBackground(string host, int port, string dev_udid);
     
     [DllImport (APO_DLL_NAME)]
-	public static extern  RESULT_T apoCli_TrytoRelogin();
+    public static extern unsafe RESULT_T apoCli_ReloginEx(IntPtr sessionData, int sessionSize, bool bReloginOffline);  //relogin without account name and password
+
+    [DllImport (APO_DLL_NAME)]
+    public static extern unsafe int apoCli_fetchSessionKey(IntPtr sessionBuf, int bufsize); //fetch the current session-info when login success
+
+    //[DllImport (APO_DLL_NAME)]
+	//public static extern  RESULT_T apoCli_ReloginBackground(string host, int port, string dev_udid);
+    
+    //[DllImport (APO_DLL_NAME)]
+	//public static extern  RESULT_T apoCli_TrytoRelogin();
 
     [DllImport (APO_DLL_NAME)]
 	public static extern  RESULT_T apoCli_LoginAccount(string account, string passwd);
@@ -64,14 +74,14 @@ public class apoClient {
     [DllImport (APO_DLL_NAME)]
 	public static extern  RESULT_T apoCli_CreateAccount(string userName, string passwd, string phone, string email);
 
-    [DllImport (APO_DLL_NAME)]
-	public static extern  RESULT_T apoCli_testOneKeyLogin(string host, int port, string user, string passwd);
+    //[DllImport (APO_DLL_NAME)]
+	//public static extern  RESULT_T apoCli_testOneKeyLogin(string host, int port, string user, string passwd);
 
     [DllImport (APO_DLL_NAME)]
 	public static extern  void apoCli_Logout();
 
-    [DllImport (APO_DLL_NAME)]
-	public static extern  void apoCli_ClearLoginHistory();
+    //[DllImport (APO_DLL_NAME)]
+	//public static extern  void apoCli_ClearLoginHistory();
 
     [DllImport (APO_DLL_NAME)]
 	public static extern  uint apoCli_GetCurAccId();
@@ -88,11 +98,20 @@ public class apoClient {
 
     private const int accType = 2;
     //private const string sessionFile = Application.persistentDataPath + "/sessionFile.session";
+
+    public uint RoleID
+    {
+        get
+        {
+            return apoCli_GetCurRoleId();
+        }
+    }
    
     public bool Init() 
     {
+        LogManager.Log("begin init....");
+
         string workPath = Application.persistentDataPath;
-        Debug.Log("begin init....");
         return apoCli_init(workPath, workPath);
     }
     
@@ -101,23 +120,13 @@ public class apoClient {
         apoCli_destroy() ;
     }
 
-    public unsafe int Send(int messageId, byte[]body) 
-    {
-        fixed (byte* pAddr = &body[0])
-        {
-            return apoCli_sendMsg(messageId, (IntPtr)pAddr, body.Length);
-        }
-    }
     public unsafe int Send(int messageId, NDMsgStream body) 
     {
-        if (body == null)
+        fixed (byte* pAddr = &body.m_buf[0])
         {
-            Debug.LogError("message body is NULL \n");
-            return -1;
+            return apoCli_sendMsg(messageId, (IntPtr)pAddr, body.ValidLength);
         }
-        return Send(messageId, body.ToArray());
     }
-
     
     public unsafe int Send(int messageId)
     {
@@ -139,6 +148,7 @@ public class apoClient {
         Marshal.FreeHGlobal(bufPtr);
         return res;
     }
+
     unsafe public int Recv(out int messageId, ref NDMsgStream body, int waitMs)
     {
         int MsgId = 0 ;
@@ -149,7 +159,6 @@ public class apoClient {
         if (res > 0)
         {
             body.FromAddr(bufPtr, res);
-            //Marshal.Copy(bufPtr, body, 0, res);
         }
         messageId = MsgId;
         Marshal.FreeHGlobal(bufPtr);
@@ -188,6 +197,7 @@ public class apoClient {
         }
         return apoCli_CreateAccount(user, password, phone, email);
     }
+
     #region for-test-api
     /*
     public bool TestLogin()

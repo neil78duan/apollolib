@@ -52,7 +52,7 @@ enum APOLLO_LOGIN_MSG {
 	LOGIN_MSG_CLIENT_LANGUAGE_INFO, //发送客户的端的时区和语言信息 8bits:timezone + text:language 
 	
 
-	LOGIN_MSG_GET_ROLE_LIST_REQ,//Get role list request : format :numll
+	LOGIN_MSG_GET_ROLE_LIST_REQ,//Get role list request : format :8BITS:isRelogin
 	LOGIN_MSG_GET_ROLE_LIST_ACK, // format : (role id,role1: name + attribte + package)
 
 	LOGIN_MSG_CREATE_ROLE_REQ, //forma: string: rolename
@@ -95,12 +95,15 @@ enum ATLANTIS_SERVER_MSG {
 
 	SERVER_MSG_TEST_DISCONNECT1 , //test disconnect between game and world 
 	SERVER_MSG_TEST_DISCONNECT2,  //test disconnect between game and social
-	SERVER_MSG_GM_ADD_NOTICE_REQ,	  //test GM to World Msg
-	SERVER_MSG_GM_ADD_NOTICE_ACK,	  //test GM to World Msg
+	SERVER_MSG_GM_ADD_NOTICE_REQ,	  //gm send notice msg
+	SERVER_MSG_GM_ADD_NOTICE_ACK,	  //gm send notice msg ack
 
-	SERVER_MSG_GM_FORBIDLIST_REQ,	  //test GM to World Msg
-	SERVER_MSG_GM_FORBIDLIST_ACK,	  //test GM to World Msg
-	SERVER_MSG_GM_FORBIDINFO_SYC,	  //test GM to World Msg
+	SERVER_MSG_GM_FORBIDLIST_REQ,	  //gm get forbidlist req
+	SERVER_MSG_GM_FORBIDLIST_ACK,	  //gm get forbidlist ack
+	SERVER_MSG_GM_FORBIDINFO_SYC,	  //gm forbidinfo syc
+	SERVER_MSG_GM_SENDMAIL,			  //gm send mail
+	SERVER_MSG_GM_SENDCHAT,		      //gm send chat
+	SERVER_MSG_GM_OPER_ACK,			  //gm common aper ack
 	SERVER_MSG_NUMBER
 };
 // 

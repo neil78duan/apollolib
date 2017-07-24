@@ -141,7 +141,7 @@ static inline void _tryto_change_order_short(NDUINT16 &val)
 		val = nd_order_change_short(val);
 	}
 }
-
+/*
 static inline void _tryto_change_order_long(NDUINT32 &val)
 {
 	if (DBL_CHECK_CHANGE_BYTE_ORDER()) {
@@ -155,7 +155,7 @@ static inline void _tryto_change_order_long64(NDUINT64 &val)
 		val = nd_order_change_longlong(val);
 	}
 }
-
+*/
 #ifdef malloc 
 #undef malloc
 #define malloc(size) nd_pool_alloc( DBLDatabase::m_pool,size) 
@@ -1018,7 +1018,7 @@ int DBLDatabase::_loadText(const char *datapath, const char *list_file, int enco
 	}
 	filename[0] = 0;
 	while (fgets(filename, sizeof(filename), pf)) {
-		if (filename){
+		if (filename[0]){
 			const char *p = ndstr_first_valid(filename);
 			if (!p || !*p)	{
 				continue; 

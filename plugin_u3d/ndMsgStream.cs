@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 
@@ -12,69 +11,53 @@ using System.Net;
 
 namespace NetMessage
 {
-
-    public class binaryData
+    public struct NDMsgStream
     {
-        private byte[] m_data;
+        // Default buffer length
+        public const int BUF_LENGTH = 0x10000;
 
-        public binaryData()
-        {
-            m_data = new byte[4096];
+        static byte[] _m_buf = new byte[BUF_LENGTH];
+        public byte[] m_buf 
+        { 
+            get { return _m_buf; }
+        }
+        private int m_readIndex;
+        private int m_writeIndex;
 
-        }
-        public  void Read(NDMsgStream dataStream) 
+        public int ValidLength 
         {
-            dataStream.ReadBuf(out m_data);
-        }
-        public  int Write(NDMsgStream dataStream) 
-        {
-            return dataStream.WriteBuf(m_data);
-        }
-    }
-    public class NDMsgStream
-    {
-		//private MemoryStream m_buf;
-        private byte[] m_buf;
-        private int m_readIndex = 0;
-        private int m_writeIndex = 0;
-
-        public NDMsgStream()
-        {
-            //m_buf = new MemoryStream();
-            m_buf = new byte[0x1];
+            get { return m_writeIndex; }
         }
 
-        public NDMsgStream(int capacity)
+        public NDMsgStream(int capacity = BUF_LENGTH)
         {
-            //m_buf = new MemoryStream();
-            m_buf = new byte[capacity];
+            m_readIndex = 0;
+            m_writeIndex = 0;
         }
+
         public byte[] ToArray()
         {
             return m_buf;
         }
+
         //init from socket
         public int FromArray(byte[] data)
         {
             m_readIndex = 0;
-            m_buf = data;
+            data.CopyTo(_m_buf, 0);
             return data.Length;
         }
+
         public int FromAddr(IntPtr streamBuf, int size)
         {
             m_readIndex = 0;
-            m_buf = new byte[size];
             Marshal.Copy(streamBuf, m_buf, 0, size);
             return size;
         }
 
-       
-
         public int WriteUint8(byte data)
         {
             m_buf[m_writeIndex++] = data;
-
-            //m_buf.WriteByte(data);
             return 1;
         }
 
@@ -143,7 +126,7 @@ namespace NetMessage
         {
             byte[] byteArray = Encoding.ASCII.GetBytes(data);
             WriteUint16((ushort)(byteArray.Length));
-            myWrite(byteArray, (int)m_buf.Length);
+            myWrite(byteArray, (int)byteArray.Length);
             m_buf[m_writeIndex++] = 0x7f;
             //m_buf.Write(byteArray, (int)m_buf.Length, byteArray.Length);
             //m_buf.WriteByte(0x7f);

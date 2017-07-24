@@ -973,7 +973,7 @@ bool apollo_time_func(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataN
 				int year = (int)(deta / 12);
 				int month = deta % 12;
 
-				if (E_APOLLO_TIME_OP_ADD) {
+				if (E_APOLLO_TIME_OP_ADD==opType) {
 					_tm1.tm_mon += month;
 					_tm1.tm_year += year;
 				}
@@ -1011,7 +1011,7 @@ bool apollo_time_func(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataN
 		{
 			tm _tm1;
 			if (localtime_r(&orgtime, &_tm1)) {
-				if (E_APOLLO_TIME_OP_ADD) {
+				if (E_APOLLO_TIME_OP_ADD==opType) {
 					_tm1.tm_year += (int)deta;
 				}
 				else {

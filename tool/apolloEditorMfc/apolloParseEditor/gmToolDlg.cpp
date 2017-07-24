@@ -268,6 +268,7 @@ void gmToolDlg::OnBnClickedButtonLogin()
 	if (m_pConn){
 
 		KillTimer(1);
+		KillTimer(2);
 		pBt->SetWindowText(_T("µÇÂ¼"));
 		if (m_pConn->CheckValid())	{
 			m_pConn->Close();
@@ -339,6 +340,7 @@ void gmToolDlg::OnBnClickedButtonLogin()
 
 		
 		SetTimer(1, 100, 0);
+		SetTimer(2, 1000, 0);
 		pBt->SetWindowText(_T("µÇ³ö"));
 
 		pBTgm->EnableWindow(TRUE);
@@ -593,6 +595,7 @@ int gmToolDlg::SelOrCreateRole()
 	//get role list
 
 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ);
+	omsg.Write((NDUINT8)0);
 	nd_handle h = m_pConn->GetHandle();
 	nd_usermsgbuf_t recv_msg;
 
@@ -725,6 +728,13 @@ void gmToolDlg::OnTimer(UINT_PTR nIDEvent)
 			if (-1==ret){
 				OnBnClickedButtonLogin();
 			}
+		}
+	}
+	else if (2 == nIDEvent) {
+		LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
+		if (scriptRoot) {
+			parse_arg_list_t arg;
+			scriptRoot->getGlobalParser().eventNtf(APOLLO_EVENT_UPDATE, arg);
 		}
 	}
 	CDialog::OnTimer(nIDEvent);

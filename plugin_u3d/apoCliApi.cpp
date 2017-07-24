@@ -52,6 +52,17 @@ void* get_NDNetObject()
 	return NULL;
 }
 
+
+void apoCli_resetConnector()
+{
+	ApoClient *apoCli = ApoClient::getInstant();
+	if (apoCli && apoCli->getConn())	{
+		nd_handle h = apoCli->getConn();
+		nd_connector_close(h, 0);
+		nd_connector_set_crypt(h, NULL, 0);
+	}
+}
+
 RESULT_T apoCli_send(char *bufferFram, int frameSize)
 {
 	ApoClient *apoCli = ApoClient::getInstant();
@@ -205,25 +216,47 @@ RESULT_T apoCli_open(const char *host, int port, const char *dev_udid)
 
 	return apoCli->Open(host, port, dev_udid);
 }
+// 
+// RESULT_T apoCli_ReloginBackground()
+// {
+// 	ApoClient *apoCli = ApoClient::getInstant();
+// 	if (!apoCli)	{
+// 		return NDSYS_ERR_NOT_INIT;
+// 	}
+// 	return apoCli->ReloginBackground();
+// }
 
-RESULT_T apoCli_ReloginBackground(const char *host, int port, const char *dev_udid)
+RESULT_T apoCli_ReloginEx(const char *sessionData, int sessionSize, bool bReloginOffline)
 {
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (!apoCli)	{
 		return NDSYS_ERR_NOT_INIT;
 	}
-	return apoCli->ReloginBackground(host, port, dev_udid);
+	return apoCli->ReloginEx((void*)sessionData,sessionSize,bReloginOffline);
 }
 
-RESULT_T apoCli_TrytoRelogin()
+int apoCli_fetchSessionKey(char *outbuf, int bufsize)
 {
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (!apoCli)	{
-		return NDSYS_ERR_NOT_INIT;
+		return -1;
 	}
-	return apoCli->TrytoRelogin();
-
+	LoginBase *pLogin = apoCli->getLoginObj();
+	if (!pLogin)	{
+		return -1;
+	}
+	return pLogin->GetSessionData(outbuf, bufsize);
 }
+// 
+// RESULT_T apoCli_TrytoRelogin()
+// {
+// 	ApoClient *apoCli = ApoClient::getInstant();
+// 	if (!apoCli)	{
+// 		return NDSYS_ERR_NOT_INIT;
+// 	}
+// 	return apoCli->TrytoRelogin();
+// 
+// }
 RESULT_T apoCli_LoginAccount(const char *account, const char *passwd)
 {
 	ApoClient *apoCli = ApoClient::getInstant();
@@ -241,15 +274,15 @@ RESULT_T apoCli_CreateAccount(const char *userName, const char *passwd, const ch
 	}
 	return apoCli->CreateAccount(userName,passwd,phone,email);
 }
-RESULT_T apoCli_testOneKeyLogin(const char *host, int port, const char *user, const char *passwd)
-{
-	ApoClient *apoCli = ApoClient::getInstant();
-	if (!apoCli)	{
-		return NDSYS_ERR_NOT_INIT;
-	}
-	return apoCli->testOneKeyLogin(host, port, user, passwd);
-
-}
+// RESULT_T apoCli_testOneKeyLogin(const char *host, int port, const char *user, const char *passwd)
+// {
+// 	ApoClient *apoCli = ApoClient::getInstant();
+// 	if (!apoCli)	{
+// 		return NDSYS_ERR_NOT_INIT;
+// 	}
+// 	return apoCli->testOneKeyLogin(host, port, user, passwd);
+// 
+// }
 void apoCli_Logout()
 {
 

@@ -58,9 +58,9 @@ public:
 	////
 	RESULT_T Open(const char *host, int port, const char *dev_udid);
 
-	RESULT_T ReloginBackground(const char *host, int port, const char *dev_udid);
-
-	RESULT_T TrytoRelogin();
+	RESULT_T ReloginBackground();
+	RESULT_T ReloginEx(void *session, size_t sessionSize, bool bReloginOffline);
+	
 	RESULT_T LoginAccount(const char *account, const char *passwd);
 
 	RESULT_T CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email);
@@ -89,6 +89,8 @@ public:
 	void setServerTime(time_t srvTime);
 
 private:
+	RESULT_T TrytoRelogin();
+	RESULT_T TrytoReloginEx(void *session, size_t sessionSize);
 	void onInit();
 	void onLogin();
 	RESULT_T _connectHost(const char *host, int port) ;
@@ -108,6 +110,7 @@ private:
 	NDUINT32 m_accId;
 	roleid_t m_roleId;
 	int m_port;
+	NDUINT8 m_isRelogin;		// 0 NEW LOGIN, 1 relogin after offline
 	//NDIConn *m_pconn;
 	nd_handle m_pconn;
 	LoginBase *m_login;
