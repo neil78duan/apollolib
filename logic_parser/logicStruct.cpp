@@ -81,12 +81,12 @@ int LogicUserDefStruct::ToStream(void *buf, size_t bufsize, int byteOrder ) cons
 
 	param_vct_t::const_iterator it = m_members.begin();
 	for (; it != m_members.end(); it++){
-		NDUINT16 len = (NDUINT16) strlen(it->m_name);
+		int len = (int) strlen(it->m_name);
 		if (len >= bufsize)	{
 			return -1;
 		}
 		
-		p = lp_write_stream(p, len, byteOrder);
+		p = lp_write_stream(p, (NDUINT16)len, byteOrder);
 		bufsize -= 2;
 
 		strncpy(p, it->m_name, bufsize );

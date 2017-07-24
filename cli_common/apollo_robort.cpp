@@ -212,6 +212,7 @@ int ApolloRobort::_selOrCreateRole(const char *roleName)
 	//get role list
 
 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ);
+	omsg.Write((NDUINT8)0);
 	nd_handle h = m_pConn->GetHandle();
 	nd_usermsgbuf_t recv_msg;
 

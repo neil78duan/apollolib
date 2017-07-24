@@ -37,22 +37,29 @@ typedef int  APO_RESULT_T;
 
 
 APOLLO_CLI_API bool apoCli_init(const char *workingPath, const char *logPath);
+
 APOLLO_CLI_API void apoCli_destroy();
 APOLLO_CLI_API void* get_NDNetObject();
+APOLLO_CLI_API void apoCli_resetConnector();
 
 APOLLO_CLI_API APO_RESULT_T apoCli_open(const char *host, int port, const char *dev_udid);
 APOLLO_CLI_API APO_RESULT_T apoCli_send(char *bufferFram, int frameSize);
 APOLLO_CLI_API APO_RESULT_T apoCli_sendMsg(int messageId, void *messageBody, int bodySize);
+
 APOLLO_CLI_API int apoCli_recv(char *bufferFram, int bufsize, int timeOutMS);
 APOLLO_CLI_API int apoCli_recvMsg(int *messageId, char *msgBody, int bufsize, int timeOutMS);
 
 APOLLO_CLI_API int apoCli_getConnStat(); //0 unconnect ,1 connected, 2 login, 3 ingame ,4 GM
 
-APOLLO_CLI_API APO_RESULT_T apoCli_ReloginBackground(const char *host, int port, const char *dev_udid);
-APOLLO_CLI_API APO_RESULT_T apoCli_TrytoRelogin();
+//APOLLO_CLI_API APO_RESULT_T apoCli_ReloginBackground();
+
+APOLLO_CLI_API APO_RESULT_T apoCli_ReloginEx(const char *sessionData, int sessionSize, bool bReloginOffline);
+APOLLO_CLI_API int apoCli_fetchSessionKey( char *outBuf, int bufsize); //return session key size
+
+//APOLLO_CLI_API APO_RESULT_T apoCli_TrytoRelogin();
 APOLLO_CLI_API APO_RESULT_T apoCli_LoginAccount(const char *account, const char *passwd);
 APOLLO_CLI_API APO_RESULT_T apoCli_CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email);
-APOLLO_CLI_API APO_RESULT_T apoCli_testOneKeyLogin(const char *host, int port, const char *user, const char *passwd);
+//APOLLO_CLI_API APO_RESULT_T apoCli_testOneKeyLogin(const char *host, int port, const char *user, const char *passwd);
 APOLLO_CLI_API void apoCli_Logout();
 APOLLO_CLI_API void apoCli_ClearLoginHistory();
 //APOLLO_CLI_API bool apoCli_Update();

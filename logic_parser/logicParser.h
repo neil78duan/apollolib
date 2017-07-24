@@ -194,7 +194,7 @@ enum eLogicSystemError
 };
 
 
-//<type_msg_data_type kinds = "enum" enum_value = "8bits,16bits,32bits,64bits,float, string" / >
+// <type_msg_data_type kinds = "enum" enum_value = "8bits,16bits,32bits,64bits,float, string" / >
 enum eSendMsgDataThype{
 	E_MSG_DATA_INT8,
 	E_MSG_DATA_INT16,

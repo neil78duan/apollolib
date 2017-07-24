@@ -63,7 +63,7 @@ bool logciCompileSetting::setConfigFile(const char *config, int encodeType )
 
 		p = ndxml_getattr_val(sub_set, "size");
 		if (p)	{
-			setnode.size = ndstr_atoi_hex(p);
+			setnode.size = (NDUINT32)ndstr_atoi_hex(p);
 		}
 
 		p = ndxml_getattr_val(sub_set, "datatype");

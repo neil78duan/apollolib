@@ -13,7 +13,7 @@
 	</message>
 	<message name="购买普通物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="8" minId="0">0</msgid>
-		<data name="商品编号" kinds="numeral" param="0">2006</data>
+		<data name="商品编号" kinds="numeral" param="0">2016</data>
 		<data name="数量" kinds="numeral" param="4">1</data>
 	</message>
 	<message name="查看商店" expand="yes" delete="no">
@@ -272,15 +272,21 @@
 		<msgid kinds="hide" maxId="6" minId="14">0</msgid>
 	</message>
 	<message name="领取邮件" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="6" minId="16">0</msgid>
-		<data name="邮件ID" kinds="numeral" param="0">0</data>
+		<msgid kinds="hide" maxId="6" minId="48">0</msgid>
+		<data name="邮件ID" kinds="numeral" param="0">100000019</data>
+	</message>
+	<message name="删除邮件" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="6" minId="50">0</msgid>
+		<data name="数量" kinds="numeral" param="4">1</data>
+		<data name="邮件ID" kinds="numeral" param="0">100000012</data>
+		<data name="邮件ID" kinds="numeral" param="0">100000011</data>
 	</message>
 	<message name="发送聊天消息" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="46">0</msgid>
 		<data name="发送者" kinds="numeral" param="0">0</data>
 		<data name="被发送者" kinds="numeral" param="0">78</data>
 		<data name="类型" kinds="numeral" param="3">2</data>
-		<data name="内容" kinds="string" param="2">地方v</data>
+		<data name="内容" kinds="string" param="2">地方毛泽东</data>
 	</message>
 	<message name="GM_关服" expand="yes" delete="no" need_confirm="yes">
 		<msgid kinds="hide">1794</msgid>
@@ -339,32 +345,38 @@
 		<msgid kinds="hide" maxId="7" minId="10">0</msgid>
 		<data name="发送者" kinds="hide" param="0">0</data>
 		<data name="时间" kinds="hide" param="5">0</data>
+		<data name="类型" kinds="numeral" param="3">1</data>
+		<data name="是否读取" kinds="numeral" param="3">0</data>
+		<data name="是否领取邮件" kinds="numeral" param="3">0</data>
+		<data name="领取时效" kinds="numeral" param="5">60</data>
 		<data name="标题" kinds="string" param="2">3-系统补偿</data>
 		<data name="说明" kinds="string" param="2">补偿测试</data>
-		<data name="属性个数" kinds="hide" param="4">1</data>
+		<data name="属性个数" kinds="numeral" param="4">1</data>
 		<data name="补偿类型" kinds="key_value" key="游戏币,钻石,竞技场币,上古之魂" value="2,3,4,5" param="3">2</data>
-		<data name="补偿多少" kinds="numeral" param="1">1</data>
-		<data name="物品编号" kinds="numeral" param="0">30501</data>
+		<data name="补偿多少" kinds="numeral" param="1">0</data>
 		<data name="物品个数" kinds="numeral" param="4">1</data>
+		<data name="物品编号" kinds="numeral" param="0">30501</data>
+		<data name="物品个数" kinds="numeral" param="4">0</data>
 		<data name="是否隐藏" kinds="numeral" param="3">0</data>
 	</message>
 	<message name="GM_发送补偿" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="11">0</msgid>
-		<data name="玩家ID" kinds="numeral" param="0">81</data>
+		<data name="玩家ID" kinds="numeral" param="0">7</data>
 		<data name="发送者" kinds="hide" param="0">0</data>
 		<data name="时间" kinds="hide" param="5">0</data>
+		<data name="类型" kinds="numeral" param="3">1</data>
+		<data name="是否读取" kinds="numeral" param="3">0</data>
+		<data name="是否领取邮件" kinds="numeral" param="3">0</data>
+		<data name="领取时效" kinds="hide" param="5">0</data>
 		<data name="标题" kinds="string" param="2">3-系统补偿</data>
 		<data name="说明" kinds="string" param="2">补偿测试</data>
-		<data name="属性个数" kinds="hide" param="4">1</data>
+		<data name="属性个数" kinds="numeral" param="4">1</data>
 		<data name="补偿类型" kinds="key_value" key="游戏币,钻石,竞技场币,上古之魂" value="2,3,4,5" param="3">2</data>
 		<data name="补偿多少" kinds="numeral" param="1">1</data>
+		<data name="物品个数" kinds="numeral" param="4">1</data>
 		<data name="物品编号" kinds="numeral" param="0">30501</data>
 		<data name="物品个数" kinds="numeral" param="4">1</data>
-<<<<<<< HEAD
 		<data name="是否隐藏" kinds="numeral" param="3">0</data>
-=======
-		<data name="是否隐藏" kinds="numeral" param="3">1</data>
->>>>>>> 2a616946904a2f0dc5eb9cc0edbe684f898e094a
 	</message>
 	<message name="GM_获取玩家日志" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0" minId="22">0</msgid>

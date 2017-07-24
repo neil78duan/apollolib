@@ -127,5 +127,6 @@ ErrorElement(ESERVER_ERR_TIME_OUT, "你用了太多的时间"),
 ErrorElement(ESERVER_ERR_NO_NEED_CLEAR_CD, "该物品不需要秒CD"),
 
 ErrorElement(ESERVER_ERR_STOVE_TIME, "合成时间未到"),
+ErrorElement(ESERVER_ERR_MAIL_IN_GET, "该邮件已被领取过"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

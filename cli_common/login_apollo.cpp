@@ -235,7 +235,7 @@ int LoginApollo::ReloginEx(void *session_data, size_t size)
 
 	int ret = checkCryptVersion(session_saved.keymd5);
 	if (0 != ret) {
-		nd_rmfile(m_session_file);
+		//nd_rmfile(m_session_file);
 		nd_logmsg("checkCryptVersion Error: %s \n", nd_object_errordesc(m_conn));
 
 		return ret;
@@ -587,10 +587,11 @@ int LoginApollo::switchServer(const char *host, NDUINT16 port,int sendMsg, int w
 	}
 	else {
 		nd_logmsg("SWITCH server ERROR\n") ;
+		return -1;
 	}
 	
-	nd_logmsg("SWITCH server SUCCESS\n") ;
-	return 0;
+	//nd_logmsg("SWITCH server SUCCESS\n") ;
+	//return 0;
 }
 
 

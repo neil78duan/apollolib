@@ -463,7 +463,7 @@ int RoleAttrHelper::parse_run_sort()
 	int number  = m_wa_num;
 	int done = 0 ;
 
-	int deep = 0 ;
+	//int deep = 0 ;
 
 	attrid_t walked[ROLE_ATTR_CAPACITY*2] ;
 

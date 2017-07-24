@@ -39,7 +39,7 @@ static int _readMsgToUserDef(DBLDataNode &data, NDIStreamMsg &inmsg)
 		DBLDataNode *p = pUserData->ref(i);
 		nd_assert(p);
 		if (0 != logicDataRead(*p, inmsg)){
-			nd_logerror("msgtoUserDef: read %s error\n", pUserData->getName(i));
+			nd_logerror("msgtoUserDef: read %s error\n", pUserData->getName((int)i));
 			return -1;
 		}
 	}

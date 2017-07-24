@@ -15,27 +15,27 @@
 //#include "RoleDataManager.h"
 //#include "NotificationKeyDefine.h"
 //#include "BuildingInfoInheritsRef.h"
-
-static void ndnetLog(const char *text)
-{
-	//cocos2d::log("%s", text);
-}
-
-static int apoPrintf(void *pf, const char *stm, ...)
-{
-	char buf[1024 * 4];
-	char *p = buf;
-	va_list arg;
-	int done;
-
-	va_start(arg, stm);
-	done = vsnprintf(p, sizeof(buf), stm, arg);
-	va_end(arg);
-
-	return  fprintf((FILE*)pf, "%s", buf);
-	//cocos2d::log("%s",buf);
-	//return done;
-}
+//
+//static void ndnetLog(const char *text)
+//{
+//	//cocos2d::log("%s", text);
+//}
+//
+//static int apoPrintf(void *pf, const char *stm, ...)
+//{
+//	char buf[1024 * 4];
+//	char *p = buf;
+//	va_list arg;
+//	int done;
+//
+//	va_start(arg, stm);
+//	done = vsnprintf(p, sizeof(buf), stm, arg);
+//	va_end(arg);
+//
+//	return  fprintf((FILE*)pf, "%s", buf);
+//	//cocos2d::log("%s",buf);
+//	//return done;
+//}
 //load ios file 
 // 
 // static bool apollo_load_file_data_cocos(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
@@ -182,6 +182,7 @@ if (!m_pconn) {						\
 
 ApoClient::ApoClient() :m_pconn(0), m_login(0), m_accId(0), m_runningUpdate(ERUN_UP_STOP), m_roleId(0)
 {
+	m_isRelogin = 0;
 	m_updateIndex = 0;
 	time(&m_localTm);
 	time(&m_serverTm);
@@ -299,21 +300,46 @@ LogicEngineRoot *ApoClient::getScriptRoot()
 
 
 
-RESULT_T ApoClient::ReloginBackground(const char *host, int port, const char *dev_udid)
+RESULT_T ApoClient::ReloginBackground()
 {
 	CHECK_CONN_VALID(m_pconn) ;
 	
 	nd_connector_close(m_pconn, 1);
 	//m_pconn->Close(1);
-	RESULT_T res = Open(host, port,dev_udid);
+	RESULT_T res = Open(m_host.c_str(), m_port,m_udid.c_str());
 	if (res != ESERVER_ERR_SUCCESS ){
 		return res;
 	}
+
+	m_isRelogin = 1;
 	res = TrytoRelogin();
 	if (res != ESERVER_ERR_SUCCESS) {
 		nd_connector_close(m_pconn, 0);
 		//m_pconn->Close(0);
 	}
+
+	m_isRelogin = 0;
+	return res;
+}
+
+RESULT_T ApoClient::ReloginEx(void *session, size_t sessionSize, bool bReloginOffline)
+{
+	CHECK_CONN_VALID(m_pconn);
+
+	nd_connector_close(m_pconn, 1);
+	//m_pconn->Close(1);
+	RESULT_T res = Open(m_host.c_str(), m_port, m_udid.c_str());
+	if (res != ESERVER_ERR_SUCCESS){
+		return res;
+	}
+
+	m_isRelogin = bReloginOffline?1:0;
+	
+	res = TrytoReloginEx(session,sessionSize);
+	if (res != ESERVER_ERR_SUCCESS) {
+		nd_connector_close(m_pconn, 0);
+	}
+	m_isRelogin = 0;
 	return res;
 }
 
@@ -378,7 +404,7 @@ RESULT_T ApoClient::_connectHost(const char *host, int port)
 
 RESULT_T ApoClient::CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email)
 {
-
+	m_isRelogin = 0;
 	if (!userName || !*userName){
 		nd_logerror("create account error, input account name is NULL\n");
 		return NDSYS_ERR_INVALID_INPUT;
@@ -440,22 +466,58 @@ RESULT_T ApoClient::TrytoRelogin()
 	}
 	return (RESULT_T)NDERR_LIMITED;
 }
+
+RESULT_T ApoClient::TrytoReloginEx(void *session, size_t sessionSize)
+{
+	// in login 
+	if (IsLoginOk()){
+		return ESERVER_ERR_SUCCESS;
+	}
+
+	if (-1 == _trytoOpen()) {
+		return NDSYS_ERR_HOST_UNAVAILABLE;
+	}
+
+	//login server 
+
+	m_runningUpdate = ERUN_UP_STOP;
+	int ret = m_login->ReloginEx(session,sessionSize);
+	if (0 == ret) {
+		RESULT_T res = EnterGame();
+		m_runningUpdate = ERUN_UP_NORMAL;
+		return res;
+	}
+	return (RESULT_T)NDERR_LIMITED;
+}
+
 RESULT_T ApoClient::LoginAccount(const char *account, const char *passwd)
 {
+	m_isRelogin = 0;
+	int reTrytimes = 3;
 	// in login 
 	if (IsLoginOk()){
 		return NDSYS_ERR_ALREADY_LOGIN;
 	}
 
 	m_runningUpdate = ERUN_UP_STOP;
+	
+RE_LOGIN:
 	if (-1 == _trytoOpen()) {
 		return NDSYS_ERR_HOST_UNAVAILABLE;
 	}
 	int ret = m_login->Login(account, passwd, (ACCOUNT_TYPE)ACC_APOLLO);
 	if (-1 == ret) {
+		int errCode = m_login->GetLastError();
+		if (errCode == NDERR_CLOSED || errCode == NDERR_RESET) {
+			if (--reTrytimes > 0){
+				nd_connector_close(m_pconn,0);
+				nd_connector_set_crypt(m_pconn, NULL, 0);
+				goto RE_LOGIN;
+			}
+		}
 
 		m_runningUpdate = ERUN_UP_NORMAL;
-		return(RESULT_T)m_login->GetLastError();
+		return (RESULT_T) errCode;
 	}
 
 	RESULT_T res = _enterGame(NULL,0,account);
@@ -498,11 +560,13 @@ RESULT_T ApoClient::_enterGame(const char *host, int port, const char *roleName)
 	}
 	
 	if (logResult != 0) {
-		return NDSYS_ERR_HOST_UNAVAILABLE;
+		return (RESULT_T)m_login->GetLastError();
 	}
 
 	//get role list
 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN,LOGIN_MSG_GET_ROLE_LIST_REQ);
+	omsg.Write(m_isRelogin);
+
 	nd_handle h = m_pconn;
 	nd_usermsgbuf_t recv_msg;
 
@@ -548,7 +612,7 @@ RESULT_T ApoClient::_enterGame(const char *host, int port, const char *roleName)
 
 RESULT_T ApoClient::createRole(const char *roleName)
 {
-	NDUINT32 error_code = NDSYS_ERR_UNKNOWN;
+	//NDUINT32 error_code = NDSYS_ERR_UNKNOWN;
 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_REQ);
 	omsg.Write((NDUINT8*)roleName);
 
@@ -662,7 +726,7 @@ bool ApoClient::Update()
 		int ret =ndUpdateConnect((netObject)m_pconn,0) ;
 		if (-1 == ret) {
 			//return false;
-			int err =nd_object_lasterror(m_pconn) ;
+			//int err =nd_object_lasterror(m_pconn) ;
 			
 			m_login->Logout() ;
 			//m_pconn->Close() ;

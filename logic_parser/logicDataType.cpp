@@ -1288,7 +1288,7 @@ int DBLDataNode::GetInt() const
 			if (tmpdata.StringToArrayInt(pText)){
 				return tmpdata.GetarrayInt(0);
 			}
-			return ndstr_atoi_hex(pText);
+			return (int)ndstr_atoi_hex(pText);
 		}
 	}
 	return 0;
@@ -1525,7 +1525,7 @@ int DBLDataNode::GetarrayInt(int index) const
 					if (tmpdata.StringToArrayInt(pText)){
 						return tmpdata.GetarrayInt(0);
 					}
-					return ndstr_atoi_hex(pText);
+					return (int)ndstr_atoi_hex(pText);
 				}
 
 				//return atoi(m_data->_str_arr->data[index]);
@@ -1904,14 +1904,14 @@ DBLDataNode  DBLDataNode::operator+(const char *text) const
 	case OT_INT16:
 	case OT_INT:
 	{
-		int rval = ndstr_atoi_hex(text);
+		int rval = (int)ndstr_atoi_hex(text);
 		int val = GetInt() +rval;
 		return DBLDataNode(val);
 	}
 	case OT_TIME:
 	case OT_INT64:
 	{
-		int rval = ndstr_atoi_hex(text);
+		int rval = (int)ndstr_atoi_hex(text);
 		NDUINT64 val = GetInt64() + rval;
 		return DBLDataNode(val);
 	}
@@ -3099,7 +3099,8 @@ int dbl_destroy_data(dbl_element_base *buf, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_
 			delete buf->_userDef ;
 		}
 		break;
-			
+	default:
+			break ;
 	}
 	return 0;
 #undef SAVE_FREE
@@ -3208,7 +3209,7 @@ int dbl_build_from_text(dbl_element_base *buf, const char *in_data, DBL_ELEMENT_
 	}
 	switch (etype){
 	case OT_INT:
-		buf->i_val = ndstr_atoi_hex(in_data);
+		buf->i_val =(int) ndstr_atoi_hex(in_data);
 		break;
 	case OT_FLOAT:
 		buf->f_val = (float)atof(in_data);
@@ -3223,7 +3224,7 @@ int dbl_build_from_text(dbl_element_base *buf, const char *in_data, DBL_ELEMENT_
 	}
 		break;
 	case OT_BOOL:
-		buf->i_val = ndstr_atoi_hex(in_data);
+		buf->i_val = (int)ndstr_atoi_hex(in_data);
 		break;
 
 	case OT_ARRAY:
