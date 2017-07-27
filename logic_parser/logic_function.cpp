@@ -542,7 +542,7 @@ APOLLO_SCRIPT_API_DEF(apollo_func_read_msg, "读取消息(int:数据类型)")
 	DBLDataNode val(NULL, t, (DBL_ELEMENT_TYPE) 0);
 	if (0 != logicDataRead(val,*pInmsg) ) {
 		nd_logerror("read message error\n");
-		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		parser->setErrno(NDSYS_ERR_NETMSG_FORMAT);
 		return false;
 	}
 	result = val;
@@ -632,7 +632,7 @@ APOLLO_SCRIPT_API_DEF(apollo_func_read_userData_from_msg, "从消息中读UserDe
 
 	if(-1 == logicDataRead(result, *pInmsg)) {
 		nd_logerror("read data-type %s error from message  \n", args[2].GetText());
-		parser->setErrno(NDERR_READ_STREAM);
+		parser->setErrno(NDSYS_ERR_NETMSG_FORMAT);
 		return false;
 	}
 

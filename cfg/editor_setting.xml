@@ -143,6 +143,7 @@
 	<list instruction="100" size="0">comment</list>
 	<list instruction="100" size="0">apoEditorPos</list>
 	<list instruction="100" size="0">breakPointInfo</list>	
+	<list instruction="100" size="0">func_params</list>	
 	<list instruction="5" size="0">user_define_function</list>
 	<list instruction="6" size="0" datatype="2">function_info</list>	
 	<list instruction="6" size="0" datatype="2">is_open_role_affair</list>

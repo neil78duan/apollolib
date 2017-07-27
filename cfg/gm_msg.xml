@@ -9,7 +9,7 @@
 	</message>
 	<message name="领取任务奖励" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="11" minId="4">0</msgid>
-		<data name="任务编号" kinds="numeral" param="4">0</data>
+		<data name="任务编号" kinds="numeral" param="0">31505001</data>
 	</message>
 	<message name="购买普通物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="8" minId="0">0</msgid>
@@ -128,6 +128,10 @@
 		<data name="对象id" kinds="numeral" param="0">142073</data>
 		<data name="使用物品" kinds="numeral" param="0">45001</data>
 		<data name="数量" kinds="numeral" param="4">1</data>
+	</message>
+	<message name="VIP秒CD" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="6" minId="52">0</msgid>
+		<data name="对象id" kinds="numeral" param="0">40000</data>
 	</message>
 	<message name="移动建筑" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="4" minId="2">0</msgid>
@@ -273,7 +277,7 @@
 	</message>
 	<message name="领取邮件" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="48">0</msgid>
-		<data name="邮件ID" kinds="numeral" param="0">100000019</data>
+		<data name="邮件ID" kinds="numeral" param="0">100000312</data>
 	</message>
 	<message name="删除邮件" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="50">0</msgid>
@@ -297,7 +301,7 @@
 	</message>
 	<message name="GM_修改游戏时间" expand="yes" delete="no" need_confirm="yes">
 		<msgid kinds="hide">1797</msgid>
-		<data name="加快小时" kinds="numeral" param="0">13</data>
+		<data name="加快小时" kinds="numeral" param="0">24</data>
 		<data name="加快分钟" kinds="numeral" param="0">1</data>
 	</message>
 	<message name="GM_打印消息" expand="yes" delete="no" need_confirm="yes">
@@ -352,11 +356,11 @@
 		<data name="标题" kinds="string" param="2">3-系统补偿</data>
 		<data name="说明" kinds="string" param="2">补偿测试</data>
 		<data name="属性个数" kinds="numeral" param="4">1</data>
-		<data name="补偿类型" kinds="key_value" key="游戏币,钻石,竞技场币,上古之魂" value="2,3,4,5" param="3">2</data>
-		<data name="补偿多少" kinds="numeral" param="1">0</data>
+		<data name="补偿类型" kinds="key_value" key="游戏币,钻石,竞技场币,上古之魂" value="2,3,4,5" param="3">3</data>
+		<data name="补偿多少" kinds="numeral" param="1">1</data>
 		<data name="物品个数" kinds="numeral" param="4">1</data>
 		<data name="物品编号" kinds="numeral" param="0">30501</data>
-		<data name="物品个数" kinds="numeral" param="4">0</data>
+		<data name="物品个数" kinds="numeral" param="4">1</data>
 		<data name="是否隐藏" kinds="numeral" param="3">0</data>
 	</message>
 	<message name="GM_发送补偿" expand="yes" delete="no">
@@ -398,6 +402,9 @@
 	<message name="GM_获得其他玩家数据" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="23">0</msgid>
 		<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">28</data>
+	</message>
+	<message name="GM_据点入侵" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="7" minId="28">0</msgid>
 	</message>
 	<message name="sys_打印收发消息" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0" minId="15">0</msgid>
