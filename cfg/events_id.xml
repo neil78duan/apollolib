@@ -14,7 +14,7 @@
 	<node desc="角色死亡(player)">11</node>
 	<node desc="接受任务(player,taskid)">12</node>
 	<node desc="完成任务(player,taskid)">13</node>
-	<node desc="每日更新(player)">14</node>
+	<node desc="每日更新(player,eventName,param, renewTimes)">14</node>
 	<node desc="成功输入邀请码(player)">15</node>
 	<node desc="完成地图(mapId, isSuccess)">16</node>
 	<node desc="摧毁建筑(buildingId)">17</node>

@@ -80,7 +80,7 @@ typedef designTypeId_t skillId_t;
 typedef designTypeId_t talentId_t;
 //typedef NDUINT16 weaponId_t;
 //typedef NDUINT16 dragonId_t;
-typedef NDUINT16 taskId_t;
+typedef NDUINT32 taskId_t;
 
 #define HOST_ID_MAKE(_ip, _port, session_id)  	ND_MAKE_QWORD(_ip, ND_MAKE_DWORD(_port, session_id) )
 #define HOST_ID_GET_IP(_host_id) 				ND_HIDWORD(_host_id)

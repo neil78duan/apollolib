@@ -129,4 +129,10 @@ ErrorElement(ESERVER_ERR_NO_NEED_CLEAR_CD, "该物品不需要秒CD"),
 ErrorElement(ESERVER_ERR_STOVE_TIME, "合成时间未到"),
 ErrorElement(ESERVER_ERR_MAIL_IN_GET, "该邮件已被领取过"),
 
+ErrorElement(ESERVER_ERR_CLEAR_CD_ERROR, "该物品已完成"),
+ErrorElement(ESERVER_ERR_VIP_CLEAR_CD_ERROR, "该物品不能使用VIP秒CD"),
+ErrorElement(ESERVER_ERR_VIP_NOT_ERROR, "您并不是vip"),
+ErrorElement(ESERVER_ERR_VIP_NOT_TIME_ERROR, "vip秒CD时间未到"),
+ErrorElement(ERR_REPEATED_CREATEBOSS_REQUEST, "不能重复创建boss副本"),
+
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

@@ -78,6 +78,9 @@ bool ApoGameObj::SendScriptEvent(int event_id, int argc, ...)
 	ND_TRACE_FUNC();
 
 	parse_arg_list_t params;
+
+	params.push_back( DBLDataNode ((void*)this, OT_OBJ_BASE_OBJ));
+
 	va_list arg;
 	va_start(arg, argc);
 	while (argc-- > 0) {
@@ -92,15 +95,12 @@ bool ApoGameObj::SendScriptEvent(int event_id, int argc, ...)
 bool ApoGameObj::SendEvent0(int event)
 {
 	ND_TRACE_FUNC();
-	DBLDataNode val0((void*)this, OT_OBJ_BASE_OBJ);
-	return SendScriptEvent(event, 1, &val0);
+	return SendScriptEvent(event, 0);
 }
 bool ApoGameObj::SendEvent1(int event, const DBLDataNode &val1)
 {
 	ND_TRACE_FUNC();
-
-	DBLDataNode val0((void*)this, OT_OBJ_BASE_OBJ);
-	return SendScriptEvent(event, 2, &val0, &val1);
+	return SendScriptEvent(event, 1, &val1);
 }
 
 //////////////////////////////////////////////////////////////////////////
