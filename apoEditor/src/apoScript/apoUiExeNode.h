@@ -76,6 +76,25 @@ public:
 		m_beDeleted = false;
 	}
 	virtual ~apoUiExenodeFuncEntry(){}
+
+
+	virtual void onInit()
+	{
+		ndxml *xmlParamCollect = ndxml_getnode(m_nodeXml, "func_params");
+		if (xmlParamCollect) {
+			int count = ndxml_num(xmlParamCollect);
+			for (int i = 0; i < count; i++)	{
+				apoBaseExeNode::getFunctionParam(i + 1);
+			}
+		}
+		else {
+			xmlParamCollect = ndxml_from_text("<func_params kinds=\"hide\"></func_params>");
+			if (xmlParamCollect)	{
+				ndxml_insert_after(m_nodeXml, xmlParamCollect, m_nodeXml);
+			}
+		}
+	}
+
 private:
 
 };

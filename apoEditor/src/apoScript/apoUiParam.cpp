@@ -249,18 +249,14 @@ QString apoBaseParam::getParamName()
 		}
 		return QString(val);
 	}
-	else {
+	else  if(m_parent){
 		const char *pRootName = ndxml_getname(m_parent);
-		if (0 == ndstricmp(pRootName, "param_collect") || 0 == ndstricmp(pRootName, "condition"))	{
+		if (pRootName && (0 == ndstricmp(pRootName, "param_collect") || 0 == ndstricmp(pRootName, "condition")))	{
 			return QString(_GetXmlName(m_parent, NULL));
-
 		}
-		else {
-			return QString(_GetXmlName(m_xml, NULL));
-
-		}
-		
 	}
+
+	return QString(_GetXmlName(m_xml, NULL));
 }
 
 QString apoBaseParam::getDisplayValue()

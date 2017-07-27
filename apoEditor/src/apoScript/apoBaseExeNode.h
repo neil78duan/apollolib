@@ -152,6 +152,8 @@ signals:
 	void NodeAddParamSignal(apoBaseExeNode *exeNode);
 protected:
 
+	void trytoAddFunctionParam(apoBaseParam*pParamCtrl, int index);
+
 	void paintEvent(QPaintEvent *event);
 	void mouseDoubleClickEvent(QMouseEvent * event);
 	QString getTitleDisplayName();

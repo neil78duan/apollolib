@@ -454,8 +454,11 @@ bool apoBaseExeNode::closeParam(apoBaseSlotCtrl *param)
 {
 	bool ret = false;
 	for (QVector<apoBaseParam *>::iterator it = m_paramVct.begin(); it != m_paramVct.end(); it++) {
-		if ((*it) == param)	{			
+		if ((*it) == param)	{
 			m_paramVct.erase(it);
+			if (param->slotType() == apoBaseParam::SLOT_FUNCTION_PARAM)	{
+				break;
+			}
 			param->onDelete();
 			param->close();
 			ret = true;
@@ -465,6 +468,11 @@ bool apoBaseExeNode::closeParam(apoBaseSlotCtrl *param)
 	if (ret) {
 		initParamPos();
 		return ret;
+	}
+	ndxml *funcParam = ((apoBaseParam*)param)->getValueXml();
+
+	if (funcParam)	{
+		ndxml_delxml(funcParam, NULL);
 	}
 
 	QVector<apoBaseSlotCtrl *>::iterator itFnd = m_outParamVct.end();
@@ -692,19 +700,62 @@ void apoBaseExeNode::onAddLabel()
 {
 	addJumpLabel(NULL);
 }
+
+void apoBaseExeNode::trytoAddFunctionParam(apoBaseParam*pParamCtrl, int index)
+{
+	ndxml *paramXml = NULL;
+	ndxml *xmlParamCollect = ndxml_getnode(m_nodeXml, "func_params");
+	if (xmlParamCollect) {
+		int count = ndxml_num(xmlParamCollect);
+		if (count>= index)	{
+			paramXml = ndxml_getnodei(xmlParamCollect, index - 1);
+		}
+		else {
+			char buf[1024];
+			snprintf(buf, sizeof(buf), "<input_param name=\"Param%d\">$%d</input_param>", index, index);
+			paramXml = ndxml_from_text(buf);
+			ndxml_insert(xmlParamCollect, paramXml);
+		}
+		
+	}	
+	else {
+		xmlParamCollect = ndxml_from_text("<func_params kinds=\"hide\"> <input_param name=\"Param1\">$1</input_param></func_params>");
+		if (!xmlParamCollect)	{
+			nd_logerror("create function input param collectoin error\n");
+			return;
+		}
+		ndxml_insert(m_nodeXml, xmlParamCollect);
+		paramXml = ndxml_getnodei(xmlParamCollect, 0);
+	}
+
+	pParamCtrl->setParam(xmlParamCollect, paramXml, NULL);
+	m_paramVct.push_back(pParamCtrl);
+
+}
+
 void apoBaseExeNode::onAddFunctionInParam()
 {
 	//apoBaseSlotCtrl*pParamCtrl;
 	//CREATE_CTRL_OBJECT(apoBaseSlotCtrl, ">>", white, return);
 
 	QString str1;
-	str1.sprintf("In%d >>", m_outParamVct.size() + 1);
-	apoBaseSlotCtrl*pParamCtrl = new apoBaseSlotCtrl(str1,this);	
+	int paramIndex = m_outParamVct.size() + 1;
+	str1.sprintf("In%d >>",paramIndex);
+
+	//apoBaseSlotCtrl*pParamCtrl = new apoBaseSlotCtrl(str1,this);	
+	apoBaseParam*pParamCtrl = new apoBaseParam(str1, this);
+	
 	pParamCtrl->resize(PARAM_CTRL_W * 2, PARAM_CTRL_H);
 	pParamCtrl->setStyleSheet("QLabel{background-color:yellow;}");
 	pParamCtrl->setAttribute(Qt::WA_DeleteOnClose, true);
 
 	pParamCtrl->setSlotType(apoBaseParam::SLOT_FUNCTION_PARAM);
+
+
+	//////////////////////////////////////////////////////////////////////////
+	//add xmlnode 
+	trytoAddFunctionParam(pParamCtrl, paramIndex);
+	//////////////////////////////////////////////////////////////////////////
 
 	QPoint newPos = m_outParamAddNew->pos();
 	pParamCtrl->move(newPos.x() , newPos.y());
