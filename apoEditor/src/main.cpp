@@ -102,6 +102,9 @@ int main(int argc, char *argv[])
 			return runDevelopTool(argc, argv);
 		}
 	}
+#if defined (__ND_MAC__)
+    return runDevelopTool(argc, argv);
+#endif
 	fprintf(stderr, "unknow run mode \n");
 	exit(1);
 }
