@@ -223,14 +223,14 @@ void ConnectDialog::WriteLog(const char *logText)
 	
 }
 
-bool ConnectDialog::LoadDataDef(const char *file, const char *script, const char *message_def)
+bool ConnectDialog::LoadClientScript(const char *file)
 {
     //if (-1 == loadUserDefFromMsgCfg(file, m_dataTypeDef))	{
     //	nd_logerror("load message datatype error from %s\n", file);
     //	return false;
     //}
 
-	m_scriptFile = script;
+	m_scriptFile = file;
     //if (message_def){
     //	ndxml_load_ex(message_def, &m_message_define, nd_get_encode_name(ND_ENCODE_TYPE));
     //}
@@ -770,4 +770,9 @@ void ConnectDialog::on_checkBox16Hex_clicked()
 		DBLDataNode::setOutHex(false);
 	}
 	//ui->checkBox16Hex
+}
+
+void ConnectDialog::on_pushButtonExit_clicked()
+{
+    accept() ;
 }

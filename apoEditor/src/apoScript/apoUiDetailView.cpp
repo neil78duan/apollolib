@@ -200,7 +200,7 @@ bool apoUiDetailView::onChanged(int row, int column, const char *xmlRealValue)
 		cell->setText(QString("var1"));
 	}
 	else if (type == OT_LAST_RET) {
-		cell->setText(QString("0"));
+		cell->setText(QString("$value"));
 	}
 	else if (type == OT_INT || type == OT_FLOAT || type == OT_INT64 || type == OT_INT8 || type == OT_INT16) {
 		cell->setText(QString("0"));

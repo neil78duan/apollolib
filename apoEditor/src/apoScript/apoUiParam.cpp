@@ -352,7 +352,7 @@ bool apoBaseParam::onConnectIn(apoBaseSlotCtrl*fromSlot)
 	else if (type == SLOT_RETURN_VALUE)	{
 
 		ndxml_setval_int(m_reference, (int)OT_LAST_RET);
-		ndxml_setval(m_xml, "0");
+		ndxml_setval(m_xml, "$value");
 	}
 	return true;
 }
