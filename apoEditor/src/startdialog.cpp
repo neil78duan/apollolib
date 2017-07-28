@@ -511,7 +511,7 @@ void startDialog::on_Connect_clicked()
     dlg.m_editor_setting =&m_editor_setting;
     dlg.m_gmCfg = &xmlSend;
 	
-	if (!dlg.LoadDataDef(dataTypeFile, client_script, message_file))	{
+	if (!dlg.LoadClientScript( client_script))	{
 		//AfxMessageBox("load message data type error");
 		QMessageBox::warning(this, "Error", "load message data type error!", QMessageBox::Ok);
 	}

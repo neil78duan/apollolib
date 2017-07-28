@@ -9,7 +9,7 @@
 	</message>
 	<message name="领取任务奖励" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="11" minId="4">0</msgid>
-		<data name="任务编号" kinds="numeral" param="0">31505001</data>
+		<data name="任务编号" kinds="numeral" param="0">1001</data>
 	</message>
 	<message name="购买普通物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="8" minId="0">0</msgid>
@@ -25,15 +25,28 @@
 		<data name="商店ID" kinds="numeral" param="4">1</data>
 		<data name="商品编号" kinds="numeral" param="4">1</data>
 	</message>
-	<message name="邀请玩家打副本" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="10" minId="0">0</msgid>
-		<data name="玩家id" kinds="numeral" param="0">3</data>
+	<message name="副本列表" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="10" minId="33">0</msgid>
 		<data name="地图id" kinds="numeral" param="4">901</data>
+	</message>
+	<message name="创建副本" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="10" minId="35">0</msgid>
+		<data name="地图id" kinds="numeral" param="4">902</data>
+	</message>
+	<message name="单人挑战副本" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="10" minId="39">0</msgid>
+		<data name="insid" kinds="numeral" param="0">27</data>
 	</message>
 	<message name="邀请玩家打副本" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="10" minId="0">0</msgid>
 		<data name="玩家id" kinds="numeral" param="0">3</data>
 		<data name="地图id" kinds="numeral" param="4">901</data>
+		<data name="实例ID" kinds="numeral" param="0">27</data>
+	</message>
+	<message name="同意邀请玩家打副本" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="10" minId="2">0</msgid>
+		<data name="玩家id" kinds="numeral" param="0">3</data>
+		<data name="是否同意" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="co-boss准备就绪" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="10" minId="5">0</msgid>

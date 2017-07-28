@@ -34,7 +34,8 @@ public:
     int getRoleData();
 
 	NDIConn *getConnect(){ return m_pConn; }
-	bool LoadDataDef(const char *file, const char *script, const char *message_def);
+
+	bool LoadClientScript(const char *file);
 	const char* m_scriptFile;
 public:
 
@@ -55,6 +56,8 @@ private slots:
     void on_pushButton_clicked();
 
     void on_checkBox16Hex_clicked();
+
+    void on_pushButtonExit_clicked();
 
 private:
     Ui::ConnectDialog *ui;
