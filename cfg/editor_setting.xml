@@ -203,11 +203,21 @@
 		</sub_node>
 	</create_func>
 	<create_function_filter name="标签页" create_type="1">
-		<function_filter name="类型_消息类"  create_template="create_msg_handler" auto_index="1" expand_stat="1">
+		<function_filter name="类型_消息类"  create_template="create_msg_handler" auto_index="1" expand_stat="1" accept_drag_in="msg_handler_node">
 		</function_filter>
 	</create_function_filter>
 	
-	<create_msg_handler name="消息处理函数创建模板" create_type="1">		
+	<create_event_function_filter name="标签页" create_type="1">
+		<function_filter name="事件分类"  create_template="create_event_callback" auto_index="1" expand_stat="1" accept_drag_in="event_callback_node">
+		</function_filter>
+	</create_event_function_filter>
+	
+	<create_common_function_filter name="标签页" create_type="1">
+		<function_filter name="函数分类"  create_template="create_func" auto_index="1" expand_stat="1" accept_drag_in="func_node">
+		</function_filter>
+	</create_common_function_filter>
+	
+	<create_msg_handler name="消息处理函数" create_type="1">		
 		<msg_handler_node name="message_handler" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="1">
 			<comment name="函数说明" expand="yes">
 				<desc>消息处理handle(player, message)</desc>
