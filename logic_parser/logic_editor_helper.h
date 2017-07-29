@@ -207,6 +207,8 @@ namespace LogicEditorHelper
 
 	//检测是否是扩展显示所有子节点
 	bool CheckExpand(ndxml *xml);
+	
+	bool checkAddNewChild(ndxml *xml);
 
 	int get_string_array(const char *pValue, text_vect_t &texts);
 

@@ -256,6 +256,15 @@ namespace LogicEditorHelper
 
 	}
 
+	bool checkAddNewChild(ndxml *xml)
+	{
+		char*template_name = (char*)ndxml_getattr_val(xml, _szReserved[ERT_TEMPLATE]);
+		if (!template_name || !*template_name) {
+			return false;
+		}
+		return true;
+	}
+
 	int get_string_array(const char *pValue, text_vect_t &texts)
 	{
 		if (!pValue)

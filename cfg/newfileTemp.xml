@@ -16,10 +16,10 @@
 	<Author name="作者" kinds="string">YourName</Author>
 	<LastMod name="最后修改" kinds="hide">1492403624</LastMod>
 </moduleInfo>
-<baseFunction name="基本功能" delete="no" create_template="create_func" auto_index="0" expand_stat="0">	
+<baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="0" expand_stat="0" accept_drag_in="func_node">	
 </baseFunction>
-<message_handler name="消息处理入口" delete="no" create_template="create_function_filter" auto_index="0" expand_stat="0">
+<message_handler name="消息处理入口" delete="no" create_template="create_function_filter,create_msg_handler" auto_index="0" expand_stat="0" accept_drag_in="msg_handler_node">
 </message_handler>
 
-<event_callback name="事件处理" delete="no" create_template="create_event_callback" auto_index="0" expand_stat="1">	
+<event_callback name="事件处理" delete="no" create_template="create_event_function_filter,create_event_callback" auto_index="0" expand_stat="1" accept_drag_in="event_callback_node">	
 </event_callback>

@@ -133,6 +133,6 @@ ErrorElement(ESERVER_ERR_CLEAR_CD_ERROR, "该物品已完成"),
 ErrorElement(ESERVER_ERR_VIP_CLEAR_CD_ERROR, "该物品不能使用VIP秒CD"),
 ErrorElement(ESERVER_ERR_VIP_NOT_ERROR, "您并不是vip"),
 ErrorElement(ESERVER_ERR_VIP_NOT_TIME_ERROR, "vip秒CD时间未到"),
-ErrorElement(ERR_REPEATED_CREATEBOSS_REQUEST, "不能重复创建boss副本"),
+ErrorElement(ERR_REPEATED_CREATEBOSS_ERROR, "不能重复创建boss副本"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),
