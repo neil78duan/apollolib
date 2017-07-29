@@ -65,6 +65,7 @@ protected:
 	void contextMenuEvent(QContextMenuEvent *event);
 	void OnPopInsertNode();
 	void OnPopXmlDel();
+	void onPopMenu(QAction *activeAction);
 
 	bool m_isInitOk;
 	int m_disp_depth; //deisplay depth

@@ -76,24 +76,6 @@ void dragTree::mouseMoveEvent(QMouseEvent *event)
 //    QTreeWidget::mouseReleaseEvent(event);
 //}
 
-//void dragTree::dragEnterEvent(QDragEnterEvent *event)
-//{
-//  QWidget *source =  qobject_cast<MyTreeWidget *>(event->source());
-//  if (source /*&& source != this*/)
-//  {
-//    if (m_CtrlPressed)
-//    {
-//      event->setDropAction(Qt::CopyAction);
-//    }
-//    else
-//    {
-//      event->setDropAction(Qt::MoveAction);
-//    }
-//    /*event->setDropAction(Qt::MoveAction);  */
-//    event->accept();
-//  }
-//}
-
 //void dragTree::dragMoveEvent(QDragMoveEvent *event)
 //{
 
@@ -122,6 +104,24 @@ void dragTree::mouseMoveEvent(QMouseEvent *event)
 //      event->accept();
 //    }
 
+//  }
+//}
+
+//void dragTree::dragEnterEvent(QDragEnterEvent *event)
+//{
+//  QWidget *source =  qobject_cast<MyTreeWidget *>(event->source());
+//  if (source /*&& source != this*/)
+//  {
+//    if (m_CtrlPressed)
+//    {
+//      event->setDropAction(Qt::CopyAction);
+//    }
+//    else
+//    {
+//      event->setDropAction(Qt::MoveAction);
+//    }
+//    /*event->setDropAction(Qt::MoveAction);  */
+//    event->accept();
 //  }
 //}
 

@@ -17,6 +17,7 @@
 #include "logic_parser/logic_editor_helper.h"
 
 #include <string>
+#include <vector>
 
 #include <QString>
 #include <QWidget>
@@ -74,6 +75,8 @@ public:
 
 	ndxml* AddNewXmlNode(ndxml *node, QWidget *parentWindow);//create new xml node from template @need show dialog and get user selected
 	ndxml *AddNewXmlByTempName(ndxml *node, const char *templateName);
+
+	ndxml* getNewTemplate(ndxml *node, QWidget *parentWindow);
 
 	bool loadUserDefEnum(const char *userDefEnumFile);
 	bool loadMessageDefine(const char *messageFile) ;

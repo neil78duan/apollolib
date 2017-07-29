@@ -269,7 +269,8 @@ const char *apoEditorSetting::_getScriptSetting(ndxml *scriptXml, const char *se
 
 ndxml* apoEditorSetting::AddNewXmlNode(ndxml *xml, QWidget *parentWindow)
 {	
-	ndxml *create_template = GetCreateTemplate(xml, getConfig());
+	//ndxml *create_template = GetCreateTemplate(xml, getConfig());
+	ndxml *create_template = getNewTemplate(xml, parentWindow);
 	if (!create_template) {
 		return NULL;
 	}
@@ -411,6 +412,71 @@ ndxml *apoEditorSetting::AddNewXmlByTempName(ndxml *xml, const char *templateNam
 	return new_xml;
 }
 
+
+ndxml* apoEditorSetting::getNewTemplate(ndxml *xml, QWidget *parentWindow)
+{
+	ndxml *root = getConfig();
+	const char*template_namelist = ndxml_getattr_val(xml, "create_template");
+	if (!template_namelist) {
+		return NULL;
+	}
+	ndxml *template_root = ndxml_getnode(root, "create_template");
+	if (!template_root)
+		return NULL;
+
+	text_vect_t tempNames;
+	if (get_string_array(template_namelist, tempNames) == 0)  {
+		return NULL;
+	}
+	else if (tempNames.size()==1) {
+		ndxml *create_template = ndxml_refsub(template_root, tempNames[0].c_str());
+		while (create_template) {
+			const char *pRef = ndxml_getattr_val(create_template, "ref_from");
+			if (pRef && (0 == ndstricmp(pRef, "yes") || 0 == ndstricmp(pRef, "true")))	{
+				create_template = LogicEditorHelper::_getRefNode(create_template, ndxml_getval(create_template));
+			}
+			else {
+				break;
+			}
+		}
+		return create_template;
+	}
+
+	ListDialog dlg(parentWindow);
+	std::vector<ndxml *> xmlnodes;
+	for (text_vect_t::iterator it = tempNames.begin(); it != tempNames.end(); ++it)	{
+		ndxml *create_template = ndxml_refsub(template_root, (*it).c_str() );
+		while (create_template) {
+			const char *pRef = ndxml_getattr_val(create_template, "ref_from");
+			if (pRef && (0 == ndstricmp(pRef, "yes") || 0 == ndstricmp(pRef, "true")))	{
+				create_template = LogicEditorHelper::_getRefNode(create_template, ndxml_getval(create_template));
+			}
+			else {
+				break;
+			}
+		}
+
+		if (create_template) {
+			const char *name = _GetXmlName(create_template, NULL);
+			nd_assert(name);
+			xmlnodes.push_back(create_template);
+			dlg.m_selList.push_back(QString(name));
+		}
+			
+	}
+
+	dlg.InitList();
+	if (dlg.exec() != QDialog::Accepted) {
+		return NULL;
+	}
+
+	int seled = dlg.GetSelect();
+	if (seled == -1 || seled >=xmlnodes.size()) {
+		return NULL;
+	}
+
+	return xmlnodes[seled];
+}
 
 int apoEditorSetting::GetCreateName(ndxml *xml_template, char *buf, size_t size)
 {

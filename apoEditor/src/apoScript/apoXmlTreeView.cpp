@@ -283,19 +283,18 @@ void apoXmlTreeView::contextMenuEvent(QContextMenuEvent *event)
 		return;
 	}
 
-
 	apoEditorSetting *setting = apoEditorSetting::getInstant();
 	QMenu *pop_menu = new QMenu(this);
 
-	ndxml *create_template = GetCreateTemplate(xml, setting->getConfig());
+	//ndxml *create_template = GetCreateTemplate(xml, setting->getConfig());
 	bool addOk = false;
 
-	if (create_template && !isNotCreateNewChild(ndxml_getname(xml)) ) {
+	if (checkAddNewChild(xml) && !isNotCreateNewChild(ndxml_getname(xml)) ) {
 		QAction *add_node = new QAction(this);
 		add_node->setText(tr("add"));
 		pop_menu->addAction(add_node);
 
-		connect(add_node, &QAction::triggered, this, &apoXmlTreeView::OnPopInsertNode);
+		//connect(add_node, &QAction::triggered, this, &apoXmlTreeView::OnPopInsertNode);
 		addOk = true;
 	}
 	if (CheckCanDelete(xml)) {
@@ -303,11 +302,12 @@ void apoXmlTreeView::contextMenuEvent(QContextMenuEvent *event)
 		QAction *del_node = new QAction(this);
 		del_node->setText(tr("del"));
 		pop_menu->addAction(del_node);
-		connect(del_node, &QAction::triggered, this, &apoXmlTreeView::OnPopXmlDel);
+		//connect(del_node, &QAction::triggered, this, &apoXmlTreeView::OnPopXmlDel);
 		addOk = true;
 	}
 
 	if (addOk) {
+		connect(pop_menu, &QMenu::triggered, this, &apoXmlTreeView::onPopMenu);
 		pop_menu->exec(QCursor::pos());
 	}
 	else {
@@ -315,6 +315,19 @@ void apoXmlTreeView::contextMenuEvent(QContextMenuEvent *event)
 	}
 
 	//nd_logdebug("test");
+}
+
+
+void apoXmlTreeView::onPopMenu(QAction *activeAction)
+{
+	nd_assert(activeAction);
+	QString text = activeAction->text();
+	if (text == "del") 	{
+		OnPopXmlDel();
+	}
+	else if (text == "add") {
+		OnPopInsertNode();
+	}
 }
 
 void apoXmlTreeView::OnPopInsertNode()
@@ -351,10 +364,9 @@ void apoXmlTreeView::OnPopInsertNode()
 void apoXmlTreeView::OnPopXmlDel()
 {
 	xmlTreeItem *curItem = (xmlTreeItem*)currentItem();
-	if (!curItem)
+	if (!curItem) {
 		return;
-
-	//apoEditorSetting *setting = apoEditorSetting::getInstant();
+	}
 
 	ndxml *xml = (ndxml *)curItem->getUserData();
 	if (xml) {
@@ -425,6 +437,11 @@ bool apoXmlTreeView::TreeDragCallback(xmlTreeItem*  hFrom, xmlTreeItem* hTo)
 	if (!xmlparent || !xmlFrom || !xmlTo)	{
 		return false;
 	}
+	const char *nameFrom = ndxml_getname(xmlFrom);
+	const char *nameTo = ndxml_getname(xmlTo);
+	if (ndstricmp(nameFrom,nameTo)!=0) {
+		return _TreeDragInNotSameRoot(hFrom, hTo);
+	}
 
 	nd_logmsg("drag  item %s to %s", _GetXmlName(xmlFrom,NULL), _GetXmlName(xmlTo, NULL));
 
@@ -460,9 +477,9 @@ bool apoXmlTreeView::TreeDragCallback(xmlTreeItem*  hFrom, xmlTreeItem* hTo)
 
 bool apoXmlTreeView::_TreeDragInNotSameRoot(xmlTreeItem*  hFrom, xmlTreeItem*  hTo)
 {
+	xmlTreeItem *hPos = hTo;
 
 	xmlTreeItem *parentFrom = (xmlTreeItem *)hFrom->parent();
-
 	ndxml *xmlparent = GetSelXml(parentFrom);
 
 	ndxml*xmlFrom = GetSelXml(hFrom);
@@ -470,28 +487,41 @@ bool apoXmlTreeView::_TreeDragInNotSameRoot(xmlTreeItem*  hFrom, xmlTreeItem*  h
 	if (!xmlparent || !xmlFrom || !xmlTo)	{
 		return false;
 	}
+	ndxml *xmlPos = xmlTo;
 	const char *fromName = ndxml_getname(xmlFrom);
 	const char *acceptName = ndxml_getattr_val(xmlTo, "accept_drag_in");
-	if (!fromName || !acceptName){
-		return false;
+	if (!acceptName || !*acceptName) {
+		ndxml *toParentXml = ndxml_get_parent(xmlTo);
+
+		acceptName = ndxml_getattr_val(toParentXml, "accept_drag_in");
+		if (!acceptName || !*acceptName || (0 != ndstricmp(fromName, acceptName)) ){
+			return false;
+		}
+
+		xmlTo = toParentXml;
+		hTo = (xmlTreeItem *)hTo->parent();
 	}
-	if (0 != ndstricmp(fromName, acceptName))	{
-		return false;
+	else {
+
+		if (0 != ndstricmp(fromName, acceptName))	{
+			return false;
+		}
 	}
+
 
 	//move
 	if (-1 == ndxml_remove(xmlFrom, xmlparent)){
 		return false;
 	}
 
-	if (-1 == ndxml_insert(xmlTo, xmlFrom)) {
+	if (-1 == ndxml_insert_after(xmlTo, xmlFrom,xmlTo)) {
 		return false;
 	}
 
 
 	//rebuild tree node 
 	parentFrom->removeChild(hFrom);
-	InitTreeNode(1,xmlFrom, hTo);
+	InitTreeNode(1,xmlFrom, hTo,hPos);
 	SetExpand(hTo);
 	emit xmlDataChangedSignal();
 	return true;
