@@ -306,6 +306,18 @@ bool LogicCompiler::_isFileInfo(ndxml * node)
 
 int LogicCompiler::_writeFileInfo(ndxml *module, FILE *pf)
 {
+	NDUINT16 nameLen = 0;
+	const char *userName = nd_get_sys_username();
+	if (userName && *userName) {
+		nameLen = strlen(userName);
+
+		NDUINT16 outval = lp_host2stream(nameLen, m_aimByteOrder);
+		fwrite(&outval, 2, 1, pf);
+		fwrite(userName, nameLen, 1, pf);
+	}
+	else {
+		fwrite(&nameLen, 2, 1, pf);
+	}
 	ndxml *xmlModule = ndxml_getnode(module, "moduleInfo");
 	if (!xmlModule) {
 		return -1;

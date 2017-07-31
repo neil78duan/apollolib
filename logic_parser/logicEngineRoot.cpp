@@ -116,6 +116,16 @@ int LogicEngineRoot::LoadScript(const char *scriptStream, LogicParserEngine *ini
 
 	fread(&compileTm, sizeof(compileTm), 1, pf);
 	
+	//read author name 
+	fread(&moduleSize, sizeof(moduleSize), 1, pf);
+	moduleSize = lp_stream2host(moduleSize, byteOrder);
+	if (moduleSize > 0 )	{
+		moudleName[0] = 0;
+		fread(moudleName, moduleSize, 1, pf);
+		m_author = moudleName;
+	}
+	moduleSize = 0;
+	//end name 
 	//m_compileTm = lp_stream2host(compileTm, byteOrder);
 	
 	

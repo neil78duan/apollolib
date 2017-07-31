@@ -1,5 +1,19 @@
 <?xml  version="1.0" encoding="utf8" ?>
 <func_list>
+	<node desc="sys_BinReadStream(fileName, readDataType)">CPP._sys_binread_file_stream</node>
+	<node desc="sys_切换目录(newpath)">CPP._sys_change_path</node>
+	<node desc="sys_CloseStream(fileStream)">CPP._sys_close_file_stream</node>
+	<node desc="sys_复制文件(filesrc,filedest)">CPP._sys_copyfile</node>
+	<node desc="sys_获取工作目录()">CPP._sys_get_path</node>
+	<node desc="sys_创建目录(pathname)">CPP._sys_mkdir</node>
+	<node desc="sys_创建文件(filepath)">CPP._sys_mkfile</node>
+	<node desc="sys_OpenStream(fileName)">CPP._sys_open_file_stream</node>
+	<node desc="sys_删除目录(path)">CPP._sys_rmdir</node>
+	<node desc="sys_删除文件(filepath)">CPP._sys_rmfile</node>
+	<node desc="sys_TextReadLine(fileName)">CPP._sys_textread_file_stream</node>
+	<node desc="sys_用户名()">CPP._sys_username</node>
+	<node desc="sys_BIN写入文件(fileName, var1,var2....)">CPP._sys_write_binfile</node>
+	<node desc="sys_text写入文件(fileName, var1,var2....)">CPP._sys_write_textfile</node>
 	<node desc="测试消息处理(script, maxId,minId, data1,data2...)">CPP.apollo_call_script_msgHandler_test</node>
 	<node desc="导出c函数(filename)">CPP.apollo_export_cpp_api</node>
 	<node desc="导出事件(filename)">CPP.apollo_export_events_list</node>
@@ -13,6 +27,7 @@
 	<node desc="从消息中读UserDef类型(输入消息, 类型名字)">CPP.apollo_func_read_userData_from_msg</node>
 	<node desc="重新载入策划数据()">CPP.apollo_func_reload_data_table</node>
 	<node desc="发送消息(int:maxID,int:minId, msg_varlist...)">CPP.apollo_func_send_msg</node>
+	<node desc="获得开发者名称()">CPP.apollo_get_author_name</node>
 	<node desc="获得dbl信息()">CPP.apollo_get_dbl_name</node>
 	<node desc="读取整个文件(filename)">CPP.apollo_load_file_data</node>
 	<node desc="加载脚本(scriptn_name)">CPP.apollo_load_script_file</node>

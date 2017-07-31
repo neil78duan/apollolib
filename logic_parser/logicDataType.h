@@ -26,33 +26,34 @@ enum DBL_ELEMENT_TYPE
 	OT_FLOAT = 0x1,
 	OT_STRING = 0x2,
 	OT_INT8 = 0x3,
-	OT_INT16 = 0x4 ,
-	OT_INT64 = 0x5 ,
+	OT_INT16 = 0x4,
+	OT_INT64 = 0x5,
 	OT_BOOL = 0x6,
 
 	OT_ARRAY = 0x7, // 数组     {array_value_type=TEXT|a;b;c}
 	//OT_ARRAY_2D = 0x8, // 数组     {array_value_type=TEXT|a;b;c}
-	OT_TIME =0x8,
-	OT_VARIABLE =0x9,  //variant in game-logic-vm
-	OT_PARAM = 0xa ,	// argment/param in call game-logic-script
+	OT_TIME = 0x8,
+	OT_VARIABLE = 0x9,  //variant in game-logic-vm
+	OT_PARAM = 0xa,	// argment/param in call game-logic-script
 	OT_LAST_RET = 0xb,	//last step return value 
-	OT_USER_DEFINED =0xc ,
-	
-	OT_COMPILE_TIME=0xd, //compile time 
+	OT_USER_DEFINED = 0xc,
+
+	OT_COMPILE_TIME = 0xd, //compile time 
 	OT_FUNCTION_NAME = 0xe, //function name 
 	OT_SCRIPT_MODULE_NAME = 0xf, //function name
 	OT_BINARY_DATA = 0x10,		//binary-data
-	OT_USER_DEFINED_ARRAY =0X11,
-	OT_AUTO = 0x12 ,		//auto type export by compile, if not assert string
+	OT_USER_DEFINED_ARRAY = 0X11,
+	OT_AUTO = 0x12,		//auto type export by compile, if not assert string
 	OT_ORG_STREAM = 0x13,	//org net message stream data
 
 	OT_OBJECT_VOID = 0x20,		//game object , c_address of object
-	OT_OBJ_MSGSTREAM =0x21,		//input message stream
-	OT_OBJ_BASE_OBJ= 0x22,
+	OT_OBJ_MSGSTREAM = 0x21,		//input message stream
+	OT_OBJ_BASE_OBJ = 0x22,
 	OT_OBJ_NDHANDLE = 0x23,
 	OT_OBJ_NDOBJECT = 0x24,
 	OT_OBJ_OUT_MSGSTREAM = 0x25,	//output message
-	OT_ATTR_DATA = 0x26 , //role attribute data
+	OT_ATTR_DATA = 0x26, //role attribute data
+	OT_FILE_STREAM = 0X27, // file binary stream
 };
 
 #pragma pack(push, 4)
