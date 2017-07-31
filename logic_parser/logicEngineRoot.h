@@ -101,6 +101,7 @@ public:
 	
 	//int run_init_script( );
 	bool getModuleChangedTime(const char *moduleName, DBLDataNode &result);
+	const char *getAuthor(){		return m_author.c_str();	}
 	int GetEncodeType() {
 		return m_scriptEncodeType;
 	}
@@ -154,6 +155,7 @@ private:
 	LocalDebugger m_globalDebugger;
 	std::string m_dftScriptModule ; //default run script module if undefine module
 	std::string m_mainModule;
+	std::string m_author;
 
 	LogicData_vct m_global_vars; 
 

@@ -34,8 +34,8 @@
 		<data name="地图id" kinds="numeral" param="4">902</data>
 	</message>
 	<message name="单人挑战副本" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="10" minId="39">0</msgid>
-		<data name="insid" kinds="numeral" param="0">27</data>
+		<msgid kinds="hide" maxId="10" minId="40">0</msgid>
+		<data name="insid" kinds="numeral" param="0">35</data>
 	</message>
 	<message name="邀请玩家打副本" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="10" minId="0">0</msgid>

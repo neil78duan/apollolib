@@ -14,6 +14,341 @@
 #include "logic_parser/dbldata2netstream.h"
 #include "logic_parser/dbl_mgr.h"
 
+APOLLO_SCRIPT_API_DEF(_sys_username, "sys_用户名()")
+{
+	result.InitSet(nd_get_sys_username());
+	return true;
+}
+
+APOLLO_SCRIPT_API_DEF(_sys_get_path, "sys_获取工作目录()")
+{
+	result.InitSet(nd_getcwd());
+	return true;
+}
+
+APOLLO_SCRIPT_API_DEF(_sys_change_path, "sys_切换目录(newpath)")
+{
+	CHECK_ARGS_NUM(args, 2, parser);
+
+	std::string newPath = args[1].GetString();
+	if (newPath.size() > 0) {
+		std::string oldPath = nd_getcwd();
+		if (0 == nd_chdir(newPath.c_str())) {
+			result.InitSet(oldPath.c_str());
+			return true;
+		}
+		return false;
+	}
+	return true;
+}
+
+APOLLO_SCRIPT_API_DEF(_sys_mkfile, "sys_创建文件(filepath)")
+{
+	CHECK_ARGS_NUM(args, 2, parser);
+
+	std::string newPath = args[1].GetString();
+	if (newPath.size() > 0) {
+		if (0 == nd_mkfile(newPath.c_str())) {
+			return true;
+		}
+		parser->setErrno(NDERR_OPENFILE);
+		return false;
+	}
+	return true;
+}
+
+APOLLO_SCRIPT_API_DEF(_sys_copyfile, "sys_复制文件(filesrc,filedest)")
+{
+	CHECK_ARGS_NUM(args, 3, parser);
+
+	std::string pathSrc = args[1].GetString();
+	std::string pathDest = args[2].GetString();
+
+	if (pathSrc.size() > 0 && pathDest.size() > 0) {
+		if (0 == nd_cpfile(pathSrc.c_str(),pathDest.c_str() )) {
+			return true;
+		}
+		parser->setErrno(NDERR_FILE_NOT_EXIST);
+		return false;
+	}
+	return false;
+
+}
+
+APOLLO_SCRIPT_API_DEF(_sys_mkdir, "sys_创建目录(pathname)")
+{
+	CHECK_ARGS_NUM(args, 2, parser);
+
+	std::string newPath = args[1].GetString();
+	if (newPath.size() > 0) {
+		if (0 == nd_mkdir(newPath.c_str())) {
+			return true;
+		}
+		return false;
+	}
+	return true;
+}
+
+APOLLO_SCRIPT_API_DEF(_sys_rmfile, "sys_删除文件(filepath)")
+{
+	CHECK_ARGS_NUM(args, 2, parser);
+
+	std::string newPath = args[1].GetString();
+	if (newPath.size() > 0) {
+		if (0 == nd_rmfile(newPath.c_str())) {
+			return true;
+		}
+		return false;
+	}
+	return true;
+}
+
+
+APOLLO_SCRIPT_API_DEF(_sys_rmdir, "sys_删除目录(path)")
+{
+	CHECK_ARGS_NUM(args, 2, parser);
+
+	std::string newPath = args[1].GetString();
+	if (newPath.size() > 0) {
+		if (0 == nd_rmdir(newPath.c_str())) {
+			return true;
+		}
+		return false;
+	}
+	return true;
+}
+
+APOLLO_SCRIPT_API_DEF(_sys_write_binfile, "sys_BIN写入文件(fileName, var1,var2....)")
+{
+	CHECK_ARGS_NUM(args, 3, parser);
+
+	std::string filename = args[1].GetString();
+	if (filename.size()==0)	{
+		parser->setErrno(NDERR_INVALID_INPUT);
+		return false;
+	}
+	FILE *pf = fopen(filename.c_str(), "a");
+	if (!pf)	{
+		parser->setErrno(NDERR_FILE_NOT_EXIST);
+		return false;
+	}
+	NDOStreamMsg omsg(0, 0);
+
+	for (size_t i = 2; i < args.size(); i++) {
+		DBLDataNode &data = args[i];
+		if (data.GetDataType() == OT_BINARY_DATA){
+			fwrite(data.GetBinary(), data.GetBinarySize(), 1, pf);
+		}
+		else {
+			if (-1 == logicDataWrite(data, omsg)) {
+				parser->setErrno(NDERR_BAD_GAME_OBJECT);
+				return false;
+			}
+			fwrite(omsg.MsgData(), omsg.GetDataLen(), 1, pf);
+		}
+		
+	}
+
+	return true;
+}
+
+APOLLO_SCRIPT_API_DEF(_sys_write_textfile, "sys_text写入文件(fileName, var1,var2....)")
+{
+	CHECK_ARGS_NUM(args, 3, parser);
+
+	std::string filename = args[1].GetString();
+	if (filename.size() == 0)	{
+		parser->setErrno(NDERR_INVALID_INPUT);
+		return false;
+	}
+	FILE *pf = fopen(filename.c_str(), "a");
+	if (!pf)	{
+		parser->setErrno(NDERR_FILE_NOT_EXIST);
+		return false;
+	}
+	NDOStreamMsg omsg(0, 0);
+
+	for (size_t i = 2; i < args.size(); i++) {
+		DBLDataNode &data = args[i];
+		data.Print((logic_print)fprintf, (void *)pf);
+	}
+	fprintf(pf, "\n");
+	return true;
+}
+
+
+APOLLO_SCRIPT_API_DEF(_sys_open_file_stream, "sys_OpenStream(fileName)")
+{
+	CHECK_ARGS_NUM(args, 3, parser);
+
+	std::string filename = args[1].GetString();
+	if (filename.size() == 0)	{
+		parser->setErrno(NDERR_INVALID_INPUT);
+		return false;
+	}
+
+	FILE *pf = fopen(filename.c_str(), "w");
+	if (!pf)	{
+		parser->setErrno(NDERR_FILE_NOT_EXIST);
+		return false;
+	}
+
+	result.InitSet((void*)pf, OT_FILE_STREAM);
+	return true;
+
+}
+
+APOLLO_SCRIPT_API_DEF(_sys_close_file_stream, "sys_CloseStream(fileStream)")
+{
+	CHECK_ARGS_NUM(args, 2, parser);
+	args[2].InitSet((int)0);
+	return true;
+}
+
+
+APOLLO_SCRIPT_API_DEF(_sys_binread_file_stream, "sys_BinReadStream(fileName, readDataType)")
+{
+
+	CHECK_ARGS_NUM(args, 3, parser);
+	if (args[1].GetDataType() != OT_FILE_STREAM){
+		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		return false;
+	}
+	DBL_ELEMENT_TYPE type = args[2].GetDataType();
+	FILE *pf = (FILE*)args[1].GetObject();
+	if (!pf){
+		parser->setErrno(NDERR_PARAM_INVALID);
+		return false;
+	}
+	NDUINT8 byteVal = 0;
+	char buf[8];
+
+	switch (type)
+	{
+	case OT_INT8:
+		if (fread(&byteVal, sizeof(NDUINT8), 1, pf) > 0) {
+			result.InitSet(byteVal);
+			return true;
+		}
+		break;
+	case OT_INT16:
+		if (fread(buf, sizeof(NDUINT16), 1, pf) > 0) {
+			NDUINT16 val = nd_netstream_to_short(buf);
+			result.InitSet(val);
+			return true;
+		}
+		break;
+	case OT_INT:
+		if (fread(buf, sizeof(NDUINT32), 1, pf) > 0) {
+			NDUINT32 val = nd_netstream_to_long(buf);
+			result.InitSet((int)val);
+			return true;
+		}
+		break;
+	case  OT_BOOL:
+		if (fread(&byteVal, sizeof(NDUINT8), 1, pf) > 0) {
+			result.InitSet((int)byteVal);
+			return true;
+		}
+		break;
+
+	case OT_FLOAT:
+	{
+		float val;
+		if (fread(&val, sizeof(val), 1, pf) > 0) {
+			result.InitSet(val);
+			return true;
+		}
+		break;
+	}
+		
+	case OT_STRING:
+	{
+		NDUINT16 size;
+		if (fread(buf, sizeof(NDUINT16), 1, pf) > 0) {
+			size = nd_netstream_to_short(buf);
+			if (size == 0)	{
+				result.InitSet((int)0);
+				return true;
+			}
+
+			char *p = (char *) malloc(size + 1);
+			if (p)	{
+				fread(p, size, 1, pf);
+				p[size] = 0;
+				result.InitSet(p);
+				free(p);
+				return true;
+			}
+		}
+		break;
+	}
+	case OT_INT64:
+	case OT_TIME:
+		if (fwrite(buf, sizeof(NDUINT64), 1, pf) > 0) {
+			NDUINT64 val = nd_netstream_to_longlong(buf);
+			result.InitSet(val);
+			return true;
+		}
+		break;
+	
+	case OT_BINARY_DATA:
+	{
+		NDUINT16 size;
+		if (fread(buf, sizeof(NDUINT16), 1, pf) > 0) {
+			size = nd_netstream_to_short(buf);
+			if (size == 0)	{
+				result.InitSet((int)0);
+				return true;
+			}
+			char *p = (char *)malloc(size + 1);
+			if (p)	{
+				fread(p, size, 1, pf);
+				p[size] = 0;
+				result.InitSet((void*)p,(size_t)size);
+				free(p);
+				return true;
+			}
+		}
+		break;
+	}
+	default:
+		break;
+	}
+
+	parser->setErrno(NDERR_PARAM_INVALID);
+	return false;
+
+}
+
+APOLLO_SCRIPT_API_DEF(_sys_textread_file_stream, "sys_TextReadLine(fileName)")
+{
+	CHECK_ARGS_NUM(args, 2, parser);
+	if (args[1].GetDataType() != OT_FILE_STREAM){
+		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		return false;
+	}
+	FILE *pf = (FILE*)args[1].GetObject();
+	if (!pf){
+		parser->setErrno(NDERR_PARAM_INVALID);
+		return false;
+	}
+	char bufline[4096];
+	bufline[0] = 0;
+	if (fgets(bufline, sizeof(bufline), pf)) {
+		result.InitSet(bufline);
+		return true;
+	}
+	else if (feof(pf) )	{
+		bufline[0] = 0; 
+		result.InitSet(bufline);
+		return true;
+	}
+	return false;
+
+}
+
+
 
 //bool apollo_str_cmp(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 APOLLO_SCRIPT_API_DEF(apollo_str_cmp, "字符串比较(str1,str2)")
@@ -208,6 +543,16 @@ APOLLO_SCRIPT_API_DEF(apollo_get_dbl_name, "获得dbl信息()")
 		return false;
 	}
 	result.InitSet(pdbl->getDatabaseName()) ;
+	return true;
+}
+APOLLO_SCRIPT_API_DEF(apollo_get_author_name, "获得开发者名称()")
+{
+
+	LogicEngineRoot *root = LogicEngineRoot::get_Instant();
+	if (!root) {
+		result.InitSet("unknown");
+	}
+	result.InitSet(root->getAuthor());
 	return true;
 }
 

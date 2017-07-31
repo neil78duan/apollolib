@@ -467,9 +467,15 @@ void DBLDataNode::_copy(const DBLDataNode &r)
 	}
 
 	if (r.m_dataOwner) {
-		m_dataOwner = true;
-		m_data = &m_dataOwn;
-		dbl_data_copy(r.m_data, m_data, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type);
+		if (r.GetDataType() == OT_FILE_STREAM)	{
+			InitSet(r.GetObject(), OT_FILE_STREAM);
+		}
+		else {
+			m_dataOwner = true;
+			m_data = &m_dataOwn;
+			dbl_data_copy(r.m_data, m_data, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type);
+		}
+		
 	}
 	else {
 		m_data = (r.m_data);
@@ -555,12 +561,14 @@ void DBLDataNode::InitSet(const char *str1)
 	Destroy();
 	m_ele_type = OT_STRING;
 	m_dataOwner = true;
-	m_data = &m_dataOwn;
+	if (str1 && *str1)	{
+		m_data = &m_dataOwn;
+		size_t s = strlen(str1) + 1;
+		m_data->str_val = (char*)malloc(s);
+		strncpy(m_data->str_val, str1, s);
 
-	size_t s = strlen(str1) + 1;
-	m_data->str_val = (char*)malloc(s);
-	strncpy(m_data->str_val, str1, s);
-
+	}
+	
 }
 
 
@@ -636,13 +644,17 @@ void DBLDataNode::InitSet(void *binary, size_t size, DBL_ELEMENT_TYPE eleType)
 	m_dataOwner = true;
 	m_data = &m_dataOwn;
 	m_data->_data = NULL;
-	dbl_binary *parr = (dbl_binary *)malloc(sizeof(dbl_binary)+size);
 
-	if (parr){
-		memcpy(parr->data, binary, size);
-		parr->size = size;
-		m_data->_bin = parr;
+	if (size > 0) {
+		dbl_binary *parr = (dbl_binary *)malloc(sizeof(dbl_binary) + size);
+		if (parr){
+			memcpy(parr->data, binary, size);
+			parr->size = size;
+			m_data->_bin = parr;
+		}
 	}
+
+	
 }
 
 void DBLDataNode::InitSet(void *object, DBL_ELEMENT_TYPE type)
@@ -2399,7 +2411,14 @@ DBL_ELEMENT_TYPE DBLDataNode::GetArrayType() const
 void DBLDataNode::Destroy()
 {
 	if (m_dataOwner && m_dataOwn._data) {
-		dbl_destroy_data(m_data, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type);
+		if (m_ele_type == OT_FILE_STREAM)	{
+			if (m_data->_data)	{
+				fclose((FILE*)m_data->_data);
+			}
+		}
+		else {
+			dbl_destroy_data(m_data, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type);
+		}
 		
 	}
 	m_dataOwn._data = 0;
