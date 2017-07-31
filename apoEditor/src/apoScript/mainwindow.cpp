@@ -529,6 +529,13 @@ bool MainWindow::saveCurFile()
 	m_filesWatcher.removePath(m_filePath.c_str());
 
 	if (m_curFile){
+		ndxml *module = ndxml_getnode(m_curFile, "moduleInfo");
+		if (module)	{
+			ndxml *authorxml = ndxml_getnode(module, "Author");
+			if (authorxml)	{
+				ndxml_setval(authorxml, nd_get_sys_username());
+			}
+		}
 		ndxml_save(m_curFile, m_filePath.c_str());
 		nd_logmsg("save %s script ok\n", m_filePath.c_str());
 
