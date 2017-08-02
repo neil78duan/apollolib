@@ -134,7 +134,6 @@ ErrorElement(ESERVER_ERR_VIP_CLEAR_CD_ERROR, "该物品不能使用VIP秒CD"),
 ErrorElement(ESERVER_ERR_VIP_NOT_ERROR, "您并不是vip"),
 ErrorElement(ESERVER_ERR_VIP_NOT_TIME_ERROR, "vip秒CD时间未到"),
 ErrorElement(ERR_REPEATED_CREATEBOSS_ERROR, "不能重复创建boss副本"),
-
 ErrorElement(ERR_CO_BOSS_ATTACKING_ERROR, "有玩家正在攻击该boss"),
 ErrorElement(ERR_CO_BOSS_KILLED_ERROR, "boss已经被杀死"),
 ErrorElement(ERR_CO_BOSS_TEAM_NUM_ERROR, "攻击者队伍人数不对"),
