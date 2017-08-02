@@ -1007,9 +1007,7 @@ void MainWindow::on_actionCompile_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
-	if (checkNeedSave()){
-		saveCurFile();
-	}
+	saveCurFile();
 	setCurFileSave(true);
 }
 
