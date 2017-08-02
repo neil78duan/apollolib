@@ -22,7 +22,6 @@
 
 int logicDataWrite(DBLDataNode &data, NDOStreamMsg &omsg); //return 0 success ,else return -1
 int logicDataRead(DBLDataNode &data, NDIStreamMsg &inmsg); //return 0 success else return -1
-
 typedef std::map<std::string, LogicUserDefStruct> userDefineDataType_map_t;
 
 int loadUserDefFromMsgCfg(const char *msgfile,  userDefineDataType_map_t &userDataRoot);
@@ -33,6 +32,8 @@ int get_type_from_alias(const char *name);
 int UserDefFormatToMessage(userDefineDataType_map_t &userDataRoot, NDOStreamMsg &omsg);
 int UserDefFormatFromMessage(userDefineDataType_map_t &userDataRoot, NDIStreamMsg &inmsg);
 
+
+bool LogicOutputMsgByFormat(logic_print print_func, void *log_file, const char *formatText, NDIStreamMsg &inmsg, userDefineDataType_map_t &dataDef);
 
 //int testFormatMsgRead(userDefineDataType_map_t &userDataRoot);
 

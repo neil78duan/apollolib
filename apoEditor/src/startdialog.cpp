@@ -60,6 +60,8 @@ startDialog::~startDialog()
 void startDialog::ClearLog()
 {
     ui->LogText->clear();
+
+	ui->LogText->update();
 }
 
 void startDialog::WriteLog(const char *logText)

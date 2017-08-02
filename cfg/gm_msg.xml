@@ -9,7 +9,7 @@
 	</message>
 	<message name="领取任务奖励" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="11" minId="4">0</msgid>
-		<data name="任务编号" kinds="numeral" param="0">1001</data>
+		<data name="任务编号" kinds="numeral" param="0">21021901</data>
 	</message>
 	<message name="购买普通物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="8" minId="0">0</msgid>
@@ -306,7 +306,7 @@
 		<data name="发送者" kinds="numeral" param="0">0</data>
 		<data name="被发送者" kinds="numeral" param="0">78</data>
 		<data name="类型" kinds="numeral" param="3">2</data>
-		<data name="内容" kinds="string" param="2">地方毛泽东</data>
+		<data name="内容" kinds="string" param="2">地方</data>
 	</message>
 	<message name="GM_关服" expand="yes" delete="no" need_confirm="yes">
 		<msgid kinds="hide">1794</msgid>
@@ -319,12 +319,6 @@
 		<msgid kinds="hide">1797</msgid>
 		<data name="加快小时" kinds="numeral" param="0">24</data>
 		<data name="加快分钟" kinds="numeral" param="0">1</data>
-	</message>
-	<message name="GM_打印消息" expand="yes" delete="no" need_confirm="yes">
-		<msgid kinds="hide" maxId="0" minId="15">0</msgid>
-		<data name="主消息号" kinds="numeral" param="4">4</data>
-		<data name="次消息号" kinds="numeral" param="4">30</data>
-		<data name="是否打开" kinds="bool" param="3">1</data>
 	</message>
 	<message name="GM_给自己加经验" expand="yes" delete="no">
 		<msgid kinds="hide">1795</msgid>
@@ -398,15 +392,16 @@
 		<data name="物品个数" kinds="numeral" param="4">1</data>
 		<data name="是否隐藏" kinds="numeral" param="3">0</data>
 	</message>
-	<message name="GM_获取玩家日志" expand="yes" delete="no">
+	<!-- message name="GM_获取玩家日志" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0" minId="22">0</msgid>
 		<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">11</data>
 		<data name="文件名" kinds="string" param="2" desc="文件名">apoclient.log</data>
 	</message>
+	
 	<message name="GM_获取玩家资源版本信息" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="16">0</msgid>
 		<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">9</data>
-	</message>
+	</message -->
 	<message name="GM_通过名字获得ID" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="18">0</msgid>
 		<data name="玩家名字" kinds="string" param="2" desc="name">ddtest</data>
@@ -422,14 +417,30 @@
 	<message name="GM_据点入侵" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="28">0</msgid>
 	</message>
-	<message name="sys_打印收发消息" expand="yes" delete="no">
+	<message name="sys_记录收发消息" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0" minId="15">0</msgid>
 		<data name="MaxID" kinds="numeral" param="4">5</data>
 		<data name="MinID" kinds="numeral" param="4">16</data>
 		<data name="是否显示" kinds="bool" param="3">0</data>
 	</message>
+	
+	<message name="sys_打印收到的消息内容" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="0" minId="29">0</msgid>
+		<data name="MaxID" kinds="numeral" param="4">5</data>
+		<data name="MinID" kinds="numeral" param="4">16</data>
+		<data name="是否显示" kinds="bool" param="3">0</data>
+	</message>
+	
 	<message name="sys_查看服务器版本" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0" minId="0">0</msgid>
+	</message>
+	<message name="显示服务器日志" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="0" minId="27">0</msgid>
+	</message>
+	<message name="打开服务器日志" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="0" minId="28">0</msgid>
+		<data name="日志类型" kinds="key_value" key="普通日志,调试,警告,错误,致命" value="0,1,2,3,4" param="3">0</data>
+		<data name="打开" kinds="bool" param="3">0</data>
 	</message>
 	<message name="gm_game-world断线测试" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="2" minId="18">0</msgid>
