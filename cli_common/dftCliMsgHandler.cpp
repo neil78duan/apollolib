@@ -378,6 +378,10 @@ namespace ClientMsgHandler
 
 	bool outPutMessageFromconfig(NDIConn* pconn, const char *formatText, NDIStreamMsg &inmsg, userDefineDataType_map_t &dataDef)
 	{
+		logic_print print_func = getLogFunction(pconn);
+		void*log_file = getLogFile(pconn);
+		return  LogicOutputMsgByFormat( print_func, log_file, formatText, inmsg, dataDef);
+		/*
 		userDefineDataType_map_t &m_dataTypeDef = dataDef;
 		int index = 0;
 		char name[128];
@@ -483,6 +487,7 @@ namespace ClientMsgHandler
 		print_func(log_file, "}\n");
 
 		return true;
+		*/
 	}
 // 
 // 	static ndxml *_getMsgNode(ndxml_root *xmlFile, const char *messageName)

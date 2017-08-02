@@ -111,7 +111,7 @@ ErrorElement(ESERVER_ERR_NO_TALENT, "天赋不存在"),
 ErrorElement(ESERVER_ERR_NONEED_TALENT, "不满足前置天赋要求"),
 ErrorElement(ESERVER_ERR_NOHAVE_TALENT, "天赋点数不够"),
 ErrorElement(ESERVER_ERR_BACK_TALENT_POINT, "返还天赋点数量不一致"),
-ErrorElement(ESERVER_ERR_TALENT_RECAL, "天赋属性计算出错"),
+ErrorElement(ESERVER_ERR_PLAYER_FORCE_QUIT, "玩家强制退出"),
 
 ErrorElement(ESERVER_ERR_BUILDING_HERO_GARRSION, "该哨所已经驻防了该英雄"),
 ErrorElement(ESERVER_ERR_BUILDING_GARRSION, "该哨所已经有英雄驻防了"),
@@ -122,7 +122,7 @@ ErrorElement(ESERVER_ERR_STOVE_FULL, "熔炉已满"),
 ErrorElement(ESERVER_ERR_NO_HAVE_CHEST, "没有找到该宝箱"),
 ErrorElement(ESERVER_ERR_NO_DEFENCE_NPC, "没有该入侵NPC"),
 
-ErrorElement(ESERVER_ERR_PLAYER_FORCE_QUIT, "玩家强制退出"),
+ErrorElement(ESERVER_ERR_TALENT_RECAL, "天赋属性计算出错"),
 ErrorElement(ESERVER_ERR_TIME_OUT, "你用了太多的时间"), 
 ErrorElement(ESERVER_ERR_NO_NEED_CLEAR_CD, "该物品不需要秒CD"),
 
@@ -134,9 +134,15 @@ ErrorElement(ESERVER_ERR_VIP_CLEAR_CD_ERROR, "该物品不能使用VIP秒CD"),
 ErrorElement(ESERVER_ERR_VIP_NOT_ERROR, "您并不是vip"),
 ErrorElement(ESERVER_ERR_VIP_NOT_TIME_ERROR, "vip秒CD时间未到"),
 ErrorElement(ERR_REPEATED_CREATEBOSS_ERROR, "不能重复创建boss副本"),
+
 ErrorElement(ERR_CO_BOSS_ATTACKING_ERROR, "有玩家正在攻击该boss"),
 ErrorElement(ERR_CO_BOSS_KILLED_ERROR, "boss已经被杀死"),
 ErrorElement(ERR_CO_BOSS_TEAM_NUM_ERROR, "攻击者队伍人数不对"),
 ErrorElement(ERR_CO_BOSS_NOTEXIST_ERROR, "boss已经不存在"),
+
+ErrorElement(ESERVER_ERR_MINE_IN_DEFENCE, "正在被入侵"),
+
+ErrorElement(ESERVER_ERR_QUIT_BEFORE_START, "玩家在开始前退出战斗"),
+
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

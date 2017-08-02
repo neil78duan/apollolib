@@ -14,6 +14,7 @@
 #include "logic_parser/dbldata2netstream.h"
 #include "logic_parser/dbl_mgr.h"
 
+
 APOLLO_SCRIPT_API_DEF(_sys_username, "sys_用户名()")
 {
 	result.InitSet(nd_get_sys_username());
@@ -149,6 +150,7 @@ APOLLO_SCRIPT_API_DEF(_sys_write_binfile, "sys_BIN写入文件(fileName, var1,va
 		
 	}
 
+	fclose(pf);
 	return true;
 }
 
@@ -173,6 +175,8 @@ APOLLO_SCRIPT_API_DEF(_sys_write_textfile, "sys_text写入文件(fileName, var1,
 		data.Print((logic_print)fprintf, (void *)pf);
 	}
 	fprintf(pf, "\n");
+
+	fclose(pf);
 	return true;
 }
 
@@ -194,6 +198,7 @@ APOLLO_SCRIPT_API_DEF(_sys_open_file_stream, "sys_OpenStream(fileName)")
 	}
 
 	result.InitSet((void*)pf, OT_FILE_STREAM);
+
 	return true;
 
 }
@@ -206,7 +211,7 @@ APOLLO_SCRIPT_API_DEF(_sys_close_file_stream, "sys_CloseStream(fileStream)")
 }
 
 
-APOLLO_SCRIPT_API_DEF(_sys_binread_file_stream, "sys_BinReadStream(fileName, readDataType)")
+APOLLO_SCRIPT_API_DEF(_sys_binread_file_stream, "sys_BinReadStream(fileStream, readDataType)")
 {
 
 	CHECK_ARGS_NUM(args, 3, parser);
@@ -223,32 +228,33 @@ APOLLO_SCRIPT_API_DEF(_sys_binread_file_stream, "sys_BinReadStream(fileName, rea
 	NDUINT8 byteVal = 0;
 	char buf[8];
 
+	int res = NDERR_PARAM_INVALID;
 	switch (type)
 	{
 	case OT_INT8:
 		if (fread(&byteVal, sizeof(NDUINT8), 1, pf) > 0) {
 			result.InitSet(byteVal);
-			return true;
+			res =(int) LOGIC_ERR_SUCCESS;
 		}
 		break;
 	case OT_INT16:
 		if (fread(buf, sizeof(NDUINT16), 1, pf) > 0) {
 			NDUINT16 val = nd_netstream_to_short(buf);
 			result.InitSet(val);
-			return true;
+			res = LOGIC_ERR_SUCCESS;
 		}
 		break;
 	case OT_INT:
 		if (fread(buf, sizeof(NDUINT32), 1, pf) > 0) {
 			NDUINT32 val = nd_netstream_to_long(buf);
 			result.InitSet((int)val);
-			return true;
+			res = (int)LOGIC_ERR_SUCCESS;
 		}
 		break;
 	case  OT_BOOL:
 		if (fread(&byteVal, sizeof(NDUINT8), 1, pf) > 0) {
 			result.InitSet((int)byteVal);
-			return true;
+			res = (int)LOGIC_ERR_SUCCESS;
 		}
 		break;
 
@@ -257,7 +263,7 @@ APOLLO_SCRIPT_API_DEF(_sys_binread_file_stream, "sys_BinReadStream(fileName, rea
 		float val;
 		if (fread(&val, sizeof(val), 1, pf) > 0) {
 			result.InitSet(val);
-			return true;
+			res = (int)LOGIC_ERR_SUCCESS;
 		}
 		break;
 	}
@@ -269,7 +275,8 @@ APOLLO_SCRIPT_API_DEF(_sys_binread_file_stream, "sys_BinReadStream(fileName, rea
 			size = nd_netstream_to_short(buf);
 			if (size == 0)	{
 				result.InitSet((int)0);
-				return true;
+				res = (int)LOGIC_ERR_SUCCESS;
+				break; 
 			}
 
 			char *p = (char *) malloc(size + 1);
@@ -278,7 +285,7 @@ APOLLO_SCRIPT_API_DEF(_sys_binread_file_stream, "sys_BinReadStream(fileName, rea
 				p[size] = 0;
 				result.InitSet(p);
 				free(p);
-				return true;
+				res = (int)LOGIC_ERR_SUCCESS;
 			}
 		}
 		break;
@@ -288,7 +295,7 @@ APOLLO_SCRIPT_API_DEF(_sys_binread_file_stream, "sys_BinReadStream(fileName, rea
 		if (fwrite(buf, sizeof(NDUINT64), 1, pf) > 0) {
 			NDUINT64 val = nd_netstream_to_longlong(buf);
 			result.InitSet(val);
-			return true;
+			res = (int)LOGIC_ERR_SUCCESS;
 		}
 		break;
 	
@@ -299,7 +306,7 @@ APOLLO_SCRIPT_API_DEF(_sys_binread_file_stream, "sys_BinReadStream(fileName, rea
 			size = nd_netstream_to_short(buf);
 			if (size == 0)	{
 				result.InitSet((int)0);
-				return true;
+				res = (int)LOGIC_ERR_SUCCESS;
 			}
 			char *p = (char *)malloc(size + 1);
 			if (p)	{
@@ -307,21 +314,26 @@ APOLLO_SCRIPT_API_DEF(_sys_binread_file_stream, "sys_BinReadStream(fileName, rea
 				p[size] = 0;
 				result.InitSet((void*)p,(size_t)size);
 				free(p);
-				return true;
+
+				res = (int)LOGIC_ERR_SUCCESS;
+				break;
 			}
 		}
 		break;
 	}
 	default:
+
 		break;
 	}
 
-	parser->setErrno(NDERR_PARAM_INVALID);
-	return false;
-
+	if (res != (int)LOGIC_ERR_SUCCESS)	{
+		parser->setErrno(res);
+		return false;
+	}
+	return true;
 }
 
-APOLLO_SCRIPT_API_DEF(_sys_textread_file_stream, "sys_TextReadLine(fileName)")
+APOLLO_SCRIPT_API_DEF(_sys_textread_file_stream, "sys_TextReadLine(fileStream)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
 	if (args[1].GetDataType() != OT_FILE_STREAM){
@@ -337,14 +349,12 @@ APOLLO_SCRIPT_API_DEF(_sys_textread_file_stream, "sys_TextReadLine(fileName)")
 	bufline[0] = 0;
 	if (fgets(bufline, sizeof(bufline), pf)) {
 		result.InitSet(bufline);
-		return true;
 	}
 	else if (feof(pf) )	{
 		bufline[0] = 0; 
 		result.InitSet(bufline);
-		return true;
 	}
-	return false;
+	return true;
 
 }
 

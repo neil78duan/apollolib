@@ -2183,10 +2183,10 @@ static  int mysprintf(void *pf, const char *stm, ...)
 	
 	va_start(arg, stm);
 	done = vsnprintf(pAddr, pBuf->bufsize, stm, arg);
-	va_end(arg);
-
 	pBuf->addr += done;
 	pBuf->bufsize -= done;
+	va_end(arg);
+
 	
 	return  done ;
 	
