@@ -121,8 +121,8 @@ protected:
 
 	void init_vm();
 
-	void AffairDo(attrid_t &aid, attrval_t &old_val, int optype);
-	void Undo(attrid_t &aid, attrval_t &old_val, int optype);
+	void AffairDo(const attrid_t &aid, const attrval_t &old_val, int optype);
+	void Undo(const attrid_t &aid, const  attrval_t &old_val, int optype);
 	virtual void OnChanged(attrid_t aid, attrval_t new_val); //value changed notify client and save db
 	
 	bool m_EnableRecalc;

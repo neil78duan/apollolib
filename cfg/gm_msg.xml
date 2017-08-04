@@ -9,7 +9,7 @@
 	</message>
 	<message name="领取任务奖励" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="11" minId="4">0</msgid>
-		<data name="任务编号" kinds="numeral" param="0">21021901</data>
+		<data name="任务编号" kinds="numeral" param="0">1001</data>
 	</message>
 	<message name="购买普通物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="8" minId="0">0</msgid>
@@ -193,7 +193,7 @@
 	<message name="开始打副本" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="3" minId="21">0</msgid>
 		<data name="是否是据点" kinds="bool" param="3">0</data>
-		<data name="副本编号" kinds="numeral" param="0">1001</data>
+		<data name="副本编号" kinds="numeral" param="0">10201</data>
 	</message>
 	<message name="打副本结束" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="3" minId="23">0</msgid>
@@ -305,8 +305,11 @@
 		<msgid kinds="hide" maxId="6" minId="46">0</msgid>
 		<data name="发送者" kinds="numeral" param="0">0</data>
 		<data name="被发送者" kinds="numeral" param="0">78</data>
-		<data name="类型" kinds="numeral" param="3">2</data>
+		<data name="类型" kinds="numeral" param="3">0</data>
 		<data name="内容" kinds="string" param="2">地方</data>
+	</message>
+	<message name="请求查看系统聊天消息" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="6" minId="54">0</msgid>
 	</message>
 	<message name="GM_关服" expand="yes" delete="no" need_confirm="yes">
 		<msgid kinds="hide">1794</msgid>
@@ -326,7 +329,7 @@
 	</message>
 	<message name="GM_改等级" expand="yes" delete="no">
 		<msgid kinds="hide">1796</msgid>
-		<data name="新等级" kinds="numeral" param="0">20</data>
+		<data name="新等级" kinds="numeral" param="0">6</data>
 	</message>
 	<message name="GM_加物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="6">0</msgid>
@@ -392,16 +395,6 @@
 		<data name="物品个数" kinds="numeral" param="4">1</data>
 		<data name="是否隐藏" kinds="numeral" param="3">0</data>
 	</message>
-	<!-- message name="GM_获取玩家日志" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="0" minId="22">0</msgid>
-		<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">11</data>
-		<data name="文件名" kinds="string" param="2" desc="文件名">apoclient.log</data>
-	</message>
-	
-	<message name="GM_获取玩家资源版本信息" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="16">0</msgid>
-		<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">9</data>
-	</message -->
 	<message name="GM_通过名字获得ID" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="18">0</msgid>
 		<data name="玩家名字" kinds="string" param="2" desc="name">ddtest</data>
@@ -419,18 +412,16 @@
 	</message>
 	<message name="sys_记录收发消息" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0" minId="15">0</msgid>
-		<data name="MaxID" kinds="numeral" param="4">5</data>
-		<data name="MinID" kinds="numeral" param="4">16</data>
+		<data name="MaxID" kinds="numeral" param="3">5</data>
+		<data name="MinID" kinds="numeral" param="3">16</data>
 		<data name="是否显示" kinds="bool" param="3">0</data>
 	</message>
-	
 	<message name="sys_打印收到的消息内容" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0" minId="29">0</msgid>
-		<data name="MaxID" kinds="numeral" param="4">5</data>
-		<data name="MinID" kinds="numeral" param="4">16</data>
-		<data name="是否显示" kinds="bool" param="3">0</data>
+		<data name="MaxID" kinds="numeral" param="3">11</data>
+		<data name="MinID" kinds="numeral" param="3">4</data>
+		<data name="是否显示" kinds="bool" param="3">1</data>
 	</message>
-	
 	<message name="sys_查看服务器版本" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0" minId="0">0</msgid>
 	</message>

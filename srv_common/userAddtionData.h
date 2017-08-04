@@ -63,7 +63,7 @@ public:
 	bool RollbackAffair();
 protected:
 
-	void Undo(std::string &index, DBLDataNode &old_val, int optype);
+	void Undo(const std::string &index, const  DBLDataNode &old_val, int optype);
 private:
 	user_addition_map m_data_map;
 };

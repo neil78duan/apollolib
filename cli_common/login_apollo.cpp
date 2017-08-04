@@ -275,10 +275,15 @@ void LoginApollo::Destroy()
 	}
 }
 
-int LoginApollo::Login(const char *userName, const char *passwd, ACCOUNT_TYPE type)
+int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE type)
 {
-
 	if (TrytoGetCryptKey() == -1) {
+		return -1;
+	}
+	char userName[ACCOUNT_NAME_SIZE];
+
+	if (!buildAccountName( type, inputName,userName, sizeof(userName))	){
+		nd_object_seterror(m_conn,NDERR_INVALID_INPUT);
 		return -1;
 	}
 
@@ -287,9 +292,11 @@ int LoginApollo::Login(const char *userName, const char *passwd, ACCOUNT_TYPE ty
 	omsg.Write(m_udid) ;
 	omsg.Write((NDUINT8)type) ;
 	omsg.Write((NDUINT8*)userName) ;
-	if (ACC_APOLLO==type && passwd && passwd[0]) {
-		omsg.Write((NDUINT8*)passwd) ;
-	}
+
+	omsg.Write((NDUINT8*)passwd);
+
+	//if (ACC_APOLLO==type && passwd && passwd[0]) {
+	//}
 
 	nd_usermsgbuf_t recv_msg ;
 
@@ -652,6 +659,34 @@ int LoginApollo::relogin(void *token_info, int sendMsgID, int waitMsgID)
 }
 
 
+bool LoginApollo::buildAccountName(ACCOUNT_TYPE type,const char *inputName, char *outName, size_t size)
+{
+	switch (type)
+	{
+	case ACC_FACEBOOK:
+		snprintf(outName,size, "fb&%s", inputName);
+		break;
+	case ACC_UDID:
+		snprintf(outName, size, "udid&%s", inputName);
+		break;
+	case ACC_APOLLO:
+		snprintf(outName, size, "%s", inputName);
+		break;
+	case ACC_GAME_CENTER:
+		snprintf(outName, size, "apl&%s", inputName);
+		break;
+	case ACC_GOOGLE_PLAY:
+		snprintf(outName, size, "gle&%s", inputName);
+		break;
+	case ACC_OTHER_3_ACCID:
+		snprintf(outName, size, "othe&%s", inputName);
+		break;
+	default:
+		return false;
+	}
+	return true;
+}
+
 int LoginApollo::getReloginSessionInfo(void *tokenBuf)
 {
 	int size ;
@@ -685,7 +720,7 @@ int LoginApollo::onLogin(NDIStreamMsg &inmsg)
 		return -1 ;
 	}
 	if (-1==inmsg.Read((NDUINT32&)m_accIndex) || m_accIndex==0) {
-		
+		nd_logerror("login success bug account id = 0 \n");
 		nd_object_seterror(m_conn, NDSYS_ERR_USERNAME) ;
 		return -1 ;
 	}

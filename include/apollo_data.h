@@ -20,7 +20,7 @@
 #endif 
 
 
-#define USER_PASSWORD_SIZE  33
+#define USER_PASSWORD_SIZE  128		//password size or token size
 #define ACCOUNT_NAME_SIZE   100
 #define USER_NAME_SIZE      40
 #define INVITE_CODE_SIZE 	33

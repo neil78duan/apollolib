@@ -197,7 +197,7 @@ bool RoleAttrAsset::subVal(const attr_node_buf &attrs)
 }
 
 
-void RoleAttrAsset::Undo(attrid_t &aid, attrval_t &old_val,  int optype)
+void RoleAttrAsset::Undo(const attrid_t &aid, const  attrval_t &old_val, int optype)
 {
 	ND_TRACE_FUNC();
 	if (EAO_MODIFIED == optype){
@@ -206,7 +206,7 @@ void RoleAttrAsset::Undo(attrid_t &aid, attrval_t &old_val,  int optype)
 	}
 
 }
-void RoleAttrAsset::AffairDo(attrid_t &aid, attrval_t &old_val, int optype)
+void RoleAttrAsset::AffairDo(const attrid_t &aid,const attrval_t &old_val, int optype)
 {
 	ND_TRACE_FUNC();
 	if (EAO_MODIFIED == optype){
@@ -215,7 +215,7 @@ void RoleAttrAsset::AffairDo(attrid_t &aid, attrval_t &old_val, int optype)
 	}
 }
 
-void RoleAttrAsset::OnChanged(attrid_t aid, attrval_t val)
+void RoleAttrAsset::OnChanged(attrid_t aid,  attrval_t val)
 {
 	if (!m_commitNtf){
 		return;
