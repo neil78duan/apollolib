@@ -124,7 +124,7 @@ protected:
 	int jumptoGame(NDUINT64 serverid) ;
 	int relogin(void *tokenBuf, int sendMsgID, int waitMsgID) ;
 	int getReloginSessionInfo(void *tokenBuf) ;
-	
+	bool buildAccountName(ACCOUNT_TYPE type,const char *inputName, char *outName, size_t size);
 	
 	nd_handle  m_conn ;
 	account_index_t m_accIndex;

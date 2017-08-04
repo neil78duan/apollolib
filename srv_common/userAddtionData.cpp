@@ -219,7 +219,7 @@ bool UserAdditionData::opSub(const DBLDataNode& id, const DBLDataNode &val)
 // 	return removeData(name);
 // }
 
-void UserAdditionData::Undo(std::string &index, DBLDataNode &old_val, int optype)
+void UserAdditionData::Undo(const std::string &index, const DBLDataNode &old_val, int optype)
 {
 	if (myBaseAff::EAO_ADD == optype || myBaseAff::EAO_MODIFIED == optype) {
 		m_data_map[index] = old_val;

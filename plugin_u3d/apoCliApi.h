@@ -57,7 +57,7 @@ APOLLO_CLI_API APO_RESULT_T apoCli_ReloginEx(const char *sessionData, int sessio
 APOLLO_CLI_API int apoCli_fetchSessionKey( char *outBuf, int bufsize); //return session key size
 
 //APOLLO_CLI_API APO_RESULT_T apoCli_TrytoRelogin();
-APOLLO_CLI_API APO_RESULT_T apoCli_LoginAccount(const char *account, const char *passwd);
+APOLLO_CLI_API APO_RESULT_T apoCli_LoginAccount(const char *account, const char *passwd, int accType);
 APOLLO_CLI_API APO_RESULT_T apoCli_CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email);
 //APOLLO_CLI_API APO_RESULT_T apoCli_testOneKeyLogin(const char *host, int port, const char *user, const char *passwd);
 APOLLO_CLI_API void apoCli_Logout();

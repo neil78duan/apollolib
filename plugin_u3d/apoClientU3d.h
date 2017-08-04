@@ -61,7 +61,7 @@ public:
 	RESULT_T ReloginBackground();
 	RESULT_T ReloginEx(void *session, size_t sessionSize, bool bReloginOffline);
 	
-	RESULT_T LoginAccount(const char *account, const char *passwd);
+	RESULT_T LoginAccount(const char *account, const char *passwd, int accType);
 
 	RESULT_T CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email);
 	RESULT_T createRole(const char *roleName);
@@ -69,7 +69,7 @@ public:
 
 	int GetGameAreaList( ApolloServerInfo bufs[], size_t number) ;
 	
-	RESULT_T testOneKeyLogin(const char *host, int port, const char *user, const char *passwd) ;
+	RESULT_T testOneKeyLogin(const char *host, int port, const char *user, const char *passwd,int accType) ;
 	void Logout();
 	void ClearLoginHistory() ;
 

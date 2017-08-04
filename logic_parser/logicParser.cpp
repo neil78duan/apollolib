@@ -1152,7 +1152,7 @@ int LogicParserEngine::_baseCallScript(runningStack *stack)
 			else if (inException == true){
 				//on error when exception-handle
 				m_sys_errno = errorBeforeException;
-				nd_logerror("%s error : %s  run in Exception handler \n", stack->cmd->cmdname, nd_error_desc(m_sys_errno));
+				nd_logdebug("%s error : %s  run in Exception handler \n", stack->cmd->cmdname, nd_error_desc(m_sys_errno));
 				return -1;
 			} 
 			else if (exception_addr)	{
@@ -1162,7 +1162,7 @@ int LogicParserEngine::_baseCallScript(runningStack *stack)
 				errorBeforeException = m_sys_errno;
 				m_registorFlag = true;
 
-				nd_logerror("%s catch exception : %s \n", stack->cmd->cmdname, nd_error_desc(m_sys_errno));
+				nd_logdebug("%s catch exception : %s \n", stack->cmd->cmdname, nd_error_desc(m_sys_errno));
 			}
 			else {
 				nd_logerror(" %s script error : %s \n", stack->cmd->cmdname, nd_error_desc(m_sys_errno));

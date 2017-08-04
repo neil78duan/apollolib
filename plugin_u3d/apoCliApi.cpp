@@ -257,13 +257,13 @@ int apoCli_fetchSessionKey(char *outbuf, int bufsize)
 // 	return apoCli->TrytoRelogin();
 // 
 // }
-RESULT_T apoCli_LoginAccount(const char *account, const char *passwd)
+RESULT_T apoCli_LoginAccount(const char *account, const char *passwd, int accType)
 {
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (!apoCli)	{
 		return NDSYS_ERR_NOT_INIT;
 	}
-	return apoCli->LoginAccount(account, passwd);
+	return apoCli->LoginAccount(account, passwd,accType);
 }
 RESULT_T apoCli_CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email)
 {
