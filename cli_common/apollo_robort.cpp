@@ -170,7 +170,7 @@ int ApolloRobort::_login(const char *accName, const char *passwd)
 	}
 	
 	
-	ret = m_login->Login(accName, passwd, ACC_APOLLO);
+	ret = m_login->Login(accName, passwd, ACC_APOLLO,false);
 	if (-1 == ret) {
 		if (m_login->GetLastError() == NDSYS_ERR_NOUSER) {
 			account_base_info acc;

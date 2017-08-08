@@ -203,7 +203,7 @@ public:
 	
 	static DBL_ELEMENT_TYPE getTypeFromName(const char *typeName);
 	static DBL_ELEMENT_TYPE getTypeFromValue(const char *valText);
-	static int getCellType(const char *celltext, int &subType);
+	static int getCellType(const char *celltext, int &subType, bool forceFloatToInt=true);
 	
 	DBLDataNode &operator =(const DBLDataNode &r);
 	bool operator == (const DBLDataNode &r) const;

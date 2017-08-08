@@ -194,6 +194,7 @@ void ConnectDialog::onTimeOut()
     if(m_pConn) {
         int ret = m_pConn->Update(0) ;
         if(ret == -1) {
+			on_loginButton_clicked();
             //close
             //m_pConn->Close
         }
@@ -462,7 +463,7 @@ int ConnectDialog::_login(const char *user, const char *passwd)
         }
     }*/
 
-    ret =m_login->Login(user, passwd, ACC_APOLLO);
+    ret =m_login->Login(user, passwd, ACC_APOLLO,false);
     if (-1==ret) {
         if (m_login->GetLastError() == NDSYS_ERR_NOUSER) {
             account_base_info acc;
@@ -775,4 +776,9 @@ void ConnectDialog::on_checkBox16Hex_clicked()
 void ConnectDialog::on_pushButtonExit_clicked()
 {
     accept() ;
+}
+
+void ConnectDialog::on_pushButton_2_clicked()
+{
+    ClearLog();
 }

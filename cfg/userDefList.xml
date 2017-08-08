@@ -7,7 +7,7 @@
 		<internal_object>
 			<node desc="无">none</node>
 			<node desc="角色属性">attr</node>
-			<node desc="背包">package</node>
+			<node desc="背包">Package</node>
 			<node desc="任务">task</node>
 			<node desc="基地">home</node>
 			<node desc="卡牌">card</node>

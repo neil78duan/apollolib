@@ -1,6 +1,6 @@
 <?xml  version="1.0" encoding="utf8" ?>
 <func_list>
-	<node desc="sys_BinReadStream(fileName, readDataType)">CPP._sys_binread_file_stream</node>
+	<node desc="sys_BinReadStream(fileStream, readDataType)">CPP._sys_binread_file_stream</node>
 	<node desc="sys_切换目录(newpath)">CPP._sys_change_path</node>
 	<node desc="sys_CloseStream(fileStream)">CPP._sys_close_file_stream</node>
 	<node desc="sys_复制文件(filesrc,filedest)">CPP._sys_copyfile</node>
@@ -10,7 +10,7 @@
 	<node desc="sys_OpenStream(fileName)">CPP._sys_open_file_stream</node>
 	<node desc="sys_删除目录(path)">CPP._sys_rmdir</node>
 	<node desc="sys_删除文件(filepath)">CPP._sys_rmfile</node>
-	<node desc="sys_TextReadLine(fileName)">CPP._sys_textread_file_stream</node>
+	<node desc="sys_TextReadLine(fileStream)">CPP._sys_textread_file_stream</node>
 	<node desc="sys_用户名()">CPP._sys_username</node>
 	<node desc="sys_BIN写入文件(fileName, var1,var2....)">CPP._sys_write_binfile</node>
 	<node desc="sys_text写入文件(fileName, var1,var2....)">CPP._sys_write_textfile</node>
