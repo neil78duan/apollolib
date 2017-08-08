@@ -61,7 +61,7 @@ public:
 	RESULT_T ReloginBackground();
 	RESULT_T ReloginEx(void *session, size_t sessionSize, bool bReloginOffline);
 	
-	RESULT_T LoginAccount(const char *account, const char *passwd, int accType);
+	RESULT_T LoginAccount(const char *account, const char *passwd, int accType, bool skipAuth);
 
 	RESULT_T CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email);
 	RESULT_T createRole(const char *roleName);

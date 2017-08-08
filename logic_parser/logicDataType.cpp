@@ -170,11 +170,11 @@ DBL_ELEMENT_TYPE DBLDataNode::getTypeFromValue(const char *valText)
 	}
 
 	int subType = OT_STRING;
-	return (DBL_ELEMENT_TYPE)DBLDataNode::getCellType(p, subType);
+	return (DBL_ELEMENT_TYPE)DBLDataNode::getCellType(p, subType,false);
 }
 
 
-int DBLDataNode::getCellType(const char *celltext, int &subType)
+int DBLDataNode::getCellType(const char *celltext, int &subType, bool forceFloatToInt )
 {
 	bool isFloat = false;
 	//bool isArray2d = false;
@@ -220,8 +220,12 @@ int DBLDataNode::getCellType(const char *celltext, int &subType)
 	else if (IS_NUMERALS(*p) || *p == '-') {
 		//check is number
 		int dotNum = 0;
+		bool floatIsZero = true;
 
 		while (*(++p)) {
+			if (isFloat && *p != '0'){
+				floatIsZero = false;
+			}
 			if (IS_NUMERALS(*p) || *p == '.') {
 				if (*p == '.') {
 					dotNum++;
@@ -234,6 +238,9 @@ int DBLDataNode::getCellType(const char *celltext, int &subType)
 			else {
 				return OT_STRING;
 			}
+		}
+		if (forceFloatToInt && floatIsZero)	{
+			return OT_INT;
 		}
 		return isFloat ? OT_FLOAT : OT_INT;
 	}

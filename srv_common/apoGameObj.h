@@ -13,6 +13,19 @@
 #include "logic_parser/logicEngineRoot.h"
 #include "logic_parser/dbldata2netstream.h"
 
+template <class _Tk>
+struct apoStringLess
+{
+
+	bool operator() (const _Tk& l, const _Tk& r) const
+	{
+		int ret = ndstricmp(l.c_str(), r.c_str());
+		return ret < 0;
+
+	}
+
+};
+
 class ApoGameObj : public LogicObjectBase
 {
 public:	
@@ -31,7 +44,7 @@ public:
 	//LogicObjectBase *getObjectMgr(const char* destName);
 	bool getOtherObject(const char*objName, DBLDataNode &val);
 
-	typedef std::map<std::string, LogicObjectBase*> objectMgr_vct;
+	typedef std::map<std::string, LogicObjectBase*, apoStringLess<std::string> > objectMgr_vct;
 protected:
 	
 	//objectMgr_vct m_objectMgr;

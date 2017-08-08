@@ -490,7 +490,7 @@ RESULT_T ApoClient::TrytoReloginEx(void *session, size_t sessionSize)
 	return (RESULT_T)NDERR_LIMITED;
 }
 
-RESULT_T ApoClient::LoginAccount(const char *account, const char *passwd, int accType)
+RESULT_T ApoClient::LoginAccount(const char *account, const char *passwd, int accType,bool skipAuth)
 {
 	m_isRelogin = 0;
 	int reTrytimes = 3;
@@ -505,7 +505,7 @@ RE_LOGIN:
 	if (-1 == _trytoOpen()) {
 		return NDSYS_ERR_HOST_UNAVAILABLE;
 	}
-	int ret = m_login->Login(account, passwd, (ACCOUNT_TYPE)accType);
+	int ret = m_login->Login(account, passwd, (ACCOUNT_TYPE)accType,skipAuth);
 	if (-1 == ret) {
 		int errCode = m_login->GetLastError();
 		if (errCode == NDERR_CLOSED || errCode == NDERR_RESET) {
@@ -668,7 +668,7 @@ RESULT_T ApoClient::testOneKeyLogin(const char *host, int port, const char *user
 		return res ;
 	}
 	
-	res = LoginAccount(user, passwd,accType) ;
+	res = LoginAccount(user, passwd,accType,false) ;
 	if(res == ESERVER_ERR_SUCCESS) {
 		return res ;
 	}

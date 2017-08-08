@@ -9,7 +9,7 @@
 	</message>
 	<message name="领取任务奖励" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="11" minId="4">0</msgid>
-		<data name="任务编号" kinds="numeral" param="0">1001</data>
+		<data name="任务编号" kinds="numeral" param="0">21011901</data>
 	</message>
 	<message name="购买普通物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="8" minId="0">0</msgid>
@@ -222,7 +222,7 @@
 	</message>
 	<message name="卡牌升星" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="5" minId="14">0</msgid>
-		<data name="卡牌ID" kinds="numeral" param="0">0x65209</data>
+		<data name="卡牌ID" kinds="numeral" param="0">21011</data>
 		<data name="卡牌数量" kinds="numeral" param="4">0</data>
 		<data name="卡牌材料" kinds="numeral" param="0">1</data>
 		<data name="卡牌材料" kinds="numeral" param="0">2</data>
@@ -241,8 +241,9 @@
 		<data name="装备ID" kinds="numeral" param="0">3765663</data>
 	</message>
 	<message name="装备强化" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="5" minId="0x15">0</msgid>
-		<data name="装备ID" kinds="numeral" param="0">424317</data>
+		<msgid kinds="hide" maxId="5" minId="0x13">0</msgid>
+		<data name="装备ID" kinds="numeral" param="0">3897725</data>
+		<data name="英雄ID" kinds="numeral" param="0">21051</data>
 	</message>
 	<message name="天赋升级" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0x0c" minId="0x00">0</msgid>
@@ -320,8 +321,8 @@
 	</message>
 	<message name="GM_修改游戏时间" expand="yes" delete="no" need_confirm="yes">
 		<msgid kinds="hide">1797</msgid>
-		<data name="加快小时" kinds="numeral" param="0">24</data>
-		<data name="加快分钟" kinds="numeral" param="0">1</data>
+		<data name="加快小时" kinds="numeral" param="0">0</data>
+		<data name="加快分钟" kinds="numeral" param="0">20</data>
 	</message>
 	<message name="GM_给自己加经验" expand="yes" delete="no">
 		<msgid kinds="hide">1795</msgid>
@@ -333,8 +334,8 @@
 	</message>
 	<message name="GM_加物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="6">0</msgid>
-		<data name="物品编号" kinds="numeral" param="0">31101</data>
-		<data name="数量" kinds="numeral" param="0">100</data>
+		<data name="物品编号" kinds="numeral" param="0">21011</data>
+		<data name="数量" kinds="numeral" param="0">1</data>
 	</message>
 	<message name="GM_增加卡牌" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="7">0</msgid>
@@ -351,7 +352,7 @@
 	</message>
 	<message name="GM_增加装备" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="20">0</msgid>
-		<data name="编号" kinds="numeral" param="0">31203</data>
+		<data name="编号" kinds="numeral" param="0">31101</data>
 	</message>
 	<message name="GM_增加属性" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="8">0</msgid>

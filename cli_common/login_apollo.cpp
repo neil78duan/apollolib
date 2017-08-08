@@ -275,7 +275,7 @@ void LoginApollo::Destroy()
 	}
 }
 
-int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE type)
+int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE type,  bool skipAuth)
 {
 	if (TrytoGetCryptKey() == -1) {
 		return -1;
@@ -287,6 +287,9 @@ int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE t
 		return -1;
 	}
 
+	if (skipAuth)	{
+		type = ACC_SKIP_AUTH;
+	}
 	// send login message
 	NDOStreamMsg omsg(ND_MAIN_ID_LOGIN,LOGIN_MSG_LOGIN_REQ) ;
 	omsg.Write(m_udid) ;

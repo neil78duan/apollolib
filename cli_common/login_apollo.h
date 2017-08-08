@@ -93,7 +93,7 @@ public:
 
 	void Destroy();
 	//return 0 success ,else return error code
-	int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type) ;//return -1 if error ESERVER_ERR_NOUSER
+	int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type, bool skipAuth);//return -1 if error ESERVER_ERR_NOUSER
 	int Relogin() ;
 	int Logout() ;
 	int TrytoGetCryptKey();

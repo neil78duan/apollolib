@@ -182,8 +182,11 @@ bool RoleAttrAsset::setVal(const attr_node_buf &attrs)
 }
 bool RoleAttrAsset::addVal(const attr_node_buf &attrs)
 {
+	bool ret = false;
 	for (int i = 0; i < attrs.number; i++)	{
-		addVal(attrs.buf[i].id, attrs.buf[i].val);
+		if (!addVal(attrs.buf[i].id, attrs.buf[i].val)){
+			return false;
+		}
 	}
 
 	return true;
@@ -191,7 +194,9 @@ bool RoleAttrAsset::addVal(const attr_node_buf &attrs)
 bool RoleAttrAsset::subVal(const attr_node_buf &attrs)
 {
 	for (int i = 0; i < attrs.number; i++)	{
-		subVal(attrs.buf[i].id, attrs.buf[i].val);
+		if (!subVal(attrs.buf[i].id, attrs.buf[i].val)){
+			return false;
+		}
 	}
 	return true;
 }
