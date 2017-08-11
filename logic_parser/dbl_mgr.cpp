@@ -514,7 +514,7 @@ int DBLTable::parseTableTypeInfo(FILE *pf, int encodeType)
 							nd_logerror("parse col %s error row=%d\n", line1[i].c_str(), rowIndex);
 							return -1;
 						}
-						m_pcols[i].type = (DBL_ELEMENT_TYPE)type;
+						m_pcols[i].type = NDMAX((DBL_ELEMENT_TYPE)type, m_pcols[i].type);
 						if (m_pcols[i].type == OT_ARRAY) {
 							m_pcols[i].sub_type = NDMAX(m_pcols[i].sub_type, (DBL_ELEMENT_TYPE)subType);
 						}
