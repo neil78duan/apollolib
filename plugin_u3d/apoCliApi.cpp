@@ -31,12 +31,12 @@ struct msgRecvInfo
 	}
 };
 
-bool apoCli_init(const char *workingPath, const char *logPath)
+int apoCli_init(const char *workingPath, const char *logPath)
 {
 	if (ApoClient::getInstant()) {
-		return true;
+		return 1;
 	}
-	return false;
+	return 0;
 }
 void apoCli_destroy()
 {
@@ -52,6 +52,15 @@ void* get_NDNetObject()
 	return NULL;
 }
 
+
+int apoCli_CheckConnValid()
+{
+	ApoClient *apoCli = ApoClient::getInstant();
+	if (apoCli && apoCli->getConn())	{
+		return nd_connector_valid((nd_netui_handle)apoCli->getConn());
+	}
+	return 0;
+}
 
 void apoCli_resetConnector()
 {

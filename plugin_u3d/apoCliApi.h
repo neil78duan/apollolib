@@ -36,10 +36,11 @@ typedef int  APO_RESULT_T;
 
 
 
-APOLLO_CLI_API bool apoCli_init(const char *workingPath, const char *logPath);
+APOLLO_CLI_API int apoCli_init(const char *workingPath, const char *logPath);
 
 APOLLO_CLI_API void apoCli_destroy();
 APOLLO_CLI_API void* get_NDNetObject();
+APOLLO_CLI_API int apoCli_CheckConnValid();
 APOLLO_CLI_API void apoCli_resetConnector();
 
 APOLLO_CLI_API APO_RESULT_T apoCli_open(const char *host, int port, const char *dev_udid);
