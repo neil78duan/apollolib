@@ -193,12 +193,12 @@
 	<message name="开始打副本" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="3" minId="21">0</msgid>
 		<data name="是否是据点" kinds="bool" param="3">0</data>
-		<data name="副本编号" kinds="numeral" param="0">10201</data>
+		<data name="副本编号" kinds="numeral" param="0">10101</data>
 	</message>
 	<message name="打副本结束" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="3" minId="23">0</msgid>
 		<data name="是否是据点" kinds="bool" param="3">0</data>
-		<data name="副本编号" kinds="numeral" param="0">1001</data>
+		<data name="副本编号" kinds="numeral" param="0">10101</data>
 		<data name="错误号" kinds="numeral" param="0">0</data>
 		<data name="玩家消耗的能量" kinds="numeral" param="0">100</data>
 		<data name="玩家获得的能量" kinds="numeral" param="0">100</data>
@@ -211,6 +211,11 @@
 		<data name="是否死亡" kinds="bool" param="3">0</data>
 		<data name="英雄4编号" kinds="numeral" param="0">0</data>
 		<data name="是否死亡" kinds="bool" param="3">0</data>
+	</message>
+	<message name="扫荡副本" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="3" minId="45">0</msgid>
+		<data name="副本编号" kinds="numeral" param="4">20102</data>
+		<data name="次数" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="获得完成的地图" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="3" minId="25">0</msgid>

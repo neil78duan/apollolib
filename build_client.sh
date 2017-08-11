@@ -27,7 +27,7 @@ cd xcode/apollo_client
 xcodebuild clean -target apollo_client_ios
 xcodebuild clean -target apollo_u3d_mac
 
-xcodebuild -project apollo_client.xcodeproj -target apollo_client_ios
+xcodebuild -project apollo_client.xcodeproj -target apollo_client_ios -configuration Release
 [ $? == 0 ] || exit 1
 
 

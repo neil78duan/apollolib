@@ -142,6 +142,6 @@ ErrorElement(ERR_CO_BOSS_NOTEXIST_ERROR, "boss已经不存在"),
 ErrorElement(ESERVER_ERR_MINE_IN_DEFENCE, "正在被入侵"),
 
 ErrorElement(ESERVER_ERR_QUIT_BEFORE_START, "玩家在开始前退出战斗"),
-
+ErrorElement(ESERVER_ERR_STOVE_POSITION_FULL, "熔炉已开启最大位置"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),
