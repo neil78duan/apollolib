@@ -193,11 +193,7 @@
 	<message name="开始打副本" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="3" minId="21">0</msgid>
 		<data name="是否是据点" kinds="bool" param="3">0</data>
-<<<<<<< HEAD
 		<data name="副本编号" kinds="numeral" param="0">20101</data>
-=======
-		<data name="副本编号" kinds="numeral" param="0">10101</data>
->>>>>>> 51b9460c90a89e8293cead85625ec1ddd5a1133d
 	</message>
 	<message name="打副本结束" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="3" minId="23">0</msgid>
@@ -395,7 +391,7 @@
 	</message>
 	<message name="GM_通过名字获得ID" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="18">0</msgid>
-		<data name="玩家名字" kinds="string" param="2" desc="name">ddtest</data>
+		<data name="玩家名字" kinds="string" param="2" desc="name">berry</data>
 	</message>
 	<message name="GM_查询其他玩家设置" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="21">0</msgid>
@@ -422,14 +418,14 @@
 	</message>
 	<message name="sys_记录收发消息" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0" minId="15">0</msgid>
-		<data name="MaxID" kinds="numeral" param="3">5</data>
-		<data name="MinID" kinds="numeral" param="3">16</data>
-		<data name="是否显示" kinds="bool" param="3">0</data>
+		<data name="MaxID" kinds="numeral" param="3">11</data>
+		<data name="MinID" kinds="numeral" param="3">6</data>
+		<data name="是否显示" kinds="bool" param="3">1</data>
 	</message>
 	<message name="sys_打印收到的消息内容" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0" minId="29">0</msgid>
 		<data name="MaxID" kinds="numeral" param="3">11</data>
-		<data name="MinID" kinds="numeral" param="3">4</data>
+		<data name="MinID" kinds="numeral" param="3">6</data>
 		<data name="是否显示" kinds="bool" param="3">1</data>
 	</message>
 	<message name="sys_关闭消息" expand="yes" delete="no">

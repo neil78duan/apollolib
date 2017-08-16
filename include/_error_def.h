@@ -143,10 +143,7 @@ ErrorElement(ESERVER_ERR_MINE_IN_DEFENCE, "正在被入侵"),
 
 ErrorElement(ESERVER_ERR_QUIT_BEFORE_START, "玩家在开始前退出战斗"),
 ErrorElement(ESERVER_ERR_STOVE_POSITION_FULL, "熔炉已开启最大位置"),
-<<<<<<< HEAD
 ErrorElement(ESERVER_ERR_BOSS_CREATE_LIMIT, "创建合作boss副本数量达到上限"),
 ErrorElement(ESERVER_ERR_BOSS_FIGHT_LIMIT, "合作boss战斗次数达到上限"),
-=======
->>>>>>> 51b9460c90a89e8293cead85625ec1ddd5a1133d
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

@@ -217,9 +217,10 @@ int LoginApollo::getReloginSessionInfo(login_session_load *outbuf)
 	login_token_info sessionifo;
 	getLoginToken(&sessionifo);
 
-	memcpy(outbuf->session_buf, &sessionifo, sizeof(sessionifo));
+	int size =sessionifo.toBuf(outbuf->session_buf, sizeof(outbuf->session_buf));
+	//memcpy(outbuf->session_buf, &sessionifo, sizeof(sessionifo));
 	memcpy(outbuf->keymd5, &m_srv_key, sizeof(rsa_key_from_srv));
-	outbuf->session_size = nd_TEAencrypt((unsigned char*)outbuf->session_buf, sizeof(sessionifo), &sessionifo.sym_key);
+	outbuf->session_size = nd_TEAencrypt((unsigned char*)outbuf->session_buf, size, &sessionifo.sym_key);
 
 	return  0;
 }
@@ -629,21 +630,27 @@ int LoginApollo::switchServer(const char *host, NDUINT16 port,int sendMsg, int w
 int LoginApollo::relogin(void *token_info, int sendMsgID, int waitMsgID)
 {
 	login_session_load *saveSession = (login_session_load *) token_info ;
-	transfer_session_key trans_key ;
 	
 	
-	tea_k k ;
-	
-	tea_key(&k) ;
-	nd_teaKeyToNetorder(&trans_key.new_key, &k);
-	
+	//tea_k k ;	
+	//tea_key(&k) ;
+	//nd_teaKeyToNetorder(&trans_key.new_key, &k);
+	int streamSize = 0;
+	char streamBuf[4096];
+
+	transfer_session_key trans_key;
+	tea_key(&trans_key.new_key);
+
 	//init transfer session key
 	trans_key.acc_index = saveSession->acc_index;
 	strncpy((char*)trans_key.udid, (char*)m_udid, sizeof(trans_key.udid));
-	memcpy(trans_key.session_buf, saveSession->session_buf, saveSession->session_size) ;
-	trans_key.size = saveSession->session_size ;
-	
-	size_t org_size = sizeof(transfer_session_key) - sizeof(trans_key.session_buf) + trans_key.size ;
+	memcpy(trans_key.session_buf, saveSession->session_buf, saveSession->session_size);
+	trans_key.size = saveSession->session_size;
+
+	streamSize = trans_key.toBuf(streamBuf, sizeof(streamBuf));
+	nd_logdebug("send relogin data len =%d udid=%s\n", streamSize, trans_key.udid);
+
+	//size_t org_size = sizeof(transfer_session_key) - sizeof(trans_key.session_buf) + trans_key.size ;
 	
 	
 	//SEND session info to server and check
@@ -653,17 +660,17 @@ int LoginApollo::relogin(void *token_info, int sendMsgID, int waitMsgID)
 	char buf[4096] ;
 	int size = sizeof(buf) ;
 	
-	if (0!=rsa_pub_encrypt((char*)&buf, &size,(char*)&trans_key, (int)org_size, &saveSession->srv_key)) {
+	if (0!=rsa_pub_encrypt((char*)&buf, &size,(char*)&streamBuf, (int)streamSize, &saveSession->srv_key)) {
 		nd_logerror("rsa encrypt symm-key error\n");
 		return 1;
 	}
 	
 	omsg.WriteBin(buf, size) ;
-	nd_logdebug("send relogin data len =%d udid=%s\n", size, trans_key.udid);
+	//nd_logdebug("send relogin data len =%d udid=%s\n", size, trans_key.udid);
 	
 	
-	size = sizeof(k) ;
-	nd_net_ioctl((nd_netui_handle)m_conn,  NDIOCTL_SET_CRYPT_KEY,&k, &size) ;
+	size = sizeof(trans_key.new_key);
+	nd_net_ioctl((nd_netui_handle)m_conn, NDIOCTL_SET_CRYPT_KEY, &trans_key.new_key, &size);
 	
 	//nd_log_screen("set new crypt key = { %x, %x, %x, %x} \n", k.k[0],k.k[1],k.k[2],k.k[3] ) ;	
 	
@@ -851,12 +858,13 @@ int session_to_stream(R_RSA_PUBLIC_KEY *key, login_token_info *session_info, con
 	char md5[16];
 	char buf[4096];
 
-	tea_k backKey = session_info->sym_key;
-	nd_teaKeyToNetorder(&session_info->sym_key, &backKey);
-	memcpy(buf, session_info, sizeof(*session_info));
-	session_info->sym_key = backKey;
+	//tea_k backKey = session_info->sym_key;
+	//nd_teaKeyToNetorder(&session_info->sym_key, &backKey);
+	//memcpy(buf, session_info, sizeof(*session_info));
+	//session_info->sym_key = backKey;
+	size = session_info->toBuf(buf, sizeof(buf));
 
-	size = nd_TEAencrypt((unsigned char*)buf, sizeof(*session_info), &session_info->sym_key);
+	size = nd_TEAencrypt((unsigned char*)buf, size, &session_info->sym_key);
 	MD5Crypt16(buf, size, md5);
 
 
@@ -949,12 +957,13 @@ int save_session_info(R_RSA_PUBLIC_KEY *key, login_token_info *session_info , co
 	char md5[16] ;
 	char buf[4096] ;
 
-	tea_k backKey = session_info->sym_key ;
-	nd_teaKeyToNetorder(&session_info->sym_key, &backKey);
-	memcpy(buf, session_info, sizeof(*session_info)) ;
-	session_info->sym_key = backKey ;
+	//tea_k backKey = session_info->sym_key ;
+	//nd_teaKeyToNetorder(&session_info->sym_key, &backKey);
+	//memcpy(buf, session_info, sizeof(*session_info)) ;
+	//session_info->sym_key = backKey ;
+	size =session_info->toBuf(buf, sizeof(buf));
 	
-	size = nd_TEAencrypt((unsigned char*)buf, sizeof(*session_info), &session_info->sym_key) ;
+	size = nd_TEAencrypt((unsigned char*)buf, size, &session_info->sym_key) ;
 	MD5Crypt16(buf, size, md5) ;
 #if 0
 	do {
