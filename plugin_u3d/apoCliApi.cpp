@@ -62,15 +62,6 @@ int apoCli_CheckConnValid()
 	return 0;
 }
 
-int apoCli_CheckConnValid()
-{
-	ApoClient *apoCli = ApoClient::getInstant();
-	if (apoCli && apoCli->getConn())	{
-		return nd_connector_valid((nd_netui_handle)apoCli->getConn());
-	}
-	return 0;
-}
-
 void apoCli_resetConnector()
 {
 	ApoClient *apoCli = ApoClient::getInstant();
