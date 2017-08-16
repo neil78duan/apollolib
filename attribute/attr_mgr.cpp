@@ -182,7 +182,7 @@ bool RoleAttrAsset::setVal(const attr_node_buf &attrs)
 }
 bool RoleAttrAsset::addVal(const attr_node_buf &attrs)
 {
-	bool ret = false;
+	//bool ret = false;
 	for (int i = 0; i < attrs.number; i++)	{
 		if (!addVal(attrs.buf[i].id, attrs.buf[i].val)){
 			return false;
@@ -216,11 +216,11 @@ void RoleAttrAsset::AffairDo(const attrid_t &aid,const attrval_t &old_val, int o
 	ND_TRACE_FUNC();
 	if (EAO_MODIFIED == optype){
 		attrval_t newval = getVal(aid);
-		OnChanged(aid, newval);
+		OnChanged(aid, newval,old_val);
 	}
 }
 
-void RoleAttrAsset::OnChanged(attrid_t aid,  attrval_t val)
+void RoleAttrAsset::OnChanged(attrid_t aid,  attrval_t val,attrval_t old_val)
 {
 	if (!m_commitNtf){
 		return;
@@ -320,7 +320,7 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 			AffairModify(aid, oldval);
 		}
 		else {
-			OnChanged(aid, *pdata);
+			OnChanged(aid, *pdata, oldval);
 			
 			//AttrValChange(aid, m_data.attrs_base[aid]);
 		}

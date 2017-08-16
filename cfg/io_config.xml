@@ -5,10 +5,10 @@
 	<net_protocol name="网络协议配置文件" kinds="in_file">../../resource/msg_config/message.xml</net_protocol>
 	<net_data_def name="网络数据格式" kinds="in_file">../../resource/msg_config/datatype.xml</net_data_def>
 	<connect_script name="客户端脚本" kinds="in_file">../../data/client_script.bin</connect_script>
-	<excel_data_in_path name="游戏数据excel输入目录" kinds="dir" delete="no">../../../../design/game_data_v1</excel_data_in_path>
+	<excel_data_in_path name="游戏数据excel输入目录" kinds="dir" delete="no">../../../../code/data</excel_data_in_path>
 	<text_data_out_path name="游戏数据text输出目录" kinds="dir" delete="no">../../resource/text_output</text_data_out_path>
 	<lua_data_out_path name="游戏数据lua输出目录" kinds="dir" delete="no">../../resource/lua_out</lua_data_out_path>
-	<game_data_listfile name="excel列表" kinds="in_file">../../../../design/game_data_v1/excel_filelist.txt</game_data_listfile>
+	<game_data_listfile name="excel列表" kinds="in_file">../../../../code/data/excel_filelist.txt</game_data_listfile>
 	<game_data_package_file name="数据打包文件" kinds="out_file">../../data/cehua_data.dat</game_data_package_file>
 	<game_data_export_cmd name="策划数据导出工具" kinds="in_file">exp_xls.bat</game_data_export_cmd>
 	<game_data_out_encode name="游戏数据输出编码" kinds="reference" reference_type="type_encode">1</game_data_out_encode>

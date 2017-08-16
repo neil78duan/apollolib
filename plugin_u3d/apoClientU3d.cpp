@@ -358,6 +358,8 @@ RESULT_T ApoClient::Open(const char *host, int port, const char *dev_udid)
 	m_host = host;
 	m_port = port;
 	m_udid = (dev_udid && *dev_udid) ? dev_udid: "unknown-udid-for-unity" ;
+
+	nd_logmsg("open client net host:%s port:%d udid:%s\n", host, port, dev_udid);
 	
 	return ESERVER_ERR_SUCCESS ;
 	
@@ -399,6 +401,7 @@ RESULT_T ApoClient::_connectHost(const char *host, int port)
 	}
 	m_runningUpdate = ERUN_UP_NORMAL;
 	onInit();
+	nd_logmsg("connect host:%s port:%d udid:%s\n", m_host.c_str(), m_port, m_udid.c_str());
 	return ESERVER_ERR_SUCCESS;
 }
 
@@ -452,7 +455,7 @@ RESULT_T ApoClient::TrytoRelogin()
 	}
 
 	//login server 
-
+	m_login->SetUdid(m_udid.c_str());
 	m_runningUpdate = ERUN_UP_STOP;
 	int ret = m_login->Relogin();
 
@@ -471,6 +474,7 @@ RESULT_T ApoClient::TrytoReloginEx(void *session, size_t sessionSize)
 {
 	// in login 
 	if (IsLoginOk()){
+		nd_logerror("already in login\n");
 		return ESERVER_ERR_SUCCESS;
 	}
 

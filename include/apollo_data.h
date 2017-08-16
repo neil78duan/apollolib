@@ -109,13 +109,15 @@ enum eChatType {
 struct login_token_info
 {
 	login_token_info() :acc_index(0), session_key(0), create_tm(0), _reserved(0)
-	{}
+	{
+		udid[0] = 0;
+	}
 	account_index_t acc_index;
 	NDUINT16 session_key;
 	NDUINT16 _reserved;
 	time_t create_tm;
 	tea_k sym_key;
-
+	NDUINT8 udid[DEVICE_UDID_SIZE];
 };
 //struct of transfer when relogin
 struct transfer_session_key
@@ -125,6 +127,7 @@ struct transfer_session_key
 
 	}
 	account_index_t acc_index;
+	NDUINT8 udid[DEVICE_UDID_SIZE];
 	tea_k new_key;
 	NDUINT32 size;
 	char session_buf[1024];

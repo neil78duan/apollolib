@@ -8,7 +8,7 @@
 #include "logic_parser/objectBaseMgr.h"
 #include "logic_parser/logicParser.h"
 
-LogicObjectBase::LogicObjectBase() :m_count(0), m_errParam(0), m_opCheckShortRate(0)
+LogicObjectBase::LogicObjectBase() :m_count(0), m_errParam(0), m_opCheckShortRate(0), m_bOpCheckFoundObj(false)
 {
 
 }

@@ -1121,8 +1121,114 @@ APOLLO_SCRIPT_API_DEF(apollo_make_full_path, "合成文件名(path,filename)")
 	return true;
 }
 
+#include "nd_crypt/nd_cryptfile.h"
+APOLLO_SCRIPT_API_DEF(apollo_encrypt_file, "cryptFile(filename,outFileName, password)")
+{
+	CHECK_ARGS_NUM(args, 3, parser);
 
+	const char *inFileName = args[1].GetText();
+	const char *outFileName = args[2].GetText();
+	if (!inFileName || !outFileName)	{
+		parser->setErrno(NDERR_PARAM_INVALID);
+		nd_logerror("input file or path is null\n");
+		return false;
+	}
 
+	size_t size = 0;
+	void *pBuf = nd_load_file(inFileName, &size);
+	if (!pBuf){
+		nd_logerror("load file %s error\n", inFileName);
+		parser->setErrno(NDERR_FILE_NOT_EXIST);
+		return false;
+	}
+	
+	NDC_FILE *pf = ndc_fopen_w(outFileName, args[3].GetText()) ;
+	if (!pf){
+
+		nd_logerror("Open file %s error\n", outFileName);
+		parser->setErrno(NDERR_IO);
+
+		nd_unload_file(pBuf);
+		return false;
+	}
+	ndc_fwrite(pBuf, size, 1, pf);
+	ndc_fclose(pf);
+
+	nd_unload_file(pBuf);
+	return true;
+}
+
+APOLLO_SCRIPT_API_DEF(apollo_decrypt_file, "deyptFile(filename,outFileName, password)")
+{
+	CHECK_ARGS_NUM(args, 3, parser);
+
+	const char *inFileName = args[1].GetText();
+	const char *outFileName = args[2].GetText();
+	if (!inFileName || !outFileName)	{
+		parser->setErrno(NDERR_PARAM_INVALID);
+		nd_logerror("input file or path is null\n");
+		return false;
+	}
+
+	size_t size = 0;
+	void *pBuf = ndc_load_file_ex(inFileName, &size, args[3].GetText());
+	if (!pBuf){
+		nd_logerror("load file %s error\n", inFileName);
+		parser->setErrno(NDERR_FILE_NOT_EXIST);
+		return false;
+	}
+
+// 	size_t size = 0;
+// 	NDC_FILE *pf = ndc_fopen_r(inFileName, args[3].GetText());
+// 	if (!pf){
+// 		nd_logerror("load file %s error\n", inFileName);
+// 		parser->setErrno(NDERR_FILE_NOT_EXIST);
+// 		return false;
+// 	}
+// 
+// 	ndc_fseek(pf, 0, SEEK_END);
+// 	size = ndc_ftell(pf);
+// 	ndc_fseek(pf, 0, SEEK_SET);
+// 
+// 	if (size == 0) {
+// 		ndc_fclose(pf);
+// 		parser->setErrno(NDERR_FILE_NOT_EXIST);
+// 		return false;
+// 	}
+// 
+// 	char *buf = (char*)malloc(size+1);
+// 
+// 	if (!buf){
+// 		ndc_fclose(pf);
+// 		parser->setErrno(NDERR_SYSTEM);
+// 		return false;
+// 	}
+// 	size_t data_len = ndc_fread(buf, 1, size, pf);
+// 	if (data_len == 0 || data_len > size) {
+// 		ndc_fclose(pf);
+// 		free(buf);
+// 		return 0;
+// 
+// 	}
+// 	buf[data_len] = 0;
+// 	ndc_fclose(pf);
+
+	FILE *outFile = fopen(outFileName, "wb");
+	if (!outFileName){
+		nd_logerror("Open file %s error\n", outFileName);
+		parser->setErrno(NDERR_IO);
+
+		nd_unload_file(pBuf);
+		//free(buf);
+		return false;
+	}
+	fwrite(pBuf, size, 1, outFile);
+	fclose(outFile);
+	//free(buf);
+	nd_unload_file(pBuf);
+
+	return true;
+}
 //////////////////////////////////////
 // public cpp function 
 

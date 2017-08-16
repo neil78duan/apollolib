@@ -8,6 +8,7 @@
 #define CONFIG_IO_SETTING "../cfg/io_config.xml"
 
 #include "nd_common/nd_common.h"
+#include "logic_parser/logic_compile.h"
 class DBLDatabase;
 // CapolloParseEditorDlg 对话框
 class CapolloParseEditorDlg : public CDialogEx
@@ -53,7 +54,10 @@ protected:
 	bool runTest();
 	void _beginEdit(const char *filename);
 	//bool GetFile(bool bOpen, CString & strFile);
-	
+	logciCompileSetting m_compileSetting;
+	ndxml_root &m_editor_setting;
+	//ndxml_root &m_io_setting;
+
 // 实现
 protected:
 	HICON m_hIcon;

@@ -35,12 +35,15 @@ logciCompileSetting::~logciCompileSetting()
 
 bool logciCompileSetting::setConfigFile(const char *config, int encodeType )
 {
-	ndxml_initroot(&m_configRoot);
-
-	if (ndxml_load_ex(config, &m_configRoot, nd_get_encode_name(encodeType))) {
-		nd_logerror("open compile setting %s file error please check file exist\n", config);
+	if (_loadConfig(config, encodeType)) {
 		return false;
 	}
+// 	ndxml_initroot(&m_configRoot);
+// 
+// 	if (ndxml_load_ex(config, &m_configRoot, nd_get_encode_name(encodeType))) {
+// 		nd_logerror("open compile setting %s file error please check file exist\n", config);
+// 		return false;
+// 	}
 	ndxml *node = ndxml_getnode(&m_configRoot, "compile_setting");
 	if (!node)	{
 		nd_logerror("open compile setting %s file error please check this setting\n", config);
@@ -1535,3 +1538,19 @@ bool LogicCompiler::_trytoAddBreakPoint(ndxml *xml)
 	return false;
 }
 
+#include "crypt_file.h"
+int logciCompileSetting::_loadConfig(const char *fileName, int encodeType)
+{
+	size_t size = 0;
+	char *pBuf = (char*) nd_load_file(fileName, &size);
+	if (!pBuf){
+		nd_logerror("load file %s error\n", fileName);
+		return -1;
+	}
+	if (-1 == ndxml_load_from_buf(fileName, pBuf, size, &m_configRoot, nd_get_encode_name(encodeType))) {
+		nd_logerror("open compile setting %s file error please check file exist\n", fileName);
+		return -1;
+	}
+
+	return 0;
+}

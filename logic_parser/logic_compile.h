@@ -110,6 +110,7 @@ protected:
 	const char* _getNodeText(ndxml *paramNode, char *buf, size_t bufsize);
 	int _loadEnumText(ndxml *dataTypeDef);
 	int _getEnumText(ndxml * node, enumTextVct &enumText);
+	int _loadConfig(const char *fileName, int encodeType);
 
 	virtual bool onLoad(ndxml &cfgRoot);
 	//compile init block

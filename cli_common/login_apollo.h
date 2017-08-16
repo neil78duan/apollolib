@@ -26,6 +26,15 @@ struct ApolloServerInfo
 	char ip_addr[20] ;
 };
 
+struct login_session_load{
+	NDUINT32 acc_index ;
+	NDUINT32 session_size ;
+	char session_buf[1024];
+
+	char keymd5[16] ;
+	R_RSA_PUBLIC_KEY srv_key;
+};
+
 #ifdef BUILD_AS_THIRD_PARTY
 class  LoginBase
 {
@@ -123,7 +132,8 @@ protected:
 	int switchServer(const char *host, NDUINT16 port,int sendMsg, int waitMsg) ;
 	int jumptoGame(NDUINT64 serverid) ;
 	int relogin(void *tokenBuf, int sendMsgID, int waitMsgID) ;
-	int getReloginSessionInfo(void *tokenBuf) ;
+	int getReloginSessionInfo(login_session_load *outbuf);
+	int getLoginToken(login_token_info *outToken);
 	bool buildAccountName(ACCOUNT_TYPE type,const char *inputName, char *outName, size_t size);
 	
 	nd_handle  m_conn ;

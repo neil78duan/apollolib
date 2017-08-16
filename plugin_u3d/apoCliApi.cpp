@@ -119,7 +119,7 @@ int apoCli_recvMsg(int *messageId, char *msgBody, int bufsize, int timeOutMS)
 {
 	nd_handle h = (nd_handle)get_NDNetObject();
 	if (!h) {
-		nd_logerror("net client not init\n");
+		//nd_logerror("net client not init\n");
 		return -1;
 	}
 	nd_usermsgbuf_t msgBuf;
@@ -127,7 +127,7 @@ int apoCli_recvMsg(int *messageId, char *msgBody, int bufsize, int timeOutMS)
 	int ret = nd_connector_waitmsg(h, (nd_packetbuf_t*)&msgBuf, timeOutMS);
 	if (ret == 0){
 
-		nd_logerror("wait message time out \n");
+		//nd_logerror("wait message time out \n");
 		return 0;
 
 	}
@@ -237,8 +237,10 @@ RESULT_T apoCli_open(const char *host, int port, const char *dev_udid)
 
 RESULT_T apoCli_ReloginEx(const char *sessionData, int sessionSize, bool bReloginOffline)
 {
+	nd_logmsg("Begining to relogin!!!!!\n");
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (!apoCli)	{
+		nd_logerror("net client instant not init\n");
 		return NDSYS_ERR_NOT_INIT;
 	}
 	return apoCli->ReloginEx((void*)sessionData,sessionSize,bReloginOffline);

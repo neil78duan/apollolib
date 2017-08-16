@@ -15,6 +15,8 @@
 	<node desc="sys_BIN写入文件(fileName, var1,var2....)">CPP._sys_write_binfile</node>
 	<node desc="sys_text写入文件(fileName, var1,var2....)">CPP._sys_write_textfile</node>
 	<node desc="测试消息处理(script, maxId,minId, data1,data2...)">CPP.apollo_call_script_msgHandler_test</node>
+	<node desc="deyptFile(filename,outFileName, password)">CPP.apollo_decrypt_file</node>
+	<node desc="cryptFile(filename,outFileName, password)">CPP.apollo_encrypt_file</node>
 	<node desc="导出c函数(filename)">CPP.apollo_export_cpp_api</node>
 	<node desc="导出事件(filename)">CPP.apollo_export_events_list</node>
 	<node desc="二进制转dataType(binary,类型名字)">CPP.apollo_func_binary_to_userData</node>

@@ -24,15 +24,6 @@
 #endif
 
 
-struct login_session_load{
-	NDUINT32 acc_index ;
-	NDUINT32 session_size ;
-	char session_buf[1024];
-	
-	char keymd5[16] ;
-	R_RSA_PUBLIC_KEY srv_key;
-};
-
 
 struct rsa_key_from_srv{
 	char keymd5[16] ;
@@ -149,7 +140,7 @@ LoginApollo::LoginApollo()
 	m_session_file = 0;
 
 
-	strncpy((char*)m_udid, "unknown", sizeof(m_udid));
+	strncpy((char*)m_udid, "unknown_udid", sizeof(m_udid));
 }
 
 LoginApollo::~LoginApollo()
@@ -166,6 +157,7 @@ void LoginApollo::SetUdid(const char *udid)
 {
 	if (udid && udid[0]) {
 		strncpy((char*)m_udid, udid, sizeof(m_udid))  ;
+		nd_logdebug("set udid =%s\n", m_udid);
 	}
 	else {
 		m_udid[0] = 0;
@@ -202,20 +194,42 @@ size_t LoginApollo::GetSessionSize()
 	return GetSessionData(buf, sizeof(buf));
 }
 
+int LoginApollo::getLoginToken(login_token_info *outToken)
+{
+	login_token_info &sessionifo = *outToken;
+	sessionifo.acc_index = m_accIndex;
+	sessionifo.session_key = m_sessionID;
+	strncpy((char*)sessionifo.udid, (const char*)m_udid, sizeof(sessionifo.udid));
+
+	int size = sizeof(sessionifo.sym_key);
+	nd_net_ioctl((nd_netui_handle)m_conn, NDIOCTL_GET_CRYPT_KEY, &sessionifo.sym_key, &size);
+
+	sessionifo._reserved = 0;
+	time(&sessionifo.create_tm);
+
+	return sizeof(*outToken);
+}
+
+int LoginApollo::getReloginSessionInfo(login_session_load *outbuf)
+{
+	//int size;
+	outbuf->acc_index = m_accIndex;
+	login_token_info sessionifo;
+	getLoginToken(&sessionifo);
+
+	memcpy(outbuf->session_buf, &sessionifo, sizeof(sessionifo));
+	memcpy(outbuf->keymd5, &m_srv_key, sizeof(rsa_key_from_srv));
+	outbuf->session_size = nd_TEAencrypt((unsigned char*)outbuf->session_buf, sizeof(sessionifo), &sessionifo.sym_key);
+
+	return  0;
+}
+
 size_t LoginApollo::GetSessionData(void *out_buf, size_t buf_size)
 {
 	login_token_info sessionifo;
-	sessionifo.acc_index = m_accIndex;
-	sessionifo.session_key = m_sessionID;
-	sessionifo._reserved = 0;
-	int size = sizeof(sessionifo.sym_key);
-
-	time(&sessionifo.create_tm);
-
-	nd_net_ioctl((nd_netui_handle)m_conn, NDIOCTL_GET_CRYPT_KEY, &sessionifo.sym_key, &size);
-
+	getLoginToken(&sessionifo);
+	
 	rsa_key_from_srv *rsk_md5 = (rsa_key_from_srv *)m_srv_key;
-
 	int ret = session_to_stream(&rsk_md5->pub_key, &sessionifo, rsk_md5->keymd5, (char*)out_buf, buf_size);
 	if (-1 == ret ) {
 		nd_logerror("convert session to stream error\n");
@@ -248,7 +262,7 @@ int LoginApollo::ReloginEx(void *session_data, size_t size)
 		return 0;
 	}
 	else {
-		nd_logmsg("RE-login ERROR\n");
+		nd_logmsg("RE-login ERROR %d\n", ndGetLastError(m_conn));
 		if (ndGetLastError(m_conn) == NDSYS_ERR_USERNAME) {
 			return 1;
 		}
@@ -295,9 +309,10 @@ int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE t
 	omsg.Write(m_udid) ;
 	omsg.Write((NDUINT8)type) ;
 	omsg.Write((NDUINT8*)userName) ;
-
 	omsg.Write((NDUINT8*)passwd);
+	omsg.Write(m_udid);
 
+	nd_logdebug("send login message udid=%s\n",m_udid);
 	//if (ACC_APOLLO==type && passwd && passwd[0]) {
 	//}
 
@@ -397,6 +412,9 @@ int LoginApollo::CreateAccount(account_base_info *acc_info)
 	omsg.Write(acc_info->passwd) ;
 	omsg.Write(acc_info->phone) ;
 	omsg.Write(acc_info->email) ;
+
+
+	nd_logdebug("send create account message udid=%s\n", acc_info->udid);
 
 	SEND_AND_WAIT(m_conn, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ACK,ESF_ENCRYPT|ESF_URGENCY)
 	else {
@@ -581,11 +599,14 @@ int LoginApollo::switchServer(const char *host, NDUINT16 port,int sendMsg, int w
 {
 	login_session_load session_saved = {0};
 	if(-1==getReloginSessionInfo( &session_saved) ) {
+		nd_logmsg("get role login session info error\n");
 		return -1 ;
 	}
 	
 	
 	if(0!=nd_reconnectex(m_conn,  host,  port, NULL)  ) {
+
+		nd_logmsg("reconnect to host %s : %d error\n", host, port);
 		nd_object_seterror(m_conn, NDSYS_ERR_HOST_UNAVAILABLE) ;
 		return -1;
 	}
@@ -617,7 +638,8 @@ int LoginApollo::relogin(void *token_info, int sendMsgID, int waitMsgID)
 	nd_teaKeyToNetorder(&trans_key.new_key, &k);
 	
 	//init transfer session key
-	trans_key.acc_index =saveSession->acc_index ;
+	trans_key.acc_index = saveSession->acc_index;
+	strncpy((char*)trans_key.udid, (char*)m_udid, sizeof(trans_key.udid));
 	memcpy(trans_key.session_buf, saveSession->session_buf, saveSession->session_size) ;
 	trans_key.size = saveSession->session_size ;
 	
@@ -625,7 +647,7 @@ int LoginApollo::relogin(void *token_info, int sendMsgID, int waitMsgID)
 	
 	
 	//SEND session info to server and check
-	// format : ras_public_crypt(accindex + size + TEA(login_token_info) + teakey)
+	// format : ras_public_crypt(accindex +udid+ size + TEA(login_token_info) + teakey)
 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN,sendMsgID/*LOGIN_MSG_RELOGIN_REQ*/) ;
 	
 	char buf[4096] ;
@@ -637,7 +659,7 @@ int LoginApollo::relogin(void *token_info, int sendMsgID, int waitMsgID)
 	}
 	
 	omsg.WriteBin(buf, size) ;
-	nd_log_screen("send relogin data len =%d\n", size) ;
+	nd_logdebug("send relogin data len =%d udid=%s\n", size, trans_key.udid);
 	
 	
 	size = sizeof(k) ;
@@ -690,29 +712,6 @@ bool LoginApollo::buildAccountName(ACCOUNT_TYPE type,const char *inputName, char
 	return true;
 }
 
-int LoginApollo::getReloginSessionInfo(void *tokenBuf)
-{
-	int size ;
-	login_session_load *outbuf = (login_session_load *)tokenBuf ;
-	
-	outbuf->acc_index = m_accIndex ;
-	
-	login_token_info sessionifo ;
-	sessionifo.acc_index = m_accIndex ;
-	sessionifo.session_key = m_sessionID ;
-	
-	size = sizeof(sessionifo.sym_key) ;
-	nd_net_ioctl((nd_netui_handle)m_conn, NDIOCTL_GET_CRYPT_KEY, &sessionifo.sym_key, &size) ;
-	
-	memcpy(outbuf->session_buf, &sessionifo, sizeof(sessionifo)) ;
-
-	memcpy(outbuf->keymd5, &m_srv_key, sizeof(rsa_key_from_srv));
-	
-	outbuf->session_size = nd_TEAencrypt((unsigned char*)outbuf->session_buf, sizeof(sessionifo), &sessionifo.sym_key) ;
-	
-	return  0;
-}
-
 int LoginApollo::onLogin(NDIStreamMsg &inmsg)
 {
 	//read account info
@@ -759,15 +758,17 @@ int LoginApollo::onLogin(NDIStreamMsg &inmsg)
 
 	if ( m_session_file && m_session_file[0]) {		
 		login_token_info sessionifo ;
-		sessionifo.acc_index = m_accIndex ;
-		sessionifo.session_key = m_sessionID ;
-		sessionifo._reserved = 0 ;
-		size = sizeof(sessionifo.sym_key) ;
+
+		getLoginToken(&sessionifo);
+// 		sessionifo.acc_index = m_accIndex ;
+// 		sessionifo.session_key = m_sessionID ;
+// 		sessionifo._reserved = 0 ;
+// 		size = sizeof(sessionifo.sym_key);
+// 		strncpy((char*)sessionifo.udid, (const char*)m_udid, sizeof(sessionifo.udid));		
+// 		time(&sessionifo.create_tm);		
+// 		nd_net_ioctl((nd_netui_handle)m_conn, NDIOCTL_GET_CRYPT_KEY, &sessionifo.sym_key, &size) ;
 		
-		time(&sessionifo.create_tm);
-		
-		nd_net_ioctl((nd_netui_handle)m_conn, NDIOCTL_GET_CRYPT_KEY, &sessionifo.sym_key, &size) ;
-		
+
 		rsa_key_from_srv *rsk_md5 = (rsa_key_from_srv *) m_srv_key ;
 		if(-1==save_session_info(&rsk_md5->pub_key, &sessionifo , rsk_md5->keymd5 ,m_session_file ) ) {
 			nd_logerror("save session ifo error") ;
