@@ -1828,36 +1828,29 @@ bool LogicParserEngine::_bitOperate(eBitOperate op, const DBLDataNode &var1, con
 
 bool LogicParserEngine::_mathOperate(eMathOperate op,const DBLDataNode &var1, const DBLDataNode &var2)
 {
-	/*if (var1.GetDataType()==OT_STRING || var2.GetDataType()==OT_STRING)	{
+	if (var1.GetDataType() == OT_FLOAT || var2.GetDataType() == OT_FLOAT) {
+		double f1 = var1.GetFloat();
+		double f2 = var2.GetFloat();
+		double val = 0;
 
-		float f1 = var1.GetFloat();
-		float f2 = var2.GetFloat();
-
-		return _mathOperate(op, DBLDataNode(f1), DBLDataNode(f2));
-		
-	}*/
-	float f1 = var1.GetFloat();
-	float f2 = var2.GetFloat();
-	float val = 0;
-
-	switch (op) {			
+		switch (op) {
 		case E_MATH_ADD:
 			val = f1 + f2;
 			break;
 		case E_MATH_SUB:
 			val = f1 - f2;
-			break ;
+			break;
 		case E_MATH_MUL:
 			val = f1 * f2;
-			break ;
+			break;
 		case E_MATH_DIV:
-			if (f2 ==0)	{
+			if (f2 == 0)	{
 				nd_logerror("div param is zero\n");
 				m_sys_errno = NDERR_SCRIPT_INSTRUCT;
 				return false;
 			}
 			val = f1 / f2;
-			break ;
+			break;
 		case E_MATH_SQRT:
 		{
 			val = sqrt(f1);
@@ -1875,15 +1868,65 @@ bool LogicParserEngine::_mathOperate(eMathOperate op,const DBLDataNode &var1, co
 		}
 		case E_MATH_RAND:
 		{
-			val = (float) logic_rand(var1.GetInt(), var2.GetInt());
+			val = (float)logic_rand(var1.GetInt(), var2.GetInt());
 			break;
 
 		}
 		default:
 			m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
-			return false ;
+			return false;
+		}
+		m_registerVal.InitSet((float)val);
 	}
-	m_registerVal.InitSet(val);
+	else {
+		double f1 = var1.GetFloat();
+		double f2 = var2.GetFloat();
+		double val = 0;
+
+		switch (op) {
+		case E_MATH_ADD:
+			m_registerVal = var1 + var2;
+			break;
+		case E_MATH_SUB:
+			m_registerVal = var1 - var2;
+			break;
+		case E_MATH_MUL:
+			m_registerVal = var1 * var2;
+			break;
+		case E_MATH_DIV:
+			m_registerVal = var1 / var2;
+			break;
+		case E_MATH_SQRT:
+		{
+			val = sqrt(f1);
+			m_registerVal.InitSet((float)val);
+			break;
+		}
+		case E_MATH_MAX:
+		{
+			val = NDMAX(f1, f2);
+			m_registerVal.InitSet((float)val);
+			break;
+		}
+		case E_MATH_MIN:
+		{
+			val = NDMIN(f1, f2);
+			m_registerVal.InitSet((float)val);
+			break;
+		}
+		case E_MATH_RAND:
+		{
+			val = (float)logic_rand(var1.GetInt(), var2.GetInt());
+			m_registerVal.InitSet((float)val);
+			break;
+
+		}
+		default:
+			m_sys_errno = LOGIC_ERR_INPUT_INSTRUCT;
+			return false;
+		}
+	}
+
 	return  true ;
 }
 
@@ -2186,7 +2229,7 @@ bool LogicParserEngine::_opCmp(DBLDataNode& compValData, DBLDataNode& invalData,
 	if (compValData.GetDataType() == OT_STRING &&  invalData.GetDataType()== OT_STRING){
 		const char *p1 = compValData.GetText();
 		const char *p2 = invalData.GetText();
-		if (!p1 || p2)	{
+		if (!p1 || !p2)	{
 			return false;
 		}
 		int ret = ndstricmp(p1, p2);

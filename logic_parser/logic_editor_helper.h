@@ -160,22 +160,6 @@ namespace LogicEditorHelper
 	int getEnumList(ndxml *xml, ndxml_root *config_root, TTextList& texts)
 	{
 		return _getEnumMembers(xml, config_root, texts, ERT_VALUE);
-// 		const char *pValue = GetEnumValText(xml, config_root);
-// 		if (!pValue)
-// 			return 0;
-// 		char subtext[128];
-// 
-// 		do 	{
-// 			subtext[0] = 0;
-// 			pValue = ndstr_nstr_end(pValue, subtext, ',', sizeof(subtext));
-// 			if (subtext[0])	{
-// 				texts.push_back((subtext));
-// 			}
-// 			if (pValue && *pValue == ',') {
-// 				++pValue;
-// 			}
-// 		} while (pValue && *pValue);
-// 		return texts.size();
 	}
 
 

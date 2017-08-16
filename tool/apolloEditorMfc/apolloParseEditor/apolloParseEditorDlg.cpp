@@ -28,7 +28,7 @@
 #endif
 
 
-static ndxml_root m_editor_setting;
+//static ndxml_root m_editor_setting;
 static ndxml_root m_io_setting;
 
 
@@ -74,7 +74,9 @@ END_MESSAGE_MAP()
 
 
 CapolloParseEditorDlg::CapolloParseEditorDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(CapolloParseEditorDlg::IDD, pParent)
+	: CDialogEx(CapolloParseEditorDlg::IDD, pParent),
+	m_editor_setting(*(m_compileSetting.getConfig()))
+
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	ndxml_initroot(&m_editor_setting);
@@ -139,10 +141,14 @@ BOOL CapolloParseEditorDlg::OnInitDialog()
 
 	// TODO:  在此添加额外的初始化代码
 
-	if (0 != ndxml_load_ex(CONFIG_FILE_PATH, &m_editor_setting,"gbk")){
+	if (!m_compileSetting.setConfigFile(CONFIG_FILE_PATH, E_SRC_CODE_GBK)){
 		AfxMessageBox("加载配置文件错误");
 		return false;
 	}
+	//if (0 != ndxml_load_ex(CONFIG_FILE_PATH, &m_editor_setting,"gbk")){
+	//	AfxMessageBox("加载配置文件错误");
+	//	return false;
+	//}
 	if (0 != ndxml_load_ex(CONFIG_IO_SETTING, &m_io_setting, "gbk")){
 		AfxMessageBox("加载配置文件错误");
 		return false;

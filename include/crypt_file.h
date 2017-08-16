@@ -39,33 +39,30 @@
 #define fflush ndc_fflush
 
 //crypt read write file
-static const char* get_pwd_text(char *buf, int inlen)
+static inline const char* getFileKey(char *buf, int inlen)
 {
-#ifdef ND_DEBUG
-	char tmp_buf[128];
-	int size = snprintf(tmp_buf, sizeof(tmp_buf), "%s%s", __TIME__,__DATE__) ;
-
-	MD5CryptToStr32(tmp_buf, size, buf) ;
-#else
-	
-        MD5CryptToStr32((char*)"test-duan", 9, buf) ;
-#endif
+	MD5CryptToStr32((char*)"apoloKey", 9, buf);
 	buf[32] = 0 ;
 	return buf ;
 }
 
+#define MYOPEN_FILE_WITH_KEY(_filename, _mode, _keyBuf)	\
+	if (0==strcmp(_mode, "r") ||0==strcmp(_mode, "rb") || 0==strcmp(_mode, "r+b")) {	\
+		return ndc_fopen_r(_filename, getFileKey(_keyBuf, sizeof(_keyBuf)));			\
+	}											\
+	else {										\
+		return ndc_fopen_w(_filename, getFileKey(_keyBuf, sizeof(_keyBuf)));			\
+	}
 
 static NDC_FILE *fopen_ex(const char * filename, const char *mode)
 {
-	char pwd_buf[33] ;
-	if (0==strcmp(mode, "r") ||0==strcmp(mode, "rb") || 0==strcmp(mode, "r+b")) {
-		return ndc_fopen_r( filename, get_pwd_text(pwd_buf,sizeof(pwd_buf)) ) ;
-	}
-	else {
-		return ndc_fopen_w( filename, get_pwd_text(pwd_buf,sizeof(pwd_buf)) ) ;
-	}
-
+	char keybuf[33] ;
+	MYOPEN_FILE_WITH_KEY(filename, mode, keybuf);
+	return NULL;
 }
 
 #undef fopen
 #define fopen fopen_ex
+
+#undef nd_load_file
+#define nd_load_file(file, size) ndc_load_file_ex(file, size,"apoloKey")

@@ -65,13 +65,15 @@ public:
 	int getError();
 
 	int getCheckShortRate() { return m_opCheckShortRate; }
-	void clearCheckShortRate() { m_opCheckShortRate=0; }
+	bool checkObjectIsExist() { return m_bOpCheckFoundObj; }
+	void clearCheckShortRate() { m_bOpCheckFoundObj= false; m_opCheckShortRate = 0; }
 protected:
 	int m_count;
 
 	int m_error;
 	NDUINT32 m_errParam ;
 	NDUINT8 m_opCheckShortRate;
+	bool m_bOpCheckFoundObj;
 };
 
 class LogicObjAffairHelper

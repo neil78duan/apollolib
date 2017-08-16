@@ -237,8 +237,10 @@ RESULT_T apoCli_open(const char *host, int port, const char *dev_udid)
 
 RESULT_T apoCli_ReloginEx(const char *sessionData, int sessionSize, bool bReloginOffline)
 {
+	nd_logmsg("Begining to relogin!!!!!\n");
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (!apoCli)	{
+		nd_logerror("net client instant not init\n");
 		return NDSYS_ERR_NOT_INIT;
 	}
 	return apoCli->ReloginEx((void*)sessionData,sessionSize,bReloginOffline);
