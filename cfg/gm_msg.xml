@@ -193,7 +193,11 @@
 	<message name="开始打副本" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="3" minId="21">0</msgid>
 		<data name="是否是据点" kinds="bool" param="3">0</data>
+<<<<<<< HEAD
 		<data name="副本编号" kinds="numeral" param="0">20101</data>
+=======
+		<data name="副本编号" kinds="numeral" param="0">10101</data>
+>>>>>>> 51b9460c90a89e8293cead85625ec1ddd5a1133d
 	</message>
 	<message name="打副本结束" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="3" minId="23">0</msgid>
