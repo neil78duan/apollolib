@@ -207,6 +207,12 @@ void ApoClient::setWorkingPath(const char *pathText)
 	m_path = pathText;
 }
 
+
+void ApoClient::setLogPath(const char *logPath)
+{
+	m_logPath = logPath;
+}
+
 void ApoClient::Destroy()
 {
 	//RoleDataManager::getInstance()->SaveLocalFile();
@@ -379,20 +385,29 @@ RESULT_T ApoClient::_connectHost(const char *host, int port)
 	if (-1==nd_connector_open(m_pconn,host,port, NULL)){
 		return (RESULT_T)NDSYS_ERR_HOST_UNAVAILABLE;
 	}
+
+	if (m_bEnableStreamRecord) {
+		//char pathBuf[1024];
+		//int length =snprintf(pathBuf, sizeof(pathBuf), "./apoGameNetStream.data",m_logPath.c_str() );
+		const char *pFielName = "./apoGameNetStream.data";
+		int length = strlen(pFielName);
+		if (nd_net_ioctl((nd_netui_handle)m_pconn, NDIOCTL_LOG_SEND_STRAM_FILE, (void*)pFielName, &length) ==-1){
+			nd_logmsg("log net message bin-data errror\n");
+			return NDSYS_ERR_SYSTEM;
+		}
+	}
+
 	
 	if (m_login) {
 		delete m_login;
 		m_login = 0;
 	}
 	
-	if (m_path.empty()){
+	if (m_sessionFile.empty()){
 		m_login = new LoginApollo(m_pconn,  NULL, m_udid.c_str());
 	}
 	else {
-		char sessionFile[ND_FILE_PATH_SIZE] ;
-		nd_full_path(m_path.c_str(),APO_LOGIN_SESSION_FILE, sessionFile, sizeof(sessionFile)) ;
-		
-		m_login = new LoginApollo(m_pconn,  sessionFile, m_udid.c_str());
+		m_login = new LoginApollo(m_pconn, m_sessionFile.c_str(), m_udid.c_str());
 	}
 	nd_assert(m_login);
 	
@@ -401,7 +416,7 @@ RESULT_T ApoClient::_connectHost(const char *host, int port)
 	}
 	m_runningUpdate = ERUN_UP_NORMAL;
 	onInit();
-	nd_logmsg("connect host:%s port:%d udid:%s\n", m_host, m_port, m_udid.c_str());
+	nd_logmsg("connect host:%s port:%d udid:%s\n", m_host.c_str(), m_port, m_udid.c_str());
 	return ESERVER_ERR_SUCCESS;
 }
 
@@ -494,7 +509,49 @@ RESULT_T ApoClient::TrytoReloginEx(void *session, size_t sessionSize)
 	return (RESULT_T)NDERR_LIMITED;
 }
 
-RESULT_T ApoClient::LoginAccount(const char *account, const char *passwd, int accType,bool skipAuth)
+RESULT_T ApoClient::LoginAccountOneKey(const char *account, const char *passwd, int accType, bool skipAuth)
+{
+// 	m_isRelogin = 0;
+// 	int reTrytimes = 3;
+// 	// in login 
+// 	if (IsLoginOk()){
+// 		return NDSYS_ERR_ALREADY_LOGIN;
+// 	}
+// 
+// 	m_runningUpdate = ERUN_UP_STOP;
+// 	
+// RE_LOGIN:
+// 	if (-1 == _trytoOpen()) {
+// 		return NDSYS_ERR_HOST_UNAVAILABLE;
+// 	}
+// 	int ret = m_login->Login(account, passwd, (ACCOUNT_TYPE)accType,skipAuth);
+// 	if (-1 == ret) {
+// 		int errCode = m_login->GetLastError();
+// 		if (errCode == NDERR_CLOSED || errCode == NDERR_RESET) {
+// 			if (--reTrytimes > 0){
+// 				nd_connector_close(m_pconn,0);
+// 				nd_connector_set_crypt(m_pconn, NULL, 0);
+// 				goto RE_LOGIN;
+// 			}
+// 		}
+// 
+// 		m_runningUpdate = ERUN_UP_NORMAL;
+// 		return (RESULT_T) errCode;
+// 	}
+
+	RESULT_T res = LoginOnly(account, passwd, accType, skipAuth);
+	if (res != ESERVER_ERR_SUCCESS) {
+		return res;
+	}
+
+	m_runningUpdate = ERUN_UP_STOP;
+
+	 res = _enterGame(NULL,0,account);
+	m_runningUpdate = ERUN_UP_NORMAL;
+	return res;
+}
+
+RESULT_T ApoClient::LoginOnly(const char *account, const char *passwd, int accType, bool skipAuth)
 {
 	m_isRelogin = 0;
 	int reTrytimes = 3;
@@ -504,31 +561,29 @@ RESULT_T ApoClient::LoginAccount(const char *account, const char *passwd, int ac
 	}
 
 	m_runningUpdate = ERUN_UP_STOP;
-	
+
 RE_LOGIN:
 	if (-1 == _trytoOpen()) {
 		return NDSYS_ERR_HOST_UNAVAILABLE;
 	}
-	int ret = m_login->Login(account, passwd, (ACCOUNT_TYPE)accType,skipAuth);
+	int ret = m_login->Login(account, passwd, (ACCOUNT_TYPE)accType, skipAuth);
 	if (-1 == ret) {
 		int errCode = m_login->GetLastError();
 		if (errCode == NDERR_CLOSED || errCode == NDERR_RESET) {
 			if (--reTrytimes > 0){
-				nd_connector_close(m_pconn,0);
+				nd_connector_close(m_pconn, 0);
 				nd_connector_set_crypt(m_pconn, NULL, 0);
 				goto RE_LOGIN;
 			}
 		}
 
 		m_runningUpdate = ERUN_UP_NORMAL;
-		return (RESULT_T) errCode;
+		return (RESULT_T)errCode;
 	}
 
-	RESULT_T res = _enterGame(NULL,0,account);
 	m_runningUpdate = ERUN_UP_NORMAL;
-	return res;
+	return ESERVER_ERR_SUCCESS;
 }
-
 
 int ApoClient::_trytoOpen()
 {
@@ -548,7 +603,7 @@ int ApoClient::GetGameAreaList(ApolloServerInfo bufs[], size_t number)
 	return m_login->GetServerList(bufs, (int) number);
 }
 
-RESULT_T ApoClient::_enterGame(const char *host, int port, const char *roleName)
+RESULT_T ApoClient::_enterGame(const char *host, int port, const char *roleName,bool bWithoutLoadBalance)
 {
 	int logResult = 0;
 	if (host && *host) {
@@ -560,7 +615,7 @@ RESULT_T ApoClient::_enterGame(const char *host, int port, const char *roleName)
 		if (num == 0) {
 			return NDSYS_ERR_HOST_UNAVAILABLE;
 		}
-		logResult = m_login->EnterServer(bufs[0].ip_addr, bufs[0].host.port);
+		logResult = m_login->EnterServer(bufs[0].ip_addr, bufs[0].host.port, bWithoutLoadBalance);
 	}
 	
 	if (logResult != 0) {
@@ -662,26 +717,26 @@ RESULT_T ApoClient::createRole(const char *roleName)
 	return ESERVER_ERR_SUCCESS ;
 }
 
-
-RESULT_T ApoClient::testOneKeyLogin(const char *host, int port, const char *user, const char *passwd, int accType)
-{
-	RESULT_T res ;
-	res = Open(host, port, "unknown-device") ;
-	
-	if(res) {
-		return res ;
-	}
-	
-	res = LoginAccount(user, passwd,accType,false) ;
-	if(res == ESERVER_ERR_SUCCESS) {
-		return res ;
-	}
-	else if(res == NDSYS_ERR_NOUSER) {
-		return CreateAccount(user, passwd, "10001", "web@qq.com") ;
-	}
-	
-	return res ;
-}
+// 
+// RESULT_T ApoClient::testOneKeyLogin(const char *host, int port, const char *user, const char *passwd, int accType)
+// {
+// 	RESULT_T res ;
+// 	res = Open(host, port, "unknown-device") ;
+// 	
+// 	if(res) {
+// 		return res ;
+// 	}
+// 	
+// 	res = LoginAccount(user, passwd,accType,false) ;
+// 	if(res == ESERVER_ERR_SUCCESS) {
+// 		return res ;
+// 	}
+// 	else if(res == NDSYS_ERR_NOUSER) {
+// 		return CreateAccount(user, passwd, "10001", "web@qq.com") ;
+// 	}
+// 	
+// 	return res ;
+// }
 
 void ApoClient::Logout()
 {

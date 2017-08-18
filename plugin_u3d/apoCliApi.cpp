@@ -33,7 +33,10 @@ struct msgRecvInfo
 
 int apoCli_init(const char *workingPath, const char *logPath)
 {
-	if (ApoClient::getInstant()) {
+	ApoClient *pInstant = ApoClient::getInstant();
+	if (pInstant) {
+		pInstant->setWorkingPath(workingPath);
+		pInstant->setLogPath(logPath);
 		return 1;
 	}
 	return 0;
@@ -119,7 +122,7 @@ int apoCli_recvMsg(int *messageId, char *msgBody, int bufsize, int timeOutMS)
 {
 	nd_handle h = (nd_handle)get_NDNetObject();
 	if (!h) {
-		nd_logerror("net client not init\n");
+		//nd_logerror("net client not init\n");
 		return -1;
 	}
 	nd_usermsgbuf_t msgBuf;
@@ -127,7 +130,7 @@ int apoCli_recvMsg(int *messageId, char *msgBody, int bufsize, int timeOutMS)
 	int ret = nd_connector_waitmsg(h, (nd_packetbuf_t*)&msgBuf, timeOutMS);
 	if (ret == 0){
 
-		nd_logerror("wait message time out \n");
+		//nd_logerror("wait message time out \n");
 		return 0;
 
 	}
@@ -274,7 +277,7 @@ RESULT_T apoCli_LoginAccount(const char *account, const char *passwd, int accTyp
 	if (!apoCli)	{
 		return NDSYS_ERR_NOT_INIT;
 	}
-	return apoCli->LoginAccount(account, passwd,accType,skipAuth);
+	return apoCli->LoginAccountOneKey(account, passwd,accType,skipAuth);
 }
 RESULT_T apoCli_CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email)
 {
@@ -336,6 +339,89 @@ NDUINT32 apoCli_GetCurRoleId()
 	return 0;
 
 }
+void apoCli_EnableRecvLog(int bIsEnable)
+{
+
+	ApoClient *apoCli = ApoClient::getInstant();
+	if (apoCli && apoCli->getConn())	{
+
+		int val = bIsEnable ? 1 : 0;
+		int size = sizeof(val);
+		nd_net_ioctl((nd_netui_handle)apoCli->getConn(), NDIOCTL_LOG_RECV_MSG, &val, &size);
+	}
+}
+
+void apoCli_EnableSendLog(int bIsEnable)
+{
+
+	ApoClient *apoCli = ApoClient::getInstant();
+	if (apoCli && apoCli->getConn())	{
+
+		int val = bIsEnable ? 1 : 0;
+		int size = sizeof(val);
+		nd_net_ioctl((nd_netui_handle)apoCli->getConn(), NDIOCTL_LOG_SEND_MSG, &val, &size);
+	}
+}
+
+void apoCli_EnableStreamRecord()
+{
+	ApoClient *apoCli = ApoClient::getInstant();
+	if (apoCli)	{
+		apoCli->SetEnableStreamRecord(true);
+	}
+}
+
+
+APO_RESULT_T apoCli_LoginOnly(const char *account, const char *passwd, int accType, bool skipAuth)
+{
+	ApoClient *apoCli = ApoClient::getInstant();
+	if (!apoCli)	{
+		return NDSYS_ERR_NOT_INIT;
+	}
+	return apoCli->LoginAccountOneKey(account, passwd, accType, skipAuth);
+
+}
+int apoCli_GetServerList(char *buf, size_t size)
+{
+
+	ApoClient *apoCli = ApoClient::getInstant();
+	if (!apoCli)	{
+		return NDSYS_ERR_NOT_INIT;
+	}
+	ApolloServerInfo srvbuf[10];
+	char *p = buf;
+	int num = apoCli->GetGameAreaList(srvbuf,10);
+	if (num > 0){
+		int len = snprintf(buf, size, "<root>");
+		buf += len;
+		size -= len; 
+
+		for (int i = 0; i < num; i++)	{
+			len = snprintf(buf, size, "<node ip=\"%s\" port=\"%d\" onlines=\"%d\">", 
+				srvbuf[i].ip_addr, srvbuf[i].host.port,srvbuf[i].host.cur_number);
+
+			buf += len;
+			size -= len;
+
+		}
+
+		len = snprintf(buf, size, "</root>");
+		buf += len;
+		size -= len;
+	}
+	return (int)(buf - p);
+
+}
+APO_RESULT_T apoCli_EnterGame(const char *host, int port)
+{
+	ApoClient *apoCli = ApoClient::getInstant();
+	if (!apoCli)	{
+		return NDSYS_ERR_NOT_INIT;
+	}
+	return apoCli->EnterGame(host, port);
+	//const char *account, const char *passwd, int accType, bool skipAuth
+}
+
 // 
 // time_t apoCli_getServerTime()
 // {

@@ -17,7 +17,7 @@ ndk-build clean
 #ndk-build apo_debug=1
 #[ $? == 0 ] || exit 1
 
-ndk-build
+ndk-build 
 [ $? == 0 ] || exit 1
 
 
