@@ -17,6 +17,8 @@
 #else
 #include "nd_common/nd_common.h"
 #include "nd_crypt/nd_crypt.h"
+#include "nd_net/nd_netlib.h"
+#include "nd_crypt/nd_crypt.h"
 #endif 
 
 
@@ -165,7 +167,6 @@ struct login_token_info
 
 		return (int)(buf - src);
 	}
-	
 };
 //struct of transfer when relogin
 struct transfer_session_key

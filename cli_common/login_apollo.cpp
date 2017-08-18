@@ -311,7 +311,7 @@ int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE t
 	omsg.Write((NDUINT8)type) ;
 	omsg.Write((NDUINT8*)userName) ;
 	omsg.Write((NDUINT8*)passwd);
-	omsg.Write(m_udid);
+	//omsg.Write(m_udid);
 
 	nd_logdebug("send login message udid=%s\n",m_udid);
 	//if (ACC_APOLLO==type && passwd && passwd[0]) {
@@ -489,17 +489,17 @@ int LoginApollo::ReadyGame()
 int LoginApollo::GetLastError() {return ndGetLastError(m_conn) ;}
 
 
-int LoginApollo::EnterServer(ndip_t ip, NDUINT16 port)
+int LoginApollo::EnterServer(ndip_t ip, NDUINT16 port, bool bNotLoadBalance )
 {
-	return switchServer( ip,  port,LOGIN_MSG_SELECT_SERVER_REQ, LOGIN_MSG_SELECT_SERVER_ACK) ;
+	return switchServer( ip,  port,LOGIN_MSG_SELECT_SERVER_REQ, LOGIN_MSG_SELECT_SERVER_ACK,bNotLoadBalance) ;
 }
 
-int LoginApollo::EnterServer(const char *host_name, NDUINT16 port)
+int LoginApollo::EnterServer(const char *host_name, NDUINT16 port, bool bNotLoadBalance )
 {
-	return switchServer( host_name,  port,LOGIN_MSG_SELECT_SERVER_REQ, LOGIN_MSG_SELECT_SERVER_ACK) ;
+	return switchServer( host_name,  port,LOGIN_MSG_SELECT_SERVER_REQ, LOGIN_MSG_SELECT_SERVER_ACK,bNotLoadBalance) ;
 }
 
-int LoginApollo::EnterServer(const char *host_name, NDUINT16 port,const char *session_file)
+int LoginApollo::EnterServer(const char *host_name, NDUINT16 port, const char *session_file, bool bNotLoadBalance )
 {
 	login_session_load session_saved = {0};
 	if (!session_file || !nd_existfile(session_file) ) {
@@ -520,7 +520,7 @@ int LoginApollo::EnterServer(const char *host_name, NDUINT16 port,const char *se
 	memcpy(&m_srv_key, session_saved.keymd5, sizeof(rsa_key_from_srv)) ;
 	
 	//SEND session info to server and check
-	if(0==LoginApollo::relogin(&session_saved, LOGIN_MSG_SELECT_SERVER_REQ, LOGIN_MSG_SELECT_SERVER_ACK) ) {
+	if(0==LoginApollo::relogin(&session_saved, LOGIN_MSG_SELECT_SERVER_REQ, LOGIN_MSG_SELECT_SERVER_ACK,bNotLoadBalance) ) {
 		nd_logmsg("Redirect server SUCCESS\n") ;
 		return 0 ;
 	}
@@ -570,7 +570,7 @@ int LoginApollo::jumptoGame(NDUINT64 serverid)
 	return -1;
 }
 
-int LoginApollo::switchServer(ndip_t ip, NDUINT16 port,int sendMsg, int waitMsg)
+int LoginApollo::switchServer(ndip_t ip, NDUINT16 port, int sendMsg, int waitMsg, bool bNotLoadBalance )
 {
 	login_session_load session_saved = {0};
 	if(-1==getReloginSessionInfo( &session_saved) ) {
@@ -596,7 +596,7 @@ int LoginApollo::switchServer(ndip_t ip, NDUINT16 port,int sendMsg, int waitMsg)
 	return 0;
 }
 
-int LoginApollo::switchServer(const char *host, NDUINT16 port,int sendMsg, int waitMsg)
+int LoginApollo::switchServer(const char *host, NDUINT16 port, int sendMsg, int waitMsg, bool bNotLoadBalance)
 {
 	login_session_load session_saved = {0};
 	if(-1==getReloginSessionInfo( &session_saved) ) {
@@ -627,7 +627,7 @@ int LoginApollo::switchServer(const char *host, NDUINT16 port,int sendMsg, int w
 }
 
 
-int LoginApollo::relogin(void *token_info, int sendMsgID, int waitMsgID)
+int LoginApollo::relogin(void *token_info, int sendMsgID, int waitMsgID, bool bNotLoadBalance )
 {
 	login_session_load *saveSession = (login_session_load *) token_info ;
 	
@@ -666,6 +666,7 @@ int LoginApollo::relogin(void *token_info, int sendMsgID, int waitMsgID)
 	}
 	
 	omsg.WriteBin(buf, size) ;
+	omsg.Write((NDUINT8)(bNotLoadBalance ? 1 : 0));
 	//nd_logdebug("send relogin data len =%d udid=%s\n", size, trans_key.udid);
 	
 	

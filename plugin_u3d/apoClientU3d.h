@@ -45,6 +45,8 @@ public:
 	static ApoClient *getInstant();
 	static void destroyInstant();
 	void setWorkingPath(const char *pathText);
+	void setLogPath(const char *logPath);
+	void SetEnableStreamRecord(bool bEnable) {m_bEnableStreamRecord = bEnable;}
 
 	nd_handle getConn() { return m_pconn; }
 	LoginBase *getLoginObj() { return m_login; }
@@ -61,15 +63,17 @@ public:
 	RESULT_T ReloginBackground();
 	RESULT_T ReloginEx(void *session, size_t sessionSize, bool bReloginOffline);
 	
-	RESULT_T LoginAccount(const char *account, const char *passwd, int accType, bool skipAuth);
-
+	RESULT_T LoginAccountOneKey(const char *account, const char *passwd, int accType, bool skipAuth);
+	RESULT_T LoginOnly(const char *account, const char *passwd, int accType, bool skipAuth);
 	RESULT_T CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email);
 	RESULT_T createRole(const char *roleName);
-	RESULT_T EnterGame(const char *host=NULL, int port=0) { return _enterGame(host, port, NULL); }
+	RESULT_T EnterGame(const char *host=NULL, int port=0) { return _enterGame(host, port, NULL,true); }
 
 	int GetGameAreaList( ApolloServerInfo bufs[], size_t number) ;
 	
-	RESULT_T testOneKeyLogin(const char *host, int port, const char *user, const char *passwd,int accType) ;
+	//RESULT_T testOneKeyLogin(const char *host, int port, const char *user, const char *passwd,int accType) ;
+
+
 	void Logout();
 	void ClearLoginHistory() ;
 
@@ -98,7 +102,7 @@ private:
 	//bool _moveFileToWritable();
 	//bool _moveFileToWritable(const char *infileName, const char*outFileName);
 	//std::string _getWritableFile(const char *file);
-	RESULT_T _enterGame(const char *host, int port, const char *roleName);
+	RESULT_T _enterGame(const char *host, int port, const char *roleName,bool bWithoutLoadBalance=false);
 	//RESULT_T _login();
 	//RESULT_T _roleCreate();
 	enum eRunningUpdate
@@ -106,6 +110,7 @@ private:
 		ERUN_UP_NORMAL=0x126a4fb0,
 		ERUN_UP_STOP = 0x8400ff80,
 	};
+	bool m_bEnableStreamRecord;
 	NDUINT32 m_runningUpdate;
 	NDUINT32 m_accId;
 	roleid_t m_roleId;
@@ -114,13 +119,16 @@ private:
 	//NDIConn *m_pconn;
 	nd_handle m_pconn;
 	LoginBase *m_login;
+	std::string m_logPath;
 	std::string m_path;
+	std::string m_sessionFile;
 	std::string m_accName;
 	std::string m_host;
 	std::string m_udid ;
 	time_t m_serverTm; // server time 
 	time_t m_localTm;  //local time when got server tm
 	int m_updateIndex;
+	
 };
 
 

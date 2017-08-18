@@ -174,6 +174,7 @@ int ApolloRobort::_login(const char *accName, const char *passwd)
 	if (-1 == ret) {
 		if (m_login->GetLastError() == NDSYS_ERR_NOUSER) {
 			account_base_info acc;
+			strncpy((char*)acc.udid, "unknow-udid-robort-test", DEVICE_UDID_SIZE);
 			initAccCreateInfo(acc, ACC_APOLLO, accName, passwd);
 
 			ret = m_login->CreateAccount(&acc);

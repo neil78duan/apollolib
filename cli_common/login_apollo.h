@@ -107,9 +107,9 @@ public:
 	int Logout() ;
 	int TrytoGetCryptKey();
 	//int RedirectTo(const char *inet_addr, int port) ;
-	int EnterServer(ndip_t ip, NDUINT16 port) ;
-	int EnterServer(const char *host_name, NDUINT16 port) ;
-	int EnterServer(const char *host_name, NDUINT16 port,const char *session_file) ;
+	int EnterServer(ndip_t ip, NDUINT16 port, bool bNotLoadBalance=false) ;
+	int EnterServer(const char *host_name, NDUINT16 port, bool bNotLoadBalance = false);
+	int EnterServer(const char *host_name, NDUINT16 port, const char *session_file, bool bNotLoadBalance = false);
 	
 	int CreateAccount(account_base_info *acc_info) ;
 	int GetServerList(ApolloServerInfo *buf, int size) ;
@@ -128,10 +128,10 @@ public:
 protected:
 	int onLogin(NDIStreamMsg &inmsg) ;
 	int checkCryptVersion(char *savedVersion) ;
-	int switchServer(ndip_t ip, NDUINT16 port,int sendMsg, int waitMsg) ;
-	int switchServer(const char *host, NDUINT16 port,int sendMsg, int waitMsg) ;
+	int switchServer(ndip_t ip, NDUINT16 port, int sendMsg, int waitMsg, bool bNotLoadBalance = false);
+	int switchServer(const char *host, NDUINT16 port, int sendMsg, int waitMsg, bool bNotLoadBalance = false);
 	int jumptoGame(NDUINT64 serverid) ;
-	int relogin(void *tokenBuf, int sendMsgID, int waitMsgID) ;
+	int relogin(void *tokenBuf, int sendMsgID, int waitMsgID, bool bNotLoadBalance = false);
 	int getReloginSessionInfo(login_session_load *outbuf);
 	int getLoginToken(login_token_info *outToken);
 	bool buildAccountName(ACCOUNT_TYPE type,const char *inputName, char *outName, size_t size);
