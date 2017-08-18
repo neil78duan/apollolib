@@ -659,7 +659,7 @@ RESULT_T ApoClient::_enterGame(const char *host, int port, const char *roleName,
 					NDUINT8 aid;
 					float val;
 					inmsg.Read(aid); inmsg.Read(val);
-					nd_logmsg("load role attribute id = %d val =%f \n", aid, val);
+					//nd_logmsg("load role attribute id = %d val =%f \n", aid, val);
 				}
 			}
 			onLogin();

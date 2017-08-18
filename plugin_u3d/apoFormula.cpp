@@ -87,7 +87,7 @@ static int place_name_runtime(const char *input, char *buf, int size, void *user
 		}
 	}
 
-	nd_logerror("parse formula error can not found %s\n", input);
+	//nd_logerror("parse formula error can not found %s\n", input);
 	return -1;
 }
 
@@ -120,11 +120,11 @@ bool apoFormulaRun(const char *text, float *result)
 			ret = true;
 		}
 		else {
-			nd_logerror("run formula %s error\n", text);
+			//nd_logerror("run formula %s error\n", text);
 		}
 	}
 	else {
-		nd_logerror("parse formula error %s\n", text);
+		//nd_logerror("parse formula error %s\n", text);
 	}
 
 	//__cur_vm = NULL;
