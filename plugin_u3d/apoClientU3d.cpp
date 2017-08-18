@@ -417,7 +417,6 @@ RESULT_T ApoClient::_connectHost(const char *host, int port)
 	m_runningUpdate = ERUN_UP_NORMAL;
 	onInit();
 	nd_logmsg("connect host:%s port:%d udid:%s\n", m_host.c_str(), m_port, m_udid.c_str());
-
 	return ESERVER_ERR_SUCCESS;
 }
 
