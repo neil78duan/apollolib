@@ -126,7 +126,7 @@
 	</message>
 	<message name="新建建筑" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="4" minId="0">0</msgid>
-		<data name="建筑类型ID" kinds="numeral" param="0">11001</data>
+		<data name="建筑类型ID" kinds="numeral" param="0">12401</data>
 		<data name="坐标X" kinds="numeral" param="4">40</data>
 		<data name="坐标X" kinds="numeral" param="4">200</data>
 	</message>

@@ -84,6 +84,7 @@ ND_CMDLINE_FUNC_INSTANCE(Login)
 	ND_CMDLINE_CHECK_SHOW_HELP(argc, argv,"login host port [username] [password] [session_file]") ;
 	int ret = 0 ;
 	if (argc <=2) {
+		nd_rmfile(_DFT_SESSION_FILE) ;
 		ret= _loginServer(NULL,0,NULL,NULL,_DFT_SESSION_FILE) ;
 	}
 	else if(argc > 5 ) {
@@ -91,6 +92,7 @@ ND_CMDLINE_FUNC_INSTANCE(Login)
 		
 	}
 	else 	{
+		nd_rmfile(_DFT_SESSION_FILE) ;
 		ret =_loginServer(argv[1], atoi(argv[2]), argv[3],argv[4],_DFT_SESSION_FILE) ;
 	}
 	
@@ -230,7 +232,7 @@ ND_CMDLINE_FUNC_INSTANCE(redirect_to_server)
 	if (__g_conn) {
 		
 		if (argc >= 3) {
-			int ret = redirectServer(__g_conn->GetHandle(),argv[1],atoi(argv[2]),_DFT_SESSION_FILE)  ;
+			int ret = redirectServer(__g_conn->GetHandle(),argv[1],atoi(argv[2]),_DFT_SESSION_FILE,COMMON_TEST_UDID)  ;
 			if (ret == 0) {
 				fprintf(stdout, "redirect server success\n" ) ;
 			}
@@ -245,7 +247,7 @@ ND_CMDLINE_FUNC_INSTANCE(redirect_to_server)
 				fprintf(stdout, "get host list number=0\n") ;
 				return -1 ;
 			}
-			int ret = redirectServer(__g_conn->GetHandle(), bufs[0].ip_addr,bufs[0].host.port,_DFT_SESSION_FILE)  ;
+			int ret = redirectServer(__g_conn->GetHandle(), bufs[0].ip_addr,bufs[0].host.port,_DFT_SESSION_FILE,COMMON_TEST_UDID)  ;
 			if (ret == 0) {
 				fprintf(stdout, "redirect server success\n" ) ;
 			}

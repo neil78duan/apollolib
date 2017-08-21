@@ -88,6 +88,7 @@ int loginAndCreate(const char*udid,nd_handle h,int accType, const char *userName
 			
 			initAccCreateInfo(acc, accType,userName, passwd);
 			
+			strncpy((char*)acc.udid, (const char*)udid,sizeof(acc.udid) ) ;
 			ret = login.CreateAccount(&acc) ;
 		}
 		
@@ -108,10 +109,10 @@ int loginAndCreate(const char*udid,nd_handle h,int accType, const char *userName
 	
 }
 
-int redirectServer(nd_handle h,const char *host, int port,const char*session_file)
+int redirectServer(nd_handle h,const char *host, int port,const char*session_file,const char *udid)
 {
 	int ret = 0;
-	LoginApollo login((nd_handle)h) ;
+	LoginApollo login((nd_handle)h,NULL,udid) ;
 	
 	ret = login.EnterServer(host, port,session_file) ;
 	if (-1==ret ) {		

@@ -16,6 +16,8 @@
 #include "ndcli/nd_api_c.h"
 
 
+#define COMMON_TEST_UDID "common_cmd_tool_udid"
+
 #define TEST_SEND_AND_WAIT(_conn, _omsg, _rmsg_buf,_wait_maxid, _wait_minid,_sendflag) \
 	if(0!=ndSendAndWaitMessage(_conn,_omsg.GetMsgAddr(),_rmsg_buf,_wait_maxid, _wait_minid,_sendflag,WAITMSG_TIMEOUT) ) {	\
 		fprintf(stderr, "send and wait data error code =%d\n", ndGetLastError(_conn)); \
