@@ -422,6 +422,12 @@ APO_RESULT_T apoCli_EnterGame(const char *host, int port)
 	//const char *account, const char *passwd, int accType, bool skipAuth
 }
 
+int apoCli_SetTimeout(int val)
+{
+	return ndSetTimeoutVal(val);
+}
+
+
 // 
 // time_t apoCli_getServerTime()
 // {

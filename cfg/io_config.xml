@@ -16,5 +16,5 @@
 	<role_attr_table name="角色属性表" kinds="string">attribute_config.xlsx</role_attr_table>
 	<gm_send_msg name="gm消息配置表" kinds="in_file">../cfg/gm_msg.xml</gm_send_msg>
 	<compiled_rum_cmd name="编译后输出命令" kinds="string"/>
-	<packeaged_rum_cmd name="打包后输出命令" kinds="string">copy /y  ..\..\resource\lua_out\*.lua ..\..\..\..\code\client\Guardian\Assets\Res\Lua\Game\Tables\Design;copy /y  ..\..\resource\text_output\version.txt ..\..\..\..\code\client\Guardian\Assets\Res\Lua\Game\Tables\Design\version.lua</packeaged_rum_cmd>
+	<packeaged_rum_cmd name="打包后输出命令" kinds="string">copy /y  ..\..\resource\lua_out\*.lua ..\..\..\..\code\client\Guardian\Assets\Res\Lua\Game\Tables\Design</packeaged_rum_cmd>
 </setting_config>

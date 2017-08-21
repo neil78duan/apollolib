@@ -21,7 +21,7 @@ public:
 	ApolloRobort();
 	virtual~ApolloRobort();
 
-	int Create(const char *host, int port, const char *accountName, const char *passwd);
+	int Create(const char *host, int port, const char *accountName, const char *passwd, int acctype = 2 );
 	int Close(int flag);
 	bool checkLogin();
 	bool CheckValid() ;
@@ -30,7 +30,7 @@ public:
 	LoginApollo *getLogin() { return m_login; };
 protected:
 	int _connectHost(const char *host, int port);
-	int _login(const char *acc, const char *passwd);
+	int _login(const char *acc, const char *passwd,int iAccType = 2);
 	int _selOrCreateRole(const char *roleName);
 	int _createRole(const char *roleName);
 	NDIConn *m_pConn;

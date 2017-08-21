@@ -169,7 +169,14 @@ static inline void _tryto_change_order_long64(NDUINT64 &val)
 static char * getTextLine(char *buf, size_t size, FILE *pf, int encodeType)
 {
 	if (encodeType == DBL_DATE_ENCODE_TYPE) {
-		return fgets(buf, (int)size, pf);
+		char *p= fgets(buf, (int)size, pf);
+		if (p && *p)	{
+			size_t len = strlen(p);
+			if (p[len - 1] == '\r' || p[len - 1] == '\n')		{
+				p[len - 1] = 0;
+			}
+		}
+		return p;
 	}
 	else {
 		char *p;
@@ -179,6 +186,11 @@ static char * getTextLine(char *buf, size_t size, FILE *pf, int encodeType)
 		if (!p){
 			return NULL;
 		}
+		size_t len = strlen(p);
+		if (p[len - 1] == '\r' || p[len - 1] == '\n')		{
+			p[len - 1] = 0;
+		}
+
 		if ( DBL_DATE_ENCODE_TYPE ==E_SRC_CODE_UTF_8  )	{
 			return nd_gbk_to_utf8(readbuf, buf, (int)size);
 		}
@@ -1056,6 +1068,31 @@ int DBLDatabase::_loadText(const char *datapath, const char *list_file, int enco
 			}
 		}
 	}
+	//load version 
+	if (m_tables.find("version.xlsx")==m_tables.end() )	{
+		snprintf(filepath, sizeof(filepath), "%s/version.txt", datapath);
+
+		DBLTable *ptable = new DBLTable(DBLDatabase::m_pool, "version.xlsx");
+		if (ptable) {
+			if (-1 == ptable->loadFromText(filepath, encodeType)){
+				ptable->Destroy();
+				delete ptable;
+				return -1;
+			}
+
+			std::pair<table_vct_t::iterator, bool> ret = m_tables.insert(std::make_pair("version.xlsx", ptable));
+			if (!ret.second) {
+				ptable->Destroy();
+				delete ptable;
+			}
+			else {
+				nd_logmsg("add version.xlsx to table-list success\n");
+			}
+		}
+
+		NDTRAC("IMPORT version.txt success!!!!!!\n");		
+	}
+
 	NDTRAC("!!!!!!!!!!!!LOAD database complete!\n");
 	m_bLoaded = true;
 	

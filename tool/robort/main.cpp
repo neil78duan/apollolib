@@ -106,7 +106,7 @@ int main(int argc , char *argv[])
 		}
 	}
 	
-	connsMgr.init(__host, __port, __real_conn_num,__acc_index_start) ;
+	connsMgr.init(__host, __port,"robots", __real_conn_num,__acc_index_start) ;
 
     wait_exit() ;
 	
