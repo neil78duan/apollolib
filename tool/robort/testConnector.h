@@ -48,7 +48,7 @@ public:
 	virtual ~TestconnsMgr() ;
 	
 	int initStreamMsg(const char *file) ;
-	int init( const char*host, int port , int num, int acc_start_index=0) ;
+	int init(const char*host, int port,const char* prefix, int num, int acc_start_index = 0, int iAccType = 2 );
 	int Update() ;
 	void Destroy() ;
 	

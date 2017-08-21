@@ -56,7 +56,7 @@ ApolloRobort::~ApolloRobort()
 {
 }
 
-int ApolloRobort::Create(const char *host, int port, const char *accountName, const char *passwd)
+int ApolloRobort::Create(const char *host, int port, const char *accountName, const char *passwd, int iAccType )
 {
 	if (-1 == _connectHost(host,port)){
 		nd_logerror("connect host error\n");
@@ -65,7 +65,7 @@ int ApolloRobort::Create(const char *host, int port, const char *accountName, co
 
 	nd_logmsg("CONNECT %s:%d SUCCESS\n", host, port);
 
-	if (-1 == _login(accountName,passwd))	{
+	if (-1 == _login(accountName, passwd, iAccType))	{
 		nd_logerror("user login error\n");
 		Close(1);
 		return -1;
@@ -156,7 +156,7 @@ int ApolloRobort::_connectHost(const char *host, int port)
 	return 0;
 }
 
-int ApolloRobort::_login(const char *accName, const char *passwd)
+int ApolloRobort::_login(const char *accName, const char *passwd,int iAccType )
 {
 	int ret = 0;
 	if (m_login){
@@ -170,12 +170,12 @@ int ApolloRobort::_login(const char *accName, const char *passwd)
 	}
 	
 	
-	ret = m_login->Login(accName, passwd, ACC_APOLLO,false);
+	ret = m_login->Login(accName, passwd, (ACCOUNT_TYPE)iAccType, false);
 	if (-1 == ret) {
 		if (m_login->GetLastError() == NDSYS_ERR_NOUSER) {
 			account_base_info acc;
 			strncpy((char*)acc.udid, "unknow-udid-robort-test", DEVICE_UDID_SIZE);
-			initAccCreateInfo(acc, ACC_APOLLO, accName, passwd);
+			initAccCreateInfo(acc, (ACCOUNT_TYPE)iAccType, accName, passwd);
 
 			ret = m_login->CreateAccount(&acc);
 		}

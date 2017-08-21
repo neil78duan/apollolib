@@ -78,6 +78,9 @@ APOLLO_CLI_API APO_RESULT_T apoCli_LoginOnly(const char *account, const char *pa
 APOLLO_CLI_API int apoCli_GetServerList(char *buf, size_t size);//xml
 APOLLO_CLI_API APO_RESULT_T apoCli_EnterGame(const char *host, int port);
 
+APOLLO_CLI_API int apoCli_SetTimeout(int val);
+
+
 
 
 //APOLLO_CLI_API time_t apoCli_getServerTime();

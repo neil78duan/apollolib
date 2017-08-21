@@ -9,7 +9,9 @@
 
 #include "testConnector.h"
 #include "msg_def.h"
-
+//#include "tinyxml/tinyxml.h"
+//#include "tinyxml/tinystr.h"
+#include "apollo_data.h"
 
 
 SendHelper::SendHelper()
@@ -89,7 +91,7 @@ TestconnsMgr::~TestconnsMgr()
 	
 }
 
-int TestconnsMgr::init( const char*host, int port , int num, int acc_start_index)
+int TestconnsMgr::init(const char*host, int port, const char* prefix, int num, int acc_start_index,int iAccType )
 {
 	m_maxNum = num;
 	if (m_maxNum> MAX_CONNECTOR_NUM) {
@@ -102,16 +104,53 @@ int TestconnsMgr::init( const char*host, int port , int num, int acc_start_index
 	
 	
 	for (int i=0; i<m_maxNum; ++i) {		
-		snprintf(username, sizeof(username), "roborts_%d", i+acc_start_index) ;
+		snprintf(username, sizeof(username), "%s_%d",prefix, i+acc_start_index) ;
 		
-		if(m_conns[i].Create(host, port, username, passwd) ==-1) {
+		if (m_conns[i].Create(host, port, username, passwd, ACC_APOLLO ) == -1) {
 			fprintf(stderr, "%s login error \n", username) ;
 		}
 		else {
 			m_conns[i].initStream(m_streamMessage, m_streamSize) ;
 		}
 	}
-	
+	ndxml_root doc;
+	if (-1 == ndxml_load("config.xml", &doc)) {
+		return -1;
+	}
+	ndxml *root = ndxml_getnode(&doc, "root") ;
+	if (!root){
+		return -1;
+	}
+	// 从xml 中读取
+// 	TiXmlDocument doc("config.xml");
+// 	doc.LoadFile(TIXML_ENCODING_UTF8);
+// 	if (doc.Error() && doc.ErrorId() == TiXmlBase::TIXML_ERROR_OPENING_FILE) {
+// 		return 0;
+// 	}
+// 	TiXmlElement* rootElement = doc.RootElement();
+// 	TiXmlElement* element = 0;
+// 	for (element = rootElement->FirstChildElement("usr"); element != 0; element = element->NextSiblingElement("usr")){
+// 		const char* username = element->Attribute("name");
+// 		const char* pwd = element->Attribute("pwd");
+	for (int i = 0; i < ndxml_getsub_num(root); i++)	{
+		ndxml *element = ndxml_getnodei(root, i);
+		const char* username = ndxml_getattr_val(element, "name");
+		const char* pwd = ndxml_getattr_val(element, "pwd");
+
+ 		if (username == 0 || pwd == 0){
+			continue;
+		}
+		if (m_maxNum >= MAX_CONNECTOR_NUM){
+			break;
+		}
+		if (m_conns[m_maxNum].Create(host, port, username, pwd, ACC_OTHER_3_ACCID ) == -1) {
+			fprintf(stderr, "%s login error \n", username);
+		}
+		else {
+			m_conns[m_maxNum].initStream(m_streamMessage, m_streamSize);
+		}
+		m_maxNum ++;
+	}
 	return 0;
 	
 }

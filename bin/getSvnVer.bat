@@ -14,7 +14,9 @@ svn info > %in_filelist%
 	@set SvnInfo=%%i
 )
 @rem export to lua format
-echo designDataVersion="Create by %username% at %DATE:~0,4%-%DATE:~5,2%-%DATE:~8,2% %TIME:~0,2%:%TIME:~3,2%:%TIME:~6,2% Svninfo %SvnInfo%"
+echo id	svn	desc
+echo id	svn	desc
+echo 1	%SvnInfo%	"Create by %username% at %DATE:~0,4%-%DATE:~5,2%-%DATE:~8,2% %TIME:~0,2%:%TIME:~3,2%:%TIME:~6,2% Svninfo %SvnInfo%"
 
 del %in_filelist%
 
