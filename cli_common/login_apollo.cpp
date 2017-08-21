@@ -121,7 +121,6 @@ LoginApollo::LoginApollo(nd_handle hConn, const char * session_filename, const c
 
 	memset(&m_srv_key, 0, sizeof(m_srv_key)) ;
 	m_session_file = 0 ;
-	
 	ReInit( hConn, session_filename, udid);	
 	
 }

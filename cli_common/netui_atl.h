@@ -21,7 +21,7 @@ ND_CONNCLI_API int RloginTrylogin(const char*udid, nd_handle h, int accType, con
 
 ND_CONNCLI_API int loginAndCreate(const char*udid, nd_handle h, int accType, const char *userName, const char *passwd, const char *save_session_file = NULL, NDUINT32 *accID = NULL);
 
-ND_CONNCLI_API int redirectServer(nd_handle h, const char *host, int port, const char*session_file);
+ND_CONNCLI_API int redirectServer(nd_handle h, const char *host, int port, const char*session_file,const char *udid);
 
 ND_CONNCLI_API int TryLogin(const char*udid, nd_handle h, int accType, const char *userName, const char *passwd, const char *save_session_file = NULL);
 
