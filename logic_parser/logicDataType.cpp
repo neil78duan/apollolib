@@ -1416,12 +1416,12 @@ const char *DBLDataNode::GetText() const
 		return 0;
 	}
 	if (OT_STRING == m_ele_type && m_data->str_val &&m_data->str_val[0]){
-		if (0 == ndstricmp("none", m_data->str_val)) {
-			return NULL;
-		}
-		else if (0 == ndstricmp("null", m_data->str_val)) {
-			return NULL;
-		}
+// 		if (0 == ndstricmp("none", m_data->str_val)) {
+// 			return NULL;
+// 		}
+// 		else if (0 == ndstricmp("null", m_data->str_val)) {
+// 			return NULL;
+// 		}
 		return (const char *)m_data->str_val;
 	}
 	return NULL;

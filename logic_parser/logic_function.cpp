@@ -761,10 +761,10 @@ APOLLO_SCRIPT_API_DEF(apollo_set_message_handler, "安装消息处理器(str:lis
 
 			if (0 == nd_msgentry_script_install(hListen, args[2].GetText(), maxId, minId, args[5].GetInt())) {
 				ret = true;
-				nd_logdebug("installl MESSAGE (%d,%d) handler %s success\n", maxId, minId, args[1].GetText());
+				nd_logdebug("installl MESSAGE (%d,%d) handler %s success\n", maxId, minId, args[2].GetText());
 			}
 			else {
-				nd_logerror("apollo_set_message_handler installl (%d,%d) to %s error \n", maxId, minId, args[1].GetText());
+				nd_logerror("installl (%d,%d) %s error \n", maxId, minId, args[2].GetText());
 			}
 		}
 	}
@@ -1298,8 +1298,12 @@ bool apollo_printf(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode
 	logic_print print_func = root->m_screen_out_func;
 	void *pf = (void*)root->m_print_file;
 	if (!print_func)	{
+#ifdef ND_OUT_LOG_2CTRL
 		print_func = (logic_print)fprintf;
 		pf = (void*)stdout;
+#else 
+		return true;
+#endif 
 	}
 	return _apollo_out(args, print_func, pf);
 //#else
