@@ -267,6 +267,7 @@ void ConnectDialog::on_loginButton_clicked()
         int port = ui->portEdit->text().toInt();
         std::string strName = ui->nameEdit->text().toStdString() ;
         std::string strPasswd = ui->passwdEdit->text().toStdString() ;
+		bool skipAuth = ui->skipAuth->isChecked();
 
 		//for test 
 		//end test 
@@ -281,7 +282,7 @@ void ConnectDialog::on_loginButton_clicked()
 
         nd_logmsg("CONNECT %s:%d SUCCESS\n", strHost.c_str() , port);
 
-        if (-1 == _login(strName.c_str(), strPasswd.c_str()))	{
+		if (-1 == _login(strName.c_str(), strPasswd.c_str(), skipAuth))	{
             nd_logerror("user login error\n");
             return;
         }
@@ -441,7 +442,7 @@ int ConnectDialog::_connectHost(const char *host, int port)
     return 0;
 }
 
-int ConnectDialog::_login(const char *user, const char *passwd)
+int ConnectDialog::_login(const char *user, const char *passwd,bool skipAuth)
 {
     int ret = 0;
     if (m_login){
@@ -462,10 +463,15 @@ int ConnectDialog::_login(const char *user, const char *passwd)
             return 0;
         }
     }*/
+	if (skipAuth) {
 
-    ret =m_login->Login(user, passwd, ACC_APOLLO,false);
+		ret = m_login->Login(user, passwd, ACC_OTHER_3_ACCID, true);
+	}
+	else {
+		ret = m_login->Login(user, passwd, ACC_APOLLO, false);
+	}
     if (-1==ret) {
-        if (m_login->GetLastError() == NDSYS_ERR_NOUSER) {
+        if (m_login->GetLastError() == NDSYS_ERR_NOUSER && !skipAuth) {
             account_base_info acc;
             initAccCreateInfo(acc, ACC_APOLLO, user, passwd);
 
@@ -499,7 +505,7 @@ int ConnectDialog::SelOrCreateRole(const char *accountName)
     int num = m_login->GetServerList(bufs, ND_ELEMENTS_NUM(bufs));
 
     if (num == 0) {
-        WriteLog("get host list number=0\n");
+        WriteLog("Get GAME-SERVER-LIST error , Maybe game server start FAILED\n");
         return -1 ;
     }
 
@@ -509,7 +515,12 @@ int ConnectDialog::SelOrCreateRole(const char *accountName)
         //dialogCloseHelper _helperClose(this) ;
         ListDialog dlg(this);
         for (int i = 0; i < num; i++)	{
-            dlg.m_selList.push_back(QString((const char*)bufs[i].host.name));
+			QString strtips;
+			strtips.sprintf("%d: %s %s:%d (%d/%d)", i, 
+				(const char*)bufs[i].host.name, (const char*)bufs[i].ip_addr, bufs[i].host.port,
+				bufs[i].host.cur_number, bufs[i].host.max_number);
+
+            dlg.m_selList.push_back(strtips);
         }
 
         dlg.InitList();
@@ -525,7 +536,7 @@ int ConnectDialog::SelOrCreateRole(const char *accountName)
     }
 
 
-    int ret = m_login->EnterServer(bufs[selected].ip_addr, bufs[selected].host.port);
+    int ret = m_login->EnterServer(bufs[selected].ip_addr, bufs[selected].host.port,true);
     if (ret == 0) {
         WriteLog("redirect server success\n");
         _s_session_size = m_login->GetSessionData(_s_session_buf, sizeof(_s_session_buf));

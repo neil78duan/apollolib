@@ -104,6 +104,7 @@ enum ATLANTIS_SERVER_MSG {
 	SERVER_MSG_GM_SENDMAIL,			  //gm send mail
 	SERVER_MSG_GM_SENDCHAT,		      //gm send chat
 	SERVER_MSG_GM_OPER_ACK,			  //gm common aper ack
+	SERVER_MSG_SERVER_INFO_RENEW,		//RENEW the game server info (capacit and online number)
 	SERVER_MSG_NUMBER
 };
 // 

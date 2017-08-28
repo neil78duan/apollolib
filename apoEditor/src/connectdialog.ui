@@ -146,6 +146,19 @@
      <string>GM Msg</string>
     </property>
    </widget>
+   <widget class="QCheckBox" name="skipAuth">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>130</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>忽略密码</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">

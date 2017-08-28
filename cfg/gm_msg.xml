@@ -408,12 +408,15 @@
 		<msgid kinds="hide">1794</msgid>
 		<data name="包裹编号" kinds="hide" param="0">0</data>
 	</message>
+	<message name="sys_查看服务器策划表格信息" expand="yes" delete="no" need_confirm="yes">
+		<msgid maxId="7" minId="14" kinds="hide">0</msgid>
+	</message>
 	<message name="sys_重新加载游戏数据" expand="yes" delete="no" need_confirm="yes">
 		<msgid kinds="hide">17</msgid>
 	</message>
 	<message name="sys_修改游戏时间" expand="yes" delete="no" need_confirm="yes">
 		<msgid kinds="hide">1797</msgid>
-		<data name="加快小时" kinds="numeral" param="0">24</data>
+		<data name="加快小时" kinds="numeral" param="0">8</data>
 		<data name="加快分钟" kinds="numeral" param="0">0</data>
 	</message>
 	<message name="sys_记录收发消息" expand="yes" delete="no">
@@ -432,9 +435,6 @@
 		<msgid kinds="hide" maxId="0" minId="30">0</msgid>
 		<data name="MaxID" kinds="numeral" param="3">0</data>
 		<data name="MinID" kinds="numeral" param="3">0</data>
-	</message>
-	<message name="sys_接受服务器日志" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="0" minId="27">0</msgid>
 	</message>
 	<message name="sys_查看服务器版本" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0" minId="2">0</msgid>

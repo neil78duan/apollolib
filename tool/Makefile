@@ -2,7 +2,7 @@
 #topdir=(shell pwd)
 VPATH = .
 
-SUBDIRS = robort  protocolBuilder cmdline_tool
+SUBDIRS = robort protocolBuilder cmdline_tool
 
 all: debug
 

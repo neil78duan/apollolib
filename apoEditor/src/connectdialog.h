@@ -26,7 +26,7 @@ public:
 
     void onTimeOut() ;
     int _connectHost(const char *host, int port);
-    int _login(const char *user, const char *passwd);
+	int _login(const char *user, const char *passwd, bool skipAuth);
     int _relogin(void *sessionData, size_t session_size);
 
     int SelOrCreateRole(const char *accountName);

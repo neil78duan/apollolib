@@ -1285,7 +1285,7 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 	case OT_USER_DEFINED:
 	case OT_STRING:
 	case OT_VARIABLE:
-		if (!pVal || !pVal[0]){
+		if (!pVal || !pVal[0] || 0 == ndstricmp(pVal, "none")){
 			//*((*(NDUINT16**)&p)++) = (NDUINT16)0;
 			p = lp_write_stream(p, (NDUINT16)0, m_aimByteOrder);
 		}
@@ -1327,7 +1327,7 @@ int LogicCompiler::param2Stream(ndxml *xmlParam, ndxml *parent, char *buf, size_
 		break;
 
 	case OT_ARRAY:
-		if (pVal){
+		if (pVal && 0!=ndstricmp(pVal, "none")){
 			DBLDataNode convertData ;
 			if (convertData.StringToArrayString(pVal)) {
 				if (paramType){

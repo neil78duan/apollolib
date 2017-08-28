@@ -546,7 +546,7 @@ RESULT_T ApoClient::LoginAccountOneKey(const char *account, const char *passwd, 
 
 	m_runningUpdate = ERUN_UP_STOP;
 
-	 res = _enterGame(NULL,0,account);
+	 res = _enterGame(NULL,0,account,true);
 	m_runningUpdate = ERUN_UP_NORMAL;
 	return res;
 }
@@ -615,7 +615,16 @@ RESULT_T ApoClient::_enterGame(const char *host, int port, const char *roleName,
 		if (num == 0) {
 			return NDSYS_ERR_HOST_UNAVAILABLE;
 		}
-		logResult = m_login->EnterServer(bufs[0].ip_addr, bufs[0].host.port, bWithoutLoadBalance);
+		int maxNum = 0xffff;
+		for (int i = 0; i < num; i++){
+			if (maxNum < bufs[i].host.cur_number) {
+				maxNum = bufs[i].host.cur_number;
+				host = bufs[i].ip_addr;
+				port = bufs[i].host.port;
+			}
+		}
+
+		logResult = m_login->EnterServer(host,port, bWithoutLoadBalance);
 	}
 	
 	if (logResult != 0) {
@@ -672,12 +681,14 @@ RESULT_T ApoClient::_enterGame(const char *host, int port, const char *roleName,
 RESULT_T ApoClient::createRole(const char *roleName)
 {
 	//NDUINT32 error_code = NDSYS_ERR_UNKNOWN;
+	float timezone =(float) nd_time_zone();
+
 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_REQ);
 	omsg.Write((NDUINT8*)roleName);
 
 	omsg.Write((NDUINT16)1);	//role attribute
-	omsg.Write((NDUINT8)20);
-	omsg.Write((float)0);
+	omsg.Write((NDUINT8)0xff);
+	omsg.Write(timezone);
 
 	nd_usermsgbuf_t recv_msg;
 

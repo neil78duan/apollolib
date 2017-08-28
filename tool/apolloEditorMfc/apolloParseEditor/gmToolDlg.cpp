@@ -522,13 +522,13 @@ int gmToolDlg::_login(const char *user, const char *passwd)
 		return -1;
 	}
 	
-	if (_s_session_size && _s_session_buf[0]){
-		ret = m_login->ReloginEx((void*)_s_session_buf, _s_session_size);
-		if (0==ret)	{
-			out_print("%s login success \n",user);
-			return 0;
-		}
-	}
+// 	if (_s_session_size && _s_session_buf[0]){
+// 		ret = m_login->ReloginEx((void*)_s_session_buf, _s_session_size);
+// 		if (0==ret)	{
+// 			out_print("%s login success \n",user);
+// 			return 0;
+// 		}
+// 	}
 
 	ret =m_login->Login(user, passwd, ACC_APOLLO,false);
 	if (-1==ret) {

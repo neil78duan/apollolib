@@ -4,7 +4,7 @@ VPATH = .
 
 include ./Rules.make
 
-SUBDIRS =  cli_common srv_common attribute logic_parser
+SUBDIRS = cli_common srv_common attribute logic_parser
 
 
 all: debug
@@ -23,6 +23,7 @@ tool:
 clean:
 	for n in $(SUBDIRS); do $(MAKE) -C $$n clean DEBUG="n" PROFILE="n"; done
 	for n in $(SUBDIRS); do $(MAKE) -C $$n clean DEBUG="y" PROFILE="y" || exit 1; done
+	cd tool; make clean 
 
 config:
 	chmod u+x ./config.sh ; ./config.sh

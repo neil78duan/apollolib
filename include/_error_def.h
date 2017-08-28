@@ -145,5 +145,8 @@ ErrorElement(ESERVER_ERR_QUIT_BEFORE_START, "玩家在开始前退出战斗"),
 ErrorElement(ESERVER_ERR_STOVE_POSITION_FULL, "熔炉已开启最大位置"),
 ErrorElement(ESERVER_ERR_BOSS_CREATE_LIMIT, "创建合作boss副本数量达到上限"),
 ErrorElement(ESERVER_ERR_BOSS_FIGHT_LIMIT, "合作boss战斗次数达到上限"),
+ErrorElement(ESERVER_ERR_BOSS_OTHER_FIGHT_LIMIT, "对方合作boss战斗次数达到上限"),
+ErrorElement(ESERVER_ERR_BOSS_OTHER_ENERGY_SHORT, "对方体力不足"),
+ErrorElement(ESERVER_ERR_BOSS_ENERGY_SHORT, "体力不足"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),
