@@ -11,27 +11,44 @@
 
 
 #include "ndcli/nd_iconn.h"
+#include <vector>
+
+struct replayMsgData
+{
+	NDUINT32 sendTm;
+	size_t size;
+	char data[1];	
+};
+
+typedef std::vector<replayMsgData *> replay_vct;
 
 // replay net stream to simulate the real player actions
 class ReplayStream {
 public:
-	ReplayStream() ;
+	ReplayStream();
 	virtual~ReplayStream() ;
 	
 	int update() ;
-	int initStream(const char *data, int size) ;
+
+	//int initStream(const char *data, int size) ;
+	int initStream(replay_vct& msgVct){ m_replayMsg = &msgVct; return 0; }
 	virtual int Send(void *msgData, int size) ;
 	
 protected:
 	int getNextFrameTime(ndtime_t *sendtm) ;
 	char *fetchFrame(ndtime_t *sendtm,  int *length ) ;
 	
-	ndtime_t m_lastFrameTm ;
-	ndtime_t m_curReplayTm ; //replay time
+	ndtime_t m_lastRecordFrameTm ;		//last original time 
+	ndtime_t m_lastRunTime ; //replay time
 	
-	char *m_orgData ;
-	char *m_curPlayAddr ;
-	size_t m_size ;
+
+	replay_vct *m_replayMsg;
+
+	int m_currentSendIndex;
+// 
+// 	char *m_orgData ;
+// 	char *m_curPlayAddr ;
+// 	size_t m_size ;
 	
 };
 

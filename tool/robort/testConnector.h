@@ -14,6 +14,7 @@
 #include "apollo_robort.h"
 #include "replayNetStream.hpp"
 
+#include <string>
 class SendHelper: public ReplayStream
 {
 public:
@@ -30,7 +31,7 @@ class TestConnector  : public  ApolloRobort
 public:
 	TestConnector() ;
 	virtual ~TestConnector() ;
-	int initStream(const char *stream, size_t size) ;
+	int initStream(replay_vct &msgvct);
 	int update() ;
 	
 protected:
@@ -48,7 +49,9 @@ public:
 	virtual ~TestconnsMgr() ;
 	
 	int initStreamMsg(const char *file) ;
-	int init(const char*host, int port,const char* prefix, int num, int acc_start_index = 0, int iAccType = 2 );
+	int init(const char*host, int port, int num, int acc_start_index = 0);
+	int initWithSdk(const char *sdkAccFile, const char*host, int port,  int num, int acc_start_index = 0);
+	void setAccountPrefixName(const char* prefix)	{ m_accPrefix = prefix; }
 	int Update() ;
 	void Destroy() ;
 	
@@ -58,8 +61,11 @@ public:
 	TestConnector m_conns[MAX_CONNECTOR_NUM] ;
 	
 	NDUINT32 m_tickIndex ;
-	char *m_streamMessage ;
-	size_t m_streamSize ;
+	//char *m_streamMessage ;
+	//size_t m_streamSize ;
+	std::string m_accPrefix;
+
+	replay_vct m_replyMsgbuf;
 };
 
 

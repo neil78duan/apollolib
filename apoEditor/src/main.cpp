@@ -76,7 +76,7 @@ int runGm(int argc, char *argv[])
 	dlg.m_editor_setting = &editorSetting;
 	dlg.m_gmCfg = &xmlSend;
 
-	dlg.LoadClientScript("../../data/client_script.bin");
+	dlg.LoadClientScript("../../data/client_script.bin","../../data/cehua_data.dat");
 
 
 	dlg.exec();
@@ -92,6 +92,7 @@ int runGm(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
+	
 	const char *nowDir = nd_getcwd();
 
 	for (int i = 1; i < argc ; i++){

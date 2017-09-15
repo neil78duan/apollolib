@@ -149,4 +149,15 @@ ErrorElement(ESERVER_ERR_BOSS_OTHER_FIGHT_LIMIT, "对方合作boss战斗次数�
 ErrorElement(ESERVER_ERR_BOSS_OTHER_ENERGY_SHORT, "对方体力不足"),
 ErrorElement(ESERVER_ERR_BOSS_ENERGY_SHORT, "体力不足"),
 
+ErrorElement(ESERVER_ERR_BLESS_NO_ITEM, "没有可以操作的原胚"),
+ErrorElement(ESERVER_ERR_CANNOT_BLESS, "不可以进行赐福"),
+ErrorElement(ESERVER_ERR_MINI_ARTIFACT_PUTON_FAIL, "原胚放置失败"),
+ErrorElement(ESERVER_ERR_MINI_ARTIFACT_COMPOSE_FAIL, "原胚启灵失败"),
+ErrorElement(ESERVER_ERR_MINI_ARTIFACT_SLOT_UNLOCK, "原培可放置位置已开到上限"),
+ErrorElement(ESERVER_ERR_ARTIFACT_TYPE_PUT_ON, "神器穿戴类型不匹配"),
+
+ErrorElement(ESERVER_ERR_TALENT_UP_LEVEL, "已有天赋正在升级"),
+
+ErrorElement(ESERVER_ERR_ALREADY_DOANTE, "今天已经捐献过了请明天再来"),
+
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

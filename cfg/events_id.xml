@@ -18,4 +18,5 @@
 	<node desc="成功输入邀请码(player)">15</node>
 	<node desc="完成地图(mapId, isSuccess)">16</node>
 	<node desc="摧毁建筑(buildingId)">17</node>
+	<node desc="建筑升级(buildingId,newLv)">18</node>
 </event_list>

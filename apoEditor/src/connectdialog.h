@@ -35,8 +35,9 @@ public:
 
 	NDIConn *getConnect(){ return m_pConn; }
 
-	bool LoadClientScript(const char *file);
+	bool LoadClientScript(const char *file, const char *dblFile);
 	const char* m_scriptFile;
+	const char* m_dblDataFile;
 public:
 
     ndxml *m_editor_setting;
@@ -62,6 +63,9 @@ private slots:
     void on_pushButton_2_clicked();
 
 private:
+	void saveHost(const QString &hostName);
+	void InitHostList();
+
     Ui::ConnectDialog *ui;
     QTimer *timer ;
 

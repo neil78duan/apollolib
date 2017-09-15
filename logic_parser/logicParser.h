@@ -456,6 +456,7 @@ protected:
 	bool m_bStepMode;	
 	bool m_bLastIsCalled;		//last step is call function
 	bool m_bIniativeQuit;
+	bool m_runInTimer;
 
 	int m_sys_errno;
 	int m_registerCount;
@@ -465,15 +466,22 @@ protected:
 	friend class LocalDebugger;
 	DBLDataNode m_registerVal; //this is common register 
 
+	struct timerTypeName {
+		timerTypeName(bool g, const char*timer) :isGlobal(g), name(timer) {}
+		bool isGlobal;
+		std::string name;
+	};
 	typedef std::list<StackWaitEventNode> event_list_t ;
 	typedef std::vector<SendEventNode> send_event_list_t;
 	typedef std::list<eventHandler> event_handler_list_t;
 	typedef std::list<logicParserTimer> timer_list_t;
+	typedef std::vector<timerTypeName>timer_name_vct;
 		
 	event_list_t m_events ;
 	send_event_list_t m_needHandleEvents;
 	event_handler_list_t m_hanlers;
 	timer_list_t m_timer;
+	timer_name_vct m_delTimerQueue;
 
 	//UserDefData_map_t &m_useDefType;
 

@@ -68,7 +68,7 @@ int  CMyDatabase::open_database(const char *host,int port, const char *user, con
 		return -1;
 	}
 	else {
-		nd_logmsg("connect %s %s SUCCESS!  \n MYSQL server ver=%d client ver=%d\n" 
+		nd_logmsg("connect %s %s SUCCESS!  MYSQL server ver=%d client ver=%d\n" 
 			AND host AND dbinstance AND get_server_version() AND get_version()) ;
 	}
 	return 0;

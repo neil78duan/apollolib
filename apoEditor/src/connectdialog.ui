@@ -48,16 +48,6 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="hostEdit">
-    <property name="geometry">
-     <rect>
-      <x>170</x>
-      <y>40</y>
-      <width>113</width>
-      <height>21</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_4">
     <property name="enabled">
      <bool>true</bool>
@@ -157,6 +147,25 @@
     </property>
     <property name="text">
      <string>忽略密码</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="hostCombo">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>40</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="editable">
+     <bool>true</bool>
+    </property>
+    <property name="currentIndex">
+     <number>-1</number>
+    </property>
+    <property name="maxCount">
+     <number>100</number>
     </property>
    </widget>
   </widget>

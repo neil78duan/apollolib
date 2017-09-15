@@ -68,10 +68,8 @@ int apoCli_CheckConnValid()
 void apoCli_resetConnector()
 {
 	ApoClient *apoCli = ApoClient::getInstant();
-	if (apoCli && apoCli->getConn())	{
-		nd_handle h = apoCli->getConn();
-		nd_connector_close(h, 0);
-		nd_connector_set_crypt(h, NULL, 0);
+	if (apoCli )	{
+		apoCli->ResetConnect();
 	}
 }
 
@@ -79,7 +77,10 @@ RESULT_T apoCli_send(char *bufferFram, int frameSize)
 {
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (apoCli)	{
-		nd_connector_raw_write(apoCli->getConn(), bufferFram, frameSize);
+		int ret = nd_connector_raw_write(apoCli->getConn(), bufferFram, frameSize);
+		if (ret == -1)		{
+			return (RESULT_T) nd_object_lasterror(apoCli->getConn());
+		}
 		return ESERVER_ERR_SUCCESS;
 	}
 	return NDSYS_ERR_INVALID_HANDLE;
@@ -225,9 +226,25 @@ RESULT_T apoCli_open(const char *host, int port, const char *dev_udid)
 	if (!apoCli)	{
 		return NDSYS_ERR_NOT_INIT;
 	}
-
+	if (!host || !*host) {
+		return NDSYS_ERR_INVALID_INPUT;
+	}
 	return apoCli->Open(host, port, dev_udid);
 }
+
+
+RESULT_T apoCli_close()
+{
+	ApoClient *apoCli = ApoClient::getInstant();
+	if (!apoCli)	{
+		return NDSYS_ERR_NOT_INIT;
+	}
+
+	apoCli->Close();
+	return ESERVER_ERR_SUCCESS;
+}
+
+
 // 
 // RESULT_T apoCli_ReloginBackground()
 // {
@@ -271,22 +288,30 @@ int apoCli_fetchSessionKey(char *outbuf, int bufsize)
 // 	return apoCli->TrytoRelogin();
 // 
 // }
-RESULT_T apoCli_LoginAccount(const char *account, const char *passwd, int accType, bool skipAuth)
+RESULT_T apoCli_LoginAccount(const char *account, const char *passwd, int accType, bool skipAuth, int countryIndex)
 {
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (!apoCli)	{
 		return NDSYS_ERR_NOT_INIT;
 	}
-	return apoCli->LoginAccountOneKey(account, passwd,accType,skipAuth);
+	RESULT_T res = apoCli->LoginAccountOneKey(account, passwd,accType,skipAuth,countryIndex);
+	if (res != ESERVER_ERR_SUCCESS)	{
+		apoCli->Close();
+	}
+	return res;
 }
-RESULT_T apoCli_CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email)
+RESULT_T apoCli_CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email, int countryIndex)
 {
 
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (!apoCli)	{
 		return NDSYS_ERR_NOT_INIT;
 	}
-	return apoCli->CreateAccount(userName,passwd,phone,email);
+	RESULT_T res = apoCli->CreateAccount(userName,passwd,phone,email,countryIndex);
+	if (res != ESERVER_ERR_SUCCESS)	{
+		apoCli->Close();
+	}
+	return res;
 }
 // RESULT_T apoCli_testOneKeyLogin(const char *host, int port, const char *user, const char *passwd)
 // {
@@ -299,7 +324,6 @@ RESULT_T apoCli_CreateAccount(const char *userName, const char *passwd, const ch
 // }
 void apoCli_Logout()
 {
-
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (apoCli)	{
 		apoCli->Logout();
@@ -372,14 +396,17 @@ void apoCli_EnableStreamRecord()
 }
 
 
-APO_RESULT_T apoCli_LoginOnly(const char *account, const char *passwd, int accType, bool skipAuth)
+APO_RESULT_T apoCli_LoginOnly(const char *account, const char *passwd, int accType, bool skipAuth, int countryIndex)
 {
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (!apoCli)	{
 		return NDSYS_ERR_NOT_INIT;
 	}
-	return apoCli->LoginAccountOneKey(account, passwd, accType, skipAuth);
-
+	RESULT_T res = apoCli->LoginOnly(account, passwd, accType, skipAuth,countryIndex);
+	if (res != ESERVER_ERR_SUCCESS)	{
+		apoCli->Close();
+	}
+	return res;
 }
 int apoCli_GetServerList(char *buf, size_t size)
 {

@@ -12,7 +12,6 @@
 
 #include "testConnector.h"
 
-#define  MAX_CONNECTOR_NUM 1024
 int volatile __exit = 0;
 
 char *__host;
@@ -86,7 +85,6 @@ int wait_exit()
 
 int main(int argc , char *argv[])
 {
-    
     ParseArg( argc, argv) ;
     
     if(InitNet()){
@@ -97,6 +95,7 @@ int main(int argc , char *argv[])
     }
 	TestconnsMgr connsMgr ;
 	__pconnsMgr =&connsMgr ;
+	connsMgr.setAccountPrefixName(nd_filename(argv[0]));
 	
 	if (__stream_file && __stream_file[0]) {
 		
@@ -105,9 +104,10 @@ int main(int argc , char *argv[])
 			exit(1) ;
 		}
 	}
+	connsMgr.init(__host, __port,  __real_conn_num, __acc_index_start);
+	//with sdk 
+	//connsMgr.initWithSdk("./config.xml", __host, __port,  __real_conn_num, __acc_index_start);
 	
-	connsMgr.init(__host, __port,"robots", __real_conn_num,__acc_index_start) ;
-
     wait_exit() ;
 	
 	__pconnsMgr->Destroy() ;

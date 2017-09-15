@@ -17,6 +17,7 @@
 #include "logic_parser/dbldata2netstream.h"
 #include "logic_parser/logicEngineRoot.h"
 #include "logic_parser/logicDataType.h"
+#include "logic_parser/dbl_mgr.h"
 
 #include "apollo_errors.h"
 //#include "netMessage/message_inc.h"
@@ -156,12 +157,13 @@ ConnectDialog::ConnectDialog(QWidget *parent) :
     ui->_name ##Edit->setText(var1) ;      \
 }while (0)
 
-    SET_EDIT_DFTVAL(host, "192.168.8.49") ;
+    //SET_EDIT_DFTVAL(host, "192.168.8.49") ;
     SET_EDIT_DFTVAL(port, "6600") ;
     SET_EDIT_DFTVAL(name, "tRobort1") ;
     SET_EDIT_DFTVAL(passwd, "test123") ;
 
 #undef SET_EDIT_DFTVAL
+	InitHostList();
 }
 
 ConnectDialog::~ConnectDialog()
@@ -182,9 +184,65 @@ ConnectDialog::~ConnectDialog()
 	
 	ND_LOG_WRAPPER_DELETE(__glogWrapper);
 
+
+	DBLDatabase *pdbl = DBLDatabase::get_Instant();
+	if (pdbl){
+		pdbl->Destroy();
+	}
+
     DeinitNet();
 
     //ndxml_destroy(&m_message_define);
+}
+
+void ConnectDialog::saveHost(const QString &hostName)
+{
+	QSettings settings("duanxiuyun", "ApolloEditor");
+
+	settings.setValue("lastHost", hostName);
+
+	int size = settings.beginReadArray("hostList");
+	for (int i = 0; i < size; ++i) {
+		settings.setArrayIndex(i);
+		QString ip = settings.value("ip").toString();
+		if (ip == hostName)	{
+			settings.endArray();
+			return;
+		}
+	}
+	settings.endArray();
+
+	settings.beginWriteArray("hostList");	
+	settings.setArrayIndex(size);
+	settings.setValue("ip", hostName);
+	settings.endArray();
+
+}
+
+void ConnectDialog::InitHostList()
+{
+	QSettings settings("duanxiuyun", "ApolloEditor");
+	QString lastHost = settings.value("lastHost", "10.20.20.248").toString();
+
+	ui->hostCombo->addItem(lastHost);
+
+	int size = settings.beginReadArray("hostList");
+	if (size == 0) {
+		settings.endArray();
+		//ui->hostCombo->addItem("10.20.20.248");
+		return;
+	}
+
+	for (int i = 0; i < size; ++i) {
+		settings.setArrayIndex(i);
+		QString ip = settings.value("ip").toString();
+		if (ip ==lastHost)	{
+			continue;
+		}
+		ui->hostCombo->addItem(ip);
+	}
+
+	settings.endArray();
 }
 
 
@@ -203,6 +261,12 @@ void ConnectDialog::onTimeOut()
 			if (scriptRoot) {
 				parse_arg_list_t arg;
 				scriptRoot->getGlobalParser().eventNtf(APOLLO_EVENT_UPDATE, arg);
+
+				//tick
+				static ndtime_t lastTick = nd_time();
+				ndtime_t now = nd_time();
+				scriptRoot->getGlobalParser().update(now - lastTick);
+				lastTick = now;
 			}
 		}
     }
@@ -224,12 +288,17 @@ void ConnectDialog::WriteLog(const char *logText)
 	
 }
 
-bool ConnectDialog::LoadClientScript(const char *file)
+bool ConnectDialog::LoadClientScript(const char *file,const char *dblFile)
 {
     //if (-1 == loadUserDefFromMsgCfg(file, m_dataTypeDef))	{
     //	nd_logerror("load message datatype error from %s\n", file);
     //	return false;
     //}
+	DBLDatabase *pdbl = DBLDatabase::get_Instant();
+	if (pdbl){
+		pdbl->LoadBinStream(dblFile);
+	}
+
 
 	m_scriptFile = file;
     //if (message_def){
@@ -256,14 +325,15 @@ void ConnectDialog::on_loginButton_clicked()
             m_login = 0;
         }
 
-        ClearLog();
+        //ClearLog();
         WriteLog("logout success\n");
         ui->gmMsgButton->setEnabled(false);
 
     }
     else{
         //get host name
-        std::string strHost = ui->hostEdit->text().toStdString();
+        //std::string strHost = ui->hostEdit->text().toStdString();
+		std::string strHost = ui->hostCombo->currentText().toStdString();
         int port = ui->portEdit->text().toInt();
         std::string strName = ui->nameEdit->text().toStdString() ;
         std::string strPasswd = ui->passwdEdit->text().toStdString() ;
@@ -298,11 +368,11 @@ void ConnectDialog::on_loginButton_clicked()
         }
 
         // log send data
-//        const char *msg_stream_file = "./test_robort.data";
-//        int length = strlen(msg_stream_file);
-//        if (m_pConn->ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)msg_stream_file, &length) == -1) {
-//            nd_logmsg("log net message bin-data errror\n");
-//        }
+       const char *msg_stream_file = "./test_robort.data";
+       int length = strlen(msg_stream_file);
+       if (m_pConn->ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)msg_stream_file, &length) == -1) {
+           nd_logmsg("log net message bin-data errror\n");
+       }
 
         //get and init role data
 
@@ -331,11 +401,12 @@ void ConnectDialog::on_loginButton_clicked()
         QString var1 = ui->_name ##Edit->text() ;      \
         settings.setValue(#_name, var1); \
     }while (0)
-        SET_EDIT_DFTVAL(host, "192.168.8.49") ;
+        //SET_EDIT_DFTVAL(host, "192.168.8.49") ;
         SET_EDIT_DFTVAL(port, "6600") ;
         SET_EDIT_DFTVAL(name, "tRobort1") ;
         SET_EDIT_DFTVAL(passwd, "test123") ;
 #undef  SET_EDIT_DFTVAL
+		saveHost(ui->hostCombo->currentText()) ;
     }
 }
 
@@ -509,6 +580,10 @@ int ConnectDialog::SelOrCreateRole(const char *accountName)
         return -1 ;
     }
 
+	for (int i = 0; i < num; i++)	{
+		nd_logmsg("ONLINE-NUMBER >>> host %s:%d : %d / %d \n", (const char*)bufs[i].ip_addr, bufs[i].host.port,
+			bufs[i].host.cur_number, bufs[i].host.max_number);
+	}
 
     int selected = 0;
     if(num > 1){
