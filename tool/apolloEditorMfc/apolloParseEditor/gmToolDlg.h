@@ -34,7 +34,7 @@ protected:
 	const char* m_scriptFile;
 
 	int _connectHost(const char *host, int port);
-	int _login(const char *user, const char *passwd);
+	int _login(const char *user, const char *passwd,bool bSkipAuth);
 	int _relogin(void *sessionData, size_t session_size);
 
 	int SelOrCreateRole();
@@ -66,4 +66,6 @@ public:
 public:
 	afx_msg void OnBnClickedButtonShowError();
 	afx_msg void OnBnClickedCheckShowHex();
+//	afx_msg void OnBnClickedCheck2();
+	BOOL m_bSkipAuth;
 };

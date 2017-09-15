@@ -90,7 +90,7 @@ enum ATLANTIS_SERVER_MSG {
 	
 	SERVER_MSG_UPDATE_PVP_DATA, //NetMessage::RolePvpDetail 
 
-	SERVER_MSG_GET_OTHER_ROLE_DATA, //int32:role-id, int8:field-type, int16:callback-msg
+	SERVER_MSG_GET_OTHER_ROLE_DATA, //int32:role-id, int8:field-type, int16:callback-msg, int64:callback_param
 	SERVER_MSG_CLIENT_SESSION_SYNC,//notify worldserver or social server client session changed after the connector re-connect
 
 	SERVER_MSG_TEST_DISCONNECT1 , //test disconnect between game and world 
@@ -103,7 +103,11 @@ enum ATLANTIS_SERVER_MSG {
 	SERVER_MSG_GM_FORBIDINFO_SYC,	  //gm forbidinfo syc
 	SERVER_MSG_GM_SENDMAIL,			  //gm send mail
 	SERVER_MSG_GM_SENDCHAT,		      //gm send chat
-	SERVER_MSG_GM_OPER_ACK,			  //gm common aper ack
+	SERVER_MSG_GM_GETSERVERSTATUS_REQ,    //gm get server status req
+	SERVER_MSG_GM_GETSERVERSTATUS_ACK,    //gm get server status ack
+	SERVER_MSG_GM_SETSERVERSTATUS_REQ,    //gm set server status req
+	SERVER_MSG_GM_SETSERVERSTATUS_ACK,    //gm set server status ack
+	SERVER_MSG_GM_OPER_ACK,			      //gm common aper ack
 	SERVER_MSG_SERVER_INFO_RENEW,		//RENEW the game server info (capacit and online number)
 	SERVER_MSG_NUMBER
 };

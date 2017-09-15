@@ -65,6 +65,7 @@ m_owner(NULL), m_cmdByteOrder(0)
 	m_curStack = NULL;
 	m_ownerIsNew = false;
 	m_bStepMode = false;
+	m_runInTimer = false;
 
 	m_dbg_cur_node_index = 0;
 	m_dbg_node[0]= 0;
@@ -1207,18 +1208,21 @@ int LogicParserEngine::_makeVar(runningStack *runstack, char *pCmdStream, bool i
 	LogicData_vct *pVarMgr = NULL;
 	if (isLocal){
 		pVarMgr = &runstack->local_vars;
+		for (LogicData_vct::iterator it = pVarMgr->begin(); it != pVarMgr->end(); it++)	{
+			if (ndstricmp((char*)it->name.c_str(), (char*)name) == 0) {
+				it->var = node.var;
+				return (int)(p - pCmdStream);
+			}
+		}
 	}
 	else {
 		LogicEngineRoot *root = LogicEngineRoot::get_Instant();
+		if (root->getVar(name)) {
+			return (int)(p - pCmdStream);
+		}
 		pVarMgr = root->getGlobalVars();		
 	}
 	
-	for (LogicData_vct::iterator it = pVarMgr->begin(); it != pVarMgr->end(); it++)	{
-		if (ndstricmp((char*)it->name.c_str(), (char*)name) == 0) {
-			it->var = node.var;
-			return (int)(p - pCmdStream);
-		}
-	}
 	pVarMgr->push_back(node);
 	return (int)(p - pCmdStream);
 }
@@ -1668,6 +1672,8 @@ void LogicParserEngine::update(ndtime_t interval)
 		return;
 	}
 	timer_list_t::iterator it;
+	m_runInTimer = true;
+
 	for (it = m_timer.begin(); it != m_timer.end(); ){
 		logicParserTimer *ptimer = &*it;
 		ptimer->left_val -= interval;
@@ -1683,6 +1689,15 @@ void LogicParserEngine::update(ndtime_t interval)
 		}
 		++it;		
 	}
+	m_runInTimer = false;
+	if (m_delTimerQueue.size() >0) {
+		for (size_t i = 0; i < m_delTimerQueue.size(); i++)	{
+			_delTimer(m_delTimerQueue[i].isGlobal, m_delTimerQueue[i].name.c_str());
+		}
+		m_delTimerQueue.clear();
+	}
+		
+
 	parse_arg_list_t args;
 	onEvent(0, args);		//event 0 is update event
 }
@@ -2083,18 +2098,24 @@ bool LogicParserEngine::_addTimer(int type, int interval, const char *timername,
 }
 bool LogicParserEngine::_delTimer(bool isGlobal , const char *timername)
 {
-	if (isGlobal){
-		LogicEngineRoot *root = LogicEngineRoot::get_Instant();
-		return root->getGlobalParser()._delTimer(false, timername);
+	if (m_runInTimer)	{
+		m_delTimerQueue.push_back(timerTypeName(isGlobal, timername));
+		return true;
 	}
-	timer_list_t::iterator it;
-	for (it = m_timer.begin(); it != m_timer.end(); ++it){
-		if (0 == ndstricmp(timername, it->name.c_str()))	{
-			m_timer.erase(it);
-			return true;
+	else {
+		if (isGlobal){
+			LogicEngineRoot *root = LogicEngineRoot::get_Instant();
+			return root->getGlobalParser()._delTimer(false, timername);
 		}
+		timer_list_t::iterator it;
+		for (it = m_timer.begin(); it != m_timer.end(); ++it){
+			if (0 == ndstricmp(timername, it->name.c_str()))	{
+				m_timer.erase(it);
+				return true;
+			}
+		}
+		return true;
 	}
-	return true;
 }
 
 

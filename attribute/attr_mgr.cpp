@@ -49,13 +49,6 @@ void RoleAttrAsset::endRecordChange()
 	m_changed.clear();
 }
 
-attrval_t  RoleAttrAsset::getVal(attrid_t index) const
-{
-	if (index < m_data->datasCount){
-		return m_data->datas[index];
-	}
-	return 0;
-}
 bool RoleAttrAsset::setVal(attrid_t index, attrval_t val)
 {
 	ND_TRACE_FUNC();
@@ -120,7 +113,51 @@ bool RoleAttrAsset::subVal(attrid_t index, attrval_t val)
 	return  ret ;
 }
 
-attrval_t  RoleAttrAsset::getVal(const char *name) const
+attrval_t  RoleAttrAsset::getVal(attrid_t index, bool withRecalc)
+{
+	if (withRecalc)	{
+		RoleAttrHelper  *pwah = get_attr_helper();
+		role_attr_description *pdesc = pwah->get_wa_desc(index);
+		if (pdesc ) {
+			if (pdesc->cmd_data.size > 0) {
+				init_vm();
+				if (-1 != vm_run_cmd(&m_vm, pdesc->cmd_data.cmd_buf, pdesc->cmd_data.size)) {
+					float val = vm_return_val(&m_vm);
+					_set_val((attrval_t)val, index);
+				}
+			}
+			else {
+				_set_val(m_data->datas[index], index);
+			}
+		}
+
+	}
+	if (index < m_data->datasCount){
+		return m_data->datas[index];
+	}
+	return 0;
+}
+
+attrval_t  RoleAttrAsset::getVal(const char *name, bool withRecalc )
+{
+	ND_TRACE_FUNC();
+	RoleAttrHelper  *pwah = get_attr_helper();
+	attrid_t waid = pwah->GetID(name);
+	if (waid != INVALID_ATTR_ID){
+		return getVal(waid,withRecalc);
+	}
+	return 0;
+}
+
+attrval_t  RoleAttrAsset::getVal(attrid_t index)const
+{
+	
+	if (index < m_data->datasCount){
+		return m_data->datas[index];
+	}
+	return 0;
+}
+attrval_t  RoleAttrAsset::getVal(const char *name)const
 {
 	ND_TRACE_FUNC();
 	RoleAttrHelper  *pwah = get_attr_helper();
@@ -130,6 +167,7 @@ attrval_t  RoleAttrAsset::getVal(const char *name) const
 	}
 	return 0;
 }
+
 bool RoleAttrAsset::setVal(const char *name, attrval_t newval)
 {
 	ND_TRACE_FUNC();
@@ -321,8 +359,6 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 		}
 		else {
 			OnChanged(aid, *pdata, oldval);
-			
-			//AttrValChange(aid, m_data.attrs_base[aid]);
 		}
 		m_dataChanged = 1;
 		if (pdesc->infection_num > 0) {

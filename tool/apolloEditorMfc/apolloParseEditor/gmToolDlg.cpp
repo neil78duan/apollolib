@@ -171,6 +171,7 @@ gmToolDlg::gmToolDlg(CWnd* pParent /*=NULL*/)
 	, m_minId(0)
 	, m_msgData(_T(""))
 	, m_selDataType(0)
+	, m_bSkipAuth(FALSE)
 {
 	m_newLine = true;
 	m_pConn = NULL;
@@ -223,6 +224,7 @@ void gmToolDlg::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxInt(pDX, m_minId, 0, 255);
 	DDX_Text(pDX, IDC_EDIT_MSG_DATA, m_msgData);
 	DDX_Radio(pDX, IDC_RADIO1, m_selDataType);
+	DDX_Check(pDX, IDC_CHECK2, m_bSkipAuth);
 }
 
 
@@ -237,6 +239,7 @@ BEGIN_MESSAGE_MAP(gmToolDlg, CDialog)
 	ON_BN_CLICKED(IDC_BT_GMMSG, &gmToolDlg::OnBnClickedBtGmmsg)
 	ON_BN_CLICKED(IDC_BUTTON_SHOW_ERROR, &gmToolDlg::OnBnClickedButtonShowError)
 	ON_BN_CLICKED(IDC_CHECK_SHOW_HEX, &gmToolDlg::OnBnClickedCheckShowHex)
+//	ON_BN_CLICKED(IDC_CHECK2, &gmToolDlg::OnBnClickedCheck2)
 END_MESSAGE_MAP()
 
 
@@ -301,7 +304,7 @@ void gmToolDlg::OnBnClickedButtonLogin()
 
 		out_print("CONNECT %s:%d SUCCESS\n", (LPCTSTR)m_strHost, m_nPort);
 
-		if (-1 == _login(userName, (LPCTSTR)m_strPasswd))	{
+		if (-1 == _login(userName, (LPCTSTR)m_strPasswd,m_bSkipAuth))	{
 			AfxMessageBox("user login error");
 			return;
 		}
@@ -330,14 +333,7 @@ void gmToolDlg::OnBnClickedButtonLogin()
 			m_pConn = NULL;
 			return;
 		}
-
-		// log send data 
-		const char *msg_stream_file = "./test_robort.data";
-		int length = strlen(msg_stream_file);
-		if (m_pConn->ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)msg_stream_file, &length) == -1) {
-			nd_logmsg("log net message bin-data errror\n");
-		}
-
+				
 		
 		SetTimer(1, 100, 0);
 		SetTimer(2, 1000, 0);
@@ -490,6 +486,14 @@ int gmToolDlg::_connectHost(const char *host, int port)
 		return 0;
 	}
 
+
+	// log send data 
+	const char *msg_stream_file = "./test_robort.data";
+	int length = strlen(msg_stream_file);
+	if (pConn->ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)msg_stream_file, &length) == -1) {
+		nd_logmsg("log net message bin-data errror\n");
+	}
+
 	if (!init_apollo_object(pConn, m_scriptFile)) {
 		out_print("load script %s error \n", m_scriptFile);
 		DestroyConnectorObj(pConn);
@@ -510,7 +514,7 @@ int gmToolDlg::_connectHost(const char *host, int port)
 
 	return 0;
 }
-int gmToolDlg::_login(const char *user, const char *passwd)
+int gmToolDlg::_login(const char *user, const char *passwd,bool bSkipAuth)
 {
 	int ret = 0;
 	if (m_login){
@@ -530,9 +534,15 @@ int gmToolDlg::_login(const char *user, const char *passwd)
 // 		}
 // 	}
 
-	ret =m_login->Login(user, passwd, ACC_APOLLO,false);
-	if (-1==ret) {
-		if (m_login->GetLastError() == NDSYS_ERR_NOUSER) {
+	if (bSkipAuth) {
+
+		ret = m_login->Login(user, passwd, ACC_OTHER_3_ACCID, true);
+	}
+	else {
+		ret = m_login->Login(user, passwd, ACC_APOLLO, false);
+	}
+	if (-1 == ret) {
+		if (m_login->GetLastError() == NDSYS_ERR_NOUSER && !bSkipAuth) {
 			account_base_info acc;
 			initAccCreateInfo(acc, ACC_APOLLO, user, passwd);
 
@@ -565,6 +575,11 @@ int gmToolDlg::SelOrCreateRole()
 	if (num == 0) {
 		out_log("get host list number=0\n");
 		return -1 ;
+	}
+
+	for (int i = 0; i < num; i++)	{
+		nd_logmsg("ONLINE-NUMBER >>> host %s:%d : %d / %d \n", (const char*)bufs[i].ip_addr, bufs[i].host.port,
+			bufs[i].host.cur_number, bufs[i].host.max_number);
 	}
 
 	int selected = 0;
@@ -722,12 +737,18 @@ void gmToolDlg::clearLog()
 
 void gmToolDlg::OnTimer(UINT_PTR nIDEvent)
 {
+	static ndtime_t lastTick = nd_time();
 	if (1==nIDEvent){
 		if (m_pConn)	{
 			int ret = m_pConn->Update(0);
 			if (-1==ret){
 				OnBnClickedButtonLogin();
 			}
+
+			ndtime_t now = nd_time();
+			LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
+			parser.update(now - lastTick);
+			lastTick = now;
 		}
 	}
 	else if (2 == nIDEvent) {
@@ -895,3 +916,9 @@ void gmToolDlg::OnBnClickedCheckShowHex()
 		DBLDataNode::setOutHex(pbt->GetCheck() ? true : false);
 	}
 }
+
+
+//void gmToolDlg::OnBnClickedCheck2()
+//{
+//	// TODO: Add your control notification handler code here
+//}

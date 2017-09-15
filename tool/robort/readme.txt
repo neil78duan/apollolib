@@ -14,5 +14,12 @@
 
 ./apollo_robort host port [connects-number] [account_start_index] [message-stream-file]
 
+
 duan
 2015-11-26
+
+
+需要在登录完成以后才能录制消息,因为登录消息好像会出错.问题有些奇怪
+
+duan 
+--2017.8.30

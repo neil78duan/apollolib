@@ -44,6 +44,7 @@ APOLLO_CLI_API int apoCli_CheckConnValid();
 APOLLO_CLI_API void apoCli_resetConnector();
 
 APOLLO_CLI_API APO_RESULT_T apoCli_open(const char *host, int port, const char *dev_udid);
+APOLLO_CLI_API APO_RESULT_T apoCli_close();
 APOLLO_CLI_API APO_RESULT_T apoCli_send(char *bufferFram, int frameSize);
 APOLLO_CLI_API APO_RESULT_T apoCli_sendMsg(int messageId, void *messageBody, int bodySize);
 
@@ -58,8 +59,8 @@ APOLLO_CLI_API APO_RESULT_T apoCli_ReloginEx(const char *sessionData, int sessio
 APOLLO_CLI_API int apoCli_fetchSessionKey( char *outBuf, int bufsize); //return session key size
 
 //APOLLO_CLI_API APO_RESULT_T apoCli_TrytoRelogin();
-APOLLO_CLI_API APO_RESULT_T apoCli_LoginAccount(const char *account, const char *passwd, int accType,bool skipAuth);
-APOLLO_CLI_API APO_RESULT_T apoCli_CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email);
+APOLLO_CLI_API APO_RESULT_T apoCli_LoginAccount(const char *account, const char *passwd, int accType,bool skipAuth, int countryIndex);
+APOLLO_CLI_API APO_RESULT_T apoCli_CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email, int countryIndex);
 
 //APOLLO_CLI_API APO_RESULT_T apoCli_testOneKeyLogin(const char *host, int port, const char *user, const char *passwd);
 APOLLO_CLI_API void apoCli_Logout();
@@ -74,7 +75,7 @@ APOLLO_CLI_API void apoCli_EnableSendLog(int bIsEnable);
 
 APOLLO_CLI_API void apoCli_EnableStreamRecord();
 
-APOLLO_CLI_API APO_RESULT_T apoCli_LoginOnly(const char *account, const char *passwd, int accType, bool skipAuth);
+APOLLO_CLI_API APO_RESULT_T apoCli_LoginOnly(const char *account, const char *passwd, int accType, bool skipAuth,int countryIndex);
 APOLLO_CLI_API int apoCli_GetServerList(char *buf, size_t size);//xml
 APOLLO_CLI_API APO_RESULT_T apoCli_EnterGame(const char *host, int port);
 

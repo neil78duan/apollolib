@@ -289,7 +289,7 @@ void LoginApollo::Destroy()
 	}
 }
 
-int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE type,  bool skipAuth)
+int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE type, bool skipAuth, int countryIndex)
 {
 	if (TrytoGetCryptKey() == -1) {
 		return -1;
@@ -310,6 +310,7 @@ int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE t
 	omsg.Write((NDUINT8)type) ;
 	omsg.Write((NDUINT8*)userName) ;
 	omsg.Write((NDUINT8*)passwd);
+	omsg.Write((NDUINT8)countryIndex);
 	//omsg.Write(m_udid);
 
 	nd_logdebug("send login message udid=%s\n",m_udid);
@@ -412,7 +413,7 @@ int LoginApollo::CreateAccount(account_base_info *acc_info)
 	omsg.Write(acc_info->passwd) ;
 	omsg.Write(acc_info->phone) ;
 	omsg.Write(acc_info->email) ;
-
+	omsg.Write(acc_info->country);
 
 	nd_logdebug("send create account message udid=%s\n", acc_info->udid);
 

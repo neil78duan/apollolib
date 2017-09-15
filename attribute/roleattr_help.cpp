@@ -102,9 +102,11 @@ int RoleAttrHelper::loadUplevelExp(const char *file)
 
 int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 {
-	const char *attrmax[ROLE_ATTR_CAPACITY][2] = { 0 };
-	const char *pfields[] = { "id", "name", "formula", "save_db", "sync", "min_val", "max_val", 
-		"client_change", "real_name", "forBuilding", "affect_buildings", "forRole", "affect_card", "forCard", "showInGuild","save_log"};
+	std::string attrmax[ROLE_ATTR_CAPACITY][2];
+	//const char *attrmax[ROLE_ATTR_CAPACITY][2] = { 0 };
+	const char *pfields[] = { "id", "name", "formula", "save_db", "sync", "min_val", "max_val",			//7
+		"client_change", "real_name", "forBuilding", "affect_buildings", "forRole", "affect_card",	"forCard", //14
+		"showInGuild","save_log","lostOnAttacked"};
 	
 	m_wa_num = 0 ;
 	role_attr_description *pwa_desc ;
@@ -156,14 +158,15 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 		pwa_desc->forCard = cursor[13].GetInt();
 		pwa_desc->showInGuild = cursor[14].GetInt();
 		pwa_desc->islog = cursor[15].GetInt();
+		pwa_desc->isLostOnAttacked = cursor[16].GetInt();
 		//pwa_desc->issyncai = cursor[7].GetInt();
 
 		pwa_desc->wa_id = (attrid_t ) aid ;
 		if (m_wa_num < aid)
 			m_wa_num = aid ;
 
-		attrmax[aid][1] = cursor[5].GetText();
-		attrmax[aid][0] = cursor[6].GetText();
+		attrmax[aid][1] = cursor[5].GetString();
+		attrmax[aid][0] = cursor[6].GetString();
 		++i;
 	}
 	m_wa_num++ ;
@@ -173,7 +176,7 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 		if (pwa_desc->wa_id == INVALID_ATTR_ID){
 			continue ;	
 		}
-		parse_minmax(attrmax[i][0], attrmax[i][1],pwa_desc);
+		parse_minmax(attrmax[i][0].c_str(), attrmax[i][1].c_str(),pwa_desc);
 	}
 	if (ParseFormula()==-1){
 		return -1 ;
@@ -413,7 +416,7 @@ int RoleAttrHelper::ParseFormula()
 
 int RoleAttrHelper::parse_minmax(const char *maxval, const char *minval, role_attr_description *pwa)
 {
-	if (maxval){
+	if (maxval && *maxval){
 		attrid_t attid = GetID(maxval) ;
 		if(INVALID_ATTR_ID!=attid)  {
 			pwa->ismax = 2 ;
@@ -428,7 +431,7 @@ int RoleAttrHelper::parse_minmax(const char *maxval, const char *minval, role_at
 		pwa->ismax = 0;
 	}
 	
-	if (minval){
+	if (minval && *minval){
 		attrid_t attid = GetID(minval) ;
 		if(INVALID_ATTR_ID!=attid)  {
 			pwa->ismin = 2 ;

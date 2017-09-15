@@ -74,7 +74,7 @@ int UserAdditionData::ToStream(void *buf, size_t bufsize,int byteOrder) const
 	user_addition_map::const_iterator it = m_data_map.begin();
 	for (; it != m_data_map.end(); it++){
 		size_t len = it->first.size();
-		if (len >= bufsize)	{
+		if ((len + 8)>= bufsize)	{
 			return -1;
 		}
 		if (!it->second.CheckValid()){

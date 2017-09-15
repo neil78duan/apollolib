@@ -235,6 +235,7 @@ struct account_base_info
 {
 	NDUINT8 type;
 	NDUINT8 gender;
+	NDUINT8 country;
 	NDUINT16  birth_year, birth_month, birth_day;
 	NDUINT8 acc_name[ACCOUNT_NAME_SIZE];
 	NDUINT8 nick[USER_NAME_SIZE];
@@ -293,41 +294,43 @@ struct userdata_info
 	char data[USER_DATA_SIZE];
 };
 
-struct addition_data_info
-{
-	addition_data_info() {
-		size = 0;
-		data[0] = 0;
-
-	}
-	addition_data_info &operator =(const addition_data_info &r)
-	{
-		size = NDMIN(r.size, sizeof(data));
-		memcpy(data, r.data, size);
-		return  *this;
-	}
-
-	addition_data_info &operator =(const userdata_info &r)
-	{
-		size = NDMIN(r.size, sizeof(data));
-		memcpy(data, r.data, size);
-		return  *this;
-	}
-
-	void setData(void *indata, size_t len)
-	{
-		size = (NDUINT32) NDMIN(len, sizeof(data));
-		memcpy(data, indata, size);
-	}
-
-	size_t get_stream_len() const
-	{
-		return sizeof(addition_data_info) - sizeof(data) + size;
-	}
-
-	NDUINT32 size;
-	char data[ADDITION_DATA_SIZE];
-};
+typedef userdata_info addition_data_info;
+// 
+// struct addition_data_info
+// {
+// 	addition_data_info() {
+// 		size = 0;
+// 		data[0] = 0;
+// 
+// 	}
+// 	addition_data_info &operator =(const addition_data_info &r)
+// 	{
+// 		size = NDMIN(r.size, sizeof(data));
+// 		memcpy(data, r.data, size);
+// 		return  *this;
+// 	}
+// 
+// 	addition_data_info &operator =(const userdata_info &r)
+// 	{
+// 		size = NDMIN(r.size, sizeof(data));
+// 		memcpy(data, r.data, size);
+// 		return  *this;
+// 	}
+// 
+// 	void setData(void *indata, size_t len)
+// 	{
+// 		size = (NDUINT32) NDMIN(len, sizeof(data));
+// 		memcpy(data, indata, size);
+// 	}
+// 
+// 	size_t get_stream_len() const
+// 	{
+// 		return sizeof(addition_data_info) - sizeof(data) + size;
+// 	}
+// 
+// 	NDUINT32 size;
+// 	char data[ADDITION_DATA_SIZE];
+// };
 
 
 

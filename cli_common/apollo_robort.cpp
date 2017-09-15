@@ -28,21 +28,11 @@
 
 static int my_msg_default_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
 {
-	int reLine = 0;
-	nd_logmsg("\n\trecv (%d,%d) message data: \n\t", ND_USERMSG_MAXID(msg), ND_USERMSG_MINID(msg));
-
-	char *p = msg->data;
-	int size = ND_USERMSG_DATALEN(msg);
-	for (int i = 0; i < size; i++) {
-		if (reLine >= 20) {
-			nd_logmsg("\n\t");
-			reLine = 0;
-		}
-		nd_logmsg("%x ", *p);
-		reLine++;
-		++p;
+	if (ND_USERMSG_MAXID(msg) > 16 || ND_USERMSG_MINID(msg)> 64){
+		nd_logerror("get error message (%d,%d)\n", ND_USERMSG_MAXID(msg) , ND_USERMSG_MINID(msg));
+		return -1;
 	}
-	nd_logmsg("\n");
+	nd_logmsg("recv (%d,%d) message data: length = %d \n", ND_USERMSG_MAXID(msg), ND_USERMSG_MINID(msg), ND_USERMSG_DATALEN(msg));
 	return 0;
 }
 
@@ -170,7 +160,7 @@ int ApolloRobort::_login(const char *accName, const char *passwd,int iAccType )
 	}
 	
 	
-	ret = m_login->Login(accName, passwd, (ACCOUNT_TYPE)iAccType, false);
+	ret = m_login->Login(accName, passwd, (ACCOUNT_TYPE)iAccType, false,0);
 	if (-1 == ret) {
 		if (m_login->GetLastError() == NDSYS_ERR_NOUSER) {
 			account_base_info acc;

@@ -110,6 +110,7 @@ struct role_attr_description{
 	unsigned char isSyncBuilding, forRole, forBuilding; //玩家属性是否影响的是建筑物， 玩家属性，建筑物属性
 	unsigned char isAffectCard, forCard; 
 	unsigned char showInGuild;
+	unsigned char isLostOnAttacked;
 	int infection_num ;				//受当前属性影响的属性
 	int need_num ;					//当前属性计算需要的属性个数
 	attr_name_t name;

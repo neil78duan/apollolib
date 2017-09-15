@@ -47,7 +47,7 @@ public:
 
 	virtual void Destroy() = 0;
 	//return 0 success ,else return error code
-	virtual int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type) = 0;
+	virtual int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type,int countryIndex=0) = 0;
 	virtual int Relogin() = 0;
 	virtual int Logout() = 0;
 	virtual int TrytoGetCryptKey() =0;
@@ -102,7 +102,7 @@ public:
 
 	void Destroy();
 	//return 0 success ,else return error code
-	int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type, bool skipAuth);//return -1 if error ESERVER_ERR_NOUSER
+	int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type, bool skipAuth,int countryIndex=0);//return -1 if error ESERVER_ERR_NOUSER
 	int Relogin() ;
 	int Logout() ;
 	int TrytoGetCryptKey();

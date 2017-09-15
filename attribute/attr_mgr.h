@@ -69,12 +69,16 @@ public:
 	void beginRecordChange();
 	void endRecordChange();
 public:
-	attrval_t getVal(attrid_t index) const;
+	attrval_t getVal(attrid_t index, bool withRecalc) ;
+	attrval_t   getVal(const char *name, bool withRecalc );
+
+	attrval_t getVal(attrid_t index)const;
+	attrval_t   getVal(const char *name)const;
+
 	bool setVal(attrid_t index, attrval_t val);
 	bool addVal(attrid_t index, attrval_t val);
 	bool subVal(attrid_t index, attrval_t val);
 
-	attrval_t   getVal(const char *name) const;
 	bool        setVal(const char *name, attrval_t newval);
 	bool		addVal(const char *name, attrval_t addval);
 	bool		subVal(const char *name, attrval_t subval);
@@ -137,24 +141,6 @@ private:
 	bool m_recordChange;
 	attrValVct_t m_changed;
 };
-// 
-// //for test
-// class RoleAttrsTest :public RoleAttrAsset
-// {
-// public:
-// 	RoleAttrsTest();
-// 	virtual ~RoleAttrsTest();
-// 
-// private:
-// 	role_attr_data m_data;
-// };
-// 
-// RoleAttrsTest::RoleAttrsTest() : RoleAttrAsset(&m_data)
-// {
-// }
-// 
-// RoleAttrsTest::~RoleAttrsTest()
-// {
-// }
+
 
 #endif

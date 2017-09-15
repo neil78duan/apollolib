@@ -243,6 +243,12 @@
     <ClInclude Include="..\..\logic_parser\logic_debugger.h">
       <Filter>apollo\logicParser</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\_client_config.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\_server_config.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp">
