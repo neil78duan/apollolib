@@ -17,6 +17,7 @@
 #include "logic_parser/dbldata2netstream.h"
 #include "logic_parser/logicEngineRoot.h"
 #include "logic_parser/logicDataType.h"
+#include "logic_parser/dbl_mgr.h"
 
 #include "apollo_errors.h"
 //#include "netMessage/message_inc.h"
@@ -156,12 +157,13 @@ ConnectDialog::ConnectDialog(QWidget *parent) :
     ui->_name ##Edit->setText(var1) ;      \
 }while (0)
 
-    SET_EDIT_DFTVAL(host, "192.168.8.49") ;
+    //SET_EDIT_DFTVAL(host, "192.168.8.49") ;
     SET_EDIT_DFTVAL(port, "6600") ;
     SET_EDIT_DFTVAL(name, "tRobort1") ;
     SET_EDIT_DFTVAL(passwd, "test123") ;
 
 #undef SET_EDIT_DFTVAL
+	InitHostList();
 }
 
 ConnectDialog::~ConnectDialog()
@@ -182,9 +184,65 @@ ConnectDialog::~ConnectDialog()
 	
 	ND_LOG_WRAPPER_DELETE(__glogWrapper);
 
+
+	DBLDatabase *pdbl = DBLDatabase::get_Instant();
+	if (pdbl){
+		pdbl->Destroy();
+	}
+
     DeinitNet();
 
     //ndxml_destroy(&m_message_define);
+}
+
+void ConnectDialog::saveHost(const QString &hostName)
+{
+	QSettings settings("duanxiuyun", "ApolloEditor");
+
+	settings.setValue("lastHost", hostName);
+
+	int size = settings.beginReadArray("hostList");
+	for (int i = 0; i < size; ++i) {
+		settings.setArrayIndex(i);
+		QString ip = settings.value("ip").toString();
+		if (ip == hostName)	{
+			settings.endArray();
+			return;
+		}
+	}
+	settings.endArray();
+
+	settings.beginWriteArray("hostList");	
+	settings.setArrayIndex(size);
+	settings.setValue("ip", hostName);
+	settings.endArray();
+
+}
+
+void ConnectDialog::InitHostList()
+{
+	QSettings settings("duanxiuyun", "ApolloEditor");
+	QString lastHost = settings.value("lastHost", "10.20.20.248").toString();
+
+	ui->hostCombo->addItem(lastHost);
+
+	int size = settings.beginReadArray("hostList");
+	if (size == 0) {
+		settings.endArray();
+		//ui->hostCombo->addItem("10.20.20.248");
+		return;
+	}
+
+	for (int i = 0; i < size; ++i) {
+		settings.setArrayIndex(i);
+		QString ip = settings.value("ip").toString();
+		if (ip ==lastHost)	{
+			continue;
+		}
+		ui->hostCombo->addItem(ip);
+	}
+
+	settings.endArray();
 }
 
 
@@ -203,6 +261,12 @@ void ConnectDialog::onTimeOut()
 			if (scriptRoot) {
 				parse_arg_list_t arg;
 				scriptRoot->getGlobalParser().eventNtf(APOLLO_EVENT_UPDATE, arg);
+
+				//tick
+				static ndtime_t lastTick = nd_time();
+				ndtime_t now = nd_time();
+				scriptRoot->getGlobalParser().update(now - lastTick);
+				lastTick = now;
 			}
 		}
     }
@@ -224,12 +288,17 @@ void ConnectDialog::WriteLog(const char *logText)
 	
 }
 
-bool ConnectDialog::LoadClientScript(const char *file)
+bool ConnectDialog::LoadClientScript(const char *file,const char *dblFile)
 {
     //if (-1 == loadUserDefFromMsgCfg(file, m_dataTypeDef))	{
     //	nd_logerror("load message datatype error from %s\n", file);
     //	return false;
     //}
+	DBLDatabase *pdbl = DBLDatabase::get_Instant();
+	if (pdbl){
+		pdbl->LoadBinStream(dblFile);
+	}
+
 
 	m_scriptFile = file;
     //if (message_def){
@@ -256,17 +325,19 @@ void ConnectDialog::on_loginButton_clicked()
             m_login = 0;
         }
 
-        ClearLog();
+        //ClearLog();
         WriteLog("logout success\n");
         ui->gmMsgButton->setEnabled(false);
 
     }
     else{
         //get host name
-        std::string strHost = ui->hostEdit->text().toStdString();
+        //std::string strHost = ui->hostEdit->text().toStdString();
+		std::string strHost = ui->hostCombo->currentText().toStdString();
         int port = ui->portEdit->text().toInt();
         std::string strName = ui->nameEdit->text().toStdString() ;
         std::string strPasswd = ui->passwdEdit->text().toStdString() ;
+		bool skipAuth = ui->skipAuth->isChecked();
 
 		//for test 
 		//end test 
@@ -281,7 +352,7 @@ void ConnectDialog::on_loginButton_clicked()
 
         nd_logmsg("CONNECT %s:%d SUCCESS\n", strHost.c_str() , port);
 
-        if (-1 == _login(strName.c_str(), strPasswd.c_str()))	{
+		if (-1 == _login(strName.c_str(), strPasswd.c_str(), skipAuth))	{
             nd_logerror("user login error\n");
             return;
         }
@@ -297,11 +368,11 @@ void ConnectDialog::on_loginButton_clicked()
         }
 
         // log send data
-//        const char *msg_stream_file = "./test_robort.data";
-//        int length = strlen(msg_stream_file);
-//        if (m_pConn->ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)msg_stream_file, &length) == -1) {
-//            nd_logmsg("log net message bin-data errror\n");
-//        }
+       const char *msg_stream_file = "./test_robort.data";
+       int length = strlen(msg_stream_file);
+       if (m_pConn->ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)msg_stream_file, &length) == -1) {
+           nd_logmsg("log net message bin-data errror\n");
+       }
 
         //get and init role data
 
@@ -330,11 +401,12 @@ void ConnectDialog::on_loginButton_clicked()
         QString var1 = ui->_name ##Edit->text() ;      \
         settings.setValue(#_name, var1); \
     }while (0)
-        SET_EDIT_DFTVAL(host, "192.168.8.49") ;
+        //SET_EDIT_DFTVAL(host, "192.168.8.49") ;
         SET_EDIT_DFTVAL(port, "6600") ;
         SET_EDIT_DFTVAL(name, "tRobort1") ;
         SET_EDIT_DFTVAL(passwd, "test123") ;
 #undef  SET_EDIT_DFTVAL
+		saveHost(ui->hostCombo->currentText()) ;
     }
 }
 
@@ -441,7 +513,7 @@ int ConnectDialog::_connectHost(const char *host, int port)
     return 0;
 }
 
-int ConnectDialog::_login(const char *user, const char *passwd)
+int ConnectDialog::_login(const char *user, const char *passwd,bool skipAuth)
 {
     int ret = 0;
     if (m_login){
@@ -462,10 +534,15 @@ int ConnectDialog::_login(const char *user, const char *passwd)
             return 0;
         }
     }*/
+	if (skipAuth) {
 
-    ret =m_login->Login(user, passwd, ACC_APOLLO,false);
+		ret = m_login->Login(user, passwd, ACC_OTHER_3_ACCID, true);
+	}
+	else {
+		ret = m_login->Login(user, passwd, ACC_APOLLO, false);
+	}
     if (-1==ret) {
-        if (m_login->GetLastError() == NDSYS_ERR_NOUSER) {
+        if (m_login->GetLastError() == NDSYS_ERR_NOUSER && !skipAuth) {
             account_base_info acc;
             initAccCreateInfo(acc, ACC_APOLLO, user, passwd);
 
@@ -499,17 +576,26 @@ int ConnectDialog::SelOrCreateRole(const char *accountName)
     int num = m_login->GetServerList(bufs, ND_ELEMENTS_NUM(bufs));
 
     if (num == 0) {
-        WriteLog("get host list number=0\n");
+        WriteLog("Get GAME-SERVER-LIST error , Maybe game server start FAILED\n");
         return -1 ;
     }
 
+	for (int i = 0; i < num; i++)	{
+		nd_logmsg("ONLINE-NUMBER >>> host %s:%d : %d / %d \n", (const char*)bufs[i].ip_addr, bufs[i].host.port,
+			bufs[i].host.cur_number, bufs[i].host.max_number);
+	}
 
     int selected = 0;
     if(num > 1){
         //dialogCloseHelper _helperClose(this) ;
         ListDialog dlg(this);
         for (int i = 0; i < num; i++)	{
-            dlg.m_selList.push_back(QString((const char*)bufs[i].host.name));
+			QString strtips;
+			strtips.sprintf("%d: %s %s:%d (%d/%d)", i, 
+				(const char*)bufs[i].host.name, (const char*)bufs[i].ip_addr, bufs[i].host.port,
+				bufs[i].host.cur_number, bufs[i].host.max_number);
+
+            dlg.m_selList.push_back(strtips);
         }
 
         dlg.InitList();
@@ -525,7 +611,7 @@ int ConnectDialog::SelOrCreateRole(const char *accountName)
     }
 
 
-    int ret = m_login->EnterServer(bufs[selected].ip_addr, bufs[selected].host.port);
+    int ret = m_login->EnterServer(bufs[selected].ip_addr, bufs[selected].host.port,true);
     if (ret == 0) {
         WriteLog("redirect server success\n");
         _s_session_size = m_login->GetSessionData(_s_session_buf, sizeof(_s_session_buf));

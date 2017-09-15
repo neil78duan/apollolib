@@ -501,6 +501,7 @@ void startDialog::on_Connect_clicked()
 	const char *dataTypeFile = _getFromIocfg("net_data_def");
 	const char *client_script = _getFromIocfg("connect_script");
 	const char *message_file = _getFromIocfg("net_protocol");
+	const char *package_file = _getFromIocfg("game_data_package_file");
 
 	_LOAD_XML(xmlSend, filename, "utf8", 0);
 
@@ -513,7 +514,7 @@ void startDialog::on_Connect_clicked()
     dlg.m_editor_setting =&m_editor_setting;
     dlg.m_gmCfg = &xmlSend;
 	
-	if (!dlg.LoadClientScript( client_script))	{
+	if (!dlg.LoadClientScript(client_script, package_file))	{
 		//AfxMessageBox("load message data type error");
 		QMessageBox::warning(this, "Error", "load message data type error!", QMessageBox::Ok);
 	}
