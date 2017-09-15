@@ -32,7 +32,7 @@
 	</message>
 	<message name="pvp手动刷新" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="13" minId="12">0</msgid>
-		<data name="位置" kinds="numeral" param="3">3</data>
+		<data name="位置" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="pvp查看进攻日志" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="13" minId="8">0</msgid>
