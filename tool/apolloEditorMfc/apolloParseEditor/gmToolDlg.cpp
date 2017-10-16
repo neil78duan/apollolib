@@ -304,7 +304,7 @@ void gmToolDlg::OnBnClickedButtonLogin()
 
 		out_print("CONNECT %s:%d SUCCESS\n", (LPCTSTR)m_strHost, m_nPort);
 
-		if (-1 == _login(userName, (LPCTSTR)m_strPasswd,m_bSkipAuth))	{
+		if (-1 == _login(userName, (LPCTSTR)m_strPasswd,(bool)m_bSkipAuth))	{
 			AfxMessageBox("user login error");
 			return;
 		}
@@ -578,15 +578,15 @@ int gmToolDlg::SelOrCreateRole()
 	}
 
 	for (int i = 0; i < num; i++)	{
-		nd_logmsg("ONLINE-NUMBER >>> host %s:%d : %d / %d \n", (const char*)bufs[i].ip_addr, bufs[i].host.port,
-			bufs[i].host.cur_number, bufs[i].host.max_number);
+		nd_logmsg("ONLINE-NUMBER >>> host %s:%d : %d / %d \n", (const char*)bufs[i].inet_ip, bufs[i].port,
+			bufs[i].cur_number, bufs[i].max_number);
 	}
 
 	int selected = 0;
 	if (num > 1) {
 		InsertNodeListDlg dlg;
 		for (int i = 0; i < num; i++)	{
-			dlg.m_selList.push_back(CString((LPCTSTR)bufs[i].host.name));
+			dlg.m_selList.push_back(CString((LPCTSTR)bufs[i].name));
 		}
 		if (IDOK != dlg.DoModal())  {
 
@@ -597,7 +597,7 @@ int gmToolDlg::SelOrCreateRole()
 		nd_assert(selected < num);
 	}
 
-	int ret = m_login->EnterServer(bufs[selected].ip_addr, bufs[selected].host.port);
+	int ret = m_login->EnterServer((char*)bufs[selected].inet_ip, bufs[selected].port);
 	//int ret = redirectServer(m_pConn->GetHandle(), nd_inet_ntoa(bufs[0].ip, NULL), bufs[0].port, _SESSION_FILE);
 	if (ret == 0) {
 		out_log("redirect server success\n");

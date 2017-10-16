@@ -83,14 +83,14 @@
 // }
 
 
-static void myInitAccCreateInfo(account_base_info &acc, int accType, const char *userName, const char *passwd,int country)
+static void myInitAccCreateInfo(account_base_info &acc, int accType, const char *userName, const char *passwd)
 {
 	acc.type = accType;
 	acc.gender = 0; //default F
 	acc.birth_day = 8;
 	acc.birth_month = 8;
 	acc.birth_year = 1988;
-	acc.country = country;
+	//acc.serverGroupId = serverGroupId;
 	strncpy((char*)acc.acc_name, userName, sizeof(acc.acc_name));
 	strncpy((char*)acc.nick, userName, sizeof(acc.nick));
 	strncpy((char*)acc.passwd, passwd, sizeof(acc.passwd));
@@ -417,7 +417,18 @@ void ApoClient::_closeConnect()
 	}
 }
 
-RESULT_T ApoClient::CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email, int countryIndex)
+RESULT_T ApoClient::CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email)
+{
+	RESULT_T res = CreateOnly(userName, passwd, phone, email);
+	if (res != ESERVER_ERR_SUCCESS)	{
+		return res;
+	}
+	m_runningUpdate = ERUN_UP_STOP;
+	res = _enterGame(NULL, 0, userName);
+	m_runningUpdate = ERUN_UP_NORMAL;
+	return res;
+}
+RESULT_T ApoClient::CreateOnly(const char *userName, const char *passwd, const char *phone, const char *email)
 {
 	m_isRelogin = 0;
 	if (!userName || !*userName){
@@ -436,7 +447,7 @@ RESULT_T ApoClient::CreateAccount(const char *userName, const char *passwd, cons
 	account_base_info acc;
 
 	m_runningUpdate = ERUN_UP_STOP;
-	myInitAccCreateInfo(acc, ACC_APOLLO, userName, passwd,countryIndex);
+	myInitAccCreateInfo(acc, ACC_APOLLO, userName, passwd);
 	if (email && *email)	{
 		strncpy((char*)acc.email, email, sizeof(acc.email));
 	}
@@ -445,15 +456,15 @@ RESULT_T ApoClient::CreateAccount(const char *userName, const char *passwd, cons
 	}
 
 	int ret = m_login->CreateAccount(&acc);
+
+	m_runningUpdate = ERUN_UP_NORMAL;
+
 	if (-1 == ret) {
-		m_runningUpdate = ERUN_UP_NORMAL;
 		return (RESULT_T)m_login->GetLastError();
 	}
-
-	RESULT_T res = _enterGame(NULL, 0,userName);
-	m_runningUpdate = ERUN_UP_NORMAL;
-	return res;
+	return ESERVER_ERR_SUCCESS;
 }
+
 
 RESULT_T ApoClient::TrytoRelogin()
 {
@@ -507,9 +518,9 @@ RESULT_T ApoClient::TrytoReloginEx(void *session, size_t sessionSize)
 	return (RESULT_T)NDERR_LIMITED;
 }
 
-RESULT_T ApoClient::LoginAccountOneKey(const char *account, const char *passwd, int accType, bool skipAuth, int countryIndex)
+RESULT_T ApoClient::LoginAccountOneKey(const char *account, const char *passwd, int accType, bool skipAuth)
 {
-	RESULT_T res = LoginOnly(account, passwd, accType, skipAuth,countryIndex);
+	RESULT_T res = LoginOnly(account, passwd, accType, skipAuth);
 	if (res != ESERVER_ERR_SUCCESS) {
 		return res;
 	}
@@ -521,7 +532,7 @@ RESULT_T ApoClient::LoginAccountOneKey(const char *account, const char *passwd, 
 	return res;
 }
 
-RESULT_T ApoClient::LoginOnly(const char *account, const char *passwd, int accType, bool skipAuth, int countryIndex)
+RESULT_T ApoClient::LoginOnly(const char *account, const char *passwd, int accType, bool skipAuth)
 {
 	m_isRelogin = 0;
 	int reTrytimes = 3;
@@ -536,7 +547,7 @@ RE_LOGIN:
 	if (-1 == _trytoOpen()) {
 		return NDSYS_ERR_HOST_UNAVAILABLE;
 	}
-	int ret = m_login->Login(account, passwd, (ACCOUNT_TYPE)accType, skipAuth,0);
+	int ret = m_login->Login(account, passwd, (ACCOUNT_TYPE)accType, skipAuth);
 	if (-1 == ret) {
 		int errCode = m_login->GetLastError();
 		if (errCode == NDERR_CLOSED || errCode == NDERR_RESET) {
@@ -585,25 +596,40 @@ RESULT_T ApoClient::_enterGame(const char *host, int port, const char *roleName,
 		logResult = m_login->EnterServer(host, port);
 	}
 	else {
+		int serverId = m_login->getServerId();
+
 		ApolloServerInfo bufs[10];
 		int num = m_login->GetServerList(bufs, ND_ELEMENTS_NUM(bufs));
 		if (num == 0) {
 			return NDSYS_ERR_HOST_UNAVAILABLE;
 		}
 		if (num == 1)		{
-			host = bufs[0].ip_addr;
-			port = bufs[0].host.port;
+			host = (const char*) bufs[0].inet_ip;
+			port = bufs[0].port;
 		}
 		else {
-			int maxNum = 0x10000;
-			for (int i = 0; i < num; i++){
-				if (maxNum > bufs[i].host.cur_number) {
-					maxNum = bufs[i].host.cur_number;
-					host = bufs[i].ip_addr;
-					port = bufs[i].host.port;
+			if (serverId == 0) {
+				int maxNum = 0x10000;
+				for (int i = 0; i < num; i++){
+					if (maxNum > bufs[i].cur_number) {
+						maxNum = bufs[i].cur_number;
+						host = (const char*)bufs[i].inet_ip;
+						port = bufs[i].port;
+					}
 				}
 			}
-
+			else {
+				for (int i = 0; i < num; i++){
+					if ( bufs[i].logic_group_id == serverId) {
+						host = (const char*)bufs[i].inet_ip;
+						port = bufs[i].port;
+						break;
+					}
+				}
+			}
+		}
+		if (!host || !host[0]){
+			return NDSYS_ERR_CANNOT_ENTER_SERVER;
 		}
 		logResult = m_login->EnterServer(host, port, bWithoutLoadBalance);
 		

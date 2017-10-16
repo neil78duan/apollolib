@@ -160,7 +160,7 @@ int ApolloRobort::_login(const char *accName, const char *passwd,int iAccType )
 	}
 	
 	
-	ret = m_login->Login(accName, passwd, (ACCOUNT_TYPE)iAccType, false,0);
+	ret = m_login->Login(accName, passwd, (ACCOUNT_TYPE)iAccType, false);
 	if (-1 == ret) {
 		if (m_login->GetLastError() == NDSYS_ERR_NOUSER) {
 			account_base_info acc;
@@ -192,7 +192,7 @@ int ApolloRobort::_selOrCreateRole(const char *roleName)
 		nd_logerror("get host list number=0\n");
 		return -1;
 	}
-	int ret = m_login->EnterServer((const char*)bufs[0].ip_addr, bufs[0].host.port);
+	int ret = m_login->EnterServer((const char*)bufs[0].inet_ip, bufs[0].port);
 	if (ret == 0) {
 		nd_logmsg("redirect server success\n");
 	}

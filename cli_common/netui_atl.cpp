@@ -45,13 +45,13 @@ int RloginTrylogin(const char*udid,nd_handle h,int accType, const char *userName
 	}
 
 	//need input use-name and password
-	ret = login.Login(userName, passwd, (ACCOUNT_TYPE)accType,false,0) ;
+	ret = login.Login(userName, passwd, (ACCOUNT_TYPE)accType,false) ;
 	if (-1==ret ) {
 		//Create account
 		if ( ndGetLastError(h)==NDSYS_ERR_NOUSER) {
 			account_base_info acc ;
 			initAccCreateInfo(acc, accType,userName, passwd);
-			acc.country = 0;
+			acc.serverGroupId = 0;
 			ret = login.CreateAccount(&acc) ;
 		}	
 	}
@@ -80,7 +80,7 @@ int loginAndCreate(const char*udid,nd_handle h,int accType, const char *userName
 	//bool bSaveSession = (save_session_file && save_session_file[0]) ? true : false;
 	LoginApollo login((nd_handle)h,  save_session_file,udid); //for debug tool ,maybe it would open too many connectors
 		
-	ret = login.Login(userName, passwd, (ACCOUNT_TYPE)accType,false,0) ;
+	ret = login.Login(userName, passwd, (ACCOUNT_TYPE)accType,false) ;
 	if (-1==ret ) {
 		//Create account
 		if ( ndGetLastError(h)==NDSYS_ERR_NOUSER) {
@@ -133,7 +133,7 @@ int TryLogin(const char*udid,nd_handle h,int accType, const char *userName, cons
 	
 	
     //need input use-name and password
-    ret = login.Login(userName, passwd, (ACCOUNT_TYPE)accType,false,0) ;
+    ret = login.Login(userName, passwd, (ACCOUNT_TYPE)accType,false) ;
     
     if (ret == 0 ) {
         nd_logmsg("login complete SUCCESS!\n") ;

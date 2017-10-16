@@ -3,12 +3,16 @@
 #include <string>
 #include "logic_parser/logic_editor_helper.h"
 
-ListDialog::ListDialog(QWidget *parent) :
+ListDialog::ListDialog(QWidget *parent, const char *title) :
     QDialog(parent),
     ui(new Ui::ListDialog)
 {
     ui->setupUi(this);
     m_selIndex = -1 ;
+
+    if(title && *title) {
+        ui->tipsLab->setText(title);
+    }
 }
 
 ListDialog::~ListDialog()

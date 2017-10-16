@@ -39,7 +39,7 @@ GameDbConnBase::GameDbConnBase() : m_mydb(*this)
 
 GameDbConnBase::~GameDbConnBase() 
 {
-
+	Destroy();
 }
 
 bool GameDbConnBase::SetReallocSTMT(bool bval)
@@ -78,13 +78,13 @@ void GameDbConnBase::Destroy()
 {
 	ND_TRACE_FUNC() ;
 	m_lasterror = 0 ;
+	if (m_mydb.get_mysql_handle()) {
 
-	SetReallocSTMT(true); //不需要new stmt
+		SetReallocSTMT(true); //不需要new stmt
 
-	m_mydb.close_database() ;
-#if !defined(PG_CREATE_ACCOUNT) && defined(PG_READ_7JOYDB_DIRECT)
-	m_accountdb.close_database() ;
-#endif
+		m_mydb.close_database() ;
+	}
+
 }
 
 

@@ -54,21 +54,21 @@ int Role::Send(nd_usermsgbuf_t *msgBuf, int flag)
 	nd_assert(m_mySession);
 	return m_mySession->SendMsg(&msgBuf->msg_hdr, flag);
 }
-int Role::SendtoOther(roleid_t roleId, NDOStreamMsg &omsg)
+int Role::SendtoOther(roleid_t roleId, NDOStreamMsg &omsg, bool bSave )
 {
-	return get_playerMgr()->Send(roleId, omsg);
+	return get_playerMgr()->Send(roleId, omsg,false,bSave);
 }
-int Role::SendtoOther(roleid_t roleId, nd_usermsgbuf_t *msgBuf)
+int Role::SendtoOther(roleid_t roleId, nd_usermsgbuf_t *msgBuf, bool bSave)
 {
-	return get_playerMgr()->Send(roleId, &msgBuf->msg_hdr);
+	return get_playerMgr()->Send(roleId, &msgBuf->msg_hdr,false,bSave);
 }
-int Role::CallMsgProc(roleid_t playerid, nd_usermsgbuf_t *msgBuf)
+int Role::CallMsgProc(roleid_t playerid, nd_usermsgbuf_t *msgBuf, bool bSave)
 {
-	return get_playerMgr()->CallMsgProc(playerid, &msgBuf->msg_hdr);
+	return get_playerMgr()->CallMsgProc(playerid, &msgBuf->msg_hdr,bSave);
 }
-int Role::CallMsgProc(roleid_t playerid, NDOStreamMsg &omsg)
+int Role::CallMsgProc(roleid_t playerid, NDOStreamMsg &omsg, bool bSave)
 {
-	return get_playerMgr()->CallMsgProc(playerid, omsg);
+	return get_playerMgr()->CallMsgProc(playerid, omsg,bSave);
 }
 
 

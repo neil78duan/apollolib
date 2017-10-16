@@ -12,6 +12,16 @@ using NetMessage ;
 
 using RESULT_T=System.Int32;  
 
+public enum ACCOUNT_TYPE{
+	ACC_FACEBOOK = 0,
+	ACC_UDID,
+	ACC_APOLLO,
+	ACC_GAME_CENTER,
+	ACC_GOOGLE_PLAY,
+	ACC_OTHER_3_ACCID,
+	ACC_NUMBER
+};
+
 
 public class apoClient {	
 	/* Interface to native implementation */
@@ -24,14 +34,20 @@ public class apoClient {
 #endif
 
     [DllImport (APO_DLL_NAME)]
-	private static extern  bool apoCli_init(string workingPath, string logPath);
+	private static extern  bool apoCli_init(string workingPath, string logPath);		
     
+	
+	[DllImport (APO_DLL_NAME)]
+	private static extern  bool apoCli_CheckConnValid();//检查网络是否有效
+
     [DllImport (APO_DLL_NAME)]
 	private static extern  void apoCli_destroy();    
     
     [DllImport (APO_DLL_NAME)]
 	private static extern  RESULT_T apoCli_open(string host, int port, string dev_udid);
 
+    [DllImport (APO_DLL_NAME)]
+	private static extern RESULT_T apoCli_close();
 
     [DllImport(APO_DLL_NAME)]
     private static extern void apoCli_resetConnector();
@@ -69,11 +85,14 @@ public class apoClient {
 	//public static extern  RESULT_T apoCli_TrytoRelogin();
 
     [DllImport (APO_DLL_NAME)]
-	public static extern  RESULT_T apoCli_LoginAccount(string account, string passwd);
+    public static extern RESULT_T apoCli_LoginAccount(string account, string passwd, ACCOUNT_TYPE accType = ACCOUNT_TYPE.ACC_APOLLO, bool bSkipAuth=false);
 
     [DllImport (APO_DLL_NAME)]
 	public static extern  RESULT_T apoCli_CreateAccount(string userName, string passwd, string phone, string email);
-
+	
+    [DllImport (APO_DLL_NAME)]
+	public static extern  RESULT_T apoCli_CreateAccountOnly(string userName, string passwd, string phone, string email);
+	
     //[DllImport (APO_DLL_NAME)]
 	//public static extern  RESULT_T apoCli_testOneKeyLogin(string host, int port, string user, string passwd);
 
@@ -92,7 +111,34 @@ public class apoClient {
     ///    
     [DllImport (APO_DLL_NAME)]
     private static extern IntPtr get_NDNetObject();
+	
+	
+
+    [DllImport (APO_DLL_NAME)]
+	public static extern void apoCli_EnableRecvLog(bool bIsEnable);
+
+    [DllImport (APO_DLL_NAME)]
+	public static extern void apoCli_EnableSendLog(bool bIsEnable);
+
+
+    [DllImport (APO_DLL_NAME)]
+	public static extern void apoCli_EnableStreamRecord();
+
+
+    [DllImport (APO_DLL_NAME)]
+    public static extern RESULT_T apoCli_LoginOnly(string account, string passwd, ACCOUNT_TYPE accType = ACCOUNT_TYPE.ACC_APOLLO, bool bSkipAuth = false);
+
+    [DllImport (APO_DLL_NAME)]
+	public static extern int apoCli_GetServerList(IntPtr sessionBuf, int bufsize);//xml
+
+    [DllImport (APO_DLL_NAME)]
+    public static extern RESULT_T apoCli_EnterGame(string host, int port);
+	
+	[DllImport (APO_DLL_NAME)]
+    public static extern int apoCli_SetTimeout(int timeoutValMs);
     
+	[DllImport (APO_DLL_NAME)]
+    public static extern int apoCli_GetServerGroupId();		// get logic-server-group id 
 
     private IntPtr m_netObject;
 
@@ -110,9 +156,16 @@ public class apoClient {
     public bool Init() 
     {
         LogManager.Log("begin init....");
-
+#if UNITY_EDITOR
+#else  
+	apoCli_SetTimeout(10000) ;	//time out 10 seconds
+#endif
         string workPath = Application.persistentDataPath;
-        return apoCli_init(workPath, workPath);
+        if( apoCli_init(workPath, workPath) ) {
+			//apoCli_EnableStreamRecord() ;
+			return true ;
+		}
+		return false;
     }
     
     public void Destroy() 
@@ -140,13 +193,24 @@ public class apoClient {
         IntPtr bufPtr = Marshal.AllocHGlobal(0x10000);
 
         int res = apoCli_recvMsg(&MsgId, bufPtr, 0x10000, waitMs);
-        if (res > 0)
-        {
-            Marshal.Copy(bufPtr, body, 0, res);
-        }
+		if (res > 0) {
+			Marshal.Copy (bufPtr, body, 0, res);
+		} else {
+			//Debug.LogError ("res"+ res+"  error" + apoCli_GetLastError ().ToString ()+"apoCli_CheckConnValid"+apoCli_CheckConnValid());
+		}
         messageId = MsgId;
         Marshal.FreeHGlobal(bufPtr);
         return res;
+    }
+
+    //this is a debug func please do no use it 
+    public static void Crash()
+    {
+        IntPtr bufPtr = Marshal.AllocHGlobal(10);
+        bufPtr = IntPtr.Zero;
+        //IntPtr sessionBuf, int bufsize
+        //int* messageId, IntPtr msgBody, int bufsize, int timeOutMS
+        apoCli_fetchSessionKey(bufPtr, 1000);
     }
 
     unsafe public int Recv(out int messageId, ref NDMsgStream body, int waitMs)
@@ -159,7 +223,9 @@ public class apoClient {
         if (res > 0)
         {
             body.FromAddr(bufPtr, res);
-        }
+		}else {
+			//Debug.LogError ("res"+ res+"     error" + apoCli_GetLastError ().ToString ()+"apoCli_CheckConnValid"+apoCli_CheckConnValid());
+		}
         messageId = MsgId;
         Marshal.FreeHGlobal(bufPtr);
         return res;
@@ -174,16 +240,22 @@ public class apoClient {
         if(res != 0 ) {
             return -1 ;
         }
-        m_netObject = get_NDNetObject() ;
+        //m_netObject = get_NDNetObject() ;
         return 0 ;
     }
 
-    public int Login(string user, string passwd)
+    public int Login(string user, string passwd, ACCOUNT_TYPE accType = ACCOUNT_TYPE.ACC_APOLLO, bool bSkipAuth = false)
     {
         if(m_netObject == null) {
             return -1 ;
         }
-        return apoCli_LoginAccount( user,  passwd);
+        int ret = apoCli_LoginAccount(user, passwd, accType, bSkipAuth);
+		if(ret == 0) {			
+			//apoCli_EnableStreamRecord() ;
+			m_netObject = get_NDNetObject() ;
+		}
+		
+		return ret ;
     }
     public void Logout()
     {
@@ -195,9 +267,43 @@ public class apoClient {
         if(m_netObject == null) {
             return -1 ;
         }
-        return apoCli_CreateAccount(user, password, phone, email);
+        int ret = apoCli_CreateAccount(user, password, phone, email);
+		
+		if(ret == 0) {			
+			//apoCli_EnableStreamRecord() ;
+			m_netObject = get_NDNetObject() ;
+		}
+		return ret ;
     }
 
+	public int GetConnStat()
+	{
+		return apoCli_getConnStat ();
+	}
+	public int CheckConnValid()
+	{
+		if (apoCli_CheckConnValid ())
+			return 0;
+		else
+			return 1;
+	}
+	IntPtr tokenBufPtr ;
+	int tokenBuffSize;
+	public int ReConnectLogin()
+	{
+		int result = apoCli_ReloginEx (tokenBufPtr, tokenBuffSize, true);
+		//LogManager.Error("_________________ReConnectLogin________________"+result);
+		if (result == 0) {
+			SaveLoginToken ();
+		}
+		return result;
+	}
+	public void SaveLoginToken()
+	{
+		//LogManager.Error("_________________SaveLoginToken");
+		tokenBufPtr = Marshal.AllocHGlobal(1000);
+		tokenBuffSize =  apoCli_fetchSessionKey(tokenBufPtr, 1000);
+	}
     #region for-test-api
     /*
     public bool TestLogin()
@@ -205,25 +311,25 @@ public class apoClient {
         apoClient cliNet = new apoClient(); ;
         if (!cliNet.Init())
         {
-            Debug.Log("Init net error !");
+            LogManager.Log("Init net error !");
             return false;
         }
         if (cliNet.Open(@"192.168.9.100", 6600) != 0)
         {
-            Debug.Log("open host error !");
+            LogManager.Log("open host error !");
             return false;
         }
-        Debug.Log("login server TEST begin");
+        LogManager.Log("login server TEST begin");
         if (cliNet.Login(@"test60", @"123456") != 0)
         {
-            Debug.LogError("login error \n");
+            LogManager.Error("login error \n");
             return false;
         }
         //send get role data message 
 
         if (0 != cliNet.Send(0x304))
         {
-            Debug.LogError("send init data error\n");
+            LogManager.Error("send init data error\n");
             return false;
         }
         //receive role data 
@@ -234,7 +340,7 @@ public class apoClient {
         int recvLen = cliNet.Recv(out messageId, ref streamData, 1000);
         if (recvLen <= 0)
         {
-            Debug.LogError("read message error \n");
+            LogManager.Error("read message error \n");
             return false;
         }
 

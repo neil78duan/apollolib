@@ -115,8 +115,12 @@ public:
 		bool m_oldflag;
 	};
 
-	attrid_t getLastErrorID() { return m_lastErrorID; }
-	int getLastError(){ return m_lastErrorCode; }; //return 0 success ,1 too-lower ,2 too hight
+	//attrid_t getLastErrorID() { return m_lastErrorID; }
+	//int getLastError(){ return m_lastErrorCode; }; //return 0 success ,1 too-lower ,2 too hight
+	virtual attrid_t getLastErrorID();
+	virtual int getLastError();
+	virtual void setLastErrorAttrID(attrid_t errId);
+	virtual void setLastError(int errcode);
 
 protected:
 
@@ -130,9 +134,10 @@ protected:
 	virtual void OnChanged(attrid_t aid, attrval_t new_val,attrval_t old_val); //value changed notify client and save db
 	
 	bool m_EnableRecalc;
-	attrid_t m_lastErrorID;
-	int m_lastErrorCode;
-	float m_attrRate ;
+	//attrid_t m_lastErrorID;
+	//int m_lastErrorCode;
+	//float m_attrRate ;
+	
 private:
 	role_attr_data *m_data;
 	vm_cpu	m_vm;

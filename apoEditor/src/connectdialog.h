@@ -30,6 +30,7 @@ public:
     int _relogin(void *sessionData, size_t session_size);
 
     int SelOrCreateRole(const char *accountName);
+	int ShowServers(void *hostsBuf, int size,const char *tips);
     int createRole(const char *roleName);
     int getRoleData();
 

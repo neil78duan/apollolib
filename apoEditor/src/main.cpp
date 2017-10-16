@@ -93,7 +93,7 @@ int runGm(int argc, char *argv[])
 int main(int argc, char *argv[])
 {
 	
-	const char *nowDir = nd_getcwd();
+	//const char *nowDir = nd_getcwd();
 
 	for (int i = 1; i < argc ; i++){
 		if (0 == ndstricmp(argv[i], "--rungmtool"))	{
