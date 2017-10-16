@@ -108,18 +108,26 @@ bool LogicObjectBase::CheckInAffair()
 
 NDUINT32 LogicObjectBase::getErrParam()
 {
-	NDUINT32 ret = m_errParam ;
-	m_errParam = 0 ;
-	return  ret ;
-	
+// 	NDUINT32 ret = m_errParam ;
+// 	m_errParam = 0 ;
+// 	return  ret ;
+	return m_errParam;
 }
 
 int LogicObjectBase::getError()
 {
-	NDUINT32 ret = m_error;
-	m_error = 0;
-	return  ret;
+	return m_error;
+// 	NDUINT32 ret = m_error;
+// 	m_error = 0;
+// 	return  ret;
 
+}
+
+
+void LogicObjectBase::clearError()
+{
+	m_error = 0;
+	m_errParam = 0;
 }
 
 // 

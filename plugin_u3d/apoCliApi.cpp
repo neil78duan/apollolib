@@ -288,26 +288,25 @@ int apoCli_fetchSessionKey(char *outbuf, int bufsize)
 // 	return apoCli->TrytoRelogin();
 // 
 // }
-RESULT_T apoCli_LoginAccount(const char *account, const char *passwd, int accType, bool skipAuth, int countryIndex)
+RESULT_T apoCli_LoginAccount(const char *account, const char *passwd, int accType, bool skipAuth)
 {
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (!apoCli)	{
 		return NDSYS_ERR_NOT_INIT;
 	}
-	RESULT_T res = apoCli->LoginAccountOneKey(account, passwd,accType,skipAuth,countryIndex);
+	RESULT_T res = apoCli->LoginAccountOneKey(account, passwd,accType,skipAuth);
 	if (res != ESERVER_ERR_SUCCESS)	{
 		apoCli->Close();
 	}
 	return res;
 }
-RESULT_T apoCli_CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email, int countryIndex)
+RESULT_T apoCli_CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email)
 {
-
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (!apoCli)	{
 		return NDSYS_ERR_NOT_INIT;
 	}
-	RESULT_T res = apoCli->CreateAccount(userName,passwd,phone,email,countryIndex);
+	RESULT_T res = apoCli->CreateAccount(userName,passwd,phone,email);
 	if (res != ESERVER_ERR_SUCCESS)	{
 		apoCli->Close();
 	}
@@ -396,13 +395,26 @@ void apoCli_EnableStreamRecord()
 }
 
 
-APO_RESULT_T apoCli_LoginOnly(const char *account, const char *passwd, int accType, bool skipAuth, int countryIndex)
+APO_RESULT_T apoCli_CreateAccountOnly(const char *userName, const char *passwd, const char *phone, const char *email)
 {
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (!apoCli)	{
 		return NDSYS_ERR_NOT_INIT;
 	}
-	RESULT_T res = apoCli->LoginOnly(account, passwd, accType, skipAuth,countryIndex);
+	RESULT_T res = apoCli->CreateOnly(userName, passwd, phone, email);
+	if (res != ESERVER_ERR_SUCCESS)	{
+		apoCli->Close();
+	}
+	return res;
+}
+
+APO_RESULT_T apoCli_LoginOnly(const char *account, const char *passwd, int accType, bool skipAuth)
+{
+	ApoClient *apoCli = ApoClient::getInstant();
+	if (!apoCli)	{
+		return NDSYS_ERR_NOT_INIT;
+	}
+	RESULT_T res = apoCli->LoginOnly(account, passwd, accType, skipAuth);
 	if (res != ESERVER_ERR_SUCCESS)	{
 		apoCli->Close();
 	}
@@ -424,8 +436,8 @@ int apoCli_GetServerList(char *buf, size_t size)
 		size -= len; 
 
 		for (int i = 0; i < num; i++)	{
-			len = snprintf(buf, size, "<node ip=\"%s\" port=\"%d\" onlines=\"%d\">", 
-				srvbuf[i].ip_addr, srvbuf[i].host.port,srvbuf[i].host.cur_number);
+			len = snprintf(buf, size, "<node ip=\"%s\" port=\"%d\" onlines=\"%d\" max=\"%d\" groupName=\"%d\" defaultEntry=\"%d\">\n", 
+				srvbuf[i].inet_ip, srvbuf[i].port,srvbuf[i].cur_number, srvbuf[i].max_number, srvbuf[i].name, srvbuf[i].isdefault_entry);
 
 			buf += len;
 			size -= len;
@@ -454,6 +466,20 @@ int apoCli_SetTimeout(int val)
 	return ndSetTimeoutVal(val);
 }
 
+
+int apoCli_GetServerGroupId()
+{
+	ApoClient *apoCli = ApoClient::getInstant();
+	if (!apoCli)	{
+		return -1;
+	}
+
+	LoginBase  *pLogin = apoCli->getLoginObj();
+	if (!pLogin)	{
+		return -1;
+	}
+	return pLogin->getServerId();
+}
 
 // 
 // time_t apoCli_getServerTime()

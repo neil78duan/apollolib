@@ -20,11 +20,12 @@
 #include "apollo_data.h"
 //#include "srv_define.h"
 
-struct ApolloServerInfo
-{
-	host_list_node host ;
-	char ip_addr[20] ;
-};
+// struct ApolloServerInfo
+// {
+// 	host_list_node host ;
+// 	char ip_addr[20] ;
+// };
+typedef host_list_node ApolloServerInfo;
 
 struct login_session_load{
 	NDUINT32 acc_index ;
@@ -47,7 +48,7 @@ public:
 
 	virtual void Destroy() = 0;
 	//return 0 success ,else return error code
-	virtual int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type,int countryIndex=0) = 0;
+	virtual int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type) = 0;
 	virtual int Relogin() = 0;
 	virtual int Logout() = 0;
 	virtual int TrytoGetCryptKey() =0;
@@ -58,6 +59,7 @@ public:
 
 	virtual int CreateAccount(account_base_info *acc_info) = 0;
 	virtual int GetServerList(ApolloServerInfo *buf, int size) = 0;
+	virtual int GetSubHostList(const char *groupEntryHost, NDUINT16 port, ApolloServerInfo *buf, int size)=0;
 
 	virtual size_t GetSessionSize() = 0;
 	virtual size_t GetSessionData(void *session_buf, size_t buf_size) = 0;
@@ -69,7 +71,7 @@ public:
 	
 	virtual NDUINT32 getAccountID() = 0;
 	virtual const char *getAccountName() = 0;
-	
+	virtual int getServerId() = 0 ;
 
 	LoginBase() {}
 	virtual~LoginBase(){}
@@ -102,7 +104,7 @@ public:
 
 	void Destroy();
 	//return 0 success ,else return error code
-	int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type, bool skipAuth,int countryIndex=0);//return -1 if error ESERVER_ERR_NOUSER
+	int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type, bool skipAuth);//return -1 if error ESERVER_ERR_NOUSER
 	int Relogin() ;
 	int Logout() ;
 	int TrytoGetCryptKey();
@@ -112,7 +114,10 @@ public:
 	int EnterServer(const char *host_name, NDUINT16 port, const char *session_file, bool bNotLoadBalance = false);
 	
 	int CreateAccount(account_base_info *acc_info) ;
-	int GetServerList(ApolloServerInfo *buf, int size) ;
+	int GetServerList(ApolloServerInfo *buf, int size) ;//get server group list 
+	//get gameservers list in the selected logic-group 
+	int GetSubHostList(const char *groupEntryHost, NDUINT16 port, ApolloServerInfo *buf, int size);
+
 
 	size_t GetSessionSize() ;
 	size_t GetSessionData(void *session_buf, size_t buf_size) ;
@@ -124,7 +129,7 @@ public:
 	
 	NDUINT32 getAccountID() ;
 	const char *getAccountName() ;
-	
+	int getServerId();
 protected:
 	int onLogin(NDIStreamMsg &inmsg) ;
 	int checkCryptVersion(char *savedVersion) ;
@@ -141,6 +146,7 @@ protected:
 	NDUINT16 m_sessionID ;
 	char *m_session_file ;
 	
+	NDUINT16 m_serverGroupId;
 	NDUINT8 m_accType ;
 	NDUINT8 m_accName[ACCOUNT_NAME_SIZE] ;
 	NDUINT8 m_udid[DEVICE_UDID_SIZE] ;

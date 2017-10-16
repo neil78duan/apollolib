@@ -11,8 +11,8 @@
 #define _USER_ADDTION_DATA_H_
 
 #include "logic_parser/logicDataType.h"
-#include "apollo_data.h"
 #include "ndapplib/nd_affair.h"
+#include "apollo_data.h"
 #include <map>
 #include <string>
 #include "logic_parser/objectBaseMgr.h"

@@ -13,8 +13,8 @@
 #include "ndcli/nd_iconn.h"
 #endif
 #include "ndcli/nd_api_c.h"
-#include "apollo_data.h"
 #include "login_apollo.h"
+#include "apollo_data.h"
 
 ND_CONNCLI_API void initAccCreateInfo(account_base_info &acc, int accType, const char *userName, const char *passwd);
 ND_CONNCLI_API int RloginTrylogin(const char*udid, nd_handle h, int accType, const char *userName, const char *passwd, const char *session_file = NULL, NDUINT32 *accID = NULL);

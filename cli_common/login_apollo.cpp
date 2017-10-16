@@ -9,8 +9,6 @@
 #include "nd_common/nd_common.h"
 #include "cli_common/login_apollo.h"
 #include "msg_def.h"
-//#include "apollo_data.h"
-//#include "srv_define.h"
 #include "ndcli/nd_api_c.h"
 #include "apollo_errors.h"
 
@@ -111,6 +109,11 @@ const char *LoginApollo::getAccountName()
 	return (const char*)m_accName ;
 }
 
+int LoginApollo::getServerId()
+{
+	return m_serverGroupId;
+}
+
 LoginApollo::LoginApollo(nd_handle hConn, const char * session_filename, const char*udid ) : m_conn(hConn)
 {
 	m_accIndex = 0 ;
@@ -118,7 +121,7 @@ LoginApollo::LoginApollo(nd_handle hConn, const char * session_filename, const c
 	
 	m_accType =0 ;
 	m_accName[0] =0 ;
-
+	m_serverGroupId = 0;
 	memset(&m_srv_key, 0, sizeof(m_srv_key)) ;
 	m_session_file = 0 ;
 	ReInit( hConn, session_filename, udid);	
@@ -289,7 +292,7 @@ void LoginApollo::Destroy()
 	}
 }
 
-int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE type, bool skipAuth, int countryIndex)
+int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE type, bool skipAuth)
 {
 	if (TrytoGetCryptKey() == -1) {
 		return -1;
@@ -301,6 +304,8 @@ int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE t
 		return -1;
 	}
 
+	m_serverGroupId = 0;
+
 	if (skipAuth)	{
 		type = ACC_SKIP_AUTH;
 	}
@@ -310,7 +315,7 @@ int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE t
 	omsg.Write((NDUINT8)type) ;
 	omsg.Write((NDUINT8*)userName) ;
 	omsg.Write((NDUINT8*)passwd);
-	omsg.Write((NDUINT8)countryIndex);
+	//omsg.Write((NDUINT8)countryIndex);
 	//omsg.Write(m_udid);
 
 	nd_logdebug("send login message udid=%s\n",m_udid);
@@ -352,6 +357,8 @@ int LoginApollo::Relogin()
 		return ret ;
 	}
 	memcpy(&m_srv_key, session_saved.keymd5, sizeof(rsa_key_from_srv)) ;
+
+	m_serverGroupId = 0;
 	
 	if(0==LoginApollo::relogin(&session_saved, LOGIN_MSG_RELOGIN_REQ, LOGIN_MSG_LOGIN_ACK) ) {
 		
@@ -413,9 +420,9 @@ int LoginApollo::CreateAccount(account_base_info *acc_info)
 	omsg.Write(acc_info->passwd) ;
 	omsg.Write(acc_info->phone) ;
 	omsg.Write(acc_info->email) ;
-	omsg.Write(acc_info->country);
+	omsg.Write(acc_info->serverGroupId);
 
-	nd_logdebug("send create account message udid=%s\n", acc_info->udid);
+	nd_logdebug("send create account message udid=%s\n", m_udid);
 
 	SEND_AND_WAIT(m_conn, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ACK,ESF_ENCRYPT|ESF_URGENCY)
 	else {
@@ -444,16 +451,19 @@ int LoginApollo::GetServerList(ApolloServerInfo *buf, int size)
 		
 		for (int i=0; i< num; i++) {
 			
-			host_list_node *it = & (buf[i].host) ;
+			host_list_node *it = & (buf[i]) ;
+			it->ReadStream(inmsg);
+
 			//inmsg.Read((NDUINT32&)it->ip) ;
-			inmsg.Read(buf[i].ip_addr,sizeof(buf[i].ip_addr) ) ;
-			inmsg.Read(it->port) ;
-			
-			inmsg.Read(it->max_number) ;
-			inmsg.Read(it->cur_number) ;
-			inmsg.Read(it->version_id) ;
-			inmsg.Read(it->name,sizeof(it->name)) ;
-			it->ip = nd_inet_aton(buf[i].ip_addr);
+// 			inmsg.Read(it->logic_group_id);
+// 			inmsg.Read(buf[i].ip_addr,sizeof(buf[i].ip_addr) ) ;
+// 			inmsg.Read(it->port) ;
+// 			
+// 			inmsg.Read(it->max_number) ;
+// 			inmsg.Read(it->cur_number) ;
+// 			inmsg.Read(it->version_id) ;
+// 			inmsg.Read(it->name,sizeof(it->name)) ;
+// 			it->ip = nd_inet_aton(buf[i].ip_addr);
 		}
 		return (int) num ;
 	}
@@ -461,6 +471,35 @@ int LoginApollo::GetServerList(ApolloServerInfo *buf, int size)
 	
 }
 
+
+int LoginApollo::GetSubHostList(const char *groupEntryHost, NDUINT16 port, ApolloServerInfo *buf, int size)
+{
+	if (0 != nd_reconnectex(m_conn, groupEntryHost, port, NULL)) {
+		nd_object_seterror(m_conn, NDSYS_ERR_HOST_UNAVAILABLE);
+		return -1;
+	}
+
+	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_HOST_LIST_IN_GROUP);	
+	nd_usermsgbuf_t recv_msg;
+
+	SEND_AND_WAIT(m_conn, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_HOST_LIST_IN_GROUP, ESF_URGENCY)
+	else {
+		NDUINT16 num = 0;
+		NDIStreamMsg inmsg(&recv_msg);
+		if (0 != inmsg.Read(num) || num == 0) {
+			return 0;
+		}
+
+		for (int i = 0; i < num; i++) {
+			host_list_node *it = &(buf[i]);
+			it->ReadStream(inmsg);
+		}
+		return (int)num;
+	}
+
+	return 0;
+
+}
 
 int LoginApollo::ReadyGame() 
 {
@@ -722,6 +761,7 @@ bool LoginApollo::buildAccountName(ACCOUNT_TYPE type,const char *inputName, char
 
 int LoginApollo::onLogin(NDIStreamMsg &inmsg)
 {
+	NDUINT16 serverGroupId = 0;
 	//read account info
 	if (-1==inmsg.Read(m_sessionID) || m_sessionID==0) {
 		NDUINT32 errcode = NDERR_VERSION;
@@ -736,8 +776,11 @@ int LoginApollo::onLogin(NDIStreamMsg &inmsg)
 	}
 	inmsg.Read(m_accType) ;
 	inmsg.Read(m_accName,sizeof(m_accName)) ;
-	
-	
+	inmsg.Read(serverGroupId);
+	if (serverGroupId )	{
+		m_serverGroupId = serverGroupId;
+	}
+		
 	//jump to new game server
 	NDUINT64 redirectHost = 0 ;
 	if (0==inmsg.Read(redirectHost) && redirectHost!=0) {

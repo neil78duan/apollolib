@@ -41,10 +41,10 @@ public:
 
 	int Send(NDOStreamMsg &omsg, int flag = ESF_NORMAL);
 	int Send(nd_usermsgbuf_t *msgBuf, int flag = ESF_NORMAL);
-	int SendtoOther(roleid_t roleId, NDOStreamMsg &omsg);
-	int SendtoOther(roleid_t roleId, nd_usermsgbuf_t *msgBuf);
-	int CallMsgProc(roleid_t playerid, nd_usermsgbuf_t *msghdr);
-	int CallMsgProc(roleid_t playerid, NDOStreamMsg &omsg);
+	int SendtoOther(roleid_t roleId, NDOStreamMsg &omsg,bool bSave = false);
+	int SendtoOther(roleid_t roleId, nd_usermsgbuf_t *msgBuf, bool bSave = false);
+	int CallMsgProc(roleid_t playerid, nd_usermsgbuf_t *msghdr, bool bSave = false);
+	int CallMsgProc(roleid_t playerid, NDOStreamMsg &omsg, bool bSave = false);
 
 protected:
 	roleid_t m_roleID ;	

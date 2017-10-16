@@ -255,17 +255,25 @@ const char *_get_construction_func(char *input,size_t size, ndxml *dataNode)
 		}
 		const char *pArray = ndxml_getattr_val(node1, "isArray");
 		const char *pValName = ndxml_getattr_val(node1, "name");
+		const char *pDftVal = ndxml_getattr_val(node1, "default");
+
 		if (pArray && pArray[0] && pArray[0] == '1') {
 			if (!bIsString) {
 				len = snprintf(input, size, "\t\t%sCount = 0 ;\n", pValName);
 			}
 			else {
-				len = snprintf(input, size, "\t\t%s[0] = 0 ;\n", pValName);
+				if (pDftVal) {
+
+					len = snprintf(input, size, "\t\tstrncpy(%s,\"%s\",sizeof(%s));\n", pValName,pDftVal,pValName);
+				}
+				else {
+					len = snprintf(input, size, "\t\t%s[0] = 0 ;\n", pValName);
+				}
 			}
 		}
 		else {
 			if (is_base_type(pType)) {
-				len = snprintf(input, size, "\t\t%s = 0 ;\n", pValName);
+				len = snprintf(input, size, "\t\t%s = %s ;\n", pValName, pDftVal ? pDftVal : "0");
 			}
 		}
 		input += len;
@@ -315,7 +323,7 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 		return-1 ;
 	}
 	char name_buf[256] ;
-	char construct_func[1024];
+	char construct_func[1024*16];
 	
 	const char *pComment = ndxml_getattr_val(sub, "comment");
 	if (pComment) {

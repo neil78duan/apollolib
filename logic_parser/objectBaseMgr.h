@@ -63,6 +63,7 @@ public:
 	
 	NDUINT32 getErrParam() ;
 	int getError();
+	void clearError();
 
 	int getCheckShortRate() { return m_opCheckShortRate; }
 	bool checkObjectIsExist() { return m_bOpCheckFoundObj; }

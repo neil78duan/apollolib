@@ -235,7 +235,7 @@ struct account_base_info
 {
 	NDUINT8 type;
 	NDUINT8 gender;
-	NDUINT8 country;
+	NDUINT16 serverGroupId;
 	NDUINT16  birth_year, birth_month, birth_day;
 	NDUINT8 acc_name[ACCOUNT_NAME_SIZE];
 	NDUINT8 nick[USER_NAME_SIZE];
@@ -253,12 +253,104 @@ struct invite_info
 };
 
 struct host_list_node {
-	ndip_t ip ;
 	NDUINT16 port ;
 	NDUINT16 max_number ;
 	NDUINT16 cur_number ;
+	NDUINT16 logic_group_id;
+	NDUINT8 isdefault_entry;
+	NDUINT8 isDebug;
 	NDUINT32 version_id ;
+	NDUINT8 inet_ip[20];
 	NDUINT8 name[HOST_NAME_SIZE] ;
+
+	host_list_node() 
+	{
+		port =0;
+		max_number =0;
+		cur_number=0;
+		logic_group_id=0;
+		isdefault_entry=0;
+		isDebug=0;
+		version_id=0;
+		inet_ip[0] = 0;
+		name[0]=0;
+	}
+	int WriteStream(NDOStreamMsg &omsg)
+	{
+		omsg.Write(port);
+		omsg.Write(max_number);
+		omsg.Write(cur_number);
+		omsg.Write(logic_group_id);
+		omsg.Write(isdefault_entry);
+		omsg.Write(isDebug);
+		omsg.Write(version_id);
+		omsg.Write(inet_ip);
+		omsg.Write(name);
+		return 0;
+	}
+
+	int ReadStream(NDIStreamMsg &inmsg)
+	{
+		
+		if (-1 == inmsg.Read(port)) {
+			return -1;
+		}
+
+		if (-1 == inmsg.Read(max_number)) {
+			return -1;
+		}
+
+		if (-1 == inmsg.Read(cur_number)) {
+			return -1;
+		}
+		if (-1 == inmsg.Read(logic_group_id)) {
+			return -1;
+		}
+		if (-1 == inmsg.Read(isdefault_entry)) {
+			return -1;
+		}
+		if (-1 == inmsg.Read(isDebug)) {
+			return -1;
+		}
+		if (-1 == inmsg.Read(version_id)) {
+			return -1;
+		}
+		if (-1 == inmsg.Read(inet_ip, sizeof(inet_ip))) {
+			return -1;
+		}
+		if (-1 == inmsg.Read(name, sizeof(name))) {
+			return -1;
+		}
+		return 0;
+	}
+
+	int Stream2Data(const char *StreamBuf, size_t stream_size)
+	{
+		nd_usermsgbuf_t msgbuf;
+		nd_usermsghdr_init(&msgbuf.msg_hdr);
+
+		memcpy(msgbuf.data, StreamBuf, stream_size);
+		ND_USERMSG_LEN(&msgbuf) += (NDUINT16)stream_size;
+		NDIStreamMsg inmsg(&msgbuf);
+
+		return ReadStream(inmsg);
+	}
+
+	int Data2Stream(char *StreamBuf, size_t size)
+	{
+		NDOStreamMsg omsg(0, 0);
+
+		if (WriteStream(omsg) == -1) {
+			return -1;
+		}
+		if (omsg.GetDataLen() > size) {
+			return -1;
+		}
+		int data_len = (int)omsg.GetDataLen();
+		memcpy(StreamBuf, omsg.MsgData(), data_len);
+
+		return (int)data_len;
+	}
 };
 
 //#define CURRENT_DATA_VERSION 1

@@ -12,9 +12,9 @@
 
 RoleAttrAsset::RoleAttrAsset(role_attr_data *data) : m_data(data), m_EnableRecalc(false)
 {
-	m_attrRate = 1.0f ;
-	m_lastErrorID = INVALID_ATTR_ID;
-	m_lastErrorCode = 0;
+	//m_attrRate = 1.0f ;
+	//m_lastErrorID = INVALID_ATTR_ID;
+	//m_lastErrorCode = 0;
 	m_recordChange = false;
 }
 RoleAttrAsset::~RoleAttrAsset()
@@ -25,10 +25,29 @@ RoleAttrAsset::~RoleAttrAsset()
 
 float RoleAttrAsset::setAttrRate(float newVal)
 {
-	float ret = m_attrRate ;
-	m_attrRate = newVal ;
-	return ret;
+// 	float ret = m_attrRate ;
+// 	m_attrRate = newVal ;
+// 	return ret;
+	return 1.0f;
 }
+
+attrid_t RoleAttrAsset::getLastErrorID()
+{
+	return INVALID_ATTR_ID;
+}
+int RoleAttrAsset::getLastError()
+{
+	return 0;
+}
+void RoleAttrAsset::setLastErrorAttrID(attrid_t )
+{
+
+}
+void RoleAttrAsset::setLastError(int )
+{
+
+}
+
 
 int RoleAttrAsset::getChanged(attrval_node *buf, size_t size)
 {
@@ -71,9 +90,9 @@ bool RoleAttrAsset::setVal(attrid_t index, attrval_t val)
 
 bool RoleAttrAsset::addVal(attrid_t index, attrval_t val)
 {
-	if (fabsf(m_attrRate - 1.0f) > 0.001f) {
-		val *= m_attrRate ;
-	}
+// 	if (fabsf(m_attrRate - 1.0f) > 0.001f) {
+// 		val *= m_attrRate ;
+// 	}
 	if (setVal(index, getVal(index) + val)) {
 
 		if (m_recordChange)	{
@@ -90,18 +109,21 @@ bool RoleAttrAsset::addVal(attrid_t index, attrval_t val)
 
 bool RoleAttrAsset::subVal(attrid_t index, attrval_t val)
 {
-	if (fabsf(m_attrRate - 1.0f) > 0.001f) {
-		val *= m_attrRate ;
-	}
+// 	if (fabsf(m_attrRate - 1.0f) > 0.001f) {
+// 		val *= m_attrRate ;
+// 	}
 	attrval_t curVal = getVal(index);
 	if (curVal < val) {
-		m_lastErrorCode = ESERVER_ERR_ATTR_NOT_ENOUGH;
-		m_lastErrorID = index;
+		setLastError(ESERVER_ERR_ATTR_NOT_ENOUGH);
+		setLastErrorAttrID(index);
+		//m_lastErrorCode = ESERVER_ERR_ATTR_NOT_ENOUGH;
+		//m_lastErrorID = index;
 		return false;
 	}
 	bool ret = setVal(index, curVal - val);
 	if (!ret) {
-		m_lastErrorID = index ;
+		setLastErrorAttrID(index);
+		//m_lastErrorID = index ;
 	}
 	else {
 		attrid_t errorAttrID = this->getLastErrorID();
@@ -176,8 +198,10 @@ bool RoleAttrAsset::setVal(const char *name, attrval_t newval)
 	if (waid != INVALID_ATTR_ID){
 		return setVal(waid, newval);
 	}
-	m_lastErrorCode = NDERR_INVALID_INPUT;
-	m_lastErrorID = INVALID_ATTR_ID;
+	setLastError(NDERR_INVALID_INPUT);
+	setLastErrorAttrID(INVALID_ATTR_ID);
+	//m_lastErrorCode = NDERR_INVALID_INPUT;
+	//m_lastErrorID = INVALID_ATTR_ID;
 	return false;
 }
 bool RoleAttrAsset::addVal(const char *name, attrval_t addval)
@@ -188,8 +212,11 @@ bool RoleAttrAsset::addVal(const char *name, attrval_t addval)
 	if (waid != INVALID_ATTR_ID){
 		return addVal(waid, addval);
 	}
-	m_lastErrorCode = NDERR_INVALID_INPUT;
-	m_lastErrorID = INVALID_ATTR_ID;
+
+	setLastError(NDERR_INVALID_INPUT);
+	setLastErrorAttrID(INVALID_ATTR_ID);
+	//m_lastErrorCode = NDERR_INVALID_INPUT;
+	//m_lastErrorID = INVALID_ATTR_ID;
 	return false;
 
 }
@@ -205,8 +232,10 @@ bool RoleAttrAsset::subVal(const char *name, attrval_t subval)
 		return  subVal(waid, subval);
 	}
 
-	m_lastErrorCode = NDERR_INVALID_INPUT;
-	m_lastErrorID = INVALID_ATTR_ID;
+	setLastError(NDERR_INVALID_INPUT);
+	setLastErrorAttrID(INVALID_ATTR_ID);
+	//m_lastErrorCode = NDERR_INVALID_INPUT;
+	//m_lastErrorID = INVALID_ATTR_ID;
 	return false;
 }
 bool RoleAttrAsset::setVal(const attr_node_buf &attrs)
@@ -308,8 +337,12 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 		return 0;
 	}
 
-	m_lastErrorID = INVALID_ATTR_ID;
-	m_lastErrorCode = (int)ESERVER_ERR_SUCCESS;
+
+	setLastError(ESERVER_ERR_SUCCESS);
+	setLastErrorAttrID(INVALID_ATTR_ID);
+
+	//m_lastErrorID = INVALID_ATTR_ID;
+	//m_lastErrorCode = (int)ESERVER_ERR_SUCCESS;
 
 	attrval_t  *pdata = &m_data->datas[aid];
 	attrval_t oldval = *pdata;
@@ -318,8 +351,11 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 		if (*pdata > pdesc->maxval){
 			*pdata = pdesc->maxval;
 
-			m_lastErrorID = aid;
-			m_lastErrorCode = (int) ESERVER_ERR_ATTR_TOO_MUCH;
+			setLastError(ESERVER_ERR_ATTR_TOO_MUCH);
+			setLastErrorAttrID(aid);
+
+			//m_lastErrorID = aid;
+			//m_lastErrorCode = (int) ESERVER_ERR_ATTR_TOO_MUCH;
 		}
 	}
 	else if (2 == pdesc->ismax){
@@ -327,8 +363,11 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 		if (idmax < pwah->m_wa_num && *pdata > m_data->datas[idmax])	{
 			*pdata = m_data->datas[idmax];
 
-			m_lastErrorID = aid;
-			m_lastErrorCode = ESERVER_ERR_ATTR_TOO_MUCH;
+			setLastError(ESERVER_ERR_ATTR_TOO_MUCH);
+			setLastErrorAttrID(aid);
+
+			//m_lastErrorID = aid;
+			//m_lastErrorCode = ESERVER_ERR_ATTR_TOO_MUCH;
 		}
 	}
 
@@ -336,8 +375,11 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 		if (*pdata < pdesc->minval){
 			*pdata = pdesc->minval;
 
-			m_lastErrorID = aid;
-			m_lastErrorCode = ESERVER_ERR_ATTR_NOT_ENOUGH;
+			setLastError(ESERVER_ERR_ATTR_NOT_ENOUGH);
+			setLastErrorAttrID(aid);
+
+			//m_lastErrorID = aid;
+			//m_lastErrorCode = ESERVER_ERR_ATTR_NOT_ENOUGH;
 		}
 	}
 	else if (2 == pdesc->ismin){
@@ -345,8 +387,11 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 		if (idmin < pwah->m_wa_num && *pdata < m_data->datas[idmin])	{
 			*pdata = m_data->datas[idmin];
 
-			m_lastErrorID = aid;
-			m_lastErrorCode = ESERVER_ERR_ATTR_TOO_MUCH;
+			setLastError(ESERVER_ERR_ATTR_NOT_ENOUGH);
+			setLastErrorAttrID(aid);
+
+			//m_lastErrorID = aid;
+			//m_lastErrorCode = ESERVER_ERR_ATTR_TOO_MUCH;
 		}
 	}
 

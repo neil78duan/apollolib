@@ -65,9 +65,10 @@ public:
 	RESULT_T ReloginBackground();
 	RESULT_T ReloginEx(void *session, size_t sessionSize, bool bReloginOffline);
 	
-	RESULT_T LoginAccountOneKey(const char *account, const char *passwd, int accType, bool skipAuth, int countryIndex);
-	RESULT_T LoginOnly(const char *account, const char *passwd, int accType, bool skipAuth, int countryIndex);
-	RESULT_T CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email, int countryIndex);
+	RESULT_T LoginAccountOneKey(const char *account, const char *passwd, int accType, bool skipAuth);
+	RESULT_T LoginOnly(const char *account, const char *passwd, int accType, bool skipAuth);
+	RESULT_T CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email);
+	RESULT_T CreateOnly(const char *userName, const char *passwd, const char *phone, const char *email);
 	RESULT_T createRole(const char *roleName);
 	RESULT_T EnterGame(const char *host=NULL, int port=0) { return _enterGame(host, port, NULL,true); }
 
