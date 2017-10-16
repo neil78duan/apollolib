@@ -41,7 +41,18 @@ namespace NetMessage
         private int m_readIndex;
         private int m_writeIndex;
         private bool m_bStruckEndMarker ;
+		private bool m_bDataReadEnd ;		
 
+		public bool IsReadEnd() 
+		{
+			return m_bDataReadEnd ;
+		}
+		
+		public bool IsStructEnd() 
+		{
+			return m_bStruckEndMarker ;
+		}
+		
         public int ValidLength 
         {
             get { return m_writeIndex; }
@@ -52,6 +63,7 @@ namespace NetMessage
             m_readIndex = 0;
             m_writeIndex = 0;
             m_bStruckEndMarker = false;
+			m_bDataReadEnd = false ;
         }
 
         public byte[] ToArray()
@@ -62,6 +74,9 @@ namespace NetMessage
         //init from socket
         public int FromArray(byte[] data)
         {
+            m_bStruckEndMarker = false;
+            m_bDataReadEnd = false;
+
             m_readIndex = 0;
             data.CopyTo(_m_buf, 0);
             return data.Length;
@@ -69,6 +84,10 @@ namespace NetMessage
 
         public int FromAddr(IntPtr streamBuf, int size)
         {
+
+            m_bStruckEndMarker = false;
+            m_bDataReadEnd = false;
+
             m_readIndex = 0;
             Marshal.Copy(streamBuf, m_buf, 0, size);
             return size;
@@ -504,6 +523,49 @@ namespace NetMessage
             myRead(data, length);
             return data.Length;
         }
+
+        public bool TrytoMoveStructEnd() 
+        {
+            int orgIndex =   m_readIndex;
+            while(m_readIndex < m_buf.Length) 
+            {
+                eNDnetStreamMarker type;
+                byte size;
+                m_bStruckEndMarker = false;
+                if (-1 == _ReadTypeSize(out type, out size) )
+                {
+                    m_readIndex = orgIndex ;
+                    return false ;
+                }
+                if( m_bStruckEndMarker) 
+                {
+                    return true ;
+                }
+                if(type == eNDnetStreamMarker.ENDSTREAM_MARKER_UNDEFINE) {
+                    m_readIndex = orgIndex ;
+                    return false ;
+                }
+
+                else if (type == eNDnetStreamMarker.ENDSTREAM_MARKER_BIN)
+                {
+                    ushort data_size = ReadUint16() ;
+                    m_readIndex += data_size ;
+
+                }
+                else if(type == eNDnetStreamMarker.ENDSTREAM_MARKER_TEXT)
+                {
+                    ushort data_size = ReadUint16() ;
+                    m_readIndex += data_size +1;
+                }
+                else {
+                    m_readIndex += size ;
+                }
+            }
+            
+            m_readIndex = orgIndex ;
+            return false ;
+        }
+       
         #endregion
 
 
@@ -517,18 +579,17 @@ namespace NetMessage
 
         int _ReadTypeSize(out eNDnetStreamMarker type, out byte size)
         {
-            byte marker = 0;
             type = 0;
             size = 0;
-            if (-1 == OrgWriteUint8(marker))
+            m_bStruckEndMarker = false;
+            byte marker = OrgReadUint8();
+            if (marker == 0 || m_bDataReadEnd)
             {
                 return -1;
             }
-            m_bStruckEndMarker = false;
             if (marker == NET_STREAM_STRUCT_END_MARK)
             {
                 m_bStruckEndMarker = true;
-
                 return 0;
             }
             type = (eNDnetStreamMarker)((marker & 0xf0) >> 4);
@@ -548,6 +609,11 @@ namespace NetMessage
 
         private void myRead(byte[] data, int len)
         {
+			if(m_readIndex + len >= m_buf.Length)
+			{
+				m_bDataReadEnd = true ;
+				return  ;
+			}
             for (var i = 0; i < len; ++i)
             {
                 data[i] = m_buf[m_readIndex++] ;
@@ -622,6 +688,13 @@ namespace NetMessage
 
         private byte OrgReadUint8()
         {
+			
+			if(m_readIndex + 1 >= m_buf.Length)
+			{
+				m_bDataReadEnd = true ;
+				return 0 ;
+			}
+			
             return m_buf[m_readIndex++];
         }
 

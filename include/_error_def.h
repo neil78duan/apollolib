@@ -186,5 +186,6 @@ ErrorElement(ESERVER_ERR_ALREADY_HELP_ATK, "反击信息不存在,可能已经�
 ErrorElement(ESERVER_ERR_GUILD_HELP_ATK_SELF, "您不能帮助别人反击自己"),
 ErrorElement(ESERVER_ERR_GUILD_ON_UPGRADE, "徽章正在升级中"),
 ErrorElement(ESERVER_ERR_CLONE_REQ_INFO_ERROR, "勇者试炼信息错误"),
+ErrorElement(ESERVER_ERR_CLONE_ENTER_ERROR, "您已经没有进入次数了"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),
