@@ -14,7 +14,7 @@ class ListDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ListDialog(QWidget *parent = 0);
+	explicit ListDialog(QWidget *parent = 0, const char *title = NULL);
     ~ListDialog();
 
     void InitList() ;

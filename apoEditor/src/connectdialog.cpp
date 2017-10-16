@@ -569,49 +569,74 @@ int ConnectDialog::_relogin(void *sessionData, size_t session_size)
     return 0;
 }
 
+int ConnectDialog::ShowServers(void *hostsAddr, int size, const char *tips)
+{
+	ApolloServerInfo *bufs = (ApolloServerInfo*)hostsAddr;
+	int num = size;
+
+	for (int i = 0; i < num; i++)	{
+		nd_logmsg("ONLINE-NUMBER >>> host %s:%d : %d / %d \n", (const char*)bufs[i].inet_ip, bufs[i].port,
+			bufs[i].cur_number, bufs[i].max_number);
+	}
+
+	int selected = 0;
+	if (num > 1){
+		//dialogCloseHelper _helperClose(this) ;
+		ListDialog dlg(this,tips);
+		for (int i = 0; i < num; i++)	{
+			QString strtips;
+			strtips.sprintf("%d: %s %s:%d (%d/%d)", i,
+				(const char*)bufs[i].name, (const char*)bufs[i].inet_ip, bufs[i].port,
+				bufs[i].cur_number, bufs[i].max_number);
+
+			dlg.m_selList.push_back(strtips);
+		}
+
+		dlg.InitList();
+		if (dlg.exec() == QDialog::Accepted) {
+			WriteLog("selected success \n");
+		}
+		else {
+			WriteLog("user cancel\n");
+			return -1;
+		}
+		selected = dlg.GetSelect();
+		nd_assert(selected < num);
+	}
+	return selected;
+}
+
 int ConnectDialog::SelOrCreateRole(const char *accountName)
 {
     //JUMP TO server
     ApolloServerInfo bufs[20];
     int num = m_login->GetServerList(bufs, ND_ELEMENTS_NUM(bufs));
-
     if (num == 0) {
         WriteLog("Get GAME-SERVER-LIST error , Maybe game server start FAILED\n");
         return -1 ;
     }
-
-	for (int i = 0; i < num; i++)	{
-		nd_logmsg("ONLINE-NUMBER >>> host %s:%d : %d / %d \n", (const char*)bufs[i].ip_addr, bufs[i].host.port,
-			bufs[i].host.cur_number, bufs[i].host.max_number);
+	bool skipLoadBalance = false;
+	int selected = ShowServers((void *)bufs, num, "Group list");
+	if (-1==selected)	{
+		return -1;
+	}
+	
+	if (ui->showServers->isChecked())	{
+		ApolloServerInfo groupEntry = bufs[selected];
+		num = m_login->GetSubHostList((char*)groupEntry.inet_ip, groupEntry.port, bufs, ND_ELEMENTS_NUM(bufs));
+		if (num ==0){
+			WriteLog("Get SUB HOST list error , Maybe game server start FAILED\n");
+			return -1;
+		}
+		selected = ShowServers((void *)bufs, num, "Game Servers");
+		if (-1 == selected)	{
+			return -1;
+		}
+		skipLoadBalance = true;
 	}
 
-    int selected = 0;
-    if(num > 1){
-        //dialogCloseHelper _helperClose(this) ;
-        ListDialog dlg(this);
-        for (int i = 0; i < num; i++)	{
-			QString strtips;
-			strtips.sprintf("%d: %s %s:%d (%d/%d)", i, 
-				(const char*)bufs[i].host.name, (const char*)bufs[i].ip_addr, bufs[i].host.port,
-				bufs[i].host.cur_number, bufs[i].host.max_number);
-
-            dlg.m_selList.push_back(strtips);
-        }
-
-        dlg.InitList();
-        if (dlg.exec() == QDialog::Accepted) {
-            WriteLog("selected success \n");
-        }
-        else {
-            WriteLog("user cancel\n");
-            return -1 ;
-        }
-        selected = dlg.GetSelect();
-        nd_assert(selected < num);
-    }
-
-
-    int ret = m_login->EnterServer(bufs[selected].ip_addr, bufs[selected].host.port,true);
+	
+    int ret = m_login->EnterServer((char*)bufs[selected].inet_ip, bufs[selected].port);
     if (ret == 0) {
         WriteLog("redirect server success\n");
         _s_session_size = m_login->GetSessionData(_s_session_buf, sizeof(_s_session_buf));
