@@ -156,6 +156,7 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 						"\tfor i = 1, self.%sCount do\n"
 						"\t\tsize = size + dataStream : Write%s(self.%s[i])\n\tend\n",
 						pValName, pValName, realOp, pValName);
+					pWriteStream += size;
 
 				}
 				else {
@@ -176,6 +177,7 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 						"\tfor i = 1, self.%sCount do\n"
 						"\t\tsize = size + self.%s[i]:Write(dataStream)\n\tend\n",
 						pValName, pValName, pValName);
+					pWriteStream += size;
 					
 				}
 
