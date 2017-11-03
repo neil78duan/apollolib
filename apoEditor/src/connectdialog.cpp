@@ -145,6 +145,7 @@ ConnectDialog::ConnectDialog(QWidget *parent) :
 
     ui->gmMsgButton->setEnabled(false);
 
+	
     InitNet();
 
 	__glogWrapper = ND_LOG_WRAPPER_NEW(ConnectDialog);
@@ -164,6 +165,10 @@ ConnectDialog::ConnectDialog(QWidget *parent) :
 
 #undef SET_EDIT_DFTVAL
 	InitHostList();
+
+	QString tmoutText;
+	tmoutText.sprintf("%d", WAITMSG_TIMEOUT/1000);
+	ui->timeOutEdit->setText(tmoutText);
 }
 
 ConnectDialog::~ConnectDialog()
@@ -338,7 +343,11 @@ void ConnectDialog::on_loginButton_clicked()
         std::string strName = ui->nameEdit->text().toStdString() ;
         std::string strPasswd = ui->passwdEdit->text().toStdString() ;
 		bool skipAuth = ui->skipAuth->isChecked();
+		int timeOut = ui->timeOutEdit->text().toInt();
 
+		if (timeOut > 0)		{
+			ndSetTimeoutVal(timeOut * 1000);
+		}
 		//for test 
 		//end test 
         __sendMsg.Reset();
@@ -368,11 +377,14 @@ void ConnectDialog::on_loginButton_clicked()
         }
 
         // log send data
-       const char *msg_stream_file = "./test_robort.data";
-       int length = strlen(msg_stream_file);
-       if (m_pConn->ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)msg_stream_file, &length) == -1) {
-           nd_logmsg("log net message bin-data errror\n");
-       }
+		if (ui->logSendCheck->isChecked()) {
+
+			const char *msg_stream_file = "./test_robort.data";
+			int length = strlen(msg_stream_file);
+			if (m_pConn->ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)msg_stream_file, &length) == -1) {
+				nd_logmsg("log net message bin-data errror\n");
+			}
+		}
 
         //get and init role data
 
@@ -832,6 +844,13 @@ static bool gmdlgSend(QDialog *curDlg)
             case OT_INT64:
                 omsg.Write((NDUINT64)ndxml_getval_int(node));
                 break;
+			case OT_BINARY_DATA:
+			{
+				const char *p = ndxml_getval(node);
+				size_t s = (p && *p) ? strlen(p) : 0;
+				omsg.WriteBin((void*)p, s);
+			}
+			break;
             default:
                 QMessageBox::warning(NULL, "Error","config error!",QMessageBox::Ok);
                 break;
