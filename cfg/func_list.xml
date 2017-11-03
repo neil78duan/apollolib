@@ -29,11 +29,16 @@
 	<node desc="从消息中读UserDef类型(输入消息, 类型名字)">CPP.apollo_func_read_userData_from_msg</node>
 	<node desc="重新载入策划数据()">CPP.apollo_func_reload_data_table</node>
 	<node desc="发送消息(int:maxID,int:minId, msg_varlist...)">CPP.apollo_func_send_msg</node>
+	<node desc="发送消息给Nation(maxid,minid, ...)">CPP.apollo_func_send_to_nation</node>
+	<node desc="发送消息给Social(maxid,minid, ...)">CPP.apollo_func_send_to_social</node>
+	<node desc="发送消息给World(maxid,minid, ...)">CPP.apollo_func_send_to_world</node>
 	<node desc="获得开发者名称()">CPP.apollo_get_author_name</node>
 	<node desc="获得dbl信息()">CPP.apollo_get_dbl_name</node>
 	<node desc="读取整个文件(filename)">CPP.apollo_load_file_data</node>
 	<node desc="加载脚本(scriptn_name)">CPP.apollo_load_script_file</node>
 	<node desc="合成文件名(path,filename)">CPP.apollo_make_full_path</node>
+	<node desc="读取excel行(tablename, index)">CPP.apollo_read_excel_line</node>
+	<node desc="读取excel行text(tablename, index)">CPP.apollo_read_excel_line_text</node>
 	<node desc="测试数据导出(test_output_path)">CPP.apollo_run_test</node>
 	<node desc="安装消息处理器(str:listener, str:func, int maxId, int minId, int privilege)">CPP.apollo_set_message_handler</node>
 	<node desc="字符串相加(str1, str2)">CPP.apollo_str_add</node>
@@ -48,6 +53,7 @@
 	<node desc="字符数组转换为属性格式([string]:attrname_id)">CPP.gscript_convert_data_to_attr</node>
 	<node desc="转换成attrNode(name, value)">CPP.gscript_convert_to_attr</node>
 	<node desc="根据CD读取系数(types, CDs)">CPP.gscript_get_clear_cd_rate</node>
+	<node desc="关服前踢人()">CPP.gscript_kickoff_all</node>
 	<node desc="发送错误通知(errorId)">CPP.gscript_send_client_error</node>
 	<node desc="发公告给当前用户(arg1, ...)">CPP.gscript_send_player_notice</node>
 	<node desc="关服()">CPP.gscript_shutdown_server</node>

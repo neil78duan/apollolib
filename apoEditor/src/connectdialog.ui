@@ -140,7 +140,7 @@
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>130</y>
+      <y>120</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -172,13 +172,49 @@
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>160</y>
+      <y>140</y>
       <width>161</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
      <string>显示servers list</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="logSendCheck">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>120</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>记录发送流</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="timeOutEdit">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>160</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>160</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>超时时间(S)</string>
     </property>
    </widget>
   </widget>

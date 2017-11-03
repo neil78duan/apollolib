@@ -26,6 +26,7 @@
 #define ACCOUNT_NAME_SIZE   100
 #define USER_NAME_SIZE      40
 #define INVITE_CODE_SIZE 	33
+#define COMMON_DATA_NAME_SIZE 60
 
 #define OUTLINE_MSG_DATA_SIZE 1024
 #define HOST_NAME_SIZE 64
@@ -52,13 +53,15 @@ enum eGameStat {
 
 enum eServerType {
 	ESERVER_UNKNOW = 0,
-	ESERVER_MANAGER,	// WorldServer
+	ESERVER_WORLD,	// WorldServer
 	ESERVER_GAMEHALL,   // 游戏大厅
 	ESERVER_GATE,		// 游戏入口
 	ESERVER_BATTLE_ROOM,// 对战房间
 	ESERVER_SOCIAL,		// SOCIAL SERVER
 	ESERVER_ACCOUNT,	//
 	ESERVER_GM,			// GM Server节点
+	ESERVER_NATION,			// 国家工会
+
 };
 
 enum eCommonDataSyncCmd
@@ -105,6 +108,9 @@ enum eChatType {
 	ECHAT_COMMON,
 	ECHAT_PRIVATE,
 	ECHAT_BROADCAST,
+	ECHAT_NATION,
+	ECHAT_GUILD,
+	ECHAT_SYSTEM_ROLL,
 	ECHAT_SYSTEM
 };
 

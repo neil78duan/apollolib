@@ -4,7 +4,7 @@ VPATH = .
 
 include ./Rules.make
 
-SUBDIRS = cli_common srv_common attribute logic_parser
+SUBDIRS = cli_common srv_common db_common attribute logic_parser
 
 
 all: debug

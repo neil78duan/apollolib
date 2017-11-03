@@ -27,6 +27,9 @@ MSG_ENTRY_INSTANCE(register2MgrAck)
 
         pconn->Ioctl(NDIOCTL_SET_LEVEL, &isRegisterOk, &size) ;
     }
+	else {
+		pconn->Close(0);
+	}
 	nd_logmsg("%s regisger to server  %s\n",pconn->getName(),  isOk ? "FAILED":"SUCCESS") ;
     
     return 0;

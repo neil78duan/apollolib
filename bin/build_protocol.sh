@@ -13,3 +13,4 @@ fi
 [ $? == 0 ] || exit 1
 
 cp ./cpp/* ../../src/netMessage
+#cp ./csharp/* ../DemoU3d/Assets/netMessage

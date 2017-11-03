@@ -35,6 +35,9 @@ public:
 	
 	int Send(roleid_t playerid, nd_usermsghdr_t *msghdr, bool encrypt = false, bool isSaved = false );
 	int Send(roleid_t playerid, NDOStreamMsg &omsg, bool encrypt = false, bool isSaved = false );
+
+	int SendToNation(roleid_t playerid, nd_usermsghdr_t *msghdr, bool encrypt = false, bool isSaved = false);
+	int SendToNation(roleid_t playerid, NDOStreamMsg &omsg, bool encrypt = false, bool isSaved = false);
 	
 	int BroadCastInHost(nd_usermsghdr_t *msghdr, bool encrypt = false);	
 	int BroadCastInWorld(nd_usermsghdr_t *msghdr, bool encrypt = false);
@@ -42,6 +45,9 @@ public:
 	int CallMsgProc(roleid_t playerid, nd_usermsghdr_t *msghdr, bool isSaved = false);
 	int CallMsgProc(roleid_t playerid, NDOStreamMsg &omsg, bool isSaved = false);
 	
+	int CallMsgProcToNation(account_index_t playerid, nd_usermsghdr_t *msghdr, bool isSaved = false);
+	int CallMsgProcToNation(account_index_t playerid, NDOStreamMsg &omsg, bool isSaved = false);
+
 	int CallMsgProcInHost(nd_usermsghdr_t *msghdr);	
 	int CallMsgProcInWorld(nd_usermsghdr_t *msghdr);
 	
@@ -49,6 +55,7 @@ public:
 		
 private:
 	int wrapToWorld(nd_usermsghdr_t *msg, int wrap_maxID, int wrap_minID, NDUINT32 playerID, bool ecnrypt = false, bool isSaved = false);
+	int wrapToNation(nd_usermsghdr_t *msg, int wrap_maxID, int wrap_minID, NDUINT32 playerID, bool ecnrypt, bool isSaved);
 	typedef std::map<account_index_t ,player_node_info> player_online_map;
 	
 	nd_mutex m_lock;
@@ -57,7 +64,7 @@ private:
 };
 
 extern PlayerMgr *get_playerMgr() ; 
-extern NDConnector &getWorldConnect() ;
+extern NDSafeConnector &getWorldConnect() ;
 extern NDConnector &getSyncServerConnector();
 
 

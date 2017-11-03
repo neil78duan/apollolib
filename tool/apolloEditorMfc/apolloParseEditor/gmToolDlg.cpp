@@ -869,6 +869,13 @@ static bool gmdlgSend(CDlgWithAccelerators *curDlg)
 			case OT_INT64:
 				omsg.Write((NDUINT64)ndxml_getval_int(node));
 				break;
+			case OT_BINARY_DATA:
+			{
+				const char *p = ndxml_getval(node);
+				size_t s = (p && *p) ? strlen(p) : 0;
+				omsg.WriteBin((void*)p, s);
+			}
+			break;
 			default:
 				AfxMessageBox("config error ");
 				break;
