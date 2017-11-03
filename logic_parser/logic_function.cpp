@@ -1,4 +1,4 @@
-ï»¿/* file logicengine_api.h
+/* file logicengine_api.h
  *
  * interface of game logic engine 
  *
@@ -15,19 +15,19 @@
 #include "logic_parser/dbl_mgr.h"
 
 
-APOLLO_SCRIPT_API_DEF(_sys_username, "sys_ç”¨æˆ·å()")
+APOLLO_SCRIPT_API_DEF(_sys_username, "sys_ÓÃ»§Ãû()")
 {
 	result.InitSet(nd_get_sys_username());
 	return true;
 }
 
-APOLLO_SCRIPT_API_DEF(_sys_get_path, "sys_è·å–å·¥ä½œç›®å½•()")
+APOLLO_SCRIPT_API_DEF(_sys_get_path, "sys_»ñÈ¡¹¤×÷Ä¿Â¼()")
 {
 	result.InitSet(nd_getcwd());
 	return true;
 }
 
-APOLLO_SCRIPT_API_DEF(_sys_change_path, "sys_åˆ‡æ¢ç›®å½•(newpath)")
+APOLLO_SCRIPT_API_DEF(_sys_change_path, "sys_ÇĞ»»Ä¿Â¼(newpath)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
 
@@ -43,7 +43,7 @@ APOLLO_SCRIPT_API_DEF(_sys_change_path, "sys_åˆ‡æ¢ç›®å½•(newpath)")
 	return true;
 }
 
-APOLLO_SCRIPT_API_DEF(_sys_mkfile, "sys_åˆ›å»ºæ–‡ä»¶(filepath)")
+APOLLO_SCRIPT_API_DEF(_sys_mkfile, "sys_´´½¨ÎÄ¼ş(filepath)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
 
@@ -58,7 +58,7 @@ APOLLO_SCRIPT_API_DEF(_sys_mkfile, "sys_åˆ›å»ºæ–‡ä»¶(filepath)")
 	return true;
 }
 
-APOLLO_SCRIPT_API_DEF(_sys_copyfile, "sys_å¤åˆ¶æ–‡ä»¶(filesrc,filedest)")
+APOLLO_SCRIPT_API_DEF(_sys_copyfile, "sys_¸´ÖÆÎÄ¼ş(filesrc,filedest)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 
@@ -76,7 +76,7 @@ APOLLO_SCRIPT_API_DEF(_sys_copyfile, "sys_å¤åˆ¶æ–‡ä»¶(filesrc,filedest)")
 
 }
 
-APOLLO_SCRIPT_API_DEF(_sys_mkdir, "sys_åˆ›å»ºç›®å½•(pathname)")
+APOLLO_SCRIPT_API_DEF(_sys_mkdir, "sys_´´½¨Ä¿Â¼(pathname)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
 
@@ -90,7 +90,7 @@ APOLLO_SCRIPT_API_DEF(_sys_mkdir, "sys_åˆ›å»ºç›®å½•(pathname)")
 	return true;
 }
 
-APOLLO_SCRIPT_API_DEF(_sys_rmfile, "sys_åˆ é™¤æ–‡ä»¶(filepath)")
+APOLLO_SCRIPT_API_DEF(_sys_rmfile, "sys_É¾³ıÎÄ¼ş(filepath)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
 
@@ -105,7 +105,7 @@ APOLLO_SCRIPT_API_DEF(_sys_rmfile, "sys_åˆ é™¤æ–‡ä»¶(filepath)")
 }
 
 
-APOLLO_SCRIPT_API_DEF(_sys_rmdir, "sys_åˆ é™¤ç›®å½•(path)")
+APOLLO_SCRIPT_API_DEF(_sys_rmdir, "sys_É¾³ıÄ¿Â¼(path)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
 
@@ -119,7 +119,7 @@ APOLLO_SCRIPT_API_DEF(_sys_rmdir, "sys_åˆ é™¤ç›®å½•(path)")
 	return true;
 }
 
-APOLLO_SCRIPT_API_DEF(_sys_write_binfile, "sys_BINå†™å…¥æ–‡ä»¶(fileName, var1,var2....)")
+APOLLO_SCRIPT_API_DEF(_sys_write_binfile, "sys_BINĞ´ÈëÎÄ¼ş(fileName, var1,var2....)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 
@@ -154,7 +154,7 @@ APOLLO_SCRIPT_API_DEF(_sys_write_binfile, "sys_BINå†™å…¥æ–‡ä»¶(fileName, var1,va
 	return true;
 }
 
-APOLLO_SCRIPT_API_DEF(_sys_write_textfile, "sys_textå†™å…¥æ–‡ä»¶(fileName, var1,var2....)")
+APOLLO_SCRIPT_API_DEF(_sys_write_textfile, "sys_textĞ´ÈëÎÄ¼ş(fileName, var1,var2....)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 
@@ -361,7 +361,7 @@ APOLLO_SCRIPT_API_DEF(_sys_textread_file_stream, "sys_TextReadLine(fileStream)")
 
 
 //bool apollo_str_cmp(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_str_cmp, "å­—ç¬¦ä¸²æ¯”è¾ƒ(str1,str2)")
+APOLLO_SCRIPT_API_DEF(apollo_str_cmp, "×Ö·û´®±È½Ï(str1,str2)")
 {
 	CHECK_ARGS_NUM_ONLY(args, 3, parser);
 	//CHECK_DATA_TYPE(args[1], OT_STRING, parser);
@@ -380,9 +380,9 @@ APOLLO_SCRIPT_API_DEF(apollo_str_cmp, "å­—ç¬¦ä¸²æ¯”è¾ƒ(str1,str2)")
 	return true;
 }
 
-//"å­—ç¬¦ä¸²æŸ¥æ‰¾(str1,str2)"
+//"×Ö·û´®²éÕÒ(str1,str2)"
 //bool apollo_str_str(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_str_str, "å­—ç¬¦ä¸²æŸ¥æ‰¾(str1,str2)")
+APOLLO_SCRIPT_API_DEF(apollo_str_str, "×Ö·û´®²éÕÒ(str1,str2)")
 {
 	CHECK_ARGS_NUM_ONLY(args, 3, parser);
 	//CHECK_DATA_TYPE(args[1], OT_STRING, parser);
@@ -405,9 +405,9 @@ APOLLO_SCRIPT_API_DEF(apollo_str_str, "å­—ç¬¦ä¸²æŸ¥æ‰¾(str1,str2)")
 	return true;
 }
 
-//"å­—ç¬¦ä¸²é•¿åº¦(str1)"
+//"×Ö·û´®³¤¶È(str1)"
 //bool apollo_str_len(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_str_len, "å­—ç¬¦ä¸²é•¿åº¦(str1)")
+APOLLO_SCRIPT_API_DEF(apollo_str_len, "×Ö·û´®³¤¶È(str1)")
 {
 	CHECK_ARGS_NUM_ONLY(args, 2, parser);
 	//CHECK_DATA_TYPE(args[1], OT_STRING, parser);
@@ -426,7 +426,7 @@ APOLLO_SCRIPT_API_DEF(apollo_str_len, "å­—ç¬¦ä¸²é•¿åº¦(str1)")
 
 //return (str1 + str2) ;
 //bool apollo_str_add(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_str_add, "å­—ç¬¦ä¸²ç›¸åŠ (str1, str2)")
+APOLLO_SCRIPT_API_DEF(apollo_str_add, "×Ö·û´®Ïà¼Ó(str1, str2)")
 {
 	CHECK_ARGS_NUM_ONLY(args, 3, parser);
 	std::string str1 = args[1].GetText();
@@ -441,7 +441,7 @@ APOLLO_SCRIPT_API_DEF(apollo_str_add, "å­—ç¬¦ä¸²ç›¸åŠ (str1, str2)")
 
 //str_insert(aim_str, insert_pos, inserted_text)
 //bool apollo_str_insert(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_str_insert, "å­—ç¬¦ä¸²æ’å…¥(aim_str, insert_pos, inserted_text)")
+APOLLO_SCRIPT_API_DEF(apollo_str_insert, "×Ö·û´®²åÈë(aim_str, insert_pos, inserted_text)")
 {
 	CHECK_ARGS_NUM_ONLY(args, 4, parser);
 	std::string str1 = args[1].GetText();
@@ -458,7 +458,7 @@ APOLLO_SCRIPT_API_DEF(apollo_str_insert, "å­—ç¬¦ä¸²æ’å…¥(aim_str, insert_pos, i
 
 //str_insert(src,replaced_str, new_str)
 //bool apollo_str_replace(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_str_replace, "å­—ç¬¦ä¸²æ›¿æ¢(aim_str, replaced, new_text)")
+APOLLO_SCRIPT_API_DEF(apollo_str_replace, "×Ö·û´®Ìæ»»(aim_str, replaced, new_text)")
 {
 
 	CHECK_ARGS_NUM_ONLY(args, 4, parser);
@@ -504,7 +504,7 @@ APOLLO_SCRIPT_API_DEF(apollo_str_replace, "å­—ç¬¦ä¸²æ›¿æ¢(aim_str, replaced, ne
 
 //str_insert(src_str,erased_str)
 //bool apollo_str_erase(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_str_erase, "å­—ç¬¦ä¸²åˆ é™¤(aim_str, erased_str)")
+APOLLO_SCRIPT_API_DEF(apollo_str_erase, "×Ö·û´®É¾³ı(aim_str, erased_str)")
 {
 	CHECK_ARGS_NUM_ONLY(args, 3, parser);
 	const char*pSrc = args[1].GetText();
@@ -544,7 +544,7 @@ APOLLO_SCRIPT_API_DEF(apollo_str_erase, "å­—ç¬¦ä¸²åˆ é™¤(aim_str, erased_str)")
 
 
 //bool apollo_get_dbl_name(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_get_dbl_name, "è·å¾—dblä¿¡æ¯()")
+APOLLO_SCRIPT_API_DEF(apollo_get_dbl_name, "»ñµÃdblĞÅÏ¢()")
 {
 	DBLDatabase *pdbl = DBLDatabase::get_Instant();
 	if (!pdbl) {
@@ -555,7 +555,94 @@ APOLLO_SCRIPT_API_DEF(apollo_get_dbl_name, "è·å¾—dblä¿¡æ¯()")
 	result.InitSet(pdbl->getDatabaseName()) ;
 	return true;
 }
-APOLLO_SCRIPT_API_DEF(apollo_get_author_name, "è·å¾—å¼€å‘è€…åç§°()")
+
+APOLLO_SCRIPT_API_DEF(apollo_read_excel_line, "¶ÁÈ¡excelĞĞ(tablename, index)")
+{
+	CHECK_ARGS_NUM(args, 3, parser);
+	const char*tableName = args[1].GetText();
+	int index = args[2].GetInt();
+
+	if (!tableName || !*tableName)	{
+		parser->setErrno(NDERR_PARAM_INVALID);
+		return false;
+	}
+	DBLTable *pTable = DBL_FindTable(tableName);
+	if (!pTable)	{
+		nd_logerror("table %s not exist\n", tableName);
+		parser->setErrno(NDERR_PROGRAM_OBJ_NOT_FOUND);
+		return false;
+	}
+
+	DBLCursor cursor(pTable);
+	if (-1 == cursor.Fetch(index))	{
+		nd_logerror("fetch %d line from table %s error\n", index, tableName);
+		parser->setErrno(NDERR_PROGRAM_OBJ_NOT_FOUND);
+		return false;
+	}
+
+	LogicUserDefStruct line;
+	for (int i = 0; i < cursor.GetCols(); i++)	{
+		line.push_back(cursor.GetColName(i), cursor[i]);
+	}
+
+	result.InitSet(line);
+	return true;
+}
+
+APOLLO_SCRIPT_API_DEF(apollo_read_excel_line_text, "¶ÁÈ¡excelĞĞtext(tablename, index)")
+{
+	CHECK_ARGS_NUM(args, 3, parser);
+	const char*tableName = args[1].GetText();
+	int index = args[2].GetInt();
+
+	if (!tableName || !*tableName)	{
+		parser->setErrno(NDERR_PARAM_INVALID);
+		return false;
+	}
+	DBLTable *pTable = DBL_FindTable(tableName);
+	if (!pTable)	{
+		nd_logerror("table %s not exist\n", tableName);
+		parser->setErrno(NDERR_PROGRAM_OBJ_NOT_FOUND);
+		return false;
+	}
+
+	DBLCursor cursor(pTable);
+	if (-1 == cursor.Fetch(index))	{
+		nd_logerror("fetch %d line from table %s error\n", index, tableName);
+		parser->setErrno(NDERR_PROGRAM_OBJ_NOT_FOUND);
+		return false;
+	}
+
+	
+	char buf[4096];
+	char *p = buf;
+	int size =(int)sizeof(buf);
+	int len = snprintf(p, size, "[");
+	p += len;
+	size -= len; 
+
+	LogicUserDefStruct line;
+	for (int i = 0; i < cursor.GetCols(); i++)	{
+		std::string text = cursor[i].GetString();
+		if (i == cursor.GetCols() -1 )	{
+			len = snprintf(p, size, "[%s]",text.size()? text.c_str():"none");
+		}
+		else {
+			len = snprintf(p, size, "[%s],", text.size() ? text.c_str() : "none");
+		}
+		p += len;
+		size -= len;
+		if (size<=0){
+			break;
+		}
+	}
+
+	snprintf(p, size, "]");
+	result.InitSet(buf);
+	return true;
+}
+
+APOLLO_SCRIPT_API_DEF(apollo_get_author_name, "»ñµÃ¿ª·¢ÕßÃû³Æ()")
 {
 
 	LogicEngineRoot *root = LogicEngineRoot::get_Instant();
@@ -567,7 +654,7 @@ APOLLO_SCRIPT_API_DEF(apollo_get_author_name, "è·å¾—å¼€å‘è€…åç§°()")
 }
 
 //bool apollo_run_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_run_test, "æµ‹è¯•æ•°æ®å¯¼å‡º(test_output_path)")
+APOLLO_SCRIPT_API_DEF(apollo_run_test, "²âÊÔÊı¾İµ¼³ö(test_output_path)")
 {
 
 	CHECK_ARGS_NUM(args, 2, parser);
@@ -599,7 +686,7 @@ APOLLO_SCRIPT_API_DEF(apollo_run_test, "æµ‹è¯•æ•°æ®å¯¼å‡º(test_output_path)")
 }
 
 //bool apollo_load_script_file(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_load_script_file, "åŠ è½½è„šæœ¬(scriptn_name)")
+APOLLO_SCRIPT_API_DEF(apollo_load_script_file, "¼ÓÔØ½Å±¾(scriptn_name)")
 {
 	
 	CHECK_ARGS_NUM(args, 2, parser);
@@ -617,7 +704,7 @@ APOLLO_SCRIPT_API_DEF(apollo_load_script_file, "åŠ è½½è„šæœ¬(scriptn_name)")
 
 
 //bool apollo_export_cpp_api(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_export_cpp_api, "å¯¼å‡ºcå‡½æ•°(filename)")
+APOLLO_SCRIPT_API_DEF(apollo_export_cpp_api, "µ¼³öcº¯Êı(filename)")
 {
 	
 	CHECK_ARGS_NUM(args, 2, parser);
@@ -682,7 +769,7 @@ int common_export_event_id_descript(const char *outfile)
 
 
 //bool apollo_export_events_list(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_export_events_list, "å¯¼å‡ºäº‹ä»¶(filename)")
+APOLLO_SCRIPT_API_DEF(apollo_export_events_list, "µ¼³öÊÂ¼ş(filename)")
 {
 
 	CHECK_ARGS_NUM(args, 2, parser);
@@ -741,7 +828,7 @@ int common_export_error_list(const char *outfile)
 }
 //////////////////////////////////
 //bool apollo_set_message_handler(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_set_message_handler, "å®‰è£…æ¶ˆæ¯å¤„ç†å™¨(str:listener, str:func, int maxId, int minId, int privilege)")
+APOLLO_SCRIPT_API_DEF(apollo_set_message_handler, "°²×°ÏûÏ¢´¦ÀíÆ÷(str:listener, str:func, int maxId, int minId, int privilege)")
 {
 	CHECK_ARGS_NUM(args, 6, parser);
 
@@ -777,7 +864,7 @@ APOLLO_SCRIPT_API_DEF(apollo_set_message_handler, "å®‰è£…æ¶ˆæ¯å¤„ç†å™¨(str:lis
 
 //call message-handler write by script for test
 //bool apollo_call_script_msgHandler_test(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_call_script_msgHandler_test, "æµ‹è¯•æ¶ˆæ¯å¤„ç†(script, maxId,minId, data1,data2...)")
+APOLLO_SCRIPT_API_DEF(apollo_call_script_msgHandler_test, "²âÊÔÏûÏ¢´¦Àí(script, maxId,minId, data1,data2...)")
 {
 	CHECK_ARGS_NUM(args, 4, parser);
 
@@ -825,7 +912,7 @@ APOLLO_SCRIPT_API_DEF(apollo_call_script_msgHandler_test, "æµ‹è¯•æ¶ˆæ¯å¤„ç†(sc
 
 //install event handler
 //bool apollo_func_install_event_handler(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_func_install_event_handler, "å®‰è£…å…¨å±€äº‹ä»¶å¤„ç†å™¨(str:function, int:event_id)")
+APOLLO_SCRIPT_API_DEF(apollo_func_install_event_handler, "°²×°È«¾ÖÊÂ¼ş´¦ÀíÆ÷(str:function, int:event_id)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 	CHECK_DATA_TYPE(args[1], OT_STRING, parser);
@@ -838,7 +925,7 @@ APOLLO_SCRIPT_API_DEF(apollo_func_install_event_handler, "å®‰è£…å…¨å±€äº‹ä»¶å¤„ç
 
 //send message api apollo_func_send_msg
 //bool apollo_func_send_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_func_send_msg, "å‘é€æ¶ˆæ¯(int:maxID,int:minId, msg_varlist...)")
+APOLLO_SCRIPT_API_DEF(apollo_func_send_msg, "·¢ËÍÏûÏ¢(int:maxID,int:minId, msg_varlist...)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 
@@ -884,13 +971,15 @@ APOLLO_SCRIPT_API_DEF(apollo_func_send_msg, "å‘é€æ¶ˆæ¯(int:maxID,int:minId, m
 
 //send message api
 //bool apollo_func_read_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_func_read_msg, "è¯»å–æ¶ˆæ¯(int:æ•°æ®ç±»å‹)")
+APOLLO_SCRIPT_API_DEF(apollo_func_read_msg, "¶ÁÈ¡ÏûÏ¢(int:Êı¾İÀàĞÍ)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 		
 	CHECK_DATA_TYPE(args[1], OT_OBJ_MSGSTREAM, parser);
+	
 	NDIStreamMsg *pInmsg = (NDIStreamMsg *)args[1].GetObject();
-
+	bool bSkipMarker = pInmsg->SetSkipMarker(true) ;
+	
 	CHECK_DATA_TYPE(args[2], OT_INT, parser);
 	DBL_ELEMENT_TYPE t = (DBL_ELEMENT_TYPE)args[2].GetInt();
 		
@@ -898,8 +987,10 @@ APOLLO_SCRIPT_API_DEF(apollo_func_read_msg, "è¯»å–æ¶ˆæ¯(int:æ•°æ®ç±»å‹)")
 	if (0 != logicDataRead(val,*pInmsg) ) {
 		nd_logerror("read message error\n");
 		parser->setErrno(NDSYS_ERR_NETMSG_FORMAT);
+		pInmsg->SetSkipMarker(bSkipMarker) ;
 		return false;
 	}
+	pInmsg->SetSkipMarker(bSkipMarker) ;
 	result = val;
 	return true;
 }
@@ -942,7 +1033,7 @@ static bool _get_format_type(LogicParserEngine*parser, const char *typeName, DBL
 
 //get data type
 //bool apollo_func_get_userDataType(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_func_get_userDataType, "è·å¾—æ¶ˆæ¯æ•°æ®ç±»å‹(ç±»å‹åå­—)")
+APOLLO_SCRIPT_API_DEF(apollo_func_get_userDataType, "»ñµÃÏûÏ¢Êı¾İÀàĞÍ(ÀàĞÍÃû×Ö)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
 	CHECK_DATA_TYPE(args[1], OT_STRING, parser);
@@ -962,7 +1053,7 @@ APOLLO_SCRIPT_API_DEF(apollo_func_get_userDataType, "è·å¾—æ¶ˆæ¯æ•°æ®ç±»å‹(ç±
 }
 
 //bool apollo_func_read_userData_from_msg(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_func_read_userData_from_msg, "ä»æ¶ˆæ¯ä¸­è¯»UserDefç±»å‹(è¾“å…¥æ¶ˆæ¯, ç±»å‹åå­—)")
+APOLLO_SCRIPT_API_DEF(apollo_func_read_userData_from_msg, "´ÓÏûÏ¢ÖĞ¶ÁUserDefÀàĞÍ(ÊäÈëÏûÏ¢, ÀàĞÍÃû×Ö)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 	CHECK_DATA_TYPE(args[2], OT_STRING, parser);
@@ -997,7 +1088,7 @@ APOLLO_SCRIPT_API_DEF(apollo_func_read_userData_from_msg, "ä»æ¶ˆæ¯ä¸­è¯»UserDe
 
 
 //bool apollo_func_binary_to_userData(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_func_binary_to_userData,"äºŒè¿›åˆ¶è½¬dataType(binary,ç±»å‹åå­—)")
+APOLLO_SCRIPT_API_DEF(apollo_func_binary_to_userData,"¶ş½øÖÆ×ªdataType(binary,ÀàĞÍÃû×Ö)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 	CHECK_DATA_TYPE(args[1], OT_BINARY_DATA, parser);
@@ -1032,7 +1123,7 @@ APOLLO_SCRIPT_API_DEF(apollo_func_binary_to_userData,"äºŒè¿›åˆ¶è½¬dataType(binar
 }
 //change server time 
 //bool apollo_func_change_time(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_func_change_time,"ä¿®æ”¹æ—¶é—´(int:add_hours, int:add_minutes)")
+APOLLO_SCRIPT_API_DEF(apollo_func_change_time,"ĞŞ¸ÄÊ±¼ä(int:add_hours, int:add_minutes)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 
@@ -1050,7 +1141,7 @@ APOLLO_SCRIPT_API_DEF(apollo_func_change_time,"ä¿®æ”¹æ—¶é—´(int:add_hours, int:a
 }
 
 //bool apollo_load_file_data(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_load_file_data, "è¯»å–æ•´ä¸ªæ–‡ä»¶(filename)")
+APOLLO_SCRIPT_API_DEF(apollo_load_file_data, "¶ÁÈ¡Õû¸öÎÄ¼ş(filename)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
 
@@ -1075,7 +1166,7 @@ APOLLO_SCRIPT_API_DEF(apollo_load_file_data, "è¯»å–æ•´ä¸ªæ–‡ä»¶(filename)")
 
 //send message api apollo_write_file(filename,var1,var2...
 //bool apollo_write_file(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_write_file, "å†™å…¥æ–‡ä»¶(filename,var1,var2...)")
+APOLLO_SCRIPT_API_DEF(apollo_write_file, "Ğ´ÈëÎÄ¼ş(filename,var1,var2...)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
 
@@ -1105,7 +1196,7 @@ APOLLO_SCRIPT_API_DEF(apollo_write_file, "å†™å…¥æ–‡ä»¶(filename,var1,var2...)")
 }
 
 //bool apollo_make_full_path(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-APOLLO_SCRIPT_API_DEF(apollo_make_full_path, "åˆæˆæ–‡ä»¶å(path,filename)")
+APOLLO_SCRIPT_API_DEF(apollo_make_full_path, "ºÏ³ÉÎÄ¼şÃû(path,filename)")
 {
 	char buf[ND_FILE_PATH_SIZE];
 	CHECK_ARGS_NUM(args, 3, parser);

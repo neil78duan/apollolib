@@ -61,6 +61,7 @@ enum APOLLO_LOGIN_MSG {
 	LOGIN_MSG_ROLE_ON_READY,
 
 	LOGIN_MSG_GET_HOST_LIST_IN_GROUP, //get host list , return 16bits:number + host info 
+
     LOGIN_MSG_NUMBER 
 };
 
@@ -112,6 +113,14 @@ enum ATLANTIS_SERVER_MSG {
 	SERVER_MSG_GM_OPER_ACK,			      //gm common aper ack
 	SERVER_MSG_SERVER_INFO_RENEW,		//RENEW the game server info (capacit and online number)
 	//SERVER_MSG_ERROR_DIRECT_TO_CLIENT,	// from account or world send error code to client 
+
+	SERVER_MSG_ACTIVE_CLONE_INFO_REQ,    //gm get server status req
+	SERVER_MSG_ACTIVE_CLONE_INFO_NTF,    //gm get server status ack
+	SERVER_MSG_ACTIVE_CLONE_INFO_ACK,    //gm get server status ack
+
+	SERVER_MSG_REPUSH_ROLES_REQ,			//WORLD reuqest game repush its roles
+	SERVER_MSG_REPUSH_ROLE_TO_MANAGER,		//repush role data from gameserver to world
+
 	SERVER_MSG_NUMBER
 };
 // 

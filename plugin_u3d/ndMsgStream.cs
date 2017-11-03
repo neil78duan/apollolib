@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,6 +11,33 @@ using System.Net;
 
 namespace NetMessage
 {
+    public struct binaryData
+    {
+        private byte[] m_data;
+        public byte[] Data
+        {
+            get { return m_data; }
+        }
+        public int Length
+        {
+            get { return m_data.Length; }
+        }
+        public void SetData(byte[] data)
+        {
+            m_data = new byte[data.Length];
+            data.CopyTo(m_data, 0);
+        }
+
+        public int Read(ref NDMsgStream netstream)
+        {
+            return netstream.ReadBuf(out m_data);
+        }
+        public int Write(ref NDMsgStream netstream)
+        {
+            return netstream.WriteBuf(m_data);
+        }
+    }
+
     public struct NDMsgStream
     {
         const byte NET_STREAM_STRUCT_END_MARK = 0xff;
@@ -43,14 +70,10 @@ namespace NetMessage
         private bool m_bStruckEndMarker ;
 		private bool m_bDataReadEnd ;		
 
-		public bool IsReadEnd() 
+
+		public bool IsReachedEnd()
 		{
-			return m_bDataReadEnd ;
-		}
-		
-		public bool IsStructEnd() 
-		{
-			return m_bStruckEndMarker ;
+			return m_bDataReadEnd || m_bStruckEndMarker ;
 		}
 		
         public int ValidLength 
@@ -92,6 +115,10 @@ namespace NetMessage
             Marshal.Copy(streamBuf, m_buf, 0, size);
             return size;
         }
+		public void WriteStructEnd()
+		{
+			OrgWriteUint8(NET_STREAM_STRUCT_END_MARK) ;
+		}
 
         #region pub_write_func
 
@@ -250,37 +277,51 @@ namespace NetMessage
 
         public int WriteString(string data)
         {
-            if (-1 == _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_TEXT, 0))
+            byte[] byteArray = Encoding.UTF8.GetBytes(data);
+
+			if(byteArray.Length ==0) 
             {
-                return -1;
+                _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_TEXT, 0);
+                return 1;
+			}
+            else
+            {
+                _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_TEXT, 1);
             }
 
-            byte[] byteArray = Encoding.UTF8.GetBytes(data);
-            WriteUint16((ushort)(byteArray.Length));
-			if(byteArray.Length ==0) {
-				return 2 ;
-			}
+
+            OrgWriteUint16((ushort)(byteArray.Length));
             myWrite(byteArray, (int)byteArray.Length);
             m_buf[m_writeIndex++] = 0x7f;
-            return byteArray.Length + 3;
+            return byteArray.Length + 4;
         }
 
         public int WriteBuf(byte[] data)
         {
-            if (-1 == _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_BIN, 0))
+            if (data == null)
             {
-                return -1;
+                _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_BIN, 0);
+                return 1;
             }
-
             ushort dataLenth = (ushort)data.Length;
 
 			if (data.Length >= 0xffff)
             {
                 return -1;
             }
-            WriteUint16(dataLenth);
+            else if (data.Length == 0)
+            {
+                _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_TEXT, 0);
+                return 1;
+            }
+            else
+            {
+                _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_TEXT, 1);
+            }
+
+            OrgWriteUint16(dataLenth);
             myWrite(data, data.Length);
-            return data.Length;
+            return data.Length + 3;
         }
         #endregion
 
@@ -290,7 +331,6 @@ namespace NetMessage
         {
             eNDnetStreamMarker type;
             byte size;
-            m_bStruckEndMarker = false;
             if (-1 == _ReadTypeSize(out type, out size) || m_bStruckEndMarker)
             {
                 return 0;
@@ -322,7 +362,6 @@ namespace NetMessage
         {
             eNDnetStreamMarker type;
             byte size;
-            m_bStruckEndMarker = false;
             if (-1 == _ReadTypeSize(out type, out size) || m_bStruckEndMarker)
             {
                 return 0;
@@ -346,7 +385,6 @@ namespace NetMessage
         {
             eNDnetStreamMarker type;
             byte size;
-            m_bStruckEndMarker = false;
             if (-1 == _ReadTypeSize(out type, out size) || m_bStruckEndMarker)
             {
                 return 0;
@@ -384,7 +422,6 @@ namespace NetMessage
         {
             eNDnetStreamMarker type;
             byte size;
-            m_bStruckEndMarker = false;
             if (-1 == _ReadTypeSize(out type, out size) || m_bStruckEndMarker)
             {
                 return 0;
@@ -427,7 +464,6 @@ namespace NetMessage
         {
             eNDnetStreamMarker type;
             byte size;
-            m_bStruckEndMarker = false;
             if (-1 == _ReadTypeSize(out type, out size) || m_bStruckEndMarker)
             {
                 return 0;
@@ -474,7 +510,6 @@ namespace NetMessage
         {
             eNDnetStreamMarker type;
             byte size;
-            m_bStruckEndMarker = false;
             if (-1 == _ReadTypeSize(out type, out size) || m_bStruckEndMarker)
             {
                 return string.Empty; ;
@@ -483,8 +518,13 @@ namespace NetMessage
             {
                 return string.Empty; ;
             }
-            
-            ushort stringLen = ReadUint16();
+            if (size == 0)
+            {
+                return string.Empty;
+            }
+
+
+            ushort stringLen = OrgReadUint16();
             if (stringLen == 0)
             {
                 return string.Empty;
@@ -492,7 +532,7 @@ namespace NetMessage
             byte[] receivedData = new byte[stringLen];
             myRead(receivedData, stringLen);
             //m_buf.Read(receivedData, (int)m_buf.Position, stringLen);
-            byte endByte = ReadUint8();
+            byte endByte = OrgReadUint8();
             if (endByte != 0x7f)
             {
                 return string.Empty;
@@ -506,7 +546,6 @@ namespace NetMessage
 
             eNDnetStreamMarker type;
             byte size;
-            m_bStruckEndMarker = false;
             if (-1 == _ReadTypeSize(out type, out size) || m_bStruckEndMarker)
             {
                 data = null;
@@ -518,7 +557,14 @@ namespace NetMessage
                 return 0;
             }
 
-            ushort length = ReadUint16();
+            if (size == 0)
+            {
+                data = null;
+                return 0;
+
+            }
+
+            ushort length = OrgReadUint16();
             data = new byte[length];
             myRead(data, length);
             return data.Length;
@@ -531,7 +577,6 @@ namespace NetMessage
             {
                 eNDnetStreamMarker type;
                 byte size;
-                m_bStruckEndMarker = false;
                 if (-1 == _ReadTypeSize(out type, out size) )
                 {
                     m_readIndex = orgIndex ;
@@ -548,14 +593,20 @@ namespace NetMessage
 
                 else if (type == eNDnetStreamMarker.ENDSTREAM_MARKER_BIN)
                 {
-                    ushort data_size = ReadUint16() ;
-                    m_readIndex += data_size ;
+                    if (size != 0)
+                    {
+                        ushort data_size = OrgReadUint16();
+                        m_readIndex += data_size;
+                    }
 
                 }
                 else if(type == eNDnetStreamMarker.ENDSTREAM_MARKER_TEXT)
                 {
-                    ushort data_size = ReadUint16() ;
-                    m_readIndex += data_size +1;
+                    if (size != 0)
+                    {
+                        ushort data_size = OrgReadUint16();
+                        m_readIndex += data_size + 1;
+                    }
                 }
                 else {
                     m_readIndex += size ;

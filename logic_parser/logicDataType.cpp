@@ -2398,6 +2398,26 @@ int DBLDataNode::Print(logic_print print_func, void *pf) const
 			break ;
 
 		}
+	case OT_BINARY_DATA:
+	{
+		size_t size = GetBinarySize();
+		if (size > 0)	{
+			int len = print_func(pf, "binary[");
+			ret += len;
+			const NDUINT8 *p = (const NDUINT8 *) GetBinary();
+			for (size_t i = 0; i < size; i++)			{
+				len = print_func(pf, "0x%x, ", p[i] );
+				ret += len;
+			}
+
+			len = print_func(pf, "]");
+			ret += len;
+		}
+		else {
+			ret = print_func(pf, "binary[NULL]", GetObject());
+		}
+		break;
+	}
 	default:
 		ret = print_func(pf, "(addr=%p)", GetObject());
 		break;

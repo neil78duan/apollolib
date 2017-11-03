@@ -196,7 +196,7 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 		if (!isNeedBuild(sub)){
 			continue;
 		}
-		fprintf(pf, "\tpublic struct %s : MessageDataBase \n\t{\n ", pName) ;		
+		fprintf(pf, "\t[Serializable]\n\tpublic struct %s : MessageDataBase \n\t{\n ", pName) ;		
 		char buf_read_func[40960] ;
 		char buf_write_func[40960] ;
 		char buf_constrct_func[40960] ;		
@@ -342,6 +342,7 @@ int xml2Sharp(ndxml_root *xml, const char *file, xml_export_func func)
 	_OUT_PUT_TIME(pf);
 
 	fprintf(pf, "using NetMessage;\n");
+	fprintf(pf, "using System;\n");
 	fprintf(pf, "using System.IO;\n");
 	fprintf(pf, "using System.Text;\n");
 	fprintf(pf, "using System.Collections.Generic;\n");

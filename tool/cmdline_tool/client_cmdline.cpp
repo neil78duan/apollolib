@@ -344,7 +344,7 @@ ND_CMDLINE_FUNC_INSTANCE(check_server_program_update)
 				serverType = ESERVER_UNKNOW ;
 			}
 			else if (0==ndstricmp((char*)argv[2], (char*)"world")) {
-				serverType = ESERVER_MANAGER ;
+				serverType = ESERVER_WORLD;
 			}
 			else if (0==ndstricmp((char*)argv[2], (char*)"account")) {
 				serverType = ESERVER_BATTLE_ROOM ;
@@ -368,7 +368,7 @@ ND_CMDLINE_FUNC_INSTANCE(check_server_program_update)
 			inmsg.Read(isDebug) ;
 			
 			const char *pHost = "server" ;
-			if (aimType==ESERVER_MANAGER) {
+			if (aimType==ESERVER_WORLD) {
 				pHost = "world-server" ;
 			}
 			else if (aimType==ESERVER_ACCOUNT) {
