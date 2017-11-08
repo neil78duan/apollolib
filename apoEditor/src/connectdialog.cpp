@@ -380,21 +380,13 @@ void ConnectDialog::on_loginButton_clicked()
 		if (ui->logSendCheck->isChecked()) {
 
 			const char *msg_stream_file = "./test_robort.data";
-			int length = strlen(msg_stream_file);
+			int length = (int)strlen(msg_stream_file);
 			if (m_pConn->ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)msg_stream_file, &length) == -1) {
 				nd_logmsg("log net message bin-data errror\n");
 			}
 		}
 
-        //get and init role data
-
-        //NDOStreamMsg omsg(ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
-        //m_pConn->SendMsg(omsg);
-
-        //omsg.Init(ND_MAIN_ID_SYS,ND_MSG_SYS_GET_MESSAGE_FORMAT_LIST);
-        //m_pConn->SendMsg(omsg);
-
-        __myScriptOwner.LoadMsgDataTypeFromServer();
+		__myScriptOwner.LoadMsgDataTypeFromServer();
 		LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
 		if (scriptRoot) {
 			parse_arg_list_t arg;
@@ -659,98 +651,14 @@ int ConnectDialog::SelOrCreateRole(const char *accountName)
     }
 
     //get role list
-    NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ);
-    nd_handle h = m_pConn->GetHandle();
-    nd_usermsgbuf_t recv_msg;
 
-    _SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0)
-    else {
-        NDUINT32 roleid = 0;
-        NDUINT32 error_code = 0;
-        NDUINT8 name[USER_NAME_SIZE];
+	role_base_info role;
+	ret = m_login->GetRoleList(&role, 1);
+	if (ret == 0){
+		return m_login->CreateRole((const char*)accountName, role);
+	}
 
-        NDIStreamMsg inmsg(&recv_msg);
-        inmsg.Read(roleid);
-
-        if (roleid == 0) {
-            inmsg.Read(error_code);
-            if (error_code) {
-                nd_logerror("get role list error : %d\n", error_code);
-                return -1 ;
-            }
-            std::string roleName =accountName;
-            roleName += "role";
-
-            return createRole(roleName.c_str());
-
-        }
-        else {
-            inmsg.Read(name, sizeof(name));
-
-            nd_logmsg("get role %s id=%d success \n", name, roleid);
-
-            //read attribute
-            NDUINT16 num = 0;
-            if (0 == inmsg.Read(num)) {
-                for (int i = 0; i < num; ++i) {
-                    NDUINT8 aid;
-                    float val;
-                    inmsg.Read(aid); inmsg.Read(val);
-                    nd_logmsg("load role attribute id = %d val =%f \n", aid, val);
-                }
-            }
-        }
-    }
     return 0;
-}
-
-int ConnectDialog::createRole(const char *roleName)
-{
-    NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_REQ);
-    omsg.Write((NDUINT8*)roleName);
-
-    omsg.Write((NDUINT16)1);
-    omsg.Write((NDUINT8)20);
-    omsg.Write((float)0);
-
-    nd_handle h = m_pConn->GetHandle();
-    nd_usermsgbuf_t recv_msg;
-    _SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_ACK, 0)
-    else {
-        NDUINT32 roleid = 0;
-        NDUINT32 error_code = 0;
-        NDUINT8 name[USER_NAME_SIZE];
-
-        NDIStreamMsg inmsg(&recv_msg);
-        inmsg.Read(roleid);
-
-        if (roleid == 0) {
-            inmsg.Read(error_code);
-            if (error_code) {
-                nd_logerror( "create role list error : %d\n", error_code);
-            }
-            return -1 ;
-        }
-        else {
-            inmsg.Read(name, sizeof(name));
-
-            char roleName[128];
-            nd_utf8_to_gbk((const char*)name, roleName, sizeof(roleName));
-
-            nd_logmsg("create role %s success \n", roleName);
-            //read attribute
-            NDUINT16 num = 0;
-            if (0 == inmsg.Read(num)) {
-                for (int i = 0; i < num; ++i) {
-                    NDUINT8 aid;
-                    float val;
-                    inmsg.Read(aid); inmsg.Read(val);
-                    nd_logmsg("create role attribute id = %d val =%f \n", aid, val);
-                }
-            }
-        }
-    }
-    return 0 ;
 }
 
 int ConnectDialog::getRoleData()

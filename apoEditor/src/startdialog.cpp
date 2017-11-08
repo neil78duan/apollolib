@@ -498,9 +498,9 @@ void startDialog::on_Connect_clicked()
     WriteLog("begin connect to server....");
 
     const char*filename = _getFromIocfg("gm_send_msg");
-	const char *dataTypeFile = _getFromIocfg("net_data_def");
+	//const char *dataTypeFile = _getFromIocfg("net_data_def");
 	const char *client_script = _getFromIocfg("connect_script");
-	const char *message_file = _getFromIocfg("net_protocol");
+	//const char *message_file = _getFromIocfg("net_protocol");
 	const char *package_file = _getFromIocfg("game_data_package_file");
 
 	_LOAD_XML(xmlSend, filename, "utf8", 0);

@@ -283,7 +283,7 @@ void apoXmlTreeView::contextMenuEvent(QContextMenuEvent *event)
 		return;
 	}
 
-	apoEditorSetting *setting = apoEditorSetting::getInstant();
+	//apoEditorSetting *setting = apoEditorSetting::getInstant();
 	QMenu *pop_menu = new QMenu(this);
 
 	//ndxml *create_template = GetCreateTemplate(xml, setting->getConfig());
@@ -487,7 +487,7 @@ bool apoXmlTreeView::_TreeDragInNotSameRoot(xmlTreeItem*  hFrom, xmlTreeItem*  h
 	if (!xmlparent || !xmlFrom || !xmlTo)	{
 		return false;
 	}
-	ndxml *xmlPos = xmlTo;
+	//ndxml *xmlPos = xmlTo;
 	const char *fromName = ndxml_getname(xmlFrom);
 	const char *acceptName = ndxml_getattr_val(xmlTo, "accept_drag_in");
 	if (!acceptName || !*acceptName) {
