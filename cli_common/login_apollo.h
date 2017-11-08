@@ -61,6 +61,10 @@ public:
 	virtual int GetServerList(ApolloServerInfo *buf, int size) = 0;
 	virtual int GetSubHostList(const char *groupEntryHost, NDUINT16 port, ApolloServerInfo *buf, int size)=0;
 
+	virtual int CreateRole(const char *roleName, role_base_info &roleInfo) = 0;
+	virtual int GetRoleList(role_base_info role_buf[], int number, NDUINT8 isRelogin=0) = 0;
+	virtual int SelectRole(roleid_t rid) =0;
+
 	virtual size_t GetSessionSize() = 0;
 	virtual size_t GetSessionData(void *session_buf, size_t buf_size) = 0;
 	virtual int ReloginEx(void *session_data, size_t size) = 0;
@@ -118,6 +122,9 @@ public:
 	//get gameservers list in the selected logic-group 
 	int GetSubHostList(const char *groupEntryHost, NDUINT16 port, ApolloServerInfo *buf, int size);
 
+	int CreateRole(const char *roleName, role_base_info &roleInfo);
+	int GetRoleList(role_base_info role_buf[], int number, NDUINT8 isRelogin = 0);
+	int SelectRole(roleid_t rid);
 
 	size_t GetSessionSize() ;
 	size_t GetSessionData(void *session_buf, size_t buf_size) ;

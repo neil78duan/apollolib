@@ -500,6 +500,102 @@ int LoginApollo::GetSubHostList(const char *groupEntryHost, NDUINT16 port, Apoll
 	return 0;
 
 }
+int LoginApollo::CreateRole(const char *roleName, role_base_info &roleInfo )
+{
+	//NDUINT32 error_code = NDSYS_ERR_UNKNOWN;
+	float timezone = (float)nd_time_zone();
+
+	nd_logmsg("create role %s time zone=%d\n", roleName, (int)timezone);
+
+	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_REQ);
+	omsg.Write((NDUINT8*)roleName);
+
+	omsg.Write((NDUINT16)1);	//role attribute
+	omsg.Write((NDUINT8)0xff);
+	omsg.Write(timezone);
+
+	nd_usermsgbuf_t recv_msg;
+
+
+	SEND_AND_WAIT(m_conn, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_ACK, 0)
+	else {
+		NDUINT32 roleid = 0;
+		NDUINT32 error_code = 0;
+		//NDUINT8 name[USER_NAME_SIZE];
+
+		NDIStreamMsg inmsg(&recv_msg);
+		inmsg.Read(roleid);
+
+		if (roleid == 0) {
+			inmsg.Read(error_code);
+			nd_object_seterror(m_conn, error_code);
+			return -1;
+		}
+		else {
+			roleInfo.rid = roleid;
+			inmsg.Read(roleInfo.name, sizeof(roleInfo.name));
+			
+			NDUINT16 num = 0;
+			if (0 == inmsg.Read(num)) {
+				for (int i = 0; i < num; ++i) {
+					NDUINT8 aid;
+					float val;
+					inmsg.Read(aid); inmsg.Read(val);
+					
+					roleInfo.pushAttr(aid, val);
+					//nd_logmsg("create role attribute id = %d val =%f \n", aid, val);
+				}
+			}
+		}
+	}
+	return 0;
+}
+int LoginApollo::GetRoleList(role_base_info role_buf[], int number, NDUINT8 isRelogin)
+{
+	//get role list
+	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ);
+	omsg.Write(isRelogin);
+
+	nd_usermsgbuf_t recv_msg;
+	int ret = 0;
+
+	SEND_AND_WAIT(m_conn, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0)
+	else {
+		NDUINT32 roleid = 0;
+		//NDUINT32 error_code = 0;
+
+		NDIStreamMsg inmsg(&recv_msg);
+		if (0 != inmsg.Read(roleid)) {
+			return 0;
+		}
+		if (roleid == 0){
+			return ret;
+		}
+		if (inmsg.Read(role_buf[ret].name, sizeof(role_buf[ret].name)) == 0) {
+			return ret;
+		}
+
+		//read attribute
+		NDUINT16 num = 0;
+		if (0 == inmsg.Read(num)) {
+			for (int i = 0; i < num; ++i) {
+				NDUINT8 aid;
+				float val;
+				inmsg.Read(aid); inmsg.Read(val);
+				role_buf[ret].pushAttr(aid, val);
+			}
+		}
+
+		role_buf[ret].rid = roleid;
+		++ret;
+	}
+	return ret;
+}
+
+int LoginApollo::SelectRole(roleid_t rid)
+{
+	return 0;
+}
 
 int LoginApollo::ReadyGame() 
 {

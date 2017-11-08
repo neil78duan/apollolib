@@ -31,7 +31,7 @@ public:
 
     int SelOrCreateRole(const char *accountName);
 	int ShowServers(void *hostsBuf, int size,const char *tips);
-    int createRole(const char *roleName);
+    //int createRole(const char *roleName);
     int getRoleData();
 
 	NDIConn *getConnect(){ return m_pConn; }

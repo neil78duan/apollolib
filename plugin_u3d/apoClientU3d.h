@@ -69,7 +69,13 @@ public:
 	RESULT_T LoginOnly(const char *account, const char *passwd, int accType, bool skipAuth);
 	RESULT_T CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email);
 	RESULT_T CreateOnly(const char *userName, const char *passwd, const char *phone, const char *email);
-	RESULT_T createRole(const char *roleName);
+
+	RESULT_T SelectServer(const char *host = NULL, int port = 0);
+	//int getRoleList(char *xmlBuf, size_t size);
+	//RESULT_T selRole(roleid_t rid);
+	//RESULT_T createRole(const char *roleName);
+
+	//enter game incluse select server, get rolelist, create role ..enter game
 	RESULT_T EnterGame(const char *host=NULL, int port=0) { return _enterGame(host, port, NULL,true); }
 
 	int GetGameAreaList( ApolloServerInfo bufs[], size_t number) ;
@@ -94,7 +100,7 @@ public:
 
 	time_t getServerTime();
 	void setServerTime(time_t srvTime);
-
+	NDUINT8 getReloginStat() { return m_isRelogin; }
 private:
 	RESULT_T TrytoRelogin();
 	RESULT_T TrytoReloginEx(void *session, size_t sessionSize);

@@ -1,8 +1,46 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <type_data_type name="数据类型" kinds="hide" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,2维数组,变量,参数,上一步结果,time"/>
 <send_msg_list name="发送消息" delete="no" expand_stat="1">
+	<message name="查看boss房间列表" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="16" minId="7">0</msgid>
+		<data name="mapid" kinds="numeral" param="4">901</data>
+	</message>
+	<message name="创建boss房间" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="16" minId="9">0</msgid>
+		<data name="mapid" kinds="numeral" param="4">901</data>
+	</message>
+	<message name="加入boss房间" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="16" minId="11">0</msgid>
+		<data name="teamId" kinds="numeral" param="0">1</data>
+	</message>
+	<message name="离开boss房间" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="16" minId="14">0</msgid>
+		<data name="teamId" kinds="numeral" param="0">1</data>
+	</message>
+	<message name="踢人boss房间" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="16" minId="17">0</msgid>
+		<data name="teamId" kinds="numeral" param="0">1</data>
+		<data name="roleId" kinds="numeral" param="0">3</data>
+	</message>
+	<message name="boss开始战斗" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="16" minId="20">0</msgid>
+		<data name="teamId" kinds="numeral" param="0">1</data>
+	</message>
+	<message name="boss战斗结束" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="16" minId="21">0</msgid>
+		<data name="teamId" kinds="numeral" param="0">1</data>
+		<data name="是否是据点" kinds="bool" param="3">0</data>
+		<data name="副本编号" kinds="numeral" param="0">101</data>
+		<data name="错误号" kinds="numeral" param="0">0</data>
+		<data name="玩家消耗的能量" kinds="numeral" param="0">100</data>
+		<data name="玩家获得的能量" kinds="numeral" param="0">100</data>
+		<data name="出战卡牌数" kinds="numeral" param="4">1</data>
+		<data name="英雄1编号" kinds="numeral" param="0">21061</data>
+		<data name="是否死亡" kinds="bool" param="3">0</data>
+		<data name="录像回放数据" kinds="hide" param="16">hello_world_this_is_test_reply_data</data>
+	</message>
 	<message name="发送公告" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="0">0</msgid>
+		<msgid kinds="hide" maxId="16" minId="23">0</msgid>
 		<data name="发送者" kinds="numeral" param="0">0</data>
 		<data name="被发送者" kinds="numeral" param="0">78</data>
 		<data name="头像" kinds="numeral" param="0">78</data>
@@ -12,7 +50,7 @@
 		<data name="发送时间" kinds="numeral" param="5">78</data>
 		<data name="结束时间" kinds="numeral" param="5">78</data>
 		<data name="循环间隔" kinds="numeral" param="4">78</data>
-		<data name="类型" kinds="numeral" param="3">2</data>
+		<data name="类型" kinds="numeral" param="3">0</data>
 		<data name="内容" kinds="string" param="2">地方</data>
 	</message>
 	<message name="客户端通知战斗开始" expand="yes" delete="no">
@@ -29,6 +67,15 @@
 	<message name="工会BOSS战斗结束" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="12" minId="14">0</msgid>
 		<data name="hp" kinds="numeral" param="0">10000</data>
+		<data name="是否是据点" kinds="bool" param="3">0</data>
+		<data name="副本编号" kinds="numeral" param="0">101</data>
+		<data name="错误号" kinds="numeral" param="0">0</data>
+		<data name="玩家消耗的能量" kinds="numeral" param="0">100</data>
+		<data name="玩家获得的能量" kinds="numeral" param="0">100</data>
+		<data name="出战卡牌数" kinds="numeral" param="4">1</data>
+		<data name="英雄1编号" kinds="numeral" param="0">21061</data>
+		<data name="是否死亡" kinds="bool" param="3">0</data>
+		<data name="录像回放数据" kinds="hide" param="16">hello_world_this_is_test_reply_data</data>
 	</message>
 	<message name="工会BOSS信息查看" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="12" minId="11">0</msgid>
@@ -225,7 +272,7 @@
 		<msgid kinds="hide" maxId="9" minId="2">0</msgid>
 		<data name="允许自由加入" kinds="numeral" param="3">0</data>
 		<data name="允许加入等级" kinds="numeral" param="3">1</data>
-		<data name="名字" kinds="string" param="2">124124</data>
+		<data name="名字" kinds="string" param="2">sdsff</data>
 		<data name="声明" kinds="string" param="2">chinese</data>
 		<data name="通知" kinds="string" param="2">this is my guild</data>
 		<data name="徽章信息" kinds="string" param="2">hello world</data>
@@ -329,6 +376,15 @@
 		<msgid kinds="hide" maxId="4" minId="0x22">0</msgid>
 		<data name="矿产ID" kinds="numeral" param="0">19001</data>
 		<data name="防守ID" kinds="numeral" param="4">2</data>
+		<data name="是否是据点" kinds="bool" param="3">0</data>
+		<data name="副本编号" kinds="numeral" param="0">101</data>
+		<data name="错误号" kinds="numeral" param="0">0</data>
+		<data name="玩家消耗的能量" kinds="numeral" param="0">100</data>
+		<data name="玩家获得的能量" kinds="numeral" param="0">100</data>
+		<data name="出战卡牌数" kinds="numeral" param="4">1</data>
+		<data name="英雄1编号" kinds="numeral" param="0">21061</data>
+		<data name="是否死亡" kinds="bool" param="3">0</data>
+		<data name="录像回放数据" kinds="hide" param="16">hello_world_this_is_test_reply_data</data>
 	</message>
 	<message name="熔炉取物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="40">0</msgid>
@@ -607,6 +663,12 @@
 		<msgid kinds="hide">1797</msgid>
 		<data name="加快小时" kinds="numeral" param="0">2</data>
 		<data name="加快分钟" kinds="numeral" param="0">60</data>
+	</message>
+	<message name="sys_查看游戏时间" expand="yes" delete="no" need_confirm="yes">
+		<msgid maxId="0" minId="16" kinds="hide">0</msgid>
+	</message>
+	<message name="sys_查看操作系统时间" expand="yes" delete="no" need_confirm="yes">
+		<msgid maxId="0" minId="3" kinds="hide">0</msgid>
 	</message>
 	<message name="sys_记录收发消息" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="0" minId="15">0</msgid>

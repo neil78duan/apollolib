@@ -27,8 +27,15 @@ namespace ClientMsgHandler
 	int msg_default_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
 	{
 		//int reLine = 0;
-		nd_logmsg("recv (%d,%d) message data-len =%d\n", ND_USERMSG_MAXID(msg), ND_USERMSG_MINID(msg), ND_USERMSG_LEN(msg));
-
+		//nd_logmsg("recv (%d,%d) message data-len =%d\n", ND_USERMSG_MAXID(msg), ND_USERMSG_MINID(msg), ND_USERMSG_LEN(msg));
+		char buf[0x10000];
+		NDIStreamMsg inmsg(msg);
+		NDIStreamMsg tmpInm(inmsg.GetMsgAddr());
+		int size = tmpInm.dumpText(buf, sizeof(buf));
+		if (size > 0)	{
+			buf[size] = 0;
+			nd_logmsg("%s\n", buf);
+		}
 		return 0;
 	}
 		
@@ -380,130 +387,11 @@ namespace ClientMsgHandler
 	{
 		logic_print print_func = getLogFunction(pconn);
 		void*log_file = getLogFile(pconn);
-		return  LogicOutputMsgByFormat( print_func, log_file, formatText, inmsg, dataDef);
-		/*
-		userDefineDataType_map_t &m_dataTypeDef = dataDef;
-		int index = 0;
-		char name[128];
-		const char *p = ndstr_first_valid(formatText);
-		if (!p || !*p)	{
-			return false;
-		}
-		if (0 == ndstricmp(p, "none") || 0 == ndstricmp(p, "null"))	{
-			return false;
-		}
+		return LogicOutputMsgByFormat(print_func, log_file, formatText, inmsg, dataDef);
 
-		logic_print print_func = getLogFunction(pconn);
-		void*log_file = getLogFile(pconn);
-
-		print_func(log_file, "{");
-
-		int array_size = 0;
-		do {
-			char memberName[128];
-			bool isArray = 0;
-			name[0] = 0;
-			if (*p == '[') {
-				++p;
-				p = ndstr_nstr_end(p, name, ']', sizeof(name));
-				if (p && *p == ']') {
-					++p;
-				}
-				isArray = true;
-				NDUINT16 _arrsize = 0;
-
-				if (-1 == inmsg.Read(_arrsize)) {
-					nd_logerror("can not read array size }\n");
-					return false;
-				}
-				array_size = _arrsize;
-			}
-			else {
-				p = ndstr_nstr_end(p, name, ',', sizeof(name));
-			}
-			if (!name[0]){
-				break;
-			}
-
-			if (isArray)	{
-				for (int i = 0; i < array_size; i++) {
-					if (!outPutMessageFromconfig(pconn, name, inmsg, dataDef)) {
-						return false;
-					}
-				}
-			}
-			else {
-				const char *pmember = strchr(name, ':');
-				if (pmember && *pmember == ':')	{
-					++pmember;
-					ndstr_parse_word_n(ndstr_first_valid(pmember), memberName, 128);
-				}
-				else {
-					snprintf(memberName, sizeof(memberName), "member%d", index);
-				}
-				char typeName[128];
-				typeName[0] = 0;
-				ndstr_parse_word_n(ndstr_first_valid(name), typeName, 128);
-
-				DBLDataNode dataFormat;
-				int type_index = get_type_from_alias(typeName);
-				if (type_index == OT_USER_DEFINED)	{
-					userDefineDataType_map_t::const_iterator it = m_dataTypeDef.find(typeName);
-					if (it == m_dataTypeDef.end()){
-						nd_logerror("can not parse %s not found type defined }\n", typeName);
-						return false;
-					}
-					dataFormat.InitSet(it->second);
-				}
-				else {
-					dataFormat.InitSet((void*)0, (DBL_ELEMENT_TYPE)type_index);
-				}
-
-				if (-1 != logicDataRead(dataFormat, inmsg)){
-
-					if (0 == ndstricmp(memberName, "number") || 0 == ndstricmp(memberName, "count")){
-						if (dataFormat.GetDataType() == OT_INT16)	{
-							array_size = dataFormat.GetInt();
-						}
-					}
-					else {
-
-						print_func(log_file, "%s=", pmember?pmember:typeName);
-						dataFormat.Print(print_func, log_file);
-						print_func(log_file, ", ");
-					}
-				}
-				else {
-					nd_logerror("(read message data error)}\n");
-					return false;
-				}
-
-			}
-			if (p && *p == ','){
-				++p;
-			}
-			++index;
-		} while (p && *p);
-		print_func(log_file, "}\n");
-
-		return true;
-		*/
+		
 	}
-// 
-// 	static ndxml *_getMsgNode(ndxml_root *xmlFile, const char *messageName)
-// 	{
-// 		ndxml *root = ndxml_getnode(xmlFile, "MessageDefine");
-// 		if (!root)	{
-// 			return 0;
-// 		}
-// 		for (int i = 0; i < ndxml_getsub_num(root); i++)	{
-// 			ndxml *node = ndxml_getnodei(root, i);
-// 			if (0 == ndstricmp(messageName, ndxml_getattr_val(node, "id"))) {
-// 				return node;
-// 			}
-// 		}
-// 		return NULL;
-// 	}
+
 	char *convert_msg_name(const char *inname, char *buf, int size)
 	{
 		char *ret = buf;

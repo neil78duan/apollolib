@@ -29,11 +29,12 @@ NDOStreamMsg __sendMsg;
 extern void gmtoolMsgHandlerInit(NDIConn *pconn);
 //show error 
 
-static void out_log(const char *text)
+static int out_log(const char *text)
 {
 	if (__pMyDlg){
 		__pMyDlg->LogText(text);
 	}
+	return 1;
 }
 
 static int out_print(void *pf, const char *stm, ...)
@@ -50,26 +51,7 @@ static int out_print(void *pf, const char *stm, ...)
 	out_log(buf);
 	return done;
 }
-/*
-#include "netMessage/message_inc.h"
-static int msgRoleDataInit(NDIConn* pconn, nd_usermsgbuf_t *msg)
-{
-	NetMessage::RoleInfo data;
-	NetMessage::ReadStream(inmsg, data);
-	RoleDataManager* roleMgr = RoleDataManager::getInstance();
 
-	NDIStreamMsg inmsg(msg);
-
-	nd_assert(roleMgr);
-
-	if (roleMgr->Init(inmsg) != ESERVER_ERR_SUCCESS) {
-		nd_logerror("error received role data message \n");
-	}
-
-	//roleMgr->SaveLocalFile();
-	return 0;
-}
-*/
 /////////////////////////////////////
 
 class ConnectScriptOwner :public  ClientMsgHandler::ApoConnectScriptOwner
@@ -304,22 +286,12 @@ void gmToolDlg::OnBnClickedButtonLogin()
 
 		out_print("CONNECT %s:%d SUCCESS\n", (LPCTSTR)m_strHost, m_nPort);
 
-		if (-1 == _login(userName, (LPCTSTR)m_strPasswd,(bool)m_bSkipAuth))	{
+		if (-1 == _login(userName, (LPCTSTR)m_strPasswd,m_bSkipAuth?true:false))	{
 			AfxMessageBox("user login error");
 			return;
 		}
 		out_print("ACCOUNT %s login SUCCESS\n", (LPCTSTR)m_strUserName);
 
-		//打开消息日志输出
-		/*
-		int val = 1;
-		int size = (int) sizeof(val);
-		m_pConn->ioctl(NDIOCTL_LOG_SEND_MSG, &val, &size);
-
-		val = 1;
-		size = (int) sizeof(val);
-		m_pConn->ioctl(NDIOCTL_LOG_RECV_MSG, &val, &size);
-		*/
 
 
 		nd_logmsg("登录成功账号ID=%d\n", aid);
@@ -407,55 +379,55 @@ void gmToolDlg::OnBnClickedButtonSend()
 	nd_logmsg("send message size =%d\n", ret);
 }
 
-int gmToolDlg::createRole(const char *roleName) 
-{
-
-	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_REQ);
-	omsg.Write((NDUINT8*)roleName);
-
-	omsg.Write((NDUINT16)1);
-	omsg.Write((NDUINT8)20);
-	omsg.Write((float)0);
-
-	nd_handle h = m_pConn->GetHandle();
-	nd_usermsgbuf_t recv_msg;
-	_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_ACK, 0)
-	else {
-		NDUINT32 roleid = 0;
-		NDUINT32 error_code = 0;
-		NDUINT8 name[USER_NAME_SIZE];
-
-		NDIStreamMsg inmsg(&recv_msg);
-		inmsg.Read(roleid);
-
-		if (roleid == 0) {
-			inmsg.Read(error_code);
-			if (error_code) {
-				nd_logerror( "create role list error : %d\n", error_code);
-			}
-			return -1 ;
-		}
-		else {
-			inmsg.Read(name, sizeof(name));
-
-			char roleName[128];
-			nd_utf8_to_gbk((const char*)name, roleName, sizeof(roleName));
-
-			nd_logmsg("create role %s success \n", roleName);
-			//read attribute
-			NDUINT16 num = 0;
-			if (0 == inmsg.Read(num)) {
-				for (int i = 0; i < num; ++i) {
-					NDUINT8 aid;
-					float val;
-					inmsg.Read(aid); inmsg.Read(val);
-					nd_logmsg("create role attribute id = %d val =%f \n", aid, val);
-				}
-			}
-		}
-	}
-	return 0 ;
-}
+// int gmToolDlg::createRole(const char *roleName) 
+// {
+// 
+// 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_REQ);
+// 	omsg.Write((NDUINT8*)roleName);
+// 
+// 	omsg.Write((NDUINT16)1);
+// 	omsg.Write((NDUINT8)20);
+// 	omsg.Write((float)0);
+// 
+// 	nd_handle h = m_pConn->GetHandle();
+// 	nd_usermsgbuf_t recv_msg;
+// 	_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_ACK, 0)
+// 	else {
+// 		NDUINT32 roleid = 0;
+// 		NDUINT32 error_code = 0;
+// 		NDUINT8 name[USER_NAME_SIZE];
+// 
+// 		NDIStreamMsg inmsg(&recv_msg);
+// 		inmsg.Read(roleid);
+// 
+// 		if (roleid == 0) {
+// 			inmsg.Read(error_code);
+// 			if (error_code) {
+// 				nd_logerror( "create role list error : %d\n", error_code);
+// 			}
+// 			return -1 ;
+// 		}
+// 		else {
+// 			inmsg.Read(name, sizeof(name));
+// 
+// 			char roleName[128];
+// 			nd_utf8_to_gbk((const char*)name, roleName, sizeof(roleName));
+// 
+// 			nd_logmsg("create role %s success \n", roleName);
+// 			//read attribute
+// 			NDUINT16 num = 0;
+// 			if (0 == inmsg.Read(num)) {
+// 				for (int i = 0; i < num; ++i) {
+// 					NDUINT8 aid;
+// 					float val;
+// 					inmsg.Read(aid); inmsg.Read(val);
+// 					nd_logmsg("create role attribute id = %d val =%f \n", aid, val);
+// 				}
+// 			}
+// 		}
+// 	}
+// 	return 0 ;
+// }
 
 
 bool gmToolDlg::LoadDataDef(const char *file, const char *script, const char *message_def)
@@ -597,6 +569,7 @@ int gmToolDlg::SelOrCreateRole()
 		nd_assert(selected < num);
 	}
 
+	
 	int ret = m_login->EnterServer((char*)bufs[selected].inet_ip, bufs[selected].port);
 	//int ret = redirectServer(m_pConn->GetHandle(), nd_inet_ntoa(bufs[0].ip, NULL), bufs[0].port, _SESSION_FILE);
 	if (ret == 0) {
@@ -609,53 +582,61 @@ int gmToolDlg::SelOrCreateRole()
 	}
 	//get role list
 
-	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ);
-	omsg.Write((NDUINT8)0);
-	nd_handle h = m_pConn->GetHandle();
-	nd_usermsgbuf_t recv_msg;
-
-	_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0)
-	else {
-		NDUINT32 roleid = 0;
-		NDUINT32 error_code = 0;
+	role_base_info role;
+	ret =m_login->GetRoleList(&role,1);
+	if (ret ==0){
 		NDUINT8 name[USER_NAME_SIZE];
-
-		NDIStreamMsg inmsg(&recv_msg);
-		inmsg.Read(roleid);
-
-		if (roleid == 0) {
-			inmsg.Read(error_code);
-			if (error_code) {
-				nd_logerror("get role list error : %d\n", error_code);
-				return -1 ;
-			}
-			CString roleName =m_strUserName + "role";
-
-			nd_gbk_to_utf8((LPCTSTR)roleName,(char*) name, sizeof(name));
-
-			return createRole((LPCTSTR)name);
-
-		}
-		else {
-			inmsg.Read(name, sizeof(name));
-
-			char roleName[128];
-			nd_utf8_to_gbk((const char*)name, roleName, sizeof(roleName));
-
-			nd_logmsg("get role %s id=%d success \n", roleName, roleid);
-
-			//read attribute
-			NDUINT16 num = 0;
-			if (0 == inmsg.Read(num)) {
-				for (int i = 0; i < num; ++i) {
-					NDUINT8 aid;
-					float val;
-					inmsg.Read(aid); inmsg.Read(val);
-					nd_logmsg("load role attribute id = %d val =%f \n", aid, val);
-				}
-			}
-		}
+		nd_gbk_to_utf8((LPCTSTR)m_strUserName, (char*)name, sizeof(name));
+		return m_login->CreateRole((const char*)name, role);
 	}
+// 
+// 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ);
+// 	omsg.Write((NDUINT8)0);
+// 	nd_handle h = m_pConn->GetHandle();
+// 	nd_usermsgbuf_t recv_msg;
+// 
+// 	_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0)
+// 	else {
+// 		NDUINT32 roleid = 0;
+// 		NDUINT32 error_code = 0;
+// 		NDUINT8 name[USER_NAME_SIZE];
+// 
+// 		NDIStreamMsg inmsg(&recv_msg);
+// 		inmsg.Read(roleid);
+// 
+// 		if (roleid == 0) {
+// 			inmsg.Read(error_code);
+// 			if (error_code) {
+// 				nd_logerror("get role list error : %d\n", error_code);
+// 				return -1 ;
+// 			}
+// 			CString roleName =m_strUserName + "role";
+// 
+// 			nd_gbk_to_utf8((LPCTSTR)roleName,(char*) name, sizeof(name));
+// 
+// 			return createRole((LPCTSTR)name);
+// 
+// 		}
+// 		else {
+// 			inmsg.Read(name, sizeof(name));
+// 
+// 			char roleName[128];
+// 			nd_utf8_to_gbk((const char*)name, roleName, sizeof(roleName));
+// 
+// 			nd_logmsg("get role %s id=%d success \n", roleName, roleid);
+// 
+// 			//read attribute
+// 			NDUINT16 num = 0;
+// 			if (0 == inmsg.Read(num)) {
+// 				for (int i = 0; i < num; ++i) {
+// 					NDUINT8 aid;
+// 					float val;
+// 					inmsg.Read(aid); inmsg.Read(val);
+// 					nd_logmsg("load role attribute id = %d val =%f \n", aid, val);
+// 				}
+// 			}
+// 		}
+// 	}
 	return 0;
 }
 
@@ -694,7 +675,7 @@ void gmToolDlg::LogText(const char* text)
 		p = (char*)ndstr_nstr_end(p, buf, '\n', sizeof(buf));
 		if (buf[0]){
 			if (m_newLine)	{
-				pList->AddString((LPCTSTR)text);
+				pList->AddString((LPCTSTR)buf);
 			}
 			else {
 				int total = pList->GetCount();

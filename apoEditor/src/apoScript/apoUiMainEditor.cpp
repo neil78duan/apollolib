@@ -1502,7 +1502,7 @@ void apoUiMainEditor::onVarNameChanged(apoBaseExeNode *exeNode)
 		return;
 	}
 	apoUiExenodeNewVar *varnode = (apoUiExenodeNewVar*)exeNode;
-	const char *pname = varnode->getVarName();
+	//const char *pname = varnode->getVarName();
 
 	QVector<apoUiBezier*>::iterator it = m_beziersVct.begin();
 	for (; it != m_beziersVct.end(); it++)	{
