@@ -838,6 +838,16 @@ APOLLO_SCRIPT_API_DEF(apollo_set_message_handler, "安装消息处理器(str:listener, 
 	int minId = args[4].GetInt();
 	//const char *pScript = args[2].GetText();
 
+// 	if (args.size() > 6){
+// 		bool bOnlyDevMode = args[6].GetBool();
+// 		if (bOnlyDevMode)	{
+// 			NDInstanceBase *pInst = getbase_inst();
+// 			if (pInst && !pInst->CheckIsDeveVer())	{
+// 				return true;
+// 			}
+// 		}
+// 	}
+
 	bool ret = false;
 	DBLDataNode netHandle;
 	LogicObjectBase *owner = parser->getOwner();

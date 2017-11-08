@@ -39,17 +39,19 @@ CapolloParseEditorApp::CapolloParseEditorApp()
 CapolloParseEditorApp theApp;
 
 
-void _xml_error_output(const char *errdesc)
+int _xml_error_output(const char *errdesc)
 {
 	AfxMessageBox((LPCTSTR)errdesc);
+	return 1;
 }
 
-void out_log(const char *text)
+int out_log(const char *text)
 {
 	CapolloParseEditorDlg *pWnd = (CapolloParseEditorDlg *)AfxGetMainWnd();
 	if (pWnd){
 		pWnd->LogText(text);
 	}
+	return 1;
 }
 
 int out_print(void *pf, const char *stm, ...)

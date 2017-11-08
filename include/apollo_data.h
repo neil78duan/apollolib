@@ -251,6 +251,30 @@ struct account_base_info
 	NDUINT8 udid[DEVICE_UDID_SIZE] ;
 };
 
+#define BASE_ROLE_ATTR_NUM 20
+struct role_base_info 
+{
+	roleid_t rid;
+	char name[USER_NAME_SIZE];
+	NDUINT16 num;
+	struct attrs{
+		NDUINT8 aid;
+		float val;
+	}attrs[BASE_ROLE_ATTR_NUM];
+
+	role_base_info() : rid(0), num(0)
+	{
+		name[0] = 0;
+	}
+	void pushAttr(NDUINT8 id, float val)
+	{
+		if (num < BASE_ROLE_ATTR_NUM)	{
+			attrs[num].aid = id;
+			attrs[num].val = val;
+		}
+	}
+};
+
 struct invite_info
 {
 	NDUINT8 invited ; // had been invited

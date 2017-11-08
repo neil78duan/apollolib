@@ -311,12 +311,12 @@ namespace NetMessage
             }
             else if (data.Length == 0)
             {
-                _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_TEXT, 0);
+                _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_BIN, 0);
                 return 1;
             }
             else
             {
-                _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_TEXT, 1);
+                _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_BIN, 1);
             }
 
             OrgWriteUint16(dataLenth);

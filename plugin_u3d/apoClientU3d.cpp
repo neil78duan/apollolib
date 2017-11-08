@@ -591,6 +591,69 @@ int ApoClient::GetGameAreaList(ApolloServerInfo bufs[], size_t number)
 
 RESULT_T ApoClient::_enterGame(const char *host, int port, const char *roleName,bool bWithoutLoadBalance)
 {
+	RESULT_T ret = SelectServer(host, port);
+	if (ret!=ESERVER_ERR_SUCCESS)	{
+		return ret;
+	}
+	role_base_info roleBaseInfo;
+	int num = m_login->GetRoleList(&roleBaseInfo,1);
+	if (num ==0){
+		if (-1 == m_login->CreateRole(roleName, roleBaseInfo)) {
+			return (RESULT_T)m_login->GetLastError();
+		}
+	}
+	m_roleId = roleBaseInfo.rid;
+	onLogin();
+	return ESERVER_ERR_SUCCESS;
+	//get role list
+// 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN,LOGIN_MSG_GET_ROLE_LIST_REQ);
+// 	omsg.Write(m_isRelogin);
+// 
+// 	nd_handle h = m_pconn;
+// 	nd_usermsgbuf_t recv_msg;
+// 
+// 	_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0)
+// 	else {
+// 		NDUINT32 roleid = 0;
+// 		NDUINT32 error_code = 0;
+// 
+// 		NDIStreamMsg inmsg(&recv_msg);
+// 		NDUINT8 name[USER_NAME_SIZE];
+// 		inmsg.Read(roleid);
+// 
+// 		if (roleid == 0) {
+// 			inmsg.Read(error_code);
+// 			if (error_code) {
+// 				nd_logerror("get role list error : %d\n", error_code);
+// 				return (RESULT_T)error_code;
+// 			}
+// 			if (roleName && *roleName) {
+// 				return createRole(roleName);
+// 			}
+// 		}
+// 		else {
+// 			m_roleId = roleid;
+// 			inmsg.Read(name, sizeof(name));
+// 
+// 			//read attribute
+// 			NDUINT16 num = 0;
+// 			if (0 == inmsg.Read(num)) {
+// 				for (int i = 0; i < num; ++i) {
+// 					NDUINT8 aid;
+// 					float val;
+// 					inmsg.Read(aid); inmsg.Read(val);
+// 					//nd_logmsg("load role attribute id = %d val =%f \n", aid, val);
+// 				}
+// 			}
+// 			onLogin();
+// 		}
+// 	}
+	
+	return ESERVER_ERR_SUCCESS;
+}
+
+RESULT_T ApoClient::SelectServer(const char *host , int port )
+{
 	int logResult = 0;
 	if (host && *host) {
 		logResult = m_login->EnterServer(host, port);
@@ -604,7 +667,7 @@ RESULT_T ApoClient::_enterGame(const char *host, int port, const char *roleName,
 			return NDSYS_ERR_HOST_UNAVAILABLE;
 		}
 		if (num == 1)		{
-			host = (const char*) bufs[0].inet_ip;
+			host = (const char*)bufs[0].inet_ip;
 			port = bufs[0].port;
 		}
 		else {
@@ -620,7 +683,7 @@ RESULT_T ApoClient::_enterGame(const char *host, int port, const char *roleName,
 			}
 			else {
 				for (int i = 0; i < num; i++){
-					if ( bufs[i].logic_group_id == serverId) {
+					if (bufs[i].logic_group_id == serverId) {
 						host = (const char*)bufs[i].inet_ip;
 						port = bufs[i].port;
 						break;
@@ -631,112 +694,121 @@ RESULT_T ApoClient::_enterGame(const char *host, int port, const char *roleName,
 		if (!host || !host[0]){
 			return NDSYS_ERR_CANNOT_ENTER_SERVER;
 		}
-		logResult = m_login->EnterServer(host, port, bWithoutLoadBalance);
-		
+		logResult = m_login->EnterServer(host, port, true);
+
 	}
-	
+
 	if (logResult != 0) {
 		return (RESULT_T)m_login->GetLastError();
 	}
+	return	ESERVER_ERR_SUCCESS;
 
-	//get role list
-	NDOStreamMsg omsg(NETMSG_MAX_LOGIN,LOGIN_MSG_GET_ROLE_LIST_REQ);
-	omsg.Write(m_isRelogin);
-
-	nd_handle h = m_pconn;
-	nd_usermsgbuf_t recv_msg;
-
-	_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0)
-	else {
-		NDUINT32 roleid = 0;
-		NDUINT32 error_code = 0;
-
-		NDIStreamMsg inmsg(&recv_msg);
-		NDUINT8 name[USER_NAME_SIZE];
-		inmsg.Read(roleid);
-
-		if (roleid == 0) {
-			inmsg.Read(error_code);
-			if (error_code) {
-				nd_logerror("get role list error : %d\n", error_code);
-				return (RESULT_T)error_code;
-			}
-			if (roleName && *roleName) {
-				return createRole(roleName);
-			}
-		}
-		else {
-			m_roleId = roleid;
-			inmsg.Read(name, sizeof(name));
-
-			//read attribute
-			NDUINT16 num = 0;
-			if (0 == inmsg.Read(num)) {
-				for (int i = 0; i < num; ++i) {
-					NDUINT8 aid;
-					float val;
-					inmsg.Read(aid); inmsg.Read(val);
-					//nd_logmsg("load role attribute id = %d val =%f \n", aid, val);
-				}
-			}
-			onLogin();
-		}
-	}
-	
-	return ESERVER_ERR_SUCCESS;
 }
-
-RESULT_T ApoClient::createRole(const char *roleName)
-{
-	//NDUINT32 error_code = NDSYS_ERR_UNKNOWN;
-	float timezone =(float) nd_time_zone();
-
-	nd_logmsg("create role %s time zone=%d\n", roleName,(int) timezone);
-
-	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_REQ);
-	omsg.Write((NDUINT8*)roleName);
-
-	omsg.Write((NDUINT16)1);	//role attribute
-	omsg.Write((NDUINT8)0xff);
-	omsg.Write(timezone);
-
-	nd_usermsgbuf_t recv_msg;
-
-
-	_SEND_AND_WAIT(m_pconn, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_ACK, 0)
-	else {
-		NDUINT32 roleid = 0;
-		NDUINT32 error_code = 0;
-		NDUINT8 name[USER_NAME_SIZE];
-
-		NDIStreamMsg inmsg(&recv_msg);
-		inmsg.Read(roleid);
-
-		if (roleid == 0) {
-			inmsg.Read(error_code);
-			return (RESULT_T)error_code;
-		}
-		else {
-			m_roleId = roleid;
-			inmsg.Read(name, sizeof(name));
-			//char roleName[128];
-			//nd_utf8_to_gbk((const char*)name, roleName, sizeof(roleName));
-			//nd_logerror("create role %s success \n", roleName);
-			//read attribute
-			NDUINT16 num = 0;
-			if (0 == inmsg.Read(num)) {
-				for (int i = 0; i < num; ++i) {
-					NDUINT8 aid;
-					float val;
-					inmsg.Read(aid); inmsg.Read(val);
-					//nd_logmsg("create role attribute id = %d val =%f \n", aid, val);
-				}
-			}
-			onLogin();
-		}
-	}
-	return ESERVER_ERR_SUCCESS ;
-}
+// 
+// int ApoClient::getRoleList(char *xmlBuf, size_t size)
+// {
+// 	//get role list
+// 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ);
+// 	omsg.Write(m_isRelogin);
+// 
+// 	nd_handle h = m_pconn;
+// 	nd_usermsgbuf_t recv_msg;
+// 
+// 	_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0)
+// 	else {
+// 		NDUINT32 roleid = 0;
+// 		NDUINT32 error_code = 0;
+// 
+// 		NDIStreamMsg inmsg(&recv_msg);
+// 		NDUINT8 name[USER_NAME_SIZE];
+// 		inmsg.Read(roleid);
+// 
+// 		if (roleid == 0) {
+// 			inmsg.Read(error_code);
+// 			if (error_code) {
+// 				nd_logerror("get role list error : %d\n", error_code);
+// 				return (RESULT_T)error_code;
+// 			}
+// 			if (roleName && *roleName) {
+// 				return createRole(roleName);
+// 			}
+// 		}
+// 		else {
+// 			m_roleId = roleid;
+// 			inmsg.Read(name, sizeof(name));
+// 
+// 			//read attribute
+// 			NDUINT16 num = 0;
+// 			if (0 == inmsg.Read(num)) {
+// 				for (int i = 0; i < num; ++i) {
+// 					NDUINT8 aid;
+// 					float val;
+// 					inmsg.Read(aid); inmsg.Read(val);
+// 					//nd_logmsg("load role attribute id = %d val =%f \n", aid, val);
+// 				}
+// 			}
+// 			onLogin();
+// 		}
+// 	}
+// 
+// }
+// 
+// RESULT_T ApoClient::selRole(roleid_t rid)
+// {
+// 
+// }
+// 
+// RESULT_T ApoClient::createRole(const char *roleName)
+// {
+// 	//NDUINT32 error_code = NDSYS_ERR_UNKNOWN;
+// 	float timezone =(float) nd_time_zone();
+// 
+// 	nd_logmsg("create role %s time zone=%d\n", roleName,(int) timezone);
+// 
+// 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_REQ);
+// 	omsg.Write((NDUINT8*)roleName);
+// 
+// 	omsg.Write((NDUINT16)1);	//role attribute
+// 	omsg.Write((NDUINT8)0xff);
+// 	omsg.Write(timezone);
+// 
+// 	nd_usermsgbuf_t recv_msg;
+// 
+// 
+// 	_SEND_AND_WAIT(m_pconn, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_ACK, 0)
+// 	else {
+// 		NDUINT32 roleid = 0;
+// 		NDUINT32 error_code = 0;
+// 		NDUINT8 name[USER_NAME_SIZE];
+// 
+// 		NDIStreamMsg inmsg(&recv_msg);
+// 		inmsg.Read(roleid);
+// 
+// 		if (roleid == 0) {
+// 			inmsg.Read(error_code);
+// 			return (RESULT_T)error_code;
+// 		}
+// 		else {
+// 			m_roleId = roleid;
+// 			inmsg.Read(name, sizeof(name));
+// 			//char roleName[128];
+// 			//nd_utf8_to_gbk((const char*)name, roleName, sizeof(roleName));
+// 			//nd_logerror("create role %s success \n", roleName);
+// 			//read attribute
+// 			NDUINT16 num = 0;
+// 			if (0 == inmsg.Read(num)) {
+// 				for (int i = 0; i < num; ++i) {
+// 					NDUINT8 aid;
+// 					float val;
+// 					inmsg.Read(aid); inmsg.Read(val);
+// 					//nd_logmsg("create role attribute id = %d val =%f \n", aid, val);
+// 				}
+// 			}
+// 			onLogin();
+// 		}
+// 	}
+// 	return ESERVER_ERR_SUCCESS ;
+// }
 
 // 
 // RESULT_T ApoClient::testOneKeyLogin(const char *host, int port, const char *user, const char *passwd, int accType)

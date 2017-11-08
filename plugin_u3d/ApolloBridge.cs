@@ -130,15 +130,25 @@ public class apoClient {
 
     [DllImport (APO_DLL_NAME)]
 	public static extern int apoCli_GetServerList(IntPtr sessionBuf, int bufsize);//xml
+	
+	
+    [DllImport (APO_DLL_NAME)]
+    public static extern RESULT_T apoCli_SelectServer(string host, int port); // use select server
+	
+    [DllImport (APO_DLL_NAME)]
+    public static extern int apoCli_GetRoleList(IntPtr sessionBuf, int bufsize); // xml
 
     [DllImport (APO_DLL_NAME)]
-    public static extern RESULT_T apoCli_EnterGame(string host, int port);
+    public static extern RESULT_T apoCli_CreateRole(string roleName);
+
+    [DllImport (APO_DLL_NAME)]
+    public static extern RESULT_T apoCli_SelectRole(int roleId);
 	
 	[DllImport (APO_DLL_NAME)]
     public static extern int apoCli_SetTimeout(int timeoutValMs);
     
 	[DllImport (APO_DLL_NAME)]
-    public static extern int apoCli_GetServerGroupId();		// get logic-server-group id 
+    public static extern int apoCli_GetRoleBeloneServerId();		//get the server id that the player will enter 
 
     private IntPtr m_netObject;
 

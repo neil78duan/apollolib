@@ -420,7 +420,7 @@ APO_RESULT_T apoCli_LoginOnly(const char *account, const char *passwd, int accTy
 	}
 	return res;
 }
-int apoCli_GetServerList(char *buf, size_t size)
+int apoCli_GetServerList(char *buf, int size)
 {
 
 	ApoClient *apoCli = ApoClient::getInstant();
@@ -436,7 +436,7 @@ int apoCli_GetServerList(char *buf, size_t size)
 		size -= len; 
 
 		for (int i = 0; i < num; i++)	{
-			len = snprintf(buf, size, "<node ip=\"%s\" port=\"%d\" onlines=\"%d\" max=\"%d\" groupName=\"%d\" defaultEntry=\"%d\">\n", 
+			len = snprintf(buf, size, "<node ip=\"%s\" port=\"%d\" onlines=\"%d\" max=\"%d\" groupName=\"%s\" defaultEntry=\"%d\" />\n", 
 				srvbuf[i].inet_ip, srvbuf[i].port,srvbuf[i].cur_number, srvbuf[i].max_number, srvbuf[i].name, srvbuf[i].isdefault_entry);
 
 			buf += len;
@@ -449,25 +449,81 @@ int apoCli_GetServerList(char *buf, size_t size)
 		size -= len;
 	}
 	return (int)(buf - p);
-
 }
-APO_RESULT_T apoCli_EnterGame(const char *host, int port)
+
+
+APO_RESULT_T apoCli_SelectServer(const char *host, int port)
 {
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (!apoCli)	{
 		return NDSYS_ERR_NOT_INIT;
 	}
-	return apoCli->EnterGame(host, port);
-	//const char *account, const char *passwd, int accType, bool skipAuth
+	return apoCli->SelectServer(host, port);
 }
+
+int apoCli_GetRoleList(char *buf, int size)
+{
+	ApoClient *apoCli = ApoClient::getInstant();
+	if (!apoCli)	{
+		return NDSYS_ERR_NOT_INIT;
+	}
+	
+	role_base_info roles; 
+	int ret = apoCli->getLoginObj()->GetRoleList(&roles, 1, apoCli->getReloginStat());
+	if (ret ==0){
+		return ret;
+	}
+
+	snprintf(buf, size, "<role name=\"%s\" id=\"%d\" />\n", roles.name, roles.rid);
+
+	return ret;
+}
+
+APO_RESULT_T apoCli_CreateRole(const char *roleName)
+{
+	ApoClient *apoCli = ApoClient::getInstant();
+	if (!apoCli)	{
+		return NDSYS_ERR_NOT_INIT;
+	}
+
+	role_base_info roles;
+	int ret = apoCli->getLoginObj()->CreateRole(roleName, roles);
+	if (ret == -1){
+		return (APO_RESULT_T) apoCli->getLoginObj()->GetLastError();
+	}
+
+	return ESERVER_ERR_SUCCESS;
+}
+APO_RESULT_T apoCli_SelectRole(unsigned roleId)
+{
+	ApoClient *apoCli = ApoClient::getInstant();
+	if (!apoCli)	{
+		return NDSYS_ERR_NOT_INIT;
+	}
+
+	int ret = apoCli->getLoginObj()->SelectRole(roleId);
+	if (ret == -1){
+		return (APO_RESULT_T)apoCli->getLoginObj()->GetLastError();
+	}
+
+	return ESERVER_ERR_SUCCESS;
+}
+
+// APO_RESULT_T apoCli_EnterGame(const char *host, int port)
+// {
+// 	ApoClient *apoCli = ApoClient::getInstant();
+// 	if (!apoCli)	{
+// 		return NDSYS_ERR_NOT_INIT;
+// 	}
+// 	return apoCli->EnterGame(host, port);
+// }
 
 int apoCli_SetTimeout(int val)
 {
 	return ndSetTimeoutVal(val);
 }
 
-
-int apoCli_GetServerGroupId()
+int apoCli_GetRoleBeloneServerId()
 {
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (!apoCli)	{
