@@ -337,11 +337,7 @@
 		<msgid kinds="hide" maxId="9" minId="2">0</msgid>
 		<data name="允许自由加入" kinds="numeral" param="3">0</data>
 		<data name="允许加入等级" kinds="numeral" param="3">1</data>
-<<<<<<< HEAD
-		<data name="名字" kinds="string" param="2">123123123qwe6</data>
-=======
 		<data name="名字" kinds="string" param="2">guild13</data>
->>>>>>> 1d30f30c0ee5f155ed2fe6242632cde4cce55f15
 		<data name="声明" kinds="string" param="2">chinese</data>
 		<data name="通知" kinds="string" param="2">this is my guild</data>
 		<data name="徽章信息" kinds="string" param="2">hello world</data>
