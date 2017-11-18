@@ -6,7 +6,7 @@
  */
 
 #include "editorFrame.h"
-#include "startdialog.h"
+//#include "startdialog.h"
 #include <QMessageBox>
 
 EditorFrame::EditorFrame(QWidget *parent) : MainWindow(parent), m_myHost(0)

@@ -2,7 +2,7 @@
 #include "ui_startdialog.h"
 #include "connectdialog.h"
 #include "nd_common/nd_common.h"
-#include "xmldialog.h"
+#include "apoScript/xmldialog.h"
 #include "ndlib.h"
 
 #include "logic_parser/dbl_mgr.h"

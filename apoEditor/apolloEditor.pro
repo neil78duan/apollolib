@@ -28,9 +28,7 @@ DEFINES += __ND_LINUX__
 
 win32{
 message(WIN32!)
-#ndsdk_dir = ../../../ndsdk
-#apolib_dir = ../..
-LIBS += -L$$ndsdk_dir/lib/win64
+LIBS += -L$$ndsdk_dir/lib/win64 -L$$apolib_dir/lib -lapoBluePrint
 
 CONFIG(debug, debug|release) {
     message(BUILD win32 -debug)
@@ -45,11 +43,13 @@ DEFINES += __ND_WIN__ DO_NOT_CONVERT_PRINT_TEXT
 }
 
 
+LIBS += -lapoBluePrint
+
 DEFINES += X86_64
 
 INCLUDEPATH += $$ndsdk_dir/include \
         $$apolib_dir/include \
-        $$apolib_dir ./src ./src/apoScript
+        $$apolib_dir ./src ../apoBluePrint/include
 
 QT       += core gui
 
@@ -62,55 +62,17 @@ TEMPLATE = app
 SOURCES += src/main.cpp\
     src/startdialog.cpp \
     src/workdirdialog.cpp \
-    src/connectdialog.cpp \
-    src/apoScript/xmldialog.cpp \
-    src/apoScript/listdialog.cpp \
-    src/apoScript/dragtree.cpp \
-    src/apoScript/apoBaseExeNode.cpp \
-    src/apoScript/apoUiBezier.cpp \
-    src/apoScript/apoUiExeNode.cpp \
-    src/apoScript/apoUiMainEditor.cpp \
-    src/apoScript/mainwindow.cpp \
-    src/apoScript/editorframe.cpp \
-    src/apoScript/apoXmlTreeView.cpp \
-    src/apoScript/apoUiDetailView.cpp \
-    src/apoScript/apoUiParam.cpp \
-    src/apoScript/apoUiXmlTablesWidget.cpp \
-    src/apoScript/apoEditorSetting.cpp \
-    src/apoScript/runFuncDialog.cpp \
-    src/apoScript/apoUiDebugger.cpp
+    src/connectdialog.cpp
 
 HEADERS  += \
     src/startdialog.h \
     src/workdirdialog.h \
-    src/connectdialog.h \
-    src/apoScript/xmldialog.h \
-    src/apoScript/listdialog.h \
-    src/apoScript/dragtree.h \
-    src/apoScript/myqtitemctrl.h \
-    src/apoScript/apoBaseExeNode.h \
-    src/apoScript/apoUiBezier.h \
-    src/apoScript/apoUiExeNode.h \
-    src/apoScript/apoUiMainEditor.h \
-    src/apoScript/apouinodedef.h \
-    src/apoScript/mainwindow.h \
-    src/apoScript/editorFrame.h \
-    src/apoScript/apoXmlTreeView.h \
-    src/apoScript/apoUiDetailView.h \
-    src/apoScript/apoUiParam.h \
-    src/apoScript/apoUiXmlTablesWidget.h \
-    src/apoScript/runFuncDialog.h \
-    src/apoScript/apoUiDebugger.h
+    src/connectdialog.h
 
 FORMS    += \
     src/startdialog.ui \
     src/connectdialog.ui \
-    src/workdirdialog.ui \
-    src/apoScript/listdialog.ui \
-    src/apoScript/xmldialog.ui \
-    src/apoScript/mainwindow.ui \
-    src/apoScript/mainwindow.ui \
-    src/apoScript/runFuncDialog.ui
+    src/workdirdialog.ui
 
 # logic compile modules
  

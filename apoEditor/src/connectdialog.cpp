@@ -5,7 +5,7 @@
 #include <QString>
 #include <QSettings>
 
-#include "listdialog.h"
+#include "apoScript/listdialog.h"
 
 #include "ndlib.h"
 #include "cli_common/login_apollo.h"
@@ -679,7 +679,7 @@ int ConnectDialog::getRoleData()
 }
 
 
-#include "xmldialog.h"
+#include "apoScript/xmldialog.h"
 #include "startdialog.h"
 
 static bool gmdlgInit(QDialog *curDlg)
