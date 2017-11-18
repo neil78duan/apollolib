@@ -142,7 +142,11 @@
 	</message>
 	<message name="申请加入国家" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="15" minId="0">0</msgid>
+<<<<<<< HEAD
+		<data name="国家id" kinds="numeral" param="3">3</data>
+=======
 		<data name="国家id" kinds="numeral" param="3">2</data>
+>>>>>>> 1d30f30c0ee5f155ed2fe6242632cde4cce55f15
 	</message>
 	<message name="查看国家状态" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="15" minId="2">0</msgid>
