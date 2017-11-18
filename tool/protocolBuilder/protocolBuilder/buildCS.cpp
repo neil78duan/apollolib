@@ -179,8 +179,18 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 {
 	ndxml *xnode = ndxml_getnode(xmlfile, "DataType") ;
 	
+	ndxml *xInfo = ndxml_getnode(xmlfile, "DataDesc");
+	if (!xInfo) {
+		return -1;
+	}
+
+	const char *comm_version = ndxml_getattr_val(xInfo, "comm_version");	
 	
+	fprintf(pf, "\tpublic struct MessageVersionIndex \n\t{\n");
+	fprintf(pf, "\t\tpublic const int NET_COMMUNATION_VERSION = %s;\n\t}\n", comm_version);	
+
 	fprintf(pf,"#region StructFileString \n \tpublic interface MessageDataBase\n\t{\n" ) ;
+
 	fprintf(pf, "\t\tvoid Read(ref NDMsgStream dataStream);\n");
 	fprintf(pf, "\t\tint Write(ref NDMsgStream dataStream);\n\t}\n");
 	

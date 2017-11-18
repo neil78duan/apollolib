@@ -35,12 +35,12 @@ public:
 	roleid_t GetID() {return m_roleID;} 
 	apolloSession *GetSession() { return m_mySession; }
 	const char *GetNickname() {return (const char*) m_nick;} 
-	const char *GetGuildName() { return (const char*)m_guildName; }
+	//const char *GetGuildName() { return (const char*)m_guildName; }
 
 	void SetIDName(roleid_t roleid, NDUINT8 *name);
 	void SetId(roleid_t rid);
 	void SetName(const char *name);
-	void SetGuildName(const char *name);
+	//void SetGuildName(const char *name);
 
 
 	int Send(NDOStreamMsg &omsg, int flag = ESF_NORMAL);
@@ -54,7 +54,7 @@ public:
 protected:
 	roleid_t m_roleID ;	
 	NDUINT8 m_nick[USER_NAME_SIZE];
-	NDUINT8 m_guildName[USER_NAME_SIZE];
+	//NDUINT8 m_guildName[USER_NAME_SIZE];
 
 	apolloSession *m_mySession;
 	

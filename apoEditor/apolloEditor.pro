@@ -61,11 +61,11 @@ TEMPLATE = app
 
 SOURCES += src/main.cpp\
     src/startdialog.cpp \
-    src/xmldialog.cpp \
-    src/connectdialog.cpp \
-    src/listdialog.cpp \
-    src/dragtree.cpp \
     src/workdirdialog.cpp \
+    src/connectdialog.cpp \
+    src/apoScript/xmldialog.cpp \
+    src/apoScript/listdialog.cpp \
+    src/apoScript/dragtree.cpp \
     src/apoScript/apoBaseExeNode.cpp \
     src/apoScript/apoUiBezier.cpp \
     src/apoScript/apoUiExeNode.cpp \
@@ -82,12 +82,12 @@ SOURCES += src/main.cpp\
 
 HEADERS  += \
     src/startdialog.h \
-    src/xmldialog.h \
-    src/connectdialog.h \
-    src/listdialog.h \
-    src/dragtree.h \
     src/workdirdialog.h \
-    src/myqtitemctrl.h \
+    src/connectdialog.h \
+    src/apoScript/xmldialog.h \
+    src/apoScript/listdialog.h \
+    src/apoScript/dragtree.h \
+    src/apoScript/myqtitemctrl.h \
     src/apoScript/apoBaseExeNode.h \
     src/apoScript/apoUiBezier.h \
     src/apoScript/apoUiExeNode.h \
@@ -104,10 +104,10 @@ HEADERS  += \
 
 FORMS    += \
     src/startdialog.ui \
-    src/xmldialog.ui \
     src/connectdialog.ui \
-    src/listdialog.ui \
     src/workdirdialog.ui \
+    src/apoScript/listdialog.ui \
+    src/apoScript/xmldialog.ui \
     src/apoScript/mainwindow.ui \
     src/apoScript/mainwindow.ui \
     src/apoScript/runFuncDialog.ui

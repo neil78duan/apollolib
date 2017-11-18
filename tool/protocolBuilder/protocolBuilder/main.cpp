@@ -598,6 +598,7 @@ int build_dataType(ndxml_root *xmlfile, const char *out_file,bool saveDB)
 	if (!version) {
 		return -1;
 	}
+	const char *comm_version = ndxml_getattr_val(xInfo, "comm_version");
 	
 	const char *nameSpace = ndxml_getattr_val(xnode, "namespace"); 
 
@@ -701,6 +702,7 @@ int build_dataType(ndxml_root *xmlfile, const char *out_file,bool saveDB)
 		fprintf(pf, "#include \"netMessage/dataBinary.h\"\n\n");
 
 		fprintf(pf, "#define DATA_IN_DB_VERSION %s \n\n", version);
+		fprintf(pf, "#define NET_COMMUNATION_VERSION %s \n\n", comm_version);
 		fprintf(pf, "#define NET_MESSAGE_EXPORT_TM %lld \n", nowTime);
 		
 

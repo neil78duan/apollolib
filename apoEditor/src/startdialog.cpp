@@ -614,34 +614,7 @@ void startDialog::on_CompleteAll_clicked()
 }
 
 void startDialog::on_Test_clicked()
-{
-	
-
-	/*
-	NewFileDialog dlg(this);
-	const char *scriptRoot = _getFromIocfg("script_root");
-	const char *newTmplFile = _getFromIocfg("new_template");
-
-	if (!dlg.InitFileRoot(scriptRoot, newTmplFile)) {
-	QMessageBox::warning(NULL, "Error", "Init script-edit config error!", QMessageBox::Ok);
-	return;
-	}
-	if (dlg.exec() == QDialog::Accepted) {
-	const char *file = dlg.getSelectFile();
-	const char *title = dlg.getSelectTitle();
-	if (file && *file)	{
-	_beginEdit(file,title);
-	}
-
-	}
-	else {
-	WriteLog("script unedited\n");
-	}
-
-
-	*/
-
-    
+{    
     ClearLog();
     if (false == runTest()){
         WriteLog("Run test error!!!!!!!!!");

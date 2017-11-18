@@ -14,7 +14,7 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">../cfg/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1509438732</LastMod>
+	<LastMod name="最后修改" kinds="hide">1510986618</LastMod>
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="35" expand_stat="1" accept_drag_in="func_node">
 	<func_node name="sample_selector" create_template="create_list1" auto_index="5" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
@@ -211,7 +211,7 @@
 				<var kinds="string" delete="no" restrict="type">0</var>
 			</param_collect>
 		</op_print>
-		<apoEditorPos kinds="hide" x="84" y="260" offset_x="0" offset_y="0"/>
+		<apoEditorPos kinds="hide" x="84" y="260" offset_x="17" offset_y="-128"/>
 		<unConnect kinds="hide">
 			<steps_bt_sequence name="BT-Sequence" auto_index="0">
 				<comment name="功能说明" rw_stat="read">run until one of children success </comment>
