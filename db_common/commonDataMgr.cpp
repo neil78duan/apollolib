@@ -27,6 +27,7 @@ bool CommonDataMgr::InitLoad(const char *name ,int serverId,void *data, size_t &
 	if (ret == ESERVER_ERR_SUCCESS) {
 		return true;
 	}
+	size = 0;
 	return  false ;
 }
 
