@@ -142,7 +142,11 @@
 	</message>
 	<message name="申请加入国家" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="15" minId="0">0</msgid>
+<<<<<<< HEAD
 		<data name="国家id" kinds="numeral" param="3">3</data>
+=======
+		<data name="国家id" kinds="numeral" param="3">2</data>
+>>>>>>> 1d30f30c0ee5f155ed2fe6242632cde4cce55f15
 	</message>
 	<message name="查看国家状态" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="15" minId="2">0</msgid>
@@ -333,7 +337,11 @@
 		<msgid kinds="hide" maxId="9" minId="2">0</msgid>
 		<data name="允许自由加入" kinds="numeral" param="3">0</data>
 		<data name="允许加入等级" kinds="numeral" param="3">1</data>
+<<<<<<< HEAD
 		<data name="名字" kinds="string" param="2">123123123qwe6</data>
+=======
+		<data name="名字" kinds="string" param="2">guild13</data>
+>>>>>>> 1d30f30c0ee5f155ed2fe6242632cde4cce55f15
 		<data name="声明" kinds="string" param="2">chinese</data>
 		<data name="通知" kinds="string" param="2">this is my guild</data>
 		<data name="徽章信息" kinds="string" param="2">hello world</data>
@@ -703,6 +711,11 @@
 	<message name="sys_修改SOCIAL服务器时间" expand="yes" delete="no" need_confirm="yes">
 		<msgid kinds="hide" maxId="7" minId="31">0</msgid>
 		<data name="加快小时" kinds="numeral" param="0">16</data>
+		<data name="加快分钟" kinds="numeral" param="0">0</data>
+	</message>
+	<message name="sys_修改nation服务器时间" expand="yes" delete="no" need_confirm="yes">
+		<msgid kinds="hide" maxId="7" minId="37">0</msgid>
+		<data name="加快小时" kinds="numeral" param="0">240</data>
 		<data name="加快分钟" kinds="numeral" param="0">0</data>
 	</message>
 	<message name="sys_关服" expand="yes" delete="no" need_confirm="yes">

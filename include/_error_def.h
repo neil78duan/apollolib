@@ -192,7 +192,7 @@ ErrorElement(ESERVER_ERR_ALREDY_SEND_HELP, "您已经发布过求助了"),
 ErrorElement(ESERVER_ERR_GUILD_BOSS_END_ERROR, "结束战斗发生错误"),
 ErrorElement(ESERVER_ERR_GUILD_BOSS_ENTER_ERROR, "工会boss已经打过"),
 
-ErrorElement(ESERVER_ERR_JOIN_NATION_FIRST, "清闲加入国家"),
+ErrorElement(ESERVER_ERR_JOINED_NATION, "已经加入国家"),
 ErrorElement(ESERVER_ERR_MOVE_PATH_ERROR, "目的地不可达到"),
 ErrorElement(ESERVER_ERR_PATH_MAX_LIMIT, "路径太长了"),
 
@@ -231,5 +231,9 @@ ErrorElement(ESERVER_ERR_NATION_GUILD_JION, "您不能加入不同国家的工�
 ErrorElement(ESERVER_ERR_GUILD_TEAM_LEADER, "此人声望不够您不能任命为队长"),
 ErrorElement(ESERVER_ERR_GUILD_LEADER_TEAM_ERROR, "工会没有会长队伍"),
 ErrorElement(ESERVER_ERR_GUILD_TEAM_FULL, "队伍人数已满"),
+<<<<<<< HEAD
+=======
+ErrorElement(ESERVER_ERR_GUILD_TEAM_LEADER_NULL, "没有队长"),
+>>>>>>> 1d30f30c0ee5f155ed2fe6242632cde4cce55f15
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),
