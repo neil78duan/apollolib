@@ -232,5 +232,11 @@ ErrorElement(ESERVER_ERR_GUILD_TEAM_LEADER, "此人声望不够您不能任命�
 ErrorElement(ESERVER_ERR_GUILD_LEADER_TEAM_ERROR, "工会没有会长队伍"),
 ErrorElement(ESERVER_ERR_GUILD_TEAM_FULL, "队伍人数已满"),
 ErrorElement(ESERVER_ERR_GUILD_TEAM_LEADER_NULL, "没有队长"),
+ErrorElement(ESERVER_ERR_GUILD_TEAM_EMPTY, "没有队伍"),
+ErrorElement(ESERVER_ERR_NO_GUILD_JOIN, "你还没加入工会"),
+ErrorElement(ESERVER_ERR_NO_AIM_TEAM, "没有目标队伍"),
+ErrorElement(ESERVER_ERR_LEADER_TEAM_SET_ERROR, "会长队伍不能任命队长"),
+ErrorElement(ESERVER_ERR_FLAG_TEAM_SET_ERROR, "任命出错"),
+ErrorElement(ESERVER_ERR_IS_NOT_TEAM_LEADER, "你不是队长"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

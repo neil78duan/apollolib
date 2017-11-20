@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <type_data_type name="数据类型" kinds="hide" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,2维数组,变量,参数,上一步结果,time"/>
 <send_msg_list name="发送消息" delete="no" expand_stat="1">
+	<message name="设置队长请求" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="17" minId="0">0</msgid>
+		<data name="城市id" kinds="numeral" param="3">0</data>
+		<data name="角色id" kinds="numeral" param="0">0</data>
+		<data name="是否是卸任队长" kinds="numeral" param="3">0</data>
+	</message>
+	<message name="设置队员请求" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="17" minId="0">0</msgid>
+		<data name="城市id" kinds="numeral" param="3">0</data>
+		<data name="角色id" kinds="numeral" param="0">0</data>
+		<data name="是否是卸任队长" kinds="numeral" param="3">0</data>
+	</message>
+	<message name="请求查看队伍信息" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="17" minId="8">0</msgid>
+	</message>
 	<message name="攻击国家npc" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="15" minId="42">0</msgid>
 		<data name="cityId" kinds="numeral" param="0">11501</data>
@@ -295,7 +310,7 @@
 	</message>
 	<message name="原胚赐福" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="14" minId="0">0</msgid>
-		<data name="id" kinds="numeral" param="0">3866089</data>
+		<data name="id" kinds="numeral" param="0">2096617</data>
 	</message>
 	<message name="原胚祈灵" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="14" minId="7">0</msgid>
@@ -333,7 +348,7 @@
 		<msgid kinds="hide" maxId="9" minId="2">0</msgid>
 		<data name="允许自由加入" kinds="numeral" param="3">0</data>
 		<data name="允许加入等级" kinds="numeral" param="3">1</data>
-		<data name="名字" kinds="string" param="2">guild2</data>
+		<data name="名字" kinds="string" param="2">6663333444</data>
 		<data name="声明" kinds="string" param="2">chinese</data>
 		<data name="通知" kinds="string" param="2">this is my guild</data>
 		<data name="徽章信息" kinds="string" param="2">hello world</data>
@@ -341,7 +356,7 @@
 	</message>
 	<message name="加入工会" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="9" minId="4">0</msgid>
-		<data name="工会id" kinds="numeral" param="0">62</data>
+		<data name="工会id" kinds="numeral" param="0">4</data>
 	</message>
 	<message name="同意加入工会" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="9" minId="6">0</msgid>
@@ -597,6 +612,14 @@
 	</message>
 	<message name="请求查看系统聊天消息" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="54">0</msgid>
+	</message>
+	<message name="增加公会声望" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="7" minId="38">0</msgid>
+		<data name="num" kinds="numeral" param="0">1000</data>
+	</message>
+	<message name="增加个人声望" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="7" minId="39">0</msgid>
+		<data name="num" kinds="numeral" param="0">10000</data>
 	</message>
 	<message name="GM_增加新神器" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="32">0</msgid>
