@@ -212,6 +212,13 @@ DBLTable * DBL_FindTable(const char *table) ;
 		return -1;									\
 		}
 
+#define GET_DBL_TABLE_EX(_tablename, _retval)	\
+	DBLTable * pTable = DBL_FindTable(_tablename) ;	\
+	if (!pTable){									\
+		nd_logfatal("open table %serror\n" AND _tablename) ;	\
+		return _retval;									\
+	}
+
 #define DBL_BEGIN_CURSOR(_tablename, _fieldslist)	\
 	GET_DBL_TABLE(_tablename) ;					\
 	DBLCursor cursor(pTable,_fieldslist, ND_ELEMENTS_NUM(_fieldslist),ND_ENCODE_TYPE) ;		\
@@ -220,11 +227,7 @@ DBLTable * DBL_FindTable(const char *table) ;
 
 
 #define DBL_FOR_EACH(_tablename, _fieldslist,_retval)	\
-	DBLTable * pTable = DBL_FindTable(_tablename) ;	\
-	if (!pTable){									\
-		nd_logfatal("open table %serror\n" AND _tablename) ;	\
-		return _retval;									\
-	}													\
+	GET_DBL_TABLE_EX(_tablename,_retval) \
 	DBLCursor cursor(pTable,_fieldslist, ND_ELEMENTS_NUM(_fieldslist),ND_ENCODE_TYPE) ;		\
 	for(int  nResult =cursor.FetchFirst(); nResult!=-1;  nResult=cursor.FetchNext())
 
@@ -233,5 +236,11 @@ DBLTable * DBL_FindTable(const char *table) ;
 	GET_DBL_TABLE(_tablename) ;					\
 	DBLCursor cursor(pTable,_fieldslist, _numbers,ND_ENCODE_TYPE) ;		\
 	for(int  nResult =cursor.FetchFirst(); nResult!=-1;  nResult=cursor.FetchNext())	
+
+#define DBL_FETCH_ROW(_tablename, _fieldslist, _tabelIndex, _retval)	\
+	GET_DBL_TABLE_EX(_tablename,_retval) ;								\
+	DBLCursor cursor(pTable, _fieldslist, ND_ELEMENTS_NUM(_fieldslist), ND_ENCODE_TYPE);	\
+	if (-1 != cursor.Fetch(_tabelIndex))
+
 #endif
 

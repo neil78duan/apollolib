@@ -130,7 +130,7 @@ int dbThread_create_blob_data(nd_thsrv_msg *msg){
 
 	char sql[10240];
 	memset(sql, 0, sizeof(sql));
-	int len = snprintf(sql, sizeof(sql), "insert into %s ( id,serverid,blobdata ) values ( %d, %d,'", recvmsg->name, recvmsg->id, (int)recvmsg->serverId);
+	int len = snprintf(sql, sizeof(sql), "insert into %s ( id,serverid,type,blobdata ) values ( %d, %d,%d,'", recvmsg->name, recvmsg->id, (int)recvmsg->serverId, (int)recvmsg->type);
 	len += mysql_real_escape_string(pdb->get_mysql_handle(), sql + len, recvmsg->data, recvmsg->datalen);
 	len += snprintf( sql + len, sizeof(sql)-len, "' );" );
 	if (pdb->sql_execute(sql) != 0) {
@@ -152,7 +152,7 @@ int dbThread_update_blob_data(nd_thsrv_msg *msg){
 	memset(sql, 0, sizeof(sql));
 	int len = snprintf(sql, sizeof(sql), "update %s set blobdata ='", recvmsg->name);
 	len += mysql_real_escape_string(pdb->get_mysql_handle(), sql + len, recvmsg->data, recvmsg->datalen);
-	len += snprintf(sql + len, sizeof(sql) - len, "' where id = %d and serverid = %d;", (int)recvmsg->id, (int)recvmsg->serverId);
+	len += snprintf(sql + len, sizeof(sql) - len, "' where id = %d and serverid = %d and type = %d;", (int)recvmsg->id, (int)recvmsg->serverId,(int)recvmsg->type);
 	if (pdb->sql_execute(sql) != 0) {
 		nd_logerror("run sql error : %s\n" AND pdb->sql_error());
 		return false;

@@ -694,6 +694,77 @@ static bool gmdlgExit(QDialog *curDlg)
     return false;
 }
 
+static bool _sendMsgByXml(ndxml *xml, ConnectDialog *dlg)
+{
+	NDUINT16 msgid = 0;
+	ndxml *msgXML = ndxml_getnode(xml, "msgid");
+	if (!msgXML)	{
+		QMessageBox::warning(NULL, "Error", "select xml node error!", QMessageBox::Ok);
+		return true;
+	}
+	else {
+		const char *maxId = ndxml_getattr_val(msgXML, "maxId");
+		const char *minId = ndxml_getattr_val(msgXML, "minId");
+		if (maxId && minId)	{
+			msgid = ND_MAKE_WORD(ndstr_atoi_hex(maxId), ndstr_atoi_hex(minId));
+		}
+		else {
+			msgid = ndxml_getval_int(msgXML);
+		}
+	}
+
+	NDOStreamMsg omsg(msgid);
+	for (int i = 1; i < ndxml_num(xml); ++i){
+		ndxml *node = ndxml_getnodei(xml, i);
+		if (node){
+			int typeId = 0;
+			const char *typeName = ndxml_getattr_val(node, "param");
+			if (typeName)
+				typeId = atoi(typeName);
+			switch (typeId)
+			{
+			case OT_INT:
+				omsg.Write((NDUINT32)ndxml_getval_int(node));
+				break;
+			case OT_FLOAT:
+				omsg.Write(ndxml_getval_float(node));
+				break;
+			case OT_STRING:
+				omsg.Write((NDUINT8*)ndxml_getval(node));
+				break;
+			case OT_INT8:
+				omsg.Write((NDUINT8)ndxml_getval_int(node));
+				break;
+			case OT_INT16:
+				omsg.Write((NDUINT16)ndxml_getval_int(node));
+				break;
+			case OT_INT64:
+				omsg.Write((NDUINT64)ndxml_getval_int(node));
+				break;
+			case OT_BINARY_DATA:
+			{
+				const char *p = ndxml_getval(node);
+				size_t s = (p && *p) ? strlen(p) : 0;
+				omsg.WriteBin((void*)p, s);
+			}
+			break;
+			default:
+				QMessageBox::warning(NULL, "Error", "config error!", QMessageBox::Ok);
+				break;
+			}
+
+		}
+	}
+	NDIConn *pconn = dlg->getConnect();
+	if (pconn)	{
+		pconn->SendMsg(omsg);
+	}
+	else{
+		QMessageBox::warning(NULL, "Error", "Need login!", QMessageBox::Ok);
+	}
+	return false;
+}
+
 static bool gmdlgSend(QDialog *curDlg)
 {
     ConnectDialog *dlg = (ConnectDialog*) curDlg->parent();
@@ -706,75 +777,34 @@ static bool gmdlgSend(QDialog *curDlg)
     if (!xml){
         return true;
     }
-    NDUINT16 msgid = 0;
-    ndxml *msgXML = ndxml_getnode(xml, "msgid");
-    if (!msgXML)	{
-        QMessageBox::warning(NULL, "Error","select xml node error!",QMessageBox::Ok);
-        return true;
-    }
-    else {
-        const char *maxId = ndxml_getattr_val(msgXML, "maxId");
-        const char *minId = ndxml_getattr_val(msgXML, "minId");
-        if (maxId && minId)	{
-			msgid = ND_MAKE_WORD(ndstr_atoi_hex(maxId), ndstr_atoi_hex(minId));
-        }
-        else {
-            msgid = ndxml_getval_int(msgXML);
-        }
-    }
+	const char *selSendCollectName = ndxml_getname(xml);
+	if (0==ndstricmp(selSendCollectName,"filter"))	{
+		const char *allowSendAll = ndxml_getattr_val(xml, "allowBatchSend");
+		if (!allowSendAll || 0!=ndstricmp(allowSendAll,"yes"))	{
+			QMessageBox::warning(NULL, "Error", "Not surported!", QMessageBox::Ok);
+			return true;
+		}
+		
+		int ret = QMessageBox::question(curDlg, "Question", "Do you want batch send all message ?",
+			QMessageBox::Yes | QMessageBox::No ,
+			QMessageBox::Yes);
 
-    NDOStreamMsg omsg(msgid);
+		if (QMessageBox::No == ret) {
+			return true;
+		}
 
-    for (int i = 1; i < ndxml_num(xml); ++i){
-        ndxml *node = ndxml_getnodei(xml, i);
-        if (node){
-            int typeId = 0;
-            const char *typeName = ndxml_getattr_val(node, "param");
-            if (typeName)
-                typeId = atoi(typeName);
-            switch (typeId)
-            {
-            case OT_INT :
-                omsg.Write((NDUINT32)ndxml_getval_int(node));
-                break;
-            case OT_FLOAT:
-                omsg.Write(ndxml_getval_float(node));
-                break;
-            case OT_STRING:
-                omsg.Write((NDUINT8*)ndxml_getval(node));
-                break;
-            case OT_INT8:
-                omsg.Write((NDUINT8)ndxml_getval_int(node));
-                break;
-            case OT_INT16:
-                omsg.Write((NDUINT16)ndxml_getval_int(node));
-                break;
-            case OT_INT64:
-                omsg.Write((NDUINT64)ndxml_getval_int(node));
-                break;
-			case OT_BINARY_DATA:
-			{
-				const char *p = ndxml_getval(node);
-				size_t s = (p && *p) ? strlen(p) : 0;
-				omsg.WriteBin((void*)p, s);
-			}
-			break;
-            default:
-                QMessageBox::warning(NULL, "Error","config error!",QMessageBox::Ok);
-                break;
-            }
-
-        }
-    }
-    NDIConn *pconn = dlg->getConnect();
-    if (pconn)	{
-        pconn->SendMsg(omsg);
-    }
-    else{
-
-        QMessageBox::warning(NULL, "Error","Need login!",QMessageBox::Ok);
-    }
-    return false;
+		int count = ndxml_getsub_num(xml);
+		for (int i = 0; i < count; i++)		{
+			ndxml *subNode = ndxml_getnodei(xml, i);
+			nd_assert(subNode);
+			_sendMsgByXml(subNode, dlg);
+		}
+		return false;
+	}
+	else {
+		return _sendMsgByXml(xml, dlg);
+	}
+	
 }
 
 

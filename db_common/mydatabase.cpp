@@ -80,22 +80,9 @@ int CMyDatabase::on_error_tryto_reconnect(int mysql_error)
 		mysql_error==CR_CONNECTION_ERROR || mysql_error ==CR_CONN_HOST_ERROR){
 		if (0==sql_ping() )	{
 			close_database() ;
-			//mysql_init(&m_mysqlinst );
-			//db_handle = mysql_real_connect(&m_mysqlinst,m_host, m_user, m_password, m_database,0,NULL,0);
+
+			nd_logerror("mysql error %d tryto re-connect \n", m_errno);
 			return open_database(m_host,m_port, m_user, m_password, m_database) ;
-// 			if (0 == ){
-// 				if(-1 ==on_connect() ) {
-// 					mysql_close(&m_mysqlinst);
-// 					db_handle = NULL ;
-// 					nd_logerror("mysql on_connect()  ERROR \n") ;
-// 					return -1 ;
-// 				}
-// 				nd_logmsg("reconnect to mysql SUCCESS \n") ;
-// 				return 0;
-// 			}	
-// 			else {
-// 				nd_logerror("reconnect to mysql error \n") ;
-// 			}
 		}
 	}
 	return -1;
@@ -277,6 +264,7 @@ int CMyDatabase::sql_ping()
 {
 	if(-1==mysql_ping(db_handle) ) {
 		m_errno = mysql_errno(db_handle) ;
+		nd_logerror("ping mysql server error %d\n", m_errno);
 		return -1;
 	}
 	return 0;
@@ -455,7 +443,7 @@ int CMyDatabase::stmt_execute(STMT_HANDLE stmt)
 	
 	nd_assert(m_myThid && m_myThid==nd_thread_self()) ;
 	
-	int re_times = 3 ;
+	int re_times = 2 ;
 
 RE_EXE:
 	if (!stmt || !STMT_HANDLE_TO_CONTEXT(stmt)){
@@ -465,6 +453,7 @@ RE_EXE:
 
 	if(mysql_stmt_execute(STMT_HANDLE_TO_CONTEXT(stmt)) != 0 ) {		
 		m_errno = mysql_stmt_errno(STMT_HANDLE_TO_CONTEXT(stmt));
+
 		
 		if (--re_times > 0 && 0==on_error_tryto_reconnect(m_errno) ){
 			goto RE_EXE ;

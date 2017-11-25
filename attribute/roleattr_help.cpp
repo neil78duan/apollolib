@@ -689,7 +689,7 @@ int Dbl_TableStringToAttr(const DBLDataNode &dataString, attr_node_buf &attrbuf)
 				DBLDataNode node;
 				if (node.StringToArrayString(p)) {
 					attrid_t aid = root->GetID( node.GetarrayText(0));
-					if (aid == ATTR_VALUE_DETA) {
+					if (aid == INVALID_ATTR_ID) {
 						return -1;
 					}
 					attrval_t val = node.GetarrayFloat(1);

@@ -1,14 +1,41 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <type_data_type name="数据类型" kinds="hide" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,2维数组,变量,参数,上一步结果,time"/>
-<send_msg_list name="发送消息" delete="no" expand_stat="1">
+<send_msg_list name="发送消息" delete="no" expand_stat="1" displayChildren="no">
+	<message name="插旗" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="17" minId="15">0</msgid>
+		<data name="城市id" kinds="numeral" param="0">11101</data>
+		<data name="队伍id" kinds="numeral" param="3">1</data>
+	</message>
+	<message name="请求查看城市插旗信息" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="17" minId="13">0</msgid>
+		<data name="城市id" kinds="numeral" param="0">11101</data>
+	</message>
+	<message name="设置队长请求" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="17" minId="0">0</msgid>
+		<data name="队伍id" kinds="numeral" param="3">1</data>
+		<data name="角色id" kinds="numeral" param="0">2</data>
+		<data name="是否是设置队长" kinds="numeral" param="3">1</data>
+	</message>
+	<message name="设置队员请求" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="17" minId="3">0</msgid>
+		<data name="队伍id" kinds="numeral" param="3">1</data>
+		<data name="角色id" kinds="numeral" param="0">2</data>
+		<data name="是否是设置队长" kinds="numeral" param="3">1</data>
+	</message>
+	<message name="请求查看队伍信息" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="17" minId="8">0</msgid>
+	</message>
+	<message name="请求查看自己队伍信息" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="17" minId="11">0</msgid>
+	</message>
 	<message name="攻击国家npc" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="15" minId="42">0</msgid>
-		<data name="cityId" kinds="numeral" param="0">11501</data>
+		<data name="cityId" kinds="numeral" param="0">11502</data>
 		<data name="npcId" kinds="numeral" param="4">101</data>
 	</message>
 	<message name="攻击国家npc结束战斗" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="15" minId="44">0</msgid>
-		<data name="cityId" kinds="numeral" param="0">11501</data>
+		<data name="cityId" kinds="numeral" param="0">11502</data>
 		<data name="npcId" kinds="numeral" param="4">101</data>
 		<data name="是否是据点" kinds="bool" param="3">0</data>
 		<data name="副本编号" kinds="numeral" param="0">101</data>
@@ -25,7 +52,7 @@
 	</message>
 	<message name="查看城市npc数据" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="15" minId="46">0</msgid>
-		<data name="cityId" kinds="numeral" param="0">11501</data>
+		<data name="cityId" kinds="numeral" param="0">11101</data>
 	</message>
 	<message name="开始战斗克隆岛" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="13" minId="4">0</msgid>
@@ -142,11 +169,7 @@
 	</message>
 	<message name="申请加入国家" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="15" minId="0">0</msgid>
-<<<<<<< HEAD
-		<data name="国家id" kinds="numeral" param="3">3</data>
-=======
-		<data name="国家id" kinds="numeral" param="3">2</data>
->>>>>>> 1d30f30c0ee5f155ed2fe6242632cde4cce55f15
+		<data name="国家id" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="查看国家状态" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="15" minId="2">0</msgid>
@@ -299,7 +322,7 @@
 	</message>
 	<message name="原胚赐福" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="14" minId="0">0</msgid>
-		<data name="id" kinds="numeral" param="0">3866089</data>
+		<data name="id" kinds="numeral" param="0">2096617</data>
 	</message>
 	<message name="原胚祈灵" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="14" minId="7">0</msgid>
@@ -337,15 +360,15 @@
 		<msgid kinds="hide" maxId="9" minId="2">0</msgid>
 		<data name="允许自由加入" kinds="numeral" param="3">0</data>
 		<data name="允许加入等级" kinds="numeral" param="3">1</data>
-		<data name="名字" kinds="string" param="2">guild13</data>
+		<data name="徽章信息" kinds="numeral" param="4">1</data>
+		<data name="名字" kinds="string" param="2">2223333</data>
 		<data name="声明" kinds="string" param="2">chinese</data>
 		<data name="通知" kinds="string" param="2">this is my guild</data>
-		<data name="徽章信息" kinds="string" param="2">hello world</data>
 		<data name="初始成员上限" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="加入工会" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="9" minId="4">0</msgid>
-		<data name="工会id" kinds="numeral" param="0">62</data>
+		<data name="工会id" kinds="numeral" param="0">1</data>
 	</message>
 	<message name="同意加入工会" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="9" minId="6">0</msgid>
@@ -558,9 +581,9 @@
 	</message>
 	<message name="使用物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="6">0</msgid>
-		<data name="物品" kinds="numeral" param="0">3104</data>
-		<data name="卡牌ID" kinds="numeral" param="0">4151770</data>
-		<data name="数量" kinds="numeral" param="4">1</data>
+		<data name="物品" kinds="numeral" param="0">30010</data>
+		<data name="卡牌ID" kinds="numeral" param="0">0</data>
+		<data name="数量" kinds="numeral" param="4">2</data>
 	</message>
 	<message name="获得自己的邀请码" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="8">0</msgid>
@@ -602,170 +625,211 @@
 	<message name="请求查看系统聊天消息" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="54">0</msgid>
 	</message>
-	<message name="GM_增加新神器" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="32">0</msgid>
-		<data name="id" kinds="numeral" param="0">65101</data>
-		<data name="cardId" kinds="numeral" param="0">21051</data>
-		<data name="growthValue" kinds="numeral" param="1">40</data>
-	</message>
-	<message name="GM_增加原胚" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="29">0</msgid>
-	</message>
-	<message name="GM_给自己加经验" expand="yes" delete="no">
-		<msgid kinds="hide">1795</msgid>
-		<data name="增加经验" kinds="numeral" param="0">50000</data>
-	</message>
-	<message name="GM_改等级" expand="yes" delete="no">
-		<msgid kinds="hide">1796</msgid>
-		<data name="新等级" kinds="numeral" param="0">8</data>
-	</message>
-	<message name="GM_加物品" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="6">0</msgid>
-		<data name="物品编号" kinds="numeral" param="0">42051</data>
-		<data name="数量" kinds="numeral" param="0">2000</data>
-	</message>
-	<message name="GM_增加卡牌" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="7">0</msgid>
-		<data name="编号" kinds="numeral" param="0">3</data>
-	</message>
-	<message name="GM_建筑升级" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="27">0</msgid>
-		<data name="编号" kinds="numeral" param="0">19001</data>
-		<data name="新等级" kinds="numeral" param="0">1</data>
-	</message>
-	<message name="GM_卡牌升级" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="25">0</msgid>
-		<data name="编号" kinds="numeral" param="0">21061</data>
-	</message>
-	<message name="GM_增加装备" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="20">0</msgid>
-		<data name="编号" kinds="numeral" param="0">31101</data>
-	</message>
-	<message name="GM_增加属性" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="8">0</msgid>
-		<data name="编号" kinds="numeral" param="2">Crystal</data>
-		<data name="属性增加值" kinds="numeral" param="1">3000</data>
-	</message>
-	<message name="GM_发送系统公告" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="10">0</msgid>
-		<data name="发送者" kinds="hide" param="0">0</data>
-		<data name="时间" kinds="hide" param="5">0</data>
-		<data name="类型" kinds="numeral" param="3">1</data>
-		<data name="是否读取" kinds="numeral" param="3">0</data>
-		<data name="是否领取邮件" kinds="numeral" param="3">0</data>
-		<data name="领取时效" kinds="numeral" param="5">60</data>
-		<data name="标题" kinds="string" param="2">3-系统补偿</data>
-		<data name="说明" kinds="string" param="2">补偿测试</data>
-		<data name="属性个数" kinds="numeral" param="4">1</data>
-		<data name="补偿类型" kinds="key_value" key="游戏币,钻石,竞技场币,上古之魂" value="2,3,4,5" param="3">3</data>
-		<data name="补偿多少" kinds="numeral" param="1">1</data>
-		<data name="物品个数" kinds="numeral" param="4">1</data>
-		<data name="物品编号" kinds="numeral" param="0">30501</data>
-		<data name="物品个数" kinds="numeral" param="4">1</data>
-		<data name="是否隐藏" kinds="numeral" param="3">0</data>
-	</message>
-	<message name="GM_发送补偿" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="11">0</msgid>
-		<data name="玩家ID" kinds="numeral" param="0">7</data>
-		<data name="发送者" kinds="hide" param="0">0</data>
-		<data name="时间" kinds="hide" param="5">0</data>
-		<data name="类型" kinds="numeral" param="3">1</data>
-		<data name="是否读取" kinds="numeral" param="3">0</data>
-		<data name="是否领取邮件" kinds="numeral" param="3">0</data>
-		<data name="领取时效" kinds="hide" param="5">0</data>
-		<data name="标题" kinds="string" param="2">3-系统补偿</data>
-		<data name="说明" kinds="string" param="2">补偿测试</data>
-		<data name="属性个数" kinds="numeral" param="4">1</data>
-		<data name="补偿类型" kinds="key_value" key="游戏币,钻石,竞技场币,上古之魂" value="2,3,4,5" param="3">2</data>
-		<data name="补偿多少" kinds="numeral" param="1">1</data>
-		<data name="物品个数" kinds="numeral" param="4">1</data>
-		<data name="物品编号" kinds="numeral" param="0">30501</data>
-		<data name="物品个数" kinds="numeral" param="4">1</data>
-		<data name="是否隐藏" kinds="numeral" param="3">0</data>
-	</message>
-	<message name="GM_通过名字获得ID" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="18">0</msgid>
-		<data name="玩家名字" kinds="string" param="2" desc="name">berry</data>
-	</message>
-	<message name="GM_查询其他玩家设置" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="21">0</msgid>
-		<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">22</data>
-	</message>
-	<message name="GM_获得其他玩家数据" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="23">0</msgid>
-		<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">28</data>
-	</message>
-	<message name="GM_据点入侵" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="28">0</msgid>
-	</message>
-	<message name="GM_重新加载排行榜" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="30">0</msgid>
-	</message>
-	<message name="GM_关机前T人" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="36">0</msgid>
-	</message>
-	<message name="sys_修改SOCIAL服务器时间" expand="yes" delete="no" need_confirm="yes">
-		<msgid kinds="hide" maxId="7" minId="31">0</msgid>
-		<data name="加快小时" kinds="numeral" param="0">16</data>
-		<data name="加快分钟" kinds="numeral" param="0">0</data>
-	</message>
-	<message name="sys_修改nation服务器时间" expand="yes" delete="no" need_confirm="yes">
-		<msgid kinds="hide" maxId="7" minId="37">0</msgid>
-		<data name="加快小时" kinds="numeral" param="0">240</data>
-		<data name="加快分钟" kinds="numeral" param="0">0</data>
-	</message>
-	<message name="sys_关服" expand="yes" delete="no" need_confirm="yes">
-		<msgid kinds="hide">1794</msgid>
-		<data name="包裹编号" kinds="hide" param="0">0</data>
-	</message>
-	<message name="sys_查看服务器策划表格信息" expand="yes" delete="no" need_confirm="yes">
-		<msgid maxId="7" minId="14" kinds="hide">0</msgid>
-	</message>
-	<message name="sys_查询服务器excel" expand="yes" delete="no" need_confirm="yes">
-		<msgid maxId="7" minId="34" kinds="hide">0</msgid>
-		<data name="表格名字" kinds="string" param="2">constant_config.xlsx</data>
-		<data name="索引ID" kinds="numeral" param="0">1</data>
-	</message>
-	<message name="sys_重新加载游戏数据" expand="yes" delete="no" need_confirm="yes">
-		<msgid kinds="hide">17</msgid>
-	</message>
-	<message name="sys_修改游戏时间" expand="yes" delete="no" need_confirm="yes">
-		<msgid kinds="hide">1797</msgid>
-		<data name="加快小时" kinds="numeral" param="0">2</data>
-		<data name="加快分钟" kinds="numeral" param="0">60</data>
-	</message>
-	<message name="sys_查看游戏时间" expand="yes" delete="no" need_confirm="yes">
-		<msgid maxId="0" minId="16" kinds="hide">0</msgid>
-	</message>
-	<message name="sys_查看操作系统时间" expand="yes" delete="no" need_confirm="yes">
-		<msgid maxId="0" minId="3" kinds="hide">0</msgid>
-	</message>
-	<message name="sys_记录收发消息" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="0" minId="15">0</msgid>
-		<data name="MaxID" kinds="numeral" param="3">2</data>
-		<data name="MinID" kinds="numeral" param="3">33</data>
-		<data name="是否显示" kinds="bool" param="3">1</data>
-	</message>
-	<message name="sys_打印收到的消息内容" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="0" minId="29">0</msgid>
-		<data name="MaxID" kinds="numeral" param="3">2</data>
-		<data name="MinID" kinds="numeral" param="3">35</data>
-		<data name="是否显示" kinds="bool" param="3">1</data>
-	</message>
-	<message name="sys_关闭消息" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="0" minId="30">0</msgid>
-		<data name="MaxID" kinds="numeral" param="3">0</data>
-		<data name="MinID" kinds="numeral" param="3">0</data>
-	</message>
-	<message name="sys_查看服务器版本" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="0" minId="2">0</msgid>
-	</message>
-	<message name="sys_显示服务器日志" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="0" minId="27">0</msgid>
-	</message>
-	<message name="sys_打开特定类型日志" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="0" minId="28">0</msgid>
-		<data name="日志类型" kinds="key_value" key="普通日志,调试,警告,错误,致命" value="0,1,2,3,4" param="3">0</data>
-		<data name="打开" kinds="bool" param="3">1</data>
-	</message>
+	<filter name="test_批量发送测试" delete="no" displayChildren="no" expand_stat="0" allowBatchSend="yes">
+		<message name="给自己加经验" expand="yes" delete="no">
+			<msgid kinds="hide">1795</msgid>
+			<data name="增加经验" kinds="numeral" param="0">50000</data>
+		</message>
+		<message name="加物品" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="6">0</msgid>
+			<data name="物品编号" kinds="numeral" param="0">30010</data>
+			<data name="数量" kinds="numeral" param="0">80</data>
+		</message>
+	</filter>
+	<filter name="GM_gm消息" delete="no" displayChildren="no" expand_stat="0">
+		<message name="GM设置个人耐久" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="42">0</msgid>
+			<data name="num" kinds="numeral" param="0">100000</data>
+		</message>
+		<message name="GM设置个人行动力" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="43">0</msgid>
+			<data name="num" kinds="numeral" param="0">100000</data>
+		</message>
+		<message name="GM增加公会声望" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="38">0</msgid>
+			<data name="num" kinds="numeral" param="0">100000</data>
+		</message>
+		<message name="GM增加个人声望" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="39">0</msgid>
+			<data name="num" kinds="numeral" param="0">10000</data>
+		</message>
+		<message name="GM_国战加buff" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="40">0</msgid>
+			<data name="isCity" kinds="enum" enum_value="国家,城市" param="3">0</data>
+			<data name="city_id" kinds="numeral" param="4">1</data>
+			<data name="buff" kinds="numeral" param="4">100</data>
+		</message>
+		<message name="GM_国家排行刷新" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="41">0</msgid>
+			<data name="isCity" kinds="enum" enum_value="排行榜,爵位,奖励" param="3">2</data>
+		</message>
+		<message name="GM_增加新神器" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="32">0</msgid>
+			<data name="id" kinds="numeral" param="0">65101</data>
+			<data name="cardId" kinds="numeral" param="0">21051</data>
+			<data name="growthValue" kinds="numeral" param="1">40</data>
+		</message>
+		<message name="GM_增加原胚" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="29">0</msgid>
+		</message>
+		<message name="GM_给自己加经验" expand="yes" delete="no">
+			<msgid kinds="hide">1795</msgid>
+			<data name="增加经验" kinds="numeral" param="0">50000</data>
+		</message>
+		<message name="GM_改等级" expand="yes" delete="no">
+			<msgid kinds="hide">1796</msgid>
+			<data name="新等级" kinds="numeral" param="0">2</data>
+		</message>
+		<message name="GM_加物品" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="6">0</msgid>
+			<data name="物品编号" kinds="numeral" param="0">30010</data>
+			<data name="数量" kinds="numeral" param="0">80</data>
+		</message>
+		<message name="GM_增加卡牌" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="7">0</msgid>
+			<data name="编号" kinds="numeral" param="0">3</data>
+		</message>
+		<message name="GM_建筑升级" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="27">0</msgid>
+			<data name="编号" kinds="numeral" param="0">19001</data>
+			<data name="新等级" kinds="numeral" param="0">1</data>
+		</message>
+		<message name="GM_卡牌升级" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="25">0</msgid>
+			<data name="编号" kinds="numeral" param="0">21061</data>
+		</message>
+		<message name="GM_增加装备" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="20">0</msgid>
+			<data name="编号" kinds="numeral" param="0">31101</data>
+		</message>
+		<message name="GM_增加属性" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="8">0</msgid>
+			<data name="编号" kinds="numeral" param="2">Crystal</data>
+			<data name="属性增加值" kinds="numeral" param="1">3000</data>
+		</message>
+		<message name="GM_发送系统公告" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="10">0</msgid>
+			<data name="发送者" kinds="hide" param="0">0</data>
+			<data name="时间" kinds="hide" param="5">0</data>
+			<data name="类型" kinds="numeral" param="3">1</data>
+			<data name="是否读取" kinds="numeral" param="3">0</data>
+			<data name="是否领取邮件" kinds="numeral" param="3">0</data>
+			<data name="领取时效" kinds="numeral" param="5">60</data>
+			<data name="标题" kinds="string" param="2">3-系统补偿</data>
+			<data name="说明" kinds="string" param="2">补偿测试</data>
+			<data name="属性个数" kinds="numeral" param="4">1</data>
+			<data name="补偿类型" kinds="key_value" key="游戏币,钻石,竞技场币,上古之魂" value="2,3,4,5" param="3">3</data>
+			<data name="补偿多少" kinds="numeral" param="1">1</data>
+			<data name="物品个数" kinds="numeral" param="4">1</data>
+			<data name="物品编号" kinds="numeral" param="0">30501</data>
+			<data name="物品个数" kinds="numeral" param="4">1</data>
+			<data name="是否隐藏" kinds="numeral" param="3">0</data>
+		</message>
+		<message name="GM_发送补偿" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="11">0</msgid>
+			<data name="玩家ID" kinds="numeral" param="0">7</data>
+			<data name="发送者" kinds="hide" param="0">0</data>
+			<data name="时间" kinds="hide" param="5">0</data>
+			<data name="类型" kinds="numeral" param="3">1</data>
+			<data name="是否读取" kinds="numeral" param="3">0</data>
+			<data name="是否领取邮件" kinds="numeral" param="3">0</data>
+			<data name="领取时效" kinds="hide" param="5">0</data>
+			<data name="标题" kinds="string" param="2">3-系统补偿</data>
+			<data name="说明" kinds="string" param="2">补偿测试</data>
+			<data name="属性个数" kinds="numeral" param="4">1</data>
+			<data name="补偿类型" kinds="key_value" key="游戏币,钻石,竞技场币,上古之魂" value="2,3,4,5" param="3">2</data>
+			<data name="补偿多少" kinds="numeral" param="1">1</data>
+			<data name="物品个数" kinds="numeral" param="4">1</data>
+			<data name="物品编号" kinds="numeral" param="0">30501</data>
+			<data name="物品个数" kinds="numeral" param="4">1</data>
+			<data name="是否隐藏" kinds="numeral" param="3">0</data>
+		</message>
+		<message name="GM_通过名字获得ID" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="18">0</msgid>
+			<data name="玩家名字" kinds="string" param="2" desc="name">ddtest</data>
+		</message>
+		<message name="GM_查询其他玩家设置" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="21">0</msgid>
+			<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">22</data>
+		</message>
+		<message name="GM_获得其他玩家数据" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="23">0</msgid>
+			<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">2</data>
+		</message>
+		<message name="GM_据点入侵" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="28">0</msgid>
+		</message>
+		<message name="GM_重新加载排行榜" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="30">0</msgid>
+		</message>
+		<message name="GM_关机前T人" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="36">0</msgid>
+		</message>
+	</filter>
+	<filter name="system_系统消息" delete="no" displayChildren="no" expand_stat="0">
+		<message name="sys_修改SOCIAL服务器时间" expand="yes" delete="no" need_confirm="yes">
+			<msgid kinds="hide" maxId="7" minId="31">0</msgid>
+			<data name="加快小时" kinds="numeral" param="0">16</data>
+			<data name="加快分钟" kinds="numeral" param="0">0</data>
+		</message>
+		<message name="sys_修改nation服务器时间" expand="yes" delete="no" need_confirm="yes">
+			<msgid kinds="hide" maxId="7" minId="37">0</msgid>
+			<data name="加快小时" kinds="numeral" param="0">1</data>
+			<data name="加快分钟" kinds="numeral" param="0">0</data>
+		</message>
+		<message name="sys_关服" expand="yes" delete="no" need_confirm="yes">
+			<msgid kinds="hide">1794</msgid>
+			<data name="包裹编号" kinds="hide" param="0">0</data>
+		</message>
+		<message name="sys_查看服务器策划表格信息" expand="yes" delete="no" need_confirm="yes">
+			<msgid maxId="7" minId="14" kinds="hide">0</msgid>
+		</message>
+		<message name="sys_查询服务器excel" expand="yes" delete="no" need_confirm="yes">
+			<msgid maxId="7" minId="34" kinds="hide">0</msgid>
+			<data name="表格名字" kinds="string" param="2">constant_config.xlsx</data>
+			<data name="索引ID" kinds="numeral" param="0">1</data>
+		</message>
+		<message name="sys_重新加载游戏数据" expand="yes" delete="no" need_confirm="yes">
+			<msgid kinds="hide">17</msgid>
+		</message>
+		<message name="sys_修改游戏时间" expand="yes" delete="no" need_confirm="yes">
+			<msgid kinds="hide">1797</msgid>
+			<data name="加快小时" kinds="numeral" param="0">2</data>
+			<data name="加快分钟" kinds="numeral" param="0">60</data>
+		</message>
+		<message name="sys_查看游戏时间" expand="yes" delete="no" need_confirm="yes">
+			<msgid maxId="0" minId="16" kinds="hide">0</msgid>
+		</message>
+		<message name="sys_查看操作系统时间" expand="yes" delete="no" need_confirm="yes">
+			<msgid maxId="0" minId="3" kinds="hide">0</msgid>
+		</message>
+		<message name="sys_记录收发消息" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="0" minId="15">0</msgid>
+			<data name="MaxID" kinds="numeral" param="3">2</data>
+			<data name="MinID" kinds="numeral" param="3">33</data>
+			<data name="是否显示" kinds="bool" param="3">1</data>
+		</message>
+		<message name="sys_打印收到的消息内容" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="0" minId="29">0</msgid>
+			<data name="MaxID" kinds="numeral" param="3">2</data>
+			<data name="MinID" kinds="numeral" param="3">35</data>
+			<data name="是否显示" kinds="bool" param="3">1</data>
+		</message>
+		<message name="sys_关闭消息" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="0" minId="30">0</msgid>
+			<data name="MaxID" kinds="numeral" param="3">0</data>
+			<data name="MinID" kinds="numeral" param="3">0</data>
+		</message>
+		<message name="sys_查看服务器版本" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="0" minId="2">0</msgid>
+		</message>
+		<message name="sys_显示服务器日志" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="0" minId="27">0</msgid>
+		</message>
+		<message name="sys_打开特定类型日志" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="0" minId="28">0</msgid>
+			<data name="日志类型" kinds="key_value" key="普通日志,调试,警告,错误,致命" value="0,1,2,3,4" param="3">0</data>
+			<data name="打开" kinds="bool" param="3">1</data>
+		</message>
+	</filter>
 </send_msg_list>

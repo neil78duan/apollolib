@@ -239,11 +239,16 @@ bool apoUiCommonXmlView::showDetail(void *data, ndxml_root *xmlfile)
 	m_rootFile = xmlfile;
 	m_editedNode = (ndxml *)data;
 
-	int num = ndxml_getsub_num(m_editedNode);
-	for (int i = 0; i < num; i++){
-		ndxml *subNode = ndxml_getnodei(m_editedNode, i);
-		if (!CheckHide(subNode)) {
-			ShowXMLValue(subNode, CheckExpand(subNode));
+	if (CheckDisplayChildren(m_editedNode))	{
+		int num = ndxml_getsub_num(m_editedNode);
+		for (int i = 0; i < num; i++){
+			ndxml *subNode = ndxml_getnodei(m_editedNode, i);
+			if (!CheckDisplayChildren(subNode))	{
+				continue;
+			}
+			if (!CheckHide(subNode)) {
+				ShowXMLValue(subNode, CheckExpand(subNode));
+			}
 		}
 	}
 	//
@@ -310,22 +315,23 @@ int apoUiCommonXmlView::ShowXMLValue(ndxml *xml_node, int expand)
 			}
 		}
 	}
-
-	if (expand) {
-		for (i = 0; i < ndxml_getsub_num(xml_node); i++) {
-			ndxml *sub_node = ndxml_refsubi(xml_node, i);
-			if (sub_node && !CheckHide(sub_node)){
-				ShowXMLValue(sub_node, expand);
+	if (CheckDisplayChildren(xml_node)) {
+		if (expand) {
+			for (i = 0; i < ndxml_getsub_num(xml_node); i++) {
+				ndxml *sub_node = ndxml_refsubi(xml_node, i);
+				if (sub_node && !CheckHide(sub_node)){
+					ShowXMLValue(sub_node, expand);
+				}
 			}
 		}
-	}
-	else {
-		text_vect_t exp_list;
-		if (get_string_array((char*)ndxml_getattr_val(xml_node, _GetReverdWord(ERT_EXPAND_LIST)), exp_list)) {
-			for (text_vect_t::iterator it = exp_list.begin(); it != exp_list.end(); it++) {
-				ndxml *sub_node = ndxml_refsub(xml_node, (*it).c_str());
-				if (sub_node && !CheckHide(sub_node)){
-					ShowXMLValue(sub_node, 1);
+		else {
+			text_vect_t exp_list;
+			if (get_string_array((char*)ndxml_getattr_val(xml_node, _GetReverdWord(ERT_EXPAND_LIST)), exp_list)) {
+				for (text_vect_t::iterator it = exp_list.begin(); it != exp_list.end(); it++) {
+					ndxml *sub_node = ndxml_refsub(xml_node, (*it).c_str());
+					if (sub_node && !CheckHide(sub_node)){
+						ShowXMLValue(sub_node, 1);
+					}
 				}
 			}
 		}
