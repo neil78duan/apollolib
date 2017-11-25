@@ -73,6 +73,7 @@ struct db_blob_data_update_msg : public db_msg_header
 		serverId = 0;
 		datalen = 0;
 		id = 0;
+		type = 0;
 		name[0] = 0;
 	}
 	int msgSize(){
@@ -80,6 +81,7 @@ struct db_blob_data_update_msg : public db_msg_header
 	}
 	NDUINT32 serverId;
 	NDUINT32 id;
+	NDUINT32 type;
 	NDUINT32 datalen;
 	char name[COMMON_DATA_NAME_SIZE];
 	char data[0x10000];

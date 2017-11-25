@@ -1,29 +1,41 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <type_data_type name="数据类型" kinds="hide" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,2维数组,变量,参数,上一步结果,time"/>
 <send_msg_list name="发送消息" delete="no" expand_stat="1">
+	<message name="插旗" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="17" minId="15">0</msgid>
+		<data name="城市id" kinds="numeral" param="0">11101</data>
+		<data name="队伍id" kinds="numeral" param="3">1</data>
+	</message>
+	<message name="请求查看城市插旗信息" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="17" minId="13">0</msgid>
+		<data name="城市id" kinds="numeral" param="0">11101</data>
+	</message>
 	<message name="设置队长请求" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="17" minId="0">0</msgid>
-		<data name="城市id" kinds="numeral" param="3">0</data>
-		<data name="角色id" kinds="numeral" param="0">0</data>
-		<data name="是否是卸任队长" kinds="numeral" param="3">0</data>
+		<data name="队伍id" kinds="numeral" param="3">1</data>
+		<data name="角色id" kinds="numeral" param="0">2</data>
+		<data name="是否是设置队长" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="设置队员请求" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="17" minId="0">0</msgid>
-		<data name="城市id" kinds="numeral" param="3">0</data>
-		<data name="角色id" kinds="numeral" param="0">0</data>
-		<data name="是否是卸任队长" kinds="numeral" param="3">0</data>
+		<msgid kinds="hide" maxId="17" minId="3">0</msgid>
+		<data name="队伍id" kinds="numeral" param="3">1</data>
+		<data name="角色id" kinds="numeral" param="0">2</data>
+		<data name="是否是设置队长" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="请求查看队伍信息" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="17" minId="8">0</msgid>
 	</message>
+	<message name="请求查看自己队伍信息" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="17" minId="11">0</msgid>
+	</message>
 	<message name="攻击国家npc" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="15" minId="42">0</msgid>
-		<data name="cityId" kinds="numeral" param="0">11501</data>
+		<data name="cityId" kinds="numeral" param="0">11502</data>
 		<data name="npcId" kinds="numeral" param="4">101</data>
 	</message>
 	<message name="攻击国家npc结束战斗" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="15" minId="44">0</msgid>
-		<data name="cityId" kinds="numeral" param="0">11501</data>
+		<data name="cityId" kinds="numeral" param="0">11502</data>
 		<data name="npcId" kinds="numeral" param="4">101</data>
 		<data name="是否是据点" kinds="bool" param="3">0</data>
 		<data name="副本编号" kinds="numeral" param="0">101</data>
@@ -40,7 +52,7 @@
 	</message>
 	<message name="查看城市npc数据" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="15" minId="46">0</msgid>
-		<data name="cityId" kinds="numeral" param="0">11501</data>
+		<data name="cityId" kinds="numeral" param="0">11101</data>
 	</message>
 	<message name="开始战斗克隆岛" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="13" minId="4">0</msgid>
@@ -157,7 +169,7 @@
 	</message>
 	<message name="申请加入国家" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="15" minId="0">0</msgid>
-		<data name="国家id" kinds="numeral" param="3">2</data>
+		<data name="国家id" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="查看国家状态" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="15" minId="2">0</msgid>
@@ -348,15 +360,15 @@
 		<msgid kinds="hide" maxId="9" minId="2">0</msgid>
 		<data name="允许自由加入" kinds="numeral" param="3">0</data>
 		<data name="允许加入等级" kinds="numeral" param="3">1</data>
-		<data name="名字" kinds="string" param="2">6663333444</data>
+		<data name="徽章信息" kinds="numeral" param="4">1</data>
+		<data name="名字" kinds="string" param="2">2223333</data>
 		<data name="声明" kinds="string" param="2">chinese</data>
 		<data name="通知" kinds="string" param="2">this is my guild</data>
-		<data name="徽章信息" kinds="string" param="2">hello world</data>
 		<data name="初始成员上限" kinds="numeral" param="3">1</data>
 	</message>
 	<message name="加入工会" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="9" minId="4">0</msgid>
-		<data name="工会id" kinds="numeral" param="0">4</data>
+		<data name="工会id" kinds="numeral" param="0">1</data>
 	</message>
 	<message name="同意加入工会" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="9" minId="6">0</msgid>
@@ -569,9 +581,9 @@
 	</message>
 	<message name="使用物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="6">0</msgid>
-		<data name="物品" kinds="numeral" param="0">3104</data>
-		<data name="卡牌ID" kinds="numeral" param="0">4151770</data>
-		<data name="数量" kinds="numeral" param="4">1</data>
+		<data name="物品" kinds="numeral" param="0">30010</data>
+		<data name="卡牌ID" kinds="numeral" param="0">0</data>
+		<data name="数量" kinds="numeral" param="4">2</data>
 	</message>
 	<message name="获得自己的邀请码" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="8">0</msgid>
@@ -613,13 +625,31 @@
 	<message name="请求查看系统聊天消息" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="6" minId="54">0</msgid>
 	</message>
-	<message name="增加公会声望" expand="yes" delete="no">
-		<msgid kinds="hide" maxId="7" minId="38">0</msgid>
-		<data name="num" kinds="numeral" param="0">1000</data>
+	<message name="GM设置个人耐久" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="7" minId="42">0</msgid>
+		<data name="num" kinds="numeral" param="0">10</data>
 	</message>
-	<message name="增加个人声望" expand="yes" delete="no">
+	<message name="GM设置个人行动力" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="7" minId="43">0</msgid>
+		<data name="num" kinds="numeral" param="0">70</data>
+	</message>
+	<message name="GM增加公会声望" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="7" minId="38">0</msgid>
+		<data name="num" kinds="numeral" param="0">100000</data>
+	</message>
+	<message name="GM增加个人声望" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="39">0</msgid>
 		<data name="num" kinds="numeral" param="0">10000</data>
+	</message>
+	<message name="GM_国战加buff" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="7" minId="40">0</msgid>
+		<data name="isCity" kinds="enum" enum_value="国家,城市" param="3">0</data>
+		<data name="city_id" kinds="numeral" param="4">1</data>
+		<data name="buff" kinds="numeral" param="4">100</data>
+	</message>
+	<message name="GM_国家排行刷新" expand="yes" delete="no">
+		<msgid kinds="hide" maxId="7" minId="41">0</msgid>
+		<data name="isCity" kinds="enum" enum_value="排行榜,爵位,奖励" param="3">2</data>
 	</message>
 	<message name="GM_增加新神器" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="32">0</msgid>
@@ -640,8 +670,8 @@
 	</message>
 	<message name="GM_加物品" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="6">0</msgid>
-		<data name="物品编号" kinds="numeral" param="0">42051</data>
-		<data name="数量" kinds="numeral" param="0">2000</data>
+		<data name="物品编号" kinds="numeral" param="0">30010</data>
+		<data name="数量" kinds="numeral" param="0">80</data>
 	</message>
 	<message name="GM_增加卡牌" expand="yes" delete="no">
 		<msgid kinds="hide" maxId="7" minId="7">0</msgid>
@@ -730,7 +760,7 @@
 	</message>
 	<message name="sys_修改nation服务器时间" expand="yes" delete="no" need_confirm="yes">
 		<msgid kinds="hide" maxId="7" minId="37">0</msgid>
-		<data name="加快小时" kinds="numeral" param="0">240</data>
+		<data name="加快小时" kinds="numeral" param="0">1</data>
 		<data name="加快分钟" kinds="numeral" param="0">0</data>
 	</message>
 	<message name="sys_关服" expand="yes" delete="no" need_confirm="yes">

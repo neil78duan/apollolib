@@ -716,6 +716,9 @@ int build_dataType(ndxml_root *xmlfile, const char *out_file,bool saveDB)
 		int total =(int) res_list.size(); //ndxml_getsub_num(xnode) ;
 		for (int i=0; i<total; ++i) {
 			ndxml *sub = ndxml_refsub(xnode,res_list[i].name.c_str()) ;
+// 			if (0 == ndstricmp(sub->name, "CityBase")) {
+// 				ND_DebugBreak();
+// 			}
 			_save_dataTypeNode(sub,  pf,pfCpp, NULL, false) ;
 			fprintf(pf, "\n") ;
 		}
