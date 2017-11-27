@@ -74,6 +74,7 @@ namespace LogicEditorHelper
 		ERT_BREAK_ANCHOR,
 		ERT_ONLY_DEBUG,
 		ERT_BREAKPOINT,
+		ERT_DISPLAY_CHILDREN,
 	};
 
 	const char *_GetDataTypeName(eDataType dataType);
@@ -191,6 +192,8 @@ namespace LogicEditorHelper
 
 	//检测是否是扩展显示所有子节点
 	bool CheckExpand(ndxml *xml);
+
+	bool CheckDisplayChildren(ndxml *xml);
 	
 	bool checkAddNewChild(ndxml *xml);
 
