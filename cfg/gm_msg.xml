@@ -620,7 +620,7 @@
 			<data name="内容" kinds="string" param="2">地方</data>
 		</message>
 	</filter>
-	<filter name="test_批量发送测试" delete="no" displayChildren="no" expand_stat="1" allowBatchSend="yes">
+	<filter name="test_批量发送测试" delete="no" displayChildren="no" expand_stat="0" allowBatchSend="yes">
 		<message name="给自己加经验" expand="yes" delete="no">
 			<msgid kinds="hide">1795</msgid>
 			<data name="增加经验" kinds="numeral" param="0">50000</data>

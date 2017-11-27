@@ -781,22 +781,12 @@ static bool gmdlgInit(CDlgWithAccelerators *curDlg)
 
 	return true;
 }
-static bool gmdlgSend(CDlgWithAccelerators *curDlg)
+
+static bool _sendMsgByXml(ndxml *xml, gmToolDlg *curDlg)
 {
-	gmToolDlg *dlg = (gmToolDlg*) curDlg->GetParent();
-	if (!dlg){
-		AfxMessageBox("没有登录");
-		return true;
-	}
-	CXmlCfg *xmdlg = (CXmlCfg*)curDlg;
-	ndxml *xml = xmdlg->GetCurrentXml();
-	if (!xml){
-		AfxMessageBox("No function selected");
-		return true;
-	}
 	const char *isCheck = ndxml_getattr_val(xml, "need_confirm");
 	if (isCheck && *isCheck){
-		if (0==ndstricmp(isCheck,"yes")){
+		if (0 == ndstricmp(isCheck, "yes")){
 			char buf[128];
 			snprintf(buf, sizeof(buf), "确实要%s吗?", ndxml_getattr_val(xml, "name"));
 			if (IDYES != AfxMessageBox(buf, MB_YESNO)) {
@@ -832,7 +822,7 @@ static bool gmdlgSend(CDlgWithAccelerators *curDlg)
 				typeId = ndstr_atoi_hex(typeName);
 			switch (typeId)
 			{
-			case OT_INT :
+			case OT_INT:
 				omsg.Write((NDUINT32)ndxml_getval_int(node));
 				break;
 			case OT_FLOAT:
@@ -864,7 +854,8 @@ static bool gmdlgSend(CDlgWithAccelerators *curDlg)
 
 		}
 	}
-	NDIConn *pconn = dlg->getConnect();
+
+	NDIConn *pconn = curDlg->getConnect();
 	if (pconn)	{
 		pconn->SendMsg(omsg);
 	}
@@ -872,6 +863,44 @@ static bool gmdlgSend(CDlgWithAccelerators *curDlg)
 		AfxMessageBox("need login");
 	}
 	return false;
+}
+
+static bool gmdlgSend(CDlgWithAccelerators *curDlg)
+{
+	gmToolDlg *dlg = (gmToolDlg*) curDlg->GetParent();
+	if (!dlg){
+		AfxMessageBox("没有登录");
+		return true;
+	}
+	CXmlCfg *xmdlg = (CXmlCfg*)curDlg;
+	ndxml *xml = xmdlg->GetCurrentXml();
+	if (!xml){
+		AfxMessageBox("No function selected");
+		return true;
+	}
+	const char *selSendCollectName = ndxml_getname(xml);
+	if (0 == ndstricmp(selSendCollectName, "filter"))	{
+		const char *allowSendAll = ndxml_getattr_val(xml, "allowBatchSend");
+		if (!allowSendAll || 0 != ndstricmp(allowSendAll, "yes"))	{
+			AfxMessageBox( "不支持该功能");
+			return true;
+		}
+
+		if (IDNO == AfxMessageBox("是否要批量发送消息", MB_YESNO)) {
+			return true;
+		}
+
+		int count = ndxml_getsub_num(xml);
+		for (int i = 0; i < count; i++)		{
+			ndxml *subNode = ndxml_getnodei(xml, i);
+			nd_assert(subNode);
+			_sendMsgByXml(subNode, dlg);
+		}
+		return false;
+	}
+	else {
+		return _sendMsgByXml(xml, dlg);
+	}
 }
 
 
