@@ -8,54 +8,56 @@ ndsdk_dir = ../../ndsdk
 apolib_dir = ..
 
 macx:{
-#apolib_dir = $$(LIBAPOLLO)
-#ndsdk_dir = $$(NDHOME)
 
-
-QMAKE_MAC_SDK = macosx10.13
-
-DEFINES += __ND_MAC__
-
-LIBS += -L$$ndsdk_dir/lib -L$$apolib_dir/lib/darwin_x86_64  -liconv -L$$ndsdk_dir/lib/darwin_x86_64
-
-LIBS += -lnd_vm_dbg -lndclient_darwin_x86_64_d
+    QMAKE_MAC_SDK = macosx10.13
+    DEFINES += __ND_MAC__
+    platform_name = darwin_x86_64
+    LIBS += -lnd_vm_dbg -lndclient_darwin_x86_64_d -liconv
 
 }
 unix:!macx{
-message(BUILD LINUX!)
-DEFINES += __ND_LINUX__
+    message(BUILD LINUX!)
+    DEFINES += __ND_LINUX__
+    platform_name = linux_x86_64
+
+    LIBS += -lnd_vm_dbg -lndclient_linux_x86_64_d -liconv
 }
 
 win32{
-message(WIN32!)
-LIBS += -L$$ndsdk_dir/lib/win64 -L$$apolib_dir/lib -lapoBluePrint
+    message(WIN32!)
+    platform_name = Win64
+    LIBS += -L$$ndsdk_dir/lib/win64
 
-CONFIG(debug, debug|release) {
-    message(BUILD win32 -debug)
-    LIBS += -lndclient_s_d
-    DEFINES +=  ND_DEBUG
-} else {
-    message(BUILD win32 -release)
-    LIBS += -lndclient_s
+    CONFIG(debug, debug|release) {
+        message(BUILD win32 -debug)
+        LIBS += -lndclient_s_d
+        DEFINES +=  ND_DEBUG
+    } else {
+        message(BUILD win32 -release)
+        LIBS += -lndclient_s
+    }
+
+    DEFINES += __ND_WIN__ DO_NOT_CONVERT_PRINT_TEXT
 }
 
-DEFINES += __ND_WIN__ DO_NOT_CONVERT_PRINT_TEXT
-}
 
-
-LIBS += -lapoBluePrint
+LIBS += -L$$ndsdk_dir/lib -L$$apolib_dir/lib/$$platform_name  -L$$ndsdk_dir/lib/$$platform_name -lapoBluePrint
 
 DEFINES += X86_64
 
 INCLUDEPATH += $$ndsdk_dir/include \
         $$apolib_dir/include \
-        $$apolib_dir ./src ../apoBluePrint/include
+        $$apolib_dir  ./include ./include/apoScript \
+        ./src ../apoBluePrint/include
+
+
+#-------qt----------
 
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = apolloEditor
+TARGET = ../bin/apolloEditor
 TEMPLATE = app
 
 

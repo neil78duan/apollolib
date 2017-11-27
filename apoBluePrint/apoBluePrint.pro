@@ -12,17 +12,22 @@ macx:{
 
 QMAKE_MAC_SDK = macosx10.13
 DEFINES += __ND_MAC__
-LIBS += -L$$ndsdk_dir/lib -L$$apolib_dir/lib/darwin_x86_64  -liconv -L$$ndsdk_dir/lib/darwin_x86_64
+platform_name = darwin_x86_64
 LIBS += -lnd_vm_dbg -lndclient_darwin_x86_64_d
 
 }
 unix:!macx{
 message(BUILD LINUX!)
 DEFINES += __ND_LINUX__
+platform_name = linux_x86_64
+
+LIBS += -lnd_vm_dbg -lndclient_linux_x86_64_d -liconv
 }
 
 win32{
 message(WIN32!)
+
+platform_name = Win64
 LIBS += -L$$ndsdk_dir/lib/win64
 
 CONFIG(debug, debug|release) {
@@ -38,6 +43,7 @@ DEFINES += __ND_WIN__ DO_NOT_CONVERT_PRINT_TEXT
 }
 
 
+LIBS += -L$$ndsdk_dir/lib -L$$apolib_dir/lib/$$platform_name  -L$$ndsdk_dir/lib/$$platform_name
 DEFINES += X86_64
 
 INCLUDEPATH += $$ndsdk_dir/include \
@@ -48,7 +54,7 @@ INCLUDEPATH += $$ndsdk_dir/include \
 #----------------------------------------
 QT       += widgets
 
-TARGET = apoBluePrint
+TARGET = $$apolib_dir/lib/$$platform_name/apoBluePrint
 TEMPLATE = lib
 CONFIG += staticlib
 
