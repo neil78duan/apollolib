@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <type_data_type name="数据类型" kinds="hide" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,2维数组,变量,参数,上一步结果,time"/>
 <send_msg_list name="发送消息" delete="no" expand_stat="1" displayChildren="no">
-	<filter name="国战消息" delete="no" displayChildren="no" expand_stat="0">
+	<filter name="国战消息" delete="no" displayChildren="no" expand_stat="1">
 		<message name="申请加入国家" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="15" minId="0">0</msgid>
 			<data name="国家id" kinds="numeral" param="3">1</data>
