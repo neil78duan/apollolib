@@ -203,6 +203,14 @@ APOLLO_SCRIPT_API_DEF(_sys_open_file_stream, "sys_OpenStream(fileName)")
 
 }
 
+
+APOLLO_SCRIPT_API_DEF(_sys_get_time_zone, "sys_time_zone()")
+{
+	result.InitSet((int)nd_time_zone());
+	return true;
+
+}
+
 APOLLO_SCRIPT_API_DEF(_sys_close_file_stream, "sys_CloseStream(fileStream)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);

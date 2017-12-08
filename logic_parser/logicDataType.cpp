@@ -1300,6 +1300,7 @@ int DBLDataNode::GetInt() const
 	else if (OT_FLOAT == m_ele_type){
 		return (int)m_data->f_val;
 	}
+	
 	else if (OT_STRING == m_ele_type) {
 		const char *pText = GetText();
 		if (pText && *pText)  {
@@ -1379,6 +1380,7 @@ bool DBLDataNode::GetBool() const
 		}
 		//return atoi(m_data->str_val) ? true : false;
 	}
+
 	return false;
 }
 float DBLDataNode::GetFloat() const
@@ -1407,6 +1409,7 @@ float DBLDataNode::GetFloat() const
 		}
 		//if (pText) return (float) atof(pText);
 	}
+
 	return 0.0f;
 }
 
@@ -1424,6 +1427,7 @@ const char *DBLDataNode::GetText() const
 // 		}
 		return (const char *)m_data->str_val;
 	}
+
 	return NULL;
 }
 
@@ -1442,6 +1446,7 @@ std::string DBLDataNode::GetString() const
 			return std::string("");
 		}
 	}
+	
 	else {
 		char buf[4096];
 		int size = Sprint(buf, sizeof(buf));

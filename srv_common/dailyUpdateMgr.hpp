@@ -54,7 +54,7 @@ typedef std::vector<dailyEventInfo> dailyRunInfo_vct;
 class AlarmBase
 {
 public:
-	AlarmBase(NDAlarm *pObject, int timezone = 0);
+	AlarmBase(NDAlarm *pObject, int timezone = -1);
 	~AlarmBase();
 
 	int Init(const DBLDataNode *data, int version);
@@ -90,7 +90,7 @@ class DailyUpdateMgr :public AlarmBase
 public:
 	//typedef std::map<std::string, DailyUpdateObj> dailyUpdate_vct ;
 	
-	DailyUpdateMgr(NDAlarm *pObject, int timezone=0);
+	DailyUpdateMgr(NDAlarm *pObject, int timezone=-1);
 	virtual ~DailyUpdateMgr() ;
 	
 	void Update();

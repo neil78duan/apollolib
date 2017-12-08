@@ -5,6 +5,7 @@
 	<node desc="sys_CloseStream(fileStream)">CPP._sys_close_file_stream</node>
 	<node desc="sys_复制文件(filesrc,filedest)">CPP._sys_copyfile</node>
 	<node desc="sys_获取工作目录()">CPP._sys_get_path</node>
+	<node desc="sys_time_zone()">CPP._sys_get_time_zone</node>
 	<node desc="sys_创建目录(pathname)">CPP._sys_mkdir</node>
 	<node desc="sys_创建文件(filepath)">CPP._sys_mkfile</node>
 	<node desc="sys_OpenStream(fileName)">CPP._sys_open_file_stream</node>
