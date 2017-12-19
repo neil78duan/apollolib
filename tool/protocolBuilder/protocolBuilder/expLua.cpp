@@ -20,10 +20,10 @@ struct type_name_info
 
 static type_name_info alias_operate[] = {
 	{ "char", "Uint8" },
-	{ "int8_t", "Uint8" },
-	{ "int16_t", "Uint16" },
-	{ "int32_t", "Uint32" },
-	{ "int64_t", "Uint64" },
+	{ "int8_t", "Int8" },
+	{ "int16_t", "Int16" },
+	{ "int32_t", "Int32" },
+	{ "int64_t", "Int64" },
 	{ "uint8_t", "Uint8" },
 	{ "uint16_t", "Uint16" },
 	{ "uint32_t", "Uint32" },

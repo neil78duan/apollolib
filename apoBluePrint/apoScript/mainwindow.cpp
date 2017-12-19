@@ -513,6 +513,7 @@ void MainWindow::onFileChangedExternal(const QString &path)
 
 bool MainWindow::showCurFunctions()
 {	
+	m_editorWindow->preShowFunction();
 	bool ret = m_editorWindow->showFunction(m_currFunction, m_curFile);
 	if (ret == false){
 		m_editorWindow->clearFunction();
@@ -1756,6 +1757,21 @@ void MainWindow::setCurFileSave(bool isSaved)
 			rootName.insert(0,"*");
 			pEdit->setRootName(rootName);
 		}
+	}
+
+}
+
+void MainWindow::on_actionUndo_triggered()
+{
+	if (m_editorWindow) {
+		m_editorWindow->ShowFuncUndo();
+	}
+}
+
+void MainWindow::on_actionRedo_triggered()
+{
+	if (m_editorWindow) {
+		m_editorWindow->ShowFuncRedo();
 	}
 
 }

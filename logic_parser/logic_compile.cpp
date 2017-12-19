@@ -1414,6 +1414,16 @@ bool LogicCompiler::_compilePreCmd(ndxml *xmlroot)
 	if (!xmlModule) {
 		return true;
 	}
+
+	ndxml *preInitCMDxml = ndxml_getnode(xmlModule, "InitPreCmd");
+	if (preInitCMDxml)	{
+		int len = blockSteps2Stream(preInitCMDxml, m_pInitBlock, m_initBlockSize);
+		if (len > 0){
+			m_pInitBlock += len;
+			m_initBlockSize -= len;
+		}
+	}
+
 	ndxml *preCMDxml = ndxml_getnode(xmlModule, "PreCmd");
 	if (!preCMDxml)	{
 		return true;

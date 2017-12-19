@@ -128,6 +128,7 @@ public:
 
 	UserDefData_map_t &getUserDefType() { return m_useDefType; }
 	const char *getMainModuleName() { return m_mainModule.c_str(); }
+	bool addGlobalFunction(int byteOrder, char*name, void *data, size_t size);
 private:
 
 	//static LogicEngineRoot *s_root;

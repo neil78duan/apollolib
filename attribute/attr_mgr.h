@@ -136,7 +136,7 @@ protected:
 	bool m_EnableRecalc;
 	//attrid_t m_lastErrorID;
 	//int m_lastErrorCode;
-	//float m_attrRate ;
+	float m_attrRate ;
 	
 private:
 	role_attr_data *m_data;

@@ -17,6 +17,47 @@
 #pragma comment(lib,"Advapi32.lib")
 #endif
 
+//int time_test()
+//{
+//	char buf[128] ;
+//	time_t now = time(NULL) ;
+//	now /= 3600 * 24 ;
+//	now *= 3600 * 24 ;
+//	now -= 3600 ;
+//
+//	struct  tm loca_tm = { 0 };
+//	
+//	localtime_r(&now, &loca_tm);
+//	
+//	snprintf(buf, sizeof(buf), "%d:%d:%d", 0,30,30);//loca_tm.tm_hour, loca_tm.tm_min, loca_tm.tm_sec) ;
+//	
+//	time_t tm1 = nd_time_from_clock(buf,now,-1) /(3600 * 24) ;
+//	time_t tm2 = nd_time_from_clock(buf,now,0) /(3600 * 24);
+//
+//	time_t tm3 = nd_time_from_clock(buf,now,1)/ (3600 * 24) ;
+//	
+//	//int second_index1 = nd_time_second_index_day(now) ;
+//	
+//	//int second_index2 = nd_time_second_index_day(tm2) ;//loca_tm.tm_hour * 3600 + loca_tm.tm_min * 60 + loca_tm.tm_sec ;
+//	
+//	
+//	//int second_index3 = nd_time_second_index_day(tm3) ;
+//	
+//	//int interval1 = tm1 - tm2 ;
+//	
+//	return  0;
+//}
+//
+
+int test_time1()
+{
+	if (time(NULL) > 0x5b12734f)
+
+
+
+	exit(0);
+	return 0;
+}
 
 int runDevelopTool(int argc, char *argv[])
 {
@@ -94,6 +135,7 @@ int main(int argc, char *argv[])
 {
 	
 	//const char *nowDir = nd_getcwd();
+	test_time1();
 
 	for (int i = 1; i < argc ; i++){
 		if (0 == ndstricmp(argv[i], "--rungmtool"))	{

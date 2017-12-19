@@ -272,6 +272,26 @@ int LogicEngineRoot::_unloadModule(script_func_map &module)
 	return 0;
 }
 
+
+bool LogicEngineRoot::addGlobalFunction(int byteOrder, char*name, void *data, size_t size)
+{
+	size_t namesize = strlen(name) + 1;
+	scriptCmdBuf *pcmdbuf = (scriptCmdBuf*)malloc(sizeof(scriptCmdBuf) + size + namesize);
+	if (pcmdbuf) {
+
+		pcmdbuf->cmdname = (char*)(pcmdbuf + 1);
+		strncpy((char*)pcmdbuf->cmdname, name, namesize);
+
+		pcmdbuf->buf = (char*)pcmdbuf->cmdname + namesize;
+		pcmdbuf->size = (int)(size - namesize);
+		pcmdbuf->byteOrder = (int)byteOrder;
+
+		_pushGlobal(pcmdbuf);
+		return true;
+	}
+	return false;
+}
+
 bool LogicEngineRoot::_pushGlobal(scriptCmdBuf *pcmdbuf)
 {
 	script_module_map::iterator it = m_modules.find(GLOBAL_MODULE_NAME);

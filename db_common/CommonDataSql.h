@@ -90,13 +90,13 @@ class SaveMail: public SqlBindStm
 {
 public:
 	int Create(CMyDatabase *dbhandle) ;
-	RESULT_T Save( NDUINT32 to_id, NDUINT32 from_id,bool isSystem, const char *title,void *data, size_t size ) ;
+	RESULT_T Save(NDUINT32 to_id, NDUINT32 from_id, NDUINT32 server_id, NDUINT32 nation_id, bool isSystem, const char *title, void *data, size_t size);
 	int Read(NDUINT32 mailId, void *data, size_t size);
 protected:
-	enum {BIND_NUMB = 5};
+	enum {BIND_NUMB = 7};
 	MYSQL_BIND    m_binds[BIND_NUMB];
 	
-	unsigned long m_fromId, m_toId , m_isSystem;
+	unsigned long m_fromId, m_toId , m_isSystem,m_serverId,m_nationId;
 	long m_dataLen,m_titleLen ;
 	
 	char m_title[MAIL_TITLE_SIZE] ;

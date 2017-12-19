@@ -254,7 +254,12 @@ static bool _check_array(const char *src);
 DBLDataNode::DBLDataNode(dbl_element_base *data, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype) :
 m_ele_type(etype), m_sub_type(sub_etype), m_data(data), m_dataOwner(false)
 {
-	m_dataOwn.isInit = true;
+	if (data){
+		m_dataOwn.isInit = data->isInit;
+	}
+	else {
+		m_dataOwn.isInit = false;
+	}
 	//m_refParent = false;
 	//m_unsafeRef = false;
 
@@ -263,6 +268,7 @@ m_ele_type(etype), m_sub_type(sub_etype), m_data(data), m_dataOwner(false)
 DBLDataNode::DBLDataNode(const DBLDataNode &r) 
 {
 	init() ;
+	m_dataOwn.isInit = false;
 	_copy(r);
 }
 
@@ -469,7 +475,8 @@ void DBLDataNode::_copy(const DBLDataNode &r)
 	m_sub_type = (r.m_sub_type);
 
 	if (!r.CheckValid()) {
-		m_dataOwn.isInit = r.m_dataOwn.isInit;
+		//m_dataOwn.isInit = r.m_dataOwn.isInit;
+		m_dataOwn.isInit = false;
 		return;
 	}
 
@@ -1300,6 +1307,7 @@ int DBLDataNode::GetInt() const
 	else if (OT_FLOAT == m_ele_type){
 		return (int)m_data->f_val;
 	}
+	
 	else if (OT_STRING == m_ele_type) {
 		const char *pText = GetText();
 		if (pText && *pText)  {
@@ -1379,6 +1387,7 @@ bool DBLDataNode::GetBool() const
 		}
 		//return atoi(m_data->str_val) ? true : false;
 	}
+
 	return false;
 }
 float DBLDataNode::GetFloat() const
@@ -1407,6 +1416,7 @@ float DBLDataNode::GetFloat() const
 		}
 		//if (pText) return (float) atof(pText);
 	}
+
 	return 0.0f;
 }
 
@@ -1424,6 +1434,7 @@ const char *DBLDataNode::GetText() const
 // 		}
 		return (const char *)m_data->str_val;
 	}
+
 	return NULL;
 }
 
@@ -1442,6 +1453,7 @@ std::string DBLDataNode::GetString() const
 			return std::string("");
 		}
 	}
+	
 	else {
 		char buf[4096];
 		int size = Sprint(buf, sizeof(buf));

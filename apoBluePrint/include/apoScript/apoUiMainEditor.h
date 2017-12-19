@@ -17,6 +17,7 @@
 #include "logic_parser/logic_compile.h"
 
 #include <map>
+#include <vector>
 #include <QWidget>
 #include <QBoxLayout>
 #include <QMouseEvent>
@@ -35,11 +36,15 @@ public:
 	typedef QVector<QString> text_list_t;
 
     explicit apoUiMainEditor(QWidget *parent = 0);
-    ~apoUiMainEditor(){}
+	~apoUiMainEditor();
 
 	bool showFunction(ndxml *data, ndxml_root *xmlfile);
 	void clearFunction();
-
+	void preShowFunction();
+	void postShowFunction();
+	bool ShowFuncUndo();
+	bool ShowFuncRedo();
+	
 	void showNodeDetail(apoBaseExeNode *exenode);
 	bool setCurDetail(ndxml *xmlNode, bool inError= false);
 	bool setDebugNode(ndxml *xmlNode);
@@ -50,6 +55,7 @@ public:
 	const char *getEditedFunc();
 
 	apoBaseExeNode *getCurDebugNode() { return m_debugNode; }
+
 
 public slots:
 	void onCurNodeChanged();
@@ -138,6 +144,12 @@ private:
 	void onFileChanged();
 	ndxml *createSubNode(ndxml *xmlRoot);
 
+	bool reShowFunction();
+	void pushtoUndoList(ndxml *xml);
+	void destroyUndoList();
+	ndxml *_getUndoInfo();
+	ndxml *_getRedoInfo();
+
 	enum eDragType{
 		E_MOUSE_TYPE_MOVE_NODE,
 		E_MOUSE_TYPE_CONNECT_SLOT,
@@ -183,8 +195,11 @@ private:
 	//apoBaseSlotCtrl *m_editingToNext;  //connector to next exe node 
 	int m_startX;
 	int m_startY;
-
 	QPoint m_offset;
+
+	typedef std::vector<ndxml*>undoVct_t;
+	undoVct_t m_undoList;
+	int m_undoCursor;
 };
 
 

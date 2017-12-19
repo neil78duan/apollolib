@@ -1375,9 +1375,7 @@ DBLDataNode DBL_FindDataObject_ex(const char *table, const int RowID, const char
 				if (val.GetDataType() == OT_STRING)	{
 					val.ConvertEncode(DBL_DATE_ENCODE_TYPE, outputEncode);
 				}
-				else {
-					return val;
-				}
+				return val;
 			}
 		}
 	}

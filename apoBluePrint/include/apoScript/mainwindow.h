@@ -102,6 +102,10 @@ private slots:
 
     void on_actionExit_without_save_triggered();
 
+    void on_actionUndo_triggered();
+
+    void on_actionRedo_triggered();
+
 protected:
 
 	bool openFileView();
