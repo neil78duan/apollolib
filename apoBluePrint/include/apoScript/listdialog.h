@@ -39,6 +39,8 @@ private slots:
 
     void on_mylist_clicked(const QModelIndex &index);
 
+    void on_Search_clicked();
+
 private:
     Ui::ListDialog *ui;
 };
