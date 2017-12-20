@@ -65,7 +65,7 @@ bool apoUiMainEditor::showFunction(ndxml *data, ndxml_root *xmlfile)
 	clearFunction();
 	m_editedFunction = data;
 	m_scriptFileXml = xmlfile;
-	pushtoUndoList(m_editedFunction);
+	pushtoUndoList();
 	return reShowFunction();
 }
 
@@ -893,6 +893,7 @@ apoBaseExeNode *apoUiMainEditor::createExenode(const QPoint &pos)
 	savePosition(exeNode);
 	showNodeDetail(exeNode);
 	onFileChanged();
+
 	nd_logmsg("create %s SUCCESS\n", _GetXmlName(newxml, NULL));
 	return exeNode;
 }
@@ -901,7 +902,7 @@ apoBaseExeNode *apoUiMainEditor::createExenode(const QPoint &pos)
 void apoUiMainEditor::popMenuAddnewTrigged()
 {
 	if (createExenode(m_curClicked)) {
-		pushtoUndoList(m_editedFunction);
+		pushtoUndoList();
 	}
 }
 
@@ -917,7 +918,7 @@ void apoUiMainEditor::popMenuDeleteTrigged()
 			apoBaseExeNode *exeNode = dynamic_cast<apoBaseExeNode*>(m_popSrc);
 			if (exeNode && exeNode->isDeletable())	{
 				if (_removeExenode(exeNode)) {
-					pushtoUndoList(m_editedFunction);
+					pushtoUndoList();
 				}
 			}
 			else {
@@ -939,7 +940,7 @@ void apoUiMainEditor::popMenuAddLabelTrigged()
 			showNodeDetail(exeNode);
 			this->update();
 
-			pushtoUndoList(m_editedFunction);
+			pushtoUndoList();
 		}
 	}
 }
@@ -952,7 +953,7 @@ void apoUiMainEditor::popMenuDelLabelTrigged()
 			exeNode->delLabel();
 			showNodeDetail(exeNode);
 			this->update();
-			pushtoUndoList(m_editedFunction);
+			pushtoUndoList();
 		}
 	}
 }
@@ -972,7 +973,7 @@ void apoUiMainEditor::popMenuCloseParamTrigged()
 		this->update();
 		onFileChanged();
 
-		pushtoUndoList(m_editedFunction);
+		pushtoUndoList();
 	}
 }
 
@@ -987,7 +988,7 @@ void apoUiMainEditor::popMenuDisconnectTRigged()
 		this->update();
 		onFileChanged();
 
-		pushtoUndoList(m_editedFunction);
+		pushtoUndoList();
 	}
 }
 
@@ -1285,10 +1286,7 @@ void apoUiMainEditor::mouseReleaseEvent(QMouseEvent *event)
 		QWidget *w = this->childAt(event->pos());
 		if (w)	{
 			apoBaseSlotCtrl *fromSlot = dynamic_cast<apoBaseSlotCtrl*>(m_dragSrc);
-			if (trytoBuildConnector(fromSlot, dynamic_cast<apoBaseSlotCtrl*>(w))) {
-				onFileChanged();
-				pushtoUndoList(m_editedFunction);
-			}
+			trytoBuildConnector(fromSlot, dynamic_cast<apoBaseSlotCtrl*>(w));
 			if (fromSlot){
 				fromSlot->setInDrag(false);
 			}
@@ -1301,10 +1299,7 @@ void apoUiMainEditor::mouseReleaseEvent(QMouseEvent *event)
 			if (fromSlot->slotType() == apoBaseSlotCtrl::SLOT_RUN_OUT || fromSlot->slotType() == apoBaseSlotCtrl::SLOT_SUB_ENTRY) {
 				apoBaseExeNode *newExeNode = createExenode(event->pos());
 				if (newExeNode)	{
-					if (trytoBuildConnector(fromSlot, newExeNode->inNode())) {
-						onFileChanged();
-						pushtoUndoList(m_editedFunction);
-					}
+					trytoBuildConnector(fromSlot, newExeNode->inNode());
 				}
 			}
 			else if (fromSlot->slotType() == apoBaseSlotCtrl::SLOT_RETURN_VALUE ||
@@ -1313,10 +1308,7 @@ void apoUiMainEditor::mouseReleaseEvent(QMouseEvent *event)
 				
 				apoBaseExeNode *newExeNode = createNewVarNode(event->pos());
 				if (newExeNode)	{
-					if (trytoBuildConnector(fromSlot, newExeNode->getParam(1))) {
-						onFileChanged();
-						pushtoUndoList(m_editedFunction);
-					}
+					trytoBuildConnector(fromSlot, newExeNode->getParam(1));
 				}
 			}
 			
@@ -1324,10 +1316,7 @@ void apoUiMainEditor::mouseReleaseEvent(QMouseEvent *event)
 
 				apoBaseExeNode *newExeNode = createNewVarNode(event->pos());
 				if (newExeNode)	{
-					if (trytoBuildConnector(newExeNode->returnVal() ,fromSlot)) {
-						onFileChanged();
-						pushtoUndoList(m_editedFunction);
-					}
+					trytoBuildConnector(newExeNode->returnVal(), fromSlot);
 				}
 			}
 		}
@@ -1365,7 +1354,6 @@ void apoUiMainEditor::mouseReleaseEvent(QMouseEvent *event)
 void apoUiMainEditor::wheelEvent(QWheelEvent *event)
 {
 	int delta = event->delta();
-	//nd_logmsg("mouse wheel deta=%d\n", delta);
 	if (m_scale == 0){
 		// first scale 
 		saveCurPosWithOffset();
@@ -1377,24 +1365,7 @@ void apoUiMainEditor::wheelEvent(QWheelEvent *event)
 	float scale = m_scale + (float)delta / 10000.0f;
 	setScale(scale);
 
-// 
-// 	m_scale = scale;
-// 	if (m_scale > 2.0f)	{
-// 		m_scale = 2.0f;
-// 	}
-// 	else if (m_scale < 0.25f) {
-// 		m_scale = 0.25f;
-// 	}
-// 
-// 	QObjectList list = children();
-// 	foreach(QObject *obj, list) {
-// 		apoBaseExeNode *exeNode = qobject_cast<apoBaseExeNode*>(obj);
-// 		if (exeNode ){
-// 			exeNode->setScale(m_scale);
-// 		}
-// 	}
-// 	this->update();
-// 	paintEvent( NULL );
+
 }
 
 void apoUiMainEditor::paintEvent(QPaintEvent *event)
@@ -1681,7 +1652,10 @@ bool apoUiMainEditor::trytoBuildConnector(apoBaseSlotCtrl *fromSlot, apoBaseSlot
 	default:
 		break;
 	}
-
+	if (ret)	{
+		onFileChanged();
+		pushtoUndoList();
+	}
 	return ret;
 }
 
@@ -2068,12 +2042,13 @@ bool apoUiMainEditor::ShowFuncRedo()
 	update();
 }
 
-void apoUiMainEditor::pushtoUndoList(ndxml *xml)
+void apoUiMainEditor::pushtoUndoList()
 {
 	if (m_undoCursor != -1)	{
+		++m_undoCursor;
 		m_undoList.erase(m_undoList.begin() + m_undoCursor, m_undoList.end());
 	}
-	m_undoList.push_back(ndxml_copy(xml));
+	m_undoList.push_back(ndxml_copy(m_editedFunction));
 	m_undoCursor = -1;
 
 }

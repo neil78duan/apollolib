@@ -145,7 +145,7 @@ private:
 	ndxml *createSubNode(ndxml *xmlRoot);
 
 	bool reShowFunction();
-	void pushtoUndoList(ndxml *xml);
+	void pushtoUndoList();
 	void destroyUndoList();
 	ndxml *_getUndoInfo();
 	ndxml *_getRedoInfo();
