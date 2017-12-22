@@ -212,7 +212,7 @@ typedef std::vector<int>IntVal_vct;
 
 struct scriptCmdBuf
 {
-	scriptCmdBuf() :size(0), cmdname(0), buf(0), byteOrder(1)
+    scriptCmdBuf() :byteOrder(1),size(0), cmdname(0), buf(0)
 	{
 		
 	}

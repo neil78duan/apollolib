@@ -49,6 +49,7 @@
     <addaction name="actionFunctionView"/>
     <addaction name="actionDetail"/>
     <addaction name="actionCancel_scale"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuDebug">
     <property name="title">
@@ -63,8 +64,17 @@
     <addaction name="actionAttach"/>
     <addaction name="actionDeattch"/>
    </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="actionSearch"/>
+   </widget>
    <addaction name="menuHello_world"/>
    <addaction name="menuWindows"/>
+   <addaction name="menuEdit"/>
    <addaction name="menuDebug"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -247,6 +257,30 @@
   <action name="actionExit_without_save">
    <property name="text">
     <string>Exit without save</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionSearch">
+   <property name="text">
+    <string>Search</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
    </property>
   </action>
  </widget>

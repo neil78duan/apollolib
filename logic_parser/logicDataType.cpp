@@ -726,7 +726,7 @@ bool DBLDataNode::InitReservedArray(size_t size, int attay_type)
 			return false;
 		}
 
-		for (int i = 0; i < size; i++) {
+        for (size_t i = 0; i < size; i++) {
 			paddr->data[i] = 0;
 		}
 		paddr->number = 0;

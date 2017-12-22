@@ -93,8 +93,9 @@ apoUiExenodeNewVar::apoUiExenodeNewVar(QWidget *parent, ndxml *exeNodeXml) :apoB
 	//disableReturnVar();
 	//apoEditorSetting* p_setting = apoEditorSetting::getInstant();
 	//if (!LogicEditorHelper::GetCreateTemplate(exeNodeXml, p_setting->getConfig()) ){
+	disableNewParam();
 	if (LogicEditorHelper::checkAddNewChild(exeNodeXml)){
-		disableNewParam();
+		m_disableNewParam = false;
 	}
 
 	setNodeInfo(parent, exeNodeXml);

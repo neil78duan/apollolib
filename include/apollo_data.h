@@ -117,7 +117,7 @@ enum eChatType {
 
 struct login_token_info
 {
-	login_token_info() :acc_index(0), session_key(0), create_tm(0), _reserved(0)
+        login_token_info() :acc_index(0), session_key(0), _reserved(0), create_tm(0)
 	{
 		udid[0] = 0;
 	}
@@ -131,7 +131,7 @@ struct login_token_info
 	int toBuf(char *buf, int bufsize)
 	{
 		char *src = buf;
-		if (bufsize <= sizeof(login_token_info) )	{
+                if (bufsize <= (int)sizeof(login_token_info) )	{
 			return -1;
 		}
 
@@ -156,6 +156,9 @@ struct login_token_info
 	int fromBuf(char *buf, int bufsize)
 	{
 		char *src = buf;
+                if(bufsize <= 16) {
+                    return 0 ;
+                }
 
 		acc_index = nd_netstream_to_long(buf);
 		buf += 4;
@@ -193,7 +196,7 @@ struct transfer_session_key
 	}
 	int toBuf(char *buf, size_t bufSize)
 	{
-		if (bufSize < getLength())	{
+                if (bufSize <(size_t) getLength())	{
 			return -1;
 		}
 		char *src = buf;
@@ -228,7 +231,7 @@ struct transfer_session_key
 		buf += sizeof(new_key);
 		size =nd_netstream_to_long(buf);
 		buf += 4;
-		if (size > bufSize)		{
+                if (size >(NDUINT32) bufSize)		{
 			return -1;
 		}
 		memcpy(session_buf,buf, size);
@@ -346,10 +349,10 @@ struct host_list_node {
 		if (-1 == inmsg.Read(version_id)) {
 			return -1;
 		}
-		if (-1 == inmsg.Read(inet_ip, sizeof(inet_ip))) {
+                if (0 == inmsg.Read(inet_ip, sizeof(inet_ip))) {
 			return -1;
 		}
-		if (-1 == inmsg.Read(name, sizeof(name))) {
+                if (0 == inmsg.Read(name, sizeof(name))) {
 			return -1;
 		}
 		return 0;

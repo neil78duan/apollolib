@@ -26,7 +26,7 @@
 			}
 
 
-static int my_msg_default_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
+static int my_msg_default_handler(NDIConn* , nd_usermsgbuf_t *msg)
 {
 	if (ND_USERMSG_MAXID(msg) > 16 || ND_USERMSG_MINID(msg)> 64){
 		nd_logerror("get error message (%d,%d)\n", ND_USERMSG_MAXID(msg) , ND_USERMSG_MINID(msg));

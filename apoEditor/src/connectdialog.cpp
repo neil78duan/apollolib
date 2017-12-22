@@ -73,7 +73,7 @@ public:
 static ConnectScriptOwner  __myScriptOwner;
 
 
-void destroy_apollo_object(NDIConn *pConn)
+void destroy_apollo_object(NDIConn *)
 {
 
     __myScriptOwner.Destroy();
@@ -567,7 +567,7 @@ int ConnectDialog::_login(const char *user, const char *passwd,bool skipAuth)
     return 0;
 }
 
-int ConnectDialog::_relogin(void *sessionData, size_t session_size)
+int ConnectDialog::_relogin(void *, size_t )
 {
 
     return 0;
@@ -682,13 +682,13 @@ int ConnectDialog::getRoleData()
 #include "apoScript/xmldialog.h"
 #include "startdialog.h"
 
-static bool gmdlgInit(QDialog *curDlg)
+static bool gmdlgInit(QDialog *)
 {
 
     return true;
 }
 
-static bool gmdlgExit(QDialog *curDlg)
+static bool gmdlgExit(QDialog *)
 {
 
     return false;

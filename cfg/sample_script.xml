@@ -14,9 +14,9 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">../cfg/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1513751320</LastMod>
+	<LastMod name="最后修改" kinds="hide">1513915068</LastMod>
 </moduleInfo>
-<baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="35" expand_stat="0" accept_drag_in="func_node">
+<baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="35" expand_stat="1" accept_drag_in="func_node">
 	<func_node name="sample_selector" create_template="create_list1" auto_index="5" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
 		<func_params kinds="hide">
 			<input_param name="Param">param1</input_param>
@@ -211,7 +211,7 @@
 				<var kinds="string" delete="no" restrict="type">0</var>
 			</param_collect>
 		</op_print>
-		<apoEditorPos kinds="hide" x="61" y="138" offset_x="0" offset_y="0"/>
+		<apoEditorPos kinds="hide" x="61" y="138" offset_x="-8" offset_y="9"/>
 		<unConnect kinds="hide">
 			<steps_bt_sequence name="BT-Sequence" auto_index="0">
 				<comment name="功能说明" rw_stat="read">run until one of children success </comment>
@@ -2447,7 +2447,7 @@
 				<condition no_comp="1" kinds="hide" delete="no">0</condition>
 			</op_sub_comp_entry>
 		</op_bool_entry>
-		<apoEditorPos kinds="hide" x="-319" y="295" offset_x="510" offset_y="-10"/>
+		<apoEditorPos kinds="hide" x="-319" y="295" offset_x="394" offset_y="-64"/>
 		<unConnect kinds="hide">
 			<steps_collection/>
 			<steps_collection/>

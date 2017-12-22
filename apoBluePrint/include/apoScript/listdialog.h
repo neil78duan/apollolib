@@ -23,7 +23,7 @@ public:
     }
     bool GetSelectText(QString &val) {
 
-        if(-1==m_selIndex || m_selIndex >= m_selList.size()) {
+        if(-1==m_selIndex || m_selIndex >= (int)m_selList.size()) {
             return false ;
         }
         val = m_selList[m_selIndex] ;
@@ -38,6 +38,8 @@ private slots:
     void on_mylist_doubleClicked(const QModelIndex &index);
 
     void on_mylist_clicked(const QModelIndex &index);
+
+    void on_Search_clicked();
 
 private:
     Ui::ListDialog *ui;

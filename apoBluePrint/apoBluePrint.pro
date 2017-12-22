@@ -63,7 +63,7 @@ unix {
     INSTALLS += target
 }
 
-SOURCES += apoblueprint.cpp \
+SOURCES += \
     apoScript/xmldialog.cpp \
     apoScript/listdialog.cpp \
     apoScript/dragtree.cpp \
@@ -79,9 +79,10 @@ SOURCES += apoblueprint.cpp \
     apoScript/apoUiXmlTablesWidget.cpp \
     apoScript/apoEditorSetting.cpp \
     apoScript/runFuncDialog.cpp \
-    apoScript/apoUiDebugger.cpp
+    apoScript/apoUiDebugger.cpp \
+    apoScript/searchdlg.cpp
 
-HEADERS += apoblueprint.h\
+HEADERS +=\
     include/apoScript/xmldialog.h \
     include/apoScript/listdialog.h \
     include/apoScript/dragtree.h \
@@ -98,11 +99,13 @@ HEADERS += apoblueprint.h\
     include/apoScript/apoUiParam.h \
     include/apoScript/apoUiXmlTablesWidget.h \
     include/apoScript/runFuncDialog.h \
-    include/apoScript/apoUiDebugger.h
+    include/apoScript/apoUiDebugger.h \
+    include/apoScript/searchdlg.h
 
 FORMS    += \
     apoScript/listdialog.ui \
     apoScript/xmldialog.ui \
     apoScript/mainwindow.ui \
     apoScript/mainwindow.ui \
-    apoScript/runFuncDialog.ui
+    apoScript/runFuncDialog.ui \
+    apoScript/searchdlg.ui
