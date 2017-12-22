@@ -54,6 +54,7 @@
 	<node desc="字符数组转换为属性格式([string]:attrname_id)">CPP.gscript_convert_data_to_attr</node>
 	<node desc="转换成attrNode(name, value)">CPP.gscript_convert_to_attr</node>
 	<node desc="根据CD读取系数(types, CDs)">CPP.gscript_get_clear_cd_rate</node>
+	<node desc="获得服务器组开服时间()">CPP.gscript_group_open_time</node>
 	<node desc="关服前踢人()">CPP.gscript_kickoff_all</node>
 	<node desc="发送错误通知(errorId)">CPP.gscript_send_client_error</node>
 	<node desc="发公告给当前用户(arg1, ...)">CPP.gscript_send_player_notice</node>

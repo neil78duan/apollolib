@@ -292,7 +292,7 @@ LogicCompiler::~LogicCompiler()
 
 
 
-bool LogicCompiler::_isFileInfo(ndxml * node)
+bool LogicCompiler::isFileInfo(ndxml * node)
 {
 	const char *p = ndxml_getattr_val(node, "is_file_info");
 	if (p && *p){
@@ -411,7 +411,7 @@ bool LogicCompiler::compileXml(const char *xmlFile, const char *outStreamFile, i
 
 	for (int x = 0; x < ndxml_num(&xmlroot); x++){
 		ndxml *funcList = ndxml_getnodei(&xmlroot, x);
-		if (_isFileInfo(funcList)) {
+		if (isFileInfo(funcList)) {
 			continue;
 		}
 		if (!compileFuncs(funcList, pf)) {
@@ -1414,6 +1414,16 @@ bool LogicCompiler::_compilePreCmd(ndxml *xmlroot)
 	if (!xmlModule) {
 		return true;
 	}
+
+	ndxml *preInitCMDxml = ndxml_getnode(xmlModule, "InitPreCmd");
+	if (preInitCMDxml)	{
+		int len = blockSteps2Stream(preInitCMDxml, m_pInitBlock, m_initBlockSize);
+		if (len > 0){
+			m_pInitBlock += len;
+			m_initBlockSize -= len;
+		}
+	}
+
 	ndxml *preCMDxml = ndxml_getnode(xmlModule, "PreCmd");
 	if (!preCMDxml)	{
 		return true;
@@ -1530,7 +1540,7 @@ bool LogicCompiler::_trytoAddBreakPoint(ndxml *xml)
 {
 	if (LogicEditorHelper::getBoolValue(ndxml_getattr_val(xml,"breakPoint")) )	{
 		LocalDebugger &debugger = LogicEngineRoot::get_Instant()->getGlobalDebugger();
-		char debugInfo[1024];
+		char debugInfo[4096];
 		getFuncStackInfo(xml, debugInfo, sizeof(debugInfo));
 		debugger.addBreakPoint(m_cur_function.c_str(), debugInfo);
 		return true;

@@ -120,6 +120,19 @@ time_t AlarmBase::getLastTm(int id)
 }
 
 
+time_t AlarmBase::getLastRunTime(const char *alarmName)
+{
+	time_t ret = 0;
+	for (dailyRunInfo_vct::iterator it = m_lastRunInfo.begin(); it != m_lastRunInfo.end(); it++)	{
+		if (0==ndstricmp(it->name.c_str(), alarmName) )	{
+			if (it->lastRunTm > ret ){
+				ret = it->lastRunTm;
+			}
+		}
+	}
+	return ret;
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 ////////////////
@@ -204,6 +217,22 @@ int DailyUpdateMgr::GetOffsetSeconds(int id)
 	return 0;
 }
 
+int DailyUpdateMgr::GetOffsetSeconds(const char *name)
+{
+	if (0 == DailyUpdateMgr::s_global_updateCfgInfo.size()) {
+		return NULL;
+	}
+
+	for (dailyUpCfg_vct::const_iterator it = s_global_updateCfgInfo.begin(); it != s_global_updateCfgInfo.end(); it++) {
+		if (0==ndstricmp(name, it->name.c_str()) ){
+			if (it->timeOffsets.size() > 0)	{
+				return it->timeOffsets[0];
+			}
+		}
+	}
+	return 0;
+}
+
 DailyUpdateMgr::DailyUpdateMgr(NDAlarm *pObject, int timezone) :AlarmBase(pObject,timezone)
 {
 
@@ -254,6 +283,13 @@ bool DailyUpdateMgr::_UpdateNode(const dailyUpdateCfg *pCfg , dailyEventInfo *ev
 	std::vector<time_t> clock_seconds;
 
 	time_t lastRenewTm = eventInfo->lastRunTm;
+
+	if (lastRenewTm > now){
+		eventInfo->lastRunTm = now;
+		m_bChanged = true;
+		return false;
+	}
+
 	int renewTimes = 0;
 
 	int intervalDays = nd_time_day_interval_ex(now, eventInfo->lastRunTm, timezone);
@@ -333,7 +369,7 @@ int WeekAlarmMgr::LoadWeeklyConfig(const char *tablename)
 
 			node.weekDay = cursor[4].GetInt();
 
-			node.timeOffset = nd_time_clock_to_seconds(cursor[2].GetText());
+			node.timeOffset = nd_time_clock_to_seconds(cursor[2].GetarrayText(0));
 
 			if (-1 == node.timeOffset)	{
 				nd_logfatal("load alarm time error line =%d update_time=%s\n", cursor[0].GetInt(), cursor[2].GetText());
@@ -383,6 +419,12 @@ bool WeekAlarmMgr::_UpdateNode(const WeeklyUpdateCfg *pCfg, dailyEventInfo *even
 {
 	time_t now = app_inst_time(NULL);	
 	time_t lastRenewTm = eventInfo->lastRunTm;
+
+	if (lastRenewTm > now){
+		eventInfo->lastRunTm = now;
+		m_bChanged = true;
+		return false;
+	}
 
 	int nowWeekIndex = nd_time_week_index(now, timezone);
 	int lastWeekIndex = nd_time_week_index(lastRenewTm, timezone);

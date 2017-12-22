@@ -12,7 +12,7 @@
 
 RoleAttrAsset::RoleAttrAsset(role_attr_data *data) : m_data(data), m_EnableRecalc(false)
 {
-	//m_attrRate = 1.0f ;
+	m_attrRate = 1.0f ;
 	//m_lastErrorID = INVALID_ATTR_ID;
 	//m_lastErrorCode = 0;
 	m_recordChange = false;
@@ -25,10 +25,10 @@ RoleAttrAsset::~RoleAttrAsset()
 
 float RoleAttrAsset::setAttrRate(float newVal)
 {
-// 	float ret = m_attrRate ;
-// 	m_attrRate = newVal ;
-// 	return ret;
-	return 1.0f;
+	float ret = m_attrRate ;
+	m_attrRate = newVal ;
+	return ret;
+	//return 1.0f;
 }
 
 attrid_t RoleAttrAsset::getLastErrorID()
@@ -90,9 +90,9 @@ bool RoleAttrAsset::setVal(attrid_t index, attrval_t val)
 
 bool RoleAttrAsset::addVal(attrid_t index, attrval_t val)
 {
-// 	if (fabsf(m_attrRate - 1.0f) > 0.001f) {
-// 		val *= m_attrRate ;
-// 	}
+	if (fabsf(m_attrRate - 1.0f) > 0.001f) {
+		val *= m_attrRate ;
+	}
 	if (setVal(index, getVal(index) + val)) {
 
 		if (m_recordChange)	{
@@ -109,9 +109,9 @@ bool RoleAttrAsset::addVal(attrid_t index, attrval_t val)
 
 bool RoleAttrAsset::subVal(attrid_t index, attrval_t val)
 {
-// 	if (fabsf(m_attrRate - 1.0f) > 0.001f) {
-// 		val *= m_attrRate ;
-// 	}
+	if (fabsf(m_attrRate - 1.0f) > 0.001f) {
+		val *= m_attrRate ;
+	}
 	attrval_t curVal = getVal(index);
 	if (curVal < val) {
 		setLastError(ESERVER_ERR_ATTR_NOT_ENOUGH);

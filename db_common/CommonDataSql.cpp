@@ -113,14 +113,12 @@ RESULT_T LoadCommonDataSql::LoadData(const char *name , int serverId, char *buf,
 int SaveCommonDataSql::Create( CMyDatabase* dbhandle )
 {
 	ND_TRACE_FUNC() ;
-	const char *SQL_STM = "update at_common_data set userdata=?, last_update=now() "
-	"where server_id =? and name=? ;";
-	
+
+	const char *SQL_STM = "call save_common_data(?,?,?)";	
 	memset(m_binds, 0, sizeof(m_binds));
-	
-	SET_BIND_CONTEXT(&m_binds[0], MYSQL_TYPE_BLOB, m_databuf,sizeof(m_databuf), 0, &m_data_len ) ;
-	SET_BIND_CONTEXT(&m_binds[1], MYSQL_TYPE_LONG, &m_serverId,0, 0, 0 ) ;
-	SET_BIND_CONTEXT(&m_binds[2], MYSQL_TYPE_STRING, m_name,sizeof(m_name), 0, &m_name_len ) ;
+	SET_BIND_CONTEXT(&m_binds[0], MYSQL_TYPE_STRING, m_name, sizeof(m_name), 0, &m_name_len);
+	SET_BIND_CONTEXT(&m_binds[1], MYSQL_TYPE_LONG, &m_serverId, 0, 0, 0);
+	SET_BIND_CONTEXT(&m_binds[2], MYSQL_TYPE_BLOB, m_databuf,sizeof(m_databuf), 0, &m_data_len ) ;
 	
 	m_dbhandle = dbhandle;
 	PREPARE_STM(m_stmt, dbhandle,SQL_STM, m_binds,BIND_NUMB) ;
@@ -131,6 +129,7 @@ int SaveCommonDataSql::Create( CMyDatabase* dbhandle )
 RESULT_T SaveCommonDataSql::SaveData(const char *name, int serverId, void *data, size_t size )
 {
 	ND_TRACE_FUNC() ;
+	
 	
 	RESULT_T ret = ESERVER_ERR_SUCCESS;
 	
@@ -147,8 +146,8 @@ RESULT_T SaveCommonDataSql::SaveData(const char *name, int serverId, void *data,
 	if (stmt_execute()){
 		return NDSYS_ERR_SYSTEM;
 	}
-	
-	return  ret ;
+
+	return ESERVER_ERR_SUCCESS;
 }
 
 /////////////////////////

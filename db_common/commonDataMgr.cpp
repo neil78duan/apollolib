@@ -92,6 +92,8 @@ bool CommonDataMgr::SaveAsync(const char *name ,int serverId, void *data, size_t
 	
 	int msg_size = (int)(sizeof(msg) - sizeof(msg.data) + size);
 	netSendtoSqlThread(DBTHMSG_COMMON_SAVE, &msg, msg_size) ;
+
+
 	return  true;
 }
 

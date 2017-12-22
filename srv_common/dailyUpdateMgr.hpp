@@ -72,6 +72,8 @@ public:
 	bool checkDataChange() { return m_bChanged; }
 	void ClearDataChange() { m_bChanged = false; }
 	void setTimeZone(int timezone) { m_timeZone = timezone; }
+
+	time_t getLastRunTime(const char *alarmName);
 	
 protected:
 	bool Add(int id, const char *name, time_t lastRunTM = 0);	
@@ -101,6 +103,7 @@ public:
 	//static const dailyUpdateCfg *GetDailyConfgInfo(const char *name);
 	static const dailyUpdateCfg *GetDailyConfgInfoId(int id);
 	static int GetOffsetSeconds(int id) ;
+	static int GetOffsetSeconds(const char *name);
 	
 protected:
 
