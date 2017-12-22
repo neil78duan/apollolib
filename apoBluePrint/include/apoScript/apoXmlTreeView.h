@@ -37,6 +37,7 @@ public:
 	void hideXmlNodeChildren(const char *xmlName);
 
 	void unCreateNewChild(const char *xmlName);
+	void setSelected(ndxml *xmlnode);
 
 	void setRootName(const QString &name);
 	QString rootName(){ return m_rootName; }
@@ -66,6 +67,7 @@ protected:
 	void OnPopInsertNode();
 	void OnPopXmlDel();
 	void onPopMenu(QAction *activeAction);
+	xmlTreeItem *_findItem(xmlTreeItem *treeItem, ndxml *xmlnode);
 
 	bool m_isInitOk;
 	int m_disp_depth; //deisplay depth

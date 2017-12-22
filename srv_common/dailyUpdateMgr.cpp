@@ -120,6 +120,19 @@ time_t AlarmBase::getLastTm(int id)
 }
 
 
+time_t AlarmBase::getLastRunTime(const char *alarmName)
+{
+	time_t ret = 0;
+	for (dailyRunInfo_vct::iterator it = m_lastRunInfo.begin(); it != m_lastRunInfo.end(); it++)	{
+		if (0==ndstricmp(it->name.c_str(), alarmName) )	{
+			if (it->lastRunTm > ret ){
+				ret = it->lastRunTm;
+			}
+		}
+	}
+	return ret;
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 ////////////////
@@ -356,7 +369,7 @@ int WeekAlarmMgr::LoadWeeklyConfig(const char *tablename)
 
 			node.weekDay = cursor[4].GetInt();
 
-			node.timeOffset = nd_time_clock_to_seconds(cursor[2].GetText());
+			node.timeOffset = nd_time_clock_to_seconds(cursor[2].GetarrayText(0));
 
 			if (-1 == node.timeOffset)	{
 				nd_logfatal("load alarm time error line =%d update_time=%s\n", cursor[0].GetInt(), cursor[2].GetText());

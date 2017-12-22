@@ -237,7 +237,39 @@ QTreeWidgetItem* apoXmlTreeView::InitTreeNode(int depth, ndxml *xml_node, QTreeW
 	return leaf;
 }
 
+void apoXmlTreeView::setSelected(ndxml *xmlnode)
+{
+	xmlTreeItem *aimitem = _findItem(m_root, xmlnode);
+	if (!aimitem)	{
+		return ;
+	}
+	setCurrentItem(aimitem);
+	xmlTreeItem *myparent= (xmlTreeItem *) aimitem->parent();
+	while (myparent){
+		myparent->setExpanded(true);
+		myparent = (xmlTreeItem *)myparent->parent();
+	}
+}
 
+xmlTreeItem *apoXmlTreeView::_findItem(xmlTreeItem *treeItem, ndxml *xmlnode)
+{
+	for (int i = 0; i < treeItem->childCount(); i++){
+		xmlTreeItem *item = (xmlTreeItem *) treeItem->child(i);
+		if (!item){
+			continue;
+		}
+		if (item->getUserData()==xmlnode){
+			return item;
+		}
+		if (item->childCount() > 0)	{
+			xmlTreeItem *subItem = _findItem(item, xmlnode);
+			if (subItem){
+				return subItem;
+			}
+		}
+	}
+	return NULL;
+}
 
 void apoXmlTreeView::unCreateNewChild(const char *xmlName)
 {

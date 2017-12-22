@@ -1318,6 +1318,10 @@ int DBLDataNode::GetInt() const
 			return (int)ndstr_atoi_hex(pText);
 		}
 	}
+
+	else if (OT_ARRAY == m_ele_type && m_data->_i_arr->number) {
+		return GetarrayInt(0);
+	}
 	return 0;
 }
 
@@ -1358,6 +1362,10 @@ NDUINT64 DBLDataNode::GetInt64() const
 			return atoll(pText);
 		}
 	}
+
+	else if (OT_ARRAY == m_ele_type && m_data->_i_arr->number) {
+		return GetarrayInt64(0);
+	}
 	return 0;
 
 }
@@ -1388,6 +1396,11 @@ bool DBLDataNode::GetBool() const
 		//return atoi(m_data->str_val) ? true : false;
 	}
 
+	else if (OT_ARRAY == m_ele_type && m_data->_i_arr->number) {
+		return GetarrayBool(0);
+	}
+
+
 	return false;
 }
 float DBLDataNode::GetFloat() const
@@ -1417,6 +1430,10 @@ float DBLDataNode::GetFloat() const
 		//if (pText) return (float) atof(pText);
 	}
 
+	else if (OT_ARRAY == m_ele_type && m_data->_i_arr->number) {
+		return GetarrayFloat(0);
+	}
+
 	return 0.0f;
 }
 
@@ -1426,13 +1443,12 @@ const char *DBLDataNode::GetText() const
 		return 0;
 	}
 	if (OT_STRING == m_ele_type && m_data->str_val &&m_data->str_val[0]){
-// 		if (0 == ndstricmp("none", m_data->str_val)) {
-// 			return NULL;
-// 		}
-// 		else if (0 == ndstricmp("null", m_data->str_val)) {
-// 			return NULL;
-// 		}
 		return (const char *)m_data->str_val;
+	}
+	else if (OT_ARRAY == m_ele_type && OT_STRING == m_sub_type ) {
+		if (m_data->_i_arr->number > 0)	{
+			return m_data->_str_arr->data[0];
+		}
 	}
 
 	return NULL;
@@ -1530,7 +1546,7 @@ int DBLDataNode::GetarrayInt(int index) const
 			}
 		}
 		
-		if (index == 0){
+		if (index == 0 && OT_ARRAY != m_ele_type){
 			return GetInt();
 		}
 		return 0;
@@ -1578,7 +1594,7 @@ bool DBLDataNode::GetarrayBool(int index) const
 			}
 		}
 
-		if (index == 0){
+		if (index == 0 && OT_ARRAY != m_ele_type){
 			return GetBool();
 		}
 		return false;
@@ -1626,7 +1642,7 @@ float DBLDataNode::GetarrayFloat(int index) const
 			}
 		}
 
-		if (index == 0){
+		if (index == 0 && OT_ARRAY != m_ele_type){
 			return GetFloat();
 		}
 		return 0;
@@ -1674,7 +1690,7 @@ NDUINT64 DBLDataNode::GetarrayInt64(int index) const
 			}
 		}
 
-		if (index == 0){
+		if (index == 0 && OT_ARRAY != m_ele_type){
 			return GetInt64();
 		}
 		return 0;
@@ -1722,7 +1738,7 @@ const char *DBLDataNode::GetarrayText(int index) const
 			}
 		}
 
-		if (index == 0){
+		if (index == 0 && OT_ARRAY != m_ele_type){
 			return GetText();
 		}
 		return 0;
@@ -2179,6 +2195,9 @@ bool DBLDataNode::CheckValid() const
 bool DBLDataNode::CheckArray(int index) const
 {
 	if (!m_data || !m_data->_data){
+		return false;
+	}
+	if (m_ele_type != OT_ARRAY) {
 		return false;
 	}
 	if (index < 0 || index >= m_data->_i_arr->number){

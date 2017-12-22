@@ -99,13 +99,13 @@ private slots:
 	void onFunctionsTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 	void onFilesTreeCurItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
-
     void on_actionExit_without_save_triggered();
-
     void on_actionUndo_triggered();
 
     void on_actionRedo_triggered();
 
+    void on_actionSearch_triggered();
+	void onSearchResultListChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 protected:
 
 	bool openFileView();
@@ -129,6 +129,7 @@ protected:
 	bool showCurFile();
 	bool showFileslist();
 	bool showCurFunctions();
+	bool setCurrSelectedFunction(ndxml *xml);
 
 	bool saveCurFile();
 	bool checkNeedSave();
@@ -154,6 +155,7 @@ protected:
 	ndxml_root *m_curFile;			//current edited file 
 	ndxml *m_currFunction;			//current edited function 
 	ndxml *m_debugInfo;
+	ndxml *m_xmlSearchedRes;
 	
 	std::string m_fileTemplate;		// new-file template
 	std::string m_confgiFile;		// config file-path

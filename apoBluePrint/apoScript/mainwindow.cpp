@@ -34,6 +34,7 @@ QMainWindow(parent), m_editorSetting(*apoEditorSetting::getInstant()), m_editorW
 m_fileRoot(0), m_curFile(0), m_currFunction(0), m_localDebugOwner(NULL), m_filesWatcher(this),
     ui(new Ui::MainWindow)
 {
+	m_xmlSearchedRes = NULL;
 	m_debugInfo = NULL;
 	m_debuggerCli = NULL;
 	m_isChangedCurFile = false;
@@ -71,6 +72,10 @@ MainWindow::~MainWindow()
 		ndxml_save(m_fileRoot, m_fileRootPath.c_str());
 		ndxml_destroy(m_fileRoot);
 		m_fileRoot = 0;
+	}
+	if (m_xmlSearchedRes ){
+		ndxml_free(m_xmlSearchedRes);
+		m_xmlSearchedRes = NULL;
 	}
     delete ui;
 
@@ -291,7 +296,6 @@ bool MainWindow::loadScriptFile(const char *scriptFile)
 	if (!scriptFile)	{
 		return false;
 	}
-	
 
 	if (checkNeedSave()){
 		saveCurFile();
@@ -511,6 +515,20 @@ void MainWindow::onFileChangedExternal(const QString &path)
 	
 }
 
+bool MainWindow::setCurrSelectedFunction(ndxml *xml)
+{
+	QDockWidget *pDock = this->findChild<QDockWidget*>("FunctionView");
+	if (!pDock){
+		return false;
+	}
+
+	apoXmlTreeView *tree = this->findChild<apoXmlTreeView*>("functionsTree");
+	if (!tree)	{
+		return false;
+	}
+	tree->setSelected(xml);
+	return true;
+}
 bool MainWindow::showCurFunctions()
 {	
 	m_editorWindow->preShowFunction();
@@ -1631,6 +1649,7 @@ bool MainWindow::showCompileError(const char *xmlFile, stackIndex_vct &errorStac
 		const char *pAction = m_editorSetting.getDisplayAction(ndxml_getname(node));
 		if (pAction && 0 == ndstricmp(pAction, "function")) {
 			m_currFunction = node;
+			setCurrSelectedFunction(m_currFunction);
 			showCurFunctions();
 		}
 
@@ -1697,19 +1716,7 @@ bool  MainWindow::showRuntimeError(const char *scriptFile, const char *errNodeIn
 {
 	stackIndex_vct stackIndex;
 	getStackFromName(errNodeInfo, stackIndex);
-// 	const char *p = strchr(errNodeInfo, '.');
-// 
-// 	while (p && *p) {
-// 		if (*p == '.') {
-// 			++p;
-// 		}
-// 		char buf[10];
-// 		buf[0] = 0;
-// 		p = ndstr_nstr_ansi(p, buf,'.', 10);
-// 		if (buf[0])	{
-// 			stackIndex.push_back(atoi(buf));
-// 		}
-// 	}
+
 	return showCompileError(scriptFile, stackIndex);
 }
 
@@ -1773,5 +1780,73 @@ void MainWindow::on_actionRedo_triggered()
 	if (m_editorWindow) {
 		m_editorWindow->ShowFuncRedo();
 	}
+
+}
+
+
+
+// double click file list
+void MainWindow::onSearchResultListChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+{
+
+	xmlTreeItem *pXmlItem = dynamic_cast<xmlTreeItem*>(current);
+	if (!pXmlItem)	{
+		return;
+	}
+	ndxml *pxml = (ndxml *)pXmlItem->getUserData();
+	if (!pxml)	{
+		return;
+	}
+
+	closeDetail();
+	m_editorWindow->clearFunction();
+	m_currFunction = NULL;
+
+	showRuntimeError(m_filePath.c_str(), ndxml_getval(pxml));
+
+}
+
+#include "apoScript/searchdlg.h"
+void MainWindow::on_actionSearch_triggered()
+{
+	SearchDlg dlg(m_curFile,this);
+	if (dlg.exec() != QDialog::Accepted) {
+		return ;
+	}
+	ndxml *res = dlg.getResult();
+	if (!res) {
+		QMessageBox::warning(this, "searched", "nothing to be found!", QMessageBox::Ok);
+		return;
+	}
+
+	apoXmlTreeView *subwindow = NULL;
+	QDockWidget *pDock = this->findChild<QDockWidget*>("SearchResultView");
+	if (!pDock)	{
+		pDock = new QDockWidget(tr("Search"), this);
+		pDock->setObjectName("SearchResultView");
+		pDock->setAttribute(Qt::WA_DeleteOnClose, true);
+
+		subwindow = new apoXmlTreeView();
+		subwindow->setAttribute(Qt::WA_DeleteOnClose, true);
+		subwindow->setObjectName("SearchResultTree");
+
+		pDock->setWidget(subwindow);
+		addDockWidget(Qt::RightDockWidgetArea, pDock);
+
+		QObject::connect(subwindow, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
+			this, SLOT(onSearchResultListChanged(QTreeWidgetItem *, QTreeWidgetItem *)));
+	}
+	else {
+		subwindow = pDock->findChild<apoXmlTreeView*>("SearchResultTree");
+	}
+
+	if (m_xmlSearchedRes){
+		ndxml_free(m_xmlSearchedRes);
+	}
+	m_xmlSearchedRes= ndxml_copy(res);
+
+	subwindow->clear();
+
+	subwindow->setXmlInfo(m_xmlSearchedRes, 2, "Result");
 
 }
