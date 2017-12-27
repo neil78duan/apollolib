@@ -239,6 +239,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_datatransfer.cpp" />
     <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_msgpack.cpp" />
+    <ClCompile Include="..\..\..\ndsdk\src\ndclient\cpp_api\nd_client.cpp" />
     <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\msg_format.cpp" />
     <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\nd_connector.c" />
     <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\nd_exch_key.cpp" />

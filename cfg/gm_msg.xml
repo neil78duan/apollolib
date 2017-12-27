@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<type_data_type name="数据类型" kinds="hide" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,2维数组,变量,参数,上一步结果,time"/>
+<type_data_type name="数据类型" kinds="hide" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,文件"/>
 <send_msg_list name="发送消息" delete="no" expand_stat="1" displayChildren="no">
 	<filter name="国战消息" delete="no" displayChildren="no" expand_stat="1">
 		<message name="请求查看封地信息" expand="yes" delete="no">
@@ -19,8 +19,15 @@
 			<msgid kinds="hide" maxId="15" minId="11">0</msgid>
 			<data name="国家ID" kinds="numeral" param="3">1</data>
 		</message>
+		<message name="查看玩家" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="15" minId="13">0</msgid>
+			<data name="玩家ID" kinds="numeral" param="0">1</data>
+		</message>
 		<message name="查看国家状态" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="15" minId="2">0</msgid>
+		</message>
+		<message name="查看城市列表" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="15" minId="5">0</msgid>
 		</message>
 		<message name="插旗" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="17" minId="15">0</msgid>
@@ -51,7 +58,7 @@
 		</message>
 		<message name="攻击国家npc" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="15" minId="42">0</msgid>
-			<data name="cityId" kinds="numeral" param="0">11405</data>
+			<data name="cityId" kinds="numeral" param="0">11205</data>
 			<data name="npcId" kinds="numeral" param="4">101</data>
 		</message>
 		<message name="攻击国家npc结束战斗" expand="yes" delete="no">
@@ -868,7 +875,7 @@
 			<msgid kinds="hide" maxId="7" minId="36">0</msgid>
 		</message>
 	</filter>
-	<filter name="system_系统消息" delete="no" displayChildren="no" expand_stat="1">
+	<filter name="system_系统消息" delete="no" displayChildren="no" expand_stat="0">
 		<message name="sys_修改SOCIAL服务器时间" expand="yes" delete="no" need_confirm="yes">
 			<msgid kinds="hide" maxId="7" minId="31">0</msgid>
 			<data name="加快小时" kinds="numeral" param="0">16</data>
@@ -932,6 +939,29 @@
 			<msgid kinds="hide" maxId="0" minId="28">0</msgid>
 			<data name="日志类型" kinds="key_value" key="普通日志,调试,警告,错误,致命" value="0,1,2,3,4" param="3">0</data>
 			<data name="打开" kinds="bool" param="3">1</data>
+		</message>
+		<message name="sys_install_function" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="0" minId="32">0</msgid>
+			<data name="maxMsgId" kinds="numeral" param="4">0</data>
+			<data name="minMsgId" kinds="numeral" param="4">36</data>
+			<data name="privilege" kinds="enum" enum_value="empty,connected,login,ready,GM" param="3">3</data>
+			<data name="OrderByte" kinds="enum" enum_value="bigEnd,littleEnd" param="3">1</data>
+			<data name="functionName" kinds="string" param="2">test_install_func</data>
+			<data name="file" kinds="in_file" param="7">../../log/gm_add_exp</data>
+		</message>
+		<message name="sys_push_file_toclient" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="0" minId="33">0</msgid>
+			<data name="file name" kinds="string" param="2">test.txt</data>
+			<data name="文件" kinds="in_file" param="7"/>
+		</message>
+		<message name="sys_push_function_toclient" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="0" minId="32">0</msgid>
+			<data name="RecvRoleId" kinds="numeral" param="0">0</data>
+			<data name="maxMsgId" kinds="numeral" param="4">0</data>
+			<data name="minMsgId" kinds="numeral" param="4">40</data>
+			<data name="OrderByte" kinds="enum" enum_value="bigEnd,littleEnd" param="3">1</data>
+			<data name="functionName" kinds="string" param="2">test.txt</data>
+			<data name="文件" kinds="in_file" param="7"/>
 		</message>
 	</filter>
 	<filter name="新建高级号" delete="no" displayChildren="no" expand_stat="0">

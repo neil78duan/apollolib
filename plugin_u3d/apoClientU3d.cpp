@@ -98,7 +98,6 @@ static void myInitAccCreateInfo(account_base_info &acc, int accType, const char 
 	strncpy((char*)acc.email, "webmaster@qq.com", sizeof(acc.email));
 
 }
-
 #ifndef WITHOUT_LOGIC_PARSER
 
 class ApoScriptOwner : public  ClientMsgHandler::ApoConnectScriptOwner
@@ -124,14 +123,14 @@ public:
 			return true;
 		}
 
-		else if (0==ndstricmp(objName, "LogFunction")) {
-			val.InitSet((void*)apoPrintf);
-			return true;
-		}
-		else if (0==ndstricmp(objName, "LogFile")) {
-			val.InitSet((void*)NULL);
-			return true;
-		}
+// 		else if (0==ndstricmp(objName, "LogFunction")) {
+// 			val.InitSet((void*)apoPrintf);
+// 			return true;
+// 		}
+// 		else if (0==ndstricmp(objName, "LogFile")) {
+// 			val.InitSet((void*)NULL);
+// 			return true;
+// 		}
 
 		else if (0==ndstricmp(objName, "LogPath")) {
 			//std::string mypath = cocos2d::FileUtils::getInstance()->getWritablePath();
@@ -167,6 +166,27 @@ private:
 };
 static ApoScriptOwner  __scriptObjOwner;
 
+static nd_handle _create_connector_object()
+{
+	nd_handle pconn = nd_object_create("tcp-connector");
+	if (-1 == nd_msgtable_create(pconn, ND_MAIN_MSG_CAPACITY, ND_MSG_BASE_ID)) {
+		nd_object_destroy(pconn, 0);
+		return NULL;
+	}
+	__scriptObjOwner.setConn(m_pconn);
+	return pconn;
+}
+#else 
+
+static nd_handle _create_connector_object()
+{
+	nd_handle pconn = nd_object_create("tcp-connector");
+	if (-1 == nd_msgtable_create(pconn, ND_MAIN_MSG_CAPACITY, ND_MSG_BASE_ID)) {
+		nd_object_destroy(pconn, 0);
+		return NULL;
+	}
+	return pconn;
+}
 #endif
 
 #define _SEND_AND_WAIT(_conn, _omsg, _rmsg_buf,_wait_maxid, _wait_minid,_sendflag) \
@@ -268,8 +288,8 @@ int ApoClient::Init()
 	scriptRoot->setPrint(apoPrintf, NULL);
 
 	ndInitNet();	
-	m_pconn = nd_object_create("tcp-connector");
-	__scriptObjOwner.setConn(m_pconn);	
+	//m_pconn = nd_object_create("tcp-connector");
+	m_pconn _create_connector_object() ;
 	parser.eventNtf(APOLLO_EVENT_SERVER_START, 0); //program start up
 #else 
 	ndInitNet();
@@ -330,7 +350,8 @@ RESULT_T ApoClient::Open(const char *host, int port, const char *dev_udid)
 {
 	//connect host
 	Close();
-	m_pconn = nd_object_create("tcp-connector");
+	//m_pconn = nd_object_create("tcp-connector");
+	m_pconn = _create_connector_object();
 	
 	if (!m_pconn) {
 		return NDSYS_ERR_NOSOURCE;

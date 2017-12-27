@@ -14,9 +14,9 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">../cfg/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1513915068</LastMod>
+	<LastMod name="最后修改" kinds="hide">1513934027</LastMod>
 </moduleInfo>
-<baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="35" expand_stat="1" accept_drag_in="func_node">
+<baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="35" expand_stat="0" accept_drag_in="func_node">
 	<func_node name="sample_selector" create_template="create_list1" auto_index="5" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
 		<func_params kinds="hide">
 			<input_param name="Param">param1</input_param>
@@ -734,6 +734,9 @@
 		</unConnect>
 	</func_node>
 	<func_node name="sample_loop_switch" create_template="create_list1" auto_index="7" expand_list="comment" enable_drag="yes" expand_stat="1">
+		<func_params kinds="hide">
+			<input_param name="Param1">$1</input_param>
+		</func_params>
 		<comment>test</comment>
 		<op_loop_entry name="节点_循环" expand_list="param_collect" auto_index="1" comp_cond="param_collect" expand_stat="0">
 			<comment name="功能说明" rw_stat="read">loop{}</comment>
@@ -875,7 +878,7 @@
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<internal_label name="标签$lab_start$" kinds="string" replace_val=".name" auto_index_ref="auto_index">lab_start</internal_label>
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
-			<apoEditorPos kinds="hide" x="319" y="353" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="318" y="345" offset_x="0" offset_y="0"/>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 				<var kinds="string" delete="no" restrict="type">loop times : </var>
@@ -1066,7 +1069,7 @@
 				<var kinds="string" delete="no" restrict="type">$value</var>
 			</param_collect>
 		</op_print>
-		<apoEditorPos kinds="hide" x="20" y="400" offset_x="-418" offset_y="-278"/>
+		<apoEditorPos kinds="hide" x="20" y="400" offset_x="-221" offset_y="-243"/>
 		<unConnect kinds="hide">
 			<steps_collection/>
 			<steps_collection/>

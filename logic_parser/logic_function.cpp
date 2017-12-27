@@ -1287,41 +1287,6 @@ APOLLO_SCRIPT_API_DEF(apollo_decrypt_file, "deyptFile(filename,outFileName, pass
 		return false;
 	}
 
-// 	size_t size = 0;
-// 	NDC_FILE *pf = ndc_fopen_r(inFileName, args[3].GetText());
-// 	if (!pf){
-// 		nd_logerror("load file %s error\n", inFileName);
-// 		parser->setErrno(NDERR_FILE_NOT_EXIST);
-// 		return false;
-// 	}
-// 
-// 	ndc_fseek(pf, 0, SEEK_END);
-// 	size = ndc_ftell(pf);
-// 	ndc_fseek(pf, 0, SEEK_SET);
-// 
-// 	if (size == 0) {
-// 		ndc_fclose(pf);
-// 		parser->setErrno(NDERR_FILE_NOT_EXIST);
-// 		return false;
-// 	}
-// 
-// 	char *buf = (char*)malloc(size+1);
-// 
-// 	if (!buf){
-// 		ndc_fclose(pf);
-// 		parser->setErrno(NDERR_SYSTEM);
-// 		return false;
-// 	}
-// 	size_t data_len = ndc_fread(buf, 1, size, pf);
-// 	if (data_len == 0 || data_len > size) {
-// 		ndc_fclose(pf);
-// 		free(buf);
-// 		return 0;
-// 
-// 	}
-// 	buf[data_len] = 0;
-// 	ndc_fclose(pf);
-
 	FILE *outFile = fopen(outFileName, "wb");
 	if (!outFileName){
 		nd_logerror("Open file %s error\n", outFileName);
@@ -1338,6 +1303,38 @@ APOLLO_SCRIPT_API_DEF(apollo_decrypt_file, "deyptFile(filename,outFileName, pass
 
 	return true;
 }
+
+
+APOLLO_SCRIPT_API_DEF(apollo_dump_function, "dumpFunction(funcName,outFileName)")
+{
+	CHECK_ARGS_NUM(args, 2, parser);
+
+	const char *funcName = args[1].GetText();
+	const char *outFileName = args[2].GetText();
+
+	if (!funcName || !outFileName) {
+		parser->setErrno(NDERR_PARAM_NUMBER_ZERO);
+		return false;
+	}
+
+	const char *pModule = NULL;
+
+	const scriptCmdBuf*script = LogicEngineRoot::get_Instant()->getScript(funcName, NULL, &pModule);
+	if (!script){
+		parser->setErrno(NDSYS_ERR_FUNCTION_NOT_FOUND);
+		return false;
+	}
+
+	FILE *pf = fopen(outFileName, "wb");
+	if (!pf)	{
+		parser->setErrno(NDERR_FILE_NOT_EXIST);
+		return false;
+	}
+	fwrite(script->buf, script->size, 1, pf);
+	fclose(pf);
+	return true;
+}
+
 //////////////////////////////////////
 // public cpp function 
 

@@ -488,6 +488,9 @@
     <ClCompile Include="..\..\logic_parser\logic_debugger.cpp">
       <Filter>apollo\logicParser</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndclient\cpp_api\nd_client.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\logic_parser\Makefile">
