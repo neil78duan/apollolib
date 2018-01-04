@@ -84,6 +84,10 @@ bool AlarmBase::setEvent(int id, time_t lastRun)
 
 bool AlarmBase::Add(int id, const char *name, time_t t)
 {
+	time_t now = app_inst_time(NULL);
+	if (t > now){
+		nd_logwarn("alarm %s last run time =%lld now =%lld \n", name, t, now);
+	}
 	for (dailyRunInfo_vct::iterator it = m_lastRunInfo.begin(); it != m_lastRunInfo.end(); it++)	{
 		if (id == it->id)	{
 			it->lastRunTm = t;

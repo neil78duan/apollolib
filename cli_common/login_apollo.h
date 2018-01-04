@@ -41,14 +41,13 @@ class  LoginBase
 {
 public:
 
-	virtual void ReInit(nd_handle hConn, const char * session_filename, const char*udid = NULL) = 0;
-	virtual void SetUdid(const char *udid)  =0 ;
+	virtual void ReInit(nd_handle hConn, const char * session_filename) = 0;
 	virtual void SetSessionFile(const char *session_filepath)  =0 ;
 	virtual void SetConnector(nd_handle hConn) =0;
 
 	virtual void Destroy() = 0;
 	//return 0 success ,else return error code
-	virtual int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type) = 0;
+	virtual int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type,int chanelId=0, bool skipAuth=false) = 0;
 	virtual int Relogin() = 0;
 	virtual int Logout() = 0;
 	virtual int TrytoGetCryptKey() =0;
@@ -77,6 +76,8 @@ public:
 	virtual const char *getAccountName() = 0;
 	virtual int getServerId() = 0 ;
 
+	static void SetDeviceInfo(const char *udid, const char *devDesc); 
+
 	LoginBase() {}
 	virtual~LoginBase(){}
 protected:
@@ -84,6 +85,7 @@ protected:
 
 ND_CONNCLI_API LoginBase *ApolloCreateLoginInst();
 ND_CONNCLI_API void ApolloDestroyLoginInst(LoginBase *pLogin);
+
 
 class  LoginApollo : public LoginBase
 #else 
@@ -97,18 +99,19 @@ class  LoginApollo
 #endif 
 {
 public:
-	LoginApollo(nd_handle hConn, const char * session_filename = NULL,const char*udid=NULL);
+	LoginApollo(nd_handle hConn, const char * session_filename = NULL);
 	LoginApollo();
 	virtual ~LoginApollo() ;
 
-	void ReInit(nd_handle hConn, const char * session_filename, const char*udid = NULL);
-	void SetUdid(const char *udid) ;
+	void ReInit(nd_handle hConn, const char * session_filename);
 	void SetSessionFile(const char *session_filepath) ;
 	void SetConnector(nd_handle hConn);
 
+	static void SetDeviceInfo(const char *udid, const char *devDesc);
+
 	void Destroy();
 	//return 0 success ,else return error code
-	int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type, bool skipAuth);//return -1 if error ESERVER_ERR_NOUSER
+	int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type,int channelId, bool skipAuth);//return -1 if error ESERVER_ERR_NOUSER
 	int Relogin() ;
 	int Logout() ;
 	int TrytoGetCryptKey();
@@ -146,7 +149,7 @@ protected:
 	int relogin(void *tokenBuf, int sendMsgID, int waitMsgID, bool bNotLoadBalance = false);
 	int getReloginSessionInfo(login_session_load *outbuf);
 	int getLoginToken(login_token_info *outToken);
-	bool buildAccountName(ACCOUNT_TYPE type,const char *inputName, char *outName, size_t size);
+	//bool buildAccountName(ACCOUNT_TYPE type,const char *inputName, char *outName, size_t size);
 	
 	nd_handle  m_conn ;
 	account_index_t m_accIndex;
@@ -156,8 +159,8 @@ protected:
 	NDUINT16 m_serverGroupId;
 	NDUINT8 m_accType ;
 	NDUINT8 m_accName[ACCOUNT_NAME_SIZE] ;
-	NDUINT8 m_udid[DEVICE_UDID_SIZE] ;
-	
+	static NDUINT8 m_udid[DEVICE_UDID_SIZE] ;
+	static NDUINT8 m_deviceDesc[DEVICE_UDID_SIZE];
 	
 //
 //	struct {

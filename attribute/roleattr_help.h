@@ -116,8 +116,8 @@ struct role_attr_description{
 	attr_name_t name;
 	attr_name_t real_name;
 	char input_for[NDVM_CMD_SIZE];
-	char ismin, ismax ;				//是否有最大值0没有,1 输入数值, 2 不超过某个属性
-	attrval_t minval ,maxval ;		//最大最小值
+	char ismin, ismax, isUnlimitedMax ;				//是否有最大值0没有,1 输入数值, 2 不超过某个属性
+	attrval_t minval ,maxval, unlimitMax ;		//最大最小值
 	attrid_t infections[ROLE_ATTR_CAPACITY];
 	attrid_t need_buf[ROLE_ATTR_CAPACITY];
 	ndvm_cmd_node cmd_data;
@@ -150,7 +150,7 @@ public:
 
 	int ParseFormula() ;
 	int place_param_name(char *input, char *buf, int size) ;
-	int parse_minmax(const char *maxval, const char *minval, role_attr_description *pwa_desc);
+	int parse_minmax(const char *maxval, const char *minval, const char*unlimitedMax, role_attr_description *pwa_desc);
 	bool check_save(attrid_t wa_id) ;
 	bool check_log(attrid_t wa_id);
 	bool check_sync(attrid_t wa_id) ;

@@ -78,7 +78,7 @@ public:
 	bool setVal(attrid_t index, attrval_t val);
 	bool addVal(attrid_t index, attrval_t val);
 	bool subVal(attrid_t index, attrval_t val);
-
+	
 	bool        setVal(const char *name, attrval_t newval);
 	bool		addVal(const char *name, attrval_t addval);
 	bool		subVal(const char *name, attrval_t subval);
@@ -86,6 +86,8 @@ public:
 	bool setVal(const attr_node_buf &attrs);
 	bool addVal(const attr_node_buf &attrs);
 	bool subVal(const attr_node_buf &attrs);
+
+	bool checkUnlimitMax(attrid_t aid);
 
 	bool printf() ;
 	int toNodeBuf(attr_node_buf &nodebuf) ;

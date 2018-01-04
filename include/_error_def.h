@@ -262,5 +262,7 @@ ErrorElement(ESERVER_ERR_NATION_OWN_ATT_ERROR, "不能攻打自己国家城市")
 ErrorElement(ESERVER_ERR_NATION_UNION_ATT_ERROR, "不能攻打同盟国家城市"),
 ErrorElement(ESERVER_ERR_NATION_OTHER_INVIMCIBLE, "不能攻击无敌玩家"),
 ErrorElement(ESERVER_ERR_GUILD_BOSS_TIME_LIMIT, "您加入公会时间未满一天"),
+ErrorElement(ESERVER_ERR_MOVE_BUILD_FIRST, "先移除建筑"),
+ErrorElement(ESERVER_ERR_CHANGE_NAME_COUNT, "您已经达到改名上限"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

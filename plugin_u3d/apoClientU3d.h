@@ -48,7 +48,7 @@ public:
 	void setLogPath(const char *logPath);
 	void SetEnableStreamRecord(bool bEnable) {m_bEnableStreamRecord = bEnable;}
 
-	nd_handle getConn() { return m_pconn; }
+	nd_handle getConn(); // { return m_pconn; }
 	LoginBase *getLoginObj() { return m_login; }
 	std::string getPath() { return m_path; }
 	DBLDatabase *getExcelDatabase();
@@ -58,31 +58,25 @@ public:
 	LogicEngineRoot *getScriptRoot();
 #endif
 	////
-	RESULT_T Open(const char *host=NULL, int port =0, const char *dev_udid=NULL);
+	RESULT_T Open(const char *host=NULL, int port =0);
 	void Close();
 	void ResetConnect();
 
 	RESULT_T ReloginBackground();
 	RESULT_T ReloginEx(void *session, size_t sessionSize, bool bReloginOffline);
 	
-	RESULT_T LoginAccountOneKey(const char *account, const char *passwd, int accType, bool skipAuth);
-	RESULT_T LoginOnly(const char *account, const char *passwd, int accType, bool skipAuth);
-	RESULT_T CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email);
-	RESULT_T CreateOnly(const char *userName, const char *passwd, const char *phone, const char *email);
+	RESULT_T LoginAccountOneKey(const char *account, const char *passwd, int accType, int channel, bool skipAuth);
+	RESULT_T LoginOnly(const char *account, const char *passwd, int accType, int channel, bool skipAuth);
+	RESULT_T CreateAccount(const char *userName, const char *passwd, int channel);
+	RESULT_T CreateOnly(const char *userName, const char *passwd, int channel);
 
 	RESULT_T SelectServer(const char *host = NULL, int port = 0);
-	//int getRoleList(char *xmlBuf, size_t size);
-	//RESULT_T selRole(roleid_t rid);
-	//RESULT_T createRole(const char *roleName);
 
 	//enter game incluse select server, get rolelist, create role ..enter game
 	RESULT_T EnterGame(const char *host=NULL, int port=0) { return _enterGame(host, port, NULL,true); }
 
 	int GetGameAreaList( ApolloServerInfo bufs[], size_t number) ;
 	
-	//RESULT_T testOneKeyLogin(const char *host, int port, const char *user, const char *passwd,int accType) ;
-
-
 	void Logout();
 	void ClearLoginHistory() ;
 
@@ -101,6 +95,7 @@ public:
 	time_t getServerTime();
 	void setServerTime(time_t srvTime);
 	NDUINT8 getReloginStat() { return m_isRelogin; }
+	void trytoHandle(nd_usermsgbuf_t *msg);
 private:
 	RESULT_T TrytoRelogin();
 	RESULT_T TrytoReloginEx(void *session, size_t sessionSize);
@@ -113,8 +108,6 @@ private:
 	//bool _moveFileToWritable(const char *infileName, const char*outFileName);
 	//std::string _getWritableFile(const char *file);
 	RESULT_T _enterGame(const char *host, int port, const char *roleName,bool bWithoutLoadBalance=false);
-	//RESULT_T _login();
-	//RESULT_T _roleCreate();
 	enum eRunningUpdate
 	{
 		ERUN_UP_NORMAL=0x126a4fb0,
@@ -126,15 +119,14 @@ private:
 	roleid_t m_roleId;
 	int m_port;
 	NDUINT8 m_isRelogin;		// 0 NEW LOGIN, 1 relogin after offline
-	//NDIConn *m_pconn;
-	nd_handle m_pconn;
+	NDIConn *m_pconn;
+	//nd_handle m_pconn;
 	LoginBase *m_login;
 	std::string m_logPath;
 	std::string m_path;
 	std::string m_sessionFile;
 	std::string m_accName;
 	std::string m_host;
-	std::string m_udid ;
 	time_t m_serverTm; // server time 
 	time_t m_localTm;  //local time when got server tm
 	int m_updateIndex;

@@ -232,7 +232,7 @@ ND_CMDLINE_FUNC_INSTANCE(redirect_to_server)
 	if (__g_conn) {
 		
 		if (argc >= 3) {
-			int ret = redirectServer(__g_conn->GetHandle(),argv[1],atoi(argv[2]),_DFT_SESSION_FILE,COMMON_TEST_UDID)  ;
+			int ret = redirectServer(__g_conn->GetHandle(),argv[1],atoi(argv[2]),_DFT_SESSION_FILE)  ;
 			if (ret == 0) {
 				fprintf(stdout, "redirect server success\n" ) ;
 			}
@@ -247,7 +247,7 @@ ND_CMDLINE_FUNC_INSTANCE(redirect_to_server)
 				fprintf(stdout, "get host list number=0\n") ;
 				return -1 ;
 			}
-			int ret = redirectServer(__g_conn->GetHandle(), (char*)bufs[0].inet_ip,bufs[0].port,_DFT_SESSION_FILE,COMMON_TEST_UDID)  ;
+			int ret = redirectServer(__g_conn->GetHandle(), (char*)bufs[0].inet_ip,bufs[0].port,_DFT_SESSION_FILE)  ;
 			if (ret == 0) {
 				fprintf(stdout, "redirect server success\n" ) ;
 			}

@@ -123,6 +123,11 @@ namespace ClientMsgHandler
 		return NULL;
 	}
 
+// 	bool ApoConnectScriptOwner::loadScript() 
+// 	{
+// 		
+// 		return false;
+// 	}
 
 	bool ApoConnectScriptOwner::loadDataType(const char *file)
 	{
@@ -175,6 +180,14 @@ namespace ClientMsgHandler
 		return val.GetString();
 	}
 
+	std::string getDataPath(NDIConn *pconn)
+	{
+		DBLDataNode val;
+
+		_GET_OBJ_FROM_MGR(pconn, "DataPath", val);
+		return val.GetString();
+	}
+
 	int OutputMessage2File(NDIConn *pconn, const char *file, const NDIStreamMsg &inmsg)
 	{
 		char mypath[1024];
@@ -193,6 +206,12 @@ namespace ClientMsgHandler
 		return ret;
 	}
 
+	ApoConnectScriptOwner *getScriptOwner(NDIConn *pconn) 
+	{
+		DBLDataNode val;
+		_GET_OBJ_FROM_MGR(pconn, "LogPath", val);
+		return (ApoConnectScriptOwner *)val.GetObject();
+	}
 
 	bool handleMsgFirstFromFileBeforTime(NDIConn *pconn, const char *file, NDUINT64 genTime, NDUINT16 msgId, nd_iconn_func func)
 	{
@@ -386,10 +405,11 @@ namespace ClientMsgHandler
 	bool outPutMessageFromconfig(NDIConn* pconn, const char *formatText, NDIStreamMsg &inmsg, userDefineDataType_map_t &dataDef)
 	{
 		logic_print print_func = getLogFunction(pconn);
-		void*log_file = getLogFile(pconn);
-		return LogicOutputMsgByFormat(print_func, log_file, formatText, inmsg, dataDef);
-
-		
+		if(print_func) {
+			void*log_file = getLogFile(pconn);
+			return LogicOutputMsgByFormat(print_func, log_file, formatText, inmsg, dataDef);
+		}
+		return false;
 	}
 
 	char *convert_msg_name(const char *inname, char *buf, int size)
@@ -500,6 +520,87 @@ namespace ClientMsgHandler
 		}
 		}
 		*/
+		return 0;
+	}
+	int msg_store_file(NDIConn* pconn, nd_usermsgbuf_t *msg)
+	{
+		NDIStreamMsg inmsg(msg);
+		char filename[128];
+
+		if (inmsg.Read((NDUINT8*)filename, sizeof(filename)) <= 0){
+			return 0;
+		}
+
+		int len = inmsg.PeekBinSize();
+		if (-1 == len || 0 == len || len > ND_USERMSG_DATA_CAPACITY){
+			return 0;
+		}
+		len += 7;
+
+		char *_data = (char *)malloc(len);
+		if (!_data)	{
+			return 0;
+		}
+		len = (int)(inmsg.ReadBin(_data, len));
+		//write file 
+		std::string wPath = getWritablePath(pconn);
+		wPath += "/";
+		wPath += filename;
+
+		FILE *pf = fopen(wPath.c_str(), "wb");
+		if (!pf) {
+			return -1;
+		}
+		fwrite(_data, 1, len, pf);
+		fclose(pf);
+
+		return 0;
+	}
+
+	int msg_install_messageHandler(NDIConn* pconn, nd_usermsgbuf_t *msg)
+	{
+		NDIStreamMsg inmsg(msg);
+		NDUINT16 maxId, minId;
+		NDUINT8 byteOrder;
+		NDUINT8 name[64];
+		char buf[4096];
+
+		name[0] = 0;
+		if (0 != inmsg.Read(maxId))	{ return 0; }
+		if (0 != inmsg.Read(minId))	{ return 0; }
+		if (0 != inmsg.Read(byteOrder))	{ return 0; }
+
+		if (inmsg.Read(name, sizeof(name)) == 0) { return 0; }
+		size_t bodySize = inmsg.ReadBin(buf, sizeof(buf));
+		if (bodySize){
+			if (LogicEngineRoot::get_Instant()->addGlobalFunction(byteOrder, (char*)name, buf, bodySize)) {				
+				if (0 == nd_msgentry_script_install(pconn->GetHandle(), (char*)name, (ndmsgid_t)maxId, (ndmsgid_t)minId, 0)) {
+					nd_logdebug("add function %s success for (%d, %d) success \n", name, maxId, minId);
+				}
+			}
+		}
+		return 0;
+	}
+
+
+	int msg_reload_file(NDIConn* pconn, nd_usermsgbuf_t *msg)
+	{
+		std::string myPath = getDataPath(pconn);
+		if (myPath.empty())	{
+			nd_logdebug("can not get data path\n");
+			return 0;
+		}
+		NDIStreamMsg inmsg(msg);
+		char buf[1024];
+
+		if (inmsg.Read(buf, sizeof(buf)) > 0) {
+			myPath += "/";
+			myPath += buf;
+
+			LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
+			LogicEngineRoot::get_Instant()->LoadScript(myPath.c_str(), &parser);
+
+		}
 		return 0;
 	}
 #endif 
@@ -613,6 +714,7 @@ namespace ClientMsgHandler
 	}
 
 
+
 	void InstallDftClientHandler(NDIConn *pconn)
 	{
 		CONNECT_INSTALL_MSG(pconn, msg_show_server_time_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_TIME);
@@ -621,16 +723,18 @@ namespace ClientMsgHandler
 
 		CONNECT_INSTALL_MSG(pconn, msg_show_msg_name_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_MESSAGE_NAME);
 		CONNECT_INSTALL_MSG(pconn, msg_get_version_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GETVERSION);
-		CONNECT_INSTALL_MSG(pconn, msg_get_rlimit_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_RLIMIT);
-
-
+		
 #ifdef WITHOUT_LOGIC_PARSER
 		pconn->SetDftMsgHandler(msg_default_handler);
 #else 
-
 		CONNECT_INSTALL_MSG(pconn, get_message_protocol_build_time, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_MESSAGE_BUILD_TIME);
 		CONNECT_INSTALL_MSG(pconn, get_id_name_format_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_MESSAGE_FORMAT_LIST);
 		CONNECT_INSTALL_MSG(pconn, get_data_format_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
+
+		CONNECT_INSTALL_MSG(pconn, msg_store_file, ND_MAIN_ID_SYS, ND_MSG_SYS_REQ_OTHER_STORE_FILE);
+		CONNECT_INSTALL_MSG(pconn, msg_reload_file, ND_MAIN_ID_SYS, ND_MSG_SYS_REQ_OTHER_RELOAD_SCRIPT);
+		CONNECT_INSTALL_MSG(pconn, msg_install_messageHandler, ND_MAIN_ID_SYS, ND_MSG_SYS_REQ_OTHER_INSTALL_HANDLER);
+		
 #endif 
 
 	}

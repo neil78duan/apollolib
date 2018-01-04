@@ -59,10 +59,10 @@ NDIConn* LoginServer( const char * host,int port, const char* user, const char *
 	
 	int bSuccess = 0;
 	if (sessionFile && sessionFile[0]) {
-		bSuccess =	RloginTrylogin(COMMON_TEST_UDID,pConn->GetHandle(),ACC_APOLLO, user, passwd,sessionFile, accID) ;
+		bSuccess =	RloginTrylogin(pConn->GetHandle(),ACC_APOLLO, user, passwd,sessionFile, accID) ;
 	}
 	else {
-		bSuccess = loginAndCreate(COMMON_TEST_UDID,pConn->GetHandle(),ACC_APOLLO,user, passwd,NULL,accID);
+		bSuccess = loginAndCreate(pConn->GetHandle(),ACC_APOLLO,user, passwd,NULL,accID);
 	}
 	
 	if (0== bSuccess) {

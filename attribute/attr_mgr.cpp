@@ -90,6 +90,12 @@ bool RoleAttrAsset::setVal(attrid_t index, attrval_t val)
 
 bool RoleAttrAsset::addVal(attrid_t index, attrval_t val)
 {
+	if (checkUnlimitMax(index)) {
+		setLastError(ESERVER_ERR_ATTR_TOO_MUCH);
+		setLastErrorAttrID(index);
+		return false;
+	}
+
 	if (fabsf(m_attrRate - 1.0f) > 0.001f) {
 		val *= m_attrRate ;
 	}
@@ -268,6 +274,31 @@ bool RoleAttrAsset::subVal(const attr_node_buf &attrs)
 	return true;
 }
 
+
+bool RoleAttrAsset::checkUnlimitMax(attrid_t aid)
+{
+	ND_TRACE_FUNC();
+	RoleAttrHelper  *pwah = get_attr_helper();
+	role_attr_description *pdesc = pwah->get_wa_desc(aid);
+	if (!pdesc){
+		return false;
+	}
+
+	attrval_t  curVal = m_data->datas[aid];
+	
+	if (1 == pdesc->isUnlimitedMax){
+		if (curVal >= pdesc->unlimitMax){
+			return true;
+		}
+	}
+	else if (2 == pdesc->isUnlimitedMax){
+		attrid_t idmax = (attrid_t)pdesc->unlimitMax;
+		if (idmax < pwah->m_wa_num && curVal >= m_data->datas[idmax])	{
+			return true;
+		}
+	}
+	return false;
+}
 
 void RoleAttrAsset::Undo(const attrid_t &aid, const  attrval_t &old_val, int optype)
 {

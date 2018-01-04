@@ -86,7 +86,7 @@ namespace LogicEditorHelper
 			std::string str_var;
 			std::string str_alias;
 		};
-		CXMLAlias() : m_num(0), m_pBuf(0), m_created(0){}
+        CXMLAlias() : m_num(0), m_created(0), m_pBuf(0){}
 		virtual ~CXMLAlias() {
 			if (m_pBuf) delete[] m_pBuf;
 		}

@@ -280,10 +280,12 @@ bool LogicEngineRoot::addGlobalFunction(int byteOrder, char*name, void *data, si
 	if (pcmdbuf) {
 
 		pcmdbuf->cmdname = (char*)(pcmdbuf + 1);
-		strncpy((char*)pcmdbuf->cmdname, name, namesize);
-
 		pcmdbuf->buf = (char*)pcmdbuf->cmdname + namesize;
-		pcmdbuf->size = (int)(size - namesize);
+
+		strncpy((char*)pcmdbuf->cmdname, name, namesize);
+		memcpy((char*)pcmdbuf->buf, data, size);
+		pcmdbuf->size = size;
+
 		pcmdbuf->byteOrder = (int)byteOrder;
 
 		_pushGlobal(pcmdbuf);

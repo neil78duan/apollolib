@@ -53,6 +53,10 @@ public:
             val.InitSet("../../log");
             return true;
         }
+		else if (0 == ndstricmp(objName, "DataPath")) {
+			val.InitSet("../../data");
+			return true;
+		}
 
 		else if (0 == ndstricmp(objName, "SelfName")) {
 			val.InitSet("gmtool");
@@ -524,11 +528,12 @@ int ConnectDialog::_login(const char *user, const char *passwd,bool skipAuth)
         ApolloDestroyLoginInst(m_login);
 
     }
+	LoginApollo::SetDeviceInfo("unknow-udid-this-qt-test", "UNKNOWN");
     m_login = ApolloCreateLoginInst();
     if (!m_login){
         return -1;
     }
-    m_login->ReInit(m_pConn->GetHandle(), _SESSION_FILE,"unknow-udid-this-qt-test");
+    m_login->ReInit(m_pConn->GetHandle(), _SESSION_FILE);
 
     /*
     if (_s_session_size && _s_session_buf[0]){
@@ -540,10 +545,10 @@ int ConnectDialog::_login(const char *user, const char *passwd,bool skipAuth)
     }*/
 	if (skipAuth) {
 
-		ret = m_login->Login(user, passwd, ACC_OTHER_3_ACCID, true);
+		ret = m_login->Login(user, passwd, ACC_OTHER_3_ACCID, 0,true);
 	}
 	else {
-		ret = m_login->Login(user, passwd, ACC_APOLLO, false);
+		ret = m_login->Login(user, passwd, ACC_APOLLO,0, false);
 	}
     if (-1==ret) {
         if (m_login->GetLastError() == NDSYS_ERR_NOUSER && !skipAuth) {
@@ -748,6 +753,23 @@ static bool _sendMsgByXml(ndxml *xml, ConnectDialog *dlg)
 				omsg.WriteBin((void*)p, s);
 			}
 			break;
+
+			case OT_ARRAY:		//file
+			{
+				const char *pFileName = ndxml_getval(node);
+				if (pFileName && *pFileName){
+					size_t filesize = 0;
+					void *pData = nd_load_file(pFileName, &filesize);
+					if (!pData)	{
+						QMessageBox::warning(NULL, "Error", "Can not open file!", QMessageBox::Ok);
+						return false;
+					}
+					omsg.WriteBin(pData, filesize);
+					nd_unload_file(pData);
+				}
+			}
+			break;
+
 			default:
 				QMessageBox::warning(NULL, "Error", "config error!", QMessageBox::Ok);
 				break;

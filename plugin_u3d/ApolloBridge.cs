@@ -13,13 +13,14 @@ using NetMessage ;
 using RESULT_T=System.Int32;  
 
 public enum ACCOUNT_TYPE{
-	ACC_FACEBOOK = 0,
-	ACC_UDID,
-	ACC_APOLLO,
-	ACC_GAME_CENTER,
-	ACC_GOOGLE_PLAY,
-	ACC_OTHER_3_ACCID,
-	ACC_NUMBER
+    ACC_FACEBOOK = 0,
+    ACC_UDID,
+    ACC_APOLLO,
+    ACC_GAME_CENTER,
+    ACC_GOOGLE_PLAY,
+    ACC_OTHER_3_ACCID,
+    ACC_ANYSDK,		//any sdk
+    ACC_NUMBER,
 };
 
 
@@ -34,7 +35,7 @@ public class apoClient {
 #endif
 
     [DllImport (APO_DLL_NAME)]
-	private static extern  bool apoCli_init(string workingPath, string logPath);		
+	private static extern  bool apoCli_init(string workingPath, string logPath, string udid, string deviceInfo);		
     
 	
 	[DllImport (APO_DLL_NAME)]
@@ -44,7 +45,7 @@ public class apoClient {
 	private static extern  void apoCli_destroy();    
     
     [DllImport (APO_DLL_NAME)]
-	private static extern  RESULT_T apoCli_open(string host, int port, string dev_udid);
+	private static extern  RESULT_T apoCli_open(string host, int port);
 
     [DllImport (APO_DLL_NAME)]
 	private static extern RESULT_T apoCli_close();
@@ -85,13 +86,13 @@ public class apoClient {
 	//public static extern  RESULT_T apoCli_TrytoRelogin();
 
     [DllImport (APO_DLL_NAME)]
-    public static extern RESULT_T apoCli_LoginAccount(string account, string passwd, ACCOUNT_TYPE accType = ACCOUNT_TYPE.ACC_APOLLO, bool bSkipAuth=false);
+    public static extern RESULT_T apoCli_LoginAccount(string account, string passwd, ACCOUNT_TYPE accType = ACCOUNT_TYPE.ACC_APOLLO, int channel =0, bool bSkipAuth=false);
 
     [DllImport (APO_DLL_NAME)]
-	public static extern  RESULT_T apoCli_CreateAccount(string userName, string passwd, string phone, string email);
+	public static extern  RESULT_T apoCli_CreateAccount(string userName, string passwd, int channel =0);
 	
     [DllImport (APO_DLL_NAME)]
-	public static extern  RESULT_T apoCli_CreateAccountOnly(string userName, string passwd, string phone, string email);
+	public static extern  RESULT_T apoCli_CreateAccountOnly(string userName, string passwd, int channel =0);
 	
     //[DllImport (APO_DLL_NAME)]
 	//public static extern  RESULT_T apoCli_testOneKeyLogin(string host, int port, string user, string passwd);
@@ -126,7 +127,7 @@ public class apoClient {
 
 
     [DllImport (APO_DLL_NAME)]
-    public static extern RESULT_T apoCli_LoginOnly(string account, string passwd, ACCOUNT_TYPE accType = ACCOUNT_TYPE.ACC_APOLLO, bool bSkipAuth = false);
+    public static extern RESULT_T apoCli_LoginOnly(string account, string passwd, ACCOUNT_TYPE accType = ACCOUNT_TYPE.ACC_APOLLO,int channel =0, bool bSkipAuth = false);
 
     [DllImport (APO_DLL_NAME)]
 	public static extern int apoCli_GetServerList(IntPtr sessionBuf, int bufsize);//xml
@@ -170,8 +171,12 @@ public class apoClient {
 #else  
 	apoCli_SetTimeout(10000) ;	//time out 10 seconds
 #endif
-        string workPath = Application.persistentDataPath;
-        if( apoCli_init(workPath, workPath) ) {
+        string workPath = Application.persistentDataPath;		
+        string udid = SystemInfo.deviceUniqueIdentifier;
+		
+        string devDesc = SystemInfo.operatingSystem;
+		
+        if( apoCli_init(workPath, workPath,udid, devDesc) ) {
 			//apoCli_EnableStreamRecord() ;
 			return true ;
 		}
@@ -244,9 +249,7 @@ public class apoClient {
 
     public int Open(string host, int port)
     {
-
-        string udid = SystemInfo.deviceUniqueIdentifier;
-        RESULT_T res = apoCli_open(host, port, udid); 
+        RESULT_T res = apoCli_open(host, port); 
         if(res != 0 ) {
             return -1 ;
         }
@@ -254,12 +257,14 @@ public class apoClient {
         return 0 ;
     }
 
-    public int Login(string user, string passwd, ACCOUNT_TYPE accType = ACCOUNT_TYPE.ACC_APOLLO, bool bSkipAuth = false)
+    public int Login(string user, string passwd, ACCOUNT_TYPE accType = ACCOUNT_TYPE.ACC_APOLLO, int channel =0, bool bSkipAuth = false)
     {
         if(m_netObject == null) {
             return -1 ;
         }
-        int ret = apoCli_LoginAccount(user, passwd, accType, bSkipAuth);
+        string accName = buildAccountName(user, accType);
+
+        int ret = apoCli_LoginAccount(accName, passwd, accType,channel, bSkipAuth);
 		if(ret == 0) {			
 			//apoCli_EnableStreamRecord() ;
 			m_netObject = get_NDNetObject() ;
@@ -272,12 +277,13 @@ public class apoClient {
         apoCli_Logout();
     }
 
-    public int Register(string user, string password, string phone, string email)
+    public int Register(string user, string password, string phone, string email, int channel= 0)
     {
         if(m_netObject == null) {
             return -1 ;
         }
-        int ret = apoCli_CreateAccount(user, password, phone, email);
+
+        int ret = apoCli_CreateAccount(user, password, channel);
 		
 		if(ret == 0) {			
 			//apoCli_EnableStreamRecord() ;
@@ -314,6 +320,37 @@ public class apoClient {
 		tokenBufPtr = Marshal.AllocHGlobal(1000);
 		tokenBuffSize =  apoCli_fetchSessionKey(tokenBufPtr, 1000);
 	}
+    private string buildAccountName(string inputName, ACCOUNT_TYPE accType)
+    {
+        string outName;
+        switch (accType)
+        {
+            case ACCOUNT_TYPE.ACC_FACEBOOK:
+                outName = @"fb&" + inputName;
+                break;
+            case ACCOUNT_TYPE.ACC_UDID:
+                outName = @"udid&" + inputName;
+                break;
+            case ACCOUNT_TYPE.ACC_APOLLO:
+                outName = inputName;
+                break;
+            case ACCOUNT_TYPE.ACC_GAME_CENTER:
+                outName = @"apl&" + inputName;
+                break;
+            case ACCOUNT_TYPE.ACC_GOOGLE_PLAY:
+
+                outName = @"gle&" + inputName;
+                break;
+            case ACCOUNT_TYPE.ACC_OTHER_3_ACCID:
+
+                outName = @"othe&" + inputName;
+                break;
+            default:
+                outName = inputName;
+                break;
+        }
+        return outName;
+    }
     #region for-test-api
     /*
     public bool TestLogin()

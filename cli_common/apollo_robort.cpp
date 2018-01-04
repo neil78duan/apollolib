@@ -26,7 +26,7 @@
 			}
 
 
-static int my_msg_default_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
+static int my_msg_default_handler(NDIConn* , nd_usermsgbuf_t *msg)
 {
 	if (ND_USERMSG_MAXID(msg) > 16 || ND_USERMSG_MINID(msg)> 64){
 		nd_logerror("get error message (%d,%d)\n", ND_USERMSG_MAXID(msg) , ND_USERMSG_MINID(msg));
@@ -154,17 +154,17 @@ int ApolloRobort::_login(const char *accName, const char *passwd,int iAccType )
 		delete m_login;
 	}
 	
-	m_login = new LoginApollo(m_pConn->GetHandle(), NULL, "unknow-udid-robort-test");
+	m_login = new LoginApollo(m_pConn->GetHandle(), NULL);
 	if (!m_login){
 		return -1;
 	}
 	
-	
-	ret = m_login->Login(accName, passwd, (ACCOUNT_TYPE)iAccType, false);
+	LoginApollo::SetDeviceInfo("unknow-udid-robort-test", "pc-device");
+
+	ret = m_login->Login(accName, passwd, (ACCOUNT_TYPE)iAccType,0, false);
 	if (-1 == ret) {
 		if (m_login->GetLastError() == NDSYS_ERR_NOUSER) {
 			account_base_info acc;
-			strncpy((char*)acc.udid, "unknow-udid-robort-test", DEVICE_UDID_SIZE);
 			initAccCreateInfo(acc, (ACCOUNT_TYPE)iAccType, accName, passwd);
 
 			ret = m_login->CreateAccount(&acc);
