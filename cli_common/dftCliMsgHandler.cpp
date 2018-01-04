@@ -123,10 +123,11 @@ namespace ClientMsgHandler
 		return NULL;
 	}
 
-	bool ApoConnectScriptOwner::loadScript() 
-	{
-		return false;
-	}
+// 	bool ApoConnectScriptOwner::loadScript() 
+// 	{
+// 		
+// 		return false;
+// 	}
 
 	bool ApoConnectScriptOwner::loadDataType(const char *file)
 	{
@@ -176,6 +177,14 @@ namespace ClientMsgHandler
 		DBLDataNode val;
 
 		_GET_OBJ_FROM_MGR(pconn, "LogPath", val);
+		return val.GetString();
+	}
+
+	std::string getDataPath(NDIConn *pconn)
+	{
+		DBLDataNode val;
+
+		_GET_OBJ_FROM_MGR(pconn, "DataPath", val);
 		return val.GetString();
 	}
 
@@ -548,12 +557,49 @@ namespace ClientMsgHandler
 		return 0;
 	}
 
+	int msg_install_messageHandler(NDIConn* pconn, nd_usermsgbuf_t *msg)
+	{
+		NDIStreamMsg inmsg(msg);
+		NDUINT16 maxId, minId;
+		NDUINT8 byteOrder;
+		NDUINT8 name[64];
+		char buf[4096];
+
+		name[0] = 0;
+		if (0 != inmsg.Read(maxId))	{ return 0; }
+		if (0 != inmsg.Read(minId))	{ return 0; }
+		if (0 != inmsg.Read(byteOrder))	{ return 0; }
+
+		if (inmsg.Read(name, sizeof(name)) == 0) { return 0; }
+		size_t bodySize = inmsg.ReadBin(buf, sizeof(buf));
+		if (bodySize){
+			if (LogicEngineRoot::get_Instant()->addGlobalFunction(byteOrder, (char*)name, buf, bodySize)) {				
+				if (0 == nd_msgentry_script_install(pconn->GetHandle(), (char*)name, (ndmsgid_t)maxId, (ndmsgid_t)minId, 0)) {
+					nd_logdebug("add function %s success for (%d, %d) success \n", name, maxId, minId);
+				}
+			}
+		}
+		return 0;
+	}
+
+
 	int msg_reload_file(NDIConn* pconn, nd_usermsgbuf_t *msg)
 	{
-		LogicEngineRoot::get_Instant()->destroy_Instant();
-		ApoConnectScriptOwner * powner = getScriptOwner(pconn) ;
-		if(powner){
-			powner->loadScript();
+		std::string myPath = getDataPath(pconn);
+		if (myPath.empty())	{
+			nd_logdebug("can not get data path\n");
+			return 0;
+		}
+		NDIStreamMsg inmsg(msg);
+		char buf[1024];
+
+		if (inmsg.Read(buf, sizeof(buf)) > 0) {
+			myPath += "/";
+			myPath += buf;
+
+			LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
+			LogicEngineRoot::get_Instant()->LoadScript(myPath.c_str(), &parser);
+
 		}
 		return 0;
 	}
@@ -686,7 +732,9 @@ namespace ClientMsgHandler
 		CONNECT_INSTALL_MSG(pconn, get_data_format_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
 
 		CONNECT_INSTALL_MSG(pconn, msg_store_file, ND_MAIN_ID_SYS, ND_MSG_SYS_REQ_OTHER_STORE_FILE);
-		CONNECT_INSTALL_MSG(pconn, msg_reload_file, ND_MAIN_ID_SYS, ND_MSG_SYS_REQ_OTHER_INSTALL_HANDLER);
+		CONNECT_INSTALL_MSG(pconn, msg_reload_file, ND_MAIN_ID_SYS, ND_MSG_SYS_REQ_OTHER_RELOAD_SCRIPT);
+		CONNECT_INSTALL_MSG(pconn, msg_install_messageHandler, ND_MAIN_ID_SYS, ND_MSG_SYS_REQ_OTHER_INSTALL_HANDLER);
+		
 #endif 
 
 	}

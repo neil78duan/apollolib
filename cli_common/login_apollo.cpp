@@ -85,6 +85,12 @@ void ApolloDestroyLoginInst(LoginBase *pLogin)
 {
 	delete pLogin;
 }
+
+void LoginBase::SetDeviceInfo(const char *udid, const char *devDesc)
+{
+	LoginApollo::SetDeviceInfo( udid,  devDesc) ;
+}
+
 #else 
 LoginApollo *ApolloCreateLoginInst()
 {
@@ -97,6 +103,9 @@ void ApolloDestroyLoginInst(LoginApollo *pLogin)
 }
 
 #endif
+
+NDUINT8 LoginApollo::m_udid[DEVICE_UDID_SIZE] = "unknown-udid";
+NDUINT8 LoginApollo::m_deviceDesc[DEVICE_UDID_SIZE] = "unknown-device";
 
 NDUINT32 LoginApollo::getAccountID() 
 {
@@ -114,7 +123,7 @@ int LoginApollo::getServerId()
 	return m_serverGroupId;
 }
 
-LoginApollo::LoginApollo(nd_handle hConn, const char * session_filename, const char*udid ) : m_conn(hConn)
+LoginApollo::LoginApollo(nd_handle hConn, const char * session_filename ) : m_conn(hConn)
 {
 	m_accIndex = 0 ;
 	m_sessionID = 0 ;
@@ -124,7 +133,7 @@ LoginApollo::LoginApollo(nd_handle hConn, const char * session_filename, const c
 	m_serverGroupId = 0;
 	memset(&m_srv_key, 0, sizeof(m_srv_key)) ;
 	m_session_file = 0 ;
-	ReInit( hConn, session_filename, udid);	
+	ReInit( hConn, session_filename);	
 	
 }
 
@@ -141,8 +150,7 @@ LoginApollo::LoginApollo()
 	memset(&m_srv_key, 0, sizeof(m_srv_key));
 	m_session_file = 0;
 
-
-	strncpy((char*)m_udid, "unknown_udid", sizeof(m_udid));
+	//strncpy((char*)m_udid, "unknown_udid", sizeof(m_udid));
 }
 
 LoginApollo::~LoginApollo()
@@ -155,25 +163,31 @@ LoginApollo::~LoginApollo()
 }
 
 
-void LoginApollo::SetUdid(const char *udid)
+void LoginApollo::SetDeviceInfo(const char *udid, const char *devDesc)
 {
+	m_udid[0] = 0; 
+	m_deviceDesc[0] = 0;
+
 	if (udid && udid[0]) {
 		strncpy((char*)m_udid, udid, sizeof(m_udid))  ;
 		nd_logdebug("set udid =%s\n", m_udid);
 	}
-	else {
-		m_udid[0] = 0;
+
+	if (devDesc && devDesc[0])	{
+		strncpy((char*)m_deviceDesc, devDesc, sizeof(m_deviceDesc));
+		nd_logdebug("set udid =%s\n", m_deviceDesc);
 	}
+
+
 }
 
-void LoginApollo::ReInit(nd_handle hConn, const char * session_filename, const char*udid )
+void LoginApollo::ReInit(nd_handle hConn, const char * session_filename)
 {
 	Destroy();
 
 	m_conn = hConn;		
 	SetSessionFile(session_filename);
-	SetUdid(udid);
-
+	
 }
 
 void LoginApollo::SetSessionFile(const char *session_filepath)
@@ -283,7 +297,6 @@ void LoginApollo::Destroy()
 	
 	m_accType = 0;
 	m_accName[0]=0;
-	m_udid[0]=0;
 
 	memset(&m_srv_key, 0, sizeof(m_srv_key));
 	if (m_session_file) {
@@ -292,17 +305,17 @@ void LoginApollo::Destroy()
 	}
 }
 
-int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE type, bool skipAuth)
+int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE type, int chanelId, bool skipAuth)
 {
 	if (TrytoGetCryptKey() == -1) {
 		return -1;
 	}
-	char userName[ACCOUNT_NAME_SIZE];
-
-	if (!buildAccountName( type, inputName,userName, sizeof(userName))	){
-		nd_object_seterror(m_conn,NDERR_INVALID_INPUT);
-		return -1;
-	}
+	//char userName[ACCOUNT_NAME_SIZE];
+// 
+// 	if (!buildAccountName( type, inputName,userName, sizeof(userName))	){
+// 		nd_object_seterror(m_conn,NDERR_INVALID_INPUT);
+// 		return -1;
+// 	}
 
 	m_serverGroupId = 0;
 
@@ -313,10 +326,10 @@ int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE t
 	NDOStreamMsg omsg(ND_MAIN_ID_LOGIN,LOGIN_MSG_LOGIN_REQ) ;
 	omsg.Write(m_udid) ;
 	omsg.Write((NDUINT8)type) ;
-	omsg.Write((NDUINT8*)userName) ;
+	omsg.Write((NDUINT8*)inputName) ;
 	omsg.Write((NDUINT8*)passwd);
-	//omsg.Write((NDUINT8)countryIndex);
-	//omsg.Write(m_udid);
+	omsg.Write((NDUINT16)chanelId);
+	omsg.Write(m_deviceDesc);
 
 	nd_logdebug("send login message udid=%s\n",m_udid);
 	//if (ACC_APOLLO==type && passwd && passwd[0]) {
@@ -407,20 +420,24 @@ int LoginApollo::CreateAccount(account_base_info *acc_info)
 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_REQ) ;
 	nd_usermsgbuf_t recv_msg ;
 
-	omsg.Write(m_udid) ;
-	omsg.Write(acc_info->type) ;
-	omsg.Write(acc_info->gender) ;
-	
-	omsg.Write(acc_info->birth_year) ;
-	omsg.Write(acc_info->birth_month) ;
-	omsg.Write(acc_info->birth_day) ;
-	
-	omsg.Write(acc_info->acc_name) ;
-	omsg.Write(acc_info->nick) ;
-	omsg.Write(acc_info->passwd) ;
-	omsg.Write(acc_info->phone) ;
-	omsg.Write(acc_info->email) ;
-	omsg.Write(acc_info->serverGroupId);
+	strncpy((char*)acc_info->udid, (char*)m_udid, sizeof(acc_info->udid));
+	strncpy((char*)acc_info->devDesc, (char*)m_deviceDesc, sizeof(acc_info->devDesc));
+	acc_info->WriteStream(omsg);
+
+// 	omsg.Write(m_udid) ;
+// 	omsg.Write(acc_info->type) ;
+// 	omsg.Write(acc_info->gender) ;
+// 	
+// 	omsg.Write(acc_info->birth_year) ;
+// 	omsg.Write(acc_info->birth_month) ;
+// 	omsg.Write(acc_info->birth_day) ;
+// 	
+// 	omsg.Write(acc_info->acc_name) ;
+// 	omsg.Write(acc_info->nick) ;
+// 	omsg.Write(acc_info->passwd) ;
+// 	omsg.Write(acc_info->phone) ;
+// 	omsg.Write(acc_info->email) ;
+// 	omsg.Write(acc_info->serverGroupId);
 
 	nd_logdebug("send create account message udid=%s\n", m_udid);
 
@@ -825,35 +842,36 @@ int LoginApollo::relogin(void *token_info, int sendMsgID, int waitMsgID, bool bN
 	
 	return 0;
 }
-
-
-bool LoginApollo::buildAccountName(ACCOUNT_TYPE type,const char *inputName, char *outName, size_t size)
-{
-	switch (type)
-	{
-	case ACC_FACEBOOK:
-		snprintf(outName,size, "fb&%s", inputName);
-		break;
-	case ACC_UDID:
-		snprintf(outName, size, "udid&%s", inputName);
-		break;
-	case ACC_APOLLO:
-		snprintf(outName, size, "%s", inputName);
-		break;
-	case ACC_GAME_CENTER:
-		snprintf(outName, size, "apl&%s", inputName);
-		break;
-	case ACC_GOOGLE_PLAY:
-		snprintf(outName, size, "gle&%s", inputName);
-		break;
-	case ACC_OTHER_3_ACCID:
-		snprintf(outName, size, "othe&%s", inputName);
-		break;
-	default:
-		return false;
-	}
-	return true;
-}
+// 
+// 
+// bool LoginApollo::buildAccountName(ACCOUNT_TYPE type,const char *inputName, char *outName, size_t size)
+// {
+// 	switch (type)
+// 	{
+// 	case ACC_FACEBOOK:
+// 		snprintf(outName,size, "fb&%s", inputName);
+// 		break;
+// 	case ACC_UDID:
+// 		snprintf(outName, size, "udid&%s", inputName);
+// 		break;
+// 	case ACC_APOLLO:
+// 		snprintf(outName, size, "%s", inputName);
+// 		break;
+// 	case ACC_GAME_CENTER:
+// 		snprintf(outName, size, "apl&%s", inputName);
+// 		break;
+// 	case ACC_GOOGLE_PLAY:
+// 		snprintf(outName, size, "gle&%s", inputName);
+// 		break;
+// 	case ACC_OTHER_3_ACCID:
+// 		snprintf(outName, size, "othe&%s", inputName);
+// 		break;
+// 	default:
+// 		return false;
+// 	}
+// 
+// 	return true;
+// }
 
 int LoginApollo::onLogin(NDIStreamMsg &inmsg)
 {

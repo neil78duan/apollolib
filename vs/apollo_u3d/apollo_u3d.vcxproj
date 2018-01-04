@@ -89,7 +89,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>ND_CLIENT_ONLY;WITHOUT_LOGIC_PARSER;ND_DEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ND_CLIENT_ONLY;ND_DEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -108,7 +108,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>ND_CLIENT_ONLY;WITHOUT_LOGIC_PARSER;ND_DEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ND_CLIENT_ONLY;ND_DEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -128,7 +128,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>ND_CLIENT_ONLY;WITHOUT_LOGIC_PARSER;WIN32;NDEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ND_CLIENT_ONLY;WIN32;NDEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -151,7 +151,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>ND_CLIENT_ONLY;WITHOUT_LOGIC_PARSER;WIN32;NDEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ND_CLIENT_ONLY;WIN32;NDEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>

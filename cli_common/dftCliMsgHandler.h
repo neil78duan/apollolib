@@ -56,7 +56,7 @@ int apollo_cli_msg_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t
 		bool getOtherObject(const char*objName, DBLDataNode &val);
 		virtual const char *getMsgName(int msgId);
 		virtual const char *getMsgBody(int msgId);
-		virtual bool loadScript() ;
+		//virtual bool loadScript() ;
 		bool loadDataType(const char *file);
 		void LoadMsgDataTypeFromServer();
 	protected:

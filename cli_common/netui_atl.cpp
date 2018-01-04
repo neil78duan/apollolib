@@ -17,22 +17,24 @@
 void initAccCreateInfo(account_base_info &acc,int accType,const char *userName, const char *passwd)
 {
 	acc.type = accType ;
-	acc.gender = 0 ; //default F
-	acc.birth_day = 8 ;
-	acc.birth_month = 8 ;
-	acc.birth_year = 1988 ;
+	acc.isAdult = 0;
+	//acc.
+// 	acc.gender = 0 ; //default F
+// 	acc.birth_day = 8 ;
+// 	acc.birth_month = 8 ;
+// 	acc.birth_year = 1988 ;
 	strncpy((char*) acc.acc_name, userName, sizeof(acc.acc_name)) ;
 	strncpy((char*) acc.nick, userName,sizeof(acc.nick)) ;
 	strncpy((char*) acc.passwd, passwd,sizeof(acc.passwd)) ;
-	strncpy((char*) acc.phone, "100086",sizeof(acc.phone)) ;
-	strncpy((char*) acc.email, "webmaster@qq.com", sizeof(acc.email)) ;
+	//strncpy((char*) acc.phone, "100086",sizeof(acc.phone)) ;
+	//strncpy((char*) acc.email, "webmaster@qq.com", sizeof(acc.email)) ;
 	
 }
 
-int RloginTrylogin(const char*udid,nd_handle h,int accType, const char *userName, const char *passwd,const char *save_session_file, NDUINT32 *accID)
+int RloginTrylogin(nd_handle h,int accType, const char *userName, const char *passwd,const char *save_session_file, NDUINT32 *accID)
 {
 	int ret = 0;
-	LoginApollo login((nd_handle)h, save_session_file,udid) ;
+	LoginApollo login((nd_handle)h, save_session_file) ;
 	
 	ret = login.Relogin() ;
 
@@ -45,7 +47,7 @@ int RloginTrylogin(const char*udid,nd_handle h,int accType, const char *userName
 	}
 
 	//need input use-name and password
-	ret = login.Login(userName, passwd, (ACCOUNT_TYPE)accType,false) ;
+	ret = login.Login(userName, passwd, (ACCOUNT_TYPE)accType,0,false) ;
 	if (-1==ret ) {
 		//Create account
 		if ( ndGetLastError(h)==NDSYS_ERR_NOUSER) {
@@ -74,13 +76,13 @@ int RloginTrylogin(const char*udid,nd_handle h,int accType, const char *userName
 }
 
 
-int loginAndCreate(const char*udid,nd_handle h,int accType, const char *userName, const char *passwd,const char *save_session_file, NDUINT32 *accID) 
+int loginAndCreate(nd_handle h,int accType, const char *userName, const char *passwd,const char *save_session_file, NDUINT32 *accID) 
 {
 	int ret = 0;
 	//bool bSaveSession = (save_session_file && save_session_file[0]) ? true : false;
-	LoginApollo login((nd_handle)h,  save_session_file,udid); //for debug tool ,maybe it would open too many connectors
+	LoginApollo login((nd_handle)h,  save_session_file); //for debug tool ,maybe it would open too many connectors
 		
-	ret = login.Login(userName, passwd, (ACCOUNT_TYPE)accType,false) ;
+	ret = login.Login(userName, passwd, (ACCOUNT_TYPE)accType,0,false) ;
 	if (-1==ret ) {
 		//Create account
 		if ( ndGetLastError(h)==NDSYS_ERR_NOUSER) {
@@ -88,7 +90,7 @@ int loginAndCreate(const char*udid,nd_handle h,int accType, const char *userName
 			
 			initAccCreateInfo(acc, accType,userName, passwd);
 			
-			strncpy((char*)acc.udid, (const char*)udid,sizeof(acc.udid) ) ;
+			//strncpy((char*)acc.udid, (const char*)udid,sizeof(acc.udid) ) ;
 			ret = login.CreateAccount(&acc) ;
 		}
 		
@@ -109,10 +111,10 @@ int loginAndCreate(const char*udid,nd_handle h,int accType, const char *userName
 	
 }
 
-int redirectServer(nd_handle h,const char *host, int port,const char*session_file,const char *udid)
+int redirectServer(nd_handle h,const char *host, int port,const char*session_file)
 {
 	int ret = 0;
-	LoginApollo login((nd_handle)h,NULL,udid) ;
+	LoginApollo login((nd_handle)h,NULL) ;
 	
 	ret = login.EnterServer(host, port,session_file) ;
 	if (-1==ret ) {		
@@ -126,14 +128,14 @@ int redirectServer(nd_handle h,const char *host, int port,const char*session_fil
 
 }
 
-int TryLogin(const char*udid,nd_handle h,int accType, const char *userName, const char *passwd,const char *save_session_file)
+int TryLogin(nd_handle h,int accType, const char *userName, const char *passwd,const char *save_session_file)
 {
     int ret = -1;
-    LoginApollo login((nd_handle)h, save_session_file,udid) ;
+    LoginApollo login((nd_handle)h, save_session_file) ;
 	
 	
     //need input use-name and password
-    ret = login.Login(userName, passwd, (ACCOUNT_TYPE)accType,false) ;
+    ret = login.Login(userName, passwd, (ACCOUNT_TYPE)accType,0,false) ;
     
     if (ret == 0 ) {
         nd_logmsg("login complete SUCCESS!\n") ;
@@ -144,10 +146,10 @@ int TryLogin(const char*udid,nd_handle h,int accType, const char *userName, cons
     return ret;
 }
 
-int TryRegister(const char*udid,nd_handle h,int accType, const char *userName, const char *passwd,const char *save_session_file)
+int TryRegister(nd_handle h,int accType, const char *userName, const char *passwd,const char *save_session_file)
 {
     int ret = -1;
-    LoginApollo login((nd_handle)h, save_session_file,udid) ;
+    LoginApollo login((nd_handle)h, save_session_file) ;
 	
     account_base_info acc ;
 	

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <type_data_type name="数据类型" kinds="hide" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,文件"/>
 <send_msg_list name="发送消息" delete="no" expand_stat="1" displayChildren="no">
-	<filter name="国战消息" delete="no" displayChildren="no" expand_stat="1">
+	<filter name="国战消息" delete="no" displayChildren="no" expand_stat="0">
 		<message name="请求查看封地信息" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="15" minId="59">0</msgid>
 		</message>
@@ -726,7 +726,7 @@
 			<data name="数量" kinds="numeral" param="0">80</data>
 		</message>
 	</filter>
-	<filter name="GM_gm消息" delete="no" displayChildren="no" expand_stat="0">
+	<filter name="GM_gm消息" delete="no" displayChildren="no" expand_stat="1">
 		<message name="GM设置国家等级" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="51">0</msgid>
 			<data name="nationId" kinds="numeral" param="3">1</data>
@@ -813,8 +813,8 @@
 		</message>
 		<message name="GM_增加属性" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="8">0</msgid>
-			<data name="编号" kinds="numeral" param="2">vitality</data>
-			<data name="属性增加值" kinds="numeral" param="1">20</data>
+			<data name="编号" kinds="numeral" param="2">MoneyCapacity</data>
+			<data name="属性增加值" kinds="numeral" param="1">0</data>
 		</message>
 		<message name="GM_发送系统公告" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="10">0</msgid>
@@ -855,7 +855,7 @@
 		</message>
 		<message name="GM_通过名字获得ID" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="18">0</msgid>
-			<data name="玩家名字" kinds="string" param="2" desc="name">ddtest</data>
+			<data name="玩家名字" kinds="string" param="2" desc="name">ddtest31</data>
 		</message>
 		<message name="GM_查询其他玩家设置" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="21">0</msgid>
@@ -863,7 +863,7 @@
 		</message>
 		<message name="GM_获得其他玩家数据" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="23">0</msgid>
-			<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">2</data>
+			<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">1</data>
 		</message>
 		<message name="GM_据点入侵" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="28">0</msgid>
@@ -875,7 +875,7 @@
 			<msgid kinds="hide" maxId="7" minId="36">0</msgid>
 		</message>
 	</filter>
-	<filter name="system_系统消息" delete="no" displayChildren="no" expand_stat="0">
+	<filter name="system_系统消息" delete="no" displayChildren="no" expand_stat="1">
 		<message name="sys_修改SOCIAL服务器时间" expand="yes" delete="no" need_confirm="yes">
 			<msgid kinds="hide" maxId="7" minId="31">0</msgid>
 			<data name="加快小时" kinds="numeral" param="0">16</data>
@@ -914,8 +914,8 @@
 		</message>
 		<message name="sys_记录收发消息" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="0" minId="15">0</msgid>
-			<data name="MaxID" kinds="numeral" param="3">2</data>
-			<data name="MinID" kinds="numeral" param="3">33</data>
+			<data name="MaxID" kinds="numeral" param="3">11</data>
+			<data name="MinID" kinds="numeral" param="3">5</data>
 			<data name="是否显示" kinds="bool" param="3">1</data>
 		</message>
 		<message name="sys_打印收到的消息内容" expand="yes" delete="no">
@@ -951,17 +951,23 @@
 		</message>
 		<message name="sys_push_file_toclient" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="0" minId="33">0</msgid>
-			<data name="file name" kinds="string" param="2">test.txt</data>
-			<data name="文件" kinds="in_file" param="7"/>
+			<data name="RecvRoleId" kinds="numeral" param="0">254</data>
+			<data name="store file name" kinds="string" param="2">test11.txt</data>
+			<data name="inputFile" kinds="in_file" param="7">../../readme.txt</data>
 		</message>
 		<message name="sys_push_function_toclient" expand="yes" delete="no">
-			<msgid kinds="hide" maxId="0" minId="32">0</msgid>
-			<data name="RecvRoleId" kinds="numeral" param="0">0</data>
+			<msgid kinds="hide" maxId="0" minId="34">0</msgid>
+			<data name="RecvRoleId" kinds="numeral" param="0">254</data>
 			<data name="maxMsgId" kinds="numeral" param="4">0</data>
 			<data name="minMsgId" kinds="numeral" param="4">40</data>
 			<data name="OrderByte" kinds="enum" enum_value="bigEnd,littleEnd" param="3">1</data>
-			<data name="functionName" kinds="string" param="2">test.txt</data>
-			<data name="文件" kinds="in_file" param="7"/>
+			<data name="functionName" kinds="string" param="2">test_install_func</data>
+			<data name="文件" kinds="in_file" param="7">../../log/gm_add_exp</data>
+		</message>
+		<message name="sys_push_file_toclient" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="0" minId="35">0</msgid>
+			<data name="RecvRoleId" kinds="numeral" param="0">18</data>
+			<data name="file name" kinds="string" param="2">client_script.bin</data>
 		</message>
 	</filter>
 	<filter name="新建高级号" delete="no" displayChildren="no" expand_stat="0">

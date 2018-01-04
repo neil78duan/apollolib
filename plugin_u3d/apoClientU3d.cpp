@@ -86,16 +86,17 @@
 static void myInitAccCreateInfo(account_base_info &acc, int accType, const char *userName, const char *passwd)
 {
 	acc.type = accType;
-	acc.gender = 0; //default F
-	acc.birth_day = 8;
-	acc.birth_month = 8;
-	acc.birth_year = 1988;
+	acc.isAdult = 0;
+// 	acc.gender = 0; //default F
+// 	acc.birth_day = 8;
+// 	acc.birth_month = 8;
+// 	acc.birth_year = 1988;
 	//acc.serverGroupId = serverGroupId;
 	strncpy((char*)acc.acc_name, userName, sizeof(acc.acc_name));
 	strncpy((char*)acc.nick, userName, sizeof(acc.nick));
 	strncpy((char*)acc.passwd, passwd, sizeof(acc.passwd));
-	strncpy((char*)acc.phone, "100086", sizeof(acc.phone));
-	strncpy((char*)acc.email, "webmaster@qq.com", sizeof(acc.email));
+	//strncpy((char*)acc.phone, "100086", sizeof(acc.phone));
+	//strncpy((char*)acc.email, "webmaster@qq.com", sizeof(acc.email));
 
 }
 #ifndef WITHOUT_LOGIC_PARSER
@@ -104,7 +105,7 @@ class ApoScriptOwner : public  ClientMsgHandler::ApoConnectScriptOwner
 {
 public:
 
-	ApoScriptOwner() : ClientMsgHandler::ApoConnectScriptOwner(), m_netHandler(0)
+	ApoScriptOwner() : ClientMsgHandler::ApoConnectScriptOwner()
 	{
 
 	}
@@ -115,13 +116,13 @@ public:
 			return ret;
 		}
 
-		else if (0 == ndstricmp(objName, "connector") || 0 == ndstricmp(objName, "session")){
-			if (!m_netHandler) {
-				return false;
-			}
-			val.InitSet((void*)m_netHandler, OT_OBJ_NDHANDLE);
-			return true;
-		}
+// 		else if (0 == ndstricmp(objName, "connector") || 0 == ndstricmp(objName, "session")){
+// 			if (!m_netHandler) {
+// 				return false;
+// 			}
+// 			val.InitSet((void*)m_netHandler, OT_OBJ_NDHANDLE);
+// 			return true;
+// 		}
 
 // 		else if (0==ndstricmp(objName, "LogFunction")) {
 // 			val.InitSet((void*)apoPrintf);
@@ -144,6 +145,12 @@ public:
 			val.InitSet(mypath.c_str());
 			return true;
 		}
+
+		else if (0 == ndstricmp(objName, "DataPath")) {
+			std::string mypath = ApoClient::getInstant()->getPath();
+			val.InitSet(mypath.c_str());
+			return true;
+		}
 		return false;
 	}
 
@@ -157,35 +164,43 @@ public:
 		return NULL;
 		//return NetMessage::getMessageBody(msgId);
 	}
-	void setConn(nd_handle pconn)
-	{
-		m_netHandler = pconn;
-	}
+// 	void setConn(nd_handle pconn)
+// 	{
+// 		m_netHandler = pconn;
+// 	}
 private:
-	nd_handle m_netHandler;
+	//nd_handle m_netHandler;
 };
 static ApoScriptOwner  __scriptObjOwner;
 
-static nd_handle _create_connector_object()
+static NDIConn*  _create_connector_object()
 {
-	nd_handle pconn = nd_object_create("tcp-connector");
-	if (-1 == nd_msgtable_create(pconn, ND_MAIN_MSG_CAPACITY, ND_MSG_BASE_ID)) {
-		nd_object_destroy(pconn, 0);
-		return NULL;
-	}
-	__scriptObjOwner.setConn(m_pconn);
-	return pconn;
+// 	nd_handle pconn = nd_object_create("tcp-connector");
+// 	if (-1 == nd_msgtable_create(pconn, ND_MAIN_MSG_CAPACITY, ND_MSG_BASE_ID)) {
+// 		nd_object_destroy(pconn, 0);
+// 		return NULL;
+// 	}
+	NDIConn* p =CreateConnectorObj("tcp-connector");
+	__scriptObjOwner.setConn(p);
+
+	LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
+	nd_message_set_script_engine(p->GetHandle(), (void*)&parser, ClientMsgHandler::apollo_cli_msg_script_entry);
+	p->SetUserData(&parser);
+
+	ClientMsgHandler::InstallDftClientHandler(p);
+	return p;
 }
 #else 
 
-static nd_handle _create_connector_object()
+static NDIConn* _create_connector_object()
 {
-	nd_handle pconn = nd_object_create("tcp-connector");
-	if (-1 == nd_msgtable_create(pconn, ND_MAIN_MSG_CAPACITY, ND_MSG_BASE_ID)) {
-		nd_object_destroy(pconn, 0);
-		return NULL;
-	}
-	return pconn;
+// 	nd_handle pconn = nd_object_create("tcp-connector");
+// 	if (-1 == nd_msgtable_create(pconn, ND_MAIN_MSG_CAPACITY, ND_MSG_BASE_ID)) {
+// 		nd_object_destroy(pconn, 0);
+// 		return NULL;
+// 	}
+// 	return pconn;
+	return CreateConnectorObj("tcp-connector");
 }
 #endif
 
@@ -197,7 +212,7 @@ static nd_handle _create_connector_object()
 //////////////////////////////
 
 #define CHECK_CONN_VALID( _conn ) 	\
-if (!m_pconn) {						\
+if (!_conn) {	\
 	return NDSYS_ERR_INVALID_HANDLE;		\
 }
 
@@ -236,8 +251,6 @@ void ApoClient::setLogPath(const char *logPath)
 
 void ApoClient::Destroy()
 {
-	//RoleDataManager::getInstance()->SaveLocalFile();
-
 	if (m_login) {
 		delete m_login;
 		m_login = 0;
@@ -254,8 +267,11 @@ void ApoClient::Destroy()
 
 bool ApoClient::IsLoginOk()
 {
-	if (m_pconn && nd_connector_valid((nd_netui_handle)m_pconn)){
-		return nd_connect_level_get(m_pconn) >= EPL_LOGIN;
+// 	if (m_pconn && nd_connector_valid((nd_netui_handle)m_pconn)){
+// 		return nd_connect_level_get(m_pconn) >= EPL_LOGIN;
+// 	}
+	if (m_pconn && m_pconn->CheckValid()){
+		return nd_connect_level_get(m_pconn->GetHandle()) >= EPL_LOGIN;
 	}
 	return false;
 }
@@ -272,7 +288,12 @@ void ApoClient::setServerTime(time_t srvTime)
 	m_serverTm = srvTime;
 }
 
-
+void ApoClient::trytoHandle(nd_usermsgbuf_t *msg)
+{
+	if (m_pconn->TestMsgIsHandle(ND_USERMSG_MAXID(msg), ND_USERMSG_MINID(msg)))	{
+		m_pconn->CallMsgHandle(msg);
+	}
+}
 
 int ApoClient::Init()
 {
@@ -285,11 +306,11 @@ int ApoClient::Init()
 	LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
 	parser.setOwner(&__scriptObjOwner);
 	scriptRoot->getGlobalParser().setSimulate(false);	
-	scriptRoot->setPrint(apoPrintf, NULL);
+	//scriptRoot->setPrint(NULL, NULL);	
 
 	ndInitNet();	
 	//m_pconn = nd_object_create("tcp-connector");
-	m_pconn _create_connector_object() ;
+	m_pconn = _create_connector_object() ;
 	parser.eventNtf(APOLLO_EVENT_SERVER_START, 0); //program start up
 #else 
 	ndInitNet();
@@ -316,6 +337,14 @@ LogicEngineRoot *ApoClient::getScriptRoot()
 #endif 
 
 
+nd_handle ApoClient::getConn()
+{
+	if (m_pconn){
+		return m_pconn->GetHandle();
+	}
+	return NULL;
+}
+
 
 RESULT_T ApoClient::ReloginBackground()
 {
@@ -324,8 +353,8 @@ RESULT_T ApoClient::ReloginBackground()
 	m_isRelogin = 1;
 	RESULT_T res = TrytoRelogin();
 	if (res != ESERVER_ERR_SUCCESS) {
-		nd_connector_close(m_pconn, 0);
-		//m_pconn->Close(0);
+		//nd_connector_close(m_pconn, 0);
+		m_pconn->Close(0);
 	}
 
 	m_isRelogin = 0;
@@ -340,13 +369,14 @@ RESULT_T ApoClient::ReloginEx(void *session, size_t sessionSize, bool bReloginOf
 	
 	RESULT_T res = TrytoReloginEx(session, sessionSize);
 	if (res != ESERVER_ERR_SUCCESS) {
-		nd_connector_close(m_pconn, 0);
+		//nd_connector_close(m_pconn, 0);
+		m_pconn->Close(0);
 	}
 	m_isRelogin = 0;
 	return res;
 }
 
-RESULT_T ApoClient::Open(const char *host, int port, const char *dev_udid)
+RESULT_T ApoClient::Open(const char *host, int port)
 {
 	//connect host
 	Close();
@@ -361,10 +391,8 @@ RESULT_T ApoClient::Open(const char *host, int port, const char *dev_udid)
 		m_host = host;
 		m_port = port;
 	}
-	if (dev_udid && *dev_udid)	{
-		m_udid = dev_udid;
-	}
-	nd_logmsg("open client net host:%s port:%d udid:%s\n", host, port, dev_udid);
+	
+	nd_logmsg("open client net host:%s port:%d \n", host, port);
 	
 	return ESERVER_ERR_SUCCESS ;
 	
@@ -373,10 +401,14 @@ RESULT_T ApoClient::Open(const char *host, int port, const char *dev_udid)
 void ApoClient::Close()
 {
 	if (m_pconn) {
-		if (nd_connector_valid((nd_netui_handle)m_pconn)){
-			ndClostConnect(m_pconn);
+// 		if (nd_connector_valid((nd_netui_handle)m_pconn)){
+// 			ndClostConnect(m_pconn);
+// 		}
+// 		nd_object_destroy(m_pconn, 0);
+		if (m_pconn )	{
+			m_pconn->Close(0);
 		}
-		nd_object_destroy(m_pconn, 0);
+		DestroyConnectorObj(m_pconn);
 	}
 	m_pconn = 0;
 }
@@ -384,8 +416,11 @@ void ApoClient::Close()
 void ApoClient::ResetConnect()
 {
 	if (m_pconn) {
-		nd_connector_close(m_pconn, 1);
-		nd_connector_set_crypt(m_pconn, NULL, 0);
+		m_pconn->Close(1);
+		nd_connector_set_crypt(m_pconn->GetHandle(), NULL, 0);
+		
+		//nd_connector_close(m_pconn, 1);
+		//nd_connector_set_crypt(m_pconn, NULL, 0);
 	}
 
 }
@@ -398,14 +433,18 @@ RESULT_T ApoClient::_connectHost(const char *host, int port)
 	}	
 	CHECK_CONN_VALID(m_pconn) ;
 	
-	if (-1==nd_connector_open(m_pconn,host,port, NULL)){
+// 	if (-1==nd_connector_open(m_pconn,host,port, NULL)){
+// 		return (RESULT_T)NDSYS_ERR_HOST_UNAVAILABLE;
+// 	}
+	if (-1 == m_pconn->Open(host, port, "tcp-connector")){
 		return (RESULT_T)NDSYS_ERR_HOST_UNAVAILABLE;
 	}
 
 
 	int level = ndGetTimeoutVal();
 	int size = sizeof(int);
-	nd_net_ioctl((nd_netui_handle)m_pconn,NDIOCTL_SET_TIMEOUT, &level, &size);
+	m_pconn->ioctl(NDIOCTL_SET_TIMEOUT, &level, &size);
+	//nd_net_ioctl((nd_netui_handle)m_pconn,);
 
 	
 	if (m_login) {
@@ -414,10 +453,10 @@ RESULT_T ApoClient::_connectHost(const char *host, int port)
 	}
 	
 	if (m_sessionFile.empty()){
-		m_login = new LoginApollo(m_pconn,  NULL, m_udid.c_str());
+		m_login = new LoginApollo(m_pconn->GetHandle(),  NULL);
 	}
 	else {
-		m_login = new LoginApollo(m_pconn, m_sessionFile.c_str(), m_udid.c_str());
+		m_login = new LoginApollo(m_pconn->GetHandle(), m_sessionFile.c_str());
 	}
 	nd_assert(m_login);
 	
@@ -426,7 +465,7 @@ RESULT_T ApoClient::_connectHost(const char *host, int port)
 	}
 	m_runningUpdate = ERUN_UP_NORMAL;
 	onInit();
-	nd_logmsg("connect host:%s port:%d udid:%s\n", m_host.c_str(), m_port, m_udid.c_str());
+	nd_logmsg("connect host:%s port:%d udid:%s\n", m_host.c_str(), m_port);
 	return ESERVER_ERR_SUCCESS;
 }
 
@@ -434,13 +473,14 @@ RESULT_T ApoClient::_connectHost(const char *host, int port)
 void ApoClient::_closeConnect()
 {
 	if (m_pconn) {
-		nd_connector_close((nd_handle)m_pconn, 0);
+		m_pconn->Close(0);
+		//nd_connector_close((nd_handle)m_pconn, 0);
 	}
 }
 
-RESULT_T ApoClient::CreateAccount(const char *userName, const char *passwd, const char *phone, const char *email)
+RESULT_T ApoClient::CreateAccount(const char *userName, const char *passwd,int channel)
 {
-	RESULT_T res = CreateOnly(userName, passwd, phone, email);
+	RESULT_T res = CreateOnly(userName, passwd,channel);
 	if (res != ESERVER_ERR_SUCCESS)	{
 		return res;
 	}
@@ -449,7 +489,7 @@ RESULT_T ApoClient::CreateAccount(const char *userName, const char *passwd, cons
 	m_runningUpdate = ERUN_UP_NORMAL;
 	return res;
 }
-RESULT_T ApoClient::CreateOnly(const char *userName, const char *passwd, const char *phone, const char *email)
+RESULT_T ApoClient::CreateOnly(const char *userName, const char *passwd, int channel)
 {
 	m_isRelogin = 0;
 	if (!userName || !*userName){
@@ -469,12 +509,14 @@ RESULT_T ApoClient::CreateOnly(const char *userName, const char *passwd, const c
 
 	m_runningUpdate = ERUN_UP_STOP;
 	myInitAccCreateInfo(acc, ACC_APOLLO, userName, passwd);
-	if (email && *email)	{
-		strncpy((char*)acc.email, email, sizeof(acc.email));
-	}
-	if (phone && *phone)	{
-		strncpy((char*)acc.phone, phone, sizeof(acc.phone));
-	}
+
+	acc.channel = channel;
+// 	if (email && *email)	{
+// 		strncpy((char*)acc.email, email, sizeof(acc.email));
+// 	}
+// 	if (phone && *phone)	{
+// 		strncpy((char*)acc.phone, phone, sizeof(acc.phone));
+// 	}
 
 	int ret = m_login->CreateAccount(&acc);
 
@@ -499,7 +541,7 @@ RESULT_T ApoClient::TrytoRelogin()
 	}
 
 	//login server 
-	m_login->SetUdid(m_udid.c_str());
+	//m_login->SetUdid(m_udid.c_str());
 	m_runningUpdate = ERUN_UP_STOP;
 	int ret = m_login->Relogin();
 
@@ -539,9 +581,9 @@ RESULT_T ApoClient::TrytoReloginEx(void *session, size_t sessionSize)
 	return (RESULT_T)NDERR_LIMITED;
 }
 
-RESULT_T ApoClient::LoginAccountOneKey(const char *account, const char *passwd, int accType, bool skipAuth)
+RESULT_T ApoClient::LoginAccountOneKey(const char *account, const char *passwd, int accType,int channel, bool skipAuth)
 {
-	RESULT_T res = LoginOnly(account, passwd, accType, skipAuth);
+	RESULT_T res = LoginOnly(account, passwd, accType,channel, skipAuth);
 	if (res != ESERVER_ERR_SUCCESS) {
 		return res;
 	}
@@ -553,7 +595,7 @@ RESULT_T ApoClient::LoginAccountOneKey(const char *account, const char *passwd, 
 	return res;
 }
 
-RESULT_T ApoClient::LoginOnly(const char *account, const char *passwd, int accType, bool skipAuth)
+RESULT_T ApoClient::LoginOnly(const char *account, const char *passwd, int accType,int channel, bool skipAuth)
 {
 	m_isRelogin = 0;
 	int reTrytimes = 3;
@@ -568,13 +610,14 @@ RE_LOGIN:
 	if (-1 == _trytoOpen()) {
 		return NDSYS_ERR_HOST_UNAVAILABLE;
 	}
-	int ret = m_login->Login(account, passwd, (ACCOUNT_TYPE)accType, skipAuth);
+	int ret = m_login->Login(account, passwd, (ACCOUNT_TYPE)accType,channel, skipAuth);
 	if (-1 == ret) {
 		int errCode = m_login->GetLastError();
 		if (errCode == NDERR_CLOSED || errCode == NDERR_RESET) {
 			if (--reTrytimes > 0){
-				nd_connector_close(m_pconn, 0);
-				nd_connector_set_crypt(m_pconn, NULL, 0);
+				ResetConnect();
+				//nd_connector_close(m_pconn, 0);
+				//nd_connector_set_crypt(m_pconn, NULL, 0);
 				goto RE_LOGIN;
 			}
 		}
@@ -594,7 +637,7 @@ int ApoClient::_trytoOpen()
 			return -1;
 		}
 	}
-	if (m_pconn && nd_connector_valid((nd_netui_handle)m_pconn)) {
+	if (m_pconn->CheckValid()) {
 		return 0;
 	}
 	
@@ -626,51 +669,7 @@ RESULT_T ApoClient::_enterGame(const char *host, int port, const char *roleName,
 	m_roleId = roleBaseInfo.rid;
 	onLogin();
 	return ESERVER_ERR_SUCCESS;
-	//get role list
-// 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN,LOGIN_MSG_GET_ROLE_LIST_REQ);
-// 	omsg.Write(m_isRelogin);
-// 
-// 	nd_handle h = m_pconn;
-// 	nd_usermsgbuf_t recv_msg;
-// 
-// 	_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0)
-// 	else {
-// 		NDUINT32 roleid = 0;
-// 		NDUINT32 error_code = 0;
-// 
-// 		NDIStreamMsg inmsg(&recv_msg);
-// 		NDUINT8 name[USER_NAME_SIZE];
-// 		inmsg.Read(roleid);
-// 
-// 		if (roleid == 0) {
-// 			inmsg.Read(error_code);
-// 			if (error_code) {
-// 				nd_logerror("get role list error : %d\n", error_code);
-// 				return (RESULT_T)error_code;
-// 			}
-// 			if (roleName && *roleName) {
-// 				return createRole(roleName);
-// 			}
-// 		}
-// 		else {
-// 			m_roleId = roleid;
-// 			inmsg.Read(name, sizeof(name));
-// 
-// 			//read attribute
-// 			NDUINT16 num = 0;
-// 			if (0 == inmsg.Read(num)) {
-// 				for (int i = 0; i < num; ++i) {
-// 					NDUINT8 aid;
-// 					float val;
-// 					inmsg.Read(aid); inmsg.Read(val);
-// 					//nd_logmsg("load role attribute id = %d val =%f \n", aid, val);
-// 				}
-// 			}
-// 			onLogin();
-// 		}
-// 	}
 	
-	return ESERVER_ERR_SUCCESS;
 }
 
 RESULT_T ApoClient::SelectServer(const char *host , int port )
@@ -859,7 +858,8 @@ void ApoClient::Logout()
 	}
 	//m_pconn->Close(0);
 	if (m_pconn) {
-		nd_connector_close(m_pconn, 0);
+		//nd_connector_close(m_pconn, 0);
+		m_pconn->Close(0);
 	}
 
 	LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
@@ -894,17 +894,18 @@ bool ApoClient::Update()
 	if (ERUN_UP_NORMAL != m_runningUpdate)	{
 		return true;
 	}
-	if (m_pconn && nd_connector_valid((nd_netui_handle)m_pconn)){
+	if (m_pconn && m_pconn->CheckValid() ){
 		++m_updateIndex;
-		int ret =ndUpdateConnect((netObject)m_pconn,0) ;
+		//int ret =ndUpdateConnect((netObject)m_pconn,0) ;
+		int ret = m_pconn->Update(0);
 		if (-1 == ret) {
 			//return false;
 			//int err =nd_object_lasterror(m_pconn) ;
 			
 			m_login->Logout() ;
-			//m_pconn->Close() ;
+			m_pconn->Close() ;
 
-			nd_connector_close(m_pconn, 0);
+			//nd_connector_close(m_pconn, 0);
 
 // 			ErrorDesignDataNotify* notifyInfo = ErrorDesignDataNotify::create();
 // 			notifyInfo->setDesignID(err);
@@ -912,8 +913,8 @@ bool ApoClient::Update()
 // 			cocos2d::NotificationCenter::getInstance()->postNotification(RELOGIN_NTF, notifyInfo);
 		}
 		if ((m_updateIndex & 255) == 255){
-			//m_pconn->Send(ND_MAIN_ID_SYS, ND_MSG_SYS_GAME_TIME, NULL, 0);
-			ndSend(m_pconn, ND_MAIN_ID_SYS, ND_MSG_SYS_GAME_TIME, NULL, 0);
+			m_pconn->Send(ND_MAIN_ID_SYS, ND_MSG_SYS_GAME_TIME, NULL, 0);
+			//ndSend(m_pconn, ND_MAIN_ID_SYS, ND_MSG_SYS_GAME_TIME, NULL, 0);
 		}
 	}
 
@@ -946,10 +947,14 @@ void ApoClient::onLogin()
 		//int length =snprintf(pathBuf, sizeof(pathBuf), "./apoGameNetStream.data",m_logPath.c_str() );
 		const char *pFielName = "./apoGameNetStream.data";
 		int length = strlen(pFielName);
-		if (nd_net_ioctl((nd_netui_handle)m_pconn, NDIOCTL_LOG_SEND_STRAM_FILE, (void*)pFielName, &length) == -1){
+		if (m_pconn->ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)pFielName, &length) == -1){
 			nd_logmsg("log net message bin-data errror\n");
 			//return NDSYS_ERR_SYSTEM;
 		}
+// 		if (nd_net_ioctl((nd_netui_handle)m_pconn, NDIOCTL_LOG_SEND_STRAM_FILE, (void*)pFielName, &length) == -1){
+// 			nd_logmsg("log net message bin-data errror\n");
+// 			//return NDSYS_ERR_SYSTEM;
+// 		}
 	}
 
 	//get message format

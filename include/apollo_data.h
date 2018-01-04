@@ -99,10 +99,10 @@ enum ACCOUNT_TYPE{
 	ACC_APOLLO,
 	ACC_GAME_CENTER,
 	ACC_GOOGLE_PLAY,
-	ACC_OTHER_3_ACCID,
-	ACC_SKIP_AUTH,
+	ACC_OTHER_3_ACCID,	
 	ACC_ANYSDK,		//any sdk
-	ACC_NUMBER
+	ACC_NUMBER ,
+	ACC_SKIP_AUTH = 0xff,
 };
 
 enum eChatType {
@@ -244,15 +244,76 @@ struct transfer_session_key
 struct account_base_info
 {
 	NDUINT8 type;
-	NDUINT8 gender;
+	//NDUINT8 gender;
+	NDUINT8 isAdult;
 	NDUINT16 serverGroupId;
-	NDUINT16  birth_year, birth_month, birth_day;
+	NDUINT16 channel;				//渠道id
+	NDUINT16 reserved;
+
+	//NDUINT16  birth_year, birth_month, birth_day;
 	NDUINT8 acc_name[ACCOUNT_NAME_SIZE];
 	NDUINT8 nick[USER_NAME_SIZE];
 	NDUINT8 passwd[USER_PASSWORD_SIZE];
-	NDUINT8 phone[PHONE_NUMBER_SIZE];
-	NDUINT8 email[EMAIL_SIZE];
+	//NDUINT8 phone[PHONE_NUMBER_SIZE];
+	//NDUINT8 email[EMAIL_SIZE];
 	NDUINT8 udid[DEVICE_UDID_SIZE] ;
+	NDUINT8 devDesc[DEVICE_UDID_SIZE];
+
+	account_base_info()
+	{
+		type = 2 ;
+		isAdult = 0 ;
+		serverGroupId = 1;
+		channel = 0;				//渠道id
+		reserved = 0;
+
+		acc_name[0] = 0;
+		nick[0] = 0;
+		passwd[0] = 0;
+		udid[0] = 0;
+		devDesc[0] = 0;
+	}
+	int WriteStream(NDOStreamMsg &omsg)
+	{
+		omsg.Write(udid);
+		omsg.Write(type );
+		omsg.Write(isAdult);
+
+		omsg.Write(serverGroupId );
+		omsg.Write(channel );				//渠道id
+		omsg.Write(reserved);				//渠道id
+
+		omsg.Write(acc_name);
+		omsg.Write(nick);
+		omsg.Write(passwd);
+		omsg.Write(devDesc);
+		omsg.Write("");	//email . for old version
+		omsg.Write(serverGroupId); // for old version
+
+		
+		return 0;
+	}
+
+	int ReadStream(NDIStreamMsg &inmsg)
+	{
+		char tmp[128];
+		if (-1 == inmsg.Read(udid, sizeof(udid))) { return -1; }
+		if (-1 == inmsg.Read(type)) { return -1; }
+		if (-1 == inmsg.Read(isAdult)) { return -1; }
+
+		if (-1 == inmsg.Read(serverGroupId)) { return -1; }
+		if (-1 == inmsg.Read(channel)) { return -1; }				//渠道id
+		if (-1 == inmsg.Read(reserved)) { return -1; }				//渠道id
+
+		if (-1 == inmsg.Read(acc_name, sizeof(acc_name))) { return -1; }
+		if (-1 == inmsg.Read(nick, sizeof(nick))) { return -1; }
+		if (-1 == inmsg.Read(passwd, sizeof(passwd))) { return -1; }
+		if (-1 == inmsg.Read(devDesc, sizeof(devDesc))) { return -1; }
+		if (-1 == inmsg.Read(tmp, sizeof(tmp))) { return -1; }	//email . for old version
+		if (-1 == inmsg.Read(serverGroupId)) { return -1; } // for old version
+
+		return 0;
+	}
 };
 
 #define BASE_ROLE_ATTR_NUM 20
