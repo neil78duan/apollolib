@@ -23,7 +23,7 @@ public:
     }
     bool GetSelectText(QString &val) {
 
-        if(-1==m_selIndex || m_selIndex >= m_selList.size()) {
+        if(-1==m_selIndex || m_selIndex >= (int)m_selList.size()) {
             return false ;
         }
         val = m_selList[m_selIndex] ;

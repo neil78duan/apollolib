@@ -291,7 +291,7 @@ bool startDialog::expExcel()
 #ifdef WIN32
 	snprintf(path, sizeof(path), " %s %s %s %s %s ",  exp_cmd, excel_list, excel_path, text_path, encodeName);	
 #else
-	const char *cur_dir = nd_getcwd();
+    //const char *cur_dir = nd_getcwd();
 	snprintf(path, sizeof(path), "sh ./%s %s %s %s %s ",  exp_cmd, excel_list, excel_path, text_path, encodeName);
 #endif
 	int ret = system(path);
@@ -591,7 +591,7 @@ void startDialog::on_ExportExcel_clicked()
 			if (cmdbuf[0])	{
 				int ret = system(cmdbuf);
 				if (0 != ret)	{
-					nd_logerror("‘À––√¸¡Ó %s %d\n", cmdbuf, ret);
+                    nd_logerror("Run command by system %s %d\n", cmdbuf, ret);
 					break;
 				}
 			}
