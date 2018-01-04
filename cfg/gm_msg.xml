@@ -813,8 +813,8 @@
 		</message>
 		<message name="GM_增加属性" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="8">0</msgid>
-			<data name="编号" kinds="numeral" param="2">MoneyCapacity</data>
-			<data name="属性增加值" kinds="numeral" param="1">0</data>
+			<data name="编号" kinds="numeral" param="2">Money</data>
+			<data name="属性增加值" kinds="numeral" param="1">100000</data>
 		</message>
 		<message name="GM_发送系统公告" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="10">0</msgid>
@@ -903,7 +903,7 @@
 		</message>
 		<message name="sys_修改游戏时间" expand="yes" delete="no" need_confirm="yes">
 			<msgid kinds="hide">1797</msgid>
-			<data name="加快小时" kinds="numeral" param="0">24</data>
+			<data name="加快小时" kinds="numeral" param="0">4</data>
 			<data name="加快分钟" kinds="numeral" param="0">0</data>
 		</message>
 		<message name="sys_查看游戏时间" expand="yes" delete="no" need_confirm="yes">
