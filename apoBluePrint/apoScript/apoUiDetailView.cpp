@@ -47,9 +47,9 @@ bool apoUiDetailView::showDetail(void *data, ndxml_root *xmlfile)
 void apoUiDetailView::resizeEvent(QResizeEvent *event)
 {
 	int length = width();
-	setColumnWidth(0, length * 0.3);
-	setColumnWidth(1, length * 0.3);
-	setColumnWidth(2, length * 0.4);
+	setColumnWidth(0, length * 0.2);
+	setColumnWidth(1, length * 0.2);
+	setColumnWidth(2, length * 0.6);
 }
 
 int apoUiDetailView::_init()

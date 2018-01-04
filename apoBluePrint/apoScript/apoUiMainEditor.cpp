@@ -1506,7 +1506,7 @@ void apoUiMainEditor::onVarNameChanged(apoBaseExeNode *exeNode)
 	if (!toSlot)	{
 		return;
 	}
-	apoUiExenodeNewVar *varnode = (apoUiExenodeNewVar*)exeNode;
+	//apoUiExenodeNewVar *varnode = (apoUiExenodeNewVar*)exeNode;
 	//const char *pname = varnode->getVarName();
 
 	QVector<apoUiBezier*>::iterator it = m_beziersVct.begin();
@@ -2020,6 +2020,7 @@ bool apoUiMainEditor::ShowFuncUndo()
 	}
 	reShowFunction();
 	update();
+	return true;
 }
 bool apoUiMainEditor::ShowFuncRedo()
 {
@@ -2040,6 +2041,7 @@ bool apoUiMainEditor::ShowFuncRedo()
 	}
 	reShowFunction();
 	update();
+	return true;
 }
 
 void apoUiMainEditor::pushtoUndoList()
