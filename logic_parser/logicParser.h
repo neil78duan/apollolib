@@ -118,6 +118,8 @@ enum eParserOperator{
 	E_OP_CLEAR_ERROR_CODE,	//CLEAR error
 	E_OP_IDLE,				//idle instruct nothing to be done
 	E_OP_BITS_OPERATE, // & | ^ ~ << >> REF eBitOperate
+	E_OP_CHECK_DEBUG,		//check script is debug
+	E_OP_CHECK_HOST_DEBUG,	//check host is debug 
 
 
 };

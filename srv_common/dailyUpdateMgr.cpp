@@ -26,6 +26,7 @@ AlarmBase::~AlarmBase()
 
 int AlarmBase::Init(const DBLDataNode *data, int version)
 {
+	ND_TRACE_FUNC();
 	UserAdditionData saveData;
 
 	if (!saveData.Init(data)) {
@@ -48,6 +49,7 @@ int AlarmBase::Init(const DBLDataNode *data, int version)
 
 int AlarmBase::toStream(DBLDataNode *outData)
 {
+	ND_TRACE_FUNC();
 	UserAdditionData saveData;
 
 	for (dailyRunInfo_vct::iterator it = m_lastRunInfo.begin(); it != m_lastRunInfo.end(); it++)	{
@@ -84,6 +86,7 @@ bool AlarmBase::setEvent(int id, time_t lastRun)
 
 bool AlarmBase::Add(int id, const char *name, time_t t)
 {
+	ND_TRACE_FUNC();
 	time_t now = app_inst_time(NULL);
 	if (t > now){
 		nd_logwarn("alarm %s last run time =%lld now =%lld \n", name, t, now);
@@ -106,6 +109,7 @@ bool AlarmBase::Add(int id, const char *name, time_t t)
 
 dailyEventInfo *AlarmBase::getEventInfo(int id)
 {
+	ND_TRACE_FUNC();
 	for (dailyRunInfo_vct::iterator it = m_lastRunInfo.begin(); it != m_lastRunInfo.end(); it++)	{
 		if (id == it->id)	{
 			return &(*it);
@@ -116,6 +120,7 @@ dailyEventInfo *AlarmBase::getEventInfo(int id)
 
 time_t AlarmBase::getLastTm(int id)
 {
+	ND_TRACE_FUNC();
 	dailyEventInfo *pInfo = getEventInfo(id);
 	if (!pInfo) {
 		return 0;
@@ -126,6 +131,7 @@ time_t AlarmBase::getLastTm(int id)
 
 time_t AlarmBase::getLastRunTime(const char *alarmName)
 {
+	ND_TRACE_FUNC();
 	time_t ret = 0;
 	for (dailyRunInfo_vct::iterator it = m_lastRunInfo.begin(); it != m_lastRunInfo.end(); it++)	{
 		if (0==ndstricmp(it->name.c_str(), alarmName) )	{
@@ -145,6 +151,7 @@ dailyUpCfg_vct DailyUpdateMgr::s_global_updateCfgInfo ;
 
 int DailyUpdateMgr::LoadDailyUpConfig(const char *tablename)
 {
+	ND_TRACE_FUNC();
 	Destroy();
 	
 	const char *pfields[] = { "ID", "name", "update_time", "param" };
@@ -195,11 +202,13 @@ int DailyUpdateMgr::LoadDailyUpConfig(const char *tablename)
 
 void DailyUpdateMgr::Destroy()
 {
+	ND_TRACE_FUNC();
 	DailyUpdateMgr::s_global_updateCfgInfo.clear();
 }
 
 const dailyUpdateCfg *DailyUpdateMgr::GetDailyConfgInfoId(int id)
 {
+	ND_TRACE_FUNC();
 	if (0 == DailyUpdateMgr::s_global_updateCfgInfo.size()) {
 		return NULL;
 	}
@@ -214,6 +223,7 @@ const dailyUpdateCfg *DailyUpdateMgr::GetDailyConfgInfoId(int id)
 
 int DailyUpdateMgr::GetOffsetSeconds(int id)
 {
+	ND_TRACE_FUNC();
 	const dailyUpdateCfg *pcfg = GetDailyConfgInfoId(id);
 	if (pcfg && pcfg->timeOffsets.size()){
 		return pcfg->timeOffsets[0];
@@ -223,6 +233,7 @@ int DailyUpdateMgr::GetOffsetSeconds(int id)
 
 int DailyUpdateMgr::GetOffsetSeconds(const char *name)
 {
+	ND_TRACE_FUNC();
 	if (0 == DailyUpdateMgr::s_global_updateCfgInfo.size()) {
 		return NULL;
 	}
@@ -249,6 +260,7 @@ DailyUpdateMgr::~DailyUpdateMgr()
 
 const char *DailyUpdateMgr::getNameFromCfg(int id)
 {
+	ND_TRACE_FUNC();
 	const dailyUpdateCfg *pcfg =GetDailyConfgInfoId( id);
 	if (pcfg)	{
 		return pcfg->name.c_str();
@@ -258,6 +270,7 @@ const char *DailyUpdateMgr::getNameFromCfg(int id)
 
 void DailyUpdateMgr::Update()
 {
+	ND_TRACE_FUNC();
 	dailyUpCfg_vct::const_iterator it = s_global_updateCfgInfo.begin();
 
 	for (; it != s_global_updateCfgInfo.end(); it++) {
@@ -282,7 +295,8 @@ void DailyUpdateMgr::Update()
 
 bool DailyUpdateMgr::_UpdateNode(const dailyUpdateCfg *pCfg , dailyEventInfo *eventInfo, int timezone)
 {
-	
+
+	ND_TRACE_FUNC();
 	time_t now = app_inst_time(NULL);
 	std::vector<time_t> clock_seconds;
 
@@ -356,6 +370,7 @@ WeekAlarmMgr::~WeekAlarmMgr()
 
 int WeekAlarmMgr::LoadWeeklyConfig(const char *tablename)
 {
+	ND_TRACE_FUNC();
 	Destroy();
 
 	const char *pfields[] = { "ID", "name", "update_time", "param", "update_week"};
@@ -391,12 +406,14 @@ int WeekAlarmMgr::LoadWeeklyConfig(const char *tablename)
 }
 void WeekAlarmMgr::Destroy()
 {
+	ND_TRACE_FUNC();
 	s_global_weeklyCfgInfo.clear();
 }
 
 
 const WeeklyUpdateCfg *WeekAlarmMgr::GetWeeklyConfgInfo(int id)
 {
+	ND_TRACE_FUNC();
 	if (0 == s_global_weeklyCfgInfo.size()) {
 		return NULL;
 	}
@@ -411,6 +428,7 @@ const WeeklyUpdateCfg *WeekAlarmMgr::GetWeeklyConfgInfo(int id)
 
 int WeekAlarmMgr::GetOffsetSeconds(int id)
 {
+	ND_TRACE_FUNC();
 	const WeeklyUpdateCfg *pcfg = GetWeeklyConfgInfo(id);
 	if (pcfg ){
 		return pcfg->timeOffset;
@@ -421,6 +439,7 @@ int WeekAlarmMgr::GetOffsetSeconds(int id)
 
 bool WeekAlarmMgr::_UpdateNode(const WeeklyUpdateCfg *pCfg, dailyEventInfo *eventInfo, int timezone)
 {
+	ND_TRACE_FUNC();
 	time_t now = app_inst_time(NULL);	
 	time_t lastRenewTm = eventInfo->lastRunTm;
 
@@ -467,6 +486,7 @@ bool WeekAlarmMgr::_UpdateNode(const WeeklyUpdateCfg *pCfg, dailyEventInfo *even
 
 const char *WeekAlarmMgr::getNameFromCfg(int id)
 {
+	ND_TRACE_FUNC();
 	const WeeklyUpdateCfg *pcfg = WeekAlarmMgr::GetWeeklyConfgInfo(id);
 
 	if (pcfg)	{
@@ -477,6 +497,7 @@ const char *WeekAlarmMgr::getNameFromCfg(int id)
 
 void WeekAlarmMgr::Update()
 {
+	ND_TRACE_FUNC();
 	time_t now = app_inst_time(NULL);
 	weeklyUpCfg_vct::const_iterator it = s_global_weeklyCfgInfo.begin();
 

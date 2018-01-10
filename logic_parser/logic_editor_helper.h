@@ -75,6 +75,8 @@ namespace LogicEditorHelper
 		ERT_ONLY_DEBUG,
 		ERT_BREAKPOINT,
 		ERT_DISPLAY_CHILDREN,
+		ERT_BLUEPRINT_CTRL,
+		ERT_BLUEPRINT_TIPS,
 	};
 
 	const char *_GetDataTypeName(eDataType dataType);

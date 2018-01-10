@@ -88,6 +88,8 @@ APOLLO_CLI_API APO_RESULT_T apoCli_SelectRole(unsigned roleId);
 APOLLO_CLI_API int apoCli_SetTimeout(int val);
 APOLLO_CLI_API int apoCli_GetRoleBeloneServerId();
 
+APOLLO_CLI_API const char* apoCli_GetLocalToken();
+
 //APOLLO_CLI_API time_t apoCli_getServerTime();
 
 

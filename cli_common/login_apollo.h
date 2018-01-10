@@ -108,6 +108,7 @@ public:
 	void SetConnector(nd_handle hConn);
 
 	static void SetDeviceInfo(const char *udid, const char *devDesc);
+	static const char *GetLocalToken();
 
 	void Destroy();
 	//return 0 success ,else return error code
@@ -161,6 +162,8 @@ protected:
 	NDUINT8 m_accName[ACCOUNT_NAME_SIZE] ;
 	static NDUINT8 m_udid[DEVICE_UDID_SIZE] ;
 	static NDUINT8 m_deviceDesc[DEVICE_UDID_SIZE];
+	//static NDUINT8 m_myLoginToken[ACCOUNT_NAME_SIZE];
+	static NDUINT64 m_localToken;
 	
 //
 //	struct {

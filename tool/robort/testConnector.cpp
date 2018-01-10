@@ -181,6 +181,12 @@ int TestconnsMgr::initStreamMsg(const char *file)
 
 		//write message descript
 		fread(&mark, 1, sizeof(mark), fp);
+		if (mark >= sizeof(msg_desc)){
+
+			fclose(fp);
+			fprintf(stderr, "input file bad or destroyed!\n");
+			return -1;
+		}
 		fread(msg_desc, 1, mark, fp);
 		msg_desc[mark] = 0;
 

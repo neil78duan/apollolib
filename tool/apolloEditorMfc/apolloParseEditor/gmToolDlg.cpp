@@ -493,7 +493,8 @@ int gmToolDlg::_login(const char *user, const char *passwd,bool bSkipAuth)
 		//ApolloDestroyLoginInst(m_login);
 		delete m_login;
 	}
-	m_login = new LoginApollo(m_pConn->GetHandle(), _SESSION_FILE, "unknow-udid-this-mfc-test");
+	LoginApollo::SetDeviceInfo("unknown", "unknown");
+	m_login = new LoginApollo(m_pConn->GetHandle(), _SESSION_FILE);
 	if (!m_login){
 		return -1;
 	}
@@ -508,10 +509,10 @@ int gmToolDlg::_login(const char *user, const char *passwd,bool bSkipAuth)
 
 	if (bSkipAuth) {
 
-		ret = m_login->Login(user, passwd, ACC_OTHER_3_ACCID, true);
+		ret = m_login->Login(user, passwd, ACC_OTHER_3_ACCID, 0,true);
 	}
 	else {
-		ret = m_login->Login(user, passwd, ACC_APOLLO, false);
+		ret = m_login->Login(user, passwd, ACC_APOLLO,0, false);
 	}
 	if (-1 == ret) {
 		if (m_login->GetLastError() == NDSYS_ERR_NOUSER && !bSkipAuth) {
