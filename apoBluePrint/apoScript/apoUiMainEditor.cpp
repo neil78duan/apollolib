@@ -443,6 +443,11 @@ apoBaseExeNode* apoUiMainEditor::_showExeNode(apoBaseSlotCtrl *fromSlot, ndxml *
 	if (nodeCtrl->getType() == EAPO_EXE_NODE_Bool) {
 		ret = _showBools(nodeCtrl, exeNode);
 	}
+
+	if (nodeCtrl->getType() == EAPO_EXE_NODE_CompoundTest) {
+		ret = _showBools(nodeCtrl, exeNode);
+	}
+
 	else if (nodeCtrl->getType() == EAPO_EXE_NODE_Loop) {
 		ret = _showLoop(nodeCtrl, exeNode);
 	}
@@ -1297,9 +1302,26 @@ void apoUiMainEditor::mouseReleaseEvent(QMouseEvent *event)
 				return;
 			}
 			if (fromSlot->slotType() == apoBaseSlotCtrl::SLOT_RUN_OUT || fromSlot->slotType() == apoBaseSlotCtrl::SLOT_SUB_ENTRY) {
+				
+				apoBaseExeNode *fromCtrl = dynamic_cast<apoBaseExeNode*> (fromSlot->parent());
+				nd_assert(fromCtrl);
+				apoBaseSlotCtrl *toNextSlot = fromCtrl->toNext();
+				
+				if (toNextSlot) {
+					apoUiBezier *toNextLine = toNextSlot->getConnector();
+					if (toNextLine)	{
+						toNextSlot = dynamic_cast<apoBaseSlotCtrl*>(toNextLine->getSlot2());
+					}
+				}
+				
+
 				apoBaseExeNode *newExeNode = createExenode(event->pos());
 				if (newExeNode)	{
-					trytoBuildConnector(fromSlot, newExeNode->inNode());
+					if (trytoBuildConnector(fromSlot, newExeNode->inNode())){
+						if (fromSlot->slotType() == apoBaseSlotCtrl::SLOT_RUN_OUT && toNextSlot && newExeNode->toNext()) {
+							trytoBuildConnector(newExeNode->toNext(), toNextSlot);
+						}
+					}
 				}
 			}
 			else if (fromSlot->slotType() == apoBaseSlotCtrl::SLOT_RETURN_VALUE ||

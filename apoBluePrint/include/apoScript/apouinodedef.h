@@ -30,4 +30,4 @@ APOUI_NODE_ID(ValueComp)
 APOUI_NODE_ID(Throw)
 APOUI_NODE_ID(Switch)
 APOUI_NODE_ID(Selector)
-
+APOUI_NODE_ID(CompoundTest)

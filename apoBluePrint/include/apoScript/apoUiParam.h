@@ -93,6 +93,7 @@ public:
 
 	virtual bool isDelete();
 	virtual QString getParamInfo();
+	void setParamInfo(const char *paramTips);
 	
 protected:
 	bool event(QEvent *e);
@@ -106,6 +107,7 @@ protected:
 	ndxml *m_xmlAnchorParent;
 	ndxml *m_xmlAnchor;
 	ndxml *m_delNode; //if close this param , remove this from its parent
+	QString m_paramInfo;
 private:
 
 };

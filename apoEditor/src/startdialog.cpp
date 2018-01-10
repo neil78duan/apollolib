@@ -226,7 +226,7 @@ bool startDialog::compileScript(const char *scriptFile)
 		return false;
 	}
 
-	WriteLog("!!!!!!!!!!COMPILE script success !!!!!!!!!!!\n begining run script...\n");
+	nd_logmsg("!!!!!!!!!!COMPILE %s success !!!!!!!!!!!\n begining run script...\n", scriptFile);
 
 	ClientMsgHandler::ApoConnectScriptOwner apoOwner;
 	if (!apoOwner.loadDataType(_getFromIocfg("net_data_def"))) {
@@ -261,7 +261,7 @@ bool startDialog::compileScript(const char *scriptFile)
 	}
 
 	LogicEngineRoot::destroy_Instant();
-	WriteLog("!!!!!!!!!!!!!!!!!!!SCRIPT COMPILE SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+	nd_logmsg("!!!!!!!!!!!!!!!!!!!SCRIPT %s SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",scriptFile);
 	return true;
 }
 
