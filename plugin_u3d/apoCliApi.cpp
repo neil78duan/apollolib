@@ -452,6 +452,11 @@ int apoCli_GetRoleBeloneServerId()
 	return pLogin->getServerId();
 }
 
+
+const char* apoCli_GetLocalToken()
+{
+	return LoginApollo::GetLocalToken();
+}
 // 
 // time_t apoCli_getServerTime()
 // {

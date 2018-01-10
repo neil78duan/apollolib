@@ -41,7 +41,7 @@ int RoleAttrAsset::getLastError()
 }
 void RoleAttrAsset::setLastErrorAttrID(attrid_t )
 {
-
+	
 }
 void RoleAttrAsset::setLastError(int )
 {

@@ -98,7 +98,9 @@ namespace LogicEditorHelper
 		"breakPointAnchor",
 		"onlyForDebug",
 		"breakPoint",
-		"displayChildren"
+		"displayChildren",
+		"blueprintCtrl",
+		"blueprintTips"
 	};
 
 

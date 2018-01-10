@@ -23,6 +23,7 @@ CommonDataMgr::~CommonDataMgr()
 
 bool CommonDataMgr::InitLoad(const char *name ,int serverId,void *data, size_t &size)
 {
+	ND_TRACE_FUNC();
 	RESULT_T ret = get_LoadCommonDataSql()->LoadData(name, serverId, (char*)data, size);
 	if (ret == ESERVER_ERR_SUCCESS) {
 		return true;
@@ -33,6 +34,7 @@ bool CommonDataMgr::InitLoad(const char *name ,int serverId,void *data, size_t &
 
 bool CommonDataMgr::Save(const char *name ,int serverId, void *data, size_t size)
 {
+	ND_TRACE_FUNC();
 	RESULT_T ret = get_SaveCommonDataSql()->SaveData(name, serverId, (char*)data, (int)size);
 	if (ret == ESERVER_ERR_SUCCESS) {
 		return true;
@@ -42,6 +44,7 @@ bool CommonDataMgr::Save(const char *name ,int serverId, void *data, size_t size
 
 bool CommonDataMgr::Create(const char *name ,int serverId, void *data, size_t size)
 {
+	ND_TRACE_FUNC();
 	
 	RESULT_T ret = get_CreateCommonDataSql()->CommonDataCreate(name, serverId, data, (int)size);
 	if (ret == ESERVER_ERR_SUCCESS) {
@@ -53,6 +56,7 @@ bool CommonDataMgr::Create(const char *name ,int serverId, void *data, size_t si
 
 bool CommonDataMgr::LoadAsync(const char *name ,int serverId, NDUINT64 reqParam)
 {
+	ND_TRACE_FUNC();
 	db_common_data_msg msg ;
 	
 	msg.serverId = serverId ;
@@ -66,6 +70,7 @@ bool CommonDataMgr::LoadAsync(const char *name ,int serverId, NDUINT64 reqParam)
 }
 bool CommonDataMgr::CreateAsync(const char *name ,int serverId, void *data, size_t size, NDUINT64 reqParam)
 {
+	ND_TRACE_FUNC();
 	db_common_data_msg msg ;
 	
 	msg.serverId = serverId ;
@@ -81,6 +86,7 @@ bool CommonDataMgr::CreateAsync(const char *name ,int serverId, void *data, size
 }
 bool CommonDataMgr::SaveAsync(const char *name ,int serverId, void *data, size_t size)
 {
+	ND_TRACE_FUNC();
 	db_common_data_msg msg ;
 	
 	msg.serverId = serverId ;

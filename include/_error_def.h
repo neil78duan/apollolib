@@ -264,5 +264,7 @@ ErrorElement(ESERVER_ERR_NATION_OTHER_INVIMCIBLE, "不能攻击无敌玩家"),
 ErrorElement(ESERVER_ERR_GUILD_BOSS_TIME_LIMIT, "您加入公会时间未满一天"),
 ErrorElement(ESERVER_ERR_MOVE_BUILD_FIRST, "先移除建筑"),
 ErrorElement(ESERVER_ERR_CHANGE_NAME_COUNT, "您已经达到改名上限"),
+ErrorElement(ESERVER_ERR_GUILD_SEND_MSG, "留言次数已达上限"),
+ErrorElement(ESERVER_ERR_ITEM_TOO_MUCH, "物品太多"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

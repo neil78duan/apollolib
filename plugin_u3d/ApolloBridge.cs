@@ -150,6 +150,10 @@ public class apoClient {
     
 	[DllImport (APO_DLL_NAME)]
     public static extern int apoCli_GetRoleBeloneServerId();		//get the server id that the player will enter 
+	
+
+	[DllImport (APO_DLL_NAME)]
+    public static extern unsafe IntPtr apoCli_GetLocalToken();
 
     private IntPtr m_netObject;
 
@@ -176,8 +180,11 @@ public class apoClient {
 		
         string devDesc = SystemInfo.operatingSystem;
 		
+		//string apoToken = Marshal.PtrToStringAnsi(apoCli_GetLocalToken());
+			
         if( apoCli_init(workPath, workPath,udid, devDesc) ) {
 			//apoCli_EnableStreamRecord() ;
+			//string apoToken = apoCli_GetLocalToken() ;
 			return true ;
 		}
 		return false;

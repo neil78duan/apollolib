@@ -247,7 +247,7 @@ struct account_base_info
 	//NDUINT8 gender;
 	NDUINT8 isAdult;
 	NDUINT16 serverGroupId;
-	NDUINT16 channel;				//渠道id
+	NDUINT32 channel;				//渠道id
 	NDUINT16 reserved;
 
 	//NDUINT16  birth_year, birth_month, birth_day;
@@ -302,8 +302,22 @@ struct account_base_info
 		if (-1 == inmsg.Read(isAdult)) { return -1; }
 
 		if (-1 == inmsg.Read(serverGroupId)) { return -1; }
-		if (-1 == inmsg.Read(channel)) { return -1; }				//渠道id
-		if (-1 == inmsg.Read(reserved)) { return -1; }				//渠道id
+		//if (-1 == inmsg.Read(channel)) { return -1; }				//渠道id
+		eNDnetStreamMarker channelDataType = inmsg.PeekDataType();
+		if (channelDataType == ENDSTREAM_MARKER_INT32){
+			inmsg.Read(channel);
+		}
+		else if (channelDataType == ENDSTREAM_MARKER_INT16) {
+			NDUINT16 tmpch = 0;
+			inmsg.Read(tmpch);
+			channel = tmpch;
+		}
+		else {
+			return -1;
+		}
+		///end channel
+
+		if (-1 == inmsg.Read(reserved)) { return -1; }				//reserved data 
 
 		if (-1 == inmsg.Read(acc_name, sizeof(acc_name))) { return -1; }
 		if (-1 == inmsg.Read(nick, sizeof(nick))) { return -1; }

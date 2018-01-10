@@ -46,7 +46,7 @@ public:
 	static void destroyInstant();
 	void setWorkingPath(const char *pathText);
 	void setLogPath(const char *logPath);
-	void SetEnableStreamRecord(bool bEnable) {m_bEnableStreamRecord = bEnable;}
+	void SetEnableStreamRecord(bool bEnable);
 
 	nd_handle getConn(); // { return m_pconn; }
 	LoginBase *getLoginObj() { return m_login; }
@@ -104,6 +104,7 @@ private:
 	RESULT_T _connectHost(const char *host, int port) ;
 	void _closeConnect();
 	int _trytoOpen();
+	bool openSendStreamLog();
 	//bool _moveFileToWritable();
 	//bool _moveFileToWritable(const char *infileName, const char*outFileName);
 	//std::string _getWritableFile(const char *file);

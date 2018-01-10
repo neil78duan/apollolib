@@ -70,6 +70,7 @@ int dbThread_save_common_data(nd_thsrv_msg *msg)
 
 RESULT_T _load_common_data (int msgId, db_common_data_msg *recvmsg)
 {
+	ND_TRACE_FUNC();
 	db_common_data_msg loadMsgData ;
 	
 	if (recvmsg->name[0]==0) {

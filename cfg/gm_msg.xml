@@ -402,7 +402,7 @@
 		</message>
 		<message name="pvp反击" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="13" minId="16">0</msgid>
-			<data name="玩家" kinds="numeral" param="0">1</data>
+			<data name="玩家" kinds="numeral" param="0">16</data>
 		</message>
 		<message name="pvp扫荡炮击" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="13" minId="26">0</msgid>
@@ -410,10 +410,10 @@
 		</message>
 		<message name="PVP战斗结束" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="13" minId="6">0</msgid>
-			<data name="目标玩家ID" kinds="numeral" param="0">1</data>
+			<data name="目标玩家ID" kinds="numeral" param="0">16</data>
 			<data name="是否是据点" kinds="bool" param="3">0</data>
 			<data name="副本编号" kinds="numeral" param="0">10101</data>
-			<data name="错误号" kinds="numeral" param="0">0</data>
+			<data name="错误号" kinds="numeral" param="0">1025</data>
 			<data name="玩家消耗的能量" kinds="numeral" param="0">100</data>
 			<data name="玩家获得的能量" kinds="numeral" param="0">100</data>
 			<data name="出战卡牌数" kinds="numeral" param="4">1</data>
@@ -726,7 +726,7 @@
 			<data name="数量" kinds="numeral" param="0">80</data>
 		</message>
 	</filter>
-	<filter name="GM_gm消息" delete="no" displayChildren="no" expand_stat="1">
+	<filter name="GM_gm消息" delete="no" displayChildren="no" expand_stat="0">
 		<message name="GM设置国家等级" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="51">0</msgid>
 			<data name="nationId" kinds="numeral" param="3">1</data>
@@ -787,7 +787,7 @@
 		</message>
 		<message name="GM_改等级" expand="yes" delete="no">
 			<msgid kinds="hide">1796</msgid>
-			<data name="新等级" kinds="numeral" param="0">5</data>
+			<data name="新等级" kinds="numeral" param="0">10</data>
 		</message>
 		<message name="GM_加物品" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="6">0</msgid>
@@ -813,7 +813,7 @@
 		</message>
 		<message name="GM_增加属性" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="8">0</msgid>
-			<data name="编号" kinds="numeral" param="2">Money</data>
+			<data name="编号" kinds="numeral" param="2">Crystal</data>
 			<data name="属性增加值" kinds="numeral" param="1">100000</data>
 		</message>
 		<message name="GM_发送系统公告" expand="yes" delete="no">
@@ -915,13 +915,13 @@
 		<message name="sys_记录收发消息" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="0" minId="15">0</msgid>
 			<data name="MaxID" kinds="numeral" param="3">11</data>
-			<data name="MinID" kinds="numeral" param="3">5</data>
+			<data name="MinID" kinds="numeral" param="3">6</data>
 			<data name="是否显示" kinds="bool" param="3">1</data>
 		</message>
 		<message name="sys_打印收到的消息内容" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="0" minId="29">0</msgid>
-			<data name="MaxID" kinds="numeral" param="3">2</data>
-			<data name="MinID" kinds="numeral" param="3">35</data>
+			<data name="MaxID" kinds="numeral" param="3">11</data>
+			<data name="MinID" kinds="numeral" param="3">17</data>
 			<data name="是否显示" kinds="bool" param="3">1</data>
 		</message>
 		<message name="sys_关闭消息" expand="yes" delete="no">

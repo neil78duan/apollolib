@@ -61,8 +61,17 @@ bool apoBaseSlotCtrl::isDelete()
 }
 
 
+void apoBaseSlotCtrl::setParamInfo(const char *paramTips)
+{
+	m_paramInfo = paramTips;
+}
+
 QString apoBaseSlotCtrl::getParamInfo()
 {
+	if (m_paramInfo.size() > 0)	{
+		return m_paramInfo;
+	}
+
 	switch (m_slotType)
 	{
 	case apoBaseSlotCtrl::SLOT_RUN_IN:

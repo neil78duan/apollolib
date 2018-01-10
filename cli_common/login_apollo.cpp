@@ -7,6 +7,7 @@
 //
 
 #include "nd_common/nd_common.h"
+#include "nd_crypt/nd_crypt.h"
 #include "cli_common/login_apollo.h"
 #include "msg_def.h"
 #include "ndcli/nd_api_c.h"
@@ -106,6 +107,7 @@ void ApolloDestroyLoginInst(LoginApollo *pLogin)
 
 NDUINT8 LoginApollo::m_udid[DEVICE_UDID_SIZE] = "unknown-udid";
 NDUINT8 LoginApollo::m_deviceDesc[DEVICE_UDID_SIZE] = "unknown-device";
+NDUINT64 LoginApollo::m_localToken = 0 ;
 
 NDUINT32 LoginApollo::getAccountID() 
 {
@@ -177,9 +179,24 @@ void LoginApollo::SetDeviceInfo(const char *udid, const char *devDesc)
 		strncpy((char*)m_deviceDesc, devDesc, sizeof(m_deviceDesc));
 		nd_logdebug("set udid =%s\n", m_deviceDesc);
 	}
-
-
 }
+
+
+const char *LoginApollo::GetLocalToken()
+{
+	static char out_buf[33];
+	if (m_localToken == 0)	{
+		m_localToken = time(NULL);
+		m_localToken *= rand();
+		m_localToken = ~m_localToken;
+
+		char inbuf[32];
+		int len = snprintf(inbuf, sizeof(inbuf), "apo_%llu", m_localToken);
+		return MD5CryptToStr32(inbuf, len, out_buf);
+	}
+	return out_buf;
+}
+
 
 void LoginApollo::ReInit(nd_handle hConn, const char * session_filename)
 {
@@ -328,8 +345,9 @@ int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE t
 	omsg.Write((NDUINT8)type) ;
 	omsg.Write((NDUINT8*)inputName) ;
 	omsg.Write((NDUINT8*)passwd);
-	omsg.Write((NDUINT16)chanelId);
+	omsg.Write((NDUINT32)chanelId);
 	omsg.Write(m_deviceDesc);
+	omsg.Write(m_localToken);
 
 	nd_logdebug("send login message udid=%s\n",m_udid);
 	//if (ACC_APOLLO==type && passwd && passwd[0]) {
@@ -600,6 +618,7 @@ int LoginApollo::GetRoleList(role_base_info role_buf[], int number, NDUINT8 isRe
 				float val;
 				inmsg.Read(aid); inmsg.Read(val);
 				role_buf[ret].pushAttr(aid, val);
+				nd_logmsg("attribute %d = %10.2f\n", aid, val);
 			}
 		}
 

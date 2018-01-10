@@ -346,6 +346,14 @@ nd_handle ApoClient::getConn()
 }
 
 
+void ApoClient::SetEnableStreamRecord(bool bEnable)
+{ 
+	m_bEnableStreamRecord = bEnable; 
+	if (m_bEnableStreamRecord)	{
+		openSendStreamLog();
+	}
+}
+
 RESULT_T ApoClient::ReloginBackground()
 {
 	CHECK_CONN_VALID(m_pconn) ;
@@ -945,12 +953,7 @@ void ApoClient::onLogin()
 	if (m_bEnableStreamRecord) {
 		//char pathBuf[1024];
 		//int length =snprintf(pathBuf, sizeof(pathBuf), "./apoGameNetStream.data",m_logPath.c_str() );
-		const char *pFielName = "./apoGameNetStream.data";
-		int length = strlen(pFielName);
-		if (m_pconn->ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)pFielName, &length) == -1){
-			nd_logmsg("log net message bin-data errror\n");
-			//return NDSYS_ERR_SYSTEM;
-		}
+		openSendStreamLog();
 // 		if (nd_net_ioctl((nd_netui_handle)m_pconn, NDIOCTL_LOG_SEND_STRAM_FILE, (void*)pFielName, &length) == -1){
 // 			nd_logmsg("log net message bin-data errror\n");
 // 			//return NDSYS_ERR_SYSTEM;
@@ -966,6 +969,24 @@ void ApoClient::onLogin()
 
 	//LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
 	//parser.eventNtf(APOLLO_EVENT_LOGIN, 0); //program start up
+}
+
+
+bool ApoClient::openSendStreamLog()
+{
+	const char *pFielName = "./apoGameNetStream.data";
+	int length = strlen(pFielName);
+	if (m_pconn->ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)pFielName, &length) == -1){
+		nd_logmsg("log net message bin-data errror\n");
+		//return NDSYS_ERR_SYSTEM;
+		return false;
+	}
+	else {
+		//const char *p = nd_getcwd();
+		//nd_logmsg("out put net stream file %s/apoGameNetStream.data\n", p);
+		return true;
+	}
+	
 }
 
 ///////////////////////////////

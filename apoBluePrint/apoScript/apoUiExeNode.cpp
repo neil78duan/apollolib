@@ -40,13 +40,14 @@ static int apo_exeNodeGetIndex(const char *name)
 
 apoBaseExeNode *g_apoCreateExeNode(ndxml *xml, QWidget *parent)
 {
-
-	apoEditorSetting* p_setting = apoEditorSetting::getInstant();
-	const char *ctrlName = p_setting->getExeNodeName(ndxml_getname(xml));
-	if (!ctrlName || !*ctrlName) {
-		ctrlName = "Common";
+	const char *ctrlName = ndxml_getattr_val(xml, "blueprintCtrl");
+	
+	if (!ctrlName || !*ctrlName){
+		ctrlName = apoEditorSetting::getInstant()->getExeNodeName(ndxml_getname(xml));
+		if (!ctrlName || !*ctrlName) {
+			ctrlName = "Common";
+		}
 	}
-
 
 	int index = apo_exeNodeGetIndex(ctrlName);
 	return g_apoCreateExeNode(index,xml, parent);
@@ -204,6 +205,10 @@ apoUiExenodeBool::apoUiExenodeBool(QWidget *parent, ndxml *exeNodeXml) :apoBaseE
 
 
 }
+apoUiExenodeBool::apoUiExenodeBool() :apoBaseExeNode()
+{
+
+}
 apoUiExenodeBool::~apoUiExenodeBool(){}
 
 void apoUiExenodeBool::onInit()
@@ -240,14 +245,14 @@ void apoUiExenodeBool::onInit()
 		const char *pval = ndxml_getval(condXml);
 		if (pval && *pval !='0'){
 			//true 
-			ctrl1 = new apoBaseSlotCtrl(QString("True ->"), this);
+			ctrl1 = new apoBaseSlotCtrl(QString("True"), this);
 			ctrl1->setStyleSheet("QLabel{background-color:yellow;}");
 			m_trueSlot = ctrl1;
 		}
 
 		else {
 			//false 
-			ctrl1 = new apoBaseSlotCtrl(QString("False->"), this);
+			ctrl1 = new apoBaseSlotCtrl(QString("False"), this);
 			ctrl1->setStyleSheet("QLabel{background-color:gray;}");
 			m_falseSlot = ctrl1;
 		}
@@ -269,7 +274,103 @@ void apoUiExenodeBool::onInit()
 	m_toNextNode->move(x, y);
 
 }
+//////////////////////////////////////////////////////////////////////////
 
+apoUiExenodeCompoundTest::apoUiExenodeCompoundTest(QWidget *parent, ndxml *exeNodeXml) :apoUiExenodeBool()
+{
+	apoBaseExeNode::m_type = EAPO_EXE_NODE_CompoundTest;
+
+	disableNewParam();
+	disableReturnVar();	
+
+	setNodeInfo(parent, exeNodeXml, false);
+	//InitCtrl(parent, "Bool",  0);
+
+	const char *tips = ndxml_getattr_val(exeNodeXml, "blueprintTips");
+	if (tips && *tips) {
+		setTips(QString(tips));
+	}
+	else {
+		setTips(QString("Test"));
+	}
+
+
+}
+apoUiExenodeCompoundTest::~apoUiExenodeCompoundTest(){}
+
+void apoUiExenodeCompoundTest::onInit()
+{
+	apoEditorSetting* settingRoot = apoEditorSetting::getInstant();
+
+	//create if ctrl
+	int x = E_LINE_WIDTH - PARAM_CTRL_W;
+	int y = E_LINE_HEIGHT * 1.5;
+
+	ndxml *xmlTest = ndxml_getnode(m_nodeXml, "op_bool_entry");
+	if (!xmlTest){
+		return;
+	}
+	int num = ndxml_getsub_num(xmlTest);
+
+	for (int i = 0; i < num; i++){
+		ndxml *xml = ndxml_getnodei(xmlTest, i);
+		if (LogicEditorHelper::CheckHide(xml))	{
+			continue;
+		}
+		const compile_setting* compileSetting = settingRoot->getStepConfig(ndxml_getname(xml));
+		if (!compileSetting){
+			continue;
+		}
+		else if (E_INSTRUCT_TYPE_CASE_ENTRY != compileSetting->ins_type)	{
+			continue;
+		}
+		const char *tips = ndxml_getattr_val(xml, "name");
+
+		const char *condName = ndxml_getattr_val(xml, "comp_cond");
+		if (!condName) {
+			continue;
+		}
+
+		ndxml *condXml = ndxml_getnode(xml, condName);
+		if (!condXml){
+			continue;
+		}
+		apoBaseSlotCtrl *ctrl1 = NULL;
+		const char *pval = ndxml_getval(condXml);
+		if (pval && *pval != '0'){
+			//true 
+			ctrl1 = new apoBaseSlotCtrl(QString("Yes"), this);
+			ctrl1->setStyleSheet("QLabel{background-color:yellow;}");
+			m_trueSlot = ctrl1;
+		}
+
+		else {
+			//false 
+			ctrl1 = new apoBaseSlotCtrl(QString("No"), this);
+			ctrl1->setStyleSheet("QLabel{background-color:gray;}");
+			m_falseSlot = ctrl1;
+		}
+
+		ctrl1->setSlotType(apoBaseSlotCtrl::SLOT_SUB_ENTRY);
+		ctrl1->setXmlAnchor(condXml);
+		ctrl1->setXmlAnchorParent(xml);
+		if (tips && *tips)	{
+			ctrl1->setParamInfo(tips);
+		}
+
+		ctrl1->resize(PARAM_CTRL_W * 1.5, PARAM_CTRL_H);
+		ctrl1->move(x, y);
+		ctrl1->show();
+		ctrl1->setAttribute(Qt::WA_DeleteOnClose, true);
+
+		y += E_LINE_HEIGHT;
+	}
+
+	//y += E_LINE_HEIGHT;
+	x = E_LINE_WIDTH - PARAM_CTRL_W;
+	m_toNextNode->move(x, y);
+
+}
 //////////////////////////////////////////////////////////////////////////
 //
 apoUiExenodeValueComp::apoUiExenodeValueComp(QWidget *parent, ndxml *exeNodeXml) : m_subSlot(0)

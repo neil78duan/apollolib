@@ -282,12 +282,11 @@ private:
 	apoBaseSlotCtrl *m_loopSlot;
 };
 
-
-
 class apoUiExenodeBool : public apoBaseExeNode
 {
 public:
 	explicit apoUiExenodeBool(QWidget *parent, ndxml *exeNodeXml);
+	explicit apoUiExenodeBool();
 	virtual ~apoUiExenodeBool();
 	virtual void onInit();
 
@@ -295,9 +294,26 @@ public:
 	apoBaseSlotCtrl *getFalseSlot() { return m_falseSlot; }
 
 
-private:
+protected:
 	apoBaseSlotCtrl *m_trueSlot;
 	apoBaseSlotCtrl *m_falseSlot;
+};
+
+
+class apoUiExenodeCompoundTest : public apoUiExenodeBool
+{
+public:
+	explicit apoUiExenodeCompoundTest(QWidget *parent, ndxml *exeNodeXml);
+	virtual ~apoUiExenodeCompoundTest();
+	virtual void onInit();
+
+// 	apoBaseSlotCtrl *getTrueSlot() { return m_trueSlot; }
+// 	apoBaseSlotCtrl *getFalseSlot() { return m_falseSlot; }
+// 
+// 
+// private:
+// 	apoBaseSlotCtrl *m_trueSlot;
+// 	apoBaseSlotCtrl *m_falseSlot;
 };
 
 class apoUiExenodeValueComp : public apoBaseExeNode
