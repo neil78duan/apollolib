@@ -1126,6 +1126,12 @@ int LogicParserEngine::_baseCallScript(runningStack *stack)
 #endif
 				m_registorFlag = true;
 				break; 
+			case E_OP_PROCESS_EXIT:
+				exit(1);
+				break;
+			case E_OP_PROCESS_ABORT:
+				abort();
+				break;
 
 			default:
 				m_registorFlag = false;
@@ -1851,6 +1857,11 @@ bool LogicParserEngine::_bitOperate(eBitOperate op, const DBLDataNode &var1, con
 
 	}
 	else {
+		DBLDataNode srcVal = var1;
+		if (srcVal.BitOperateBin(op, (NDUINT8)var2.GetInt())){
+			m_registerVal = srcVal;
+			return true;
+		}
 		return false;
 	}
 	

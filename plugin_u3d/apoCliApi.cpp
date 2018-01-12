@@ -36,8 +36,16 @@ int apoCli_init(const char *workingPath, const char *logPath, const char *udid, 
 	LoginApollo::SetDeviceInfo(udid, devDesc);
 	ApoClient *pInstant = ApoClient::getInstant();
 	if (pInstant) {
+#ifdef __ND_WIN__
+
+		char tmpBuf[1024];
+		pInstant->setWorkingPath(nd_utf8_to_ndcode(workingPath, tmpBuf, sizeof(tmpBuf)));
+		pInstant->setLogPath(nd_utf8_to_ndcode(logPath, tmpBuf, sizeof(tmpBuf)));
+#else 
 		pInstant->setWorkingPath(workingPath);
 		pInstant->setLogPath(logPath);
+
+#endif 
 		return 1;
 	}
 	return 0;
@@ -78,13 +86,16 @@ RESULT_T apoCli_send(char *bufferFram, int frameSize)
 {
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (apoCli)	{
+		if (! apoCli->IsInConnect())	{
+			return NDSYS_ERR_CLOSED;
+		}
 		int ret = nd_connector_raw_write(apoCli->getConn(), bufferFram, frameSize);
 		if (ret == -1)		{
 			return (RESULT_T) nd_object_lasterror(apoCli->getConn());
 		}
 		return ESERVER_ERR_SUCCESS;
 	}
-	return NDSYS_ERR_INVALID_HANDLE;
+	return NDSYS_ERR_NOT_INIT;
 }
 
 RESULT_T apoCli_sendMsg(int messageId, void *messageBody, int bodySize)
@@ -98,10 +109,14 @@ RESULT_T apoCli_sendMsg(int messageId, void *messageBody, int bodySize)
 	
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (apoCli)	{
+		if (!apoCli->IsInConnect())	{
+			return NDSYS_ERR_CLOSED;
+		}
+
 		nd_connector_send(apoCli->getConn(), &(omsg.GetMsgAddr()->msg_hdr.packet_hdr), 0);
 		return ESERVER_ERR_SUCCESS;
 	}
-	return NDSYS_ERR_INVALID_HANDLE;
+	return NDSYS_ERR_NOT_INIT;
 }
 
 int apoCli_recv(char *bufferFram, int bufsize, int timeOutMS)
@@ -113,6 +128,11 @@ int apoCli_recv(char *bufferFram, int bufsize, int timeOutMS)
 	nd_handle h = apoCli->getConn();
 	if (!h) {
 		nd_logerror("net client not init\n");
+		return -1;
+	}
+
+	if (!apoCli->IsInConnect())	{
+		nd_object_seterror(h, NDSYS_ERR_CLOSED);
 		return -1;
 	}
 
@@ -342,6 +362,10 @@ int apoCli_GetServerList(char *buf, int size)
 	if (!apoCli)	{
 		return NDSYS_ERR_NOT_INIT;
 	}
+
+	if (!apoCli->IsLoginOk()){
+		return NDSYS_ERR_NEED_LOGIN;
+	}
 	ApolloServerInfo srvbuf[10];
 	char *p = buf;
 	int num = apoCli->GetGameAreaList(srvbuf,10);
@@ -373,6 +397,10 @@ APO_RESULT_T apoCli_SelectServer(const char *host, int port)
 	if (!apoCli)	{
 		return NDSYS_ERR_NOT_INIT;
 	}
+
+	if (!apoCli->IsLoginOk()){
+		return NDSYS_ERR_NEED_LOGIN;
+	}
 	return apoCli->SelectServer(host, port);
 }
 
@@ -382,7 +410,11 @@ int apoCli_GetRoleList(char *buf, int size)
 	if (!apoCli)	{
 		return NDSYS_ERR_NOT_INIT;
 	}
-	
+
+	if (!apoCli->IsLoginOk()){
+		return NDSYS_ERR_NEED_LOGIN;
+	}
+
 	role_base_info roles; 
 	int ret = apoCli->getLoginObj()->GetRoleList(&roles, 1, apoCli->getReloginStat());
 	if (ret ==0){
@@ -401,6 +433,10 @@ APO_RESULT_T apoCli_CreateRole(const char *roleName)
 		return NDSYS_ERR_NOT_INIT;
 	}
 
+	if (!apoCli->IsLoginOk()){
+		return NDSYS_ERR_NEED_LOGIN;
+	}
+
 	role_base_info roles;
 	int ret = apoCli->getLoginObj()->CreateRole(roleName, roles);
 	if (ret == -1){
@@ -414,6 +450,10 @@ APO_RESULT_T apoCli_SelectRole(unsigned roleId)
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (!apoCli)	{
 		return NDSYS_ERR_NOT_INIT;
+	}
+
+	if (!apoCli->IsLoginOk()){
+		return NDSYS_ERR_NEED_LOGIN;
 	}
 
 	int ret = apoCli->getLoginObj()->SelectRole(roleId);
@@ -443,6 +483,10 @@ int apoCli_GetRoleBeloneServerId()
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (!apoCli)	{
 		return -1;
+	}
+
+	if (!apoCli->IsLoginOk()){
+		return NDSYS_ERR_NEED_LOGIN;
 	}
 
 	LoginBase  *pLogin = apoCli->getLoginObj();

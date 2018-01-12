@@ -2466,6 +2466,56 @@ DBL_ELEMENT_TYPE DBLDataNode::GetArrayType() const
 }
 
 
+bool DBLDataNode::BitOperateBin(eBitOperate opType,NDUINT8 opVal)
+{
+	size_t size = 0;
+	NDUINT8 *p = NULL;
+
+	if (m_ele_type == OT_BINARY_DATA){
+		size = GetBinarySize();
+		p = ( NDUINT8 *)GetBinary();
+	}
+	else if (m_ele_type == OT_STRING) {
+		p = (NDUINT8*)GetText();
+		if (p){
+			size = strlen((const char*)p);
+		}
+	}
+	else {
+		return false;
+	}
+
+#define OP_BIT_OPERATE(_command)	\
+	for (size_t i = 0; i < size; i++){	\
+		_command;					\
+	}
+	
+	switch (opType)
+	{
+	case E_BIT_AND:
+		OP_BIT_OPERATE(p[i]&=opVal);
+		break;
+	case E_BIT_OR:
+		OP_BIT_OPERATE(p[i]|=opVal);
+		break;
+	case E_BIT_XOR:
+		OP_BIT_OPERATE(p[i]^= opVal);
+		break;
+	case E_BIT_NOT:
+		OP_BIT_OPERATE(p[i]=~p[i]);
+		break;
+	case E_BIT_LEFT_MOVE:
+		OP_BIT_OPERATE(p[i]=p[i]<<opVal);
+		break;
+	case E_BIT_RIGHT_MOVE:
+		OP_BIT_OPERATE(p[i]= p[i]>>opVal);
+		break;
+	default:
+		return false;
+	}
+	return true;
+}
+
 void DBLDataNode::Destroy()
 {
 	if (m_dataOwner && m_dataOwn._data) {

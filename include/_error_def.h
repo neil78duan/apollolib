@@ -266,5 +266,6 @@ ErrorElement(ESERVER_ERR_MOVE_BUILD_FIRST, "先移除建筑"),
 ErrorElement(ESERVER_ERR_CHANGE_NAME_COUNT, "您已经达到改名上限"),
 ErrorElement(ESERVER_ERR_GUILD_SEND_MSG, "留言次数已达上限"),
 ErrorElement(ESERVER_ERR_ITEM_TOO_MUCH, "物品太多"),
+ErrorElement(ESERVER_ERR_DESTROY_TOO_MUCH, "伤害太高了"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

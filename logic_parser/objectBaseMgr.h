@@ -101,36 +101,5 @@ private:
 
 };
 
-//LogicObjectBase
-class TestLogicObject : public LogicObjectBase
-{
-public:
-	TestLogicObject();
-	virtual~TestLogicObject ();
-
-	bool opRead(const DBLDataNode& id, DBLDataNode &val);
-	bool opWrite(const DBLDataNode& id, const DBLDataNode &val);
-	bool opAdd(const DBLDataNode& id, const DBLDataNode &val);
-	bool opSub(const DBLDataNode& id, const  DBLDataNode &val);
-	//bool opClear(const DBLDataNode& id, const  DBLDataNode &val);
-	bool opCheck(const DBLDataNode& id, const  DBLDataNode &val);
-	//common operate 
-	bool opOperate(const char *cmd, const DBLDataNode& id,  DBLDataNode &val);
-	//bool getObject(eOperatorObjType type, const DBLDataNode &id, DBLDataNode &val);
-	//LogicObjectBase *getObjectMgr(eOperatorDestMgr destID);
-	
-	bool getOtherObject(const char*objName, DBLDataNode &val) ;
-	LogicObjectBase *getObjectMgr(const char* destName);
-	int Print(logic_print f, void *pf); //print object self info 
-
-	bool BeginAffair();
-	bool CommitAffair();
-	bool RollbackAffair();
-
-private:
-
-	void _setval(DBLDataNode &val);
-};
-
 #endif 
  
