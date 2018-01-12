@@ -88,6 +88,8 @@ public:
 	int Init();
 	void Destroy();
 	bool IsLoginOk();
+	bool CheckValid();
+	bool IsInConnect();
 
 	NDUINT32 GetCurAccId(){ return m_accId; }
 	roleid_t GetCurRoleId() { return m_roleId; }

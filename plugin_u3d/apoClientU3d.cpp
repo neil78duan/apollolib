@@ -276,6 +276,22 @@ bool ApoClient::IsLoginOk()
 	return false;
 }
 
+bool ApoClient::CheckValid()
+{
+	if (m_pconn && m_pconn->CheckValid()){
+		return true;
+	}
+	return false;
+}
+
+bool ApoClient::IsInConnect()
+{
+	if (m_pconn && m_pconn->CheckValid()){
+		return nd_connect_level_get(m_pconn->GetHandle()) >= EPL_CONNECT;
+	}
+	return false;
+}
+
 time_t ApoClient::getServerTime()
 {
 	time_t now = time(NULL);
@@ -473,7 +489,7 @@ RESULT_T ApoClient::_connectHost(const char *host, int port)
 	}
 	m_runningUpdate = ERUN_UP_NORMAL;
 	onInit();
-	nd_logmsg("connect host:%s port:%d udid:%s\n", m_host.c_str(), m_port);
+	nd_logmsg("connect host:%s port:%d \n", m_host.c_str(), m_port);
 	return ESERVER_ERR_SUCCESS;
 }
 

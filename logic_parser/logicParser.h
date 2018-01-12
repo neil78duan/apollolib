@@ -120,7 +120,8 @@ enum eParserOperator{
 	E_OP_BITS_OPERATE, // & | ^ ~ << >> REF eBitOperate
 	E_OP_CHECK_DEBUG,		//check script is debug
 	E_OP_CHECK_HOST_DEBUG,	//check host is debug 
-
+	E_OP_PROCESS_EXIT ,
+	E_OP_PROCESS_ABORT,
 
 };
 
@@ -146,15 +147,6 @@ enum eMathOperate
 	E_MATH_RAND,
 } ;
 
-enum eBitOperate
-{
-	E_BIT_AND,
-	E_BIT_OR,
-	E_BIT_XOR,
-	E_BIT_NOT,
-	E_BIT_LEFT_MOVE,
-	E_BIT_RIGHT_MOVE
-};
 
 enum eLogicSystemError
 {

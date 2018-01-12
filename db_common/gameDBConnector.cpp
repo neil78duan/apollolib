@@ -118,7 +118,7 @@ void ServerDbConnBase::Destroy()
 CMyDatabase *ServerDbConnBase::GetDBHandle(bool bReadHandler ) 
 {
 	ND_TRACE_FUNC();
-	if (bReadHandler)	{
+	if (bReadHandler && m_bSpecialReader)	{
 		return &m_readerDB;
 	}
 	return &m_mydb;

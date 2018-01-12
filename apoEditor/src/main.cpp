@@ -3,6 +3,7 @@
 #include "workdirdialog.h"
 #include "nd_common/nd_common.h"
 #include "apoScript/apoEditorSetting.h"
+#include "logic_parser/logicEngineRoot.h"
 #include "connectdialog.h"
 
 #include <QApplication>
@@ -71,6 +72,7 @@ int runDevelopTool(int argc, char *argv[])
 		return 1;
 	}
 	apoEditorSetting* setting;
+	LogicEngineRoot::setSettingFile(editorCfg.toStdString().c_str());
 
 re_initd:
 	nd_chdir(workDir.toStdString().c_str());
@@ -113,6 +115,8 @@ int runGm(int argc, char *argv[])
 
 	_LOAD_XML(editorSetting, "../../cfg/editor_setting.xml", "utf8", 0);
 	_LOAD_XML(xmlSend, "../../cfg/gm_msg.xml", "utf8", 0);
+	
+	LogicEngineRoot::setSettingFile("../../cfg/editor_setting.xml");
 
 	dlg.m_editor_setting = &editorSetting;
 	dlg.m_gmCfg = &xmlSend;
@@ -135,7 +139,7 @@ int main(int argc, char *argv[])
 {
 	
 	//const char *nowDir = nd_getcwd();
-	test_time1();
+	//test_time1();
 
 	for (int i = 1; i < argc ; i++){
 		if (0 == ndstricmp(argv[i], "--rungmtool"))	{

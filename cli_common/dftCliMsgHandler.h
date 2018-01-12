@@ -14,6 +14,7 @@
 #include "logic_parser/dbldata2netstream.h"
 #ifndef WITHOUT_LOGIC_PARSER
 #include "logic_parser/objectBaseMgr.h"
+#include "logic_parser/logicEngineRoot.h"
 #endif
 
 namespace ClientMsgHandler
