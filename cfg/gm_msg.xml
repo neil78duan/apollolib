@@ -726,7 +726,7 @@
 			<data name="数量" kinds="numeral" param="0">80</data>
 		</message>
 	</filter>
-	<filter name="GM_gm消息" delete="no" displayChildren="no" expand_stat="0">
+	<filter name="GM_gm消息" delete="no" displayChildren="no" expand_stat="1">
 		<message name="GM设置国家等级" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="51">0</msgid>
 			<data name="nationId" kinds="numeral" param="3">1</data>
@@ -875,7 +875,7 @@
 			<msgid kinds="hide" maxId="7" minId="36">0</msgid>
 		</message>
 	</filter>
-	<filter name="system_系统消息" delete="no" displayChildren="no" expand_stat="1">
+	<filter name="system_系统消息" delete="no" displayChildren="no" expand_stat="0">
 		<message name="sys_修改SOCIAL服务器时间" expand="yes" delete="no" need_confirm="yes">
 			<msgid kinds="hide" maxId="7" minId="31">0</msgid>
 			<data name="加快小时" kinds="numeral" param="0">16</data>
