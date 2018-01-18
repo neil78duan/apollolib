@@ -207,7 +207,9 @@ bool startDialog::compileScript(const char *scriptFile)
 
 	LogicCompiler lgcompile;
 
-	if (!lgcompile.setConfigFile(CONFIG_FILE_PATH)) {
+	apoEditorSetting* setting = apoEditorSetting::getInstant();
+
+	if (!lgcompile.setConfigFile(setting->m_edirotSettingFile.c_str())) {
 		return false;
 	}
 	if (!lgcompile.compileXml(inFile, outFile, outEncode, withDebug, orderType)) {

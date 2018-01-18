@@ -416,7 +416,7 @@ RESULT_T ApoClient::Open(const char *host, int port)
 		m_port = port;
 	}
 	
-	nd_logmsg("open client net host:%s port:%d \n", host, port);
+	//nd_logmsg("open client net host:%s port:%d \n", host, port);
 	
 	return ESERVER_ERR_SUCCESS ;
 	
@@ -430,6 +430,7 @@ void ApoClient::Close()
 // 		}
 // 		nd_object_destroy(m_pconn, 0);
 		if (m_pconn )	{
+			nd_logmsg(" apoClient::close() net colsed error = %d\n", m_pconn->LastError());
 			m_pconn->Close(0);
 		}
 		DestroyConnectorObj(m_pconn);
@@ -489,7 +490,7 @@ RESULT_T ApoClient::_connectHost(const char *host, int port)
 	}
 	m_runningUpdate = ERUN_UP_NORMAL;
 	onInit();
-	nd_logmsg("connect host:%s port:%d \n", m_host.c_str(), m_port);
+	nd_logmsg("connect host:%s port:%d ok\n", host, port);
 	return ESERVER_ERR_SUCCESS;
 }
 
@@ -497,6 +498,7 @@ RESULT_T ApoClient::_connectHost(const char *host, int port)
 void ApoClient::_closeConnect()
 {
 	if (m_pconn) {
+		nd_logmsg("net colsed error = %d\n", m_pconn->LastError());
 		m_pconn->Close(0);
 		//nd_connector_close((nd_handle)m_pconn, 0);
 	}
@@ -563,6 +565,12 @@ RESULT_T ApoClient::TrytoRelogin()
 	if (-1 == _trytoOpen()) {
 		return NDSYS_ERR_HOST_UNAVAILABLE;
 	}
+	
+	//login server 
+	if (!m_login)	{
+		nd_logerror("can not login the program is not init-success or connector-to-server\n");
+		return NDSYS_ERR_NOT_INIT;
+	}
 
 	//login server 
 	//m_login->SetUdid(m_udid.c_str());
@@ -594,6 +602,10 @@ RESULT_T ApoClient::TrytoReloginEx(void *session, size_t sessionSize)
 	}
 
 	//login server 
+	if (!m_login)	{
+		nd_logerror("can not login the program is not init-success or connector-to-server\n");
+		return NDSYS_ERR_NOT_INIT;
+	}
 
 	m_runningUpdate = ERUN_UP_STOP;
 	int ret = m_login->ReloginEx(session,sessionSize);
@@ -656,12 +668,26 @@ RE_LOGIN:
 
 int ApoClient::_trytoOpen()
 {
+	if (m_host.empty() || m_port == 0){
+		nd_logerror("connect host error adress is NULL\n");
+		return -1;
+	}
+
 	if (!m_pconn){
 		if (ESERVER_ERR_SUCCESS != Open()) {
 			return -1;
 		}
 	}
 	if (m_pconn->CheckValid()) {
+		if (!m_login){
+			m_pconn->Close(1);
+			RESULT_T res = _connectHost(m_host.c_str(), m_port);
+			if (res == ESERVER_ERR_SUCCESS)	{
+				return 0;
+			}
+			m_pconn->SetLastError(res);
+			return -1;
+		}
 		return 0;
 	}
 	

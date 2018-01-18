@@ -21,7 +21,7 @@
 		</message>
 		<message name="查看玩家" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="15" minId="13">0</msgid>
-			<data name="玩家ID" kinds="numeral" param="0">1</data>
+			<data name="玩家ID" kinds="numeral" param="0">6</data>
 		</message>
 		<message name="查看国家状态" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="15" minId="2">0</msgid>
@@ -435,10 +435,10 @@
 			<msgid kinds="hide" maxId="13" minId="18">0</msgid>
 		</message>
 	</filter>
-	<filter name="个人消息" delete="no" displayChildren="no" expand_stat="0">
+	<filter name="个人消息" delete="no" displayChildren="no" expand_stat="1">
 		<message name="付费" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="19" minId="0">0</msgid>
-			<data name="类型" kinds="numeral" param="3">5</data>
+			<data name="类型" kinds="numeral" param="3">3</data>
 			<data name="值" kinds="numeral" param="0">1</data>
 			<data name="值" kinds="numeral" param="0">0</data>
 		</message>
@@ -770,7 +770,7 @@
 		</message>
 		<message name="GM_国家排行刷新" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="41">0</msgid>
-			<data name="isCity" kinds="enum" enum_value="排行榜,爵位,奖励" param="3">2</data>
+			<data name="isCity" kinds="enum" enum_value="爵位,排行榜,奖励" param="3">0</data>
 		</message>
 		<message name="GM_增加新神器" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="32">0</msgid>
@@ -813,7 +813,7 @@
 		</message>
 		<message name="GM_增加属性" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="8">0</msgid>
-			<data name="编号" kinds="numeral" param="2">Crystal</data>
+			<data name="编号" kinds="numeral" param="2">crystal</data>
 			<data name="属性增加值" kinds="numeral" param="1">100000</data>
 		</message>
 		<message name="GM_发送系统公告" expand="yes" delete="no">
@@ -855,7 +855,7 @@
 		</message>
 		<message name="GM_通过名字获得ID" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="18">0</msgid>
-			<data name="玩家名字" kinds="string" param="2" desc="name">ddtest2</data>
+			<data name="玩家名字" kinds="string" param="2" desc="name">ddtest3</data>
 		</message>
 		<message name="GM_查询其他玩家设置" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="21">0</msgid>
@@ -937,7 +937,7 @@
 		</message>
 		<message name="sys_打开特定类型日志" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="0" minId="28">0</msgid>
-			<data name="日志类型" kinds="key_value" key="普通日志,调试,警告,错误,致命" value="0,1,2,3,4" param="3">0</data>
+			<data name="日志类型" kinds="key_value" key="普通日志,调试,警告,错误,致命" value="0,1,2,3,4" param="3">1</data>
 			<data name="打开" kinds="bool" param="3">1</data>
 		</message>
 		<message name="sys_install_function" expand="yes" delete="no">
@@ -957,7 +957,7 @@
 		</message>
 		<message name="sys_push_function_toclient" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="0" minId="34">0</msgid>
-			<data name="RecvRoleId" kinds="numeral" param="0">1</data>
+			<data name="RecvRoleId" kinds="numeral" param="0">3</data>
 			<data name="maxMsgId" kinds="numeral" param="4">0</data>
 			<data name="minMsgId" kinds="numeral" param="4">40</data>
 			<data name="OrderByte" kinds="enum" enum_value="bigEnd,littleEnd" param="3">1</data>
@@ -971,7 +971,7 @@
 		</message>
 		<message name="sys_resend_to_client" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="0" minId="36">0</msgid>
-			<data name="RecvRoleId" kinds="numeral" param="0">1</data>
+			<data name="RecvRoleId" kinds="numeral" param="0">3</data>
 			<data name="maxMsgId" kinds="numeral" param="4">0</data>
 			<data name="minMsgId" kinds="numeral" param="4">40</data>
 		</message>

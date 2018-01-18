@@ -1314,7 +1314,6 @@
 					"$(inherited)",
 					__ND_MAC__,
 					WITHOUT_ICONV,
-					WITHOUT_LOGIC_PARSER,
 				);
 				INFOPLIST_FILE = apollo_u3d_mac/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
@@ -1340,7 +1339,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					__ND_MAC__,
 					WITHOUT_ICONV,
-					WITHOUT_LOGIC_PARSER,
 					ND_CLIENT_ONLY,
 				);
 				INFOPLIST_FILE = apollo_u3d_mac/Info.plist;
@@ -1447,7 +1445,6 @@
 					"$(inherited)",
 					ND_DEBUG,
 					__ND_IOS__,
-					WITHOUT_LOGIC_PARSER,
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1461,7 +1458,6 @@
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					__ND_IOS__,
-					WITHOUT_LOGIC_PARSER,
 					ND_CLIENT_ONLY,
 				);
 				OTHER_LDFLAGS = "-ObjC";

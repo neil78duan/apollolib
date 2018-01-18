@@ -215,6 +215,10 @@ RESULT_T apoCli_ReloginEx(const char *sessionData, int sessionSize, bool bRelogi
 		nd_logerror("net client instant not init\n");
 		return NDSYS_ERR_NOT_INIT;
 	}
+	if(!sessionData || sessionSize == 0) {
+		nd_logerror("can not relogin , input session data is NULL \n");
+		return  NDSYS_ERR_PARAM_NUMBER_ZERO ;
+	}
 	return apoCli->ReloginEx((void*)sessionData,sessionSize,bReloginOffline);
 }
 
@@ -228,6 +232,12 @@ int apoCli_fetchSessionKey(char *outbuf, int bufsize)
 	if (!pLogin)	{
 		return -1;
 	}
+	if(!outbuf || bufsize == 0) {
+		nd_logerror("can not catch ssession key, input buffer is NULL \n");
+		return  -1 ;
+	}
+	
+	
 	return (int)pLogin->GetSessionData(outbuf, bufsize);
 }
 

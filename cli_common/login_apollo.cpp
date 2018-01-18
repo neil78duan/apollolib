@@ -23,13 +23,6 @@
 #endif
 
 
-
-struct rsa_key_from_srv{
-	char keymd5[16] ;
-	R_RSA_PUBLIC_KEY pub_key ;
-}   ;
-
-
 //static account_index_t __g_login_account =0;
 
 static int save_session_info(R_RSA_PUBLIC_KEY *key, login_token_info *session_info ,const char*keymd5, const char *file_name ) ;
@@ -133,7 +126,7 @@ LoginApollo::LoginApollo(nd_handle hConn, const char * session_filename ) : m_co
 	m_accType =0 ;
 	m_accName[0] =0 ;
 	m_serverGroupId = 0;
-	memset(&m_srv_key, 0, sizeof(m_srv_key)) ;
+	memset(m_srv_key, 0, sizeof(m_srv_key)) ;
 	m_session_file = 0 ;
 	ReInit( hConn, session_filename);	
 	
@@ -149,7 +142,7 @@ LoginApollo::LoginApollo()
 	m_accName[0] = 0;
 
 	//m_nickName[0]=0 ;
-	memset(&m_srv_key, 0, sizeof(m_srv_key));
+	memset(m_srv_key, 0, sizeof(m_srv_key));
 	m_session_file = 0;
 
 	//strncpy((char*)m_udid, "unknown_udid", sizeof(m_udid));
@@ -157,7 +150,7 @@ LoginApollo::LoginApollo()
 
 LoginApollo::~LoginApollo()
 {
-	memset(&m_srv_key, 0, sizeof(m_srv_key)) ;
+	memset(m_srv_key, 0, sizeof(m_srv_key)) ;
 	if(m_session_file) {
 		free(m_session_file) ;
 		m_session_file = NULL ;
@@ -252,7 +245,7 @@ int LoginApollo::getReloginSessionInfo(login_session_load *outbuf)
 
 	int size =sessionifo.toBuf(outbuf->session_buf, sizeof(outbuf->session_buf));
 	//memcpy(outbuf->session_buf, &sessionifo, sizeof(sessionifo));
-	memcpy(outbuf->keymd5, &m_srv_key, sizeof(rsa_key_from_srv));
+	memcpy(outbuf->keymd5, m_srv_key, sizeof(rsa_key_from_srv));
 	outbuf->session_size = nd_TEAencrypt((unsigned char*)outbuf->session_buf, size, &sessionifo.sym_key);
 
 	return  0;
@@ -275,7 +268,11 @@ size_t LoginApollo::GetSessionData(void *out_buf, size_t buf_size)
 int LoginApollo::ReloginEx(void *session_data, size_t size)
 {
 	login_session_load session_saved = { 0 };
-	
+	if (!session_data) {
+		nd_logerror("input session key is NULL\n");
+		return -1;
+	}
+
 	if (-1 == stream_to_session((char*)session_data, size, &session_saved)){
 		nd_logerror("convert stream to session error\n");
 		return -1;
@@ -288,7 +285,7 @@ int LoginApollo::ReloginEx(void *session_data, size_t size)
 
 		return ret;
 	}
-	memcpy(&m_srv_key, session_saved.keymd5, sizeof(rsa_key_from_srv));
+	memcpy(m_srv_key, session_saved.keymd5, sizeof(rsa_key_from_srv));
 
 	if (0 == LoginApollo::relogin(&session_saved, LOGIN_MSG_RELOGIN_REQ, LOGIN_MSG_LOGIN_ACK)) {
 
@@ -315,7 +312,7 @@ void LoginApollo::Destroy()
 	m_accType = 0;
 	m_accName[0]=0;
 
-	memset(&m_srv_key, 0, sizeof(m_srv_key));
+	memset(m_srv_key, 0, sizeof(m_srv_key));
 	if (m_session_file) {
 		free(m_session_file);
 		m_session_file = NULL;
@@ -387,7 +384,7 @@ int LoginApollo::Relogin()
         
 		return ret ;
 	}
-	memcpy(&m_srv_key, session_saved.keymd5, sizeof(rsa_key_from_srv)) ;
+	memcpy(m_srv_key, session_saved.keymd5, sizeof(rsa_key_from_srv)) ;
 
 	m_serverGroupId = 0;
 	
@@ -688,7 +685,7 @@ int LoginApollo::EnterServer(const char *host_name, NDUINT16 port, const char *s
 		return -1;
 	}
 	
-	memcpy(&m_srv_key, session_saved.keymd5, sizeof(rsa_key_from_srv)) ;
+	memcpy(m_srv_key, session_saved.keymd5, sizeof(rsa_key_from_srv)) ;
 	
 	//SEND session info to server and check
 	if(0==LoginApollo::relogin(&session_saved, LOGIN_MSG_SELECT_SERVER_REQ, LOGIN_MSG_SELECT_SERVER_ACK,bNotLoadBalance) ) {
@@ -807,7 +804,7 @@ int LoginApollo::relogin(void *token_info, int sendMsgID, int waitMsgID, bool bN
 	//tea_key(&k) ;
 	//nd_teaKeyToNetorder(&trans_key.new_key, &k);
 	int streamSize = 0;
-	char streamBuf[4096];
+	char streamBuf[8192];
 
 	transfer_session_key trans_key;
 	tea_key(&trans_key.new_key);
@@ -819,7 +816,7 @@ int LoginApollo::relogin(void *token_info, int sendMsgID, int waitMsgID, bool bN
 	trans_key.size = saveSession->session_size;
 
 	streamSize = trans_key.toBuf(streamBuf, sizeof(streamBuf));
-	nd_logdebug("send relogin data len =%d udid=%s\n", streamSize, trans_key.udid);
+	//nd_logdebug("send relogin data len =%d udid=%s\n", streamSize, trans_key.udid);
 
 	//size_t org_size = sizeof(transfer_session_key) - sizeof(trans_key.session_buf) + trans_key.size ;
 	
@@ -996,7 +993,7 @@ int LoginApollo::onLogin(NDIStreamMsg &inmsg)
 int LoginApollo::TrytoGetCryptKey()
 {
 	if (!nd_connector_check_crypt(m_conn)) {
-		int ret = nd_exchange_key((netObject)m_conn, (void*)&m_srv_key);
+		int ret = nd_exchange_key((netObject)m_conn, (void*)m_srv_key);
 		if (-1 == ret) {
 			nd_logerror("exchange key error %s\n", ndGetLastErrorDesc(m_conn));
 		}
@@ -1077,9 +1074,11 @@ int stream_to_session(char *stream_buf, size_t buf_size, login_session_load *s_b
 	char md5[16], calcmd5[16];
 	int size = 0;
 
-#define READ_FROMFILE(_buf, _buf_size) do { \
-			memcpy(_buf, p, _buf_size) ; \
-			p+=_buf_size ;				\
+#define READ_FROMFILE(_buf, _read_len) do { \
+			if(_read_len > buf_size ) { nd_logerror(" read len bigger than buff-len\n"); return -1;} \
+			memcpy(_buf, p, _read_len) ; \
+			p+=_read_len ;				\
+			buf_size -= _read_len ;		\
 		}while(0)
 
 	//read md5
@@ -1105,7 +1104,7 @@ int stream_to_session(char *stream_buf, size_t buf_size, login_session_load *s_b
 	}
 
 	//read public_key
-	char buf[4096];
+	char buf[8192];
 	READ_FROMFILE(s_buf->keymd5, sizeof(s_buf->keymd5));
 
 	//read session_info	
@@ -1170,7 +1169,7 @@ int save_session_info(R_RSA_PUBLIC_KEY *key, login_token_info *session_info , co
 #endif
 	
 
-	FILE *pf = fopen(file_name, "w" ) ;
+	FILE *pf = fopen(file_name, "wb" ) ;
 	if (!pf) {
 		nd_logerror("open file %s error:%s \n", file_name, nd_last_error());
 		return -1 ;
@@ -1211,7 +1210,7 @@ int load_session_info(login_session_load *s_buf, const char * file_name)
 {
 	char md5[16],calcmd5[16] ;
 	int size = 0;
-	FILE *pf = fopen(file_name, "r" ) ;
+	FILE *pf = fopen(file_name, "rb" ) ;
 	if (!pf) {
 		nd_logerror("open file %s error: %s\n", file_name, nd_last_error());
 		return -1 ;

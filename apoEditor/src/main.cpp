@@ -60,6 +60,7 @@ int test_time1()
 	return 0;
 }
 
+
 int runDevelopTool(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
@@ -113,10 +114,10 @@ int runGm(int argc, char *argv[])
 
 	ConnectDialog dlg;
 
-	_LOAD_XML(editorSetting, "../../cfg/editor_setting.xml", "utf8", 0);
+	_LOAD_XML(editorSetting, CONFIG_FILE_PATH, "utf8", 0);
 	_LOAD_XML(xmlSend, "../../cfg/gm_msg.xml", "utf8", 0);
 	
-	LogicEngineRoot::setSettingFile("../../cfg/editor_setting.xml");
+	LogicEngineRoot::setSettingFile(CONFIG_FILE_PATH);
 
 	dlg.m_editor_setting = &editorSetting;
 	dlg.m_gmCfg = &xmlSend;

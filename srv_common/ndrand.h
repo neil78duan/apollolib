@@ -16,6 +16,7 @@
 
 #define SAMPLE_TOTAL_TIMES 100
 
+// return rand [min, max]
 template<class T>
 T ndrand_range(T lowlimit, T hilimit)
 {
@@ -27,7 +28,7 @@ T ndrand_range(T lowlimit, T hilimit)
 	else if (lowlimit == hilimit) {
 		return lowlimit;
 	}
-	return (T)((double)rand() / ((double)RAND_MAX) * (hilimit - lowlimit) + lowlimit);
+	return (T)((double)rand() / ((double)RAND_MAX) * (hilimit - lowlimit + 1) + lowlimit);
 }
 
 static inline int RandRange2(int range[2])
