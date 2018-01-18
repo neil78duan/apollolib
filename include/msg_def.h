@@ -120,6 +120,7 @@ enum ATLANTIS_SERVER_MSG {
 
 	SERVER_MSG_REPUSH_ROLES_REQ,			//WORLD reuqest game repush its roles
 	SERVER_MSG_REPUSH_ROLE_TO_MANAGER,		//repush role data from gameserver to world
+	SERVER_MSG_FRESH_LEVEL_DATA,
 
 	SERVER_MSG_NUMBER
 };

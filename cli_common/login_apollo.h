@@ -27,6 +27,12 @@
 // };
 typedef host_list_node ApolloServerInfo;
 
+
+struct rsa_key_from_srv{
+	char keymd5[16];
+	R_RSA_PUBLIC_KEY pub_key;
+};
+
 struct login_session_load{
 	NDUINT32 acc_index ;
 	NDUINT32 session_size ;
@@ -34,6 +40,7 @@ struct login_session_load{
 
 	char keymd5[16] ;
 	R_RSA_PUBLIC_KEY srv_key;
+	char reserved[16];
 };
 
 #ifdef BUILD_AS_THIRD_PARTY
@@ -170,7 +177,7 @@ protected:
 //		char keymd5[16] ;
 //		R_RSA_PUBLIC_KEY pub_key ;
 //	} m_srv_key  ;
-	char m_srv_key[4096] ;
+	char m_srv_key[sizeof(rsa_key_from_srv) + 1024];
 };
 
 
