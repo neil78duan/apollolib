@@ -435,10 +435,10 @@
 			<msgid kinds="hide" maxId="13" minId="18">0</msgid>
 		</message>
 	</filter>
-	<filter name="个人消息" delete="no" displayChildren="no" expand_stat="0">
+	<filter name="个人消息" delete="no" displayChildren="no" expand_stat="1">
 		<message name="付费" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="19" minId="0">0</msgid>
-			<data name="类型" kinds="numeral" param="3">5</data>
+			<data name="类型" kinds="numeral" param="3">3</data>
 			<data name="值" kinds="numeral" param="0">1</data>
 			<data name="值" kinds="numeral" param="0">0</data>
 		</message>
@@ -855,7 +855,7 @@
 		</message>
 		<message name="GM_通过名字获得ID" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="18">0</msgid>
-			<data name="玩家名字" kinds="string" param="2" desc="name">ddtest2</data>
+			<data name="玩家名字" kinds="string" param="2" desc="name">ddtest3</data>
 		</message>
 		<message name="GM_查询其他玩家设置" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="21">0</msgid>
@@ -957,7 +957,11 @@
 		</message>
 		<message name="sys_push_function_toclient" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="0" minId="34">0</msgid>
+<<<<<<< HEAD
 			<data name="RecvRoleId" kinds="numeral" param="0">16</data>
+=======
+			<data name="RecvRoleId" kinds="numeral" param="0">3</data>
+>>>>>>> b14b71c17a8aa7e9165b065cdce03e9e3aeaf693
 			<data name="maxMsgId" kinds="numeral" param="4">0</data>
 			<data name="minMsgId" kinds="numeral" param="4">40</data>
 			<data name="OrderByte" kinds="enum" enum_value="bigEnd,littleEnd" param="3">1</data>
@@ -971,7 +975,7 @@
 		</message>
 		<message name="sys_resend_to_client" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="0" minId="36">0</msgid>
-			<data name="RecvRoleId" kinds="numeral" param="0">16</data>
+			<data name="RecvRoleId" kinds="numeral" param="0">3</data>
 			<data name="maxMsgId" kinds="numeral" param="4">0</data>
 			<data name="minMsgId" kinds="numeral" param="4">40</data>
 		</message>

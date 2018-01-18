@@ -271,5 +271,6 @@ ErrorElement(ESERVER_ERR_NATION_ATTACK_MOVE_ERROR, "玩家已经迁走或者被�
 ErrorElement(ESERVER_ERR_NAME_TOO_LONG, "字符太长"),
 ErrorElement(ESERVER_ERR_TEAM_IN_COMMON, "该名成员已经加入该队伍了"),
 ErrorElement(ESERVER_ERR_NO_AIM_SUPER_PVP, "没找到目标"),
+ErrorElement(ESERVER_ERR_HERO_LEVEL_MAX, "英雄等级已满"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),
