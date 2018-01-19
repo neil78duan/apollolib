@@ -63,6 +63,8 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_pushButtonGetPingVal_clicked();
+
 private:
 	void saveHost(const QString &hostName);
 	void InitHostList();

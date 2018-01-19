@@ -579,7 +579,7 @@ namespace ClientMsgHandler
 		if (bodySize){
 			if (LogicEngineRoot::get_Instant()->addGlobalFunction(byteOrder, (char*)name, buf, bodySize)) {				
 				if (0 == nd_msgentry_script_install(pconn->GetHandle(), (char*)name, (ndmsgid_t)maxId, (ndmsgid_t)minId, 0)) {
-					nd_logdebug("add function %s success for (%d, %d) success \n", name, maxId, minId);
+					//nd_logdebug("add function %s success for (%d, %d) success \n", name, maxId, minId);
 				}
 			}
 		}
@@ -702,6 +702,20 @@ namespace ClientMsgHandler
 		buf[0] = 0;
 		if (inmsg.Read((NDUINT8*)buf, sizeof(buf))){
 			nd_logmsg("BROAD-CASE: %s\n", buf);
+		}
+		return 0;
+	}
+
+	int msg_show_echo_time(NDIConn* pconn, nd_usermsgbuf_t *msg)
+	{
+		NDIStreamMsg inmsg(msg);
+		NDUINT32 now = nd_time();
+		NDUINT32 sendtm = 0;
+		if (inmsg.Read(sendtm) == 0){
+			nd_logmsg("PING VALUE = %d (ms)\n", (now - sendtm) / 2);
+		}
+		else {
+			nd_logmsg("not Ping message \n");
 		}
 		return 0;
 	}

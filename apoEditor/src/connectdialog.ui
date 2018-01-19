@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>560</width>
-    <height>571</height>
+    <height>582</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -209,7 +209,7 @@
      <rect>
       <x>410</x>
       <y>160</y>
-      <width>81</width>
+      <width>71</width>
       <height>16</height>
      </rect>
     </property>
@@ -489,6 +489,19 @@
    </property>
    <property name="text">
     <string>Clear</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButtonGetPingVal">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>540</y>
+     <width>101</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Get Ping value</string>
    </property>
   </widget>
  </widget>
