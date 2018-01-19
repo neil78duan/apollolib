@@ -872,3 +872,16 @@ void ConnectDialog::on_pushButton_2_clicked()
 {
     ClearLog();
 }
+
+
+
+void ConnectDialog::on_pushButtonGetPingVal_clicked()
+{
+	if (m_pConn && m_pConn->CheckValid()){
+		m_pConn->InstallMsgFunc(ClientMsgHandler::msg_show_echo_time, ND_MAIN_ID_SYS, ND_MSG_SYS_ECHO);
+		NDOStreamMsg omsg(ND_MAIN_ID_SYS, ND_MSG_SYS_ECHO);
+		ndtime_t now = nd_time();
+		omsg.Write((NDUINT32)now);
+		m_pConn->SendMsg(omsg);
+	}
+}

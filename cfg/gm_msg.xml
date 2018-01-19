@@ -436,6 +436,7 @@
 		</message>
 	</filter>
 	<filter name="个人消息" delete="no" displayChildren="no" expand_stat="1">
+
 		<message name="改名" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="3" minId="2">0</msgid>
 			<data name="名字" kinds="string" param="2">1</data>
@@ -817,8 +818,13 @@
 		</message>
 		<message name="GM_增加属性" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="8">0</msgid>
+<<<<<<< HEAD
 			<data name="编号" kinds="numeral" param="2">Steel</data>
 			<data name="属性增加值" kinds="numeral" param="1">1000000000</data>
+=======
+			<data name="编号" kinds="numeral" param="2">crystal</data>
+			<data name="属性增加值" kinds="numeral" param="1">1000000</data>
+>>>>>>> 964bbe7255f5d2004e0dfd172825083e15011fb4
 		</message>
 		<message name="GM_发送系统公告" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="10">0</msgid>

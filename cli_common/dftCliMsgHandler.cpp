@@ -579,7 +579,7 @@ namespace ClientMsgHandler
 		if (bodySize){
 			if (LogicEngineRoot::get_Instant()->addGlobalFunction(byteOrder, (char*)name, buf, bodySize)) {				
 				if (0 == nd_msgentry_script_install(pconn->GetHandle(), (char*)name, (ndmsgid_t)maxId, (ndmsgid_t)minId, 0)) {
-					nd_logdebug("add function %s success for (%d, %d) success \n", name, maxId, minId);
+					//nd_logdebug("add function %s success for (%d, %d) success \n", name, maxId, minId);
 				}
 			}
 		}
