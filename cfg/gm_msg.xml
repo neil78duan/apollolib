@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <type_data_type name="数据类型" kinds="hide" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,文件"/>
 <send_msg_list name="发送消息" delete="no" expand_stat="1" displayChildren="no">
-	<filter name="国战消息" delete="no" displayChildren="no" expand_stat="0">
+	<filter name="国战消息" delete="no" displayChildren="no" expand_stat="1">
 		<message name="请求查看封地信息" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="15" minId="59">0</msgid>
 		</message>
@@ -21,7 +21,7 @@
 		</message>
 		<message name="查看玩家" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="15" minId="13">0</msgid>
-			<data name="玩家ID" kinds="numeral" param="0">6</data>
+			<data name="玩家ID" kinds="numeral" param="0">8</data>
 		</message>
 		<message name="查看国家状态" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="15" minId="2">0</msgid>
@@ -154,7 +154,7 @@
 			</message>
 		</filter>
 	</filter>
-	<filter name="联盟消息" delete="no" displayChildren="no" expand_stat="0">
+	<filter name="联盟消息" delete="no" displayChildren="no" expand_stat="1">
 		<message name="查看工会" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="9" minId="0">0</msgid>
 		</message>
@@ -224,7 +224,7 @@
 			<data name="nowlevel" kinds="numeral" param="3">1</data>
 		</message>
 	</filter>
-	<filter name="合作boss消息" delete="no" displayChildren="no" expand_stat="0">
+	<filter name="合作boss消息" delete="no" displayChildren="no" expand_stat="1">
 		<message name="查看boss房间列表" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="16" minId="7">0</msgid>
 			<data name="mapid" kinds="numeral" param="4">901</data>
@@ -248,7 +248,7 @@
 		</message>
 		<message name="boss开始战斗" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="16" minId="20">0</msgid>
-			<data name="teamId" kinds="numeral" param="0">1</data>
+			<data name="teamId" kinds="numeral" param="0">3</data>
 		</message>
 		<message name="boss战斗结束" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="16" minId="21">0</msgid>
@@ -436,9 +436,13 @@
 		</message>
 	</filter>
 	<filter name="个人消息" delete="no" displayChildren="no" expand_stat="1">
+		<message name="改名" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="3" minId="2">0</msgid>
+			<data name="名字" kinds="string" param="2">1</data>
+		</message>
 		<message name="付费" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="19" minId="0">0</msgid>
-			<data name="类型" kinds="numeral" param="3">3</data>
+			<data name="类型" kinds="numeral" param="3">5</data>
 			<data name="值" kinds="numeral" param="0">1</data>
 			<data name="值" kinds="numeral" param="0">0</data>
 		</message>
@@ -730,7 +734,7 @@
 		<message name="GM设置国家等级" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="51">0</msgid>
 			<data name="nationId" kinds="numeral" param="3">1</data>
-			<data name="num" kinds="numeral" param="0">1</data>
+			<data name="num" kinds="numeral" param="0">4</data>
 		</message>
 		<message name="GM增加国家经验" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="47">0</msgid>
@@ -752,7 +756,7 @@
 		</message>
 		<message name="GM设置个人行动力" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="43">0</msgid>
-			<data name="num" kinds="numeral" param="0">100000</data>
+			<data name="num" kinds="numeral" param="0">120</data>
 		</message>
 		<message name="GM增加公会声望" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="38">0</msgid>
@@ -787,12 +791,12 @@
 		</message>
 		<message name="GM_改等级" expand="yes" delete="no">
 			<msgid kinds="hide">1796</msgid>
-			<data name="新等级" kinds="numeral" param="0">10</data>
+			<data name="新等级" kinds="numeral" param="0">100</data>
 		</message>
 		<message name="GM_加物品" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="6">0</msgid>
-			<data name="物品编号" kinds="numeral" param="0">30221</data>
-			<data name="数量" kinds="numeral" param="0">80</data>
+			<data name="物品编号" kinds="numeral" param="0">42051</data>
+			<data name="数量" kinds="numeral" param="0">10000</data>
 		</message>
 		<message name="GM_增加卡牌" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="7">0</msgid>
@@ -813,8 +817,8 @@
 		</message>
 		<message name="GM_增加属性" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="8">0</msgid>
-			<data name="编号" kinds="numeral" param="2">crystal</data>
-			<data name="属性增加值" kinds="numeral" param="1">100000</data>
+			<data name="编号" kinds="numeral" param="2">Steel</data>
+			<data name="属性增加值" kinds="numeral" param="1">1000000000</data>
 		</message>
 		<message name="GM_发送系统公告" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="10">0</msgid>
@@ -855,7 +859,7 @@
 		</message>
 		<message name="GM_通过名字获得ID" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="18">0</msgid>
-			<data name="玩家名字" kinds="string" param="2" desc="name">ddtest3</data>
+			<data name="玩家名字" kinds="string" param="2" desc="name">ddtest2</data>
 		</message>
 		<message name="GM_查询其他玩家设置" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="21">0</msgid>
@@ -875,7 +879,7 @@
 			<msgid kinds="hide" maxId="7" minId="36">0</msgid>
 		</message>
 	</filter>
-	<filter name="system_系统消息" delete="no" displayChildren="no" expand_stat="0">
+	<filter name="system_系统消息" delete="no" displayChildren="no" expand_stat="1">
 		<message name="sys_修改SOCIAL服务器时间" expand="yes" delete="no" need_confirm="yes">
 			<msgid kinds="hide" maxId="7" minId="31">0</msgid>
 			<data name="加快小时" kinds="numeral" param="0">16</data>
@@ -937,7 +941,7 @@
 		</message>
 		<message name="sys_打开特定类型日志" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="0" minId="28">0</msgid>
-			<data name="日志类型" kinds="key_value" key="普通日志,调试,警告,错误,致命" value="0,1,2,3,4" param="3">1</data>
+			<data name="日志类型" kinds="key_value" key="普通日志,调试,警告,错误,致命" value="0,1,2,3,4" param="3">0</data>
 			<data name="打开" kinds="bool" param="3">1</data>
 		</message>
 		<message name="sys_install_function" expand="yes" delete="no">
@@ -957,11 +961,7 @@
 		</message>
 		<message name="sys_push_function_toclient" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="0" minId="34">0</msgid>
-<<<<<<< HEAD
-			<data name="RecvRoleId" kinds="numeral" param="0">16</data>
-=======
-			<data name="RecvRoleId" kinds="numeral" param="0">3</data>
->>>>>>> b14b71c17a8aa7e9165b065cdce03e9e3aeaf693
+			<data name="RecvRoleId" kinds="numeral" param="0">1</data>
 			<data name="maxMsgId" kinds="numeral" param="4">0</data>
 			<data name="minMsgId" kinds="numeral" param="4">40</data>
 			<data name="OrderByte" kinds="enum" enum_value="bigEnd,littleEnd" param="3">1</data>
@@ -975,7 +975,7 @@
 		</message>
 		<message name="sys_resend_to_client" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="0" minId="36">0</msgid>
-			<data name="RecvRoleId" kinds="numeral" param="0">3</data>
+			<data name="RecvRoleId" kinds="numeral" param="0">1</data>
 			<data name="maxMsgId" kinds="numeral" param="4">0</data>
 			<data name="minMsgId" kinds="numeral" param="4">40</data>
 		</message>

@@ -34,6 +34,7 @@ int apollo_cli_msg_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t
 	int msg_show_server_time_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
 	int msg_show_game_time_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
 	int msg_broadcast_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
+	int msg_show_echo_time(NDIConn* pconn, nd_usermsgbuf_t *msg);
 
 	
 

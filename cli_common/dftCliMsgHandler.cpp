@@ -706,6 +706,20 @@ namespace ClientMsgHandler
 		return 0;
 	}
 
+	int msg_show_echo_time(NDIConn* pconn, nd_usermsgbuf_t *msg)
+	{
+		NDIStreamMsg inmsg(msg);
+		NDUINT32 now = nd_time();
+		NDUINT32 sendtm = 0;
+		if (inmsg.Read(sendtm) == 0){
+			nd_logmsg("PING VALUE = %d (ms)\n", (now - sendtm) / 2);
+		}
+		else {
+			nd_logmsg("not Ping message \n");
+		}
+		return 0;
+	}
+
 	int msg_chat_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
 	{
 		NDIStreamMsg inmsg(msg);
