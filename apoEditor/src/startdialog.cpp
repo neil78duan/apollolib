@@ -523,6 +523,11 @@ void startDialog::on_Connect_clicked()
 
     dlg.exec();
 
+	ndxml *msgRoot = ndxml_getnode(&xmlSend, "send_msg_list");
+	if (msgRoot){
+		ndxml_delnode(msgRoot, "history");
+	}
+
     ndxml_save_encode(&xmlSend, filename, E_SRC_CODE_UTF_8, E_SRC_CODE_UTF_8);
     ndxml_destroy(&xmlSend) ;
 
