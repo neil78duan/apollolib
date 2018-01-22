@@ -575,7 +575,7 @@ LocalDebugger::LocalDebugger(LogicParserEngine *parser, LogicObjectBase *owner) 
 	m_RunningSem = NULL;
 	m_cliSem = NULL;
 	m_cmdSem = NULL;
-	m_thHost = NULL;
+	m_thHost = 0;
 
 	memset(&m_outPutMem, 0, sizeof(m_outPutMem));
 

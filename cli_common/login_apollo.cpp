@@ -709,7 +709,7 @@ int LoginApollo::jumptoGame(NDUINT64 serverid)
 	if(0!=nd_reconnect(m_conn, HOST_ID_GET_IP(serverid), HOST_ID_GET_PORT(serverid), NULL)  ) {
 		nd_object_seterror(m_conn, NDSYS_ERR_HOST_UNAVAILABLE) ;
 		
-		nd_logerror("re-connect to %s : %d error\n",nd_inet_ntoa( HOST_ID_GET_IP(serverid),buf), HOST_ID_GET_PORT(serverid));
+		nd_logerror("re-connect to %s : %d error\n",nd_inet_ntoa( HOST_ID_GET_IP(serverid),buf),(int) HOST_ID_GET_PORT(serverid));
 		return -1;
 	}
 	memcpy(buf, &m_sessionID, sizeof(m_sessionID)) ;

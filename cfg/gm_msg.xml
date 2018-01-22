@@ -859,7 +859,7 @@
 		</message>
 		<message name="GM_通过名字获得ID" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="18">0</msgid>
-			<data name="玩家名字" kinds="string" param="2" desc="name">ddtest2</data>
+			<data name="玩家名字" kinds="string" param="2" desc="name">ddtest7</data>
 		</message>
 		<message name="GM_查询其他玩家设置" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="21">0</msgid>
@@ -961,7 +961,7 @@
 		</message>
 		<message name="sys_push_function_toclient" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="0" minId="34">0</msgid>
-			<data name="RecvRoleId" kinds="numeral" param="0">1</data>
+			<data name="RecvRoleId" kinds="numeral" param="0">32</data>
 			<data name="maxMsgId" kinds="numeral" param="4">0</data>
 			<data name="minMsgId" kinds="numeral" param="4">40</data>
 			<data name="OrderByte" kinds="enum" enum_value="bigEnd,littleEnd" param="3">1</data>
@@ -975,7 +975,7 @@
 		</message>
 		<message name="sys_resend_to_client" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="0" minId="36">0</msgid>
-			<data name="RecvRoleId" kinds="numeral" param="0">1</data>
+			<data name="RecvRoleId" kinds="numeral" param="0">32</data>
 			<data name="maxMsgId" kinds="numeral" param="4">0</data>
 			<data name="minMsgId" kinds="numeral" param="4">40</data>
 		</message>
