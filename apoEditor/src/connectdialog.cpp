@@ -173,6 +173,9 @@ ConnectDialog::ConnectDialog(QWidget *parent) :
 	QString tmoutText;
 	tmoutText.sprintf("%d", WAITMSG_TIMEOUT/1000);
 	ui->timeOutEdit->setText(tmoutText);
+
+	//load send message history
+	getSendMsgHistory(m_msgHistory);
 }
 
 ConnectDialog::~ConnectDialog()
@@ -202,6 +205,9 @@ ConnectDialog::~ConnectDialog()
     DeinitNet();
 
     //ndxml_destroy(&m_message_define);
+	if (m_msgHistory.size()){
+		saveSendMsgHistory(m_msgHistory);
+	}
 }
 
 void ConnectDialog::saveHost(const QString &hostName)
@@ -254,6 +260,120 @@ void ConnectDialog::InitHostList()
 	settings.endArray();
 }
 
+void ConnectDialog::saveCurrentSendMsg(const QString &msgName)
+{
+	for (MsgHistoryVct_t::iterator it = m_msgHistory.begin(); it != m_msgHistory.end(); ++it) {
+		if ((*it) == msgName ){
+			m_msgHistory.erase(it);
+			break; 
+		}
+	}
+	m_msgHistory.push_back(msgName);
+	if (m_msgHistory.size() > 10){
+		m_msgHistory.erase(m_msgHistory.begin());
+	}
+}
+
+void ConnectDialog::getSendMsgHistory(MsgHistoryVct_t &historyList)
+{
+	QSettings settings("duanxiuyun", "ApolloEditor");
+	
+	int size = settings.beginReadArray("MessageHistory");
+	if (size == 0) {
+		settings.endArray();
+		return;
+	}
+
+	for (int i = 0; i < size; ++i) {
+		settings.setArrayIndex(i);
+		QString msgName = settings.value("MsgName").toString();
+		historyList.push_back(msgName);
+	}
+	settings.endArray();
+}
+
+void ConnectDialog::saveSendMsgHistory(MsgHistoryVct_t &historyList)
+{
+	QSettings settings("duanxiuyun", "ApolloEditor");
+	settings.remove("MessageHistory");
+
+	int size = 0;
+	settings.beginWriteArray("MessageHistory");
+	for (MsgHistoryVct_t::iterator it = historyList.begin(); it != historyList.end(); ++it) {
+		settings.setArrayIndex(size++);
+		settings.setValue("MsgName", *it);
+	}
+	settings.endArray();
+
+}
+
+static bool inMsgHistory(ConnectDialog::MsgHistoryVct_t &msgNameHistory,const char *name)
+{
+	ConnectDialog::MsgHistoryVct_t::iterator it = msgNameHistory.begin();
+	for (; it != msgNameHistory.end(); ++it) {
+		if ((*it) == name)	{
+			return true;
+		}
+	}
+	return false;
+}
+
+static ndxml*_searByname(ConnectDialog::XmlVct_t &xmlRes, const char *name)
+{
+	ConnectDialog::XmlVct_t::iterator it = xmlRes.begin();
+	for (; it != xmlRes.end(); ++it) {
+		const char *xmlName = ndxml_getattr_val((*it), "name");
+		if (xmlName && 0== ndstricmp(name,xmlName) )	{
+			return *it;
+		}
+	}
+	return NULL;
+}
+
+static bool _getSendHistoryXml(ndxml *xmlRoot, ConnectDialog::MsgHistoryVct_t &msgNameHistory, ConnectDialog::XmlVct_t &xmlRes)
+{
+	int count = ndxml_getsub_num(xmlRoot);
+	for (int i = 0; i < count; i++)	{
+		ndxml *sub = ndxml_getnodei(xmlRoot, i);
+		nd_assert(sub);
+		if (0 == ndstricmp(ndxml_getname(sub), "message") && ndxml_getnode(sub, "msgid")) {
+			const char *name = ndxml_getattr_val(sub, "name");
+			if (name && inMsgHistory(msgNameHistory, name) ){
+				xmlRes.push_back(sub);
+			}
+		}
+		else {
+			_getSendHistoryXml(sub, msgNameHistory, xmlRes);
+		}
+	}
+	return true;
+}
+void ConnectDialog::getHistoryNodes(XmlVct_t &xmlHistory)
+{
+	ndxml *msgRoot = ndxml_getnode(m_gmCfg, "send_msg_list");
+	
+	nd_assert(msgRoot);
+
+	XmlVct_t xmlBufs;
+	_getSendHistoryXml(msgRoot, m_msgHistory, xmlBufs);
+
+	if (xmlBufs.size() == 0)	{
+		return;
+	}
+
+	for (size_t i = 0; i < m_msgHistory.size(); i++){
+		std::string  strName = m_msgHistory[i].toStdString();
+		ndxml *node = _searByname(xmlBufs, strName.c_str());
+		if (node){
+			node = ndxml_copy(node);
+			if (node){
+				xmlHistory.push_back(node);
+			}
+		}
+
+	}
+	
+}
 
 void ConnectDialog::onTimeOut()
 {
@@ -717,6 +837,7 @@ static bool _sendMsgByXml(ndxml *xml, ConnectDialog *dlg)
 			msgid = ndxml_getval_int(msgXML);
 		}
 	}
+	const char *msgName = ndxml_getattr_val(xml, "name");
 
 	NDOStreamMsg omsg(msgid);
 	for (int i = 1; i < ndxml_num(xml); ++i){
@@ -780,6 +901,7 @@ static bool _sendMsgByXml(ndxml *xml, ConnectDialog *dlg)
 	NDIConn *pconn = dlg->getConnect();
 	if (pconn)	{
 		pconn->SendMsg(omsg);
+		dlg->saveCurrentSendMsg(QString(msgName));
 	}
 	else{
 		QMessageBox::warning(NULL, "Error", "Need login!", QMessageBox::Ok);
@@ -833,6 +955,25 @@ static bool gmdlgSend(QDialog *curDlg)
 void ConnectDialog::on_gmMsgButton_clicked()
 {
     //dialogCloseHelper _helperClose(this) ;
+	XmlVct_t xmlHistoryVct;
+	getHistoryNodes(xmlHistoryVct);
+
+	if (xmlHistoryVct.size()){
+		ndxml *msgRoot = ndxml_getnode(m_gmCfg, "send_msg_list");
+		nd_assert(msgRoot);
+		ndxml_delnode(msgRoot, "history");
+		ndxml *hostroyNode = ndxml_addnode(msgRoot, "history", NULL);
+		ndxml_addattrib(hostroyNode, "name", "History");
+		ndxml_addattrib(hostroyNode, "expand_stat", "1");
+
+		ndxml_remove(hostroyNode,msgRoot);
+
+		ndxml_insert_after(msgRoot, hostroyNode, msgRoot);
+
+		for (size_t i = 0; i < xmlHistoryVct.size(); i++)	{
+			ndxml_insert(hostroyNode, xmlHistoryVct[i]);
+		}
+	}
 
     XMLDialog xmlDlg(this);
     xmlDlg.showXml( m_gmCfg,"Message");

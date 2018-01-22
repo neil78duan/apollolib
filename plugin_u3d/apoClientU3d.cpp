@@ -12,91 +12,14 @@
 //#include "netMessage/message_inc.h"
 #include "logic_parser/script_event_id.h"
 
-//#include "RoleDataManager.h"
-//#include "NotificationKeyDefine.h"
-//#include "BuildingInfoInheritsRef.h"
-//
-//static void ndnetLog(const char *text)
-//{
-//	//cocos2d::log("%s", text);
-//}
-//
-//static int apoPrintf(void *pf, const char *stm, ...)
-//{
-//	char buf[1024 * 4];
-//	char *p = buf;
-//	va_list arg;
-//	int done;
-//
-//	va_start(arg, stm);
-//	done = vsnprintf(p, sizeof(buf), stm, arg);
-//	va_end(arg);
-//
-//	return  fprintf((FILE*)pf, "%s", buf);
-//	//cocos2d::log("%s",buf);
-//	//return done;
-//}
-//load ios file 
-// 
-// static bool apollo_load_file_data_cocos(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
-// {
-// 	//CHECK_ARGS_NUM(args, 2, parser);
-// 
-// 	size_t size = 0;
-// 	const char *fileName = args[1].GetText();
-// 	if (!fileName || !*fileName) {
-// 		nd_logmsg("input file name error\n");
-// 		return false;
-// 	}
-// 	std::string mypath;
-// 	
-// 	if (nd_existfile(fileName)) {
-// 		mypath = fileName;
-// 	}
-// 	else {
-// 		mypath = cocos2d::FileUtils::getInstance()->fullPathForFilename(fileName);
-// 		if (mypath.empty()) {
-// 			DBLDataNode val1;
-// 			if (parser->getOwner()->getOtherObject("WritablePath", val1)) {
-// 				char pathbuf[ND_FILE_PATH_SIZE];
-// 				mypath = val1.GetText();
-// 				nd_full_path(mypath.c_str(), fileName, pathbuf, sizeof(pathbuf));
-// 				mypath = pathbuf;
-// 			}
-// 		}
-// 
-// 		if (!nd_existfile(mypath.c_str())) {
-// 			nd_logmsg("cant not found file %s\n", fileName);
-// 			return false;
-// 		}
-// 	}
-// 	
-// 
-// 	void *pdata = nd_load_file(mypath.c_str(), &size);
-// 	if (!pdata) {
-// 		nd_logmsg("file %s not open\n", fileName);
-// 		return false;
-// 	}
-// 	result.InitSet(pdata, size, OT_BINARY_DATA);
-// 	nd_unload_file(pdata);
-// 	return true;
-// }
-
 
 static void myInitAccCreateInfo(account_base_info &acc, int accType, const char *userName, const char *passwd)
 {
 	acc.type = accType;
 	acc.isAdult = 0;
-// 	acc.gender = 0; //default F
-// 	acc.birth_day = 8;
-// 	acc.birth_month = 8;
-// 	acc.birth_year = 1988;
-	//acc.serverGroupId = serverGroupId;
 	strncpy((char*)acc.acc_name, userName, sizeof(acc.acc_name));
 	strncpy((char*)acc.nick, userName, sizeof(acc.nick));
 	strncpy((char*)acc.passwd, passwd, sizeof(acc.passwd));
-	//strncpy((char*)acc.phone, "100086", sizeof(acc.phone));
-	//strncpy((char*)acc.email, "webmaster@qq.com", sizeof(acc.email));
 
 }
 #ifndef WITHOUT_LOGIC_PARSER
@@ -164,10 +87,7 @@ public:
 		return NULL;
 		//return NetMessage::getMessageBody(msgId);
 	}
-// 	void setConn(nd_handle pconn)
-// 	{
-// 		m_netHandler = pconn;
-// 	}
+
 private:
 	//nd_handle m_netHandler;
 };

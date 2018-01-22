@@ -35,6 +35,7 @@ int apoCli_init(const char *workingPath, const char *logPath, const char *udid, 
 {
 	LoginApollo::SetDeviceInfo(udid, devDesc);
 	ApoClient *pInstant = ApoClient::getInstant();
+	nd_logmsg("net Initilized!\n");
 	if (pInstant) {
 #ifdef __ND_WIN__
 
@@ -53,6 +54,7 @@ int apoCli_init(const char *workingPath, const char *logPath, const char *udid, 
 void apoCli_destroy()
 {
 	ApoClient::destroyInstant();
+	nd_logmsg("net Destroyed!\n");
 }
 
 void* get_NDNetObject()
