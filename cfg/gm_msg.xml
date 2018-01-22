@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <type_data_type name="数据类型" kinds="hide" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,文件"/>
 <send_msg_list name="发送消息" delete="no" expand_stat="1" displayChildren="no">
-	<filter name="国战消息" delete="no" displayChildren="no" expand_stat="1">
+	<filter name="国战消息" delete="no" displayChildren="no" expand_stat="0">
 		<message name="请求查看封地信息" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="15" minId="59">0</msgid>
 		</message>
@@ -154,7 +154,7 @@
 			</message>
 		</filter>
 	</filter>
-	<filter name="联盟消息" delete="no" displayChildren="no" expand_stat="1">
+	<filter name="联盟消息" delete="no" displayChildren="no" expand_stat="0">
 		<message name="查看工会" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="9" minId="0">0</msgid>
 		</message>
@@ -224,7 +224,7 @@
 			<data name="nowlevel" kinds="numeral" param="3">1</data>
 		</message>
 	</filter>
-	<filter name="合作boss消息" delete="no" displayChildren="no" expand_stat="1">
+	<filter name="合作boss消息" delete="no" displayChildren="no" expand_stat="0">
 		<message name="查看boss房间列表" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="16" minId="7">0</msgid>
 			<data name="mapid" kinds="numeral" param="4">901</data>
@@ -435,8 +435,7 @@
 			<msgid kinds="hide" maxId="13" minId="18">0</msgid>
 		</message>
 	</filter>
-	<filter name="个人消息" delete="no" displayChildren="no" expand_stat="1">
-
+	<filter name="个人消息" delete="no" displayChildren="no" expand_stat="0">
 		<message name="改名" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="3" minId="2">0</msgid>
 			<data name="名字" kinds="string" param="2">1</data>
@@ -792,7 +791,7 @@
 		</message>
 		<message name="GM_改等级" expand="yes" delete="no">
 			<msgid kinds="hide">1796</msgid>
-			<data name="新等级" kinds="numeral" param="0">100</data>
+			<data name="新等级" kinds="numeral" param="0">10</data>
 		</message>
 		<message name="GM_加物品" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="6">0</msgid>
@@ -818,13 +817,8 @@
 		</message>
 		<message name="GM_增加属性" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="8">0</msgid>
-<<<<<<< HEAD
-			<data name="编号" kinds="numeral" param="2">Steel</data>
-			<data name="属性增加值" kinds="numeral" param="1">1000000000</data>
-=======
 			<data name="编号" kinds="numeral" param="2">crystal</data>
 			<data name="属性增加值" kinds="numeral" param="1">1000000</data>
->>>>>>> 964bbe7255f5d2004e0dfd172825083e15011fb4
 		</message>
 		<message name="GM_发送系统公告" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="10">0</msgid>
