@@ -13,11 +13,11 @@
 		</message>
 		<message name="申请加入国家" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="15" minId="0">0</msgid>
-			<data name="国家id" kinds="numeral" param="3">1</data>
+			<data name="国家id" kinds="numeral" param="3">2</data>
 		</message>
 		<message name="查看国家信息" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="15" minId="11">0</msgid>
-			<data name="国家ID" kinds="numeral" param="3">1</data>
+			<data name="国家ID" kinds="numeral" param="3">2</data>
 		</message>
 		<message name="查看玩家" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="15" minId="13">0</msgid>
@@ -154,7 +154,7 @@
 			</message>
 		</filter>
 	</filter>
-	<filter name="联盟消息" delete="no" displayChildren="no" expand_stat="0">
+	<filter name="联盟消息" delete="no" displayChildren="no" expand_stat="1">
 		<message name="查看工会" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="9" minId="0">0</msgid>
 		</message>
@@ -730,7 +730,10 @@
 			<data name="数量" kinds="numeral" param="0">80</data>
 		</message>
 	</filter>
-	<filter name="GM_gm消息" delete="no" displayChildren="no" expand_stat="0">
+	<filter name="GM_gm消息" delete="no" displayChildren="no" expand_stat="1">
+		<message name="GM_一键英雄建筑等级属性全满" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="54">0</msgid>
+		</message>
 		<message name="GM设置国家等级" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="51">0</msgid>
 			<data name="nationId" kinds="numeral" param="3">1</data>
@@ -756,7 +759,7 @@
 		</message>
 		<message name="GM设置个人行动力" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="43">0</msgid>
-			<data name="num" kinds="numeral" param="0">120</data>
+			<data name="num" kinds="numeral" param="0">600</data>
 		</message>
 		<message name="GM增加公会声望" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="38">0</msgid>
@@ -791,11 +794,11 @@
 		</message>
 		<message name="GM_改等级" expand="yes" delete="no">
 			<msgid kinds="hide">1796</msgid>
-			<data name="新等级" kinds="numeral" param="0">10</data>
+			<data name="新等级" kinds="numeral" param="0">30</data>
 		</message>
 		<message name="GM_加物品" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="6">0</msgid>
-			<data name="物品编号" kinds="numeral" param="0">42051</data>
+			<data name="物品编号" kinds="numeral" param="0">30000</data>
 			<data name="数量" kinds="numeral" param="0">10000</data>
 		</message>
 		<message name="GM_增加卡牌" expand="yes" delete="no">
@@ -859,7 +862,7 @@
 		</message>
 		<message name="GM_通过名字获得ID" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="18">0</msgid>
-			<data name="玩家名字" kinds="string" param="2" desc="name">ddtest7</data>
+			<data name="玩家名字" kinds="string" param="2" desc="name">ddtest2</data>
 		</message>
 		<message name="GM_查询其他玩家设置" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="21">0</msgid>
@@ -879,7 +882,7 @@
 			<msgid kinds="hide" maxId="7" minId="36">0</msgid>
 		</message>
 	</filter>
-	<filter name="system_系统消息" delete="no" displayChildren="no" expand_stat="0">
+	<filter name="system_系统消息" delete="no" displayChildren="no" expand_stat="1">
 		<message name="sys_修改SOCIAL服务器时间" expand="yes" delete="no" need_confirm="yes">
 			<msgid kinds="hide" maxId="7" minId="31">0</msgid>
 			<data name="加快小时" kinds="numeral" param="0">16</data>
@@ -961,7 +964,7 @@
 		</message>
 		<message name="sys_push_function_toclient" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="0" minId="34">0</msgid>
-			<data name="RecvRoleId" kinds="numeral" param="0">32</data>
+			<data name="RecvRoleId" kinds="numeral" param="0">1</data>
 			<data name="maxMsgId" kinds="numeral" param="4">0</data>
 			<data name="minMsgId" kinds="numeral" param="4">40</data>
 			<data name="OrderByte" kinds="enum" enum_value="bigEnd,littleEnd" param="3">1</data>
@@ -975,7 +978,7 @@
 		</message>
 		<message name="sys_resend_to_client" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="0" minId="36">0</msgid>
-			<data name="RecvRoleId" kinds="numeral" param="0">32</data>
+			<data name="RecvRoleId" kinds="numeral" param="0">1</data>
 			<data name="maxMsgId" kinds="numeral" param="4">0</data>
 			<data name="minMsgId" kinds="numeral" param="4">40</data>
 		</message>
