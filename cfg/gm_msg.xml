@@ -769,6 +769,9 @@
 			<msgid kinds="hide" maxId="7" minId="39">0</msgid>
 			<data name="num" kinds="numeral" param="0">10000</data>
 		</message>
+		<message name="GM_刷新克隆岛数据" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="55">0</msgid>
+		</message>
 		<message name="GM_国战加buff" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="40">0</msgid>
 			<data name="isCity" kinds="enum" enum_value="国家,城市" param="3">0</data>
