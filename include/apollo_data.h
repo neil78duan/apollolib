@@ -101,9 +101,9 @@ enum ACCOUNT_TYPE{
 	ACC_GOOGLE_PLAY,
 	ACC_OTHER_3_ACCID,	
 	ACC_ANYSDK,		//any sdk
+	ACC_UC,
 	
 	ACC_NUMBER ,
-	ACC_UC =255,
 	ACC_SKIP_AUTH = 0xff,
 };
 

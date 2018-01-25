@@ -112,7 +112,8 @@ RESULT_T apoCli_sendMsg(int messageId, void *messageBody, int bodySize)
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (apoCli)	{
 		if (!apoCli->IsInConnect())	{
-			return NDSYS_ERR_CLOSED;
+			nd_logerror("can not send data, MUST LOGIN \n") ;
+			return NDSYS_ERR_NEED_LOGIN;
 		}
 
 		nd_connector_send(apoCli->getConn(), &(omsg.GetMsgAddr()->msg_hdr.packet_hdr), 0);
@@ -129,12 +130,13 @@ int apoCli_recv(char *bufferFram, int bufsize, int timeOutMS)
 	}
 	nd_handle h = apoCli->getConn();
 	if (!h) {
-		nd_logerror("net client not init\n");
+		nd_logerror("can not RECV data, MUST connected\n") ;
 		return -1;
 	}
 
 	if (!apoCli->IsInConnect())	{
-		nd_object_seterror(h, NDSYS_ERR_CLOSED);
+		nd_logerror("can not RECV data, MUST LOGIN \n") ;
+		nd_object_seterror(h, NDSYS_ERR_NEED_LOGIN);
 		return -1;
 	}
 
@@ -187,12 +189,19 @@ RESULT_T apoCli_open(const char *host, int port)
 {
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (!apoCli)	{
+		
+		nd_logerror("open net, MUST INIT before open\n") ;
+		
 		return NDSYS_ERR_NOT_INIT;
 	}
 	if (!host || !*host) {
+		
+		nd_logerror("open net error aim address is NULL\n") ;
 		return NDSYS_ERR_INVALID_INPUT;
 	}
-	return apoCli->Open(host, port);
+	RESULT_T res = apoCli->Open(host, port);
+	nd_logdebug("open net %s code = %d\n", res ? "success":"error", res) ;
+	return  res ;
 }
 
 
@@ -204,6 +213,7 @@ RESULT_T apoCli_close()
 	}
 
 	apoCli->Close();
+	nd_logdebug("net closed\n");
 	return ESERVER_ERR_SUCCESS;
 }
 
@@ -228,10 +238,12 @@ int apoCli_fetchSessionKey(char *outbuf, int bufsize)
 {
 	ApoClient *apoCli = ApoClient::getInstant();
 	if (!apoCli)	{
+		nd_logerror("can not fetch session key, net connector is NULL\n") ;
 		return -1;
 	}
 	LoginBase *pLogin = apoCli->getLoginObj();
 	if (!pLogin)	{
+		nd_logerror("can not fetch session key, login manager is NULL\n") ;
 		return -1;
 	}
 	if(!outbuf || bufsize == 0) {
@@ -252,6 +264,7 @@ RESULT_T apoCli_LoginAccount(const char *account, const char *passwd, int accTyp
 	RESULT_T res = apoCli->LoginAccountOneKey(account, passwd,accType,channel,skipAuth);
 	if (res != ESERVER_ERR_SUCCESS)	{
 		apoCli->Close();
+		nd_logerror("login failed code =%d\n", res) ;
 	}
 	return res;
 }
@@ -264,6 +277,7 @@ RESULT_T apoCli_CreateAccount(const char *userName, const char *passwd,int chann
 	RESULT_T res = apoCli->CreateAccount(userName,passwd,channel);
 	if (res != ESERVER_ERR_SUCCESS)	{
 		apoCli->Close();
+		nd_logerror("account create failed code =%d\n", res) ;
 	}
 	return res;
 }
@@ -274,6 +288,8 @@ void apoCli_Logout()
 	if (apoCli)	{
 		apoCli->Logout();
 	}
+	
+	nd_logmsg("account logout\n") ;
 }
 void apoCli_ClearLoginHistory()
 {

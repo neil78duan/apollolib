@@ -29,7 +29,7 @@ int ProbSampling(int prob[], int num)
 		return -1 ;
 	}
 
-	int sampled = ndrand_range(0, sum) ;
+	int sampled = ndrand_range(0, sum-1) ;
 	int i = 0 ;
 	for( i=0; i<num; i++) {
 		if (sampled< prob[i]){
@@ -51,7 +51,7 @@ int ProbSamplingEx( int prob[],int result[], int num)
 	}
 	int ret = 0 ;
 	for(int i=0; i<num; i++) {
-		int sampled = ndrand_range(0, sum);
+		int sampled = ndrand_range(0, sum-1);
 		if (sampled< prob[i]){
 			result[ret++] = i;
 		}
