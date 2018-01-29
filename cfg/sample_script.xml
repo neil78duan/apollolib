@@ -14,7 +14,7 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">../cfg/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1516097933</LastMod>
+	<LastMod name="最后修改" kinds="hide">1516961523</LastMod>
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="38" expand_stat="1" accept_drag_in="func_node">
 	<func_node name="sample_selector" create_template="create_list1" auto_index="5" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
@@ -2673,19 +2673,18 @@
 	<func_node name="test_process_exit" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="2" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
-		<op_call_func name="节点_调用$dumpFunction(funcName,outFileName)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
-			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-			<apoEditorPos kinds="hide" x="205" y="52" offset_x="0" offset_y="0"/>
-			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_dump_function&amp;_dispname=dumpFunction(funcName,outFileName)</func_name>
+		<op_get_time name="节点_时间" expand="yes" create_label="create_internal_label">
+			<comment name="功能说明" rw_stat="read">get_time()</comment>
+			<apoEditorPos kinds="hide" x="145" y="629" offset_x="0" offset_y="0"/>
+		</op_get_time>
+		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
+			<comment name="功能说明" rw_stat="read">print(...)</comment>
+			<apoEditorPos kinds="hide" x="459" y="661" offset_x="0" offset_y="0"/>
 			<param_collect name="参数" expand="yes">
-				<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-				<var kinds="string" delete="no" restrict="type">message_my_exit</var>
+				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+				<var kinds="string" delete="no" restrict="type">$value</var>
 			</param_collect>
-			<param_collect name="参数" expand="yes">
-				<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-				<var kinds="string" delete="no" restrict="type">../../log/msg_my_exit.handle</var>
-			</param_collect>
-		</op_call_func>
+		</op_print>
 		<op_make_var name="节点_申明变量$textdata$" expand="yes" var_name="param">
 			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
 			<apoEditorPos kinds="hide" x="440" y="559" offset_x="0" offset_y="0"/>
@@ -2693,7 +2692,7 @@
 			<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
 			<var name="初始值" kinds="string" delete="no" restrict="type">$value</var>
 		</op_make_var>
-		<apoEditorPos kinds="hide" x="20" y="400" offset_x="1" offset_y="0"/>
+		<apoEditorPos kinds="hide" x="20" y="400" offset_x="11" offset_y="-42"/>
 		<unConnect kinds="hide">
 			<op_process_exit name="节点_process_exit" expand="yes">
 				<apoEditorPos kinds="hide" x="460" y="26" offset_x="0" offset_y="0"/>
@@ -2740,6 +2739,19 @@
 					</param_collect>
 				</op_call_func>
 			</steps_collection>
+			<op_call_func name="节点_调用$dumpFunction(funcName,outFileName)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
+				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+				<apoEditorPos kinds="hide" x="205" y="52" offset_x="0" offset_y="0"/>
+				<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_dump_function&amp;_dispname=dumpFunction(funcName,outFileName)</func_name>
+				<param_collect name="参数" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+					<var kinds="string" delete="no" restrict="type">message_my_exit</var>
+				</param_collect>
+				<param_collect name="参数" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+					<var kinds="string" delete="no" restrict="type">../../log/msg_my_exit.handle</var>
+				</param_collect>
+			</op_call_func>
 		</unConnect>
 	</func_node>
 </baseFunction>

@@ -971,7 +971,7 @@ void ConnectDialog::on_gmMsgButton_clicked()
 		ndxml_insert_after(msgRoot, hostroyNode, msgRoot);
 
 		for (size_t i = 0; i < xmlHistoryVct.size(); i++)	{
-			ndxml_insert(hostroyNode, xmlHistoryVct[i]);
+			ndxml_insert_after(hostroyNode, xmlHistoryVct[i], hostroyNode);
 		}
 	}
 

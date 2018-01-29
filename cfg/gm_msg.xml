@@ -154,7 +154,7 @@
 			</message>
 		</filter>
 	</filter>
-	<filter name="联盟消息" delete="no" displayChildren="no" expand_stat="1">
+	<filter name="联盟消息" delete="no" displayChildren="no" expand_stat="0">
 		<message name="查看工会" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="9" minId="0">0</msgid>
 		</message>
@@ -769,9 +769,6 @@
 			<msgid kinds="hide" maxId="7" minId="39">0</msgid>
 			<data name="num" kinds="numeral" param="0">10000</data>
 		</message>
-		<message name="GM_刷新克隆岛数据" expand="yes" delete="no">
-			<msgid kinds="hide" maxId="7" minId="55">0</msgid>
-		</message>
 		<message name="GM_国战加buff" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="40">0</msgid>
 			<data name="isCity" kinds="enum" enum_value="国家,城市" param="3">0</data>
@@ -865,7 +862,11 @@
 		</message>
 		<message name="GM_通过名字获得ID" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="18">0</msgid>
-			<data name="玩家名字" kinds="string" param="2" desc="name">ddtest2</data>
+			<data name="玩家名字" kinds="string" param="2" desc="name">fbshzb</data>
+		</message>
+		<message name="GM_查询在线用户账号" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="56">0</msgid>
+			<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">22</data>
 		</message>
 		<message name="GM_查询其他玩家设置" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="21">0</msgid>
