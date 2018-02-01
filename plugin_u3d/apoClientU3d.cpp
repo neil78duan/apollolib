@@ -599,6 +599,9 @@ RESULT_T ApoClient::_enterGame(const char *host, int port, const char *roleName,
 	}
 	role_base_info roleBaseInfo;
 	int num = m_login->GetRoleList(&roleBaseInfo,1);
+	if (-1==num){
+		return (RESULT_T)m_login->GetLastError();
+	}
 	if (num ==0){
 		if (-1 == m_login->CreateRole(roleName, roleBaseInfo)) {
 			return (RESULT_T)m_login->GetLastError();

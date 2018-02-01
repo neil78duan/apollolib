@@ -585,26 +585,44 @@ int LoginApollo::CreateRole(const char *roleName, role_base_info &roleInfo )
 int LoginApollo::GetRoleList(role_base_info role_buf[], int number, NDUINT8 isRelogin)
 {
 	//get role list
+	int resendTimes = 3;
+	int ret = 0;
 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ);
+	nd_usermsgbuf_t recv_msg;
 	omsg.Write(isRelogin);
 
-	nd_usermsgbuf_t recv_msg;
-	int ret = 0;
-
-	SEND_AND_WAIT(m_conn, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0)
+RESEND_ROLE_LIST:
+	if (0 != ndSendAndWaitMessage(m_conn, omsg.GetMsgAddr(), &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0, NET_MSG_TIMEOUT * 2)) {
+		nd_logerror("wait get-role-list-message error %dd\n", nd_object_lasterror(m_conn)); 
+		return -1;
+	}
 	else {
 		NDUINT32 roleid = 0;
-		//NDUINT32 error_code = 0;
 
 		NDIStreamMsg inmsg(&recv_msg);
 		if (0 != inmsg.Read(roleid)) {
-			return 0;
+			nd_logerror("read role id error \n");
+			return -1;
 		}
 		if (roleid == 0){
-			return ret;
+			NDUINT32 error_code = 0;
+			inmsg.Read(error_code);
+			if (error_code == NDSYS_ERR_WOULD_BLOCK){
+				if (--resendTimes > 0) {
+					goto RESEND_ROLE_LIST;
+				}
+				nd_object_seterror(m_conn, NDSYS_ERR_TIMEOUT);
+				return -1;
+			}
+			else {
+				nd_logerror("get role number = 0 \n");
+				return 0;
+			}
 		}
 		if (inmsg.Read(role_buf[ret].name, sizeof(role_buf[ret].name)) == 0) {
-			return ret;
+			nd_logerror("read role name error \n");
+			nd_object_seterror(m_conn, NDSYS_ERR_BADPACKET);
+			return -1;
 		}
 
 		//read attribute
