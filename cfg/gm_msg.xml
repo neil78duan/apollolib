@@ -868,6 +868,10 @@
 			<msgid kinds="hide" maxId="7" minId="56">0</msgid>
 			<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">22</data>
 		</message>
+		<message name="GM_查询在线用户账号" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="56">0</msgid>
+			<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">22</data>
+		</message>
 		<message name="GM_查询其他玩家设置" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="21">0</msgid>
 			<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">22</data>
