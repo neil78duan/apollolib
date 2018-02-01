@@ -670,7 +670,7 @@
 			<data name="邀请码" kinds="string" param="2">a027baad86754dbb9d04e15c7d385236</data>
 		</message>
 	</filter>
-	<filter name="邮件聊天消息" delete="no" displayChildren="no" expand_stat="0">
+	<filter name="邮件聊天消息" delete="no" displayChildren="no" expand_stat="1">
 		<message name="接受新邮件" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="6" minId="12">0</msgid>
 		</message>
@@ -695,10 +695,10 @@
 			<data name="国家" kinds="numeral" param="3">78</data>
 			<data name="工会名字" kinds="string" param="2">1</data>
 			<data name="玩家名字" kinds="string" param="2">1</data>
-			<data name="发送时间" kinds="numeral" param="5">78</data>
-			<data name="结束时间" kinds="numeral" param="5">78</data>
+			<data name="发送时间" kinds="numeral" param="5">0</data>
+			<data name="结束时间" kinds="numeral" param="5">0xffffffff</data>
 			<data name="循环间隔" kinds="numeral" param="4">78</data>
-			<data name="类型" kinds="numeral" param="3">0</data>
+			<data name="类型" kinds="numeral" param="3">5</data>
 			<data name="内容" kinds="string" param="2">1</data>
 		</message>
 		<message name="请求查看系统聊天消息" expand="yes" delete="no">
@@ -707,15 +707,15 @@
 		<message name="发送公告" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="16" minId="23">0</msgid>
 			<data name="发送者" kinds="numeral" param="0">0</data>
-			<data name="被发送者" kinds="numeral" param="0">78</data>
-			<data name="头像" kinds="numeral" param="0">78</data>
-			<data name="国家" kinds="numeral" param="3">78</data>
+			<data name="被发送者" kinds="numeral" param="0">0</data>
+			<data name="头像" kinds="numeral" param="0">0</data>
+			<data name="国家" kinds="numeral" param="3">0</data>
 			<data name="工会名字" kinds="string" param="2">1</data>
 			<data name="玩家名字" kinds="string" param="2">1</data>
-			<data name="发送时间" kinds="numeral" param="5">78</data>
-			<data name="结束时间" kinds="numeral" param="5">78</data>
-			<data name="循环间隔" kinds="numeral" param="4">78</data>
-			<data name="类型" kinds="numeral" param="3">0</data>
+			<data name="发送时间" kinds="numeral" param="5">0</data>
+			<data name="结束时间" kinds="numeral" param="5">0</data>
+			<data name="循环间隔" kinds="numeral" param="4">10</data>
+			<data name="类型" kinds="numeral" param="3">5</data>
 			<data name="内容" kinds="string" param="2">地方</data>
 		</message>
 	</filter>
@@ -833,7 +833,7 @@
 			<data name="领取时效" kinds="numeral" param="5">60</data>
 			<data name="标题" kinds="string" param="2">3-系统补偿</data>
 			<data name="说明" kinds="string" param="2">补偿测试</data>
-			<data name="属性个数" kinds="numeral" param="4">1</data>
+			<data name="属性个数" kinds="numeral" param="4">0</data>
 			<data name="补偿类型" kinds="key_value" key="游戏币,钻石,竞技场币,上古之魂" value="2,3,4,5" param="3">3</data>
 			<data name="补偿多少" kinds="numeral" param="1">1</data>
 			<data name="物品个数" kinds="numeral" param="4">1</data>
@@ -862,7 +862,11 @@
 		</message>
 		<message name="GM_通过名字获得ID" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="18">0</msgid>
-			<data name="玩家名字" kinds="string" param="2" desc="name">fbshzb</data>
+			<data name="玩家名字" kinds="string" param="2" desc="name">ddtest26</data>
+		</message>
+		<message name="GM_查询在线用户账号" expand="yes" delete="no">
+			<msgid kinds="hide" maxId="7" minId="56">0</msgid>
+			<data name="玩家ID" kinds="numeral" param="0" desc="玩家的ID">22</data>
 		</message>
 		<message name="GM_查询其他玩家设置" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="21">0</msgid>
