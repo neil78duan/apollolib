@@ -135,7 +135,6 @@
     <ClInclude Include="..\..\attribute\roleattr_help.h" />
     <ClInclude Include="..\..\cli_common\dftCliMsgHandler.h" />
     <ClInclude Include="..\..\cli_common\login_apollo.h" />
-    <ClInclude Include="..\..\cli_common\netui_atl.h" />
     <ClInclude Include="..\..\logic_parser\dbldata2netstream.h" />
     <ClInclude Include="..\..\logic_parser\dbl_mgr.h" />
     <ClInclude Include="..\..\logic_parser\logicDataType.h" />
@@ -216,7 +215,6 @@
     <ClCompile Include="..\..\attribute\roleattr_help.cpp" />
     <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp" />
     <ClCompile Include="..\..\cli_common\login_apollo.cpp" />
-    <ClCompile Include="..\..\cli_common\netui_atl.cpp" />
     <ClCompile Include="..\..\logic_parser\dbldata2netstream.cpp" />
     <ClCompile Include="..\..\logic_parser\dbl_mgr.cpp" />
     <ClCompile Include="..\..\logic_parser\logicDataType.cpp" />

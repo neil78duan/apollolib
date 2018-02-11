@@ -272,5 +272,7 @@ ErrorElement(ESERVER_ERR_NAME_TOO_LONG, "字符太长"),
 ErrorElement(ESERVER_ERR_TEAM_IN_COMMON, "该名成员已经加入该队伍了"),
 ErrorElement(ESERVER_ERR_NO_AIM_SUPER_PVP, "没找到目标"),
 ErrorElement(ESERVER_ERR_HERO_LEVEL_MAX, "英雄等级已满"),
+ErrorElement(ESERVER_ERR_BUILDING_NUM_LIMIT, "建造扩展已达上限"),
+ErrorElement(ESERVER_ERR_COUNTRY_GUIDE, "您已经通过该国战训练关"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

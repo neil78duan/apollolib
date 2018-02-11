@@ -128,7 +128,7 @@ APOLLO_SCRIPT_API_DEF(_sys_write_binfile, "sys_BINÐ´ÈëÎÄ¼þ(fileName, var1,var2..
 		parser->setErrno(NDERR_INVALID_INPUT);
 		return false;
 	}
-	FILE *pf = fopen(filename.c_str(), "a");
+	FILE *pf = fopen(filename.c_str(), "ab");
 	if (!pf)	{
 		parser->setErrno(NDERR_FILE_NOT_EXIST);
 		return false;
@@ -191,7 +191,7 @@ APOLLO_SCRIPT_API_DEF(_sys_open_file_stream, "sys_OpenStream(fileName)")
 		return false;
 	}
 
-	FILE *pf = fopen(filename.c_str(), "w");
+	FILE *pf = fopen(filename.c_str(), "wb");
 	if (!pf)	{
 		parser->setErrno(NDERR_FILE_NOT_EXIST);
 		return false;
@@ -203,6 +203,20 @@ APOLLO_SCRIPT_API_DEF(_sys_open_file_stream, "sys_OpenStream(fileName)")
 
 }
 
+APOLLO_SCRIPT_API_DEF(_sys_close_file_stream, "sys_CloseStream(fileStream)")
+{
+	CHECK_ARGS_NUM(args, 2, parser);
+	
+	if (args[1].GetDataType() == OT_FILE_STREAM)	{
+		FILE *pf = (FILE *)args[1].GetObject();
+		if (pf)	{
+			fclose(pf);
+		}
+	}
+
+	args[2].InitSet((int)0);
+	return true;
+}
 
 APOLLO_SCRIPT_API_DEF(_sys_get_time_zone, "sys_time_zone()")
 {
@@ -210,14 +224,6 @@ APOLLO_SCRIPT_API_DEF(_sys_get_time_zone, "sys_time_zone()")
 	return true;
 
 }
-
-APOLLO_SCRIPT_API_DEF(_sys_close_file_stream, "sys_CloseStream(fileStream)")
-{
-	CHECK_ARGS_NUM(args, 2, parser);
-	args[2].InitSet((int)0);
-	return true;
-}
-
 
 APOLLO_SCRIPT_API_DEF(_sys_binread_file_stream, "sys_BinReadStream(fileStream, readDataType)")
 {

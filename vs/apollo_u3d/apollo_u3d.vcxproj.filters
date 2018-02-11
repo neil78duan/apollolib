@@ -231,9 +231,6 @@
     <ClInclude Include="..\..\attribute\roleattr_help.h">
       <Filter>apollo\attribute</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\plugin_u3d\apoClientU3d.h">
-      <Filter>apollo</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\plugin_u3d\apoCliApi.h">
       <Filter>apollo</Filter>
     </ClInclude>
@@ -248,6 +245,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\_server_config.h">
       <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cli_common\apoClientU3d.h">
+      <Filter>apollo\login</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -479,9 +479,6 @@
     <ClCompile Include="..\..\plugin_u3d\apoCliApi.cpp">
       <Filter>apollo</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\plugin_u3d\apoClientU3d.cpp">
-      <Filter>apollo</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\plugin_u3d\apoFormula.cpp">
       <Filter>apollo</Filter>
     </ClCompile>
@@ -490,6 +487,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\ndsdk\src\ndclient\cpp_api\nd_client.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cli_common\apoClientU3d.cpp">
+      <Filter>apollo\login</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

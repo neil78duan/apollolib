@@ -10,12 +10,12 @@
 
 #include "nd_common/nd_common.h"
 #include "cli_common/login_apollo.h"
+#include "cli_common/apoClientU3d.h"
 #include "apollo_errors.h"
-#include "cli_common/netui_atl.h"
+//#include "cli_common/netui_atl.h"
 #include "ndcli/nd_api_c.h"
 #include "msg_def.h"
 
-#include "apoClientU3d.h"
 #include "apollo_errors.h"
 
 #include "apoCliApi.h"

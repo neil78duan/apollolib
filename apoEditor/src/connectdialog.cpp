@@ -9,7 +9,7 @@
 
 #include "ndlib.h"
 #include "cli_common/login_apollo.h"
-#include "cli_common/netui_atl.h"
+//#include "cli_common/netui_atl.h"
 //#include "cli_common/gameMessage.h"
 #include "cli_common/login_apollo.h"
 #include "cli_common/dftCliMsgHandler.h"
@@ -673,7 +673,7 @@ int ConnectDialog::_login(const char *user, const char *passwd,bool skipAuth)
     if (-1==ret) {
         if (m_login->GetLastError() == NDSYS_ERR_NOUSER && !skipAuth) {
             account_base_info acc;
-            initAccCreateInfo(acc, ACC_APOLLO, user, passwd);
+            myInitAccCreateInfo(acc, ACC_APOLLO, user, passwd);
 
             ret = m_login->CreateAccount(&acc);
         }

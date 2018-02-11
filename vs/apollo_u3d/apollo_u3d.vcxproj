@@ -218,6 +218,7 @@
     <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_udthdr.h" />
     <ClInclude Include="..\..\attribute\attr_mgr.h" />
     <ClInclude Include="..\..\attribute\roleattr_help.h" />
+    <ClInclude Include="..\..\cli_common\apoClientU3d.h" />
     <ClInclude Include="..\..\cli_common\dftCliMsgHandler.h" />
     <ClInclude Include="..\..\cli_common\login_apollo.h" />
     <ClInclude Include="..\..\logic_parser\dbldata2netstream.h" />
@@ -233,7 +234,6 @@
     <ClInclude Include="..\..\logic_parser\logic_function.h" />
     <ClInclude Include="..\..\logic_parser\objectBaseMgr.h" />
     <ClInclude Include="..\..\plugin_u3d\apoCliApi.h" />
-    <ClInclude Include="..\..\plugin_u3d\apoClientU3d.h" />
     <ClInclude Include="..\..\plugin_u3d\apoFormula.h" />
   </ItemGroup>
   <ItemGroup>
@@ -301,6 +301,7 @@
     <ClCompile Include="..\..\..\ndsdk\src\nd_vm\src\nd_vmdbg.c" />
     <ClCompile Include="..\..\attribute\attr_mgr.cpp" />
     <ClCompile Include="..\..\attribute\roleattr_help.cpp" />
+    <ClCompile Include="..\..\cli_common\apoClientU3d.cpp" />
     <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp" />
     <ClCompile Include="..\..\cli_common\login_apollo.cpp" />
     <ClCompile Include="..\..\logic_parser\dbldata2netstream.cpp" />
@@ -315,7 +316,6 @@
     <ClCompile Include="..\..\logic_parser\logic_function.cpp" />
     <ClCompile Include="..\..\logic_parser\objectBaseMgr.cpp" />
     <ClCompile Include="..\..\plugin_u3d\apoCliApi.cpp" />
-    <ClCompile Include="..\..\plugin_u3d\apoClientU3d.cpp" />
     <ClCompile Include="..\..\plugin_u3d\apoFormula.cpp" />
   </ItemGroup>
   <ItemGroup>

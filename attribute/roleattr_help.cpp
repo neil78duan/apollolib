@@ -546,6 +546,28 @@ bool RoleAttrHelper::check_log(attrid_t wa_id)
 		return m_wahelper_bufs[wa_id].islog ? true : false;
 	}
 	return false;
+}
+
+bool RoleAttrHelper::check_readonly(attrid_t wa_id)
+{
+	if (wa_id < (attrid_t)m_wa_num){
+		if (m_wahelper_bufs[wa_id].wa_id == INVALID_ATTR_ID) {
+			return true;
+		}
+		return m_wahelper_bufs[wa_id].isReadOnly ? true : false;
+	}
+	return false;
+}
+
+void RoleAttrHelper::set_readonly(attrid_t wa_id,bool bReadOnly)
+{
+
+	if (wa_id < (attrid_t)m_wa_num){
+		if (m_wahelper_bufs[wa_id].wa_id == INVALID_ATTR_ID) {
+			return ;
+		}
+		 m_wahelper_bufs[wa_id].isReadOnly = bReadOnly? 1: 0;
+	}
 
 }
 

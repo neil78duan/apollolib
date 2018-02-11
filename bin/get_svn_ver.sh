@@ -11,10 +11,10 @@ workDir=`pwd`
 dataPath=$1
 
 cd $dataPath
-svnInfo=`svn info | grep Revision`
-
-
-datasvnInfo=`svn info $GAME_DATA_SVN_URL | grep Revision`
+# svnInfo=`svn info | grep Revision`
+svnInfo="unknown svn "
+datasvnInfo="unknown svn"
+# datasvnInfo=`svn info $GAME_DATA_SVN_URL | grep Revision`
 platInfo=`uname -rms`
 
 

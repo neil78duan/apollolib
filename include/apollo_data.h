@@ -366,7 +366,7 @@ struct invite_info
 struct host_list_node {
 	NDUINT16 port ;
 	NDUINT16 max_number ;
-	NDUINT16 cur_number ;
+	NDINT16 cur_number ;
 	NDUINT16 logic_group_id;
 	NDUINT8 isdefault_entry;
 	NDUINT8 isDebug;
@@ -390,7 +390,7 @@ struct host_list_node {
 	{
 		omsg.Write(port);
 		omsg.Write(max_number);
-		omsg.Write(cur_number);
+		omsg.Write((NDUINT16)cur_number);
 		omsg.Write(logic_group_id);
 		omsg.Write(isdefault_entry);
 		omsg.Write(isDebug);
@@ -411,7 +411,7 @@ struct host_list_node {
 			return -1;
 		}
 
-		if (-1 == inmsg.Read(cur_number)) {
+		if (-1 == inmsg.Read((NDUINT16&)cur_number)) {
 			return -1;
 		}
 		if (-1 == inmsg.Read(logic_group_id)) {

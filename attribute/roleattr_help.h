@@ -111,6 +111,7 @@ struct role_attr_description{
 	unsigned char isAffectCard, forCard; 
 	unsigned char showInGuild;
 	unsigned char isLostOnAttacked;
+	unsigned char isReadOnly;
 	int infection_num ;				//受当前属性影响的属性
 	int need_num ;					//当前属性计算需要的属性个数
 	attr_name_t name;
@@ -156,6 +157,8 @@ public:
 	bool check_sync(attrid_t wa_id) ;
 	bool check_client_change(attrid_t wa_id) ;
 	bool check_gen_event(attrid_t wa_id);
+	bool check_readonly(attrid_t wa_id);
+	void set_readonly(attrid_t wa_id, bool bReadOnly);
 	role_attr_description *get_wa_desc(attrid_t wa_id);
     //const up_grade_info* GetUpgradeInfo(const int _grade);
 

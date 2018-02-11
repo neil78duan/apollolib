@@ -14,7 +14,6 @@
 		07EC87A71D546A9B00C32925 /* apollo_robort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC879C1D546A9B00C32925 /* apollo_robort.cpp */; };
 		07EC87AA1D546A9B00C32925 /* login_apollo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87A21D546A9B00C32925 /* login_apollo.cpp */; };
 		07EC87AB1D546A9B00C32925 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87A41D546A9B00C32925 /* Makefile */; };
-		07EC87AC1D546A9B00C32925 /* netui_atl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87A51D546A9B00C32925 /* netui_atl.cpp */; };
 		07EC87AE1D546ABA00C32925 /* libndclient_mac.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 07EC87AD1D546ABA00C32925 /* libndclient_mac.dylib */; };
 /* End PBXBuildFile section */
 
@@ -37,7 +36,6 @@
 		07EC87911D546A8200C32925 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
 		07EC87921D546A8200C32925 /* replayNetStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = replayNetStream.cpp; sourceTree = "<group>"; };
 		07EC87931D546A8200C32925 /* replayNetStream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = replayNetStream.hpp; sourceTree = "<group>"; };
-		07EC87941D546A8200C32925 /* test_robort.data */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_robort.data; sourceTree = "<group>"; };
 		07EC87951D546A8200C32925 /* testConnector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testConnector.cpp; sourceTree = "<group>"; };
 		07EC87961D546A8200C32925 /* testConnector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testConnector.h; sourceTree = "<group>"; };
 		07EC879C1D546A9B00C32925 /* apollo_robort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apollo_robort.cpp; sourceTree = "<group>"; };
@@ -45,8 +43,6 @@
 		07EC87A21D546A9B00C32925 /* login_apollo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = login_apollo.cpp; sourceTree = "<group>"; };
 		07EC87A31D546A9B00C32925 /* login_apollo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = login_apollo.h; sourceTree = "<group>"; };
 		07EC87A41D546A9B00C32925 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		07EC87A51D546A9B00C32925 /* netui_atl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = netui_atl.cpp; sourceTree = "<group>"; };
-		07EC87A61D546A9B00C32925 /* netui_atl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = netui_atl.h; sourceTree = "<group>"; };
 		07EC87AD1D546ABA00C32925 /* libndclient_mac.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libndclient_mac.dylib; path = "../../../../../../../xCodeBuild/DerivedData/apollo-grwebjbmwsyfujajiaspxbhvxtrc/Build/Products/Debug/libndclient_mac.dylib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -88,7 +84,6 @@
 				07EC87911D546A8200C32925 /* readme.txt */,
 				07EC87921D546A8200C32925 /* replayNetStream.cpp */,
 				07EC87931D546A8200C32925 /* replayNetStream.hpp */,
-				07EC87941D546A8200C32925 /* test_robort.data */,
 				07EC87951D546A8200C32925 /* testConnector.cpp */,
 				07EC87961D546A8200C32925 /* testConnector.h */,
 			);
@@ -104,8 +99,6 @@
 				07EC87A21D546A9B00C32925 /* login_apollo.cpp */,
 				07EC87A31D546A9B00C32925 /* login_apollo.h */,
 				07EC87A41D546A9B00C32925 /* Makefile */,
-				07EC87A51D546A9B00C32925 /* netui_atl.cpp */,
-				07EC87A61D546A9B00C32925 /* netui_atl.h */,
 			);
 			name = cli_common;
 			path = ../../cli_common;
@@ -171,7 +164,6 @@
 				07EC87AA1D546A9B00C32925 /* login_apollo.cpp in Sources */,
 				07EC87991D546A8200C32925 /* replayNetStream.cpp in Sources */,
 				07EC879A1D546A8200C32925 /* testConnector.cpp in Sources */,
-				07EC87AC1D546A9B00C32925 /* netui_atl.cpp in Sources */,
 				07EC87A71D546A9B00C32925 /* apollo_robort.cpp in Sources */,
 				07EC87981D546A8200C32925 /* Makefile in Sources */,
 				07EC87971D546A8200C32925 /* main.cpp in Sources */,

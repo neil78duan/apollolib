@@ -22,6 +22,16 @@
 
 #endif
 
+void myInitAccCreateInfo(account_base_info &acc, int accType, const char *userName, const char *passwd)
+{
+	acc.type = accType;
+	acc.isAdult = 0;
+	strncpy((char*)acc.acc_name, userName, sizeof(acc.acc_name));
+	strncpy((char*)acc.nick, userName, sizeof(acc.nick));
+	strncpy((char*)acc.passwd, passwd, sizeof(acc.passwd));
+	
+}
+
 
 //static account_index_t __g_login_account =0;
 
@@ -346,7 +356,7 @@ int LoginApollo::Login(const char *inputName, const char *passwd, ACCOUNT_TYPE t
 	omsg.Write(m_deviceDesc);
 	omsg.Write(m_localToken);
 
-	nd_logdebug("send login message udid=%s\n",m_udid);
+	//nd_logdebug("send login message udid=%s\n",m_udid);
 	//if (ACC_APOLLO==type && passwd && passwd[0]) {
 	//}
 
@@ -454,7 +464,7 @@ int LoginApollo::CreateAccount(account_base_info *acc_info)
 // 	omsg.Write(acc_info->email) ;
 // 	omsg.Write(acc_info->serverGroupId);
 
-	nd_logdebug("send create account message udid=%s\n", m_udid);
+	//nd_logdebug("send create account message udid=%s\n", m_udid);
 
 	SEND_AND_WAIT(m_conn, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ACK,ESF_ENCRYPT|ESF_URGENCY)
 	else {
@@ -585,26 +595,45 @@ int LoginApollo::CreateRole(const char *roleName, role_base_info &roleInfo )
 int LoginApollo::GetRoleList(role_base_info role_buf[], int number, NDUINT8 isRelogin)
 {
 	//get role list
+	int resendTimes = 3;
+	int ret = 0;
 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ);
+	nd_usermsgbuf_t recv_msg;
 	omsg.Write(isRelogin);
 
-	nd_usermsgbuf_t recv_msg;
-	int ret = 0;
-
-	SEND_AND_WAIT(m_conn, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0)
+RESEND_ROLE_LIST:
+	if (0 != ndSendAndWaitMessage(m_conn, omsg.GetMsgAddr(), &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0, NET_MSG_TIMEOUT * 2)) {
+		nd_logerror("wait get-role-list-message error %dd\n", nd_object_lasterror(m_conn)); 
+		return -1;
+	}
 	else {
 		NDUINT32 roleid = 0;
-		//NDUINT32 error_code = 0;
 
 		NDIStreamMsg inmsg(&recv_msg);
 		if (0 != inmsg.Read(roleid)) {
-			return 0;
+			nd_logerror("read role id error \n");
+			return -1;
 		}
 		if (roleid == 0){
-			return ret;
+			NDUINT32 error_code = 0;
+			inmsg.Read(error_code);
+			if (error_code == NDSYS_ERR_WOULD_BLOCK){
+				if (--resendTimes > 0) {
+					nd_sleep(1000);	// force wait server load data success 
+					goto RESEND_ROLE_LIST;
+				}
+				nd_object_seterror(m_conn, NDSYS_ERR_TIMEOUT);
+				return -1;
+			}
+			else {
+				nd_logerror("get role number = 0 \n");
+				return 0;
+			}
 		}
 		if (inmsg.Read(role_buf[ret].name, sizeof(role_buf[ret].name)) == 0) {
-			return ret;
+			nd_logerror("read role name error \n");
+			nd_object_seterror(m_conn, NDSYS_ERR_BADPACKET);
+			return -1;
 		}
 
 		//read attribute

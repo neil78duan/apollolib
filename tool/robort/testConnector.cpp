@@ -8,6 +8,7 @@
 
 
 #include "testConnector.h"
+#include "login_apollo.h"
 #include "msg_def.h"
 //#include "tinyxml/tinyxml.h"
 //#include "tinyxml/tinystr.h"
@@ -105,6 +106,7 @@ int TestconnsMgr::init(const char*host, int port, int num, int acc_start_index)
 
 	strncpy(passwd, "test123", sizeof(passwd));
 
+	LoginApollo::SetDeviceInfo("udid-robort-test", "pc-device");
 
 	for (int i = 0; i < m_maxNum; ++i) {
 		snprintf(username, sizeof(username), "%s_%d", m_accPrefix.c_str(), i + acc_start_index);

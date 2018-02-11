@@ -106,14 +106,12 @@ HEADERS  += $$apolib_dir/logic_parser/dbl_mgr.h \
 #cli-common
 SOURCES += \
     $$apolib_dir/cli_common/apollo_robort.cpp\
-    $$apolib_dir/cli_common/netui_atl.cpp \
     $$apolib_dir/cli_common/dftCliMsgHandler.cpp \
     $$apolib_dir/cli_common/login_apollo.cpp
 
 HEADERS  += $$apolib_dir/cli_common/dftCliMsgHandler.h \
     $$apolib_dir/cli_common/login_apollo.h \
-    $$apolib_dir/cli_common/apollo_robort.h	\
-    $$apolib_dir/cli_common/netui_atl.h
+    $$apolib_dir/cli_common/apollo_robort.h
 
 # attribute 
 

@@ -2520,9 +2520,10 @@ void DBLDataNode::Destroy()
 {
 	if (m_dataOwner && m_dataOwn._data) {
 		if (m_ele_type == OT_FILE_STREAM)	{
-			if (m_data->_data)	{
-				fclose((FILE*)m_data->_data);
-			}
+			// nothing to be done
+// 			if (m_data->_data)	{
+// 				fclose((FILE*)m_data->_data);
+// 			}
 		}
 		else {
 			dbl_destroy_data(m_data, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type);

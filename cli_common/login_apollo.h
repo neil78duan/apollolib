@@ -93,7 +93,6 @@ protected:
 ND_CONNCLI_API LoginBase *ApolloCreateLoginInst();
 ND_CONNCLI_API void ApolloDestroyLoginInst(LoginBase *pLogin);
 
-
 class  LoginApollo : public LoginBase
 #else 
 
@@ -181,6 +180,7 @@ protected:
 };
 
 
+CPPAPI void myInitAccCreateInfo(account_base_info &acc, int accType, const char *userName, const char *passwd) ;
 //ND_CONNCLI_API const char *apollo_error(int errcode);
 //CPPAPI int ndSendAndWaitMessage(nd_handle nethandle, nd_usermsgbuf_t *sendBuf, nd_usermsgbuf_t* recvBuf, ndmsgid_t waitMaxid, ndmsgid_t waitMinid, int sendFlag = 0);
 //CPPAPI int ndSendAndWaitMessage(NDIConn *conn, NDOStreamMsg &omsg, nd_usermsgbuf_t* recvBuf, ndmsgid_t waitMaxid, ndmsgid_t waitMinid, int sendFlag = 0);
