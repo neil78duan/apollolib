@@ -619,7 +619,7 @@ RESEND_ROLE_LIST:
 			inmsg.Read(error_code);
 			if (error_code == NDSYS_ERR_WOULD_BLOCK){
 				if (--resendTimes > 0) {
-					nd_sleep(1000);	// force wait server load data success 
+					nd_sleep(1000);	// force wait server load data success
 					goto RESEND_ROLE_LIST;
 				}
 				nd_object_seterror(m_conn, NDSYS_ERR_TIMEOUT);

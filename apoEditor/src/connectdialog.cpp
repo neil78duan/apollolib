@@ -409,8 +409,14 @@ void ConnectDialog::ClearLog()
 
 void ConnectDialog::WriteLog(const char *logText)
 {
-	
+	static size_t s_send_text = 0;
+
+	s_send_text += strlen(logText);
 	QTextEdit *pEdit = ui->logEdit;
+	if (s_send_text >= 0x10000)	{
+		pEdit->clear();
+		s_send_text = 0;
+	}
 	
 	pEdit->moveCursor(QTextCursor::End, QTextCursor::KeepAnchor);
 	pEdit->insertPlainText(QString(logText));

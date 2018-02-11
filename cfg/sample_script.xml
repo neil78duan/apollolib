@@ -14,7 +14,7 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">../cfg/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1518234547</LastMod>
+	<LastMod name="最后修改" kinds="hide">1517450565</LastMod>
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="39" expand_stat="1" accept_drag_in="func_node">
 	<func_node name="sample_selector" create_template="create_list1" auto_index="5" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
@@ -2673,20 +2673,26 @@
 	<func_node name="test_process_exit" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="2" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
-		<op_call_func name="节点_调用$dumpFunction(funcName,outFileName)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
-			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-			<apoEditorPos kinds="hide" x="232" y="140" offset_x="0" offset_y="0"/>
-			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_dump_function&amp;_dispname=dumpFunction(funcName,outFileName)</func_name>
+		<op_get_time name="节点_时间" expand="yes" create_label="create_internal_label">
+			<comment name="功能说明" rw_stat="read">get_time()</comment>
+			<apoEditorPos kinds="hide" x="145" y="629" offset_x="0" offset_y="0"/>
+		</op_get_time>
+		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
+			<comment name="功能说明" rw_stat="read">print(...)</comment>
+			<apoEditorPos kinds="hide" x="459" y="661" offset_x="0" offset_y="0"/>
 			<param_collect name="参数" expand="yes">
-				<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-				<var kinds="string" delete="no" restrict="type">message_get_add_attr</var>
+				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+				<var kinds="string" delete="no" restrict="type">$value</var>
 			</param_collect>
-			<param_collect name="参数" expand="yes">
-				<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-				<var kinds="string" delete="no" restrict="type">../../log/get_addition_val.handle</var>
-			</param_collect>
-		</op_call_func>
-		<apoEditorPos kinds="hide" x="20" y="400" offset_x="18" offset_y="-13"/>
+		</op_print>
+		<op_make_var name="节点_申明变量$textdata$" expand="yes" var_name="param">
+			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+			<apoEditorPos kinds="hide" x="440" y="559" offset_x="0" offset_y="0"/>
+			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">textdata</param>
+			<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+			<var name="初始值" kinds="string" delete="no" restrict="type">$value</var>
+		</op_make_var>
+		<apoEditorPos kinds="hide" x="20" y="400" offset_x="11" offset_y="-42"/>
 		<unConnect kinds="hide">
 			<op_process_exit name="节点_process_exit" expand="yes">
 				<apoEditorPos kinds="hide" x="460" y="26" offset_x="0" offset_y="0"/>
@@ -2733,27 +2739,19 @@
 					</param_collect>
 				</op_call_func>
 			</steps_collection>
-			<steps_collection>
-				<op_get_time name="节点_时间" expand="yes" create_label="create_internal_label">
-					<comment name="功能说明" rw_stat="read">get_time()</comment>
-					<apoEditorPos kinds="hide" x="145" y="629" offset_x="0" offset_y="0"/>
-				</op_get_time>
-				<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
-					<comment name="功能说明" rw_stat="read">print(...)</comment>
-					<apoEditorPos kinds="hide" x="459" y="661" offset_x="0" offset_y="0"/>
-					<param_collect name="参数" expand="yes">
-						<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-						<var kinds="string" delete="no" restrict="type">$value</var>
-					</param_collect>
-				</op_print>
-				<op_make_var name="节点_申明变量$textdata$" expand="yes" var_name="param">
-					<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-					<apoEditorPos kinds="hide" x="685" y="582" offset_x="0" offset_y="0"/>
-					<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">textdata</param>
-					<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-					<var name="初始值" kinds="string" delete="no" restrict="type">$value</var>
-				</op_make_var>
-			</steps_collection>
+			<op_call_func name="节点_调用$dumpFunction(funcName,outFileName)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
+				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+				<apoEditorPos kinds="hide" x="205" y="52" offset_x="0" offset_y="0"/>
+				<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_dump_function&amp;_dispname=dumpFunction(funcName,outFileName)</func_name>
+				<param_collect name="参数" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+					<var kinds="string" delete="no" restrict="type">message_my_exit</var>
+				</param_collect>
+				<param_collect name="参数" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+					<var kinds="string" delete="no" restrict="type">../../log/msg_my_exit.handle</var>
+				</param_collect>
+			</op_call_func>
 		</unConnect>
 	</func_node>
 	<func_node name="func_get_time_stamp" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
@@ -2786,7 +2784,7 @@
 	</func_node>
 </baseFunction>
 <message_handler name="消息处理入口" delete="no" create_template="create_function_filter,create_msg_handler" auto_index="1" expand_stat="1" accept_drag_in="msg_handler_node">
-	<function_filter name="测试消息" create_template="create_msg_handler" auto_index="8" expand_stat="1" accept_drag_in="msg_handler_node">
+	<function_filter name="测试消息" create_template="create_msg_handler" auto_index="7" expand_stat="1" accept_drag_in="msg_handler_node">
 		<msg_handler_node name="message_test" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="4">
 			<func_params kinds="hide"/>
 			<comment name="函数说明" expand="yes">
@@ -2940,97 +2938,6 @@
 				</op_process_exit>
 			</unConnect>
 		</msg_handler_node>
-		<msg_handler_node name="message_get_add_attr" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="1" preFillCmd="_localinit_msg_entry">
-			<func_params kinds="hide"/>
-			<comment name="函数说明" expand="yes">
-				<desc>消息处理handle(player, message)</desc>
-				<isGlobal kinds="bool">1</isGlobal>
-			</comment>
-			<op_call_func name="节点_读取网络数据" expand="yes" expand_list="comment" create_label="create_internal_label">
-				<comment name="功能说明" rw_stat="read">function_read_message(read_type)</comment>
-				<apoEditorPos kinds="hide" x="258" y="408" offset_x="0" offset_y="0"/>
-				<func_name name="函数" kinds="hide" delete="no">apollo_func_read_msg</func_name>
-				<param_collect name="参数1_输入消息对象" kinds="hide" delete="no">
-					<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
-					<var kinds="string" delete="no" restrict="type">2</var>
-				</param_collect>
-				<param_collect name="读取参数" expand="yes" expand_stat="1" delete="no">
-					<type kinds="hide" delete="no">0</type>
-					<msgtype name="读取数据类型" kinds="reference" reference_type="type_data_type" delete="no" restrict="type">2</msgtype>
-				</param_collect>
-			</op_call_func>
-			<op_make_var name="节点_申明变量:$additionName$" expand="yes" expand_stat="1">
-				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-				<apoEditorPos kinds="hide" x="434" y="583" offset_x="0" offset_y="0"/>
-				<param name="名字" kinds="string" delete="no" replace_val="../.name">additionName</param>
-				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-				<var name="初始值" kinds="string" delete="no" restrict="type">$value</var>
-			</op_make_var>
-			<op_read name="节点_读取_$附加数据$" expand="yes" create_label="create_internal_label">
-				<comment name="功能说明" rw_stat="read">op_read(aim,index_name)</comment>
-				<apoEditorPos kinds="hide" x="611" y="421" offset_x="0" offset_y="0"/>
-				<aim kinds="user_define" user_param="internal_object" replace_val="../.name">_realval=addition&amp;_dispname=附加数据</aim>
-				<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
-					<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">9</type>
-					<var name="索引值" kinds="string" delete="no" restrict="type">additionName</var>
-				</param_collect>
-			</op_read>
-			<op_call_func name="节点_发送消息" create_template="create_input_param" auto_index="0" expand_list="comment,varInt,msgtype" create_label="create_internal_label">
-				<comment name="功能说明" rw_stat="read">function_send_message(msg_id,...)</comment>
-				<apoEditorPos kinds="hide" x="946" y="485" offset_x="0" offset_y="0"/>
-				<func_name name="函数" kinds="hide" delete="no">apollo_func_send_msg</func_name>
-				<varInt name="主消息号" kinds="numeral" delete="no">0</varInt>
-				<msgtype name="次消息号" kinds="numeral" delete="no">41</msgtype>
-				<param_collect name="参数" expand="yes">
-					<type kinds="reference" reference_type="type_data_type" delete="no">9</type>
-					<var kinds="string" delete="no" restrict="type">additionName</var>
-				</param_collect>
-				<param_collect name="参数" expand="yes">
-					<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-					<var kinds="string" delete="no" restrict="type">$value</var>
-				</param_collect>
-			</op_call_func>
-			<apoEditorPos kinds="hide" x="20" y="400" offset_x="21" offset_y="-155"/>
-			<function_init_block name="block_加载时运行" create_template="create_list2" expand_list="condition" auto_index="0">
-				<comment name="功能说明" rw_stat="read">加载时运行</comment>
-				<apoEditorPos kinds="hide" x="10" y="20" offset_x="0" offset_y="0"/>
-				<op_call_func name="节点_安装消息处理器" expand="yes" expand_list="comment">
-					<comment name="功能说明" rw_stat="read">function_install_msg_handler(netModuleName, scriptName,maxId, minId,privilege)</comment>
-					<apoEditorPos kinds="hide" x="210" y="40" offset_x="0" offset_y="0"/>
-					<func_name name="函数" kinds="hide" delete="no">apollo_set_message_handler</func_name>
-					<var name="网络接收器" kinds="string" delete="no">listener</var>
-					<param_collect name="脚本名" kinds="hide" delete="no">
-						<type name="类型" kinds="reference" reference_type="type_data_type" delete="no">14</type>
-						<var name="值" kinds="string" delete="no" restrict="type">none</var>
-					</param_collect>
-					<msgtype name="主消息" kinds="numeral" delete="no">0</msgtype>
-					<msgtype name="次消息" kinds="numeral" delete="no">0</msgtype>
-					<varInt name="权限" kinds="enum" enum_value="none,connect,login,ingame,hight" delete="no">2</varInt>
-				</op_call_func>
-			</function_init_block>
-			<exception_catch_block name="节点_异常处理" create_template="create_list1" expand_list="comment" auto_index="2" expand_stat="1">
-				<comment name="功能说明" rw_stat="read">catch{}</comment>
-				<apoEditorPos kinds="hide" x="10" y="200" offset_x="0" offset_y="0"/>
-				<op_get_last_error name="节点_获得错误号" expand="yes">
-					<comment name="功能说明" rw_stat="read">get_last_error()</comment>
-					<apoEditorPos kinds="hide" x="210" y="220" offset_x="0" offset_y="0"/>
-				</op_get_last_error>
-				<op_call_func name="节点_调用: send_error()" create_template="create_input_param" auto_index="1" expand_list="comment,func_name" expand_stat="0">
-					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-					<apoEditorPos kinds="hide" x="479" y="185" offset_x="0" offset_y="0"/>
-					<func_name kinds="user_define" user_param="func_list">_realval=CPP.gscript_send_client_error&amp;_dispname=发送错误通知(errorId)</func_name>
-					<param_collect name="参数_错误号" expand="yes" expand_stat="1">
-						<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-						<var kinds="string" delete="no" restrict="type">0</var>
-					</param_collect>
-				</op_call_func>
-			</exception_catch_block>
-			<op_skip_error name="节点_忽略错误_for_test" kinds="hide" expand="yes">
-				<comment name="功能说明" rw_stat="read">skip_error(value)</comment>
-				<num name="错误类型" kinds="user_define" user_param="error_list" delete="no">_realval=47&amp;_dispname=system(NDERR_VARIANT_NOT_EXIST):variant not found</num>
-			</op_skip_error>
-			<unConnect kinds="hide"/>
-		</msg_handler_node>
 	</function_filter>
 </message_handler>
 <event_callback name="事件处理" delete="no" create_template="create_event_function_filter,create_event_callback" auto_index="1" expand_stat="0" accept_drag_in="event_callback_node">
@@ -3098,3 +3005,4 @@
 		<unConnect kinds="hide"/>
 	</event_callback_node>
 </event_callback>
+
