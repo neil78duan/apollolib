@@ -8,6 +8,7 @@
 
 #include "nd_common/nd_common.h"
 #include "nd_crypt/nd_crypt.h"
+#include "nd_crypt/crypt_file.h"
 #include "cli_common/login_apollo.h"
 #include "msg_def.h"
 #include "ndcli/nd_api_c.h"
@@ -1154,7 +1155,6 @@ int stream_to_session(char *stream_buf, size_t buf_size, login_session_load *s_b
 #undef READ_FROMFILE
 }
 
-#include "crypt_file.h"
 
 int save_session_info(R_RSA_PUBLIC_KEY *key, login_token_info *session_info , const char*keymd5, const char *file_name )
 {

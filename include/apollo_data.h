@@ -19,6 +19,7 @@
 #include "nd_crypt/nd_crypt.h"
 #include "nd_net/nd_netlib.h"
 #include "nd_crypt/nd_crypt.h"
+#include "ndapplib/nd_msgpacket.h"
 #endif 
 
 
@@ -305,7 +306,7 @@ struct account_base_info
 
 		if (-1 == inmsg.Read(serverGroupId)) { return -1; }
 		//if (-1 == inmsg.Read(channel)) { return -1; }				//ÇþµÀid
-		eNDnetStreamMarker channelDataType = inmsg.PeekDataType();
+                eNDnetStreamMarker channelDataType = (eNDnetStreamMarker) inmsg.PeekDataType();
 		if (channelDataType == ENDSTREAM_MARKER_INT32){
 			inmsg.Read(channel);
 		}

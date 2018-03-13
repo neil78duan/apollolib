@@ -4,8 +4,9 @@
 #
 #-------------------------------------------------
 
-ndsdk_dir = ../../ndsdk
-apolib_dir = ..
+ndsdk_dir = ../../../ndsdk
+apolib_dir = ../..
+apoBP_dir = ../../../apolloBP
 
 macx:{
 
@@ -41,14 +42,15 @@ win32{
 }
 
 
-LIBS += -L$$ndsdk_dir/lib -L$$apolib_dir/lib/$$platform_name  -L$$ndsdk_dir/lib/$$platform_name -lapoBluePrint
+LIBS += -L$$ndsdk_dir/lib -L$$apolib_dir/lib/$$platform_name  -L$$ndsdk_dir/lib/$$platform_name \
+        -L$$apoBP_dir/lib/$$platform_name -lapoBluePrint -llogic_parser_d
 
 DEFINES += X86_64
 
 INCLUDEPATH += $$ndsdk_dir/include \
         $$apolib_dir/include \
-        $$apolib_dir  ./include ./include/apoScript \
-        ./src ../apoBluePrint/include
+        $$apolib_dir  ./include ./src \
+        $$apoBP_dir/include $$apoBP_dir/apoScript
 
 
 #-------qt----------
@@ -57,7 +59,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = ../bin/apolloEditor
+TARGET = ../../bin/apolloEditor
 TEMPLATE = app
 
 
@@ -75,33 +77,6 @@ FORMS    += \
     src/startdialog.ui \
     src/connectdialog.ui \
     src/workdirdialog.ui
-
-# logic compile modules
- 
-SOURCES += \
-    $$apolib_dir/logic_parser/logicDataType.cpp \
-    $$apolib_dir/logic_parser/logicEngineRoot.cpp \
-    $$apolib_dir/logic_parser/logicParser.cpp \
-    $$apolib_dir/logic_parser/logic_compile.cpp \
-    $$apolib_dir/logic_parser/logic_editor_helper.cpp \
-    $$apolib_dir/logic_parser/objectBaseMgr.cpp \
-    $$apolib_dir/logic_parser/dbl_mgr.cpp \
-    $$apolib_dir/logic_parser/logic_function.cpp \
-    $$apolib_dir/logic_parser/dbldata2netstream.cpp \
-    $$apolib_dir/logic_parser/logicStruct.cpp \
-    $$apolib_dir/logic_parser/logic_debugger.cpp
-
-HEADERS  += $$apolib_dir/logic_parser/dbl_mgr.h \
-    $$apolib_dir/logic_parser/logicDataType.h \
-    $$apolib_dir/logic_parser/logicEngineRoot.h \
-    $$apolib_dir/logic_parser/logicParser.h \
-    $$apolib_dir/logic_parser/logic_compile.h \
-    $$apolib_dir/logic_parser/logic_editor_helper.h \
-    $$apolib_dir/logic_parser/objectBaseMgr.h \
-    $$apolib_dir/logic_parser/logic_function.h \
-    $$apolib_dir/logic_parser/dbldata2netstream.h \
-    $$apolib_dir/logic_parser/logicStruct.hpp\
-    $$apolib_dir/logic_parser/logic_debugger.h
 
 #cli-common
 SOURCES += \
