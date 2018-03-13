@@ -670,7 +670,7 @@
 			<data name="邀请码" kinds="string" param="2">a027baad86754dbb9d04e15c7d385236</data>
 		</message>
 	</filter>
-	<filter name="邮件聊天消息" delete="no" displayChildren="no" expand_stat="1">
+	<filter name="邮件聊天消息" delete="no" displayChildren="no" expand_stat="0">
 		<message name="接受新邮件" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="6" minId="12">0</msgid>
 		</message>
@@ -794,16 +794,16 @@
 		</message>
 		<message name="GM_改等级" expand="yes" delete="no">
 			<msgid kinds="hide">1796</msgid>
-			<data name="新等级" kinds="numeral" param="0">30</data>
+			<data name="新等级" kinds="numeral" param="0">10</data>
 		</message>
 		<message name="GM_加物品" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="6">0</msgid>
-			<data name="物品编号" kinds="numeral" param="0">30000</data>
-			<data name="数量" kinds="numeral" param="0">10000</data>
+			<data name="物品编号" kinds="numeral" param="0">21081</data>
+			<data name="数量" kinds="numeral" param="0">1</data>
 		</message>
 		<message name="GM_增加卡牌" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="7">0</msgid>
-			<data name="编号" kinds="numeral" param="0">3</data>
+			<data name="编号" kinds="numeral" param="0">21081</data>
 		</message>
 		<message name="GM_建筑升级" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="27">0</msgid>
@@ -890,7 +890,7 @@
 			<msgid kinds="hide" maxId="7" minId="36">0</msgid>
 		</message>
 	</filter>
-	<filter name="system_系统消息" delete="no" displayChildren="no" expand_stat="1">
+	<filter name="system_系统消息" delete="no" displayChildren="no" expand_stat="0">
 		<message name="sys_修改SOCIAL服务器时间" expand="yes" delete="no" need_confirm="yes">
 			<msgid kinds="hide" maxId="7" minId="31">0</msgid>
 			<data name="加快小时" kinds="numeral" param="0">16</data>
