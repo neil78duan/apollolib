@@ -97,7 +97,10 @@ namespace LogicEditorHelper
 		"connect_in_seq",
 		"breakPointAnchor",
 		"onlyForDebug",
-		"breakPoint"
+		"breakPoint",
+		"displayChildren",
+		"blueprintCtrl",
+		"blueprintTips"
 	};
 
 
@@ -250,10 +253,18 @@ namespace LogicEditorHelper
 		if (kinds) {
 			if (0 == ndstricmp(kinds, "yes"))
 				return true;
-
 		}
 		return false;
+	}
 
+	bool CheckDisplayChildren(ndxml *xml)
+	{
+		char *kinds = (char*)ndxml_getattr_val(xml, _szReserved[ERT_DISPLAY_CHILDREN]);
+		if (kinds) {
+			if (0 == ndstricmp(kinds, "no"))
+				return false;
+		}
+		return true;
 	}
 
 	bool checkAddNewChild(ndxml *xml)

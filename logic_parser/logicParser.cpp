@@ -408,6 +408,7 @@ int LogicParserEngine::_baseCallScript(runningStack *stack)
 	NDUINT32 opCmd , opAim = 0 ;
 	//bool isdebug_step = false;
 	bool inException = false;
+	bool scriptIsDebug = false;
 
 	//bool bLastIsCalled = false;		//last step is call function
 	NDUINT32 cur_step_size = -1;
@@ -596,6 +597,7 @@ int LogicParserEngine::_baseCallScript(runningStack *stack)
 
 			case E_OP_DEBUG_INFO:
 				//isdebug_step = true;
+				scriptIsDebug = true;
 				p = lp_read_stream(p, m_dbg_cur_node_index, m_cmdByteOrder);
 				GET_TEXT_FROM_STREAM(m_dbg_node, sizeof(m_dbg_node),p);
 				
@@ -1110,6 +1112,25 @@ int LogicParserEngine::_baseCallScript(runningStack *stack)
 				m_registorFlag = true;
 				++m_curStack->loopIndex;
 			}
+				break;
+
+			case E_OP_CHECK_DEBUG:
+				m_registorCtrl = scriptIsDebug;
+				m_registorFlag = true;
+				break;
+			case E_OP_CHECK_HOST_DEBUG:
+#ifdef ND_DEBUG
+				m_registorCtrl = true;
+#else 
+				m_registorCtrl = false;
+#endif
+				m_registorFlag = true;
+				break; 
+			case E_OP_PROCESS_EXIT:
+				exit(1);
+				break;
+			case E_OP_PROCESS_ABORT:
+				abort();
 				break;
 
 			default:
@@ -1836,6 +1857,11 @@ bool LogicParserEngine::_bitOperate(eBitOperate op, const DBLDataNode &var1, con
 
 	}
 	else {
+		DBLDataNode srcVal = var1;
+		if (srcVal.BitOperateBin(op, (NDUINT8)var2.GetInt())){
+			m_registerVal = srcVal;
+			return true;
+		}
 		return false;
 	}
 	

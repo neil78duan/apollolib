@@ -12,10 +12,11 @@
 #include "msg_def.h"
 #include "ndcli/nd_api_c.h"
 #include "apollo_data.h"
-#include "commonTest.h"
+//#include "commonTest.h"
 
 #include "apollo_errors.h"
 #include "login_apollo.h"
+#include "apoClientU3d.h"
 
 #define myfprintf fprintf
 
@@ -138,55 +139,95 @@ if (!pconn ) {						\
 	fprintf(stderr, "need to login \n") ;		\
 	return -1 ;									\
 }
-//
-//ND_CMDLINE_FUNC_INSTANCE(atlantisChat)
-//{
-//	ND_CMDLINE_CHECK_SHOW_HELP(argc, argv,"chat [message-text]") ;
-//	CHECK_LOGIN() ;
-//	NDOStreamMsg omsg(NETMSG_MAX_SOCIAL, SOCIAL_MSG_CHAT_REQ) ;
-//	omsg.Write((NDUINT8)ECHAT_BROADCAST) ;
-//	omsg.Write((NDUINT32)0) ;
-//	if (argc >= 2) {
-//		omsg.Write((NDUINT8*)argv[1]) ;
+
+
+int getConnectStat(NDIConn *pConn)
+{
+	if (pConn && pConn->CheckValid()) {
+		int priv_level = 0 ;
+		int size = sizeof(priv_level) ;
+		
+		pConn->ioctl(NDIOCTL_GET_LEVEL, &priv_level, &size) ;
+		return  priv_level ;
+	}
+	return 0;
+}
+
+void LogoutServer()
+{
+	ApoClient *pcliInst = ApoClient::getInstant();
+	if (pcliInst) {
+		pcliInst->Close() ;
+	}
+	ApoClient::destroyInstant() ;
+}
+
+NDIConn* LoginServer( const char * host,int port, const char* user, const char *passwd, const char*sessionFile,NDUINT32 *accID )
+{
+	
+	LoginApollo::SetDeviceInfo(COMMON_TEST_UDID, "cmd-tool");
+	ApoClient *pcliInst = ApoClient::getInstant();
+	nd_assert(pcliInst) ;
+	pcliInst->setWorkingPath(nd_getcwd()) ;
+	pcliInst->setLogPath(nd_getcwd()) ;
+	
+	RESULT_T res = pcliInst->Open(host, port) ;
+	if (res != NDERR_SUCCESS) {
+		fprintf(stderr, "open host %s error =%d\n", host, res) ;
+		return 0 ;
+	}
+	
+	res = pcliInst->LoginOnly(user, passwd, ACC_APOLLO, 0, false) ;
+	if (res == NDSYS_ERR_NOUSER) {
+		res = pcliInst->CreateOnly(user, passwd, 0) ;
+	}
+	if (res != (RESULT_T)NDERR_SUCCESS) {
+		fprintf(stderr, "can not login %s username=%s\n", host, user) ;
+		return 0 ;
+	}
+	return pcliInst->getNetObj() ;
+//	NDIConn *pConn = CreateConnectorObj(NULL) ;
+//	if (!pConn) {
+//		return 0 ;
 //	}
-//	pconn->SendMsg(omsg,ESF_ENCRYPT | ESF_URGENCY) ;
-//	return 0;
-//}
+//	//initCommonMessageHandle(pConn) ;
+//	if (!host || !host[0]) {
+//		host = "localhost" ;
+//		port = 6600 ;
+//	}
 //
-//ND_CMDLINE_FUNC_INSTANCE(privateChat)
-//{
-//	ND_CMDLINE_CHECK_SHOW_HELP(argc, argv,"pchat [recv_player_id] [private-message-text]") ;
-//	CHECK_LOGIN() ;
-//	
-//	if (argc >= 3) {
-//		NDOStreamMsg omsg(NETMSG_MAX_SOCIAL, SOCIAL_MSG_CHAT_REQ) ;
-//		omsg.Write((NDUINT8)ECHAT_PRIVATE) ;
-//		omsg.Write((NDUINT32)atoi(argv[1])) ;
+//	if(-1==pConn->Open(host, port, "tcp-connector", NULL) ) {
+//		fprintf(stderr, "connect %s:%d ERROR \n",  host, port) ;
+//		DestroyConnectorObj(pConn) ;
+//		return 0 ;
+//	}
 //
-//		omsg.Write((NDUINT8*)argv[2]) ;
-//		pconn->SendMsg(omsg,ESF_ENCRYPT | ESF_URGENCY) ;
+//	fprintf(stdout, "connect %s:%d success \n",host, port ) ;
+//
+//	if (!user || !user[0]) {
+//		user = "testTooluser0" ;
+//		passwd = "testUser123" ;
+//	}
+//
+//	int bSuccess = 0;
+//	if (sessionFile && sessionFile[0]) {
+//		bSuccess =	RloginTrylogin(pConn->GetHandle(),ACC_APOLLO, user, passwd,sessionFile, accID) ;
 //	}
 //	else {
-//		fprintf(stderr, "USAGE: pchat [recv_player_id] [private-message-text]\n") ;
-//		
+//		bSuccess = loginAndCreate(pConn->GetHandle(),ACC_APOLLO,user, passwd,NULL,accID);
 //	}
-//	return 0;
-//}
 //
-//ND_CMDLINE_FUNC_INSTANCE(atlantisBraodcast)
-//{
-//	ND_CMDLINE_CHECK_SHOW_HELP(argc, argv,"remotecall [echo-message-text]") ;
-//	CHECK_LOGIN() ;
-//	NDOStreamMsg omsg(NETMSG_MAX_SOCIAL, SOCIAL_MSG_BRAODCAST_REQ) ;
-//	
-//	if (argc >= 2) {
-//		omsg.Write((NDUINT8*)argv[1]) ;
+//	if (0== bSuccess) {
+//		fprintf(stdout,"%s Login Success \n",user) ;
 //	}
-//	pconn->SendMsg(omsg,ESF_ENCRYPT | ESF_URGENCY) ;
-//	return 0;
-//
-//}
-
+//	else {
+//		fprintf(stderr,"%s Login Failed errorcode = %d\n", user, pConn->LastError()) ;
+//		pConn->Close(1) ;
+//		DestroyConnectorObj(pConn) ;
+//		return 0;
+//	}
+//	return pConn;
+}
 
 ND_CMDLINE_FUNC_INSTANCE(atlantis_round_trip_time)
 {
@@ -300,52 +341,66 @@ ND_CMDLINE_FUNC_INSTANCE(createRole)
 		fprintf(stderr, "USAGE: role_create rolename\n") ;
 		return -1;
 	}
+	ApoClient *pcliInst = ApoClient::getInstant();
+	LoginApollo *pLogin = pcliInst->getLoginObj() ;
 	
-	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_REQ ) ;
-	omsg.Write((NDUINT8*)argv[1]) ;
-	
-	omsg.Write((NDUINT16)1) ;
-	omsg.Write((NDUINT8)20) ;
-	omsg.Write((float)0) ;
-	
-	nd_handle h = pconn->GetHandle() ;
-	nd_usermsgbuf_t recv_msg ;
-	TEST_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_ACK,0)
-	else {
-		NDUINT32 roleid = 0;
-		NDUINT32 error_code = 0;
-		NDUINT8 name[USER_NAME_SIZE] ;
-		
-		NDIStreamMsg inmsg(&recv_msg) ;
-		inmsg.Read(roleid) ;
-		
-		if (roleid == 0) {
-			inmsg.Read(error_code) ;
-			if (error_code) {
-				fprintf(stderr, "create role list error : %d\n", error_code) ;
-			}
-			return -1 ;
-		}
-		else {
-			inmsg.Read(name,sizeof(name)) ;
-			fprintf(stdout, "create role %s success \n", name) ;
-			//read attribute
-			NDUINT16 num =0;
-			if(0==inmsg.Read(num) ) {
-				for (int i=0; i<num; ++i) {
-					NDUINT8 aid ;
-					float val ;
-					inmsg.Read(aid) ;inmsg.Read(val) ;
-					fprintf(stderr, "create role attribute id = %d val =%f \n", aid, val) ;
-				}
-			}
-			
-			LoginApollo login(h) ;
-			login.ReadyGame() ;
-		}
-
+	if (!pLogin) {
+		fprintf(stderr, "error: not login\n") ;
+		return -1;
 	}
-	return 0;
+	role_base_info roleInfo ;
+	if(0!=pLogin->CreateRole(argv[1], roleInfo ) ) {
+		fprintf(stderr, "error: create role error %d\n", pLogin->GetLastError() ) ;
+		return -1;
+	}
+	pLogin->ReadyGame() ;
+	return 0 ;
+//
+//	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_REQ ) ;
+//	omsg.Write((NDUINT8*)argv[1]) ;
+//
+//	omsg.Write((NDUINT16)1) ;
+//	omsg.Write((NDUINT8)20) ;
+//	omsg.Write((float)0) ;
+//
+//	nd_handle h = pconn->GetHandle() ;
+//	nd_usermsgbuf_t recv_msg ;
+//	TEST_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_ACK,0)
+//	else {
+//		NDUINT32 roleid = 0;
+//		NDUINT32 error_code = 0;
+//		NDUINT8 name[USER_NAME_SIZE] ;
+//
+//		NDIStreamMsg inmsg(&recv_msg) ;
+//		inmsg.Read(roleid) ;
+//
+//		if (roleid == 0) {
+//			inmsg.Read(error_code) ;
+//			if (error_code) {
+//				fprintf(stderr, "create role list error : %d\n", error_code) ;
+//			}
+//			return -1 ;
+//		}
+//		else {
+//			inmsg.Read(name,sizeof(name)) ;
+//			fprintf(stdout, "create role %s success \n", name) ;
+//			//read attribute
+//			NDUINT16 num =0;
+//			if(0==inmsg.Read(num) ) {
+//				for (int i=0; i<num; ++i) {
+//					NDUINT8 aid ;
+//					float val ;
+//					inmsg.Read(aid) ;inmsg.Read(val) ;
+//					fprintf(stderr, "create role attribute id = %d val =%f \n", aid, val) ;
+//				}
+//			}
+//
+//			LoginApollo login(h) ;
+//			login.ReadyGame() ;
+//		}
+//
+//	}
+//	return 0;
 }
 
 
@@ -354,58 +409,83 @@ ND_CMDLINE_FUNC_INSTANCE(getRoleList)
 	ND_CMDLINE_CHECK_SHOW_HELP(argc, argv,"role_list [ create_role_name_if_list_is_emt]") ;
 	CHECK_LOGIN() ;
 	
-	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ ) ;
+	ApoClient *pcliInst = ApoClient::getInstant();
+	LoginApollo *pLogin = pcliInst->getLoginObj() ;
 	
-	nd_handle h = pconn->GetHandle() ;
-	nd_usermsgbuf_t recv_msg ;
+	if (!pLogin) {
+		fprintf(stderr, "error: not login\n") ;
+		return -1;
+	}
 	
-	TEST_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK,0)
-	else {
-		NDUINT32 roleid = 0;
-		NDUINT32 error_code = 0;
-		NDUINT8 name[USER_NAME_SIZE] ;
-		
-		NDIStreamMsg inmsg(&recv_msg) ;
-		inmsg.Read(roleid) ;
-		
-		if (roleid == 0) {
-			inmsg.Read(error_code) ;
-			if (error_code) {
-				fprintf(stderr, "get role list error : %d\n", error_code) ;
-				return -1 ;
-			}
-			
-			if (argc >= 2) {
-				//create role ;
-				const char * create_args[2] ;
-				create_args[0] = "role_create" ;
-				create_args[1] = argv[1] ;
-				
-				return createRole(root, 2, create_args) ;
-			}
-			else {
-				fprintf(stderr, "role list is empty, role number = 0\n") ;
-			}
-			
-		}
-		else {
-			inmsg.Read(name,sizeof(name)) ;
-			fprintf(stdout, "get role %s success \n", name) ;
-			
-			//read attribute
-			NDUINT16 num =0;
-			if(0==inmsg.Read(num) ) {
-				for (int i=0; i<num; ++i) {
-					NDUINT8 aid ;
-					float val ;
-					inmsg.Read(aid) ;inmsg.Read(val) ;
-					fprintf(stderr, "load role attribute id = %d val =%f \n", aid, val) ;
-				}
-			}
-			LoginApollo login(h) ;
-			login.ReadyGame() ;
+	role_base_info roleInfo ;
+	int ret = pLogin->GetRoleList(&roleInfo, 1) ;
+	if (0==ret) {
+		if(0!=pLogin->CreateRole(argv[1], roleInfo ) ) {
+			fprintf(stderr, "error: create role error %d\n", pLogin->GetLastError() ) ;
+			return -1;
 		}
 	}
-	return 0;
+	else if(-1==ret){
+		fprintf(stderr, "error: select role error %d\n", pLogin->GetLastError()) ;
+		return -1;
+	}
+	
+	pLogin->ReadyGame() ;
+	return 0 ;
+	
+//	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ ) ;
+//	omsg.Write((NDUINT8)0);
+//
+//	nd_handle h = pconn->GetHandle() ;
+//	nd_usermsgbuf_t recv_msg ;
+//
+//	TEST_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK,0)
+//	else {
+//		NDUINT32 roleid = 0;
+//		NDUINT32 error_code = 0;
+//		NDUINT8 name[USER_NAME_SIZE] ;
+//
+//		NDIStreamMsg inmsg(&recv_msg) ;
+//		inmsg.Read(roleid) ;
+//
+//		if (roleid == 0) {
+//			inmsg.Read(error_code) ;
+//			if (error_code == NDERR_NOUSER) {
+//
+//				if (argc >= 2) {
+//					//create role ;
+//					const char * create_args[2];
+//					create_args[0] = "role_create";
+//					create_args[1] = argv[1];
+//
+//					return createRole(root, 2, create_args);
+//				}
+//				return -1;
+//			}
+//			else if (error_code) {
+//				fprintf(stderr, "get role list error : %d\n", error_code) ;
+//				return -1 ;
+//			}
+//
+//		}
+//		else {
+//			inmsg.Read(name,sizeof(name)) ;
+//			fprintf(stdout, "get role %s success \n", name) ;
+//
+//			//read attribute
+//			NDUINT16 num =0;
+//			if(0==inmsg.Read(num) ) {
+//				for (int i=0; i<num; ++i) {
+//					NDUINT8 aid ;
+//					float val ;
+//					inmsg.Read(aid) ;inmsg.Read(val) ;
+//					fprintf(stderr, "load role attribute id = %d val =%f \n", aid, val) ;
+//				}
+//			}
+//			LoginApollo login(h) ;
+//			login.ReadyGame() ;
+//		}
+//	}
+//	return 0;
 }
 

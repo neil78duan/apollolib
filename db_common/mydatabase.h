@@ -244,7 +244,10 @@ public:
 		m_dbhandle->stmt_free_result(m_stmt) ;
 		return 0 ;
 	}
-	
+	int bind_stmt_error()
+	{
+		return m_dbhandle->stmt_errno(m_stmt);
+	}
 protected:
 	CMyDatabase *m_dbhandle ;
 	STMT_HANDLE  m_stmt;

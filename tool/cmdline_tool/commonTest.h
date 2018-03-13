@@ -24,26 +24,7 @@
 		return -1;		\
 	}
 
-// if (nd_connector_send(_conn,(nd_packhdr_t*) (_omsg.GetMsgAddr()), _sendflag)<=0) {			\
-// 	nd_object_seterror(_conn,NDERR_WRITE) ;	\
-// 	fprintf(stderr, "send data error\n") ; \
-// 	return -1 ;							\
-// }										\
-// if (-1==nd_connector_waitmsg(_conn, (nd_packetbuf_t *)_rmsg_buf,WAITMSG_TIMEOUT)) {	\
-// 	nd_object_seterror(_conn,NDERR_TIMEOUT) ;				\
-// 	fprintf(stderr, "wait message timeout\n") ; \
-// 	return -1 ;							\
-// }										\
-// else if (nd_checkErrorMsg(_conn, (ndMsgData*)_rmsg_buf) ) {	\
-// 	fprintf(stderr, "receive error message \n") ; \
-// 	return -1 ;							\
-// }										\
-// else if(ND_USERMSG_MAXID(_rmsg_buf)!=_wait_maxid || ND_USERMSG_MINID(_rmsg_buf) != _wait_minid) { \
-// 	nd_object_seterror(_conn, ESERVER_ERR_UNEXCEPTED_MSG) ;	\
-// 	fprintf(stderr,"receive message not match with input(%d,%d)\n", ND_USERMSG_MAXID(_rmsg_buf), ND_USERMSG_MINID(_rmsg_buf)) ; \
-// 	return -1 ;								\
-// }
-//show error 
+
 
 CPPAPI int getConnectStat(NDIConn *pConn) ;
 //CPPAPI int gloable_connector_on_error(nd_handle nethandle ,unsigned char *data, int dataLen) ;

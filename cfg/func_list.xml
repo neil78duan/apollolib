@@ -5,6 +5,7 @@
 	<node desc="sys_CloseStream(fileStream)">CPP._sys_close_file_stream</node>
 	<node desc="sys_复制文件(filesrc,filedest)">CPP._sys_copyfile</node>
 	<node desc="sys_获取工作目录()">CPP._sys_get_path</node>
+	<node desc="sys_time_zone()">CPP._sys_get_time_zone</node>
 	<node desc="sys_创建目录(pathname)">CPP._sys_mkdir</node>
 	<node desc="sys_创建文件(filepath)">CPP._sys_mkfile</node>
 	<node desc="sys_OpenStream(fileName)">CPP._sys_open_file_stream</node>
@@ -16,6 +17,7 @@
 	<node desc="sys_text写入文件(fileName, var1,var2....)">CPP._sys_write_textfile</node>
 	<node desc="测试消息处理(script, maxId,minId, data1,data2...)">CPP.apollo_call_script_msgHandler_test</node>
 	<node desc="deyptFile(filename,outFileName, password)">CPP.apollo_decrypt_file</node>
+	<node desc="dumpFunction(funcName,outFileName)">CPP.apollo_dump_function</node>
 	<node desc="cryptFile(filename,outFileName, password)">CPP.apollo_encrypt_file</node>
 	<node desc="导出c函数(filename)">CPP.apollo_export_cpp_api</node>
 	<node desc="导出事件(filename)">CPP.apollo_export_events_list</node>
@@ -53,6 +55,7 @@
 	<node desc="字符数组转换为属性格式([string]:attrname_id)">CPP.gscript_convert_data_to_attr</node>
 	<node desc="转换成attrNode(name, value)">CPP.gscript_convert_to_attr</node>
 	<node desc="根据CD读取系数(types, CDs)">CPP.gscript_get_clear_cd_rate</node>
+	<node desc="获得服务器组开服时间()">CPP.gscript_group_open_time</node>
 	<node desc="关服前踢人()">CPP.gscript_kickoff_all</node>
 	<node desc="发送错误通知(errorId)">CPP.gscript_send_client_error</node>
 	<node desc="发公告给当前用户(arg1, ...)">CPP.gscript_send_player_notice</node>

@@ -27,8 +27,15 @@ namespace ClientMsgHandler
 	int msg_default_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
 	{
 		//int reLine = 0;
-		nd_logmsg("recv (%d,%d) message data-len =%d\n", ND_USERMSG_MAXID(msg), ND_USERMSG_MINID(msg), ND_USERMSG_LEN(msg));
-
+		//nd_logmsg("recv (%d,%d) message data-len =%d\n", ND_USERMSG_MAXID(msg), ND_USERMSG_MINID(msg), ND_USERMSG_LEN(msg));
+		char buf[0x10000];
+		NDIStreamMsg inmsg(msg);
+		NDIStreamMsg tmpInm(inmsg.GetMsgAddr());
+		int size = tmpInm.dumpText(buf, sizeof(buf));
+		if (size > 0)	{
+			buf[size] = 0;
+			nd_logmsg("%s\n", buf);
+		}
 		return 0;
 	}
 		
@@ -82,11 +89,15 @@ namespace ClientMsgHandler
 			val.InitSet((void*)this, OT_OBJ_BASE_OBJ);
 			return true;
 		}
-		else if (0 == ndstricmp(objName, "machineInfo")) {
-			char buf[256];
-			val.InitSet(nd_common_machine_info(buf, sizeof(buf)));
-			return true;
+// 		else if (0 == ndstricmp(objName, "machineInfo")) {
+// 			char buf[256];
+// 			val.InitSet(nd_common_machine_info(buf, sizeof(buf)));
+// 			return true;
+// 		}
+		else {
+			return TestLogicObject::getOtherObject(objName, val);
 		}
+
 		return false;
 	}
 
@@ -116,6 +127,11 @@ namespace ClientMsgHandler
 		return NULL;
 	}
 
+// 	bool ApoConnectScriptOwner::loadScript() 
+// 	{
+// 		
+// 		return false;
+// 	}
 
 	bool ApoConnectScriptOwner::loadDataType(const char *file)
 	{
@@ -168,6 +184,14 @@ namespace ClientMsgHandler
 		return val.GetString();
 	}
 
+	std::string getDataPath(NDIConn *pconn)
+	{
+		DBLDataNode val;
+
+		_GET_OBJ_FROM_MGR(pconn, "DataPath", val);
+		return val.GetString();
+	}
+
 	int OutputMessage2File(NDIConn *pconn, const char *file, const NDIStreamMsg &inmsg)
 	{
 		char mypath[1024];
@@ -186,6 +210,12 @@ namespace ClientMsgHandler
 		return ret;
 	}
 
+	ApoConnectScriptOwner *getScriptOwner(NDIConn *pconn) 
+	{
+		DBLDataNode val;
+		_GET_OBJ_FROM_MGR(pconn, "LogPath", val);
+		return (ApoConnectScriptOwner *)val.GetObject();
+	}
 
 	bool handleMsgFirstFromFileBeforTime(NDIConn *pconn, const char *file, NDUINT64 genTime, NDUINT16 msgId, nd_iconn_func func)
 	{
@@ -379,131 +409,13 @@ namespace ClientMsgHandler
 	bool outPutMessageFromconfig(NDIConn* pconn, const char *formatText, NDIStreamMsg &inmsg, userDefineDataType_map_t &dataDef)
 	{
 		logic_print print_func = getLogFunction(pconn);
-		void*log_file = getLogFile(pconn);
-		return  LogicOutputMsgByFormat( print_func, log_file, formatText, inmsg, dataDef);
-		/*
-		userDefineDataType_map_t &m_dataTypeDef = dataDef;
-		int index = 0;
-		char name[128];
-		const char *p = ndstr_first_valid(formatText);
-		if (!p || !*p)	{
-			return false;
+		if(print_func) {
+			void*log_file = getLogFile(pconn);
+			return LogicOutputMsgByFormat(print_func, log_file, formatText, inmsg, dataDef);
 		}
-		if (0 == ndstricmp(p, "none") || 0 == ndstricmp(p, "null"))	{
-			return false;
-		}
-
-		logic_print print_func = getLogFunction(pconn);
-		void*log_file = getLogFile(pconn);
-
-		print_func(log_file, "{");
-
-		int array_size = 0;
-		do {
-			char memberName[128];
-			bool isArray = 0;
-			name[0] = 0;
-			if (*p == '[') {
-				++p;
-				p = ndstr_nstr_end(p, name, ']', sizeof(name));
-				if (p && *p == ']') {
-					++p;
-				}
-				isArray = true;
-				NDUINT16 _arrsize = 0;
-
-				if (-1 == inmsg.Read(_arrsize)) {
-					nd_logerror("can not read array size }\n");
-					return false;
-				}
-				array_size = _arrsize;
-			}
-			else {
-				p = ndstr_nstr_end(p, name, ',', sizeof(name));
-			}
-			if (!name[0]){
-				break;
-			}
-
-			if (isArray)	{
-				for (int i = 0; i < array_size; i++) {
-					if (!outPutMessageFromconfig(pconn, name, inmsg, dataDef)) {
-						return false;
-					}
-				}
-			}
-			else {
-				const char *pmember = strchr(name, ':');
-				if (pmember && *pmember == ':')	{
-					++pmember;
-					ndstr_parse_word_n(ndstr_first_valid(pmember), memberName, 128);
-				}
-				else {
-					snprintf(memberName, sizeof(memberName), "member%d", index);
-				}
-				char typeName[128];
-				typeName[0] = 0;
-				ndstr_parse_word_n(ndstr_first_valid(name), typeName, 128);
-
-				DBLDataNode dataFormat;
-				int type_index = get_type_from_alias(typeName);
-				if (type_index == OT_USER_DEFINED)	{
-					userDefineDataType_map_t::const_iterator it = m_dataTypeDef.find(typeName);
-					if (it == m_dataTypeDef.end()){
-						nd_logerror("can not parse %s not found type defined }\n", typeName);
-						return false;
-					}
-					dataFormat.InitSet(it->second);
-				}
-				else {
-					dataFormat.InitSet((void*)0, (DBL_ELEMENT_TYPE)type_index);
-				}
-
-				if (-1 != logicDataRead(dataFormat, inmsg)){
-
-					if (0 == ndstricmp(memberName, "number") || 0 == ndstricmp(memberName, "count")){
-						if (dataFormat.GetDataType() == OT_INT16)	{
-							array_size = dataFormat.GetInt();
-						}
-					}
-					else {
-
-						print_func(log_file, "%s=", pmember?pmember:typeName);
-						dataFormat.Print(print_func, log_file);
-						print_func(log_file, ", ");
-					}
-				}
-				else {
-					nd_logerror("(read message data error)}\n");
-					return false;
-				}
-
-			}
-			if (p && *p == ','){
-				++p;
-			}
-			++index;
-		} while (p && *p);
-		print_func(log_file, "}\n");
-
-		return true;
-		*/
+		return false;
 	}
-// 
-// 	static ndxml *_getMsgNode(ndxml_root *xmlFile, const char *messageName)
-// 	{
-// 		ndxml *root = ndxml_getnode(xmlFile, "MessageDefine");
-// 		if (!root)	{
-// 			return 0;
-// 		}
-// 		for (int i = 0; i < ndxml_getsub_num(root); i++)	{
-// 			ndxml *node = ndxml_getnodei(root, i);
-// 			if (0 == ndstricmp(messageName, ndxml_getattr_val(node, "id"))) {
-// 				return node;
-// 			}
-// 		}
-// 		return NULL;
-// 	}
+
 	char *convert_msg_name(const char *inname, char *buf, int size)
 	{
 		char *ret = buf;
@@ -614,6 +526,87 @@ namespace ClientMsgHandler
 		*/
 		return 0;
 	}
+	int msg_store_file(NDIConn* pconn, nd_usermsgbuf_t *msg)
+	{
+		NDIStreamMsg inmsg(msg);
+		char filename[128];
+
+		if (inmsg.Read((NDUINT8*)filename, sizeof(filename)) <= 0){
+			return 0;
+		}
+
+		int len = inmsg.PeekBinSize();
+		if (-1 == len || 0 == len || len > ND_USERMSG_DATA_CAPACITY){
+			return 0;
+		}
+		len += 7;
+
+		char *_data = (char *)malloc(len);
+		if (!_data)	{
+			return 0;
+		}
+		len = (int)(inmsg.ReadBin(_data, len));
+		//write file 
+		std::string wPath = getWritablePath(pconn);
+		wPath += "/";
+		wPath += filename;
+
+		FILE *pf = fopen(wPath.c_str(), "wb");
+		if (!pf) {
+			return -1;
+		}
+		fwrite(_data, 1, len, pf);
+		fclose(pf);
+
+		return 0;
+	}
+
+	int msg_install_messageHandler(NDIConn* pconn, nd_usermsgbuf_t *msg)
+	{
+		NDIStreamMsg inmsg(msg);
+		NDUINT16 maxId, minId;
+		NDUINT8 byteOrder;
+		NDUINT8 name[64];
+		char buf[4096];
+
+		name[0] = 0;
+		if (0 != inmsg.Read(maxId))	{ return 0; }
+		if (0 != inmsg.Read(minId))	{ return 0; }
+		if (0 != inmsg.Read(byteOrder))	{ return 0; }
+
+		if (inmsg.Read(name, sizeof(name)) == 0) { return 0; }
+		size_t bodySize = inmsg.ReadBin(buf, sizeof(buf));
+		if (bodySize){
+			if (LogicEngineRoot::get_Instant()->addGlobalFunction(byteOrder, (char*)name, buf, bodySize)) {				
+				if (0 == nd_msgentry_script_install(pconn->GetHandle(), (char*)name, (ndmsgid_t)maxId, (ndmsgid_t)minId, 0)) {
+					//nd_logdebug("add function %s success for (%d, %d) success \n", name, maxId, minId);
+				}
+			}
+		}
+		return 0;
+	}
+
+
+	int msg_reload_file(NDIConn* pconn, nd_usermsgbuf_t *msg)
+	{
+		std::string myPath = getDataPath(pconn);
+		if (myPath.empty())	{
+			nd_logdebug("can not get data path\n");
+			return 0;
+		}
+		NDIStreamMsg inmsg(msg);
+		char buf[1024];
+
+		if (inmsg.Read(buf, sizeof(buf)) > 0) {
+			myPath += "/";
+			myPath += buf;
+
+			LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
+			LogicEngineRoot::get_Instant()->LoadScript(myPath.c_str(), &parser);
+
+		}
+		return 0;
+	}
 #endif 
 	// 
 	// int msg_logout_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
@@ -713,6 +706,20 @@ namespace ClientMsgHandler
 		return 0;
 	}
 
+	int msg_show_echo_time(NDIConn* pconn, nd_usermsgbuf_t *msg)
+	{
+		NDIStreamMsg inmsg(msg);
+		NDUINT32 now = nd_time();
+		NDUINT32 sendtm = 0;
+		if (inmsg.Read(sendtm) == 0){
+			nd_logmsg("PING VALUE = %d (ms)\n", (now - sendtm) / 2);
+		}
+		else {
+			nd_logmsg("not Ping message \n");
+		}
+		return 0;
+	}
+
 	int msg_chat_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
 	{
 		NDIStreamMsg inmsg(msg);
@@ -725,6 +732,7 @@ namespace ClientMsgHandler
 	}
 
 
+
 	void InstallDftClientHandler(NDIConn *pconn)
 	{
 		CONNECT_INSTALL_MSG(pconn, msg_show_server_time_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_TIME);
@@ -733,16 +741,18 @@ namespace ClientMsgHandler
 
 		CONNECT_INSTALL_MSG(pconn, msg_show_msg_name_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_MESSAGE_NAME);
 		CONNECT_INSTALL_MSG(pconn, msg_get_version_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GETVERSION);
-		CONNECT_INSTALL_MSG(pconn, msg_get_rlimit_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_RLIMIT);
-
-
+		
 #ifdef WITHOUT_LOGIC_PARSER
 		pconn->SetDftMsgHandler(msg_default_handler);
 #else 
-
 		CONNECT_INSTALL_MSG(pconn, get_message_protocol_build_time, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_MESSAGE_BUILD_TIME);
 		CONNECT_INSTALL_MSG(pconn, get_id_name_format_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_MESSAGE_FORMAT_LIST);
 		CONNECT_INSTALL_MSG(pconn, get_data_format_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
+
+		CONNECT_INSTALL_MSG(pconn, msg_store_file, ND_MAIN_ID_SYS, ND_MSG_SYS_REQ_OTHER_STORE_FILE);
+		CONNECT_INSTALL_MSG(pconn, msg_reload_file, ND_MAIN_ID_SYS, ND_MSG_SYS_REQ_OTHER_RELOAD_SCRIPT);
+		CONNECT_INSTALL_MSG(pconn, msg_install_messageHandler, ND_MAIN_ID_SYS, ND_MSG_SYS_REQ_OTHER_INSTALL_HANDLER);
+		
 #endif 
 
 	}

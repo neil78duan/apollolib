@@ -74,6 +74,9 @@ namespace LogicEditorHelper
 		ERT_BREAK_ANCHOR,
 		ERT_ONLY_DEBUG,
 		ERT_BREAKPOINT,
+		ERT_DISPLAY_CHILDREN,
+		ERT_BLUEPRINT_CTRL,
+		ERT_BLUEPRINT_TIPS,
 	};
 
 	const char *_GetDataTypeName(eDataType dataType);
@@ -85,7 +88,7 @@ namespace LogicEditorHelper
 			std::string str_var;
 			std::string str_alias;
 		};
-		CXMLAlias() : m_num(0), m_pBuf(0), m_created(0){}
+        CXMLAlias() : m_num(0), m_created(0), m_pBuf(0){}
 		virtual ~CXMLAlias() {
 			if (m_pBuf) delete[] m_pBuf;
 		}
@@ -191,6 +194,8 @@ namespace LogicEditorHelper
 
 	//检测是否是扩展显示所有子节点
 	bool CheckExpand(ndxml *xml);
+
+	bool CheckDisplayChildren(ndxml *xml);
 	
 	bool checkAddNewChild(ndxml *xml);
 

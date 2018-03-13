@@ -189,9 +189,6 @@
     <ClInclude Include="..\..\..\ndsdk\include\nd_crypt\tea.h">
       <Filter>include\nd_crypt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\cli_common\netui_atl.h">
-      <Filter>apollo\login</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\cli_common\login_apollo.h">
       <Filter>apollo\login</Filter>
     </ClInclude>
@@ -429,9 +426,6 @@
       <Filter>src\nd_vm</Filter>
     </ClCompile>
     <ClCompile Include="..\..\cli_common\login_apollo.cpp">
-      <Filter>apollo\login</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\cli_common\netui_atl.cpp">
       <Filter>apollo\login</Filter>
     </ClCompile>
     <ClCompile Include="..\..\logic_parser\dbl_mgr.cpp">

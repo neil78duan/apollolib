@@ -1,5 +1,6 @@
 #include "workdirdialog.h"
 #include "ui_workdirdialog.h"
+#include "nd_common/nd_common.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -15,6 +16,20 @@ bool trytoGetSetting(QString &workPath,QString &cfgSetting,QString &editorCfg,QW
     if(workPath.isEmpty() || cfgSetting.isEmpty()) {
 		return inputSetting(workPath, cfgSetting, editorCfg, parent);
     }
+
+	std::string config_setting = editorCfg.toStdString();
+	const char * pName = nd_filename(config_setting.c_str());
+	if (pName && 0==ndstricmp(pName,"editor_setting.xml")) {
+		char mypaht[1024];
+		if (nd_getpath(config_setting.c_str(), mypaht, sizeof(mypaht))) {
+			editorCfg = mypaht;
+			editorCfg += "/editor_config_setting.json";
+
+			QSettings settings("duanxiuyun", "ApolloEditor");
+			settings.setValue("editor_config", editorCfg);
+		}
+	}
+		
     return true ;
 }
 

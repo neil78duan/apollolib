@@ -99,9 +99,12 @@ enum ACCOUNT_TYPE{
 	ACC_APOLLO,
 	ACC_GAME_CENTER,
 	ACC_GOOGLE_PLAY,
-	ACC_OTHER_3_ACCID,
-	ACC_SKIP_AUTH,
-	ACC_NUMBER
+	ACC_OTHER_3_ACCID,	
+	ACC_ANYSDK,		//any sdk
+	ACC_UC,
+	
+	ACC_NUMBER ,
+	ACC_SKIP_AUTH = 0xff,
 };
 
 enum eChatType {
@@ -116,7 +119,7 @@ enum eChatType {
 
 struct login_token_info
 {
-	login_token_info() :acc_index(0), session_key(0), create_tm(0), _reserved(0)
+        login_token_info() :acc_index(0), session_key(0), _reserved(0), create_tm(0)
 	{
 		udid[0] = 0;
 	}
@@ -130,7 +133,7 @@ struct login_token_info
 	int toBuf(char *buf, int bufsize)
 	{
 		char *src = buf;
-		if (bufsize <= sizeof(login_token_info) )	{
+                if (bufsize <= (int)sizeof(login_token_info) )	{
 			return -1;
 		}
 
@@ -155,6 +158,9 @@ struct login_token_info
 	int fromBuf(char *buf, int bufsize)
 	{
 		char *src = buf;
+                if(bufsize <= 16) {
+                    return 0 ;
+                }
 
 		acc_index = nd_netstream_to_long(buf);
 		buf += 4;
@@ -192,7 +198,7 @@ struct transfer_session_key
 	}
 	int toBuf(char *buf, size_t bufSize)
 	{
-		if (bufSize < getLength())	{
+                if (bufSize <(size_t) getLength())	{
 			return -1;
 		}
 		char *src = buf;
@@ -227,7 +233,7 @@ struct transfer_session_key
 		buf += sizeof(new_key);
 		size =nd_netstream_to_long(buf);
 		buf += 4;
-		if (size > bufSize)		{
+                if (size >(NDUINT32) bufSize)		{
 			return -1;
 		}
 		memcpy(session_buf,buf, size);
@@ -240,15 +246,114 @@ struct transfer_session_key
 struct account_base_info
 {
 	NDUINT8 type;
-	NDUINT8 gender;
+	//NDUINT8 gender;
+	NDUINT8 isAdult;
 	NDUINT16 serverGroupId;
-	NDUINT16  birth_year, birth_month, birth_day;
+	NDUINT32 channel;				//渠道id
+	NDUINT16 reserved;
+
+	//NDUINT16  birth_year, birth_month, birth_day;
 	NDUINT8 acc_name[ACCOUNT_NAME_SIZE];
 	NDUINT8 nick[USER_NAME_SIZE];
 	NDUINT8 passwd[USER_PASSWORD_SIZE];
-	NDUINT8 phone[PHONE_NUMBER_SIZE];
-	NDUINT8 email[EMAIL_SIZE];
+	//NDUINT8 phone[PHONE_NUMBER_SIZE];
+	//NDUINT8 email[EMAIL_SIZE];
 	NDUINT8 udid[DEVICE_UDID_SIZE] ;
+	NDUINT8 devDesc[DEVICE_UDID_SIZE];
+
+	account_base_info()
+	{
+		type = 2 ;
+		isAdult = 0 ;
+		serverGroupId = 1;
+		channel = 0;				//渠道id
+		reserved = 0;
+
+		acc_name[0] = 0;
+		nick[0] = 0;
+		passwd[0] = 0;
+		udid[0] = 0;
+		devDesc[0] = 0;
+	}
+	int WriteStream(NDOStreamMsg &omsg)
+	{
+		omsg.Write(udid);
+		omsg.Write(type );
+		omsg.Write(isAdult);
+
+		omsg.Write(serverGroupId );
+		omsg.Write(channel );				//渠道id
+		omsg.Write(reserved);				//渠道id
+
+		omsg.Write(acc_name);
+		omsg.Write(nick);
+		omsg.Write(passwd);
+		omsg.Write(devDesc);
+		omsg.Write("");	//email . for old version
+		omsg.Write(serverGroupId); // for old version
+
+		
+		return 0;
+	}
+
+	int ReadStream(NDIStreamMsg &inmsg)
+	{
+		char tmp[128];
+		if (-1 == inmsg.Read(udid, sizeof(udid))) { return -1; }
+		if (-1 == inmsg.Read(type)) { return -1; }
+		if (-1 == inmsg.Read(isAdult)) { return -1; }
+
+		if (-1 == inmsg.Read(serverGroupId)) { return -1; }
+		//if (-1 == inmsg.Read(channel)) { return -1; }				//渠道id
+		eNDnetStreamMarker channelDataType = inmsg.PeekDataType();
+		if (channelDataType == ENDSTREAM_MARKER_INT32){
+			inmsg.Read(channel);
+		}
+		else if (channelDataType == ENDSTREAM_MARKER_INT16) {
+			NDUINT16 tmpch = 0;
+			inmsg.Read(tmpch);
+			channel = tmpch;
+		}
+		else {
+			return -1;
+		}
+		///end channel
+
+		if (-1 == inmsg.Read(reserved)) { return -1; }				//reserved data 
+
+		if (-1 == inmsg.Read(acc_name, sizeof(acc_name))) { return -1; }
+		if (-1 == inmsg.Read(nick, sizeof(nick))) { return -1; }
+		if (-1 == inmsg.Read(passwd, sizeof(passwd))) { return -1; }
+		if (-1 == inmsg.Read(devDesc, sizeof(devDesc))) { return -1; }
+		if (-1 == inmsg.Read(tmp, sizeof(tmp))) { return -1; }	//email . for old version
+		if (-1 == inmsg.Read(serverGroupId)) { return -1; } // for old version
+
+		return 0;
+	}
+};
+
+#define BASE_ROLE_ATTR_NUM 20
+struct role_base_info 
+{
+	roleid_t rid;
+	char name[USER_NAME_SIZE];
+	NDUINT16 num;
+	struct attrs{
+		NDUINT8 aid;
+		float val;
+	}attrs[BASE_ROLE_ATTR_NUM];
+
+	role_base_info() : rid(0), num(0)
+	{
+		name[0] = 0;
+	}
+	void pushAttr(NDUINT8 id, float val)
+	{
+		if (num < BASE_ROLE_ATTR_NUM)	{
+			attrs[num].aid = id;
+			attrs[num].val = val;
+		}
+	}
 };
 
 struct invite_info
@@ -261,7 +366,7 @@ struct invite_info
 struct host_list_node {
 	NDUINT16 port ;
 	NDUINT16 max_number ;
-	NDUINT16 cur_number ;
+	NDINT16 cur_number ;
 	NDUINT16 logic_group_id;
 	NDUINT8 isdefault_entry;
 	NDUINT8 isDebug;
@@ -285,7 +390,7 @@ struct host_list_node {
 	{
 		omsg.Write(port);
 		omsg.Write(max_number);
-		omsg.Write(cur_number);
+		omsg.Write((NDUINT16)cur_number);
 		omsg.Write(logic_group_id);
 		omsg.Write(isdefault_entry);
 		omsg.Write(isDebug);
@@ -306,7 +411,7 @@ struct host_list_node {
 			return -1;
 		}
 
-		if (-1 == inmsg.Read(cur_number)) {
+		if (-1 == inmsg.Read((NDUINT16&)cur_number)) {
 			return -1;
 		}
 		if (-1 == inmsg.Read(logic_group_id)) {
@@ -321,10 +426,10 @@ struct host_list_node {
 		if (-1 == inmsg.Read(version_id)) {
 			return -1;
 		}
-		if (-1 == inmsg.Read(inet_ip, sizeof(inet_ip))) {
+                if (0 == inmsg.Read(inet_ip, sizeof(inet_ip))) {
 			return -1;
 		}
-		if (-1 == inmsg.Read(name, sizeof(name))) {
+                if (0 == inmsg.Read(name, sizeof(name))) {
 			return -1;
 		}
 		return 0;

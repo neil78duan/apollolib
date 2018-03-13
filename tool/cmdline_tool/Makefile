@@ -9,7 +9,7 @@ PROJ2  = $(WORKDIR)/cmdline_tool
 
 #OBJS   :=   commonTest.o testConnector.o
 
-TOOLOBJS := $(OBJS) client_cmdline.o test_msgsend.o atlantis_test.o rsa_gen.o commonTest.o
+TOOLOBJS := $(OBJS) client_cmdline.o test_msgsend.o atlantis_test.o rsa_gen.o 
 
 CFLAGS += -I$(TOPDIR)/include  -I$(LIBAPOLLO)/cli_common -DWITHOUT_LOGIC_PARSER
 

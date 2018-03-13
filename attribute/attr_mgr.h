@@ -70,22 +70,24 @@ public:
 	void endRecordChange();
 public:
 	attrval_t getVal(attrid_t index, bool withRecalc) ;
-	attrval_t   getVal(const char *name, bool withRecalc );
+	attrval_t getVal(const char *name, bool withRecalc );
 
 	attrval_t getVal(attrid_t index)const;
-	attrval_t   getVal(const char *name)const;
+	attrval_t getVal(const char *name)const;
 
 	bool setVal(attrid_t index, attrval_t val);
 	bool addVal(attrid_t index, attrval_t val);
 	bool subVal(attrid_t index, attrval_t val);
-
-	bool        setVal(const char *name, attrval_t newval);
-	bool		addVal(const char *name, attrval_t addval);
-	bool		subVal(const char *name, attrval_t subval);
+	
+	bool setVal(const char *name, attrval_t newval);
+	bool addVal(const char *name, attrval_t addval);
+	bool subVal(const char *name, attrval_t subval);
 
 	bool setVal(const attr_node_buf &attrs);
 	bool addVal(const attr_node_buf &attrs);
 	bool subVal(const attr_node_buf &attrs);
+
+	bool checkUnlimitMax(attrid_t aid);
 
 	bool printf() ;
 	int toNodeBuf(attr_node_buf &nodebuf) ;
@@ -121,6 +123,10 @@ public:
 	virtual int getLastError();
 	virtual void setLastErrorAttrID(attrid_t errId);
 	virtual void setLastError(int errcode);
+	
+	bool setValRaw(attrid_t index, attrval_t val);
+	bool setValRaw(const char *name, attrval_t newval);
+	bool setValRaw(const attr_node_buf &attrs);
 
 protected:
 
@@ -136,7 +142,7 @@ protected:
 	bool m_EnableRecalc;
 	//attrid_t m_lastErrorID;
 	//int m_lastErrorCode;
-	//float m_attrRate ;
+	float m_attrRate ;
 	
 private:
 	role_attr_data *m_data;

@@ -56,6 +56,15 @@ enum DBL_ELEMENT_TYPE
 	OT_FILE_STREAM = 0X27, // file binary stream
 };
 
+enum eBitOperate
+{
+	E_BIT_AND,
+	E_BIT_OR,
+	E_BIT_XOR,
+	E_BIT_NOT,
+	E_BIT_LEFT_MOVE,
+	E_BIT_RIGHT_MOVE
+};
 #pragma pack(push, 4)
 //整形数组/bool
 struct dbl_intarray
@@ -309,6 +318,7 @@ public:
 	DBL_ELEMENT_TYPE GetDataType() const;
 	DBL_ELEMENT_TYPE GetArrayType() const;
 
+	bool BitOperateBin(eBitOperate opType, NDUINT8 opVal);
 	static bool setOutHex(bool isHex = true);
 	static bool setOutLua(bool isLua);
 

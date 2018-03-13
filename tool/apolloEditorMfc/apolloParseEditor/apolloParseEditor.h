@@ -14,7 +14,7 @@
 // CapolloParseEditorApp: 
 // 有关此类的实现，请参阅 apolloParseEditor.cpp
 //
-void out_log( const char *text);
+int out_log( const char *text);
 int out_print(void *pf, const char *stm, ...);
 
 class CapolloParseEditorApp : public CWinApp

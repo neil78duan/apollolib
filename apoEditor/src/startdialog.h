@@ -1,7 +1,7 @@
 #ifndef STARTDIALOG_H
 #define STARTDIALOG_H
 
-#define CONFIG_FILE_PATH "../cfg/editor_setting.xml"
+#define CONFIG_FILE_PATH "../cfg/editor_config_setting.json"
 #ifdef __MAC_OS__
 #define CONFIG_IO_SETTING "../cfg/io_config_mac.xml"
 #else

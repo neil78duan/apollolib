@@ -17,7 +17,7 @@
 
 #include "ndlib.h"
 #include "cli_common/login_apollo.h"
-#include "cli_common/netui_atl.h"
+//#include "cli_common/netui_atl.h"
 #include "apollo_data.h"
 #include "nd_msg.h"
 #include "msg_def.h"
@@ -31,7 +31,7 @@
 
 #include "ndlib.h"
 #include "cli_common/login_apollo.h"
-#include "cli_common/netui_atl.h"
+//#include "cli_common/netui_atl.h"
 #include "apollo_data.h"
 #include "nd_msg.h"
 #include "msg_def.h"

@@ -102,11 +102,11 @@ int RoleAttrHelper::loadUplevelExp(const char *file)
 
 int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 {
-	std::string attrmax[ROLE_ATTR_CAPACITY][2];
+	std::string attrmax[ROLE_ATTR_CAPACITY][3];
 	//const char *attrmax[ROLE_ATTR_CAPACITY][2] = { 0 };
 	const char *pfields[] = { "id", "name", "formula", "save_db", "sync", "min_val", "max_val",			//7
 		"client_change", "real_name", "forBuilding", "affect_buildings", "forRole", "affect_card",	"forCard", //14
-		"showInGuild","save_log","lostOnAttacked"};
+		"showInGuild", "save_log", "lostOnAttacked", "unlimited_max"};
 	
 	m_wa_num = 0 ;
 	role_attr_description *pwa_desc ;
@@ -167,6 +167,7 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 
 		attrmax[aid][1] = cursor[5].GetString();
 		attrmax[aid][0] = cursor[6].GetString();
+		attrmax[aid][2] = cursor[17].GetString();
 		++i;
 	}
 	m_wa_num++ ;
@@ -176,7 +177,7 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 		if (pwa_desc->wa_id == INVALID_ATTR_ID){
 			continue ;	
 		}
-		parse_minmax(attrmax[i][0].c_str(), attrmax[i][1].c_str(),pwa_desc);
+		parse_minmax(attrmax[i][0].c_str(), attrmax[i][1].c_str(), attrmax[i][2].c_str(), pwa_desc);
 	}
 	if (ParseFormula()==-1){
 		return -1 ;
@@ -414,7 +415,7 @@ int RoleAttrHelper::ParseFormula()
 }
 
 
-int RoleAttrHelper::parse_minmax(const char *maxval, const char *minval, role_attr_description *pwa)
+int RoleAttrHelper::parse_minmax(const char *maxval, const char *minval, const char*unlimitedMax, role_attr_description *pwa)
 {
 	if (maxval && *maxval){
 		attrid_t attid = GetID(maxval) ;
@@ -446,6 +447,21 @@ int RoleAttrHelper::parse_minmax(const char *maxval, const char *minval, role_at
 		pwa->ismin = 0 ;
 	}
 	
+	if (unlimitedMax && *unlimitedMax){
+		attrid_t attid = GetID(unlimitedMax);
+		if (INVALID_ATTR_ID != attid)  {
+			pwa->isUnlimitedMax = 2;
+			pwa->unlimitMax = (attrval_t)attid;
+		}
+		else {
+			pwa->isUnlimitedMax = 1;
+			pwa->unlimitMax = (attrval_t)atof(maxval);
+		}
+	}
+	else {
+		pwa->isUnlimitedMax = 0;
+	}
+
 	return 0;
 }
 
@@ -530,6 +546,28 @@ bool RoleAttrHelper::check_log(attrid_t wa_id)
 		return m_wahelper_bufs[wa_id].islog ? true : false;
 	}
 	return false;
+}
+
+bool RoleAttrHelper::check_readonly(attrid_t wa_id)
+{
+	if (wa_id < (attrid_t)m_wa_num){
+		if (m_wahelper_bufs[wa_id].wa_id == INVALID_ATTR_ID) {
+			return true;
+		}
+		return m_wahelper_bufs[wa_id].isReadOnly ? true : false;
+	}
+	return false;
+}
+
+void RoleAttrHelper::set_readonly(attrid_t wa_id,bool bReadOnly)
+{
+
+	if (wa_id < (attrid_t)m_wa_num){
+		if (m_wahelper_bufs[wa_id].wa_id == INVALID_ATTR_ID) {
+			return ;
+		}
+		 m_wahelper_bufs[wa_id].isReadOnly = bReadOnly? 1: 0;
+	}
 
 }
 
@@ -689,7 +727,7 @@ int Dbl_TableStringToAttr(const DBLDataNode &dataString, attr_node_buf &attrbuf)
 				DBLDataNode node;
 				if (node.StringToArrayString(p)) {
 					attrid_t aid = root->GetID( node.GetarrayText(0));
-					if (aid == ATTR_VALUE_DETA) {
+					if (aid == INVALID_ATTR_ID) {
 						return -1;
 					}
 					attrval_t val = node.GetarrayFloat(1);

@@ -20,10 +20,10 @@ struct type_name_info
 
 static type_name_info alias_operate[] = {
 	{ "char", "Uint8" },
-	{ "int8_t", "Uint8" },
-	{ "int16_t", "Uint16" },
-	{ "int32_t", "Uint32" },
-	{ "int64_t", "Uint64" },
+	{ "int8_t", "Int8" },
+	{ "int16_t", "Int16" },
+	{ "int32_t", "Int32" },
+	{ "int64_t", "Int64" },
 	{ "uint8_t", "Uint8" },
 	{ "uint16_t", "Uint16" },
 	{ "uint32_t", "Uint32" },
@@ -156,6 +156,7 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 						"\tfor i = 1, self.%sCount do\n"
 						"\t\tsize = size + dataStream : Write%s(self.%s[i])\n\tend\n",
 						pValName, pValName, realOp, pValName);
+					pWriteStream += size;
 
 				}
 				else {
@@ -176,6 +177,7 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 						"\tfor i = 1, self.%sCount do\n"
 						"\t\tsize = size + self.%s[i]:Write(dataStream)\n\tend\n",
 						pValName, pValName, pValName);
+					pWriteStream += size;
 					
 				}
 

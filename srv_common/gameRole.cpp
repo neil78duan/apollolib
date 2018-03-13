@@ -43,12 +43,12 @@ void Role::SetName(const char *name)
 		strncpy((char*)m_nick, name, sizeof(m_nick));
 	}
 }
-void Role::SetGuildName(const char *name)
-{
-	if (name && name[0]) {
-		strncpy((char*)m_guildName, name, sizeof(m_guildName));
-	}
-}
+// void Role::SetGuildName(const char *name)
+// {
+// 	if (name && name[0]) {
+// 		strncpy((char*)m_guildName, name, sizeof(m_guildName));
+// 	}
+// }
 
 
 int Role::Send(NDOStreamMsg &omsg, int flag)

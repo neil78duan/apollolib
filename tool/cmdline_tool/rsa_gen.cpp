@@ -113,12 +113,15 @@ ND_CMDLINE_FUNC_INSTANCE(gen_rsa_key_bin)
 	
 	int bits = 0 ;
 	int number_index = 2 ;
+	int timeout_days = 365 ;
 	const char *_pub_file = NULL;
 	const char *_pri_file = NULL;
+	time_t tmout_stamp = time(NULL) ;
 	//char md5text[33] ;
 	//R_RANDOM_STRUCT _rand_contex = {0};
 	ND_RSA_CONTEX rsa_contex ={0};
 	RSA_HANDLE _h_rsa = &rsa_contex ;
+	char tips[1024] ;
 	
 	nd_common_init() ;
 	if (argc >= 2){
@@ -139,11 +142,14 @@ ND_CMDLINE_FUNC_INSTANCE(gen_rsa_key_bin)
 			else if (strcmp(argv[i],"-bits")==0)	{
 				bits = atoi(argv[i+1]) ;
 				++i;
+			}else if (strcmp(argv[i],"-t")==0)	{
+				timeout_days = atoi(argv[i+1]) ;
+				++i;
 			}
 		}
 		
 	}
-	
+	tmout_stamp += timeout_days * 24 * 3600 ;
 	if (!_pri_file || !_pub_file){		
 		fprintf(stderr, "usage :rsakeybin -p public_key.bin -s private_key.bin -v -bits rsa-key-bit\n");
 		EXIT_RSA(1) ;
@@ -172,12 +178,14 @@ ND_CMDLINE_FUNC_INSTANCE(gen_rsa_key_bin)
 		EXIT_RSA(1) ;
 	}*/
 	
-	if(-1==nd_rsa_privkey_output(&_h_rsa->privateKey, _pri_file) )  {
+	snprintf(tips, sizeof(tips), "file %s is timeount", _pri_file) ;
+	if(-1==nd_rsa_privkey_output(&_h_rsa->privateKey, _pri_file,tmout_stamp,tips) )  {
 		fprintf(stderr,"out put private key bin error \n") ;
 		EXIT_RSA(1) ;
 	}
 	
-	if(-1==nd_rsa_pubkey_output(&_h_rsa->publicKey, _pub_file) )  {
+	snprintf(tips, sizeof(tips), "file %s is timeount", _pub_file) ;
+	if(-1==nd_rsa_pubkey_output(&_h_rsa->publicKey, _pub_file,tmout_stamp,tips) )  {
 		fprintf(stderr,"out put public key bin error \n") ;
 		EXIT_RSA(1) ;
 	}

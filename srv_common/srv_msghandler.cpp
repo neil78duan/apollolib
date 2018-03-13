@@ -225,6 +225,7 @@ MSG_ENTRY_INSTANCE(resend_playermsg_to_world_handler)
 //show error
 const char *apollo_error(int errcode)
 {
+	ND_TRACE_FUNC();
 	static char errdesc[128];
 
 	const char *nd_err[] = {

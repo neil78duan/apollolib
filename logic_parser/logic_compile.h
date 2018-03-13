@@ -161,6 +161,7 @@ public:
 	//bool setConfigFile(const char *config);
 
 	static bool getFuncStackInfo(ndxml *curNode, char *buf, size_t size);
+	static bool isFileInfo(ndxml * node);
 private:
 	
 	bool compileFuncs(ndxml *funcsCollect, FILE *pf);
@@ -190,7 +191,6 @@ private:
 	int trytoCompileExceptionHandler(ndxml *funcNode, char *buf, size_t bufsize);
 	int trytoCompileInitilizerBlock(ndxml *funcNode, char *buf, size_t bufsize);
 
-	bool _isFileInfo(ndxml * node);
 	int _writeFileInfo(ndxml *module, FILE *pf) ;
 	bool _isGlobalFunc(ndxml *funcNode);
 

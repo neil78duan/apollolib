@@ -141,6 +141,7 @@ BOOL CapolloParseEditorDlg::OnInitDialog()
 
 	// TODO:  在此添加额外的初始化代码
 
+	LogicEngineRoot::setSettingFile(CONFIG_FILE_PATH);
 	if (!m_compileSetting.setConfigFile(CONFIG_FILE_PATH, E_SRC_CODE_GBK)){
 		AfxMessageBox("加载配置文件错误");
 		return false;

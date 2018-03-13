@@ -8,109 +8,73 @@ ndsdk_dir = ../../ndsdk
 apolib_dir = ..
 
 macx:{
-#apolib_dir = $$(LIBAPOLLO)
-#ndsdk_dir = $$(NDHOME)
 
-
-QMAKE_MAC_SDK = macosx10.13
-
-DEFINES += __ND_MAC__
-
-LIBS += -L$$ndsdk_dir/lib -L$$apolib_dir/lib/darwin_x86_64  -liconv -L$$ndsdk_dir/lib/darwin_x86_64
-
-LIBS += -lnd_vm_dbg -lndclient_darwin_x86_64_d
+    QMAKE_MAC_SDK = macosx10.13
+    DEFINES += __ND_MAC__
+    platform_name = darwin_x86_64
+    LIBS += -lnd_vm_dbg -lndclient_darwin_x86_64_d -liconv
 
 }
 unix:!macx{
-message(BUILD LINUX!)
-DEFINES += __ND_LINUX__
+    message(BUILD LINUX!)
+    DEFINES += __ND_LINUX__
+    platform_name = linux_x86_64
+
+    LIBS += -lnd_vm_dbg -lndclient_linux_x86_64_d -liconv
 }
 
 win32{
-message(WIN32!)
-#ndsdk_dir = ../../../ndsdk
-#apolib_dir = ../..
-LIBS += -L$$ndsdk_dir/lib/win64
+    message(WIN32!)
+    platform_name = Win64
+    LIBS += -L$$ndsdk_dir/lib/win64
 
-CONFIG(debug, debug|release) {
-    message(BUILD win32 -debug)
-    LIBS += -lndclient_s_d
-    DEFINES +=  ND_DEBUG
-} else {
-    message(BUILD win32 -release)
-    LIBS += -lndclient_s
+    CONFIG(debug, debug|release) {
+        message(BUILD win32 -debug)
+        LIBS += -lndclient_s_d
+        DEFINES +=  ND_DEBUG
+    } else {
+        message(BUILD win32 -release)
+        LIBS += -lndclient_s
+    }
+
+    DEFINES += __ND_WIN__ DO_NOT_CONVERT_PRINT_TEXT
 }
 
-DEFINES += __ND_WIN__ DO_NOT_CONVERT_PRINT_TEXT
-}
 
+LIBS += -L$$ndsdk_dir/lib -L$$apolib_dir/lib/$$platform_name  -L$$ndsdk_dir/lib/$$platform_name -lapoBluePrint
 
 DEFINES += X86_64
 
 INCLUDEPATH += $$ndsdk_dir/include \
         $$apolib_dir/include \
-        $$apolib_dir ./src ./src/apoScript
+        $$apolib_dir  ./include ./include/apoScript \
+        ./src ../apoBluePrint/include
+
+
+#-------qt----------
 
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = apolloEditor
+TARGET = ../bin/apolloEditor
 TEMPLATE = app
 
 
 SOURCES += src/main.cpp\
     src/startdialog.cpp \
-    src/xmldialog.cpp \
-    src/connectdialog.cpp \
-    src/listdialog.cpp \
-    src/dragtree.cpp \
     src/workdirdialog.cpp \
-    src/apoScript/apoBaseExeNode.cpp \
-    src/apoScript/apoUiBezier.cpp \
-    src/apoScript/apoUiExeNode.cpp \
-    src/apoScript/apoUiMainEditor.cpp \
-    src/apoScript/mainwindow.cpp \
-    src/apoScript/editorframe.cpp \
-    src/apoScript/apoXmlTreeView.cpp \
-    src/apoScript/apoUiDetailView.cpp \
-    src/apoScript/apoUiParam.cpp \
-    src/apoScript/apoUiXmlTablesWidget.cpp \
-    src/apoScript/apoEditorSetting.cpp \
-    src/apoScript/runFuncDialog.cpp \
-    src/apoScript/apoUiDebugger.cpp
+    src/connectdialog.cpp
 
 HEADERS  += \
     src/startdialog.h \
-    src/xmldialog.h \
-    src/connectdialog.h \
-    src/listdialog.h \
-    src/dragtree.h \
     src/workdirdialog.h \
-    src/myqtitemctrl.h \
-    src/apoScript/apoBaseExeNode.h \
-    src/apoScript/apoUiBezier.h \
-    src/apoScript/apoUiExeNode.h \
-    src/apoScript/apoUiMainEditor.h \
-    src/apoScript/apouinodedef.h \
-    src/apoScript/mainwindow.h \
-    src/apoScript/editorFrame.h \
-    src/apoScript/apoXmlTreeView.h \
-    src/apoScript/apoUiDetailView.h \
-    src/apoScript/apoUiParam.h \
-    src/apoScript/apoUiXmlTablesWidget.h \
-    src/apoScript/runFuncDialog.h \
-    src/apoScript/apoUiDebugger.h
+    src/connectdialog.h
 
 FORMS    += \
     src/startdialog.ui \
-    src/xmldialog.ui \
     src/connectdialog.ui \
-    src/listdialog.ui \
-    src/workdirdialog.ui \
-    src/apoScript/mainwindow.ui \
-    src/apoScript/mainwindow.ui \
-    src/apoScript/runFuncDialog.ui
+    src/workdirdialog.ui
 
 # logic compile modules
  
@@ -142,14 +106,12 @@ HEADERS  += $$apolib_dir/logic_parser/dbl_mgr.h \
 #cli-common
 SOURCES += \
     $$apolib_dir/cli_common/apollo_robort.cpp\
-    $$apolib_dir/cli_common/netui_atl.cpp \
     $$apolib_dir/cli_common/dftCliMsgHandler.cpp \
     $$apolib_dir/cli_common/login_apollo.cpp
 
 HEADERS  += $$apolib_dir/cli_common/dftCliMsgHandler.h \
     $$apolib_dir/cli_common/login_apollo.h \
-    $$apolib_dir/cli_common/apollo_robort.h	\
-    $$apolib_dir/cli_common/netui_atl.h
+    $$apolib_dir/cli_common/apollo_robort.h
 
 # attribute 
 

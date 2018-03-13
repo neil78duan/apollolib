@@ -27,6 +27,12 @@
 // };
 typedef host_list_node ApolloServerInfo;
 
+
+struct rsa_key_from_srv{
+	char keymd5[16];
+	R_RSA_PUBLIC_KEY pub_key;
+};
+
 struct login_session_load{
 	NDUINT32 acc_index ;
 	NDUINT32 session_size ;
@@ -34,6 +40,7 @@ struct login_session_load{
 
 	char keymd5[16] ;
 	R_RSA_PUBLIC_KEY srv_key;
+	char reserved[16];
 };
 
 #ifdef BUILD_AS_THIRD_PARTY
@@ -41,14 +48,13 @@ class  LoginBase
 {
 public:
 
-	virtual void ReInit(nd_handle hConn, const char * session_filename, const char*udid = NULL) = 0;
-	virtual void SetUdid(const char *udid)  =0 ;
+	virtual void ReInit(nd_handle hConn, const char * session_filename) = 0;
 	virtual void SetSessionFile(const char *session_filepath)  =0 ;
 	virtual void SetConnector(nd_handle hConn) =0;
 
 	virtual void Destroy() = 0;
 	//return 0 success ,else return error code
-	virtual int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type) = 0;
+	virtual int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type,int chanelId=0, bool skipAuth=false) = 0;
 	virtual int Relogin() = 0;
 	virtual int Logout() = 0;
 	virtual int TrytoGetCryptKey() =0;
@@ -61,6 +67,10 @@ public:
 	virtual int GetServerList(ApolloServerInfo *buf, int size) = 0;
 	virtual int GetSubHostList(const char *groupEntryHost, NDUINT16 port, ApolloServerInfo *buf, int size)=0;
 
+	virtual int CreateRole(const char *roleName, role_base_info &roleInfo) = 0;
+	virtual int GetRoleList(role_base_info role_buf[], int number, NDUINT8 isRelogin=0) = 0;
+	virtual int SelectRole(roleid_t rid) =0;
+
 	virtual size_t GetSessionSize() = 0;
 	virtual size_t GetSessionData(void *session_buf, size_t buf_size) = 0;
 	virtual int ReloginEx(void *session_data, size_t size) = 0;
@@ -72,6 +82,8 @@ public:
 	virtual NDUINT32 getAccountID() = 0;
 	virtual const char *getAccountName() = 0;
 	virtual int getServerId() = 0 ;
+
+	static void SetDeviceInfo(const char *udid, const char *devDesc); 
 
 	LoginBase() {}
 	virtual~LoginBase(){}
@@ -93,18 +105,20 @@ class  LoginApollo
 #endif 
 {
 public:
-	LoginApollo(nd_handle hConn, const char * session_filename = NULL,const char*udid=NULL);
+	LoginApollo(nd_handle hConn, const char * session_filename = NULL);
 	LoginApollo();
 	virtual ~LoginApollo() ;
 
-	void ReInit(nd_handle hConn, const char * session_filename, const char*udid = NULL);
-	void SetUdid(const char *udid) ;
+	void ReInit(nd_handle hConn, const char * session_filename);
 	void SetSessionFile(const char *session_filepath) ;
 	void SetConnector(nd_handle hConn);
 
+	static void SetDeviceInfo(const char *udid, const char *devDesc);
+	static const char *GetLocalToken();
+
 	void Destroy();
 	//return 0 success ,else return error code
-	int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type, bool skipAuth);//return -1 if error ESERVER_ERR_NOUSER
+	int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type,int channelId, bool skipAuth);//return -1 if error ESERVER_ERR_NOUSER
 	int Relogin() ;
 	int Logout() ;
 	int TrytoGetCryptKey();
@@ -118,6 +132,9 @@ public:
 	//get gameservers list in the selected logic-group 
 	int GetSubHostList(const char *groupEntryHost, NDUINT16 port, ApolloServerInfo *buf, int size);
 
+	int CreateRole(const char *roleName, role_base_info &roleInfo);
+	int GetRoleList(role_base_info role_buf[], int number, NDUINT8 isRelogin = 0);
+	int SelectRole(roleid_t rid);
 
 	size_t GetSessionSize() ;
 	size_t GetSessionData(void *session_buf, size_t buf_size) ;
@@ -139,7 +156,7 @@ protected:
 	int relogin(void *tokenBuf, int sendMsgID, int waitMsgID, bool bNotLoadBalance = false);
 	int getReloginSessionInfo(login_session_load *outbuf);
 	int getLoginToken(login_token_info *outToken);
-	bool buildAccountName(ACCOUNT_TYPE type,const char *inputName, char *outName, size_t size);
+	//bool buildAccountName(ACCOUNT_TYPE type,const char *inputName, char *outName, size_t size);
 	
 	nd_handle  m_conn ;
 	account_index_t m_accIndex;
@@ -149,18 +166,21 @@ protected:
 	NDUINT16 m_serverGroupId;
 	NDUINT8 m_accType ;
 	NDUINT8 m_accName[ACCOUNT_NAME_SIZE] ;
-	NDUINT8 m_udid[DEVICE_UDID_SIZE] ;
-	
+	static NDUINT8 m_udid[DEVICE_UDID_SIZE] ;
+	static NDUINT8 m_deviceDesc[DEVICE_UDID_SIZE];
+	//static NDUINT8 m_myLoginToken[ACCOUNT_NAME_SIZE];
+	static NDUINT64 m_localToken;
 	
 //
 //	struct {
 //		char keymd5[16] ;
 //		R_RSA_PUBLIC_KEY pub_key ;
 //	} m_srv_key  ;
-	char m_srv_key[4096] ;
+	char m_srv_key[sizeof(rsa_key_from_srv) + 1024];
 };
 
 
+CPPAPI void myInitAccCreateInfo(account_base_info &acc, int accType, const char *userName, const char *passwd) ;
 //ND_CONNCLI_API const char *apollo_error(int errcode);
 //CPPAPI int ndSendAndWaitMessage(nd_handle nethandle, nd_usermsgbuf_t *sendBuf, nd_usermsgbuf_t* recvBuf, ndmsgid_t waitMaxid, ndmsgid_t waitMinid, int sendFlag = 0);
 //CPPAPI int ndSendAndWaitMessage(NDIConn *conn, NDOStreamMsg &omsg, nd_usermsgbuf_t* recvBuf, ndmsgid_t waitMaxid, ndmsgid_t waitMinid, int sendFlag = 0);

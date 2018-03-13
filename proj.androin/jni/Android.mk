@@ -68,8 +68,8 @@ LOCAL_SRC_FILES := ../../../ndsdk/src/nd_common/src/bintree.c \
 ../../../ndsdk/src/ndapplib/nd_msgpack.cpp \
 ../../../ndsdk/src/ndapplib/nd_datatransfer.cpp \
 ../../cli_common/login_apollo.cpp \
-../../cli_common/netui_atl.cpp	\
 ../../cli_common/dftCliMsgHandler.cpp \
+../../cli_common/apoClientU3d.cpp	\
 ../../logic_parser/dbl_mgr.cpp	\
 ../../logic_parser/logicParser.cpp	\
 ../../logic_parser/logic_function.cpp	\
@@ -84,11 +84,10 @@ LOCAL_SRC_FILES := ../../../ndsdk/src/nd_common/src/bintree.c \
 ../../attribute/attr_mgr.cpp \
 ../../attribute/roleattr_help.cpp \
 ../../plugin_u3d/apoCliApi.cpp	\
-../../plugin_u3d/apoClientU3d.cpp	\
 ../../plugin_u3d/apoFormula.cpp	\
 
 
-LOCAL_CFLAGS := -D__ND_ADNROID__ -DWITHOUT_LOGIC_PARSER -DND_CLIENT_ONLY
+LOCAL_CFLAGS := -D__ND_ADNROID__ -DND_CLIENT_ONLY
 LOCAL_CPPFLAGS := -D__ND_ANDROID__  -DWITHOUT_LOGIC_PARSER -DND_CLIENT_ONLY
 
 ifeq ($(apo_debug),1)

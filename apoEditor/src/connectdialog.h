@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "nd_common/nd_common.h"
+#include <vector>
 
 class NDIConn;
 class LoginApollo;
@@ -31,15 +32,19 @@ public:
 
     int SelOrCreateRole(const char *accountName);
 	int ShowServers(void *hostsBuf, int size,const char *tips);
-    int createRole(const char *roleName);
+    //int createRole(const char *roleName);
     int getRoleData();
 
 	NDIConn *getConnect(){ return m_pConn; }
 
 	bool LoadClientScript(const char *file, const char *dblFile);
+
+	void saveCurrentSendMsg(const QString &msgName);
 	const char* m_scriptFile;
 	const char* m_dblDataFile;
 public:
+	typedef std::vector<QString>MsgHistoryVct_t;
+	typedef std::vector<ndxml*>XmlVct_t;
 
     ndxml *m_editor_setting;
     ndxml *m_gmCfg ;
@@ -63,8 +68,14 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_pushButtonGetPingVal_clicked();
+
 private:
 	void saveHost(const QString &hostName);
+	void getSendMsgHistory(MsgHistoryVct_t &historyList);
+	void saveSendMsgHistory(MsgHistoryVct_t &historyList);
+	void getHistoryNodes(XmlVct_t &xmlHistory);
+
 	void InitHostList();
 
     Ui::ConnectDialog *ui;
@@ -72,6 +83,7 @@ private:
 
     NDIConn *m_pConn;
     LoginApollo *m_login;
+	MsgHistoryVct_t m_msgHistory;
 };
 
 #endif // CONNECTDIALOG_H

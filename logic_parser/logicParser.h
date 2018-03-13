@@ -118,7 +118,10 @@ enum eParserOperator{
 	E_OP_CLEAR_ERROR_CODE,	//CLEAR error
 	E_OP_IDLE,				//idle instruct nothing to be done
 	E_OP_BITS_OPERATE, // & | ^ ~ << >> REF eBitOperate
-
+	E_OP_CHECK_DEBUG,		//check script is debug
+	E_OP_CHECK_HOST_DEBUG,	//check host is debug 
+	E_OP_PROCESS_EXIT ,
+	E_OP_PROCESS_ABORT,
 
 };
 
@@ -144,15 +147,6 @@ enum eMathOperate
 	E_MATH_RAND,
 } ;
 
-enum eBitOperate
-{
-	E_BIT_AND,
-	E_BIT_OR,
-	E_BIT_XOR,
-	E_BIT_NOT,
-	E_BIT_LEFT_MOVE,
-	E_BIT_RIGHT_MOVE
-};
 
 enum eLogicSystemError
 {
@@ -212,7 +206,7 @@ typedef std::vector<int>IntVal_vct;
 
 struct scriptCmdBuf
 {
-	scriptCmdBuf() :size(0), cmdname(0), buf(0), byteOrder(1)
+    scriptCmdBuf() :byteOrder(1),size(0), cmdname(0), buf(0)
 	{
 		
 	}

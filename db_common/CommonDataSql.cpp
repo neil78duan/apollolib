@@ -113,14 +113,12 @@ RESULT_T LoadCommonDataSql::LoadData(const char *name , int serverId, char *buf,
 int SaveCommonDataSql::Create( CMyDatabase* dbhandle )
 {
 	ND_TRACE_FUNC() ;
-	const char *SQL_STM = "update at_common_data set userdata=?, last_update=now() "
-	"where server_id =? and name=? ;";
-	
+
+	const char *SQL_STM = "call save_common_data(?,?,?)";	
 	memset(m_binds, 0, sizeof(m_binds));
-	
-	SET_BIND_CONTEXT(&m_binds[0], MYSQL_TYPE_BLOB, m_databuf,sizeof(m_databuf), 0, &m_data_len ) ;
-	SET_BIND_CONTEXT(&m_binds[1], MYSQL_TYPE_LONG, &m_serverId,0, 0, 0 ) ;
-	SET_BIND_CONTEXT(&m_binds[2], MYSQL_TYPE_STRING, m_name,sizeof(m_name), 0, &m_name_len ) ;
+	SET_BIND_CONTEXT(&m_binds[0], MYSQL_TYPE_STRING, m_name, sizeof(m_name), 0, &m_name_len);
+	SET_BIND_CONTEXT(&m_binds[1], MYSQL_TYPE_LONG, &m_serverId, 0, 0, 0);
+	SET_BIND_CONTEXT(&m_binds[2], MYSQL_TYPE_BLOB, m_databuf,sizeof(m_databuf), 0, &m_data_len ) ;
 	
 	m_dbhandle = dbhandle;
 	PREPARE_STM(m_stmt, dbhandle,SQL_STM, m_binds,BIND_NUMB) ;
@@ -131,6 +129,7 @@ int SaveCommonDataSql::Create( CMyDatabase* dbhandle )
 RESULT_T SaveCommonDataSql::SaveData(const char *name, int serverId, void *data, size_t size )
 {
 	ND_TRACE_FUNC() ;
+	
 	
 	RESULT_T ret = ESERVER_ERR_SUCCESS;
 	
@@ -147,8 +146,8 @@ RESULT_T SaveCommonDataSql::SaveData(const char *name, int serverId, void *data,
 	if (stmt_execute()){
 		return NDSYS_ERR_SYSTEM;
 	}
-	
-	return  ret ;
+
+	return ESERVER_ERR_SUCCESS;
 }
 
 /////////////////////////
@@ -206,15 +205,17 @@ RESULT_T SaveOutlineMsgSql::SaveMsg(roleid_t rid,  void *data , NDUINT32 msg_len
 int SaveMail::Create( CMyDatabase* dbhandle )
 {
 	ND_TRACE_FUNC() ;
-	const char *SQL_STM = "select save_mail(? ,?, ?, ? , ?)" ;
+	const char *SQL_STM = "select save_mail(?, ?, ? ,?, ?, ? , ?)" ;
 	//a_from int unsigned ,a_to int unsigned, a_title char(40), is_system int , a_data BLOB
 	memset(m_binds, 0, sizeof(m_binds));
 	
 	SET_BIND_CONTEXT(&m_binds[0], MYSQL_TYPE_LONG, &m_fromId,0, 0, 0 ) ;
 	SET_BIND_CONTEXT(&m_binds[1], MYSQL_TYPE_LONG, &m_toId,0, 0, 0 ) ;
-	SET_BIND_CONTEXT(&m_binds[2], MYSQL_TYPE_STRING, &m_title,sizeof(m_title), 0, &m_titleLen ) ;
-	SET_BIND_CONTEXT(&m_binds[3], MYSQL_TYPE_LONG, &m_isSystem,0, 0, 0 ) ;
-	SET_BIND_CONTEXT(&m_binds[4], MYSQL_TYPE_MEDIUM_BLOB, &m_data,sizeof(m_data), 0, &m_dataLen) ;
+	SET_BIND_CONTEXT(&m_binds[2], MYSQL_TYPE_LONG, &m_serverId, 0, 0, 0);
+	SET_BIND_CONTEXT(&m_binds[3], MYSQL_TYPE_LONG, &m_nationId, 0, 0, 0);
+	SET_BIND_CONTEXT(&m_binds[4], MYSQL_TYPE_STRING, &m_title,sizeof(m_title), 0, &m_titleLen ) ;
+	SET_BIND_CONTEXT(&m_binds[5], MYSQL_TYPE_LONG, &m_isSystem,0, 0, 0 ) ;
+	SET_BIND_CONTEXT(&m_binds[6], MYSQL_TYPE_MEDIUM_BLOB, &m_data,sizeof(m_data), 0, &m_dataLen) ;
 	
 	m_dbhandle = dbhandle;
 	PREPARE_STM(m_stmt, dbhandle,SQL_STM, m_binds,BIND_NUMB) ;
@@ -222,7 +223,7 @@ int SaveMail::Create( CMyDatabase* dbhandle )
 	
 }
 
-RESULT_T SaveMail::Save( NDUINT32 to_id, NDUINT32 from_id,bool isSystem, const char *title,void *data, size_t size )
+RESULT_T SaveMail::Save(NDUINT32 to_id, NDUINT32 from_id, NDUINT32 server_id, NDUINT32 nation_id, bool isSystem, const char *title, void *data, size_t size)
 {
 	ND_TRACE_FUNC() ;
 	int ret =-1;
@@ -232,6 +233,8 @@ RESULT_T SaveMail::Save( NDUINT32 to_id, NDUINT32 from_id,bool isSystem, const c
 	m_fromId = from_id ;
 	m_toId = to_id ;
 	m_isSystem = isSystem ;
+	m_serverId = server_id;
+	m_nationId = nation_id;
 	
 	if (title && *title) {
 		m_titleLen = strlen(title) ;

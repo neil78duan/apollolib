@@ -14,6 +14,7 @@
 #include "logic_parser/dbldata2netstream.h"
 #ifndef WITHOUT_LOGIC_PARSER
 #include "logic_parser/objectBaseMgr.h"
+#include "logic_parser/logicEngineRoot.h"
 #endif
 
 namespace ClientMsgHandler
@@ -33,6 +34,7 @@ int apollo_cli_msg_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t
 	int msg_show_server_time_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
 	int msg_show_game_time_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
 	int msg_broadcast_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
+	int msg_show_echo_time(NDIConn* pconn, nd_usermsgbuf_t *msg);
 
 	
 
@@ -56,6 +58,7 @@ int apollo_cli_msg_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t
 		bool getOtherObject(const char*objName, DBLDataNode &val);
 		virtual const char *getMsgName(int msgId);
 		virtual const char *getMsgBody(int msgId);
+		//virtual bool loadScript() ;
 		bool loadDataType(const char *file);
 		void LoadMsgDataTypeFromServer();
 	protected:
@@ -70,6 +73,7 @@ int apollo_cli_msg_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t
 	std::string getLogPath(NDIConn *pconn);
 	void* getLogFile(NDIConn *pconn);
 	msgIdNameFormat_vct* getMsgIdNameFormat(NDIConn *pconn);
+	ApoConnectScriptOwner *getScriptOwner(NDIConn *pconn) ;
 
 	//read message from file, the message first file is 64bits time,
 	// if time newer than @gentime pass the message to @func else send to server 

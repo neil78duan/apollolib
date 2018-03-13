@@ -19,12 +19,14 @@ NDDbConnect::NDDbConnect(ServerDbConnBase &host) : CMyDatabase(), m_host(host) {
 NDDbConnect::~NDDbConnect() {}
 
 int NDDbConnect::on_connect()
-{ 
+{
+	ND_TRACE_FUNC();
 	return m_host.OnCreate(this);
 }
 
 int NDDbConnect::on_disconnect()
 {
+	ND_TRACE_FUNC();
 	return m_host.OnDestroy(this);
 }
 
@@ -53,6 +55,7 @@ bool ServerDbConnBase::SetReallocSTMT(bool bval)
 
 void ServerDbConnBase::setThread(ndthread_t thid)
 {
+	ND_TRACE_FUNC();
 	if (m_bSpecialReader)	{
 		m_readerDB.set_thread(thid);
 	}
@@ -113,8 +116,9 @@ void ServerDbConnBase::Destroy()
 
 
 CMyDatabase *ServerDbConnBase::GetDBHandle(bool bReadHandler ) 
-{ 
-	if (bReadHandler)	{
+{
+	ND_TRACE_FUNC();
+	if (bReadHandler && m_bSpecialReader)	{
 		return &m_readerDB;
 	}
 	return &m_mydb;
@@ -159,6 +163,7 @@ int ServerDbConnBase::RunSql(const char *sqlstm)
 
 bool ServerDbConnBase::checkIsSelect(const char *sqlText)
 {
+	ND_TRACE_FUNC();
 	char *p = (char *) ndstr_first_valid(sqlText);
 	if (!p || !*p)	{
 		return false; 
@@ -220,8 +225,6 @@ int GameDbConnBase::OnDestroy(NDDbConnect *dbconnector)
 {
 	ND_TRACE_FUNC() ;
 	
-	
-	
 	if (m_bSpecialReader) {
 		if (dbconnector == &m_mydb)	{
 			DESTROY_SQL_MOD(SaveOutlineMsgSql, m_sqlSaveOutlineMsg, dbconnector);
@@ -250,10 +253,12 @@ int GameDbConnBase::OnDestroy(NDDbConnect *dbconnector)
 
 ServerDbConnBase* get_DatabaseHandle()
 {
+	ND_TRACE_FUNC();
 	return GameDbConnBase::get_Instant();
 }
 CreateCommonDataSql *get_CreateCommonDataSql()
 {
+	ND_TRACE_FUNC();
 	if (GameDbConnBase::get_Instant()) {
 		return GameDbConnBase::get_Instant()->m_sqlcommonCreate ;
 	}
@@ -261,6 +266,7 @@ CreateCommonDataSql *get_CreateCommonDataSql()
 }
 LoadCommonDataSql *get_LoadCommonDataSql()
 {
+	ND_TRACE_FUNC();
 	if (GameDbConnBase::get_Instant()) {
 		return GameDbConnBase::get_Instant()->m_sqlcommonLoad ;
 	}
@@ -269,6 +275,7 @@ LoadCommonDataSql *get_LoadCommonDataSql()
 }
 SaveCommonDataSql* get_SaveCommonDataSql()
 {
+	ND_TRACE_FUNC();
 	if (GameDbConnBase::get_Instant()) {
 		return GameDbConnBase::get_Instant()->m_sqlcommonSave ;
 	}
@@ -277,6 +284,7 @@ SaveCommonDataSql* get_SaveCommonDataSql()
 }
 SaveOutlineMsgSql*get_SaveOutlineMsgSql()
 {
+	ND_TRACE_FUNC();
 	if (GameDbConnBase::get_Instant()) {
 		return GameDbConnBase::get_Instant()->m_sqlSaveOutlineMsg ;
 	}
@@ -285,6 +293,7 @@ SaveOutlineMsgSql*get_SaveOutlineMsgSql()
 }
 SaveMail* get_SaveMail()
 {
+	ND_TRACE_FUNC();
 	if (GameDbConnBase::get_Instant()) {
 		return GameDbConnBase::get_Instant()->m_sqlMailSave ;
 	}
@@ -294,6 +303,7 @@ SaveMail* get_SaveMail()
 }
 ReceiveMail* get_ReceiveMail()
 {
+	ND_TRACE_FUNC();
 	if (GameDbConnBase::get_Instant()) {
 		return GameDbConnBase::get_Instant()->m_sqlMailReceive ;
 	}

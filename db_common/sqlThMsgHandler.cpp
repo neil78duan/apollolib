@@ -70,6 +70,7 @@ int dbThread_save_common_data(nd_thsrv_msg *msg)
 
 RESULT_T _load_common_data (int msgId, db_common_data_msg *recvmsg)
 {
+	ND_TRACE_FUNC();
 	db_common_data_msg loadMsgData ;
 	
 	if (recvmsg->name[0]==0) {
@@ -120,45 +121,46 @@ int dbThread_create_common_data(nd_thsrv_msg *msg)
 	}
 	return 0 ;
 }
-int dbThread_create_blob_data(nd_thsrv_msg *msg){
-	ND_TRACE_FUNC();
-	db_blob_data_update_msg* recvmsg = (db_blob_data_update_msg*)msg->data;
-	CMyDatabase*pdb = get_DatabaseHandle()->GetDBHandle();
-	if (!pdb){
-		return 0;
-	}
-
-	char sql[10240];
-	memset(sql, 0, sizeof(sql));
-	int len = snprintf(sql, sizeof(sql), "insert into %s ( id,serverid,blobdata ) values ( %d, %d,'", recvmsg->name, recvmsg->id, (int)recvmsg->serverId);
-	len += mysql_real_escape_string(pdb->get_mysql_handle(), sql + len, recvmsg->data, recvmsg->datalen);
-	len += snprintf( sql + len, sizeof(sql)-len, "' );" );
-	if (pdb->sql_execute(sql) != 0) {
-		nd_logerror("run sql error : %s\n" AND pdb->sql_error());
-		return false;
-	}
-	return 0;
-}
-
-int dbThread_update_blob_data(nd_thsrv_msg *msg){
-	ND_TRACE_FUNC();
-	db_blob_data_update_msg* recvmsg = (db_blob_data_update_msg*)msg->data;
-	CMyDatabase*pdb = get_DatabaseHandle()->GetDBHandle();
-	if (!pdb){
-		return 0;
-	}
-
-	char sql[10240];
-	memset(sql, 0, sizeof(sql));
-	int len = snprintf(sql, sizeof(sql), "update %s set blobdata ='", recvmsg->name);
-	len += mysql_real_escape_string(pdb->get_mysql_handle(), sql + len, recvmsg->data, recvmsg->datalen);
-	len += snprintf(sql + len, sizeof(sql) - len, "' where id = %d and serverid = %d;", (int)recvmsg->id, (int)recvmsg->serverId);
-	if (pdb->sql_execute(sql) != 0) {
-		nd_logerror("run sql error : %s\n" AND pdb->sql_error());
-		return false;
-	}
-	return 0;
-}
+// 
+// int dbThread_create_blob_data(nd_thsrv_msg *msg){
+// 	ND_TRACE_FUNC();
+// 	db_blob_data_update_msg* recvmsg = (db_blob_data_update_msg*)msg->data;
+// 	CMyDatabase*pdb = get_DatabaseHandle()->GetDBHandle();
+// 	if (!pdb){
+// 		return 0;
+// 	}
+// 
+// 	char sql[10240];
+// 	memset(sql, 0, sizeof(sql));
+// 	int len = snprintf(sql, sizeof(sql), "insert into %s ( id,serverid,type,blobdata ) values ( %d, %d,%d,'", recvmsg->name, recvmsg->id, (int)recvmsg->serverId, (int)recvmsg->type);
+// 	len += mysql_real_escape_string(pdb->get_mysql_handle(), sql + len, recvmsg->data, recvmsg->datalen);
+// 	len += snprintf( sql + len, sizeof(sql)-len, "' );" );
+// 	if (pdb->sql_execute(sql) != 0) {
+// 		nd_logerror("run sql error : %s\n" AND pdb->sql_error());
+// 		return false;
+// 	}
+// 	return 0;
+// }
+// 
+// int dbThread_update_blob_data(nd_thsrv_msg *msg){
+// 	ND_TRACE_FUNC();
+// 	db_blob_data_update_msg* recvmsg = (db_blob_data_update_msg*)msg->data;
+// 	CMyDatabase*pdb = get_DatabaseHandle()->GetDBHandle();
+// 	if (!pdb){
+// 		return 0;
+// 	}
+// 
+// 	char sql[10240];
+// 	memset(sql, 0, sizeof(sql));
+// 	int len = snprintf(sql, sizeof(sql), "update %s set blobdata ='", recvmsg->name);
+// 	len += mysql_real_escape_string(pdb->get_mysql_handle(), sql + len, recvmsg->data, recvmsg->datalen);
+// 	len += snprintf(sql + len, sizeof(sql) - len, "' where id = %d and serverid = %d and type = %d;", (int)recvmsg->id, (int)recvmsg->serverId,(int)recvmsg->type);
+// 	if (pdb->sql_execute(sql) != 0) {
+// 		nd_logerror("run sql error : %s\n" AND pdb->sql_error());
+// 		return false;
+// 	}
+// 	return 0;
+// }
 
 
 int dbThread_save_mail(nd_thsrv_msg *msg)
@@ -166,7 +168,7 @@ int dbThread_save_mail(nd_thsrv_msg *msg)
 	ND_TRACE_FUNC() ;
 	db_mail_data_msg *recvmsg = (db_mail_data_msg*) msg->data ;
 	
-	get_SaveMail()->Save(recvmsg->to_id, recvmsg->from_id,
+	get_SaveMail()->Save(recvmsg->to_id, recvmsg->from_id, recvmsg->serverId,recvmsg->nationId,
 									   recvmsg->is_system?true:false, recvmsg->title,
 									   recvmsg->body, recvmsg->body_size) ;
 	

@@ -2,7 +2,7 @@
 #include "ui_startdialog.h"
 #include "connectdialog.h"
 #include "nd_common/nd_common.h"
-#include "xmldialog.h"
+#include "apoScript/xmldialog.h"
 #include "ndlib.h"
 
 #include "logic_parser/dbl_mgr.h"
@@ -207,7 +207,9 @@ bool startDialog::compileScript(const char *scriptFile)
 
 	LogicCompiler lgcompile;
 
-	if (!lgcompile.setConfigFile(CONFIG_FILE_PATH)) {
+	apoEditorSetting* setting = apoEditorSetting::getInstant();
+
+	if (!lgcompile.setConfigFile(setting->m_edirotSettingFile.c_str())) {
 		return false;
 	}
 	if (!lgcompile.compileXml(inFile, outFile, outEncode, withDebug, orderType)) {
@@ -226,7 +228,7 @@ bool startDialog::compileScript(const char *scriptFile)
 		return false;
 	}
 
-	WriteLog("!!!!!!!!!!COMPILE script success !!!!!!!!!!!\n begining run script...\n");
+	nd_logmsg("!!!!!!!!!!COMPILE %s success !!!!!!!!!!!\n begining run script...\n", scriptFile);
 
 	ClientMsgHandler::ApoConnectScriptOwner apoOwner;
 	if (!apoOwner.loadDataType(_getFromIocfg("net_data_def"))) {
@@ -261,7 +263,7 @@ bool startDialog::compileScript(const char *scriptFile)
 	}
 
 	LogicEngineRoot::destroy_Instant();
-	WriteLog("!!!!!!!!!!!!!!!!!!!SCRIPT COMPILE SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+	nd_logmsg("!!!!!!!!!!!!!!!!!!!SCRIPT %s SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",scriptFile);
 	return true;
 }
 
@@ -291,7 +293,7 @@ bool startDialog::expExcel()
 #ifdef WIN32
 	snprintf(path, sizeof(path), " %s %s %s %s %s ",  exp_cmd, excel_list, excel_path, text_path, encodeName);	
 #else
-	const char *cur_dir = nd_getcwd();
+    //const char *cur_dir = nd_getcwd();
 	snprintf(path, sizeof(path), "sh ./%s %s %s %s %s ",  exp_cmd, excel_list, excel_path, text_path, encodeName);
 #endif
 	int ret = system(path);
@@ -498,9 +500,9 @@ void startDialog::on_Connect_clicked()
     WriteLog("begin connect to server....");
 
     const char*filename = _getFromIocfg("gm_send_msg");
-	const char *dataTypeFile = _getFromIocfg("net_data_def");
+	//const char *dataTypeFile = _getFromIocfg("net_data_def");
 	const char *client_script = _getFromIocfg("connect_script");
-	const char *message_file = _getFromIocfg("net_protocol");
+	//const char *message_file = _getFromIocfg("net_protocol");
 	const char *package_file = _getFromIocfg("game_data_package_file");
 
 	_LOAD_XML(xmlSend, filename, "utf8", 0);
@@ -520,6 +522,11 @@ void startDialog::on_Connect_clicked()
 	}
 
     dlg.exec();
+
+	ndxml *msgRoot = ndxml_getnode(&xmlSend, "send_msg_list");
+	if (msgRoot){
+		ndxml_delnode(msgRoot, "history");
+	}
 
     ndxml_save_encode(&xmlSend, filename, E_SRC_CODE_UTF_8, E_SRC_CODE_UTF_8);
     ndxml_destroy(&xmlSend) ;
@@ -591,7 +598,7 @@ void startDialog::on_ExportExcel_clicked()
 			if (cmdbuf[0])	{
 				int ret = system(cmdbuf);
 				if (0 != ret)	{
-					nd_logerror("‘À––√¸¡Ó %s %d\n", cmdbuf, ret);
+                    nd_logerror("Run command by system %s %d\n", cmdbuf, ret);
 					break;
 				}
 			}
@@ -614,34 +621,7 @@ void startDialog::on_CompleteAll_clicked()
 }
 
 void startDialog::on_Test_clicked()
-{
-	
-
-	/*
-	NewFileDialog dlg(this);
-	const char *scriptRoot = _getFromIocfg("script_root");
-	const char *newTmplFile = _getFromIocfg("new_template");
-
-	if (!dlg.InitFileRoot(scriptRoot, newTmplFile)) {
-	QMessageBox::warning(NULL, "Error", "Init script-edit config error!", QMessageBox::Ok);
-	return;
-	}
-	if (dlg.exec() == QDialog::Accepted) {
-	const char *file = dlg.getSelectFile();
-	const char *title = dlg.getSelectTitle();
-	if (file && *file)	{
-	_beginEdit(file,title);
-	}
-
-	}
-	else {
-	WriteLog("script unedited\n");
-	}
-
-
-	*/
-
-    
+{    
     ClearLog();
     if (false == runTest()){
         WriteLog("Run test error!!!!!!!!!");

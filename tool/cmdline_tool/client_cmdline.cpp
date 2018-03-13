@@ -11,7 +11,7 @@
 #include "nd_msg.h"
 #include "msg_def.h"
 #include "ndcli/nd_api_c.h"
-#include "netui_atl.h"
+//#include "netui_atl.h"
 #include "ndapplib/nd_datatransfer.h"
 #include "login_apollo.h"
 
@@ -19,8 +19,9 @@
 
 #include "atlantis_test.h"
 #include "apollo_errors.h"
-#include "commonTest.h"
+//#include "commonTest.h"
 #include "dftCliMsgHandler.h"
+#include "apoClientU3d.h"
 //#include "gameMessage.h"
 //#include "sanguo_msg.h"
 #define _DFT_SESSION_FILE "./test_session.sen"
@@ -65,17 +66,24 @@ int _loginServer( const char * host,int port, const char* user, const char *pass
 		fprintf(stderr, "already in login\n") ;
 		return -1 ;
 	}
-	if (__g_conn) {
-		DestroyConnectorObj(__g_conn) ;
-		__g_conn = 0 ;
-	}
-	__g_conn = LoginServer(  host, port,  user, passwd,sessionfile ) ;
+	
+	__g_conn = LoginServer( host,port,user,passwd, sessionfile) ;
 	if (__g_conn) {
 		init_cmdline_msg(__g_conn) ;
-		
-		return 0 ;
+		return  0 ;
 	}
 	return -1;
+//	if (__g_conn) {
+//		DestroyConnectorObj(__g_conn) ;
+//		__g_conn = 0 ;
+//	}
+//	__g_conn = LoginServer(  host, port,  user, passwd,sessionfile ) ;
+//	if (__g_conn) {
+//		init_cmdline_msg(__g_conn) ;
+//
+//		return 0 ;
+//	}
+//	return -1;
 	
 }
 
@@ -101,23 +109,23 @@ ND_CMDLINE_FUNC_INSTANCE(Login)
 	}
 	return ret ;
 }
-
-ND_CMDLINE_FUNC_INSTANCE(Login1) 
-{
-	ND_CMDLINE_CHECK_SHOW_HELP(argc, argv,"login1 username") ;
-	int ret = 0 ;
-	if (argc >=2) {
-		ret= _loginServer("192.168.8.45",6600, argv[1],"test123",_DFT_SESSION_FILE) ;
-	}
-	else 	{
-		ret =_loginServer("192.168.8.45",6600, "test1","test123",_DFT_SESSION_FILE) ;
-	}
-	
-	if(0== ret ) {
-		root->userdata = __g_conn ;
-	}
-	return ret ;
-}
+//
+//ND_CMDLINE_FUNC_INSTANCE(Login1)
+//{
+//	ND_CMDLINE_CHECK_SHOW_HELP(argc, argv,"login1 username") ;
+//	int ret = 0 ;
+//	if (argc >=2) {
+//		ret= _loginServer("192.168.8.45",6600, argv[1],"test123",_DFT_SESSION_FILE) ;
+//	}
+//	else 	{
+//		ret =_loginServer("192.168.8.45",6600, "test1","test123",_DFT_SESSION_FILE) ;
+//	}
+//
+//	if(0== ret ) {
+//		root->userdata = __g_conn ;
+//	}
+//	return ret ;
+//}
 
 ND_CMDLINE_FUNC_INSTANCE(show_msgname) 
 {
@@ -161,9 +169,10 @@ ND_CMDLINE_FUNC_INSTANCE(Logout)
 	if (__g_conn) {
 		NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_LOGOUT_NTF) ;		
 		__g_conn->SendMsg(omsg, ESF_URGENCY |ESF_ENCRYPT) ;
-		__g_conn->Close() ;
-		DestroyConnectorObj(__g_conn) ;
+//		__g_conn->Close() ;
+//		DestroyConnectorObj(__g_conn) ;
 		__g_conn = 0 ;
+		LogoutServer() ;
 		
 	}
 	fprintf(stdout, "logout Success!\n") ;
@@ -230,28 +239,30 @@ ND_CMDLINE_FUNC_INSTANCE(redirect_to_server)
 //	}
 	
 	if (__g_conn) {
+		ApoClient *pcliInst = ApoClient::getInstant();
+		LoginApollo *pLogin = pcliInst->getLoginObj() ;
+		
+		if (!pLogin) {
+			fprintf(stderr, "error: not login\n") ;
+			return -1;
+		}
+		
 		
 		if (argc >= 3) {
-			int ret = redirectServer(__g_conn->GetHandle(),argv[1],atoi(argv[2]),_DFT_SESSION_FILE,COMMON_TEST_UDID)  ;
-			if (ret == 0) {
+			RESULT_T res = pcliInst->SelectServer(argv[1],atoi(argv[2])) ;
+			if (res == (RESULT_T)NDERR_SUCCESS) {
 				fprintf(stdout, "redirect server success\n" ) ;
+				return 0;
 			}
-			return ret ;
+			return  -1;
 		}
 		else {
-			ApolloServerInfo bufs[20] ;
-			LoginApollo login(__g_conn->GetHandle()) ;
-			int num = login.GetServerList(bufs, ND_ELEMENTS_NUM(bufs)) ;
-			
-			if (num == 0) {
-				fprintf(stdout, "get host list number=0\n") ;
-				return -1 ;
-			}
-			int ret = redirectServer(__g_conn->GetHandle(), (char*)bufs[0].inet_ip,bufs[0].port,_DFT_SESSION_FILE,COMMON_TEST_UDID)  ;
-			if (ret == 0) {
+			RESULT_T res = pcliInst->SelectServer() ;
+			if (res == (RESULT_T)NDERR_SUCCESS) {
 				fprintf(stdout, "redirect server success\n" ) ;
+				return 0;
 			}
-			return ret ;
+			return  -1;
 		}
 		
 	}
@@ -269,8 +280,10 @@ ND_CMDLINE_FUNC_INSTANCE(get_server_list)
 	
 	if (__g_conn) {
 		ApolloServerInfo host_buf[20] ;
-		LoginApollo login(__g_conn->GetHandle()) ;
-		int num = login.GetServerList(host_buf, ND_ELEMENTS_NUM(host_buf)) ;
+		
+		ApoClient *pcliInst = ApoClient::getInstant();
+		
+		int num = pcliInst->GetGameAreaList(host_buf, ND_ELEMENTS_NUM(host_buf)) ;
 		for (int i=0; i<num; ++i) {
 			fprintf(stdout, "server : %s : %d [%s]\n", host_buf[i].inet_ip,host_buf[i].port, host_buf[i].name) ;
 		}
@@ -635,6 +648,11 @@ extern ND_CMDLINE_FUNC_INSTANCE(net_msg_test);
 
 ND_CMDLINE_FUNC_INSTANCE(trace_mmap) ;
 
+static int my_logfunc(const char *logtext)
+{
+	return fprintf(stderr, "%s", logtext) ;
+}
+
 int main(int argc, char *argv[])
 {
 	int ret ;
@@ -643,8 +661,7 @@ int main(int argc, char *argv[])
 	
 		
 	nd_cmdline_node cmdlist[] = {
-		{"login", Login} 
-		,{"login1", Login1} 
+		{"login", Login}
 		,{"logout", Logout}
 		,{"quit" , exit_tool}
 		
@@ -693,6 +710,8 @@ int main(int argc, char *argv[])
 	root.number = ND_ELEMENTS_NUM(cmdlist) ;
 	root.entries = cmdlist ;
 
+	nd_setlog_func(my_logfunc) ;
+	nd_log_close_screen(1) ;
 	
 	ret = nd_run_cmdline(&root,argc,(const char**)argv) ;
 	if (0==ret) {

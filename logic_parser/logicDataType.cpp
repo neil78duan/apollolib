@@ -254,7 +254,12 @@ static bool _check_array(const char *src);
 DBLDataNode::DBLDataNode(dbl_element_base *data, DBL_ELEMENT_TYPE etype, DBL_ELEMENT_TYPE sub_etype) :
 m_ele_type(etype), m_sub_type(sub_etype), m_data(data), m_dataOwner(false)
 {
-	m_dataOwn.isInit = true;
+	if (data){
+		m_dataOwn.isInit = data->isInit;
+	}
+	else {
+		m_dataOwn.isInit = false;
+	}
 	//m_refParent = false;
 	//m_unsafeRef = false;
 
@@ -263,6 +268,7 @@ m_ele_type(etype), m_sub_type(sub_etype), m_data(data), m_dataOwner(false)
 DBLDataNode::DBLDataNode(const DBLDataNode &r) 
 {
 	init() ;
+	m_dataOwn.isInit = false;
 	_copy(r);
 }
 
@@ -469,7 +475,8 @@ void DBLDataNode::_copy(const DBLDataNode &r)
 	m_sub_type = (r.m_sub_type);
 
 	if (!r.CheckValid()) {
-		m_dataOwn.isInit = r.m_dataOwn.isInit;
+		//m_dataOwn.isInit = r.m_dataOwn.isInit;
+		m_dataOwn.isInit = false;
 		return;
 	}
 
@@ -719,7 +726,7 @@ bool DBLDataNode::InitReservedArray(size_t size, int attay_type)
 			return false;
 		}
 
-		for (int i = 0; i < size; i++) {
+        for (size_t i = 0; i < size; i++) {
 			paddr->data[i] = 0;
 		}
 		paddr->number = 0;
@@ -1300,6 +1307,7 @@ int DBLDataNode::GetInt() const
 	else if (OT_FLOAT == m_ele_type){
 		return (int)m_data->f_val;
 	}
+	
 	else if (OT_STRING == m_ele_type) {
 		const char *pText = GetText();
 		if (pText && *pText)  {
@@ -1309,6 +1317,10 @@ int DBLDataNode::GetInt() const
 			}
 			return (int)ndstr_atoi_hex(pText);
 		}
+	}
+
+	else if (OT_ARRAY == m_ele_type && m_data->_i_arr->number) {
+		return GetarrayInt(0);
 	}
 	return 0;
 }
@@ -1350,6 +1362,10 @@ NDUINT64 DBLDataNode::GetInt64() const
 			return atoll(pText);
 		}
 	}
+
+	else if (OT_ARRAY == m_ele_type && m_data->_i_arr->number) {
+		return GetarrayInt64(0);
+	}
 	return 0;
 
 }
@@ -1379,6 +1395,12 @@ bool DBLDataNode::GetBool() const
 		}
 		//return atoi(m_data->str_val) ? true : false;
 	}
+
+	else if (OT_ARRAY == m_ele_type && m_data->_i_arr->number) {
+		return GetarrayBool(0);
+	}
+
+
 	return false;
 }
 float DBLDataNode::GetFloat() const
@@ -1407,6 +1429,11 @@ float DBLDataNode::GetFloat() const
 		}
 		//if (pText) return (float) atof(pText);
 	}
+
+	else if (OT_ARRAY == m_ele_type && m_data->_i_arr->number) {
+		return GetarrayFloat(0);
+	}
+
 	return 0.0f;
 }
 
@@ -1416,14 +1443,14 @@ const char *DBLDataNode::GetText() const
 		return 0;
 	}
 	if (OT_STRING == m_ele_type && m_data->str_val &&m_data->str_val[0]){
-// 		if (0 == ndstricmp("none", m_data->str_val)) {
-// 			return NULL;
-// 		}
-// 		else if (0 == ndstricmp("null", m_data->str_val)) {
-// 			return NULL;
-// 		}
 		return (const char *)m_data->str_val;
 	}
+	else if (OT_ARRAY == m_ele_type && OT_STRING == m_sub_type ) {
+		if (m_data->_i_arr->number > 0)	{
+			return m_data->_str_arr->data[0];
+		}
+	}
+
 	return NULL;
 }
 
@@ -1442,6 +1469,7 @@ std::string DBLDataNode::GetString() const
 			return std::string("");
 		}
 	}
+	
 	else {
 		char buf[4096];
 		int size = Sprint(buf, sizeof(buf));
@@ -1518,7 +1546,7 @@ int DBLDataNode::GetarrayInt(int index) const
 			}
 		}
 		
-		if (index == 0){
+		if (index == 0 && OT_ARRAY != m_ele_type){
 			return GetInt();
 		}
 		return 0;
@@ -1566,7 +1594,7 @@ bool DBLDataNode::GetarrayBool(int index) const
 			}
 		}
 
-		if (index == 0){
+		if (index == 0 && OT_ARRAY != m_ele_type){
 			return GetBool();
 		}
 		return false;
@@ -1614,7 +1642,7 @@ float DBLDataNode::GetarrayFloat(int index) const
 			}
 		}
 
-		if (index == 0){
+		if (index == 0 && OT_ARRAY != m_ele_type){
 			return GetFloat();
 		}
 		return 0;
@@ -1662,7 +1690,7 @@ NDUINT64 DBLDataNode::GetarrayInt64(int index) const
 			}
 		}
 
-		if (index == 0){
+		if (index == 0 && OT_ARRAY != m_ele_type){
 			return GetInt64();
 		}
 		return 0;
@@ -1710,7 +1738,7 @@ const char *DBLDataNode::GetarrayText(int index) const
 			}
 		}
 
-		if (index == 0){
+		if (index == 0 && OT_ARRAY != m_ele_type){
 			return GetText();
 		}
 		return 0;
@@ -2169,6 +2197,9 @@ bool DBLDataNode::CheckArray(int index) const
 	if (!m_data || !m_data->_data){
 		return false;
 	}
+	if (m_ele_type != OT_ARRAY) {
+		return false;
+	}
 	if (index < 0 || index >= m_data->_i_arr->number){
 		return false;
 	}
@@ -2435,13 +2466,64 @@ DBL_ELEMENT_TYPE DBLDataNode::GetArrayType() const
 }
 
 
+bool DBLDataNode::BitOperateBin(eBitOperate opType,NDUINT8 opVal)
+{
+	size_t size = 0;
+	NDUINT8 *p = NULL;
+
+	if (m_ele_type == OT_BINARY_DATA){
+		size = GetBinarySize();
+		p = ( NDUINT8 *)GetBinary();
+	}
+	else if (m_ele_type == OT_STRING) {
+		p = (NDUINT8*)GetText();
+		if (p){
+			size = strlen((const char*)p);
+		}
+	}
+	else {
+		return false;
+	}
+
+#define OP_BIT_OPERATE(_command)	\
+	for (size_t i = 0; i < size; i++){	\
+		_command;					\
+	}
+	
+	switch (opType)
+	{
+	case E_BIT_AND:
+		OP_BIT_OPERATE(p[i]&=opVal);
+		break;
+	case E_BIT_OR:
+		OP_BIT_OPERATE(p[i]|=opVal);
+		break;
+	case E_BIT_XOR:
+		OP_BIT_OPERATE(p[i]^= opVal);
+		break;
+	case E_BIT_NOT:
+		OP_BIT_OPERATE(p[i]=~p[i]);
+		break;
+	case E_BIT_LEFT_MOVE:
+		OP_BIT_OPERATE(p[i]=p[i]<<opVal);
+		break;
+	case E_BIT_RIGHT_MOVE:
+		OP_BIT_OPERATE(p[i]= p[i]>>opVal);
+		break;
+	default:
+		return false;
+	}
+	return true;
+}
+
 void DBLDataNode::Destroy()
 {
 	if (m_dataOwner && m_dataOwn._data) {
 		if (m_ele_type == OT_FILE_STREAM)	{
-			if (m_data->_data)	{
-				fclose((FILE*)m_data->_data);
-			}
+			// nothing to be done
+// 			if (m_data->_data)	{
+// 				fclose((FILE*)m_data->_data);
+// 			}
 		}
 		else {
 			dbl_destroy_data(m_data, (DBL_ELEMENT_TYPE)m_ele_type, (DBL_ELEMENT_TYPE)m_sub_type);

@@ -28,7 +28,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -89,7 +89,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>ND_CLIENT_ONLY;WITHOUT_LOGIC_PARSER;ND_DEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ND_CLIENT_ONLY;ND_DEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -98,7 +98,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) D:\work\code\client\Guardian\Assets\Scripts\Base\Network\Plugins\x86</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -107,7 +108,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>ND_CLIENT_ONLY;WITHOUT_LOGIC_PARSER;ND_DEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ND_CLIENT_ONLY;ND_DEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -127,7 +128,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>ND_CLIENT_ONLY;WITHOUT_LOGIC_PARSER;WIN32;NDEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ND_CLIENT_ONLY;WIN32;NDEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -138,7 +139,8 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) D:\work\code\client\Guardian\Assets\Scripts\Base\Network\Plugins\x86</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -149,7 +151,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>ND_CLIENT_ONLY;WITHOUT_LOGIC_PARSER;WIN32;NDEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ND_CLIENT_ONLY;WIN32;NDEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -216,6 +218,7 @@
     <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_udthdr.h" />
     <ClInclude Include="..\..\attribute\attr_mgr.h" />
     <ClInclude Include="..\..\attribute\roleattr_help.h" />
+    <ClInclude Include="..\..\cli_common\apoClientU3d.h" />
     <ClInclude Include="..\..\cli_common\dftCliMsgHandler.h" />
     <ClInclude Include="..\..\cli_common\login_apollo.h" />
     <ClInclude Include="..\..\logic_parser\dbldata2netstream.h" />
@@ -231,12 +234,12 @@
     <ClInclude Include="..\..\logic_parser\logic_function.h" />
     <ClInclude Include="..\..\logic_parser\objectBaseMgr.h" />
     <ClInclude Include="..\..\plugin_u3d\apoCliApi.h" />
-    <ClInclude Include="..\..\plugin_u3d\apoClientU3d.h" />
     <ClInclude Include="..\..\plugin_u3d\apoFormula.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_datatransfer.cpp" />
     <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_msgpack.cpp" />
+    <ClCompile Include="..\..\..\ndsdk\src\ndclient\cpp_api\nd_client.cpp" />
     <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\msg_format.cpp" />
     <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\nd_connector.c" />
     <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\nd_exch_key.cpp" />
@@ -298,6 +301,7 @@
     <ClCompile Include="..\..\..\ndsdk\src\nd_vm\src\nd_vmdbg.c" />
     <ClCompile Include="..\..\attribute\attr_mgr.cpp" />
     <ClCompile Include="..\..\attribute\roleattr_help.cpp" />
+    <ClCompile Include="..\..\cli_common\apoClientU3d.cpp" />
     <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp" />
     <ClCompile Include="..\..\cli_common\login_apollo.cpp" />
     <ClCompile Include="..\..\logic_parser\dbldata2netstream.cpp" />
@@ -312,7 +316,6 @@
     <ClCompile Include="..\..\logic_parser\logic_function.cpp" />
     <ClCompile Include="..\..\logic_parser\objectBaseMgr.cpp" />
     <ClCompile Include="..\..\plugin_u3d\apoCliApi.cpp" />
-    <ClCompile Include="..\..\plugin_u3d\apoClientU3d.cpp" />
     <ClCompile Include="..\..\plugin_u3d\apoFormula.cpp" />
   </ItemGroup>
   <ItemGroup>

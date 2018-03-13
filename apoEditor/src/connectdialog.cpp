@@ -5,11 +5,11 @@
 #include <QString>
 #include <QSettings>
 
-#include "listdialog.h"
+#include "apoScript/listdialog.h"
 
 #include "ndlib.h"
 #include "cli_common/login_apollo.h"
-#include "cli_common/netui_atl.h"
+//#include "cli_common/netui_atl.h"
 //#include "cli_common/gameMessage.h"
 #include "cli_common/login_apollo.h"
 #include "cli_common/dftCliMsgHandler.h"
@@ -53,6 +53,10 @@ public:
             val.InitSet("../../log");
             return true;
         }
+		else if (0 == ndstricmp(objName, "DataPath")) {
+			val.InitSet("../../data");
+			return true;
+		}
 
 		else if (0 == ndstricmp(objName, "SelfName")) {
 			val.InitSet("gmtool");
@@ -73,7 +77,7 @@ public:
 static ConnectScriptOwner  __myScriptOwner;
 
 
-void destroy_apollo_object(NDIConn *pConn)
+void destroy_apollo_object(NDIConn *)
 {
 
     __myScriptOwner.Destroy();
@@ -169,6 +173,9 @@ ConnectDialog::ConnectDialog(QWidget *parent) :
 	QString tmoutText;
 	tmoutText.sprintf("%d", WAITMSG_TIMEOUT/1000);
 	ui->timeOutEdit->setText(tmoutText);
+
+	//load send message history
+	getSendMsgHistory(m_msgHistory);
 }
 
 ConnectDialog::~ConnectDialog()
@@ -198,6 +205,9 @@ ConnectDialog::~ConnectDialog()
     DeinitNet();
 
     //ndxml_destroy(&m_message_define);
+	if (m_msgHistory.size()){
+		saveSendMsgHistory(m_msgHistory);
+	}
 }
 
 void ConnectDialog::saveHost(const QString &hostName)
@@ -250,6 +260,120 @@ void ConnectDialog::InitHostList()
 	settings.endArray();
 }
 
+void ConnectDialog::saveCurrentSendMsg(const QString &msgName)
+{
+	for (MsgHistoryVct_t::iterator it = m_msgHistory.begin(); it != m_msgHistory.end(); ++it) {
+		if ((*it) == msgName ){
+			m_msgHistory.erase(it);
+			break; 
+		}
+	}
+	m_msgHistory.push_back(msgName);
+	if (m_msgHistory.size() > 10){
+		m_msgHistory.erase(m_msgHistory.begin());
+	}
+}
+
+void ConnectDialog::getSendMsgHistory(MsgHistoryVct_t &historyList)
+{
+	QSettings settings("duanxiuyun", "ApolloEditor");
+	
+	int size = settings.beginReadArray("MessageHistory");
+	if (size == 0) {
+		settings.endArray();
+		return;
+	}
+
+	for (int i = 0; i < size; ++i) {
+		settings.setArrayIndex(i);
+		QString msgName = settings.value("MsgName").toString();
+		historyList.push_back(msgName);
+	}
+	settings.endArray();
+}
+
+void ConnectDialog::saveSendMsgHistory(MsgHistoryVct_t &historyList)
+{
+	QSettings settings("duanxiuyun", "ApolloEditor");
+	settings.remove("MessageHistory");
+
+	int size = 0;
+	settings.beginWriteArray("MessageHistory");
+	for (MsgHistoryVct_t::iterator it = historyList.begin(); it != historyList.end(); ++it) {
+		settings.setArrayIndex(size++);
+		settings.setValue("MsgName", *it);
+	}
+	settings.endArray();
+
+}
+
+static bool inMsgHistory(ConnectDialog::MsgHistoryVct_t &msgNameHistory,const char *name)
+{
+	ConnectDialog::MsgHistoryVct_t::iterator it = msgNameHistory.begin();
+	for (; it != msgNameHistory.end(); ++it) {
+		if ((*it) == name)	{
+			return true;
+		}
+	}
+	return false;
+}
+
+static ndxml*_searByname(ConnectDialog::XmlVct_t &xmlRes, const char *name)
+{
+	ConnectDialog::XmlVct_t::iterator it = xmlRes.begin();
+	for (; it != xmlRes.end(); ++it) {
+		const char *xmlName = ndxml_getattr_val((*it), "name");
+		if (xmlName && 0== ndstricmp(name,xmlName) )	{
+			return *it;
+		}
+	}
+	return NULL;
+}
+
+static bool _getSendHistoryXml(ndxml *xmlRoot, ConnectDialog::MsgHistoryVct_t &msgNameHistory, ConnectDialog::XmlVct_t &xmlRes)
+{
+	int count = ndxml_getsub_num(xmlRoot);
+	for (int i = 0; i < count; i++)	{
+		ndxml *sub = ndxml_getnodei(xmlRoot, i);
+		nd_assert(sub);
+		if (0 == ndstricmp(ndxml_getname(sub), "message") && ndxml_getnode(sub, "msgid")) {
+			const char *name = ndxml_getattr_val(sub, "name");
+			if (name && inMsgHistory(msgNameHistory, name) ){
+				xmlRes.push_back(sub);
+			}
+		}
+		else {
+			_getSendHistoryXml(sub, msgNameHistory, xmlRes);
+		}
+	}
+	return true;
+}
+void ConnectDialog::getHistoryNodes(XmlVct_t &xmlHistory)
+{
+	ndxml *msgRoot = ndxml_getnode(m_gmCfg, "send_msg_list");
+	
+	nd_assert(msgRoot);
+
+	XmlVct_t xmlBufs;
+	_getSendHistoryXml(msgRoot, m_msgHistory, xmlBufs);
+
+	if (xmlBufs.size() == 0)	{
+		return;
+	}
+
+	for (size_t i = 0; i < m_msgHistory.size(); i++){
+		std::string  strName = m_msgHistory[i].toStdString();
+		ndxml *node = _searByname(xmlBufs, strName.c_str());
+		if (node){
+			node = ndxml_copy(node);
+			if (node){
+				xmlHistory.push_back(node);
+			}
+		}
+
+	}
+	
+}
 
 void ConnectDialog::onTimeOut()
 {
@@ -285,8 +409,14 @@ void ConnectDialog::ClearLog()
 
 void ConnectDialog::WriteLog(const char *logText)
 {
-	
+	static size_t s_send_text = 0;
+
+	s_send_text += strlen(logText);
 	QTextEdit *pEdit = ui->logEdit;
+	if (s_send_text >= 0x10000)	{
+		pEdit->clear();
+		s_send_text = 0;
+	}
 	
 	pEdit->moveCursor(QTextCursor::End, QTextCursor::KeepAnchor);
 	pEdit->insertPlainText(QString(logText));
@@ -380,21 +510,13 @@ void ConnectDialog::on_loginButton_clicked()
 		if (ui->logSendCheck->isChecked()) {
 
 			const char *msg_stream_file = "./test_robort.data";
-			int length = strlen(msg_stream_file);
+			int length = (int)strlen(msg_stream_file);
 			if (m_pConn->ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)msg_stream_file, &length) == -1) {
 				nd_logmsg("log net message bin-data errror\n");
 			}
 		}
 
-        //get and init role data
-
-        //NDOStreamMsg omsg(ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
-        //m_pConn->SendMsg(omsg);
-
-        //omsg.Init(ND_MAIN_ID_SYS,ND_MSG_SYS_GET_MESSAGE_FORMAT_LIST);
-        //m_pConn->SendMsg(omsg);
-
-        __myScriptOwner.LoadMsgDataTypeFromServer();
+		__myScriptOwner.LoadMsgDataTypeFromServer();
 		LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
 		if (scriptRoot) {
 			parse_arg_list_t arg;
@@ -532,11 +654,12 @@ int ConnectDialog::_login(const char *user, const char *passwd,bool skipAuth)
         ApolloDestroyLoginInst(m_login);
 
     }
+	LoginApollo::SetDeviceInfo("unknow-udid-this-qt-test", "UNKNOWN");
     m_login = ApolloCreateLoginInst();
     if (!m_login){
         return -1;
     }
-    m_login->ReInit(m_pConn->GetHandle(), _SESSION_FILE,"unknow-udid-this-qt-test");
+    m_login->ReInit(m_pConn->GetHandle(), _SESSION_FILE);
 
     /*
     if (_s_session_size && _s_session_buf[0]){
@@ -548,15 +671,15 @@ int ConnectDialog::_login(const char *user, const char *passwd,bool skipAuth)
     }*/
 	if (skipAuth) {
 
-		ret = m_login->Login(user, passwd, ACC_OTHER_3_ACCID, true);
+		ret = m_login->Login(user, passwd, ACC_OTHER_3_ACCID, 0,true);
 	}
 	else {
-		ret = m_login->Login(user, passwd, ACC_APOLLO, false);
+		ret = m_login->Login(user, passwd, ACC_APOLLO,0, false);
 	}
     if (-1==ret) {
         if (m_login->GetLastError() == NDSYS_ERR_NOUSER && !skipAuth) {
             account_base_info acc;
-            initAccCreateInfo(acc, ACC_APOLLO, user, passwd);
+            myInitAccCreateInfo(acc, ACC_APOLLO, user, passwd);
 
             ret = m_login->CreateAccount(&acc);
         }
@@ -575,7 +698,7 @@ int ConnectDialog::_login(const char *user, const char *passwd,bool skipAuth)
     return 0;
 }
 
-int ConnectDialog::_relogin(void *sessionData, size_t session_size)
+int ConnectDialog::_relogin(void *, size_t )
 {
 
     return 0;
@@ -659,98 +782,14 @@ int ConnectDialog::SelOrCreateRole(const char *accountName)
     }
 
     //get role list
-    NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ);
-    nd_handle h = m_pConn->GetHandle();
-    nd_usermsgbuf_t recv_msg;
 
-    _SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0)
-    else {
-        NDUINT32 roleid = 0;
-        NDUINT32 error_code = 0;
-        NDUINT8 name[USER_NAME_SIZE];
+	role_base_info role;
+	ret = m_login->GetRoleList(&role, 1);
+	if (ret == 0){
+		return m_login->CreateRole((const char*)accountName, role);
+	}
 
-        NDIStreamMsg inmsg(&recv_msg);
-        inmsg.Read(roleid);
-
-        if (roleid == 0) {
-            inmsg.Read(error_code);
-            if (error_code) {
-                nd_logerror("get role list error : %d\n", error_code);
-                return -1 ;
-            }
-            std::string roleName =accountName;
-            roleName += "role";
-
-            return createRole(roleName.c_str());
-
-        }
-        else {
-            inmsg.Read(name, sizeof(name));
-
-            nd_logmsg("get role %s id=%d success \n", name, roleid);
-
-            //read attribute
-            NDUINT16 num = 0;
-            if (0 == inmsg.Read(num)) {
-                for (int i = 0; i < num; ++i) {
-                    NDUINT8 aid;
-                    float val;
-                    inmsg.Read(aid); inmsg.Read(val);
-                    nd_logmsg("load role attribute id = %d val =%f \n", aid, val);
-                }
-            }
-        }
-    }
     return 0;
-}
-
-int ConnectDialog::createRole(const char *roleName)
-{
-    NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_REQ);
-    omsg.Write((NDUINT8*)roleName);
-
-    omsg.Write((NDUINT16)1);
-    omsg.Write((NDUINT8)20);
-    omsg.Write((float)0);
-
-    nd_handle h = m_pConn->GetHandle();
-    nd_usermsgbuf_t recv_msg;
-    _SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_CREATE_ROLE_ACK, 0)
-    else {
-        NDUINT32 roleid = 0;
-        NDUINT32 error_code = 0;
-        NDUINT8 name[USER_NAME_SIZE];
-
-        NDIStreamMsg inmsg(&recv_msg);
-        inmsg.Read(roleid);
-
-        if (roleid == 0) {
-            inmsg.Read(error_code);
-            if (error_code) {
-                nd_logerror( "create role list error : %d\n", error_code);
-            }
-            return -1 ;
-        }
-        else {
-            inmsg.Read(name, sizeof(name));
-
-            char roleName[128];
-            nd_utf8_to_gbk((const char*)name, roleName, sizeof(roleName));
-
-            nd_logmsg("create role %s success \n", roleName);
-            //read attribute
-            NDUINT16 num = 0;
-            if (0 == inmsg.Read(num)) {
-                for (int i = 0; i < num; ++i) {
-                    NDUINT8 aid;
-                    float val;
-                    inmsg.Read(aid); inmsg.Read(val);
-                    nd_logmsg("create role attribute id = %d val =%f \n", aid, val);
-                }
-            }
-        }
-    }
-    return 0 ;
 }
 
 int ConnectDialog::getRoleData()
@@ -771,19 +810,109 @@ int ConnectDialog::getRoleData()
 }
 
 
-#include "xmldialog.h"
+#include "apoScript/xmldialog.h"
 #include "startdialog.h"
 
-static bool gmdlgInit(QDialog *curDlg)
+static bool gmdlgInit(QDialog *)
 {
 
     return true;
 }
 
-static bool gmdlgExit(QDialog *curDlg)
+static bool gmdlgExit(QDialog *)
 {
 
     return false;
+}
+
+static bool _sendMsgByXml(ndxml *xml, ConnectDialog *dlg)
+{
+	NDUINT16 msgid = 0;
+	ndxml *msgXML = ndxml_getnode(xml, "msgid");
+	if (!msgXML)	{
+		QMessageBox::warning(NULL, "Error", "select xml node error!", QMessageBox::Ok);
+		return true;
+	}
+	else {
+		const char *maxId = ndxml_getattr_val(msgXML, "maxId");
+		const char *minId = ndxml_getattr_val(msgXML, "minId");
+		if (maxId && minId)	{
+			msgid = ND_MAKE_WORD(ndstr_atoi_hex(maxId), ndstr_atoi_hex(minId));
+		}
+		else {
+			msgid = ndxml_getval_int(msgXML);
+		}
+	}
+	const char *msgName = ndxml_getattr_val(xml, "name");
+
+	NDOStreamMsg omsg(msgid);
+	for (int i = 1; i < ndxml_num(xml); ++i){
+		ndxml *node = ndxml_getnodei(xml, i);
+		if (node){
+			int typeId = 0;
+			const char *typeName = ndxml_getattr_val(node, "param");
+			if (typeName)
+				typeId = atoi(typeName);
+			switch (typeId)
+			{
+			case OT_INT:
+				omsg.Write((NDUINT32)ndxml_getval_int(node));
+				break;
+			case OT_FLOAT:
+				omsg.Write(ndxml_getval_float(node));
+				break;
+			case OT_STRING:
+				omsg.Write((NDUINT8*)ndxml_getval(node));
+				break;
+			case OT_INT8:
+				omsg.Write((NDUINT8)ndxml_getval_int(node));
+				break;
+			case OT_INT16:
+				omsg.Write((NDUINT16)ndxml_getval_int(node));
+				break;
+			case OT_INT64:
+				omsg.Write((NDUINT64)ndxml_getval_int(node));
+				break;
+			case OT_BINARY_DATA:
+			{
+				const char *p = ndxml_getval(node);
+				size_t s = (p && *p) ? strlen(p) : 0;
+				omsg.WriteBin((void*)p, s);
+			}
+			break;
+
+			case OT_ARRAY:		//file
+			{
+				const char *pFileName = ndxml_getval(node);
+				if (pFileName && *pFileName){
+					size_t filesize = 0;
+					void *pData = nd_load_file(pFileName, &filesize);
+					if (!pData)	{
+						QMessageBox::warning(NULL, "Error", "Can not open file!", QMessageBox::Ok);
+						return false;
+					}
+					omsg.WriteBin(pData, filesize);
+					nd_unload_file(pData);
+				}
+			}
+			break;
+
+			default:
+				QMessageBox::warning(NULL, "Error", "config error!", QMessageBox::Ok);
+				break;
+			}
+
+		}
+	}
+	NDIConn *pconn = dlg->getConnect();
+	if (pconn)	{
+		pconn->SendMsg(omsg);
+		dlg->saveCurrentSendMsg(QString(msgName));
+	}
+	else{
+		QMessageBox::warning(NULL, "Error", "Need login!", QMessageBox::Ok);
+	}
+	return false;
 }
 
 static bool gmdlgSend(QDialog *curDlg)
@@ -798,81 +927,59 @@ static bool gmdlgSend(QDialog *curDlg)
     if (!xml){
         return true;
     }
-    NDUINT16 msgid = 0;
-    ndxml *msgXML = ndxml_getnode(xml, "msgid");
-    if (!msgXML)	{
-        QMessageBox::warning(NULL, "Error","select xml node error!",QMessageBox::Ok);
-        return true;
-    }
-    else {
-        const char *maxId = ndxml_getattr_val(msgXML, "maxId");
-        const char *minId = ndxml_getattr_val(msgXML, "minId");
-        if (maxId && minId)	{
-			msgid = ND_MAKE_WORD(ndstr_atoi_hex(maxId), ndstr_atoi_hex(minId));
-        }
-        else {
-            msgid = ndxml_getval_int(msgXML);
-        }
-    }
+	const char *selSendCollectName = ndxml_getname(xml);
+	if (0==ndstricmp(selSendCollectName,"filter"))	{
+		const char *allowSendAll = ndxml_getattr_val(xml, "allowBatchSend");
+		if (!allowSendAll || 0!=ndstricmp(allowSendAll,"yes"))	{
+			QMessageBox::warning(NULL, "Error", "Not surported!", QMessageBox::Ok);
+			return true;
+		}
+		
+		int ret = QMessageBox::question(curDlg, "Question", "Do you want batch send all message ?",
+			QMessageBox::Yes | QMessageBox::No ,
+			QMessageBox::Yes);
 
-    NDOStreamMsg omsg(msgid);
+		if (QMessageBox::No == ret) {
+			return true;
+		}
 
-    for (int i = 1; i < ndxml_num(xml); ++i){
-        ndxml *node = ndxml_getnodei(xml, i);
-        if (node){
-            int typeId = 0;
-            const char *typeName = ndxml_getattr_val(node, "param");
-            if (typeName)
-                typeId = atoi(typeName);
-            switch (typeId)
-            {
-            case OT_INT :
-                omsg.Write((NDUINT32)ndxml_getval_int(node));
-                break;
-            case OT_FLOAT:
-                omsg.Write(ndxml_getval_float(node));
-                break;
-            case OT_STRING:
-                omsg.Write((NDUINT8*)ndxml_getval(node));
-                break;
-            case OT_INT8:
-                omsg.Write((NDUINT8)ndxml_getval_int(node));
-                break;
-            case OT_INT16:
-                omsg.Write((NDUINT16)ndxml_getval_int(node));
-                break;
-            case OT_INT64:
-                omsg.Write((NDUINT64)ndxml_getval_int(node));
-                break;
-			case OT_BINARY_DATA:
-			{
-				const char *p = ndxml_getval(node);
-				size_t s = (p && *p) ? strlen(p) : 0;
-				omsg.WriteBin((void*)p, s);
-			}
-			break;
-            default:
-                QMessageBox::warning(NULL, "Error","config error!",QMessageBox::Ok);
-                break;
-            }
-
-        }
-    }
-    NDIConn *pconn = dlg->getConnect();
-    if (pconn)	{
-        pconn->SendMsg(omsg);
-    }
-    else{
-
-        QMessageBox::warning(NULL, "Error","Need login!",QMessageBox::Ok);
-    }
-    return false;
+		int count = ndxml_getsub_num(xml);
+		for (int i = 0; i < count; i++)		{
+			ndxml *subNode = ndxml_getnodei(xml, i);
+			nd_assert(subNode);
+			_sendMsgByXml(subNode, dlg);
+		}
+		return false;
+	}
+	else {
+		return _sendMsgByXml(xml, dlg);
+	}
+	
 }
 
 
 void ConnectDialog::on_gmMsgButton_clicked()
 {
     //dialogCloseHelper _helperClose(this) ;
+	XmlVct_t xmlHistoryVct;
+	getHistoryNodes(xmlHistoryVct);
+
+	if (xmlHistoryVct.size()){
+		ndxml *msgRoot = ndxml_getnode(m_gmCfg, "send_msg_list");
+		nd_assert(msgRoot);
+		ndxml_delnode(msgRoot, "history");
+		ndxml *hostroyNode = ndxml_addnode(msgRoot, "history", NULL);
+		ndxml_addattrib(hostroyNode, "name", "History");
+		ndxml_addattrib(hostroyNode, "expand_stat", "1");
+
+		ndxml_remove(hostroyNode,msgRoot);
+
+		ndxml_insert_after(msgRoot, hostroyNode, msgRoot);
+
+		for (size_t i = 0; i < xmlHistoryVct.size(); i++)	{
+			ndxml_insert_after(hostroyNode, xmlHistoryVct[i], hostroyNode);
+		}
+	}
 
     XMLDialog xmlDlg(this);
     xmlDlg.showXml( m_gmCfg,"Message");
@@ -911,4 +1018,17 @@ void ConnectDialog::on_pushButtonExit_clicked()
 void ConnectDialog::on_pushButton_2_clicked()
 {
     ClearLog();
+}
+
+
+
+void ConnectDialog::on_pushButtonGetPingVal_clicked()
+{
+	if (m_pConn && m_pConn->CheckValid()){
+		m_pConn->InstallMsgFunc(ClientMsgHandler::msg_show_echo_time, ND_MAIN_ID_SYS, ND_MSG_SYS_ECHO);
+		NDOStreamMsg omsg(ND_MAIN_ID_SYS, ND_MSG_SYS_ECHO);
+		ndtime_t now = nd_time();
+		omsg.Write((NDUINT32)now);
+		m_pConn->SendMsg(omsg);
+	}
 }

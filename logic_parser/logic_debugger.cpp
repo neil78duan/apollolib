@@ -575,7 +575,7 @@ LocalDebugger::LocalDebugger(LogicParserEngine *parser, LogicObjectBase *owner) 
 	m_RunningSem = NULL;
 	m_cliSem = NULL;
 	m_cmdSem = NULL;
-	m_thHost = NULL;
+	m_thHost = 0;
 
 	memset(&m_outPutMem, 0, sizeof(m_outPutMem));
 
@@ -692,16 +692,19 @@ bool LocalDebugger::preStartDebug(NDUINT32 processId)
 
 	int ret = nd_mem_share_create(proceInfo->shareMemName, 1024 * 1024, &m_outPutMem);
 	if (-1 == ret) {
+		nd_logerror("blueprint vm open debug share memfile error %s\n", nd_last_error());
 		return false;
 	}
 
 	m_RunningSem = nd_sem_open(proceInfo->semName);
 	if (!m_RunningSem) {
+		nd_logerror("blueprint vm open debug share memfile error %s\n", nd_last_error());
 		return false;
 	}
 
 	m_cliSem = nd_sem_open(proceInfo->semClient);
 	if (!m_cliSem) {
+		nd_logerror("blueprint vm open debug share memfile error %s\n", nd_last_error());
 		return false;
 	}
 	return true;
@@ -803,13 +806,15 @@ int LocalDebugger::ScriptRunOk(LogicParserEngine *parser)
 
 bool LocalDebugger::isBreakPoint(const char *func, const char *node, bool bTrytoDel )
 {
-	for (breakPoint_vct::iterator it = m_breakPoints.begin(); it != m_breakPoints.end(); it++) {
-		if (0 == ndstricmp(it->functionName.c_str(),func) &&
-			0 == ndstricmp(it->nodeName.c_str(), node))	{
-			if (bTrytoDel && it->tempBreak)	{
-				m_breakPoints.erase(it);
+	if (m_breakPoints.size())	{
+		for (breakPoint_vct::iterator it = m_breakPoints.begin(); it != m_breakPoints.end(); it++) {
+			if (0 == ndstricmp(it->functionName.c_str(), func) &&
+				0 == ndstricmp(it->nodeName.c_str(), node))	{
+				if (bTrytoDel && it->tempBreak)	{
+					m_breakPoints.erase(it);
+				}
+				return true;
 			}
-			return true;
 		}
 	}
 	return false;

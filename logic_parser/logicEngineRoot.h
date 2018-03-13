@@ -77,6 +77,9 @@ public:
 
 	static LogicEngineRoot *get_Instant();
 	static void destroy_Instant();
+	
+	static void setSettingFile(const char *filename);
+	static const char *getSettingFile();
 
 	int LoadScript(const char *scriptStream, LogicParserEngine *initCallLoader);
 	int Reload(const char *scriptStream, LogicParserEngine *initCallLoader);
@@ -128,6 +131,7 @@ public:
 
 	UserDefData_map_t &getUserDefType() { return m_useDefType; }
 	const char *getMainModuleName() { return m_mainModule.c_str(); }
+	bool addGlobalFunction(int byteOrder, char*name, void *data, size_t size);
 private:
 
 	//static LogicEngineRoot *s_root;
@@ -148,6 +152,7 @@ private:
 	//script_func_map m_scripts;
 	script_module_map m_modules;
 	static cpp_func_map *m_c_funcs;
+	static std::string s_setting_file;
 	event_table_map m_event_entry;
 	module_changed_tm_map m_moduleChangedTime;
 
@@ -160,6 +165,38 @@ private:
 	LogicData_vct m_global_vars; 
 
 	UserDefData_map_t m_useDefType;
+};
+
+
+//LogicObjectBase
+class TestLogicObject : public LogicObjectBase
+{
+public:
+	TestLogicObject();
+	virtual~TestLogicObject();
+
+	bool opRead(const DBLDataNode& id, DBLDataNode &val);
+	bool opWrite(const DBLDataNode& id, const DBLDataNode &val);
+	bool opAdd(const DBLDataNode& id, const DBLDataNode &val);
+	bool opSub(const DBLDataNode& id, const  DBLDataNode &val);
+	//bool opClear(const DBLDataNode& id, const  DBLDataNode &val);
+	bool opCheck(const DBLDataNode& id, const  DBLDataNode &val);
+	//common operate 
+	bool opOperate(const char *cmd, const DBLDataNode& id, DBLDataNode &val);
+	//bool getObject(eOperatorObjType type, const DBLDataNode &id, DBLDataNode &val);
+	//LogicObjectBase *getObjectMgr(eOperatorDestMgr destID);
+
+	bool getOtherObject(const char*objName, DBLDataNode &val);
+	LogicObjectBase *getObjectMgr(const char* destName);
+	int Print(logic_print f, void *pf); //print object self info 
+
+	bool BeginAffair();
+	bool CommitAffair();
+	bool RollbackAffair();
+
+private:
+
+	void _setval(DBLDataNode &val);
 };
 
 

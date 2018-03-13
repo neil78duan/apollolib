@@ -15,6 +15,7 @@
 extern NDSafeConnector &getWorldConnect() ;
 extern NDConnector &getSyncServerConnector();
 extern NDConnector &getNationConnect();
+extern NDConnector &getLogConnect();
 
 #define USE_SOCIAL_SYNC_MESSAGE  1
 

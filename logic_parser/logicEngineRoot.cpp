@@ -18,6 +18,7 @@
 
 
 cpp_func_map* LogicEngineRoot:: m_c_funcs = NULL;
+std::string LogicEngineRoot::s_setting_file;
 
 LogicEngineRoot *LogicEngineRoot::get_Instant()
 {
@@ -28,6 +29,21 @@ void LogicEngineRoot::destroy_Instant()
 {
 	NDSingleton<LogicEngineRoot>::Destroy();
 }
+
+void LogicEngineRoot::setSettingFile(const char *filename)
+{
+	s_setting_file = filename;
+}
+
+const char *LogicEngineRoot::getSettingFile()
+{
+	if (s_setting_file.size()) {
+		return s_setting_file.c_str();
+	}
+	return NULL;
+
+}
+
 
 LogicEngineRoot::LogicEngineRoot() : m_globalDebugger(&m_globalParser,NULL)
 {
@@ -270,6 +286,28 @@ int LogicEngineRoot::_unloadModule(script_func_map &module)
 		}
 	}
 	return 0;
+}
+
+
+bool LogicEngineRoot::addGlobalFunction(int byteOrder, char*name, void *data, size_t size)
+{
+	size_t namesize = strlen(name) + 1;
+	scriptCmdBuf *pcmdbuf = (scriptCmdBuf*)malloc(sizeof(scriptCmdBuf) + size + namesize);
+	if (pcmdbuf) {
+
+		pcmdbuf->cmdname = (char*)(pcmdbuf + 1);
+		pcmdbuf->buf = (char*)pcmdbuf->cmdname + namesize;
+
+		strncpy((char*)pcmdbuf->cmdname, name, namesize);
+		memcpy((char*)pcmdbuf->buf, data, size);
+		pcmdbuf->size = size;
+
+		pcmdbuf->byteOrder = (int)byteOrder;
+
+		_pushGlobal(pcmdbuf);
+		return true;
+	}
+	return false;
 }
 
 bool LogicEngineRoot::_pushGlobal(scriptCmdBuf *pcmdbuf)
@@ -534,4 +572,136 @@ DBLDataNode *LogicEngineRoot::getVar(const char *name)
 		}
 	}
 	return NULL;
+}
+
+
+////////////////////////////////////////////////////
+///test object manager
+TestLogicObject::TestLogicObject()
+{
+
+}
+TestLogicObject::~TestLogicObject()
+{
+
+}
+
+bool TestLogicObject::opRead(const DBLDataNode& id, DBLDataNode &val)
+{
+	PARSE_TRACE("logic_engine_test: opRead(%d) \n", id.GetInt());
+	_setval(val);
+	return true;
+}
+
+bool TestLogicObject::opWrite(const DBLDataNode& id, const DBLDataNode &val)
+{
+	PARSE_TRACE("logic_engine_test: opWrite(%d) \n", id.GetInt());
+	//_setval(val);
+	return true;
+}
+
+
+bool TestLogicObject::opAdd(const DBLDataNode& id, const DBLDataNode &val)
+{
+	PARSE_TRACE("logic_engine_test: opAdd(%d) \n", id.GetInt());
+	//_setval(val);
+	return true;
+}
+
+
+bool TestLogicObject::opSub(const DBLDataNode& id, const  DBLDataNode &val)
+{
+	PARSE_TRACE("logic_engine_test: opSub(%d) \n", id.GetInt());
+	//_setval(val);
+	return true;
+}
+// 
+// bool TestLogicObject::opClear(const DBLDataNode& id, const  DBLDataNode &val)
+// {
+// 	PARSE_TRACE("logic_engine_test: opClear(%d) \n", id.GetInt());
+// 	return true;
+// }
+
+
+bool TestLogicObject::opCheck(const DBLDataNode& id, const  DBLDataNode &val)
+{
+	if (val.GetDataType() == OT_STRING){
+		const char *pText = val.GetText();
+		if (pText && *pText){
+			if (0 == ndstricmp(pText, "test-error"))	{
+				m_error = NDERR_SUCCESS;
+				return false;
+			}
+			// 			else if (0 == ndstricmp(pText, "test-success"))	{
+			// 				m_error = NDERR_SUCCESS;
+			// 				return true;
+			// 			}
+		}
+	}
+	//m_error = NDERR_NOT_SURPORT;
+	return true;
+}
+
+bool TestLogicObject::opOperate(const char *cmd, const DBLDataNode& id, DBLDataNode &val)
+{
+	PARSE_TRACE("logic_engine_test: opOperate(%s,%d,%d) \n", cmd, id.GetInt(), val.GetInt());
+	return true;
+}
+
+
+bool TestLogicObject::getOtherObject(const char*objName, DBLDataNode &val)
+{
+	//PARSE_TRACE("logic_engine_test: getObject(%d, %d) \n",type);
+	if (0 == ndstricmp(objName, "machineInfo")) {
+		char buf[256];
+		val.InitSet(nd_common_machine_info(buf, sizeof(buf)));
+		return true;
+	}
+	else if (0 == ndstricmp(objName, "settingFile")) {
+		const char *pSettingFile = LogicEngineRoot::getSettingFile();
+		val.InitSet(pSettingFile);
+		return true;
+	}
+	_setval(val);
+	return true;
+
+}
+LogicObjectBase *TestLogicObject::getObjectMgr(const char* destName)
+{
+	PARSE_TRACE("logic_engine_test: getObjectMgr(%s) \n", destName);
+	return this;
+}
+
+
+int TestLogicObject::Print(logic_print f, void *pf)
+{
+	PARSE_TRACE("this is object for test_engine\n");
+	return 31;
+}
+
+bool TestLogicObject::BeginAffair()
+{
+	PARSE_TRACE("logic_engine_test: BeginAffair() \n");
+	return true;
+}
+
+bool TestLogicObject::CommitAffair()
+{
+	PARSE_TRACE("logic_engine_test: CommitAffair \n");
+	return true;
+}
+
+bool TestLogicObject::RollbackAffair()
+{
+	PARSE_TRACE("logic_engine_test: RollbackAffair() \n");
+	return true;
+}
+
+
+
+void TestLogicObject::_setval(DBLDataNode &val)
+{
+	DBLDataNode data;
+	data.InitSet("0");
+	val = data;
 }

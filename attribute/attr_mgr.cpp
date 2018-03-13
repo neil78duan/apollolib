@@ -12,7 +12,7 @@
 
 RoleAttrAsset::RoleAttrAsset(role_attr_data *data) : m_data(data), m_EnableRecalc(false)
 {
-	//m_attrRate = 1.0f ;
+	m_attrRate = 1.0f ;
 	//m_lastErrorID = INVALID_ATTR_ID;
 	//m_lastErrorCode = 0;
 	m_recordChange = false;
@@ -25,10 +25,10 @@ RoleAttrAsset::~RoleAttrAsset()
 
 float RoleAttrAsset::setAttrRate(float newVal)
 {
-// 	float ret = m_attrRate ;
-// 	m_attrRate = newVal ;
-// 	return ret;
-	return 1.0f;
+	float ret = m_attrRate ;
+	m_attrRate = newVal ;
+	return ret;
+	//return 1.0f;
 }
 
 attrid_t RoleAttrAsset::getLastErrorID()
@@ -41,7 +41,7 @@ int RoleAttrAsset::getLastError()
 }
 void RoleAttrAsset::setLastErrorAttrID(attrid_t )
 {
-
+	
 }
 void RoleAttrAsset::setLastError(int )
 {
@@ -75,6 +75,16 @@ bool RoleAttrAsset::setVal(attrid_t index, attrval_t val)
 		return false;
 	}
 
+	RoleAttrHelper  *pwah = get_attr_helper();
+	if (pwah->check_readonly(index)) {
+		char buf_stack[1024];
+		if (!nd_get_callstack_desc(buf_stack, sizeof(buf_stack))) {
+			strncpy(buf_stack, "unknow stack", sizeof(buf_stack));
+		}
+		nd_logerror("set [%d] value but is read only {%s}\n", index,buf_stack);
+		return false;
+	}
+
 	int ret = 0;
 	attrval_t *pdata = &m_data->datas[index];
 	
@@ -88,11 +98,41 @@ bool RoleAttrAsset::setVal(attrid_t index, attrval_t val)
 
 }
 
+bool RoleAttrAsset::setValRaw(attrid_t index, attrval_t val)
+{
+	_set_val(val, index);
+	return true;
+}
+
+bool RoleAttrAsset::setValRaw(const char *name, attrval_t newval)
+{
+	RoleAttrHelper  *pwah = get_attr_helper();
+	attrid_t waid = pwah->GetID(name);
+	if (waid != INVALID_ATTR_ID){
+		_set_val(newval, waid);
+	}
+	return true;
+}
+
+bool RoleAttrAsset::setValRaw(const attr_node_buf &attrs)
+{
+	for (int i = 0; i < attrs.number; i++)	{
+		setValRaw(attrs.buf[i].id, attrs.buf[i].val);
+	}
+	return true;
+}
+
 bool RoleAttrAsset::addVal(attrid_t index, attrval_t val)
 {
-// 	if (fabsf(m_attrRate - 1.0f) > 0.001f) {
-// 		val *= m_attrRate ;
-// 	}
+	if (checkUnlimitMax(index)) {
+		setLastError(ESERVER_ERR_ATTR_TOO_MUCH);
+		setLastErrorAttrID(index);
+		return false;
+	}
+
+	if (fabsf(m_attrRate - 1.0f) > 0.001f) {
+		val *= m_attrRate ;
+	}
 	if (setVal(index, getVal(index) + val)) {
 
 		if (m_recordChange)	{
@@ -109,9 +149,9 @@ bool RoleAttrAsset::addVal(attrid_t index, attrval_t val)
 
 bool RoleAttrAsset::subVal(attrid_t index, attrval_t val)
 {
-// 	if (fabsf(m_attrRate - 1.0f) > 0.001f) {
-// 		val *= m_attrRate ;
-// 	}
+	if (fabsf(m_attrRate - 1.0f) > 0.001f) {
+		val *= m_attrRate ;
+	}
 	attrval_t curVal = getVal(index);
 	if (curVal < val) {
 		setLastError(ESERVER_ERR_ATTR_NOT_ENOUGH);
@@ -137,8 +177,8 @@ bool RoleAttrAsset::subVal(attrid_t index, attrval_t val)
 
 attrval_t  RoleAttrAsset::getVal(attrid_t index, bool withRecalc)
 {
-	if (withRecalc)	{
-		RoleAttrHelper  *pwah = get_attr_helper();
+	RoleAttrHelper  *pwah = get_attr_helper();
+	if (withRecalc && pwah->check_readonly(index) )	{
 		role_attr_description *pdesc = pwah->get_wa_desc(index);
 		if (pdesc ) {
 			if (pdesc->cmd_data.size > 0) {
@@ -268,6 +308,31 @@ bool RoleAttrAsset::subVal(const attr_node_buf &attrs)
 	return true;
 }
 
+
+bool RoleAttrAsset::checkUnlimitMax(attrid_t aid)
+{
+	ND_TRACE_FUNC();
+	RoleAttrHelper  *pwah = get_attr_helper();
+	role_attr_description *pdesc = pwah->get_wa_desc(aid);
+	if (!pdesc){
+		return false;
+	}
+
+	attrval_t  curVal = m_data->datas[aid];
+	
+	if (1 == pdesc->isUnlimitedMax){
+		if (curVal >= pdesc->unlimitMax){
+			return true;
+		}
+	}
+	else if (2 == pdesc->isUnlimitedMax){
+		attrid_t idmax = (attrid_t)pdesc->unlimitMax;
+		if (idmax < pwah->m_wa_num && curVal >= m_data->datas[idmax])	{
+			return true;
+		}
+	}
+	return false;
+}
 
 void RoleAttrAsset::Undo(const attrid_t &aid, const  attrval_t &old_val, int optype)
 {

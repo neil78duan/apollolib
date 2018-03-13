@@ -10,7 +10,7 @@
 
 
 #include "nd_common/nd_common.h"
-#include "cli_common/netui_atl.h"
+//#include "cli_common/netui_atl.h"
 //#include "commonTest.h"
 //#include "cli_common/gameMessage.h"
 #include "cli_common/login_apollo.h"
@@ -26,7 +26,7 @@
 			}
 
 
-static int my_msg_default_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
+static int my_msg_default_handler(NDIConn* , nd_usermsgbuf_t *msg)
 {
 	if (ND_USERMSG_MAXID(msg) > 16 || ND_USERMSG_MINID(msg)> 64){
 		nd_logerror("get error message (%d,%d)\n", ND_USERMSG_MAXID(msg) , ND_USERMSG_MINID(msg));
@@ -62,9 +62,6 @@ int ApolloRobort::Create(const char *host, int port, const char *accountName, co
 	}
 	nd_logmsg("ACCOUNT %s login SUCCESS\n", accountName);
 
-
-	//initApolloGameMessage(m_pConn) ;
-	//initCommonMessageHandle(m_pConn);
 	m_pConn->SetDftMsgHandler(my_msg_default_handler);
 	//gmtoolMsgHandlerInit(m_pConn);
 	char roleName[100];
@@ -78,8 +75,6 @@ int ApolloRobort::Create(const char *host, int port, const char *accountName, co
 		m_pConn = NULL;
 		return -1;
 	}
-	//get and init role data
-	//getRoleData();
 	return 0;
 }
 
@@ -95,7 +90,6 @@ int ApolloRobort::Close(int flag)
 	
 
 	if (m_login){
-		//ApolloDestroyLoginInst(m_login);
 		delete m_login;
 		m_login = 0;
 	}
@@ -154,18 +148,16 @@ int ApolloRobort::_login(const char *accName, const char *passwd,int iAccType )
 		delete m_login;
 	}
 	
-	m_login = new LoginApollo(m_pConn->GetHandle(), NULL, "unknow-udid-robort-test");
+	m_login = new LoginApollo(m_pConn->GetHandle(), NULL);
 	if (!m_login){
 		return -1;
 	}
 	
-	
-	ret = m_login->Login(accName, passwd, (ACCOUNT_TYPE)iAccType, false);
+	ret = m_login->Login(accName, passwd, (ACCOUNT_TYPE)iAccType,0, false);
 	if (-1 == ret) {
 		if (m_login->GetLastError() == NDSYS_ERR_NOUSER) {
 			account_base_info acc;
-			strncpy((char*)acc.udid, "unknow-udid-robort-test", DEVICE_UDID_SIZE);
-			initAccCreateInfo(acc, (ACCOUNT_TYPE)iAccType, accName, passwd);
+			myInitAccCreateInfo(acc, (ACCOUNT_TYPE)iAccType, accName, passwd);
 
 			ret = m_login->CreateAccount(&acc);
 		}
@@ -201,49 +193,55 @@ int ApolloRobort::_selOrCreateRole(const char *roleName)
 		return -1;
 	}
 	//get role list
-
-	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ);
-	omsg.Write((NDUINT8)0);
-	nd_handle h = m_pConn->GetHandle();
-	nd_usermsgbuf_t recv_msg;
-
-	_robort_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0)
-	else {
-		NDUINT32 roleid = 0;
-		NDUINT32 error_code = 0;
-		NDUINT8 name[USER_NAME_SIZE];
-
-		NDIStreamMsg inmsg(&recv_msg);
-		inmsg.Read(roleid);
-
-		if (roleid == 0) {
-			inmsg.Read(error_code);
-			if (error_code) {
-				nd_logerror("get role list error : %d\n", error_code);
-				return -1;
-			}
-			return _createRole(roleName);
-		}
-		else {
-			inmsg.Read(name, sizeof(name));
-
-			//char roleName[128];
-			//nd_utf8_to_gbk((const char*)name, roleName, sizeof(roleName));
-
-			nd_logmsg("get role %s success \n", roleName);
-
-			//read attribute
-			NDUINT16 num = 0;
-			if (0 == inmsg.Read(num)) {
-				for (int i = 0; i < num; ++i) {
-					NDUINT8 aid;
-					float val;
-					inmsg.Read(aid); inmsg.Read(val);
-					//nd_logmsg("load role attribute id = %d val =%f \n", aid, val);
-				}
-			}
-		}
+	role_base_info role;
+	ret = m_login->GetRoleList(&role, 1);
+	if (ret == 0){
+		return m_login->CreateRole(roleName, role);
 	}
+
+// 
+// 	NDOStreamMsg omsg(NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_REQ);
+// 	omsg.Write((NDUINT8)0);
+// 	nd_handle h = m_pConn->GetHandle();
+// 	nd_usermsgbuf_t recv_msg;
+// 
+// 	_robort_SEND_AND_WAIT(h, omsg, &recv_msg, NETMSG_MAX_LOGIN, LOGIN_MSG_GET_ROLE_LIST_ACK, 0)
+// 	else {
+// 		NDUINT32 roleid = 0;
+// 		NDUINT32 error_code = 0;
+// 		NDUINT8 name[USER_NAME_SIZE];
+// 
+// 		NDIStreamMsg inmsg(&recv_msg);
+// 		inmsg.Read(roleid);
+// 
+// 		if (roleid == 0) {
+// 			inmsg.Read(error_code);
+// 			if (error_code) {
+// 				nd_logerror("get role list error : %d\n", error_code);
+// 				return -1;
+// 			}
+// 			return _createRole(roleName);
+// 		}
+// 		else {
+// 			inmsg.Read(name, sizeof(name));
+// 
+// 			//char roleName[128];
+// 			//nd_utf8_to_gbk((const char*)name, roleName, sizeof(roleName));
+// 
+// 			nd_logmsg("get role %s success \n", roleName);
+// 
+// 			//read attribute
+// 			NDUINT16 num = 0;
+// 			if (0 == inmsg.Read(num)) {
+// 				for (int i = 0; i < num; ++i) {
+// 					NDUINT8 aid;
+// 					float val;
+// 					inmsg.Read(aid); inmsg.Read(val);
+// 					//nd_logmsg("load role attribute id = %d val =%f \n", aid, val);
+// 				}
+// 			}
+// 		}
+// 	}
 	return 0;
 }
 

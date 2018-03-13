@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0796E06B202C036800B7C9E5 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0796E06A202C036800B7C9E5 /* apoClientU3d.cpp */; };
 		07EC87B81D546B1A00C32925 /* atlantis_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87B01D546B1A00C32925 /* atlantis_test.cpp */; };
 		07EC87B91D546B1A00C32925 /* client_cmdline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87B21D546B1A00C32925 /* client_cmdline.cpp */; };
-		07EC87BA1D546B1A00C32925 /* commonTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87B31D546B1A00C32925 /* commonTest.cpp */; };
 		07EC87BB1D546B1A00C32925 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87B51D546B1A00C32925 /* Makefile */; };
 		07EC87BC1D546B1A00C32925 /* rsa_gen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87B61D546B1A00C32925 /* rsa_gen.cpp */; };
 		07EC87BD1D546B1A00C32925 /* test_msgsend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87B71D546B1A00C32925 /* test_msgsend.cpp */; };
@@ -33,12 +33,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0796E069202C036800B7C9E5 /* apoClientU3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apoClientU3d.h; sourceTree = "<group>"; };
+		0796E06A202C036800B7C9E5 /* apoClientU3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apoClientU3d.cpp; sourceTree = "<group>"; };
 		07EC87841D54694000C32925 /* cmdline_tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cmdline_tool; sourceTree = BUILT_PRODUCTS_DIR; };
 		07EC87B01D546B1A00C32925 /* atlantis_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = atlantis_test.cpp; sourceTree = "<group>"; };
 		07EC87B11D546B1A00C32925 /* atlantis_test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = atlantis_test.h; sourceTree = "<group>"; };
 		07EC87B21D546B1A00C32925 /* client_cmdline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = client_cmdline.cpp; sourceTree = "<group>"; };
-		07EC87B31D546B1A00C32925 /* commonTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = commonTest.cpp; sourceTree = "<group>"; };
-		07EC87B41D546B1A00C32925 /* commonTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = commonTest.h; sourceTree = "<group>"; };
 		07EC87B51D546B1A00C32925 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		07EC87B61D546B1A00C32925 /* rsa_gen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rsa_gen.cpp; sourceTree = "<group>"; };
 		07EC87B71D546B1A00C32925 /* test_msgsend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_msgsend.cpp; sourceTree = "<group>"; };
@@ -88,8 +88,6 @@
 				07EC87B01D546B1A00C32925 /* atlantis_test.cpp */,
 				07EC87B11D546B1A00C32925 /* atlantis_test.h */,
 				07EC87B21D546B1A00C32925 /* client_cmdline.cpp */,
-				07EC87B31D546B1A00C32925 /* commonTest.cpp */,
-				07EC87B41D546B1A00C32925 /* commonTest.h */,
 				07EC87B51D546B1A00C32925 /* Makefile */,
 				07EC87B61D546B1A00C32925 /* rsa_gen.cpp */,
 				07EC87B71D546B1A00C32925 /* test_msgsend.cpp */,
@@ -101,6 +99,8 @@
 		07EC87C01D546BF100C32925 /* cli_common */ = {
 			isa = PBXGroup;
 			children = (
+				0796E06A202C036800B7C9E5 /* apoClientU3d.cpp */,
+				0796E069202C036800B7C9E5 /* apoClientU3d.h */,
 				07EC87C31D546BF100C32925 /* dftCliMsgHandler.cpp */,
 				07EC87C41D546BF100C32925 /* dftCliMsgHandler.h */,
 				07EC87C71D546BF100C32925 /* login_apollo.cpp */,
@@ -175,7 +175,7 @@
 				07EC87D01D546BF100C32925 /* Makefile in Sources */,
 				07EC87B81D546B1A00C32925 /* atlantis_test.cpp in Sources */,
 				07EC87BD1D546B1A00C32925 /* test_msgsend.cpp in Sources */,
-				07EC87BA1D546B1A00C32925 /* commonTest.cpp in Sources */,
+				0796E06B202C036800B7C9E5 /* apoClientU3d.cpp in Sources */,
 				07EC87BB1D546B1A00C32925 /* Makefile in Sources */,
 				07EC87BC1D546B1A00C32925 /* rsa_gen.cpp in Sources */,
 				07EC87B91D546B1A00C32925 /* client_cmdline.cpp in Sources */,
