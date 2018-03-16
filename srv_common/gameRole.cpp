@@ -63,11 +63,11 @@ int Role::Send(nd_usermsgbuf_t *msgBuf, int flag)
 }
 int Role::SendtoOther(roleid_t roleId, NDOStreamMsg &omsg, bool bSave )
 {
-	return get_playerMgr()->SendToNation(roleId, omsg,false,bSave);
+	return get_playerMgr()->Send(roleId, omsg,false,bSave);
 }
 int Role::SendtoOther(roleid_t roleId, nd_usermsgbuf_t *msgBuf, bool bSave)
 {
-	return get_playerMgr()->SendToNation(roleId, &msgBuf->msg_hdr, false, bSave);
+	return get_playerMgr()->Send(roleId, &msgBuf->msg_hdr, false, bSave);
 }
 int Role::CallMsgProc(roleid_t playerid, nd_usermsgbuf_t *msgBuf, bool bSave)
 {
@@ -79,11 +79,11 @@ int Role::CallMsgProc(roleid_t playerid, NDOStreamMsg &omsg, bool bSave)
 }
 int Role::CallMsgProcToNation(roleid_t playerid, nd_usermsgbuf_t *msgBuf, bool bSave)
 {
-	return get_playerMgr()->CallMsgProcToNation(playerid, &msgBuf->msg_hdr, bSave);
+	return get_playerMgr()->CallMsgProc(playerid, &msgBuf->msg_hdr, bSave);
 }
 int Role::CallMsgProcToNation(roleid_t playerid, NDOStreamMsg &omsg, bool bSave)
 {
-	return get_playerMgr()->CallMsgProcToNation(playerid, omsg, bSave);
+	return get_playerMgr()->CallMsgProc(playerid, omsg, bSave);
 }
 
 

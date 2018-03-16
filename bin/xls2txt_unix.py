@@ -23,8 +23,6 @@ def ReadExcel(fileName):
 		ncols = table.ncols
 		
 		for i in range(0, nrows ):
-			if i == 2 or i == 3:
-				continue
 			tmptxt=""
 			for j in range(0,ncols ):
 				tmptxt += str(table.cell(i,j).value)+"\t"
