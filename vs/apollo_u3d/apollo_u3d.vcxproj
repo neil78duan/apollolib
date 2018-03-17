@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -22,32 +22,31 @@
     <ProjectGuid>{7898DB31-725C-464D-ABB0-663D8459DDB6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>apollo_u3d</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -75,7 +74,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)</TargetName>
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\..\lib\Win64</OutDir>
+    <OutDir>..\..\..\lib\Win64</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -83,7 +82,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\..\lib\Win64</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -93,13 +91,11 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>ND_CLIENT_ONLY;ND_DEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;..\..\..\apolloBP\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>logic_parser.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\lib\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -114,17 +110,14 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>ND_CLIENT_ONLY;ND_DEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;..\..\..\apolloBP\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\..\lib\Win64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>logic_parser_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy $(TargetPath) D:\work\code\client\Guardian\Assets\Scripts\Base\Network\Plugins\x86_64</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -137,15 +130,13 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>ND_CLIENT_ONLY;WIN32;NDEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;..\..\..\apolloBP\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>logic_parser.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\lib\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -162,19 +153,16 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>ND_CLIENT_ONLY;WIN32;NDEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;..\..\..\apolloBP\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>..\..\lib\Win64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>logic_parser.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy $(TargetPath) D:\work\code\client\Guardian\Assets\Scripts\Base\Network\Plugins\x86_64</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -233,6 +221,18 @@
     <ClInclude Include="..\..\cli_common\apoClientU3d.h" />
     <ClInclude Include="..\..\cli_common\dftCliMsgHandler.h" />
     <ClInclude Include="..\..\cli_common\login_apollo.h" />
+    <ClInclude Include="..\..\logic_parser\dbldata2netstream.h" />
+    <ClInclude Include="..\..\logic_parser\dbl_mgr.h" />
+    <ClInclude Include="..\..\logic_parser\logicDataType.h" />
+    <ClInclude Include="..\..\logic_parser\logicEndian.h" />
+    <ClInclude Include="..\..\logic_parser\logicEngineRoot.h" />
+    <ClInclude Include="..\..\logic_parser\logicParser.h" />
+    <ClInclude Include="..\..\logic_parser\logicStruct.hpp" />
+    <ClInclude Include="..\..\logic_parser\logic_compile.h" />
+    <ClInclude Include="..\..\logic_parser\logic_debugger.h" />
+    <ClInclude Include="..\..\logic_parser\logic_editor_helper.h" />
+    <ClInclude Include="..\..\logic_parser\logic_function.h" />
+    <ClInclude Include="..\..\logic_parser\objectBaseMgr.h" />
     <ClInclude Include="..\..\plugin_u3d\apoCliApi.h" />
     <ClInclude Include="..\..\plugin_u3d\apoFormula.h" />
   </ItemGroup>
@@ -304,8 +304,22 @@
     <ClCompile Include="..\..\cli_common\apoClientU3d.cpp" />
     <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp" />
     <ClCompile Include="..\..\cli_common\login_apollo.cpp" />
+    <ClCompile Include="..\..\logic_parser\dbldata2netstream.cpp" />
+    <ClCompile Include="..\..\logic_parser\dbl_mgr.cpp" />
+    <ClCompile Include="..\..\logic_parser\logicDataType.cpp" />
+    <ClCompile Include="..\..\logic_parser\logicEngineRoot.cpp" />
+    <ClCompile Include="..\..\logic_parser\logicParser.cpp" />
+    <ClCompile Include="..\..\logic_parser\logicStruct.cpp" />
+    <ClCompile Include="..\..\logic_parser\logic_compile.cpp" />
+    <ClCompile Include="..\..\logic_parser\logic_debugger.cpp" />
+    <ClCompile Include="..\..\logic_parser\logic_editor_helper.cpp" />
+    <ClCompile Include="..\..\logic_parser\logic_function.cpp" />
+    <ClCompile Include="..\..\logic_parser\objectBaseMgr.cpp" />
     <ClCompile Include="..\..\plugin_u3d\apoCliApi.cpp" />
     <ClCompile Include="..\..\plugin_u3d\apoFormula.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\logic_parser\Makefile" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

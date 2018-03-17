@@ -605,12 +605,6 @@ ND_CMDLINE_FUNC_INSTANCE(change_dir)
 
 ND_CMDLINE_FUNC_INSTANCE(list_file)
 {
-#ifdef _MSC_VER
-
-	ND_CMDLINE_CHECK_SHOW_HELP(argc, argv, "ls --NOT implement in current platform!");
-	return 0;
-#else 
-
     ND_CMDLINE_CHECK_SHOW_HELP(argc, argv,"ls [aim-dir]") ;
     DIR *dirp ;
     struct dirent * dp ;
@@ -631,7 +625,7 @@ ND_CMDLINE_FUNC_INSTANCE(list_file)
     }
     closedir(dirp);
     return 0;
-#endif
+
 }
 
 ND_CMDLINE_FUNC_INSTANCE(run_shell)

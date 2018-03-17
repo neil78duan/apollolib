@@ -1,20 +1,24 @@
 @echo "===========begin build ...===========
+@set cur_dir=%CD%
+@set work_dir=%CD%
 
-@set apo_dir=%CD%
+@SET  VS12_BIN=%VS120COMNTOOLS%
+@set VS12_BIN=%VS12_BIN:Tools=IDE%
+@set vs12build="%VS12_BIN%devenv"
+
+@SET  builder=%vs12build%
 
 
-@SET VS_BIN=%VS140COMNTOOLS%
-@set VS_BIN=%VS_BIN:Tools=IDE%
-@set vsbuild="%VS_BIN%devenv"
-@SET builder=%vsbuild%
-
-
-cd vs
-%builder% "vsApo.sln" /rebuild "debug|x64" 
+cd tool\apolloEditorMfc
+%builder% "apolloParseEditor.sln" /build "release|Win32" 
 @if %errorlevel% NEQ 0  goto ERROR
 
+@cd %work_dir%
+cd tool\protocolBuilder\protocolBuilderVS
+%builder% "protocolBuilderVS.sln" /build "release|Win32" 
+@if %errorlevel% NEQ 0  goto ERROR
 
-@cd %apo_dir%
+@cd %work_dir%
 
 @rem exit script
 @echo " Build project success "
@@ -22,6 +26,6 @@ cd vs
 
 
 :ERROR
-@cd "%apo_dir%"
+@cd "%cur_dir%"
 @echo "build ERROR "
 @pause

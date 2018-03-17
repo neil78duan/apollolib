@@ -34,6 +34,9 @@
     <Filter Include="apollo\login">
       <UniqueIdentifier>{5220b7ed-8875-424d-9e2a-af13740e5796}</UniqueIdentifier>
     </Filter>
+    <Filter Include="apollo\logicParser">
+      <UniqueIdentifier>{9f49f218-d978-4bf2-88bd-6a135c265921}</UniqueIdentifier>
+    </Filter>
     <Filter Include="apollo\attribute">
       <UniqueIdentifier>{4a919c48-b281-4868-9bad-ae9fd8463301}</UniqueIdentifier>
     </Filter>
@@ -188,6 +191,39 @@
     </ClInclude>
     <ClInclude Include="..\..\cli_common\login_apollo.h">
       <Filter>apollo\login</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\dbl_mgr.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\dbldata2netstream.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\logic_compile.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\logic_editor_helper.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\logic_function.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\logicDataType.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\logicEndian.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\logicEngineRoot.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\logicParser.h">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\logicStruct.hpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\logic_parser\objectBaseMgr.h">
+      <Filter>apollo\logicParser</Filter>
     </ClInclude>
     <ClInclude Include="..\..\cli_common\dftCliMsgHandler.h">
       <Filter>apollo\login</Filter>
@@ -392,6 +428,36 @@
     <ClCompile Include="..\..\cli_common\login_apollo.cpp">
       <Filter>apollo\login</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\logic_parser\dbl_mgr.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\dbldata2netstream.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\logic_compile.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\logic_editor_helper.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\logic_function.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\logicDataType.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\logicEngineRoot.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\logicParser.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\logicStruct.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\logic_parser\objectBaseMgr.cpp">
+      <Filter>apollo\logicParser</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_time.c">
       <Filter>src\common</Filter>
     </ClCompile>
@@ -404,5 +470,10 @@
     <ClCompile Include="..\..\attribute\roleattr_help.cpp">
       <Filter>apollo\attribute</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\logic_parser\Makefile">
+      <Filter>apollo\logicParser</Filter>
+    </None>
   </ItemGroup>
 </Project>
