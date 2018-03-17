@@ -14,8 +14,8 @@
 //extern BattleInstance &get_instance() ;
 extern NDSafeConnector &getWorldConnect() ;
 extern NDConnector &getSyncServerConnector();
-extern NDConnector &getNationConnect();
-extern NDConnector &getLogConnect();
+// extern NDConnector &getNationConnect();
+// extern NDConnector &getLogConnect();
 
 #define USE_SOCIAL_SYNC_MESSAGE  1
 
@@ -98,27 +98,27 @@ int PlayerMgr::Send(account_index_t playerid, nd_usermsghdr_t *msghdr, bool encr
 	}
 	return ret ;
 }
-
-int PlayerMgr::SendToNation(account_index_t playerid, NDOStreamMsg &omsg, bool encrypt, bool isSaved)
-{
-	ND_TRACE_FUNC() ;
-	return SendToNation(playerid, &omsg.GetMsgAddr()->msg_hdr, encrypt, isSaved);
-}
-int PlayerMgr::SendToNation(account_index_t playerid, nd_usermsghdr_t *msghdr, bool encrypt, bool isSaved)
-{
-	ND_TRACE_FUNC();
-	int ret = -1;
-	NDUINT16 session_id = GetSessionID(playerid);
-	if (session_id) {
-		//GameInstance &inst = get_instance() ;
-		NDInstanceBase *inst = getbase_inst();
-		ret = nd_send_toclient_ex(session_id, msghdr, inst->GetDeftListener()->GetHandle(), encrypt ? 1 : 0);
-	}
-	else {
-		ret = wrapToNation(msghdr, ND_MAIN_ID_SYS, ND_MSG_SYS_DIRECTLY_TO_CLIENT_WRAPPER, playerid, encrypt, isSaved);
-	}
-	return ret;
-}
+// 
+// int PlayerMgr::SendToNation(account_index_t playerid, NDOStreamMsg &omsg, bool encrypt, bool isSaved)
+// {
+// 	ND_TRACE_FUNC() ;
+// 	return SendToNation(playerid, &omsg.GetMsgAddr()->msg_hdr, encrypt, isSaved);
+// }
+// int PlayerMgr::SendToNation(account_index_t playerid, nd_usermsghdr_t *msghdr, bool encrypt, bool isSaved)
+// {
+// 	ND_TRACE_FUNC();
+// 	int ret = -1;
+// 	NDUINT16 session_id = GetSessionID(playerid);
+// 	if (session_id) {
+// 		//GameInstance &inst = get_instance() ;
+// 		NDInstanceBase *inst = getbase_inst();
+// 		ret = nd_send_toclient_ex(session_id, msghdr, inst->GetDeftListener()->GetHandle(), encrypt ? 1 : 0);
+// 	}
+// 	else {
+// 		ret = wrapToNation(msghdr, ND_MAIN_ID_SYS, ND_MSG_SYS_DIRECTLY_TO_CLIENT_WRAPPER, playerid, encrypt, isSaved);
+// 	}
+// 	return ret;
+// }
 
 int PlayerMgr::Send(account_index_t playerid, NDOStreamMsg &omsg, bool encrypt, bool isSaved)
 {
@@ -150,32 +150,32 @@ int PlayerMgr::CallMsgProc(account_index_t playerid, NDOStreamMsg &omsg, bool is
 	ND_TRACE_FUNC() ;
 	return CallMsgProc( playerid,&omsg.GetMsgAddr()->msg_hdr,isSaved) ;
 }
-
-int PlayerMgr::CallMsgProcToNation(account_index_t playerid, nd_usermsghdr_t *msghdr, bool isSaved)
-{
-	ND_TRACE_FUNC();
-	if (playerid == 0) {
-		return -1;
-	}
-	int ret = -1;
-
-	NDUINT16 session_id = GetSessionID(playerid);
-	if (session_id) {
-		//GameInstance &inst = get_instance() ;		
-		NDInstanceBase *inst = getbase_inst();
-		ret = nd_netmsg_handle(session_id, msghdr, inst->GetDeftListener()->GetHandle());
-	}
-	else {
-		ret = wrapToNation(msghdr, ND_MAIN_ID_SYS, ND_MSG_SYS_CALL_SESSION_MSGPROC_WRAPPER, playerid, false, isSaved);
-	}
-	return ret;
-}
-
-int PlayerMgr::CallMsgProcToNation(account_index_t playerid, NDOStreamMsg &omsg, bool isSaved)
-{
-	ND_TRACE_FUNC();
-	return CallMsgProc(playerid, &omsg.GetMsgAddr()->msg_hdr, isSaved);
-}
+// 
+// int PlayerMgr::CallMsgProcToNation(account_index_t playerid, nd_usermsghdr_t *msghdr, bool isSaved)
+// {
+// 	ND_TRACE_FUNC();
+// 	if (playerid == 0) {
+// 		return -1;
+// 	}
+// 	int ret = -1;
+// 
+// 	NDUINT16 session_id = GetSessionID(playerid);
+// 	if (session_id) {
+// 		//GameInstance &inst = get_instance() ;		
+// 		NDInstanceBase *inst = getbase_inst();
+// 		ret = nd_netmsg_handle(session_id, msghdr, inst->GetDeftListener()->GetHandle());
+// 	}
+// 	else {
+// 		ret = wrapToNation(msghdr, ND_MAIN_ID_SYS, ND_MSG_SYS_CALL_SESSION_MSGPROC_WRAPPER, playerid, false, isSaved);
+// 	}
+// 	return ret;
+// }
+// 
+// int PlayerMgr::CallMsgProcToNation(account_index_t playerid, NDOStreamMsg &omsg, bool isSaved)
+// {
+// 	ND_TRACE_FUNC();
+// 	return CallMsgProc(playerid, &omsg.GetMsgAddr()->msg_hdr, isSaved);
+// }
 
 
 int PlayerMgr::BroadCastInHost(nd_usermsghdr_t *msghdr,bool encrypt)
@@ -240,21 +240,21 @@ int PlayerMgr::wrapToWorld(nd_usermsghdr_t *msg, int wrap_maxID, int wrap_minID,
 	return getWorldConnect().SendMsg(omsg) ;
 #endif 
 }
-
-int PlayerMgr::wrapToNation(nd_usermsghdr_t *msg, int wrap_maxID, int wrap_minID, NDUINT32 playerID, bool ecnrypt, bool isSaved)
-{
-	ND_TRACE_FUNC();
-	NDUINT16 wrapId = ND_MAKE_WORD(wrap_maxID, wrap_minID);
-	NDUINT16 sendId = ND_MAKE_WORD(ND_USERMSG_MAXID(msg), ND_USERMSG_MINID(msg));
-	nd_assert(wrapId != sendId);
-	//nd_assert(wrap_maxID!=(int) ND_USERMSG_MAXID(msg) && wrap_minID!=(int)ND_USERMSG_MINID(msg)) ;
-	NDOStreamMsg omsg(wrap_maxID, wrap_minID);
-	size_t size = ND_USERMSG_LEN(msg);
-
-	omsg.Write(playerID);
-	omsg.Write((NDUINT8)(ecnrypt ? 1 : 0));
-	omsg.Write((NDUINT8)(isSaved ? 1 : 0));
-	omsg.WriteBin(msg, size);
-	nd_logdebug("using (%d,%d)  wrap message (%d, %d) length =%d \n", wrap_maxID, wrap_minID, ND_USERMSG_MAXID(msg), ND_USERMSG_MINID(msg), ND_USERMSG_LEN(msg));
-	return getNationConnect().SendMsg(omsg);
-}
+// 
+// int PlayerMgr::wrapToNation(nd_usermsghdr_t *msg, int wrap_maxID, int wrap_minID, NDUINT32 playerID, bool ecnrypt, bool isSaved)
+// {
+// 	ND_TRACE_FUNC();
+// 	NDUINT16 wrapId = ND_MAKE_WORD(wrap_maxID, wrap_minID);
+// 	NDUINT16 sendId = ND_MAKE_WORD(ND_USERMSG_MAXID(msg), ND_USERMSG_MINID(msg));
+// 	nd_assert(wrapId != sendId);
+// 	//nd_assert(wrap_maxID!=(int) ND_USERMSG_MAXID(msg) && wrap_minID!=(int)ND_USERMSG_MINID(msg)) ;
+// 	NDOStreamMsg omsg(wrap_maxID, wrap_minID);
+// 	size_t size = ND_USERMSG_LEN(msg);
+// 
+// 	omsg.Write(playerID);
+// 	omsg.Write((NDUINT8)(ecnrypt ? 1 : 0));
+// 	omsg.Write((NDUINT8)(isSaved ? 1 : 0));
+// 	omsg.WriteBin(msg, size);
+// 	nd_logdebug("using (%d,%d)  wrap message (%d, %d) length =%d \n", wrap_maxID, wrap_minID, ND_USERMSG_MAXID(msg), ND_USERMSG_MINID(msg), ND_USERMSG_LEN(msg));
+// 	return getNationConnect().SendMsg(omsg);
+// }

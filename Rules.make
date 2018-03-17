@@ -48,7 +48,7 @@ CFLAGS += -c -w -O
 LFLAGS +=  -lpthread  -lm
 
 #FOR NDSDK
-CFLAGS += -I$(NDHOME)/include -I$(TOPDIR)
+CFLAGS += -I$(NDHOME)/include -I$(TOPDIR) -I$(TOPDIR)/include -I$(BPAPOLLO)/include
 LFLAGS += -L$(NDHOME)/lib 
 
 ifeq ($(DEBUG),y)
