@@ -160,14 +160,14 @@ namespace ClientMsgHandler
 	{
 		DBLDataNode val;
 		_GET_OBJ_FROM_MGR(pconn, "FormatMsgData", val);
-		return (userDefineDataType_map_t *)val.GetObject();
+		return (userDefineDataType_map_t *)val.GetObjectAddr();
 	}
 	logic_print getLogFunction(NDIConn *pconn)
 	{
 		DBLDataNode val;
 
 		_GET_OBJ_FROM_MGR(pconn, "LogFunction", val);
-		return (logic_print)val.GetObject();
+		return (logic_print)val.GetObjectAddr();
 	}
 
 	std::string getWritablePath(NDIConn *pconn)
@@ -214,7 +214,7 @@ namespace ClientMsgHandler
 	{
 		DBLDataNode val;
 		_GET_OBJ_FROM_MGR(pconn, "LogPath", val);
-		return (ApoConnectScriptOwner *)val.GetObject();
+		return (ApoConnectScriptOwner *)val.GetObjectAddr();
 	}
 
 	bool handleMsgFirstFromFileBeforTime(NDIConn *pconn, const char *file, NDUINT64 genTime, NDUINT16 msgId, nd_iconn_func func)
@@ -253,7 +253,7 @@ namespace ClientMsgHandler
 		DBLDataNode val;
 
 		_GET_OBJ_FROM_MGR(pconn, "LogFile", val);
-		return val.GetObject();
+		return val.GetObjectAddr();
 
 	}
 
@@ -262,7 +262,7 @@ namespace ClientMsgHandler
 		DBLDataNode val;
 
 		_GET_OBJ_FROM_MGR(pconn, "msgIdNameFormat", val);
-		return (msgIdNameFormat_vct*)val.GetObject();
+		return (msgIdNameFormat_vct*)val.GetObjectAddr();
 
 	}
 

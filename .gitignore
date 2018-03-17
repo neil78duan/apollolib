@@ -5,7 +5,6 @@ obj
 .DS_Store
 bin
 bin64
-newEditorBin
 lib
 lib64
 libs
