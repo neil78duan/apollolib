@@ -168,7 +168,13 @@ bool startDialog::compile()
 		ndxml *node = ndxml_getnodei(xml, i);
 		if (!node)
 			continue;
-		if (!compileScript(ndxml_getval(node))) {
+		std::string scriptPath = ndxml_getval(node);
+		if (scriptPath.size() > 0) {
+			scriptPath += "/";
+		}
+		scriptPath += ndxml_getattr_val(node, "main_file");
+
+		if (!compileScript(scriptPath.c_str())) {
 			ret = false;
 			break;
 		}

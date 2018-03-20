@@ -77,6 +77,7 @@ private:
 	void getHistoryNodes(XmlVct_t &xmlHistory);
 
 	void InitHostList();
+	void destroyConnect();
 
     Ui::ConnectDialog *ui;
     QTimer *timer ;

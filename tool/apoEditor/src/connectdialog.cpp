@@ -185,14 +185,7 @@ ConnectDialog::~ConnectDialog()
         delete timer ;
 	
     destroy_apollo_object(m_pConn);
-   
-	if (m_pConn){
-		DestroyConnectorObj(m_pConn);
-	}
-	
-	if (m_login){
-		ApolloDestroyLoginInst(m_login);
-	}
+	destroyConnect();
 	
 	ND_LOG_WRAPPER_DELETE(__glogWrapper);
 
@@ -258,6 +251,22 @@ void ConnectDialog::InitHostList()
 	}
 
 	settings.endArray();
+}
+
+void ConnectDialog::destroyConnect()
+{
+	if (m_login) {
+		ApolloDestroyLoginInst(m_login);
+		m_login = 0;
+	}
+	if (m_pConn) {
+		if (m_pConn->CheckValid()) {
+			m_pConn->Close();
+		}
+
+		DestroyConnectorObj(m_pConn);
+		m_pConn = NULL;
+	}
 }
 
 void ConnectDialog::saveCurrentSendMsg(const QString &msgName)
@@ -384,6 +393,7 @@ void ConnectDialog::onTimeOut()
 			on_loginButton_clicked();
             //close
             //m_pConn->Close
+			destroyConnect();
         }
 		else {
 			LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
@@ -425,20 +435,12 @@ void ConnectDialog::WriteLog(const char *logText)
 
 bool ConnectDialog::LoadClientScript(const char *file,const char *dblFile)
 {
-    //if (-1 == loadUserDefFromMsgCfg(file, m_dataTypeDef))	{
-    //	nd_logerror("load message datatype error from %s\n", file);
-    //	return false;
-    //}
 	DBLDatabase *pdbl = DBLDatabase::get_Instant();
 	if (pdbl){
 		pdbl->LoadBinStream(dblFile);
 	}
 
-
 	m_scriptFile = file;
-    //if (message_def){
-    //	ndxml_load_ex(message_def, &m_message_define, nd_get_encode_name(ND_ENCODE_TYPE));
-    //}
 
 	return true;
 }
@@ -449,16 +451,7 @@ void ConnectDialog::on_loginButton_clicked()
     if (m_pConn){
 
         ui->loginButton->setText(tr("Login"));
-        if (m_pConn->CheckValid())	{
-            m_pConn->Close();
-        }
-        DestroyConnectorObj(m_pConn);
-        m_pConn = NULL;
-
-        if (m_login){
-            ApolloDestroyLoginInst(m_login);
-            m_login = 0;
-        }
+		destroyConnect();
 
         //ClearLog();
         WriteLog("logout success\n");
@@ -486,6 +479,7 @@ void ConnectDialog::on_loginButton_clicked()
 
         if (-1 == _connectHost(strHost.c_str() , port)){
             nd_logerror("connect server error\n");
+			destroyConnect();
             return;
         }
 
@@ -493,20 +487,14 @@ void ConnectDialog::on_loginButton_clicked()
 
 		if (-1 == _login(strName.c_str(), strPasswd.c_str(), skipAuth))	{
             nd_logerror("user login error\n");
-
-			m_pConn->Close();
-			DestroyConnectorObj(m_pConn);
-			m_pConn = NULL;
+			destroyConnect();
             return;
         }
         nd_logmsg("ACCOUNT %s login SUCCESS\n", strName.c_str());
 		
         if (-1==SelOrCreateRole(strName.c_str()))	{
             nd_logerror("create or select role error\n");
-
-            m_pConn->Close();
-            DestroyConnectorObj(m_pConn);
-            m_pConn = NULL;
+			destroyConnect();
             return;
         }
 
@@ -621,7 +609,8 @@ void ConnectDialog::on_msgReset_clicked()
 int ConnectDialog::_connectHost(const char *host, int port)
 {
     if (m_pConn){
-        DestroyConnectorObj(m_pConn);
+		destroyConnect();
+        //DestroyConnectorObj(m_pConn);
     }
 
     NDIConn *pConn = CreateConnectorObj(NULL);
@@ -635,19 +624,12 @@ int ConnectDialog::_connectHost(const char *host, int port)
         return -1;
     }
 	nd_logmsg("connect %s:%d success \n", host, port);
-    m_pConn = pConn;
-
-
-    //initApolloGameMessage(m_pConn);
 	if (!init_apollo_object(m_pConn, m_scriptFile)) {
-
 		nd_logmsg("Load script %s error\n", m_scriptFile);
 		DestroyConnectorObj(pConn);
-
 		return -1;
 	}
-	//initApolloGameMessage(m_pConn);
-    //ClientMsgHandler::initDftClientMsgHandler(m_pConn, m_scriptFile, m_dataTypeDef, &m_message_define, out_print);
+	m_pConn = pConn;
     return 0;
 }
 
