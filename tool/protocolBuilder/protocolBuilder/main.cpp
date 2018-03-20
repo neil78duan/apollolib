@@ -1189,7 +1189,7 @@ do { 			\
 	}					\
 }while(0)
 
-extern int build_CSharp(ndxml_root *xmlID, ndxml_root *xmlMarco, ndxml_root *xmlData, const char *outfile);
+extern int build_CSharp(ndxml_root *xmlID, ndxml_root *xmlMarco, ndxml_root *xmlData, const char *outPath);
 extern int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName);
 extern int build_luaMessageID(ndxml_root *xmlfile, const char *out_file);
 int main(int argc, char *argv[])
@@ -1198,10 +1198,14 @@ int main(int argc, char *argv[])
 	const char *encode = "gbk" ;
 	fprintf(stderr, "current path =%s\n", nd_getcwd());
 	std::string _input_dir ;
+	std::string _output_dir = ".";
 	//get config file
 	for (i=1; i<argc; i++){
 		if(0 == strcmp(argv[i],"-d" ) && i< argc-1) {
 			_input_dir = argv[++i] ;
+		}
+		if (0 == strcmp(argv[i], "-o") && i < argc - 1) {
+			_output_dir = argv[++i];
 		}
 		if (0==strcmp("-encode", argv[i])) {
 			encode = argv[++i] ;
@@ -1219,38 +1223,39 @@ int main(int argc, char *argv[])
 	
 	LOAD_XML_FROM_FILE(&xmlMarco, _input_dir ,"/marco.xml",encode) ;
 	LOAD_XML_FROM_FILE(&xmlMessage, _input_dir ,"/message.xml",encode) ;
-	LOAD_XML_FROM_FILE(&xmlDatatype, _input_dir ,"/datatype.xml",encode) ;
+	LOAD_XML_FROM_FILE(&xmlDatatype, _input_dir, "/datatype.xml", encode);
+
+#define RESET_OUT_PATH(_name) do {	\
+		std::string myPath = _output_dir + _name ;	\
+		nd_rmdir(myPath.c_str());			\
+		nd_mkdir(myPath.c_str());			\
+	}while(0)
+
+	RESET_OUT_PATH("/cpp");
 	
+	std::string outFile;
 	
-	nd_rmdir("./cpp") ;
-	nd_mkdir("./cpp") ;
-	
-	//nd_rmdir("./cpp_ue") ;
-	//nd_mkdir("./cpp_ue") ;
-	
-// 	if(-1==build_dataTypeForUE4(&xmlDatatype, "./cpp_ue/netStreamAutoDefine" ) ) {
-// 		fprintf(stderr, "export datatype error \n")  ;
-// 		exit(1) ;
-// 	}
-	
-	
-	if(-1==build_dataType(&xmlDatatype, "./cpp/auto_dataType",false ) ) {
+	outFile = _output_dir + "/cpp/auto_dataType";
+	if(-1==build_dataType(&xmlDatatype, outFile.c_str(),false ) ) {
 		fprintf(stderr, "export datatype error \n")  ;
 		exit(1) ;
 	}
-	
-	if(-1==build_dataType(&xmlDatatype, "./cpp/auto_dataTypeDb",true ) ) {
+
+	outFile = _output_dir + "/cpp/auto_dataTypeDb";
+	if(-1==build_dataType(&xmlDatatype, outFile.c_str(),true ) ) {
 		fprintf(stderr, "export datatype error \n")  ;
 		exit(1) ;
 	}
-	
-	if(build_messageID(&xmlMessage, "./cpp/_msgid_export.h")){
+
+	outFile = _output_dir + "/cpp/_msgid_export.h";
+	if(build_messageID(&xmlMessage, outFile.c_str())){
 		fprintf(stderr, "export MessageID error \n")  ;
 		exit(1) ;
 	}
 
-	
-	if(build_marco(&xmlMarco, "./cpp/auto_macroDefine.h")) {
+
+	outFile = _output_dir + "/cpp/auto_macroDefine.h";
+	if(build_marco(&xmlMarco, outFile.c_str())) {
 		fprintf(stderr, "export Macro error \n")  ;
 		exit(1) ;
 	}
@@ -1262,12 +1267,8 @@ int main(int argc, char *argv[])
 //	}
 	//export cs
 	
-	nd_rmdir("./csharp");
-	nd_mkdir("./csharp");
-
-
-	nd_rmdir("./luaOut");
-	nd_mkdir("./luaOut");
+	RESET_OUT_PATH("/csharp");
+	RESET_OUT_PATH("/luaOut");
 
 	//load for utf8
 	ndxml_destroy(&xmlMarco);
@@ -1281,18 +1282,21 @@ int main(int argc, char *argv[])
 	LOAD_XML_FROM_FILE(&xmlDatatype, _input_dir, "/datatype.xml", "utf8");
 
 
-	if(build_CSharp(&xmlMessage,&xmlMarco , &xmlDatatype, "./csharp/ProtocolMessage.cs") ) {
+	//outFile = _output_dir + "/csharp/ProtocolMessage.cs";
+	if(build_CSharp(&xmlMessage,&xmlMarco , &xmlDatatype, _output_dir.c_str()) ) {
 		fprintf(stderr, "export CSharp error \n")  ;
 		exit(1) ;
 	}
-	
-	if ( build_luaDataStruct(&xmlDatatype,"./luaOut/NetDataStruct.lua"))	{
+
+	outFile = _output_dir + "/luaOut/NetDataStruct.lua";
+	if ( build_luaDataStruct(&xmlDatatype, outFile.c_str()))	{
 		fprintf(stderr, "export lua error \n");
 		exit(1);
 	}
 
 
-	if (build_luaMessageID(&xmlMessage, "./luaOut/NetMessageIDDefine.lua")) {
+	outFile = _output_dir + "/luaOut/NetMessageIDDefine.lua";
+	if (build_luaMessageID(&xmlMessage, outFile.c_str())) {
 		fprintf(stderr, "export lua mesage id error \n");
 		exit(1);
 	}

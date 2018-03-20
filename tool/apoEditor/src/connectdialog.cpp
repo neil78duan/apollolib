@@ -493,6 +493,10 @@ void ConnectDialog::on_loginButton_clicked()
 
 		if (-1 == _login(strName.c_str(), strPasswd.c_str(), skipAuth))	{
             nd_logerror("user login error\n");
+
+			m_pConn->Close();
+			DestroyConnectorObj(m_pConn);
+			m_pConn = NULL;
             return;
         }
         nd_logmsg("ACCOUNT %s login SUCCESS\n", strName.c_str());

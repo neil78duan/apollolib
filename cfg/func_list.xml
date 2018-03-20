@@ -31,7 +31,6 @@
 	<node desc="从消息中读UserDef类型(输入消息, 类型名字)">CPP.apollo_func_read_userData_from_msg</node>
 	<node desc="重新载入策划数据()">CPP.apollo_func_reload_data_table</node>
 	<node desc="发送消息(int:maxID,int:minId, msg_varlist...)">CPP.apollo_func_send_msg</node>
-	<node desc="发送消息给Nation(maxid,minid, ...)">CPP.apollo_func_send_to_nation</node>
 	<node desc="发送消息给Social(maxid,minid, ...)">CPP.apollo_func_send_to_social</node>
 	<node desc="发送消息给World(maxid,minid, ...)">CPP.apollo_func_send_to_world</node>
 	<node desc="获得开发者名称()">CPP.apollo_get_author_name</node>
