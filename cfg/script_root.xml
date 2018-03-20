@@ -1,6 +1,6 @@
 <?xml  version="1.0" encoding="utf-8" ?>
-<script_file_manager name="脚本" kinds="hide" delete="no" create_template="create_new_file" last_edited="apoGameServer">
-	<file name="apoGameServer">../../resource/script/apollo_script.xml</file>
-	<file name="apoClient">../../resource/script/client_script.xml</file>
-	<file name="apoSample">../cfg/sample_script.xml</file>
+<script_file_manager name="脚本" kinds="hide" delete="no" create_template="create_new_file" last_edited="apoSample">
+	<file name="apoGameServer" main_file="apollo_script.xml">../../../code/resource/script/game</file>
+	<file name="apoClient" main_file="client_script.xml">../../../code/resource/script/client</file>
+	<file name="apoSample" main_file="sample_script.xml">../cfg</file>
 </script_file_manager>

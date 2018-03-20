@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <type_data_type name="数据类型" kinds="hide" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,文件"/>
 <send_msg_list name="发送消息" delete="no" expand_stat="1" displayChildren="no">
-	<filter name="活动消息" delete="no" displayChildren="no" expand_stat="0">		
+	<filter name="活动消息" delete="no" displayChildren="no" expand_stat="0">
 		<message name="查看任务" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="11" minId="0">0</msgid>
 		</message>
@@ -32,7 +32,6 @@
 			<msgid kinds="hide" maxId="11" minId="13">0</msgid>
 		</message>
 	</filter>
-	
 	<filter name="个人消息" delete="no" displayChildren="no" expand_stat="0">
 		<message name="改名" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="3" minId="2">0</msgid>
@@ -52,7 +51,6 @@
 			<data name="商店ID" kinds="numeral" param="4">1</data>
 			<data name="商品编号" kinds="numeral" param="4">1</data>
 		</message>
-		
 	</filter>
 	<filter name="邮件聊天消息" delete="no" displayChildren="no" expand_stat="0">
 		<message name="接受新邮件" expand="yes" delete="no">
@@ -71,7 +69,6 @@
 			<data name="邮件ID" kinds="numeral" param="0">100000012</data>
 			<data name="邮件ID" kinds="numeral" param="0">100000011</data>
 		</message>
-		
 	</filter>
 	<filter name="test_批量发送测试" delete="no" displayChildren="no" expand_stat="0" allowBatchSend="yes">
 		<message name="给自己加经验" expand="yes" delete="no">
@@ -94,13 +91,11 @@
 			<data name="物品编号" kinds="numeral" param="0">21081</data>
 			<data name="数量" kinds="numeral" param="0">1</data>
 		</message>
-		
 		<message name="GM_增加属性" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="8">0</msgid>
 			<data name="编号" kinds="numeral" param="2">crystal</data>
 			<data name="属性增加值" kinds="numeral" param="1">1000000</data>
 		</message>
-		
 		<message name="GM_通过名字获得ID" expand="yes" delete="no">
 			<msgid kinds="hide" maxId="7" minId="18">0</msgid>
 			<data name="玩家名字" kinds="string" param="2" desc="name">ddtest26</data>
