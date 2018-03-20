@@ -13,11 +13,9 @@
 		07EC87BB1D546B1A00C32925 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87B51D546B1A00C32925 /* Makefile */; };
 		07EC87BC1D546B1A00C32925 /* rsa_gen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87B61D546B1A00C32925 /* rsa_gen.cpp */; };
 		07EC87BD1D546B1A00C32925 /* test_msgsend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87B71D546B1A00C32925 /* test_msgsend.cpp */; };
-		07EC87BF1D546BCE00C32925 /* libndclient_mac.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 07EC87BE1D546BCE00C32925 /* libndclient_mac.dylib */; };
 		07EC87CD1D546BF100C32925 /* dftCliMsgHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87C31D546BF100C32925 /* dftCliMsgHandler.cpp */; };
 		07EC87CF1D546BF100C32925 /* login_apollo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87C71D546BF100C32925 /* login_apollo.cpp */; };
 		07EC87D01D546BF100C32925 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87C91D546BF100C32925 /* Makefile */; };
-		07EC87D11D546BF100C32925 /* netui_atl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87CA1D546BF100C32925 /* netui_atl.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,14 +40,11 @@
 		07EC87B51D546B1A00C32925 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		07EC87B61D546B1A00C32925 /* rsa_gen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rsa_gen.cpp; sourceTree = "<group>"; };
 		07EC87B71D546B1A00C32925 /* test_msgsend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_msgsend.cpp; sourceTree = "<group>"; };
-		07EC87BE1D546BCE00C32925 /* libndclient_mac.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libndclient_mac.dylib; path = "../../../../../../../xCodeBuild/DerivedData/apollo-grwebjbmwsyfujajiaspxbhvxtrc/Build/Products/Debug/libndclient_mac.dylib"; sourceTree = "<group>"; };
 		07EC87C31D546BF100C32925 /* dftCliMsgHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dftCliMsgHandler.cpp; sourceTree = "<group>"; };
 		07EC87C41D546BF100C32925 /* dftCliMsgHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dftCliMsgHandler.h; sourceTree = "<group>"; };
 		07EC87C71D546BF100C32925 /* login_apollo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = login_apollo.cpp; sourceTree = "<group>"; };
 		07EC87C81D546BF100C32925 /* login_apollo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = login_apollo.h; sourceTree = "<group>"; };
 		07EC87C91D546BF100C32925 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		07EC87CA1D546BF100C32925 /* netui_atl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = netui_atl.cpp; sourceTree = "<group>"; };
-		07EC87CB1D546BF100C32925 /* netui_atl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = netui_atl.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +52,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				07EC87BF1D546BCE00C32925 /* libndclient_mac.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,7 +62,6 @@
 			isa = PBXGroup;
 			children = (
 				07EC87C01D546BF100C32925 /* cli_common */,
-				07EC87BE1D546BCE00C32925 /* libndclient_mac.dylib */,
 				07EC87AF1D546B1A00C32925 /* cmdline_tool */,
 				07EC87851D54694000C32925 /* Products */,
 			);
@@ -106,8 +99,6 @@
 				07EC87C71D546BF100C32925 /* login_apollo.cpp */,
 				07EC87C81D546BF100C32925 /* login_apollo.h */,
 				07EC87C91D546BF100C32925 /* Makefile */,
-				07EC87CA1D546BF100C32925 /* netui_atl.cpp */,
-				07EC87CB1D546BF100C32925 /* netui_atl.h */,
 			);
 			name = cli_common;
 			path = ../../cli_common;
@@ -171,7 +162,6 @@
 			files = (
 				07EC87CF1D546BF100C32925 /* login_apollo.cpp in Sources */,
 				07EC87CD1D546BF100C32925 /* dftCliMsgHandler.cpp in Sources */,
-				07EC87D11D546BF100C32925 /* netui_atl.cpp in Sources */,
 				07EC87D01D546BF100C32925 /* Makefile in Sources */,
 				07EC87B81D546B1A00C32925 /* atlantis_test.cpp in Sources */,
 				07EC87BD1D546B1A00C32925 /* test_msgsend.cpp in Sources */,
