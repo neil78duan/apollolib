@@ -14,7 +14,6 @@
 		07EC87A71D546A9B00C32925 /* apollo_robort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC879C1D546A9B00C32925 /* apollo_robort.cpp */; };
 		07EC87AA1D546A9B00C32925 /* login_apollo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87A21D546A9B00C32925 /* login_apollo.cpp */; };
 		07EC87AB1D546A9B00C32925 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87A41D546A9B00C32925 /* Makefile */; };
-		07EC87AE1D546ABA00C32925 /* libndclient_mac.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 07EC87AD1D546ABA00C32925 /* libndclient_mac.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,7 +42,6 @@
 		07EC87A21D546A9B00C32925 /* login_apollo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = login_apollo.cpp; sourceTree = "<group>"; };
 		07EC87A31D546A9B00C32925 /* login_apollo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = login_apollo.h; sourceTree = "<group>"; };
 		07EC87A41D546A9B00C32925 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		07EC87AD1D546ABA00C32925 /* libndclient_mac.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libndclient_mac.dylib; path = "../../../../../../../xCodeBuild/DerivedData/apollo-grwebjbmwsyfujajiaspxbhvxtrc/Build/Products/Debug/libndclient_mac.dylib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,7 +49,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				07EC87AE1D546ABA00C32925 /* libndclient_mac.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,7 +58,6 @@
 		07EC87681D5468F200C32925 = {
 			isa = PBXGroup;
 			children = (
-				07EC87AD1D546ABA00C32925 /* libndclient_mac.dylib */,
 				07EC879B1D546A9B00C32925 /* cli_common */,
 				07EC878E1D546A8200C32925 /* robort */,
 				07EC87721D5468F200C32925 /* Products */,

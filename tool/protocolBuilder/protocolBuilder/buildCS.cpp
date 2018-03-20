@@ -364,19 +364,24 @@ int xml2Sharp(ndxml_root *xml, const char *file, xml_export_func func)
 	fclose(pf);
 	return 0;
 }
-int build_CSharp(ndxml_root *xmlID, ndxml_root *xmlMarco, ndxml_root *xmlData, const char *outfile)
+int build_CSharp(ndxml_root *xmlID, ndxml_root *xmlMarco, ndxml_root *xmlData, const char *outPath)
 {
+	
+	std::string myPath = outPath;
 
-	if (-1 == xml2Sharp(xmlID, "./csharp/MessageID.cs",build_csMessageID)) {
+	std::string outFile = myPath + "/csharp/MessageID.cs";
+	if (-1 == xml2Sharp(xmlID, outFile.c_str(),build_csMessageID)) {
 		return -1;
 	}
 
 
-	if (-1 == xml2Sharp(xmlMarco, "./csharp/MacroDefind.cs", build_csMarco)) {
+	outFile = myPath + "/csharp/MacroDefind.cs";
+	if (-1 == xml2Sharp(xmlMarco, outFile.c_str(), build_csMarco)) {
 		return -1;
 	}
-
-	if (-1 == xml2Sharp(xmlData, "./csharp/MessageDataStruct.cs", build_csDataStruct)) {
+	
+	outFile = myPath + "/csharp/MessageDataStruct.cs";
+	if (-1 == xml2Sharp(xmlData, outFile.c_str(), build_csDataStruct)) {
 		return -1;
 	}
 

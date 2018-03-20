@@ -70,21 +70,21 @@ LOCAL_SRC_FILES := ../../../ndsdk/src/nd_common/src/bintree.c \
 ../../cli_common/login_apollo.cpp \
 ../../cli_common/dftCliMsgHandler.cpp \
 ../../cli_common/apoClientU3d.cpp	\
-../../logic_parser/dbl_mgr.cpp	\
-../../logic_parser/logicParser.cpp	\
-../../logic_parser/logic_function.cpp	\
-../../logic_parser/dbldata2netstream.cpp	\
-../../logic_parser/logicStruct.cpp	\
-../../logic_parser/objectBaseMgr.cpp	\
-../../logic_parser/logicDataType.cpp	\
-../../logic_parser/logic_compile.cpp	\
-../../logic_parser/logicEngineRoot.cpp	\
-../../logic_parser/logic_editor_helper.cpp \
-../../logic_parser/logic_debugger.cpp \
 ../../attribute/attr_mgr.cpp \
 ../../attribute/roleattr_help.cpp \
 ../../plugin_u3d/apoCliApi.cpp	\
 ../../plugin_u3d/apoFormula.cpp	\
+../../../apolloBP/src/parser/dbl_mgr.cpp	\
+../../../apolloBP/src/parser/logicParser.cpp	\
+../../../apolloBP/src/parser/logic_function.cpp	\
+../../../apolloBP/src/parser/dbldata2netstream.cpp	\
+../../../apolloBP/src/parser/logicStruct.cpp	\
+../../../apolloBP/src/parser/objectBaseMgr.cpp	\
+../../../apolloBP/src/parser/logicDataType.cpp	\
+../../../apolloBP/src/parser/logic_compile.cpp	\
+../../../apolloBP/src/parser/logicEngineRoot.cpp	\
+../../../apolloBP/src/parser/logic_editor_helper.cpp \
+../../../apolloBP/src/parser/logic_debugger.cpp \
 
 
 LOCAL_CFLAGS := -D__ND_ADNROID__ -DND_CLIENT_ONLY
@@ -103,7 +103,8 @@ LOCAL_LDLIBS += -L$(SYSROOT)/usr/lib -llog
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../include \
 	$(LOCAL_PATH)/../../../ndsdk/include \
 	$(LOCAL_PATH)/../.. \
-	$(LOCAL_PATH)/../../plugin_u3d
+	$(LOCAL_PATH)/../../plugin_u3d \
+	$(LOCAL_PATH)/../../../apolloBP/include
 
 #include $(BUILD_STATIC_LIBRARY)
 include $(BUILD_SHARED_LIBRARY)
