@@ -107,7 +107,12 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 		buf_write_func[0] = 0;
 		buf_constrct_func[0] = 0;
 
-		fprintf(pf, "\n%s = {\n", pName);
+		if (ndxml_getattr_val(sub, "comment")) {
+			fprintf(pf, "\n-- %s\n%s = {\n", ndxml_getattr_val(sub, "comment"), pName);
+		}
+		else {
+			fprintf(pf, "\n%s = {\n", pName);
+		}
 
 		int subNodes = ndxml_getsub_num(sub);
 		for (int n = 0; n < subNodes; ++n) {
@@ -127,7 +132,7 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 			if ((pArray && pArray[0] && pArray[0] == '1') && !bIsString)  {
 
 				fprintf(pf, "\t%sCount, \t\n", pValName);
-				fprintf(pf, "\t%s%c\n", pValName, isLastField?' ':',');
+				fprintf(pf, "\t%s%c -- %s\n", pValName, isLastField?' ':',' , ndxml_getattr_val(node1, "comment"));
 
 				int size = 0;
 				//construct function 
@@ -143,8 +148,10 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 					//readstream array
 					size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
 						"\tself.%sCount = dataStream:ReadUint16()\n"
+						"\tif true == dataStream.IsStructEnd() then\n\t\treturn\n\tend\n"
 						"\tfor i = 1, self.%sCount do\n"
 						"\t\tlocal val = dataStream:Read%s()\n"
+						"\t\tif true == dataStream.IsStructEnd() then\n\t\t\treturn\n\t\tend\n"
 						"\t\ttable.insert(self.%s, i, val)\n\tend\n\n",
 						pValName, pValName,realOp,pValName);
 					pReadStream += size;
@@ -163,9 +170,11 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 					//readstream array
 					size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
 						"\tself.%sCount = dataStream:ReadUint16()\n"
+						"\tif true == dataStream.IsStructEnd() then\n\t\treturn\n\tend\n"
 						"\tfor i = 1, self.%sCount do\n"
 						"\t\tlocal val = %s:New(nil)\n"
 						"\t\tval:Read(dataStream)\n"
+						"\t\tif true == dataStream.IsStructEnd() then\n\t\t\treturn\n\t\tend\n"
 						"\t\ttable.insert(self.%s, i, val)\n\tend\n\n",
 						pValName, pValName, pType,pValName);
 					pReadStream += size;
@@ -185,7 +194,7 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 
 			else {
 				int size = 0;
-				fprintf(pf, "\t%s%c\n", pValName,  isLastField ? ' ' : ',');
+				fprintf(pf, "\t%s%c -- %s\n", pValName, isLastField ? ' ' : ',', ndxml_getattr_val(node1, "comment"));
 								
 				if (realOp)	{
 					//construct
@@ -196,7 +205,7 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 
 					//readstream
 					size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
-						"\tself.%s = dataStream:Read%s()\n", pValName, realOp);
+						"\tself.%s = dataStream:Read%s()\n\tif true == dataStream.IsStructEnd() then\n\t\treturn\n\tend\n", pValName, realOp);
 					pReadStream += size;
 
 					//write stream
@@ -212,7 +221,7 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 
 					//readstream
 					size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
-						"\tself.%s:Read(dataStream)\n", pValName);
+						"\tself.%s:Read(dataStream)\n\tif true == dataStream.IsStructEnd() then\n\t\treturn\n\tend\n", pValName);
 					pReadStream += size;
 
 					//write stream
@@ -236,11 +245,12 @@ int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName)
 
 		//read stream
 		fprintf(pf, "\nfunction %s:Read(dataStream)\n"
-			"%send\n", pName, buf_read_func);
+			"%s\n\tdataStream.TrytoMoveStructEnd()\nend\n", pName, buf_read_func);
 
 		//write stream
 		fprintf(pf, "\nfunction %s:Write(dataStream)\n"
-			"\tlocal size = 0 \n%s\treturn size\nend\n\n",pName, buf_write_func);
+			"\tlocal size = 1 \n%s\tdataStream.WriteStructEnd()\n\t"
+			"return size\nend\n\n",pName, buf_write_func);
 
 	}
 
