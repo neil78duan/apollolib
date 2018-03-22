@@ -138,7 +138,7 @@ int get_name_sort(ndxml_root *xmlfile,name_list_t &res_list)
 	}
 	
 	//check  is ref not after this
-	int free_numb = org_list.size() ;
+	int free_numb =(int) org_list.size() ;
 	while (free_numb > 0) {
 		free_numb = 0 ;
 		
@@ -551,10 +551,11 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 	fprintf(pf, "};\n") ;
 
 	fprintf(pfCpp, "\n\tint ReadStream(NDIStreamMsg &inmsg,NetMessage::%s &data)\n\t{\n", pName) ;
-	fprintf(pfCpp, "%s\n\t\treturn 0; \n\t}\n", buf_read_func) ;
+	fprintf(pfCpp, "%s\n\t\tTRYTO_MOVE_STRUCT_END(inmsg);\n\t\treturn 0; \n\t}\n", buf_read_func) ;
 	
 	fprintf(pfCpp, "\tint WriteStream(NDOStreamMsg &omsg,const NetMessage::%s &data)\n\t{\n", pName) ;
-	fprintf(pfCpp, "%s\n\t\treturn 0; \n\t}\n", buf_write_func) ;
+	fprintf(pfCpp, "\t\t\n");
+	fprintf(pfCpp, "%s\n\t\tEND_STRUCT_STREAM(omsg); \n\t\treturn 0; \n\t}\n", buf_write_func) ;
 	
 	fprintf(pf, "int ReadStream(NDIStreamMsg &inmsg,NetMessage::%s &data);\n", pName) ;
 	fprintf(pf, "int WriteStream(NDOStreamMsg &omsg,const NetMessage::%s &data);\n", pName) ;
@@ -562,7 +563,7 @@ int _save_dataTypeNode(ndxml *sub, FILE *pf,FILE *pfCpp, const char *version, bo
 	//write json 	size_t PrintJson(char *buf, size_t bufsize, const char *name, const char*data);
 	fprintf(pf, "size_t PrintJson(char *buf, size_t bufsize, const char *, %s &data);\n", pName);
 	fprintf(pfCpp, "\n\tsize_t PrintJson(char *outBuf, size_t outSize, const char *name, %s &data)\n ", pName);	
-	fprintf(pfCpp, "\t{\n\t\tchar *p = outBuf;\n\t\tJSON_NODE_OUT_BEGIN(p,outSize);\n", pName);
+	fprintf(pfCpp, "\t{\n\t\tchar *p = outBuf;\n\t\tJSON_NODE_OUT_BEGIN(p,outSize);\n");
 	fprintf(pfCpp, "%s\n\t\tJSON_NODE_OUT_END(p,outSize);\n\t\treturn (p-outBuf); \n\t}\n", buf_toJson_func);
 
 	//write to user-define data paramUserData, %s, paramInputData
@@ -882,10 +883,10 @@ int _out_data_forUE(ndxml *sub, FILE *pf,FILE *pfCpp)
 	fprintf(pf, "};\n") ;
 	
 	fprintf(pfCpp, "\nint ReadStream(NDIStreamMsg &inmsg,%s &data)\n{\n", pName) ;
-	fprintf(pfCpp, "%s\n\treturn 0; \n}\n\n", buf_read_func) ;
+	fprintf(pfCpp, "%s\n\tTRYTO_MOVE_STRUCT_END(inmsg);\n\treturn 0; \n}\n\n", buf_read_func) ;
 	
 	fprintf(pfCpp, "int WriteStream(NDOStreamMsg &omsg,const %s &data)\n{\n",pName) ;
-	fprintf(pfCpp, "%s\n\treturn 0; \n}\n\n\n", buf_write_func) ;
+	fprintf(pfCpp, "%s\n\t\tEND_STRUCT_STREAM(omsg); \n\t\treturn 0; \n\t}\n", buf_write_func);
 	
 	fprintf(pf, "int ReadStream(NDIStreamMsg &inmsg,%s &data);\n", pName) ;
 	fprintf(pf, "int WriteStream(NDOStreamMsg &omsg,const %s &data);\n",pName) ;

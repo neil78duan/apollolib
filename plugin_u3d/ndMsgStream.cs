@@ -54,6 +54,7 @@ namespace NetMessage
             ENDSTREAM_MARKER_BIN,
             ENDSTREAM_MARKER_IP32,
             ENDSTREAM_MARKER_IP64,
+            ENDSTREAM_CMD_SKIP_STRUCT_MARK,
 
         };
 
@@ -73,9 +74,20 @@ namespace NetMessage
 
 		public bool IsReachedEnd()
 		{
-			return m_bDataReadEnd || m_bStruckEndMarker ;
+			return m_bDataReadEnd ;
 		}
-		
+
+        public bool IsStructEnd()
+        {
+            return m_bStruckEndMarker || m_bDataReadEnd; 
+        }
+
+        public void ClearStructEnd()
+        {
+            m_bStruckEndMarker = false;
+        }
+
+
         public int ValidLength 
         {
             get { return m_writeIndex; }
@@ -132,11 +144,15 @@ namespace NetMessage
             {
                 if (-1 == _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_INT8, 1))
                 {
-                    return 0;
+                    return -1;
                 }
-                return OrgWriteUint8((byte)a) + 1;
+                int ret = OrgWriteUint8((byte)a);
+                if(ret ==-1)
+                {
+                    return ret;
+                }
+                return ret + 1;
             }
-            return 0;
         }
 
         public int WriteInt8(sbyte data)
@@ -153,11 +169,15 @@ namespace NetMessage
             {
                 if (-1 == _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_FLOAT, 4))
                 {
-                    return 0;
+                    return -1;
                 }
-                return OrgWriteFloat(a) + 1;
+                int ret = OrgWriteFloat(a);
+                if (ret == -1)
+                {
+                    return ret;
+                }
+                return ret + 1;
             }
-            return 0;
         }
 
         public int WriteUint16(ushort a)
@@ -180,9 +200,13 @@ namespace NetMessage
                 {
                     return -1;
                 }
-                return OrgWriteUint16(a) + 1;
+                int ret = OrgWriteUint16(a);
+                if (ret == -1)
+                {
+                    return ret;
+                }
+                return ret + 1;
             }
-            return 0;
         }
 
         public int WriteInt16(short data)
@@ -192,6 +216,7 @@ namespace NetMessage
 
         public int WriteUint32(uint a)
         {
+            int ret = 0;
             if (a == 0)
             {
                 return _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_INT32, 0);
@@ -202,7 +227,7 @@ namespace NetMessage
                 {
                     return 0;
                 }
-                return OrgWriteUint8((byte)a) + 1;
+                ret = OrgWriteUint8((byte)a);
             }
             else if (a <= 0xffff)
             {
@@ -211,7 +236,7 @@ namespace NetMessage
                 {
                     return 0;
                 }
-                return OrgWriteUint16((ushort)a) + 1;
+                ret = OrgWriteUint16((ushort)a);
             }
             else
             {
@@ -219,9 +244,14 @@ namespace NetMessage
                 {
                     return 0;
                 }
-                return OrgWriteUint32(a)+1;
+                ret = OrgWriteUint32(a);
             }
-            return 0;
+
+            if (ret == -1)
+            {
+                return ret;
+            }
+            return ret + 1;
         }
 
         public int WriteInt32(int data)
@@ -231,6 +261,7 @@ namespace NetMessage
 
         public int WriteUint64(ulong a)
         {
+            int ret = 0;
             if (a == 0)
             {
                 return _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_INT64, 0);
@@ -241,7 +272,7 @@ namespace NetMessage
                 {
                     return 0;
                 }
-                return OrgWriteUint8((byte)a) + 1;
+                ret = OrgWriteUint8((byte)a) ;
             }
             else if (a <= 0xffff)
             {
@@ -249,7 +280,7 @@ namespace NetMessage
                 {
                     return 0;
                 }
-                return OrgWriteUint16((ushort)a) + 1;
+                ret = OrgWriteUint16((ushort)a) ;
             }
             else if (a <= 0xffffffff)
             {
@@ -257,7 +288,7 @@ namespace NetMessage
                 {
                     return 0;
                 }
-                return OrgWriteUint32((uint)a) + 1;
+                ret = OrgWriteUint32((uint)a);
             }
             else
             {
@@ -265,9 +296,14 @@ namespace NetMessage
                 {
                     return 0;
                 }
-                return OrgWriteUint64(a) + 1;
+                ret = OrgWriteUint64(a) ;
             }
-            return 0;
+
+            if (ret == -1)
+            {
+                return ret;
+            }
+            return ret + 1;
         }
 
         public int WriteInt64(long data)
@@ -281,17 +317,29 @@ namespace NetMessage
 
 			if(byteArray.Length ==0) 
             {
-                _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_TEXT, 0);
+                if(-1== _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_TEXT, 0))
+                {
+                    return -1;
+                }
                 return 1;
 			}
             else
             {
-                _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_TEXT, 1);
+                if (-1 == _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_TEXT, 1))
+                {
+                    return -1;
+                }
             }
 
 
-            OrgWriteUint16((ushort)(byteArray.Length));
-            myWrite(byteArray, (int)byteArray.Length);
+            if(-1==OrgWriteUint16((ushort)(byteArray.Length)) )
+            {
+                return -1;
+            }
+            if(-1==myWrite(byteArray, (int)byteArray.Length) )
+            {
+                return -1;
+            }
             m_buf[m_writeIndex++] = 0x7f;
             return byteArray.Length + 4;
         }
@@ -311,16 +359,28 @@ namespace NetMessage
             }
             else if (data.Length == 0)
             {
-                _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_BIN, 0);
+                if(-1==_writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_BIN, 0) )
+                {
+                    return -1;
+                }
                 return 1;
             }
             else
             {
-                _writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_BIN, 1);
+                if(-1==_writeMarker(eNDnetStreamMarker.ENDSTREAM_MARKER_BIN, 1) )
+                {
+                    return -1;
+                }
             }
 
-            OrgWriteUint16(dataLenth);
-            myWrite(data, data.Length);
+            if(-1==OrgWriteUint16(dataLenth))
+            {
+                return -1;
+            }
+            if(-1==myWrite(data, data.Length) )
+            {
+                return -1;
+            }
             return data.Length + 3;
         }
         #endregion
@@ -643,32 +703,39 @@ namespace NetMessage
                 m_bStruckEndMarker = true;
                 return 0;
             }
+            
             type = (eNDnetStreamMarker)((marker & 0xf0) >> 4);
             size =(byte)( marker & 0xf);
             return 0;
         }
       
 
-        private void myWrite(byte[] data, int len)
-        {   
+        private int myWrite(byte[] data, int len)
+        {
+            if (m_writeIndex + len > m_buf.Length)
+            {
+                return -1;
+            }
             for (var i = 0; i < len; ++i)
             {
                 m_buf[m_writeIndex++] = data[i];
             }
+            return len;
         }
 
 
-        private void myRead(byte[] data, int len)
+        private int myRead(byte[] data, int len)
         {
-			if(m_readIndex + len >= m_buf.Length)
+			if(m_readIndex + len > m_buf.Length)
 			{
 				m_bDataReadEnd = true ;
-				return  ;
+				return 1 ;
 			}
             for (var i = 0; i < len; ++i)
             {
                 data[i] = m_buf[m_readIndex++] ;
             }
+            return len;
         }
         #endregion
 
@@ -676,62 +743,65 @@ namespace NetMessage
 
         private int OrgWriteUint8(byte data)
         {
+            if (m_writeIndex + 1 > m_buf.Length)  {
+                return -1;
+            }
+
             m_buf[m_writeIndex++] = data;
             return 1;
         }
 
         private int OrgWriteInt8(sbyte data)
         {
+            if (m_writeIndex + 1 > m_buf.Length)
+            {
+                return -1;
+            }
+
             m_buf[m_writeIndex++] = (byte)data;
             return 1;
         }
         private int OrgWriteFloat(float data)
         {
+           
             byte[] bufData = BitConverter.GetBytes(data);
-            myWrite(bufData, 4);
-            return bufData.Length;
+            return myWrite(bufData, 4);
         }
 
         private int OrgWriteUint16(ushort data)
         {
             byte[] bufData = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)data));
-            myWrite(bufData, 2);
-            return bufData.Length;
+            return myWrite(bufData, 2);
         }
 
         private int OrgWriteInt16(short data)
         {
             byte[] bufData = BitConverter.GetBytes(IPAddress.HostToNetworkOrder(data));
-            myWrite(bufData, 2);
-            return bufData.Length;
+            return myWrite(bufData, 2);
         }
 
         private int OrgWriteUint32(uint data)
         {
             byte[] bufData = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((int)data));
-            myWrite(bufData, 4);
-            return bufData.Length;
+            return myWrite(bufData, 4);
         }
 
         private int OrgWriteInt32(int data)
         {
             byte[] bufData = BitConverter.GetBytes(IPAddress.HostToNetworkOrder(data));
-            myWrite(bufData, 4);
-            return bufData.Length;
+            return myWrite(bufData, 4);
         }
 
         private int OrgWriteUint64(ulong data)
         {
             byte[] bufData = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((long)data));
-            myWrite(bufData, 8);
-            return bufData.Length;
+            return myWrite(bufData, 8);
         }
 
         private int OrgWriteInt64(long data)
         {
             byte[] bufData = BitConverter.GetBytes(IPAddress.HostToNetworkOrder(data));
-            myWrite(bufData, 8);
-            return bufData.Length;
+            return  myWrite(bufData, 8);
         }
         #endregion
 
@@ -739,8 +809,7 @@ namespace NetMessage
 
         private byte OrgReadUint8()
         {
-			
-			if(m_readIndex + 1 >= m_buf.Length)
+			if(m_readIndex + 1 > m_buf.Length)
 			{
 				m_bDataReadEnd = true ;
 				return 0 ;
@@ -751,55 +820,87 @@ namespace NetMessage
 
         private sbyte OrgReadInt8()
         {
+            if (m_readIndex + 1 > m_buf.Length)
+            {
+                m_bDataReadEnd = true;
+                return 0;
+            }
             return (sbyte)m_buf[m_readIndex++];
 
         }
         private float OrgReadFloat()
         {
             byte[] receivedData = new byte[4];
-            myRead(receivedData, 4);
+            if(-1==myRead(receivedData, 4))
+            {
+                return 0;
+            }
             return BitConverter.ToSingle(receivedData, 0);
         }
 
         private ushort OrgReadUint16()
         {
             byte[] receivedData = new byte[2];
-            myRead(receivedData, 2);
+            //myRead(receivedData, 2);
+            if (-1 == myRead(receivedData, 2))
+            {
+                return 0;
+            }
             return (ushort)IPAddress.NetworkToHostOrder((short)BitConverter.ToUInt16(receivedData, 0));
         }
 
         private short OrgReadInt16()
         {
             byte[] receivedData = new byte[2];
-            myRead(receivedData, 2);
+            //myRead(receivedData, 2);
+            if (-1 == myRead(receivedData, 2))
+            {
+                return 0;
+            }
             return IPAddress.NetworkToHostOrder(BitConverter.ToInt16(receivedData, 0));
         }
 
         private uint OrgReadUint32()
         {
             byte[] receivedData = new byte[4];
-            myRead(receivedData, 4);
+            //myRead(receivedData, 4);
+            if (-1 == myRead(receivedData, 4))
+            {
+                return 0;
+            }
             return (uint)IPAddress.NetworkToHostOrder((int)BitConverter.ToUInt32(receivedData, 0));
         }
 
         private int OrgReadInt32()
         {
             byte[] receivedData = new byte[4];
-            myRead(receivedData, 4);
+            //myRead(receivedData, 4);
+            if (-1 == myRead(receivedData, 4))
+            {
+                return 0;
+            }
             return IPAddress.NetworkToHostOrder(BitConverter.ToInt32(receivedData, 0));
         }
 
         private ulong OrgReadUint64()
         {
             byte[] receivedData = new byte[8];
-            myRead(receivedData, 8);
+            //myRead(receivedData, 8);
+            if (-1 == myRead(receivedData, 8))
+            {
+                return 0;
+            }
             return (ulong)IPAddress.NetworkToHostOrder((long)BitConverter.ToUInt64(receivedData, 0));
         }
 
         private long OrgReadInt64()
         {
             byte[] receivedData = new byte[8];
-            myRead(receivedData, 8);
+            //myRead(receivedData, 8);
+            if (-1 == myRead(receivedData, 8))
+            {
+                return 0;
+            }
             return IPAddress.NetworkToHostOrder(BitConverter.ToInt64(receivedData, 0));
         }
         #endregion

@@ -9,17 +9,11 @@
 			<node desc="角色属性">attr</node>
 			<node desc="背包">Package</node>
 			<node desc="任务">task</node>
-			<node desc="基地">home</node>
 			<node desc="卡牌">card</node>
 			<node desc="装备">equip</node>
 			<node desc="技能">skill</node>
-			<node desc="兵种">soldier</node>			
-			<node desc="矿产">mines</node>
-			<node desc="角色对象">role</node>	
-			<node desc="神器">artifact</node>
-			<node desc="天赋">talent</node>
+			<node desc="角色对象">role</node>
 			<node desc="附加数据">addition</node>
-			<node desc="熔炉">stove</node>
 		</internal_object>
 	</data_list>
 	<data_list dataName="external_objects" src_type="list" desc="其他对象" >
@@ -30,8 +24,6 @@
 			<node desc="网络监听器">listener</node>
 			<node desc="网络会话器">session</node>
 			<node desc="网络连接">connector</node>
-			<node desc="worldServer连接器">world-connector</node>			
-			<node desc="socialServer连接器">social-connector</node>
 			<node desc="输出目录">WritablePath</node>
 			<node desc="程序信息">machineInfo</node>
 			<node desc="日志文件">LogFile</node>

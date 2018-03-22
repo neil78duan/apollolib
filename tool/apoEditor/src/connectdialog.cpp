@@ -42,19 +42,19 @@ public:
             return true;
         }
         else if (0 == ndstricmp(objName, "LogFile")) {
-            val.InitSet("ndlog.log");
+            val.InitSet("apoeditor.log");
             return true;
         }
         else if (0 == ndstricmp(objName, "LogPath")) {
-            val.InitSet("../../log");
+            val.InitSet("../log");
             return true;
         }
         else if (0 == ndstricmp(objName, "WritablePath")) {
-            val.InitSet("../../log");
+            val.InitSet("../log");
             return true;
         }
 		else if (0 == ndstricmp(objName, "DataPath")) {
-			val.InitSet("../../data");
+			val.InitSet("../log");
 			return true;
 		}
 
@@ -109,7 +109,6 @@ static bool init_apollo_object(NDIConn *pConn, const char*script_file)
     ClientMsgHandler::InstallDftClientHandler(pConn);
     pConn->SetDftMsgHandler(ClientMsgHandler::apollo_dft_message_handler);
 
-    //pConn->InstallMsgFunc(get_data_format_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
     return true;
 }
 //////////////////////////////////////
@@ -624,7 +623,7 @@ int ConnectDialog::_connectHost(const char *host, int port)
         return -1;
     }
 	nd_logmsg("connect %s:%d success \n", host, port);
-	if (!init_apollo_object(m_pConn, m_scriptFile)) {
+	if (!init_apollo_object(pConn, m_scriptFile)) {
 		nd_logmsg("Load script %s error\n", m_scriptFile);
 		DestroyConnectorObj(pConn);
 		return -1;

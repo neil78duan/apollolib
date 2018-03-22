@@ -55,7 +55,6 @@ int test_time1()
 	if (time(NULL) > 0x5b12734f)
 
 
-
 	exit(0);
 	return 0;
 }
@@ -63,31 +62,40 @@ int test_time1()
 
 int runDevelopTool(int argc, char *argv[])
 {
+
+#if defined (__ND_MAC__)
+	const char *rootConfog = "../cfg/io_config_mac.xml";
+#else
+	const char *rootConfog = "../cfg/io_config.xml";
+#endif
+	const char *scriptConfig = "../cfg/editor_config_setting.json";
+
+	if (0 != nd_chdir("../bin")) {
+		QMessageBox::critical(NULL, "Error", "can not enter working path !");
+		exit(1);
+	}
+	const char *curDir = nd_getcwd();
+
 	QApplication a(argc, argv);
 	//use utf8 
 	ndstr_set_code(APO_QT_SRC_TEXT_ENCODE);
 
-	QString workDir, ioCfgFile, editorCfg;
-
-	if (!trytoGetSetting(workDir, ioCfgFile, editorCfg)) {
-		return 1;
+	if (!nd_existfile(scriptConfig)) {
+		QMessageBox::critical(NULL, "Error", "can not found script setting file !");
+		exit(1);
 	}
-	apoEditorSetting* setting;
-	LogicEngineRoot::setSettingFile(editorCfg.toStdString().c_str());
+	if (!nd_existfile(rootConfog)) {
+		QMessageBox::critical(NULL, "Error", "can not found root config file !");
+		exit(1);
+	}
 
-re_initd:
-	nd_chdir(workDir.toStdString().c_str());
-
-	setting = apoEditorSetting::getInstant();
+	LogicEngineRoot::setSettingFile(scriptConfig);
+	apoEditorSetting*setting = apoEditorSetting::getInstant();
 	nd_assert(setting);
 
-	if (!setting->Init(ioCfgFile.toStdString().c_str(), editorCfg.toStdString().c_str(), APO_QT_SRC_TEXT_ENCODE)){
+	if (!setting->Init(rootConfog, scriptConfig, APO_QT_SRC_TEXT_ENCODE)){
 		QMessageBox::warning(NULL, "Error", "load config file error, Please Reload", QMessageBox::Yes);
-		if (!inputSetting(workDir, ioCfgFile, editorCfg)) {
-			exit(1);
-		}
-		apoEditorSetting::destroyInstant();
-		goto re_initd;
+		exit(1);
 	}
 
 	startDialog dlg;
@@ -115,19 +123,19 @@ int runGm(int argc, char *argv[])
 	ConnectDialog dlg;
 
 	_LOAD_XML(editorSetting, CONFIG_FILE_PATH, "utf8", 0);
-	_LOAD_XML(xmlSend, "../../cfg/gm_msg.xml", "utf8", 0);
+	_LOAD_XML(xmlSend, "../cfg/gm_msg.xml", "utf8", 0);
 	
 	LogicEngineRoot::setSettingFile(CONFIG_FILE_PATH);
 
 	dlg.m_editor_setting = &editorSetting;
 	dlg.m_gmCfg = &xmlSend;
 
-	dlg.LoadClientScript("../../data/client_script.bin","../../data/cehua_data.dat");
+	dlg.LoadClientScript("../data/client_script.bin","../data/cehua_data.dat");
 
 
 	dlg.exec();
 
-	ndxml_save_encode(&xmlSend, "../../cfg/gm_msg.xml", E_SRC_CODE_UTF_8, E_SRC_CODE_UTF_8);
+	ndxml_save_encode(&xmlSend, "../cfg/gm_msg.xml", E_SRC_CODE_UTF_8, E_SRC_CODE_UTF_8);
 	ndxml_destroy(&xmlSend);
 
 	//WriteLog("...\n connect server end!");

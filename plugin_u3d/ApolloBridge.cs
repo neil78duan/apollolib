@@ -169,12 +169,7 @@ public class apoClient {
     }
    
     public bool Init() 
-    {
-        LogManager.Log("begin init....");
-#if UNITY_EDITOR
-#else  
-	apoCli_SetTimeout(10000) ;	//time out 10 seconds
-#endif
+    { 
         string workPath = Application.persistentDataPath;		
         string udid = SystemInfo.deviceUniqueIdentifier;
 		

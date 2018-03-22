@@ -245,6 +245,7 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 				
 				size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
 									"\t\t\t%sCount = dataStream.ReadUint16();\n"
+									"\t\t\tif (dataStream.IsStructEnd()) return;\n"
 									"\t\t\t%s = new %s[%sCount];\n" ,
 									pValName, pValName, realType ? realType : pType, pValName);
 				pReadStream += size;
@@ -259,7 +260,9 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 				if (realOp)	{
 
 					size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
-						"\t\t\t\t%s[i] = dataStream.Read%s();\n\t\t\t}\n"
+						"\t\t\t\t%s[i] = dataStream.Read%s();\n"
+						"\t\t\t\tif (dataStream.IsStructEnd()) return;\n"
+						"\t\t\t}\n"
 						, pValName, realOp );
 					pReadStream += size;
 
@@ -275,7 +278,9 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 
 					size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
 						"\t\t\t\t%s[i] = new %s();\n"
-						"\t\t\t\t%s[i].Read(ref dataStream);\n\t\t\t}\n"
+						"\t\t\t\t%s[i].Read(ref dataStream);\n"
+						"\t\t\t\tif (dataStream.IsStructEnd()) return;\n"
+						"\t\t\t}\n"
 						, pValName, realType ? realType : pType, pValName);
 					pReadStream += size;
 
@@ -297,7 +302,9 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 				if (realOp)	{
 					//readstream
 					size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
-						"\t\t\t%s = dataStream.Read%s();\n", pValName, realOp );
+						"\t\t\t%s = dataStream.Read%s();\n"
+						"\t\t\tif (dataStream.IsStructEnd()) return;\n",
+						pValName, realOp );
 					pReadStream += size;
 					//write stream
 					size = snprintf(pWriteStream, sizeof(buf_write_func) - (pWriteStream - buf_write_func),
@@ -307,7 +314,9 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 				else {
 					//readstream
 					size = snprintf(pReadStream, sizeof(buf_read_func) - (pReadStream - buf_read_func),
-						"\t\t\t%s.Read(ref dataStream);\n", pValName);
+						"\t\t\t%s.Read(ref dataStream);\n"
+						"\t\t\tif (dataStream.IsStructEnd()) return;\n",
+						pValName);
 					pReadStream += size;
 					//write stream
 					size = snprintf(pWriteStream, sizeof(buf_write_func) - (pWriteStream - buf_write_func),
@@ -323,12 +332,14 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 		
 		//read stream
 		fprintf(pf, "\n\t\tpublic void Read(ref NDMsgStream dataStream)\n"
-				"\t\t{\n%s\n\t\t}\n", buf_read_func ) ;
+				"\t\t{\n%s\n"
+				"\t\t\tdataStream.TrytoMoveStructEnd();\n\t\t}\n", buf_read_func ) ;
 		
 		//write strea
 		fprintf(pf, "\n\t\tpublic int Write(ref NDMsgStream dataStream)\n"
-				"\t\t{\n\t\t\tint size = 0;\n"
-				"%s\n\t\t\treturn size;\n\t\t}\n", buf_write_func ) ;
+				"\t\t{\n\t\t\tint size = 1;\n"
+				"%s\n\t\t\tdataStream.WriteStructEnd();\n"
+				"\t\t\treturn size;\n\t\t}\n", buf_write_func ) ;
 		
 		
 		fprintf(pf, "\t}\n\n") ;

@@ -410,6 +410,7 @@ namespace ClientMsgHandler
 	{
 		logic_print print_func = getLogFunction(pconn);
 		if(print_func) {
+			inmsg.SetSkipMarker(true);
 			void*log_file = getLogFile(pconn);
 			return LogicOutputMsgByFormat(print_func, log_file, formatText, inmsg, dataDef);
 		}

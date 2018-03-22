@@ -37,6 +37,7 @@ PLATFORM_BITS=`getconf LONG_BIT`
 
 [ -d bin ] || mkdir bin
 [ -d lib ] || mkdir lib
+[ -d log ] || mkdir log
 
 
 ARCH_MACHINE=`uname -m`
