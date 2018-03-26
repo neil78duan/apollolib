@@ -360,7 +360,7 @@ ND_CMDLINE_FUNC_INSTANCE(check_server_program_update)
 				serverType = ESERVER_WORLD;
 			}
 			else if (0==ndstricmp((char*)argv[2], (char*)"account")) {
-				serverType = ESERVER_BATTLE_ROOM ;
+				serverType = ESERVER_ACCOUNT ;
 			}
 		}
 		
@@ -387,7 +387,7 @@ ND_CMDLINE_FUNC_INSTANCE(check_server_program_update)
 			else if (aimType==ESERVER_ACCOUNT) {
 				pHost = "account-server" ;
 			}
-			else if (aimType==ESERVER_GAMEHALL) {
+			else if (aimType==ESERVER_GAME) {
 				pHost = "game-server" ;
 			}
 			

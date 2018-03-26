@@ -38,7 +38,7 @@ PLATFORM_BITS=`getconf LONG_BIT`
 [ -d bin ] || mkdir bin
 [ -d lib ] || mkdir lib
 [ -d log ] || mkdir log
-
+[ -d editor ] || mkdir editor
 
 ARCH_MACHINE=`uname -m`
 OS_kernel=`uname -s |  tr '[A-Z]' '[a-z]'`

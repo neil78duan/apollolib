@@ -7,11 +7,13 @@
 #include "connectdialog.h"
 
 #include <QApplication>
+#include <QCoreApplication>
 #include "startdialog.h"
 #include <QMessageBox>
 
 #include <qtextcodec.h>
 #include <QString>
+#include <QDir>
 
 #ifdef WIN32
 #pragma comment(lib,"User32.lib")
@@ -63,25 +65,32 @@ int test_time1()
 int runDevelopTool(int argc, char *argv[])
 {
 
+    QApplication a(argc, argv);
 #if defined (__ND_MAC__)
 	const char *rootConfog = "../cfg/io_config_mac.xml";
+    QString curPath = QCoreApplication::applicationDirPath();
+    QDir::setCurrent(curPath) ;
+    QDir::setCurrent("../../..") ;
+
 #else
 	const char *rootConfog = "../cfg/io_config.xml";
+
+    if (0 != nd_chdir("../bin")) {
+        QMessageBox::critical(NULL, "Error", "can not enter working path !");
+        exit(1);
+    }
+
 #endif
 	const char *scriptConfig = "../cfg/editor_config_setting.json";
 
-	if (0 != nd_chdir("../bin")) {
-		QMessageBox::critical(NULL, "Error", "can not enter working path !");
-		exit(1);
-	}
-	const char *curDir = nd_getcwd();
-
-	QApplication a(argc, argv);
 	//use utf8 
 	ndstr_set_code(APO_QT_SRC_TEXT_ENCODE);
 
 	if (!nd_existfile(scriptConfig)) {
-		QMessageBox::critical(NULL, "Error", "can not found script setting file !");
+        QString errTips ;
+        errTips.sprintf("can not open script setting file ,currentpath=%s!",nd_getcwd()) ;
+        QMessageBox::critical(NULL, "Error", errTips);
+
 		exit(1);
 	}
 	if (!nd_existfile(rootConfog)) {
@@ -116,7 +125,7 @@ int runDevelopTool(int argc, char *argv[])
 
 int runGm(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
+    QApplication a(argc, argv);
 	//use utf8 
 	ndstr_set_code(APO_QT_SRC_TEXT_ENCODE);
 
@@ -146,7 +155,7 @@ int runGm(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
-	
+
 	//const char *nowDir = nd_getcwd();
 	//test_time1();
 

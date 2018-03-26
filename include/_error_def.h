@@ -15,10 +15,10 @@ ErrorElement(ESERVER_ERR_ATTR_NOT_ENOUGH, "属性不足"),
 ErrorElement(ESERVER_ERR_ATTR_TOO_MUCH, "属性太高"),
 ErrorElement(ESERVER_ERR_LEVEL_LOW, "等级太低"),
 ErrorElement(ESERVER_ERR_SHORT_MONEY, "游戏币不足"),
-ErrorElement(ESERVER_ERR_MAX_LEVEL, "已经是最高级"),
+ErrorElement(ESERVER_ERR_MAX_LEVEL, "已经达到最高级"),
 
-ErrorElement(ESERVER_ERR_NO_BUILDING, "沒有建筑物"),
-ErrorElement(ESERVER_ERR_BUILDING_LEVEL_LOW, "建筑物等级不够"),
+ErrorElement(ESERVER_ERR_AIM_DISSAGREE, "对方不同意"),
+ErrorElement(ESERVER_ERR_WAIT_REPLY_TIMEOUT, "等待对方回应超时"),
 ErrorElement(ESERVER_ERR_TYPE_NOT_MATCH, "类型不匹配"),
 
 ErrorElement(ESERVER_ERR_PACKAGE_FULL, "背包已满"),

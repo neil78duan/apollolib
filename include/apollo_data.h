@@ -55,13 +55,11 @@ enum eGameStat {
 enum eServerType {
 	ESERVER_UNKNOW = 0,
 	ESERVER_WORLD,	// WorldServer
-	ESERVER_GAMEHALL,   // 游戏大厅
+	ESERVER_GAME,   // 游戏服务器
 	ESERVER_GATE,		// 游戏入口
-	ESERVER_BATTLE_ROOM,// 对战房间
 	ESERVER_SOCIAL,		// SOCIAL SERVER
 	ESERVER_ACCOUNT,	//
 	ESERVER_GM,			// GM Server节点
-	ESERVER_NATION,			// 国家工会
 
 };
 

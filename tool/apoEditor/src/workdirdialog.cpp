@@ -7,33 +7,19 @@
 #include <QSettings>
 
 
-bool trytoGetSetting(QString &workPath,QString &cfgSetting,QString &editorCfg,QWidget *parent)
+bool trytoGetSetting(QString &workPath,QWidget *parent)
 {
     QSettings settings("duanxiuyun", "ApolloEditor");
     workPath = settings.value("workdir_path").toString();
-    cfgSetting =settings.value("setting_config").toString() ;
-    editorCfg = settings.value("editor_config").toString() ;
-    if(workPath.isEmpty() || cfgSetting.isEmpty()) {
-		return inputSetting(workPath, cfgSetting, editorCfg, parent);
+
+    if(workPath.isEmpty() ) {
+        return inputSetting(workPath, parent);
     }
-
-	std::string config_setting = editorCfg.toStdString();
-	const char * pName = nd_filename(config_setting.c_str());
-	if (pName && 0==ndstricmp(pName,"editor_setting.xml")) {
-		char mypaht[1024];
-		if (nd_getpath(config_setting.c_str(), mypaht, sizeof(mypaht))) {
-			editorCfg = mypaht;
-			editorCfg += "/editor_config_setting.json";
-
-			QSettings settings("duanxiuyun", "ApolloEditor");
-			settings.setValue("editor_config", editorCfg);
-		}
-	}
 		
     return true ;
 }
 
-bool inputSetting(QString &workPath,QString &cfgSetting,QString &editorCfg,QWidget *parent)
+bool inputSetting(QString &workPath,QWidget *parent)
 {
     workDirDialog dlg(parent) ;
     int ret = dlg.exec() ;
@@ -41,29 +27,25 @@ bool inputSetting(QString &workPath,QString &cfgSetting,QString &editorCfg,QWidg
         return false ;
     }
     workPath = dlg.getWorkingPath() ;
-    cfgSetting = dlg.getSetting() ;
-	editorCfg = dlg.getEditorCfg();
 
     QSettings settings("duanxiuyun", "ApolloEditor");
     settings.setValue("workdir_path", workPath);
-    settings.setValue("setting_config",cfgSetting) ;
-    settings.setValue("editor_config",editorCfg) ;
 
     return true ;
 }
 
 /////////////
 
-workDirDialog::workDirDialog(QWidget *parent, const char *dftWorkPath, const char *dftSettingFile) :
+workDirDialog::workDirDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::workDirDialog)
 {
     ui->setupUi(this);
-    if(dftWorkPath && *dftWorkPath)
-        ui->workingEdit->setText(dftWorkPath);
-
-    if(dftSettingFile && *dftSettingFile)
-        ui->settingEdit->setText(dftSettingFile);
+//     if(dftWorkPath && *dftWorkPath)
+//         ui->workingEdit->setText(dftWorkPath);
+// 
+//     if(dftSettingFile && *dftSettingFile)
+//         ui->settingEdit->setText(dftSettingFile);
 }
 
 workDirDialog::~workDirDialog()
@@ -78,21 +60,12 @@ void workDirDialog::on_okPushButton_clicked()
         ui->workingEdit->setFocus();
         return ;
     }
-    if(m_setting.isEmpty()) {
-        QMessageBox::question(this,tr("Error"), tr("Please select editor setting file !"),QMessageBox::Ok );
-        ui->settingEdit->setFocus();
-        return ;
-    }
+//     if(m_setting.isEmpty()) {
+//         QMessageBox::question(this,tr("Error"), tr("Please select editor setting file !"),QMessageBox::Ok );
+//         ui->settingEdit->setFocus();
+//         return ;
+//     }
     QDialog::accept() ;
-}
-
-void workDirDialog::on_selSettingButton_clicked()
-{
-    m_setting = QFileDialog::getOpenFileName(this, tr("open file"), ".",  tr("Allfile(*.*);;xmlfile(*.xml)"));
-    if(!m_setting.isEmpty()) {
-        ui->settingEdit->setText(m_setting);
-    }
-
 }
 
 void workDirDialog::on_selWorkdirButton_clicked()
@@ -108,10 +81,3 @@ void workDirDialog::on_ExitButton_clicked()
     QDialog::reject() ;
 }
 
-void workDirDialog::on_btEditorFileSel_clicked()
-{
-    m_scriptEditorCfg = QFileDialog::getOpenFileName(this, tr("open file"), ".",  tr("Allfile(*.*);;xmlfile(*.xml)"));
-    if(!m_scriptEditorCfg.isEmpty()) {
-        ui->editorCfg->setText(m_scriptEditorCfg);
-    }
-}

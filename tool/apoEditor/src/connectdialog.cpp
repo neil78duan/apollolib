@@ -21,7 +21,7 @@
 
 #include "apollo_errors.h"
 //#include "netMessage/message_inc.h"
-#include "logic_parser/script_event_id.h"
+#include "script_event_id.h"
 
 #include <string>
 

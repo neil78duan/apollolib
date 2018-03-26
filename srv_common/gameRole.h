@@ -25,7 +25,7 @@ public:
 
 
 
-class Role : public ApoGameObj
+class Role //: public ApoGameObj
 {
 public:
 	
@@ -49,8 +49,8 @@ public:
 	int SendtoOther(roleid_t roleId, nd_usermsgbuf_t *msgBuf, bool bSave = false);
 	int CallMsgProc(roleid_t playerid, nd_usermsgbuf_t *msghdr, bool bSave = false);
 	int CallMsgProc(roleid_t playerid, NDOStreamMsg &omsg, bool bSave = false);
-	int CallMsgProcToNation(roleid_t playerid, nd_usermsgbuf_t *msgBuf, bool bSave = false);
-	int CallMsgProcToNation(roleid_t playerid, NDOStreamMsg &omsg, bool bSave = false);
+
+	virtual LogicParserEngine *getScriptHandler();
 protected:
 	roleid_t m_roleID ;	
 	NDUINT8 m_nick[USER_NAME_SIZE];

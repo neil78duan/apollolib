@@ -10,7 +10,7 @@
 #include "logic_parser/dbldata2netstream.h"
 #include "cli_common/dftCliMsgHandler.h"
 //#include "netMessage/message_inc.h"
-#include "logic_parser/script_event_id.h"
+#include "script_event_id.h"
 
 #ifndef WITHOUT_LOGIC_PARSER
 

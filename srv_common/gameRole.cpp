@@ -77,13 +77,9 @@ int Role::CallMsgProc(roleid_t playerid, NDOStreamMsg &omsg, bool bSave)
 {
 	return get_playerMgr()->CallMsgProc(playerid, omsg,bSave);
 }
-int Role::CallMsgProcToNation(roleid_t playerid, nd_usermsgbuf_t *msgBuf, bool bSave)
-{
-	return get_playerMgr()->CallMsgProc(playerid, &msgBuf->msg_hdr, bSave);
-}
-int Role::CallMsgProcToNation(roleid_t playerid, NDOStreamMsg &omsg, bool bSave)
-{
-	return get_playerMgr()->CallMsgProc(playerid, omsg, bSave);
-}
 
+LogicParserEngine *Role::getScriptHandler()
+{
+	return NULL;
+}
 
