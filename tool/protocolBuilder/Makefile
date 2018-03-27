@@ -15,11 +15,7 @@ PROJECT_NAME := protoBuilder
 SRCDIR=./protocolBuilder
 
 
-ifeq ($(DEBUG),y)
-	PROJS = $(WORKDIR)/protoBuilder_d
-else
-	PROJS = $(WORKDIR)/protoBuilder
-endif
+PROJS = $(WORKDIR)/protoBuilder
 
 LFLAGS +=   -L$(NDHOME)/lib -l$(CLIENT_LIB)
 

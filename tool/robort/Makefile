@@ -12,11 +12,11 @@ LFLAGS += -L$(LIBDIR)
 
 ifeq ($(DEBUG),y)
 LFLAGS +=  -lapollo_cli_common_d
-PROJS = $(WORKDIR)/robort_d
 else
 LFLAGS +=  -lapollo_cli_common
-PROJS = $(WORKDIR)/robort
 endif
+
+PROJS = $(WORKDIR)/robort
 
 LFLAGS += -l$(CLIENT_LIB)
 

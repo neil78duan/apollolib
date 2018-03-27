@@ -4,10 +4,7 @@
 
 include ../../Rules.make
 
-#PROJ1  = $(WORKDIR)/client_test
 PROJ2  = $(WORKDIR)/cmdline_tool
-
-#OBJS   :=   commonTest.o testConnector.o
 
 TOOLOBJS := $(OBJS) client_cmdline.o test_msgsend.o atlantis_test.o rsa_gen.o 
 
