@@ -644,7 +644,7 @@ int ConnectDialog::_login(const char *user, const char *passwd,bool skipAuth)
     if (!m_login){
         return -1;
     }
-    m_login->ReInit(m_pConn->GetHandle(), _SESSION_FILE);
+    m_login->Init(m_pConn->GetHandle(), _SESSION_FILE);
 
     /*
     if (_s_session_size && _s_session_buf[0]){

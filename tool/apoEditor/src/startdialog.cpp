@@ -198,12 +198,35 @@ bool startDialog::compileScript(const char *scriptFile)
 		nd_logerror("compile %s error !!!\nMaybe file is destroyed\n", scriptFile);
 		return false;
 	}
+	//get out file absolute path 
+	std::string curPath = nd_getcwd();
+	char outFilePath[ND_FILE_PATH_SIZE];
+
+	if (!nd_getpath(scriptFile, outFilePath, sizeof(outFilePath))) {
+		nd_logerror("get out file path error 1\n");
+		return false;
+	}
+	if (-1 == nd_chdir(outFilePath)) {
+		nd_logerror("get script file-path error 2\n");
+		return false;
+	}
+
+	if (!nd_absolute_filename(outFile, outFilePath, sizeof(outFilePath))) {
+		nd_logerror("get out file path error 3\n");
+		nd_chdir(curPath.c_str());
+		return false;
+	}
+	nd_chdir(curPath.c_str());
+	outFile = outFilePath;
+	// ---end get out file absolute path
+
+
 	int outEncode = getScriptExpEncodeType(&xmlScript);
 	bool withDebug = getScriptExpDebugInfo(&xmlScript);
-	std::string outPath = outFile;
+	//std::string outPath = outFile;
 	ndxml_destroy(&xmlScript);
 
-	outFile = outPath.c_str();
+	//outFile = outPath.c_str();
 
 	int orderType = ND_L_ENDIAN;
 	const char *orderName = _getFromIocfg("bin_data_byte_order");

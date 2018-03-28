@@ -139,7 +139,7 @@ LoginApollo::LoginApollo(nd_handle hConn, const char * session_filename ) : m_co
 	m_serverGroupId = 0;
 	memset(m_srv_key, 0, sizeof(m_srv_key)) ;
 	m_session_file = 0 ;
-	ReInit( hConn, session_filename);	
+	Init( hConn, session_filename);	
 	
 }
 
@@ -202,7 +202,7 @@ const char *LoginApollo::GetLocalToken()
 }
 
 
-void LoginApollo::ReInit(nd_handle hConn, const char * session_filename)
+void LoginApollo::Init(nd_handle hConn, const char * session_filename)
 {
 	Destroy();
 

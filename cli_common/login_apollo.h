@@ -48,10 +48,7 @@ class  LoginBase
 {
 public:
 
-	virtual void ReInit(nd_handle hConn, const char * session_filename) = 0;
-	virtual void SetSessionFile(const char *session_filepath)  =0 ;
-	virtual void SetConnector(nd_handle hConn) =0;
-
+	virtual void Init(nd_handle hConn, const char * session_filename) = 0;
 	virtual void Destroy() = 0;
 	//return 0 success ,else return error code
 	virtual int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type,int chanelId=0, bool skipAuth=false) = 0;
@@ -109,20 +106,18 @@ public:
 	LoginApollo();
 	virtual ~LoginApollo() ;
 
-	void ReInit(nd_handle hConn, const char * session_filename);
-	void SetSessionFile(const char *session_filepath) ;
-	void SetConnector(nd_handle hConn);
 
 	static void SetDeviceInfo(const char *udid, const char *devDesc);
 	static const char *GetLocalToken();
 
+	void Init(nd_handle hConn, const char * session_filename);
 	void Destroy();
 	//return 0 success ,else return error code
 	int Login(const char *userName, const char *passwd, ACCOUNT_TYPE type,int channelId, bool skipAuth);//return -1 if error ESERVER_ERR_NOUSER
 	int Relogin() ;
 	int Logout() ;
 	int TrytoGetCryptKey();
-	//int RedirectTo(const char *inet_addr, int port) ;
+
 	int EnterServer(ndip_t ip, NDUINT16 port, bool bNotLoadBalance=false) ;
 	int EnterServer(const char *host_name, NDUINT16 port, bool bNotLoadBalance = false);
 	int EnterServer(const char *host_name, NDUINT16 port, const char *session_file, bool bNotLoadBalance = false);
@@ -148,6 +143,7 @@ public:
 	const char *getAccountName() ;
 	int getServerId();
 protected:
+	void SetSessionFile(const char *session_filepath);
 	int onLogin(NDIStreamMsg &inmsg) ;
 	int checkCryptVersion(char *savedVersion) ;
 	int switchServer(ndip_t ip, NDUINT16 port, int sendMsg, int waitMsg, bool bNotLoadBalance = false);

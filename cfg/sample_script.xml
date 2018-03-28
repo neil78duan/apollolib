@@ -14,9 +14,9 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">./setting/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">admin</Author>
-	<LastMod name="最后修改" kinds="hide">1517450565</LastMod>
+	<LastMod name="最后修改" kinds="hide">1522211492</LastMod>
 </moduleInfo>
-<baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="39" expand_stat="1" accept_drag_in="func_node">
+<baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="39" expand_stat="0" accept_drag_in="func_node">
 	<func_node name="sample_selector" create_template="create_list1" auto_index="5" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
 		<func_params kinds="hide">
 			<input_param name="Param">param1</input_param>
@@ -24,12 +24,12 @@
 		<comment>函数说明</comment>
 		<op_set_error_continue name="节点_出错继续" expand="yes">
 			<comment name="功能说明" rw_stat="read">on_error_continue</comment>
-			<apoEditorPos kinds="hide" x="247" y="54" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="239" y="63" offset_x="0" offset_y="0"/>
 			<index name="设置出错后继续执行" kinds="enum" enum_value="false,true" delete="no">1</index>
 		</op_set_error_continue>
 		<steps_bt_selector name="BT-Selector" auto_index="0">
 			<comment name="功能说明" rw_stat="read">run until one of children success </comment>
-			<apoEditorPos kinds="hide" x="241" y="342" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="233" y="351" offset_x="0" offset_y="0"/>
 			<op_set_label name="标签$name$" kinds="hide" expand="yes" comp_cond="param" delete="no">
 				<param name="标签名" kinds="string" delete="no" auto_index_ref="auto_index" replace_val="../.name">_SelectAutoLab4</param>
 			</op_set_label>
@@ -40,7 +40,7 @@
 					<steps_collection name="selector-node-entry" create_template="create_list1" delete="no">
 						<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 							<comment name="功能说明" rw_stat="read">print(...)</comment>
-							<apoEditorPos kinds="hide" x="479" y="361" offset_x="0" offset_y="0"/>
+							<apoEditorPos kinds="hide" x="471" y="370" offset_x="0" offset_y="0"/>
 							<param_collect name="参数" expand="yes">
 								<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 								<var kinds="string" delete="no" restrict="type">select-001</var>
@@ -48,7 +48,7 @@
 						</op_print>
 						<op_set_error name="节点_设置错误$1030$" expand="yes">
 							<comment name="功能说明" rw_stat="read">set_error(id)</comment>
-							<apoEditorPos kinds="hide" x="723" y="600" offset_x="0" offset_y="0"/>
+							<apoEditorPos kinds="hide" x="715" y="609" offset_x="0" offset_y="0"/>
 							<param_collect name="错误号" expand="yes">
 								<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 								<var kinds="string" delete="no" restrict="type">1030</var>
@@ -67,7 +67,7 @@
 					<steps_collection name="selector-node-entry" create_template="create_list1" delete="no">
 						<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 							<comment name="功能说明" rw_stat="read">print(...)</comment>
-							<apoEditorPos kinds="hide" x="478" y="492" offset_x="0" offset_y="0"/>
+							<apoEditorPos kinds="hide" x="470" y="501" offset_x="0" offset_y="0"/>
 							<param_collect name="参数" expand="yes">
 								<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 								<var kinds="string" delete="no" restrict="type">select-002</var>
@@ -75,7 +75,7 @@
 						</op_print>
 						<op_set_error name="节点_设置错误$1031$" expand="yes">
 							<comment name="功能说明" rw_stat="read">set_error(id)</comment>
-							<apoEditorPos kinds="hide" x="739" y="754" offset_x="0" offset_y="0"/>
+							<apoEditorPos kinds="hide" x="731" y="763" offset_x="0" offset_y="0"/>
 							<param_collect name="错误号" expand="yes">
 								<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 								<var kinds="string" delete="no" restrict="type">1031</var>
@@ -94,7 +94,7 @@
 					<steps_collection name="selector-node-entry" create_template="create_list1" delete="no">
 						<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 							<comment name="功能说明" rw_stat="read">print(...)</comment>
-							<apoEditorPos kinds="hide" x="479" y="624" offset_x="0" offset_y="0"/>
+							<apoEditorPos kinds="hide" x="471" y="633" offset_x="0" offset_y="0"/>
 							<param_collect name="参数" expand="yes">
 								<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 								<var kinds="string" delete="no" restrict="type">select-003</var>
@@ -117,7 +117,7 @@
 		</steps_bt_selector>
 		<steps_bt_sequence name="BT-Sequence" auto_index="0">
 			<comment name="功能说明" rw_stat="read">run until one of children success </comment>
-			<apoEditorPos kinds="hide" x="491" y="124" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="483" y="133" offset_x="0" offset_y="0"/>
 			<op_clear_error name="清除错误,非系统错误" kinds="hide">
 				<internal_label name="标签$name$" kinds="string" replace_val=".name" auto_index_ref="auto_index">_sequenceStartLab2</internal_label>
 			</op_clear_error>
@@ -127,7 +127,7 @@
 					<steps_collection name="sequence-node-entry" create_template="create_list1" delete="no">
 						<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 							<comment name="功能说明" rw_stat="read">print(...)</comment>
-							<apoEditorPos kinds="hide" x="770" y="161" offset_x="0" offset_y="0"/>
+							<apoEditorPos kinds="hide" x="762" y="170" offset_x="0" offset_y="0"/>
 							<param_collect name="参数" expand="yes">
 								<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 								<var kinds="string" delete="no" restrict="type">sequence 1</var>
@@ -144,7 +144,7 @@
 					<steps_collection name="sequence-node-entry" create_template="create_list1" delete="no">
 						<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 							<comment name="功能说明" rw_stat="read">print(...)</comment>
-							<apoEditorPos kinds="hide" x="762" y="294" offset_x="0" offset_y="0"/>
+							<apoEditorPos kinds="hide" x="754" y="303" offset_x="0" offset_y="0"/>
 							<param_collect name="参数" expand="yes">
 								<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 								<var kinds="string" delete="no" restrict="type">sequence 2</var>
@@ -161,7 +161,7 @@
 					<steps_collection name="sequence-node-entry" create_template="create_list1" delete="no">
 						<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 							<comment name="功能说明" rw_stat="read">print(...)</comment>
-							<apoEditorPos kinds="hide" x="759" y="434" offset_x="0" offset_y="0"/>
+							<apoEditorPos kinds="hide" x="751" y="443" offset_x="0" offset_y="0"/>
 							<param_collect name="参数" expand="yes">
 								<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 								<var kinds="string" delete="no" restrict="type">sequence 3</var>
@@ -169,7 +169,7 @@
 						</op_print>
 						<op_set_error name="节点_设置错误$1032$" expand="yes">
 							<comment name="功能说明" rw_stat="read">set_error(id)</comment>
-							<apoEditorPos kinds="hide" x="1052" y="447" offset_x="0" offset_y="0"/>
+							<apoEditorPos kinds="hide" x="1044" y="456" offset_x="0" offset_y="0"/>
 							<param_collect name="错误号" expand="yes">
 								<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 								<var kinds="string" delete="no" restrict="type">1032</var>
@@ -197,11 +197,11 @@
 		</steps_bt_sequence>
 		<op_get_last_error name="节点_获得错误号" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">get_last_error()</comment>
-			<apoEditorPos kinds="hide" x="767" y="46" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="759" y="55" offset_x="0" offset_y="0"/>
 		</op_get_last_error>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
-			<apoEditorPos kinds="hide" x="990" y="35" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="982" y="44" offset_x="0" offset_y="0"/>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 				<var kinds="string" delete="no" restrict="type">sequence success</var>
@@ -211,7 +211,7 @@
 				<var kinds="string" delete="no" restrict="type">0</var>
 			</param_collect>
 		</op_print>
-		<apoEditorPos kinds="hide" x="61" y="138" offset_x="-8" offset_y="9"/>
+		<apoEditorPos kinds="hide" x="53" y="147" offset_x="117" offset_y="-40"/>
 		<unConnect kinds="hide">
 			<steps_bt_sequence name="BT-Sequence" auto_index="0">
 				<comment name="功能说明" rw_stat="read">run until one of children success </comment>
@@ -2233,42 +2233,8 @@
 	<func_node name="test_crypt" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="3" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
-		<apoEditorPos kinds="hide" x="84" y="351" offset_x="0" offset_y="0"/>
+		<apoEditorPos kinds="hide" x="84" y="351" offset_x="-62" offset_y="-1"/>
 		<unConnect kinds="hide">
-			<op_call_func name="节点_调用$deyptFile(filename,outFileName, password)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
-				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-				<apoEditorPos kinds="hide" x="288" y="150" offset_x="0" offset_y="0"/>
-				<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_decrypt_file&amp;_dispname=deyptFile(filename,outFileName, password)</func_name>
-				<param_collect name="参数" expand="yes">
-					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-					<var kinds="string" delete="no" restrict="type">../cfg/editor_setting.xml</var>
-				</param_collect>
-				<param_collect name="参数" expand="yes">
-					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-					<var kinds="string" delete="no" restrict="type">../../log/setting.cyp</var>
-				</param_collect>
-				<param_collect name="参数" expand="yes">
-					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-					<var kinds="string" delete="no" restrict="type">apoloKey</var>
-				</param_collect>
-			</op_call_func>
-			<op_call_func name="节点_调用$cryptFile(filename,outFileName, password)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
-				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-				<apoEditorPos kinds="hide" x="657" y="204" offset_x="0" offset_y="0"/>
-				<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_encrypt_file&amp;_dispname=cryptFile(filename,outFileName, password)</func_name>
-				<param_collect name="参数" expand="yes">
-					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-					<var kinds="string" delete="no" restrict="type">../cfg/setting.cyp</var>
-				</param_collect>
-				<param_collect name="参数" expand="yes">
-					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-					<var kinds="string" delete="no" restrict="type">../cfg/editor_setting.xml</var>
-				</param_collect>
-				<param_collect name="参数" expand="yes">
-					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-					<var kinds="string" delete="no" restrict="type">apoloKey</var>
-				</param_collect>
-			</op_call_func>
 			<steps_collection>
 				<op_calc name="节点_公式" expand="yes" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">run_formulate(formulate_text)</comment>
@@ -2296,6 +2262,40 @@
 					<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
 				</op_read_table>
 			</steps_collection>
+			<op_call_func name="节点_调用$deyptFile(filename,outFileName, password)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
+				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+				<apoEditorPos kinds="hide" x="288" y="150" offset_x="0" offset_y="0"/>
+				<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_decrypt_file&amp;_dispname=deyptFile(filename,outFileName, password)</func_name>
+				<param_collect name="参数" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+					<var kinds="string" delete="no" restrict="type">./editor_config_setting.json</var>
+				</param_collect>
+				<param_collect name="参数" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+					<var kinds="string" delete="no" restrict="type">../log/setting.cyp</var>
+				</param_collect>
+				<param_collect name="参数" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+					<var kinds="string" delete="no" restrict="type">apoloKey</var>
+				</param_collect>
+			</op_call_func>
+			<op_call_func name="节点_调用$cryptFile(filename,outFileName, password)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
+				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+				<apoEditorPos kinds="hide" x="657" y="204" offset_x="0" offset_y="0"/>
+				<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_encrypt_file&amp;_dispname=cryptFile(filename,outFileName, password)</func_name>
+				<param_collect name="参数" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+					<var kinds="string" delete="no" restrict="type">../log/setting.cyp</var>
+				</param_collect>
+				<param_collect name="参数" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+					<var kinds="string" delete="no" restrict="type">./editor_setting.xml</var>
+				</param_collect>
+				<param_collect name="参数" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+					<var kinds="string" delete="no" restrict="type">apoloKey</var>
+				</param_collect>
+			</op_call_func>
 		</unConnect>
 	</func_node>
 	<func_node name="test_misc_function" create_template="create_list1" auto_index="7" expand_list="comment" enable_drag="yes" expand_stat="1" var_name_index="3">
@@ -2692,7 +2692,7 @@
 			<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
 			<var name="初始值" kinds="string" delete="no" restrict="type">$value</var>
 		</op_make_var>
-		<apoEditorPos kinds="hide" x="20" y="400" offset_x="11" offset_y="-42"/>
+		<apoEditorPos kinds="hide" x="20" y="400" offset_x="0" offset_y="54"/>
 		<unConnect kinds="hide">
 			<op_process_exit name="节点_process_exit" expand="yes">
 				<apoEditorPos kinds="hide" x="460" y="26" offset_x="0" offset_y="0"/>
@@ -2783,7 +2783,7 @@
 		<unConnect kinds="hide"/>
 	</func_node>
 </baseFunction>
-<message_handler name="消息处理入口" delete="no" create_template="create_function_filter,create_msg_handler" auto_index="1" expand_stat="1" accept_drag_in="msg_handler_node">
+<message_handler name="消息处理入口" delete="no" create_template="create_function_filter,create_msg_handler" auto_index="1" expand_stat="0" accept_drag_in="msg_handler_node">
 	<function_filter name="测试消息" create_template="create_msg_handler" auto_index="7" expand_stat="1" accept_drag_in="msg_handler_node">
 		<msg_handler_node name="message_test" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="4">
 			<func_params kinds="hide"/>
