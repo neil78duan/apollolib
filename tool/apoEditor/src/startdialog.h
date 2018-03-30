@@ -66,7 +66,7 @@ private slots:
 
     void on_CompleteAll_clicked();
 
-    void on_Test_clicked();
+    void on_WorkingPath_clicked();
 
 private:
 

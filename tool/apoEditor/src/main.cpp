@@ -64,24 +64,29 @@ int test_time1()
 
 int runDevelopTool(int argc, char *argv[])
 {
-
+	QString workingPath;
     QApplication a(argc, argv);
 #if defined (__ND_MAC__)
 	const char *rootConfog = "../cfg/io_config_mac.xml";
-    QString curPath = QCoreApplication::applicationDirPath();
-    QDir::setCurrent(curPath) ;
-    QDir::setCurrent("../../..") ;
+    //QString curPath = QCoreApplication::applicationDirPath();
+    //QDir::setCurrent(curPath) ;
+    //QDir::setCurrent("../../..") ;
 
+	if (!trytoGetSetting(workingPath)) {
+		QMessageBox::critical(NULL, "Error", "can not get working path !");
+		exit(1);
+	}
 #else
 	const char *rootConfog = "../cfg/io_config.xml";
-
-    if (0 != nd_chdir("../bin")) {
-        QMessageBox::critical(NULL, "Error", "can not enter working path !");
-        exit(1);
-    }
+	workingPath = "../bin";
 
 #endif
 	const char *scriptConfig = "../cfg/editor_config_setting.json";
+
+    if (!QDir::setCurrent(workingPath)) {
+        QMessageBox::critical(NULL, "Error", "can not enter working path !");
+        exit(1);
+    }
 
 	//use utf8 
 	ndstr_set_code(APO_QT_SRC_TEXT_ENCODE);

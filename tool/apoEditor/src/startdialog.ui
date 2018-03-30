@@ -56,9 +56,9 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="Test">
+     <widget class="QPushButton" name="WorkingPath">
       <property name="text">
-       <string>TEST</string>
+       <string>WorkingPath</string>
       </property>
      </widget>
     </item>

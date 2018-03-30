@@ -294,7 +294,6 @@
 		0776F9041E31C128005DCB69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0796E064202BF32100B7C9E5 /* apoClientU3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = apoClientU3d.h; path = ../../../cli_common/apoClientU3d.h; sourceTree = "<group>"; };
 		0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = apoClientU3d.cpp; path = ../../../cli_common/apoClientU3d.cpp; sourceTree = "<group>"; };
-		07B84ACB205D12C0002F2224 /* _event_def.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _event_def.h; sourceTree = "<group>"; };
 		07B84ACC205D12C0002F2224 /* dbl_mgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dbl_mgr.h; sourceTree = "<group>"; };
 		07B84ACD205D12C0002F2224 /* dbldata2netstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dbldata2netstream.h; sourceTree = "<group>"; };
 		07B84ACE205D12C0002F2224 /* logic_compile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logic_compile.h; sourceTree = "<group>"; };
@@ -307,7 +306,6 @@
 		07B84AD5205D12C0002F2224 /* logicParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logicParser.h; sourceTree = "<group>"; };
 		07B84AD6205D12C0002F2224 /* logicStruct.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = logicStruct.hpp; sourceTree = "<group>"; };
 		07B84AD7205D12C0002F2224 /* objectBaseMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objectBaseMgr.h; sourceTree = "<group>"; };
-		07B84AD8205D12C0002F2224 /* script_event_id.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = script_event_id.h; sourceTree = "<group>"; };
 		07B84AE6205D12F2002F2224 /* dbl_mgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dbl_mgr.cpp; sourceTree = "<group>"; };
 		07B84AE7205D12F2002F2224 /* dbldata2netstream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dbldata2netstream.cpp; sourceTree = "<group>"; };
 		07B84AE8205D12F2002F2224 /* logic_compile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logic_compile.cpp; sourceTree = "<group>"; };
@@ -571,7 +569,6 @@
 		07B84ACA205D12C0002F2224 /* logic_parser */ = {
 			isa = PBXGroup;
 			children = (
-				07B84ACB205D12C0002F2224 /* _event_def.h */,
 				07B84ACC205D12C0002F2224 /* dbl_mgr.h */,
 				07B84ACD205D12C0002F2224 /* dbldata2netstream.h */,
 				07B84ACE205D12C0002F2224 /* logic_compile.h */,
@@ -584,7 +581,6 @@
 				07B84AD5205D12C0002F2224 /* logicParser.h */,
 				07B84AD6205D12C0002F2224 /* logicStruct.hpp */,
 				07B84AD7205D12C0002F2224 /* objectBaseMgr.h */,
-				07B84AD8205D12C0002F2224 /* script_event_id.h */,
 			);
 			path = logic_parser;
 			sourceTree = "<group>";

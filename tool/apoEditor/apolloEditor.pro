@@ -13,7 +13,7 @@ macx:{
     QMAKE_MAC_SDK = macosx10.13
     DEFINES += __ND_MAC__
     platform_name = darwin_x86_64
-    LIBS += -lnd_vm_dbg -lndclient_darwin_x86_64_d -liconv
+#    LIBS += -lnd_vm_dbg -lndclient_darwin_x86_64_d -liconv
 
 }
 unix:!macx{
@@ -42,8 +42,8 @@ win32{
 }
 
 
-LIBS += -L$$ndsdk_dir/lib -L$$apolib_dir/lib/$$platform_name  -L$$ndsdk_dir/lib/$$platform_name \
-        -L$$apoBP_dir/lib/$$platform_name -lapoBluePrint -llogic_parser_d
+#LIBS += -L$$ndsdk_dir/lib -L$$apolib_dir/lib/$$platform_name  -L$$ndsdk_dir/lib/$$platform_name \
+#        -L$$apoBP_dir/lib/$$platform_name -lapoBluePrint -llogic_parser_d
 
 DEFINES += X86_64
 

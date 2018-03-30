@@ -300,17 +300,16 @@ bool startDialog::compileScript(const char *scriptFile)
 //#include <QProcess>
 bool startDialog::expExcel()
 {
-    char path[1024];
-
     WriteLog("==============Begin export excel===============");
 
-	DBLDatabase::destroy_Instant();
-
+    DBLDatabase::destroy_Instant();
 	const char *exp_cmd = _getFromIocfg("game_data_export_cmd");
 	const char *excel_path = _getFromIocfg("excel_data_in_path");
 	const char *text_path = _getFromIocfg("text_data_out_path");
 	const char *package_file = _getFromIocfg("game_data_package_file");
 	const char *excel_list = _getFromIocfg("game_data_listfile");
+
+    char exp_cmdbuf[1024];
 
 	if (!exp_cmd || !excel_path || !text_path || !package_file){
 		WriteLog("export excel error : on read config file\n");
@@ -320,15 +319,15 @@ bool startDialog::expExcel()
 	const char *encodeName = getGameDateEncodeType();
 	
 #ifdef WIN32
-	snprintf(path, sizeof(path), " %s %s %s %s %s ",  exp_cmd, excel_list, excel_path, text_path, encodeName);	
+	snprintf(exp_cmdbuf, sizeof(exp_cmdbuf), " %s %s %s %s %s ",  exp_cmd, excel_list, excel_path, text_path, encodeName);
 #else
-    //const char *cur_dir = nd_getcwd();
-	snprintf(path, sizeof(path), "sh ./%s %s %s %s %s ",  exp_cmd, excel_list, excel_path, text_path, encodeName);
+    snprintf(exp_cmdbuf, sizeof(exp_cmdbuf), "sh %s %s %s %s %s ",  exp_cmd, excel_list, excel_path, text_path, encodeName);
+	
 #endif
-	int ret = system(path);
+	int ret = system(exp_cmdbuf);
 	
     if (0 != ret)	{
-		nd_logerror("run export shell %s\nerror: %s \n", path,nd_last_error());
+		nd_logerror("run export shell %s\nerror: %s \n", exp_cmdbuf,nd_last_error());
         return false;
 	}
 
@@ -343,6 +342,7 @@ bool startDialog::expExcel()
 	}
 
 	//DUMP FOR WINDOWS only
+#ifdef WIN32
 	do 	{
 		std::string strWinPack = package_file;
 		strWinPack += ".gbk";
@@ -358,6 +358,7 @@ bool startDialog::expExcel()
 		dbwin.Destroy();
 
 	} while (0);
+#endif
 
 	DBLDatabase dbtmp;
 	if (0 != dbtmp.LoadFromText(text_path, excel_list, encodeName, encodeName)) {
@@ -649,10 +650,16 @@ void startDialog::on_CompleteAll_clicked()
     WriteLog("==========one key complete success===========\n");
 }
 
-void startDialog::on_Test_clicked()
-{    
-    ClearLog();
-    if (false == runTest()){
-        WriteLog("Run test error!!!!!!!!!");
-    }
+#include "workdirdialog.h"
+void startDialog::on_WorkingPath_clicked()
+{
+	QString workPath;
+
+	if (inputSetting(workPath, this)) {
+		QMessageBox::warning(NULL, "Warning", "Please restart program!");
+		exit(0);
+	}
+	else {
+		QMessageBox::critical(NULL, "Warning", "Set work path error!");
+	}
 }
