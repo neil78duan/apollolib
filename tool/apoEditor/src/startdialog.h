@@ -49,7 +49,7 @@ public:
     void ClearLog() ;
     void WriteLog(const char *logText) ;
 
-    bool initXmlSetting(const char *editorCfg, const char *ioCfg) ;
+    //bool initXmlSetting(const char *editorCfg, const char *ioCfg) ;
 
 private slots:
     void on_Exit_clicked();
@@ -74,14 +74,14 @@ private:
 	const char *getScriptSetting(ndxml *scriptXml, const char *settingName);
 	int getScriptExpEncodeType(ndxml *scriptXml);
 	bool getScriptExpDebugInfo(ndxml *scriptXml);
-	const char *getScriptEntry();
+	//const char *getScriptEntry();
 
-    const char *getNetProtocol();
+    //const char *getNetProtocol();
 
     const char *getGameDateEncodeType();
 
     const char *_getFromIocfg(const char *cfgName);
-	bool _loadUserDefEnum(const char *userDefEnumFile, void *pDlg);
+	//bool _loadUserDefEnum(const char *userDefEnumFile, void *pDlg);
 	bool compileScript(const char *scriptFile);
 	bool compile();
 

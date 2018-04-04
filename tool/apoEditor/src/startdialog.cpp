@@ -566,9 +566,14 @@ void startDialog::on_Connect_clicked()
 
 void startDialog::on_ScriptEdit_clicked()
 {
+	const char *toExeCmd = _getFromIocfg("compile_to_exe_cmd");
+
 	EditorFrame *pMain = new EditorFrame();
 	pMain->setHostWidget(this);
 	pMain->setAttribute(Qt::WA_DeleteOnClose, true);
+	if (toExeCmd) {
+		pMain->SetCompileExeCmd(toExeCmd);
+	}
 
 	if (!loadDataBase()) {
 		nd_logerror("load database error\n");
