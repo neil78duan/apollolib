@@ -12,8 +12,10 @@
 
 #include "apollo_client.h"
 
+#ifndef WITHOUT_LOGIC_PARSER
 #include "logic_parser/logicEngineRoot.h"
 #include "logic_parser/dbl_mgr.h"
+#endif
 #include "ndapplib/ndsingleton.h"
 
 #include <string>

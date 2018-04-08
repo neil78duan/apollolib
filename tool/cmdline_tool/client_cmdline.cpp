@@ -220,7 +220,7 @@ ND_CMDLINE_FUNC_INSTANCE(sendfile)
 	size_t file_size =0 ;
 	void* pdata = nd_load_file(argv[1], &file_size); 
 	if (!pdata) {
-    	fprintf(stderr, "open file %s error \n", pdata) ;
+    	fprintf(stderr, "open file %s error \n", argv[1]) ;
 		return -1;
 	}
 	BigDataAsyncSend(__g_conn->GetHandle(), pdata, file_size, 0, send_file_ok) ;

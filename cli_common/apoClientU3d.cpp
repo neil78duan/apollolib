@@ -7,12 +7,12 @@
 */
 
 #include "apoClientU3d.h"
-#include "logic_parser/dbldata2netstream.h"
 #include "cli_common/dftCliMsgHandler.h"
 //#include "netMessage/message_inc.h"
 #include "script_event_id.h"
 
 #ifndef WITHOUT_LOGIC_PARSER
+#include "logic_parser/dbldata2netstream.h"
 
 class ApoScriptOwner : public  ClientMsgHandler::ApoConnectScriptOwner
 {

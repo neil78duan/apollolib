@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07106D1C207A19C800A263A8 /* libapollo_client_mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 07106D1D207A19C800A263A8 /* libapollo_client_mac.a */; };
+		07106D1F207A19D600A263A8 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 07106D1E207A19D600A263A8 /* libiconv.tbd */; };
 		0796E06B202C036800B7C9E5 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0796E06A202C036800B7C9E5 /* apoClientU3d.cpp */; };
 		07EC87B81D546B1A00C32925 /* atlantis_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87B01D546B1A00C32925 /* atlantis_test.cpp */; };
 		07EC87B91D546B1A00C32925 /* client_cmdline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87B21D546B1A00C32925 /* client_cmdline.cpp */; };
@@ -31,6 +33,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		07106D1D207A19C800A263A8 /* libapollo_client_mac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libapollo_client_mac.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		07106D1E207A19D600A263A8 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		0796E069202C036800B7C9E5 /* apoClientU3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apoClientU3d.h; sourceTree = "<group>"; };
 		0796E06A202C036800B7C9E5 /* apoClientU3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apoClientU3d.cpp; sourceTree = "<group>"; };
 		07EC87841D54694000C32925 /* cmdline_tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cmdline_tool; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,18 +56,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07106D1F207A19D600A263A8 /* libiconv.tbd in Frameworks */,
+				07106D1C207A19C800A263A8 /* libapollo_client_mac.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		07106D1B207A19C800A263A8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				07106D1E207A19D600A263A8 /* libiconv.tbd */,
+				07106D1D207A19C800A263A8 /* libapollo_client_mac.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		07EC877B1D54694000C32925 = {
 			isa = PBXGroup;
 			children = (
 				07EC87C01D546BF100C32925 /* cli_common */,
 				07EC87AF1D546B1A00C32925 /* cmdline_tool */,
 				07EC87851D54694000C32925 /* Products */,
+				07106D1B207A19C800A263A8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};

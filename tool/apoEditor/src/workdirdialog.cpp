@@ -41,9 +41,11 @@ workDirDialog::workDirDialog(QWidget *parent) :
     ui(new Ui::workDirDialog)
 {
     ui->setupUi(this);
-//     if(dftWorkPath && *dftWorkPath)
-//         ui->workingEdit->setText(dftWorkPath);
-// 
+	const char *curPath = nd_getcwd() ;
+	if(curPath && *curPath)
+		ui->workingEdit->setText(curPath);
+	
+//
 //     if(dftSettingFile && *dftSettingFile)
 //         ui->settingEdit->setText(dftSettingFile);
 }
