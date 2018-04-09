@@ -419,5 +419,8 @@
     <ClCompile Include="..\..\cli_common\apoClientU3d.cpp">
       <Filter>apollo\login</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\cJSON.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

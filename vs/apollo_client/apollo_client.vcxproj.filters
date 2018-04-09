@@ -404,5 +404,8 @@
     <ClCompile Include="..\..\attribute\roleattr_help.cpp">
       <Filter>apollo\attribute</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\cJSON.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
