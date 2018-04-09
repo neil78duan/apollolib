@@ -8,8 +8,19 @@
 @SET builder=%vsbuild%
 
 
+
+@set buildConfig=release
+
+@if "%3" == "debug" (
+	@set buildConfig=debug
+	goto :set_type_end 
+)
+:set_type_end
+
+
 cd ..\cfg\cpptmpl
-%builder% "cppTemplate.sln" /rebuild "debug|x64" 
+
+@%builder% "cppTemplate.sln" /rebuild "%buildConfig%|x64" 
 @if %errorlevel% NEQ 0  goto ERROR
 @cd %cur_dir%
 
