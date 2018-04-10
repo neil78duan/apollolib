@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		071B19841B58F63500E54619 /* libndclient_darwin_x86_64_d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 071B19831B58F63400E54619 /* libndclient_darwin_x86_64_d.a */; };
+		07253497207C8F62001FD566 /* libndcommon_mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 07253498207C8F62001FD566 /* libndcommon_mac.a */; };
+		0725349A207C8FB3001FD566 /* expLua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07253499207C8FB3001FD566 /* expLua.cpp */; };
 		07B0FC091AD923C900CEC9BD /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07B0FC071AD923C900CEC9BD /* Makefile */; };
 		07BC4A401AD77E47001B443E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07BC4A3F1AD77E47001B443E /* main.cpp */; };
 		07BC4A8E1AD7E623001B443E /* buildCS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07BC4A8D1AD7E623001B443E /* buildCS.cpp */; };
@@ -27,7 +28,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		071B19831B58F63400E54619 /* libndclient_darwin_x86_64_d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libndclient_darwin_x86_64_d.a; path = ../../server/ndsdk/lib/libndclient_darwin_x86_64_d.a; sourceTree = "<group>"; };
+		07253498207C8F62001FD566 /* libndcommon_mac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libndcommon_mac.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		07253499207C8FB3001FD566 /* expLua.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = expLua.cpp; sourceTree = "<group>"; };
 		07B0FC071AD923C900CEC9BD /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		07BAA49E1ADCCBDA00D15167 /* run_expoort.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = run_expoort.sh; sourceTree = "<group>"; };
 		07BC4A3C1AD77E47001B443E /* protocolBuilder */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = protocolBuilder; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,20 +46,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07253497207C8F62001FD566 /* libndcommon_mac.a in Frameworks */,
 				07CFB03D1B1308AA0061C219 /* libiconv.dylib in Frameworks */,
-				071B19841B58F63500E54619 /* libndclient_darwin_x86_64_d.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		071B19181B58F5A600E54619 /* ndsdk */ = {
+		07253496207C8F62001FD566 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				071B19831B58F63400E54619 /* libndclient_darwin_x86_64_d.a */,
+				07253498207C8F62001FD566 /* libndcommon_mac.a */,
 			);
-			name = ndsdk;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		07BC4A331AD77E47001B443E = {
@@ -66,10 +68,10 @@
 				07CFB03C1B1308AA0061C219 /* libiconv.dylib */,
 				07BAA49E1ADCCBDA00D15167 /* run_expoort.sh */,
 				07B0FC071AD923C900CEC9BD /* Makefile */,
-				071B19181B58F5A600E54619 /* ndsdk */,
 				07BC4A461AD78018001B443E /* config */,
 				07BC4A3E1AD77E47001B443E /* protocolBuilder */,
 				07BC4A3D1AD77E47001B443E /* Products */,
+				07253496207C8F62001FD566 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -84,6 +86,7 @@
 		07BC4A3E1AD77E47001B443E /* protocolBuilder */ = {
 			isa = PBXGroup;
 			children = (
+				07253499207C8FB3001FD566 /* expLua.cpp */,
 				07BC4A3F1AD77E47001B443E /* main.cpp */,
 				07BC4A8D1AD7E623001B443E /* buildCS.cpp */,
 			);
@@ -158,6 +161,7 @@
 			files = (
 				07B0FC091AD923C900CEC9BD /* Makefile in Sources */,
 				07BC4A8E1AD7E623001B443E /* buildCS.cpp in Sources */,
+				0725349A207C8FB3001FD566 /* expLua.cpp in Sources */,
 				07BC4A401AD77E47001B443E /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -243,9 +247,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					__MAC_OS__,
+					__ND_MAC__,
 					ND_UNIX,
-					"DEBUG=1",
 					"$(inherited)",
 				);
 				LIBRARY_SEARCH_PATHS = (
@@ -262,7 +265,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					__MAC_OS__,
+					__ND_MAC__,
 					ND_UNIX,
 				);
 				LIBRARY_SEARCH_PATHS = (

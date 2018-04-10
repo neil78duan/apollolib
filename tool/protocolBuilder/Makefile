@@ -10,15 +10,9 @@ OBJDIR = .obj
 include ../../Rules.make
 
 
-PROJECT_NAME := protoBuilder
-
-SRCDIR=./protocolBuilder
-
-
 PROJS = $(WORKDIR)/protoBuilder
 
-LFLAGS +=   -L$(NDHOME)/lib -l$(CLIENT_LIB)
-
+LFLAGS +=   -L$(NDHOME)/lib -l$(COMMON_LIB)
 
 all: $(PROJS) 
 

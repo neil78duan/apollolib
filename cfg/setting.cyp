@@ -218,6 +218,11 @@
 		</function_filter>
 	</create_function_filter>
 	
+	<create_http_filter name="标签页" create_type="1">
+		<function_filter name="类型_消息类"  create_template="create_http_handler" auto_index="1" expand_stat="1" accept_drag_in="create_http_handler">
+		</function_filter>
+	</create_http_filter>
+	
 	<create_event_function_filter name="标签页" create_type="1">
 		<function_filter name="事件分类"  create_template="create_event_callback" auto_index="1" expand_stat="1" accept_drag_in="event_callback_node">
 		</function_filter>
@@ -340,6 +345,68 @@
 		</event_callback_node>
 	</create_event_callback>
 	
+	
+	<create_http_handler name="http处理函数" create_type="1">	
+		<msg_handler_node name="http_handler1" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="1" preFillCmd="_localinit_msg_entry">
+			<func_params kinds="hide">
+				<input_param name="Param1">session</input_param>
+				<input_param name="Param2">requestInfo</input_param>
+				<input_param name="Param3">Listener</input_param>
+			</func_params>
+			<comment name="函数说明" expand="yes">
+				<desc>消息处理handle(session, request, listener)</desc>
+				<isGlobal kinds="bool">1</isGlobal>
+			</comment>
+			<function_init_block name="block_加载时运行" create_template="create_list2" expand_list="condition" auto_index="0">
+				<comment name="功能说明" rw_stat="read">加载时运行</comment>
+				<op_call_func name="节点_安装HTTP处理器" expand="yes" expand_list="comment">
+					<comment name="功能说明" rw_stat="read">安装http处理函数(listenName, reqPath,scriptName)</comment>
+					<apoEditorPos kinds="hide" x="210" y="40" offset_x="0" offset_y="0"/>
+					<func_name name="函数" kinds="hide" delete="no">CPP.apollo_set_http_handler</func_name>
+					<var name="监听器" kinds="string" delete="no">listener</var>
+					<var name="req路径" kinds="string" delete="no"/>
+					<param_collect name="脚本名" kinds="hide" delete="no">
+						<type name="类型" kinds="reference" reference_type="type_data_type" delete="no">14</type>
+						<var name="值" kinds="string" delete="no" restrict="type">none</var>
+					</param_collect>
+				</op_call_func>
+			</function_init_block>
+			<exception_catch_block name="节点_异常处理" create_template="create_list1" expand_list="comment" auto_index="2" expand_stat="1">
+				<comment name="功能说明" rw_stat="read">catch{}</comment>
+				<op_get_last_error name="节点_获得错误号" expand="yes">
+					<comment name="功能说明" rw_stat="read">get_last_error()</comment>
+					<apoEditorPos kinds="hide" x="210" y="220" offset_x="0" offset_y="0"/>
+				</op_get_last_error>
+				<op_call_func name="节点_调用: send_error()" create_template="create_input_param" auto_index="1" expand_list="comment,func_name" expand_stat="0">
+					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+					<apoEditorPos kinds="hide" x="481" y="208" offset_x="0" offset_y="0"/>
+					<func_name kinds="user_define" user_param="func_list">_realval=CPP.apollo_http_error&amp;_dispname=发送HTTP错误(errorId,desc)</func_name>
+					<param_collect name="参数" expand="yes">
+						<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+						<var kinds="string" delete="no" restrict="type">$value</var>
+					</param_collect>
+					<var name="错误说明" kinds="string" delete="no" restrict="type">not found</var>
+				</op_call_func>
+			</exception_catch_block>
+			<op_call_func name="节点_发送http回复" expand_list="comment,func_name" expand_stat="1">
+				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+				<apoEditorPos kinds="hide" x="314" y="397" offset_x="0" offset_y="0"/>
+				<func_name kinds="user_define" user_param="func_list">_realval=CPP.apollo_http_error&amp;_dispname=发送HTTP回复(status,header, body)</func_name>
+				<param_collect name="status" expand="yes" delete="no">
+					<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+					<var kinds="string" delete="no" restrict="type">0</var>
+				</param_collect>
+				<param_collect name="Header" expand="yes" delete="no">
+					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+					<var kinds="string" delete="no" restrict="type">none</var>
+				</param_collect>
+				<param_collect name="Body" expand="yes" delete="no">
+					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+					<var kinds="string" delete="no" restrict="type">none</var>
+				</param_collect>
+			</op_call_func>
+		</msg_handler_node>
+	</create_http_handler>
 	<!-- create create func argment lists -->
 	
 	<!-- create step in function -->

@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		07106D1C207A19C800A263A8 /* libapollo_client_mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 07106D1D207A19C800A263A8 /* libapollo_client_mac.a */; };
 		07106D1F207A19D600A263A8 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 07106D1E207A19D600A263A8 /* libiconv.tbd */; };
+		077B894D207C546900090DFD /* libapollo_client_mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 07106D1D207A19C800A263A8 /* libapollo_client_mac.a */; };
 		0796E06B202C036800B7C9E5 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0796E06A202C036800B7C9E5 /* apoClientU3d.cpp */; };
 		07EC87B81D546B1A00C32925 /* atlantis_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87B01D546B1A00C32925 /* atlantis_test.cpp */; };
 		07EC87B91D546B1A00C32925 /* client_cmdline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC87B21D546B1A00C32925 /* client_cmdline.cpp */; };
@@ -56,8 +56,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				077B894D207C546900090DFD /* libapollo_client_mac.a in Frameworks */,
 				07106D1F207A19D600A263A8 /* libiconv.tbd in Frameworks */,
-				07106D1C207A19C800A263A8 /* libapollo_client_mac.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,6 +279,8 @@
 					__ND_MAC__,
 					ND_DEBUG,
 					WITHOUT_LOGIC_PARSER,
+					"DEBUG=1",
+					ND_CLIENT_ONLY,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "../../../ndsdk/include ../../include ../../";
@@ -291,6 +293,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					__ND_MAC__,
 					DWITHOUT_LOGIC_PARSER,
+					ND_CLIENT_ONLY,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "../../../ndsdk/include ../../include ../../";

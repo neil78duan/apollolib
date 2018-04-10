@@ -3,4 +3,6 @@
 	<file name="apoGameServer" main_file="apollo_script.xml">../../../code/resource/script/game</file>
 	<file name="apoClient" main_file="client_script.xml">../../../code/resource/script/client</file>
 	<file name="apoSample" main_file="sample_script.xml" delete="no">../cfg</file>
+	<file name="t3" main_file="t3.xml">../../../code/resource/script/t3</file>
+	<file name="http_test" main_file="http_test.xml">../../../code/resource/script/http_test</file>
 </script_file_manager>

@@ -62,6 +62,7 @@ ifeq ($(DEBUG),y)
     CLIENT_LIB := ndclient_$(AIM_NAME)_d
     SRV_LIB := ndsdk_$(AIM_NAME)_d
 
+	COMMON_LIB := ndcommon_$(AIM_NAME)_d
 
 else
 
@@ -69,6 +70,7 @@ else
     CLIENT_LIB := ndclient_$(AIM_NAME)
     SRV_LIB := ndsdk_$(AIM_NAME)
 
+	COMMON_LIB := ndcommon_$(AIM_NAME)
 endif
 
 

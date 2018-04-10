@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07253494207C8D5C001FD566 /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = 0778FE46207B50F90057D91B /* cJSON.c */; };
+		07253495207C8D69001FD566 /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = 0778FE46207B50F90057D91B /* cJSON.c */; };
 		074D850E1D6C2C2A00201121 /* nd_time.c in Sources */ = {isa = PBXBuildFile; fileRef = 074D850D1D6C2C2A00201121 /* nd_time.c */; };
 		074D85101D6C2DE600201121 /* nd_time.c in Sources */ = {isa = PBXBuildFile; fileRef = 074D850D1D6C2C2A00201121 /* nd_time.c */; };
 		07533A2C1D6EF0B9004DD290 /* dftCliMsgHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07533A2A1D6EF0B9004DD290 /* dftCliMsgHandler.cpp */; };
@@ -96,6 +98,7 @@
 		0776F94D1E31C1DF005DCB69 /* roleattr_help.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0774B9101D991E1F00C6401F /* roleattr_help.cpp */; };
 		0776F9591E31C1DF005DCB69 /* dftCliMsgHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07533A2A1D6EF0B9004DD290 /* dftCliMsgHandler.cpp */; };
 		0776F95A1E31C1DF005DCB69 /* login_apollo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC86581D54411E00C32925 /* login_apollo.cpp */; };
+		0778FE47207B50F90057D91B /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = 0778FE46207B50F90057D91B /* cJSON.c */; };
 		0796E066202BF32100B7C9E5 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */; };
 		0796E067202BF3D100B7C9E5 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */; };
 		0796E068202BF3E700B7C9E5 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */; };
@@ -292,6 +295,8 @@
 		0776F8F71E31BECD005DCB69 /* smcs.rsp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = smcs.rsp; sourceTree = "<group>"; };
 		0776F9021E31C128005DCB69 /* apollo_u3d_mac.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = apollo_u3d_mac.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		0776F9041E31C128005DCB69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0778FE45207B50DC0057D91B /* cJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cJSON.h; sourceTree = "<group>"; };
+		0778FE46207B50F90057D91B /* cJSON.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cJSON.c; sourceTree = "<group>"; };
 		0796E064202BF32100B7C9E5 /* apoClientU3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = apoClientU3d.h; path = ../../../cli_common/apoClientU3d.h; sourceTree = "<group>"; };
 		0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = apoClientU3d.cpp; path = ../../../cli_common/apoClientU3d.cpp; sourceTree = "<group>"; };
 		07B84ACC205D12C0002F2224 /* dbl_mgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dbl_mgr.h; sourceTree = "<group>"; };
@@ -663,6 +668,7 @@
 		07EC84AE1D54400300C32925 /* nd_common */ = {
 			isa = PBXGroup;
 			children = (
+				0778FE45207B50DC0057D91B /* cJSON.h */,
 				074D850F1D6C2C3500201121 /* nd_time.h */,
 				07EC84AF1D54400300C32925 /* _nderr.h */,
 				07EC84B01D54400300C32925 /* list.h */,
@@ -806,6 +812,7 @@
 		07EC851F1D54400300C32925 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				0778FE46207B50F90057D91B /* cJSON.c */,
 				074D850D1D6C2C2A00201121 /* nd_time.c */,
 				07EC85201D54400300C32925 /* bintree.c */,
 				07EC85211D54400300C32925 /* callstack.c */,
@@ -1051,6 +1058,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07253495207C8D69001FD566 /* cJSON.c in Sources */,
 				0796E067202BF3D100B7C9E5 /* apoClientU3d.cpp in Sources */,
 				07B84B1E205D12F2002F2224 /* logic_debugger.cpp in Sources */,
 				075A8E7F1EA77CC900710AEA /* apoFormula.cpp in Sources */,
@@ -1173,6 +1181,7 @@
 				07EC86131D54400400C32925 /* nd_pubkey.c in Sources */,
 				07EC85F91D54400400C32925 /* nd_static_alloc.c in Sources */,
 				0776F8F81E31BECD005DCB69 /* apoCliApi.cpp in Sources */,
+				0778FE47207B50F90057D91B /* cJSON.c in Sources */,
 				07EC85FA1D54400400C32925 /* nd_str.c in Sources */,
 				07EC86121D54400400C32925 /* nd_cryptfile.c in Sources */,
 				07EC860E1D54400400C32925 /* r_keygen.c in Sources */,
@@ -1231,6 +1240,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07253494207C8D5C001FD566 /* cJSON.c in Sources */,
 				0796E068202BF3E700B7C9E5 /* apoClientU3d.cpp in Sources */,
 				07533A2D1D6EF0F2004DD290 /* dftCliMsgHandler.cpp in Sources */,
 				07B84B35205D12F2002F2224 /* objectBaseMgr.cpp in Sources */,
