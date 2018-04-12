@@ -1,0 +1,25 @@
+<?xml  version="1.0" encoding="utf-8" ?>
+<blueprint_setting kinds="hide" desc="setting for blueprint editor" is_file_info="true">
+	<hide_children>
+		<node>msg_handler_node</node>
+		<node>func_node</node>
+		<node>event_callback_node</node>
+		<node>moduleInfo</node>
+	</hide_children>
+</blueprint_setting>
+<moduleInfo name="模块信息" expand="yes">
+	<moduleName name="模块名" kinds="string">moduleName</moduleName>	
+	<out_file name="输出文件" kinds="out_file">new-script_out.bin</out_file>
+	<script_with_debug name="调试信息" kinds="bool">0</script_with_debug>
+	<user_define_enum name="用户定义类型表" kinds="in_file">./setting/userDefList.xml</user_define_enum>	
+	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">1</script_out_encode>		
+	<Author name="作者" kinds="string">YourName</Author>
+	<LastMod name="最后修改" kinds="hide">1492403624</LastMod>
+</moduleInfo>
+<baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="0" expand_stat="0" accept_drag_in="func_node">	
+</baseFunction>
+<message_handler name="http请求处理" delete="no" create_template="create_http_filter,create_http_handler" auto_index="0" expand_stat="0" accept_drag_in="create_http_handler">
+</message_handler>
+
+<event_callback name="事件处理" delete="no" create_template="create_event_function_filter,create_event_callback" auto_index="0" expand_stat="1" accept_drag_in="event_callback_node">	
+</event_callback>

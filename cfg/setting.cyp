@@ -347,11 +347,11 @@
 	
 	
 	<create_http_handler name="http处理函数" create_type="1">	
-		<msg_handler_node name="http_handler1" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="1" preFillCmd="_localinit_msg_entry">
+		<msg_handler_node name="http_handler" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="1" preFillCmd="_localinit_msg_entry">
 			<func_params kinds="hide">
 				<input_param name="Param1">session</input_param>
-				<input_param name="Param2">requestInfo</input_param>
-				<input_param name="Param3">Listener</input_param>
+				<input_param name="Param2">Form</input_param>
+				<input_param name="Param3">requestObj</input_param>
 			</func_params>
 			<comment name="函数说明" expand="yes">
 				<desc>消息处理handle(session, request, listener)</desc>
@@ -380,7 +380,11 @@
 				<op_call_func name="节点_调用: send_error()" create_template="create_input_param" auto_index="1" expand_list="comment,func_name" expand_stat="0">
 					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
 					<apoEditorPos kinds="hide" x="481" y="208" offset_x="0" offset_y="0"/>
-					<func_name kinds="user_define" user_param="func_list">_realval=CPP.apollo_http_error&amp;_dispname=发送HTTP错误(errorId,desc)</func_name>
+					<func_name kinds="user_define" user_param="func_list">_realval=CPP.apollo_http_error&amp;_dispname=发送HTTP错误(session,errorId,desc)</func_name>
+					<param_collect name="参数" expand="yes">
+						<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
+						<var kinds="string" delete="no" restrict="type">1</var>
+					</param_collect>
 					<param_collect name="参数" expand="yes">
 						<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
 						<var kinds="string" delete="no" restrict="type">$value</var>
@@ -391,10 +395,15 @@
 			<op_call_func name="节点_发送http回复" expand_list="comment,func_name" expand_stat="1">
 				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
 				<apoEditorPos kinds="hide" x="314" y="397" offset_x="0" offset_y="0"/>
-				<func_name kinds="user_define" user_param="func_list">_realval=CPP.apollo_http_error&amp;_dispname=发送HTTP回复(status,header, body)</func_name>
+				<func_name kinds="user_define" user_param="func_list">_realval=CPP.apollo_http_respone&amp;_dispname=发送HTTP回复(session,header, body)</func_name>
+				<param_collect name="参数" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
+					<var kinds="string" delete="no" restrict="type">1</var>
+				</param_collect>
+					
 				<param_collect name="status" expand="yes" delete="no">
 					<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-					<var kinds="string" delete="no" restrict="type">0</var>
+					<var kinds="string" delete="no" restrict="type">200</var>
 				</param_collect>
 				<param_collect name="Header" expand="yes" delete="no">
 					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>

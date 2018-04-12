@@ -104,6 +104,13 @@ bool ApoGameObj::SendEvent1(int event, const DBLDataNode &val1)
 }
 
 //////////////////////////////////////////////////////////////////////////
+LogicObjectBase *ApoGameObj::getObjectMgr(const char* destName)
+{
+	if (0 == ndstricmp(destName, "owner")) {
+		return  this;
+	}
+	return NULL;
+}
 
 bool ApoGameObj::getOtherObject(const char*objName, DBLDataNode &val)
 {
@@ -113,17 +120,18 @@ bool ApoGameObj::getOtherObject(const char*objName, DBLDataNode &val)
 		val.InitSet((void*)hListen, OT_OBJ_NDHANDLE);
 		return true;
 	}
-	else if (0 == ndstricmp(objName, "world-connector"))	{
-		NDConnector &conn = getWorldConnect();
-		val.InitSet((void*)conn.GetHandle(), OT_OBJ_NDHANDLE);
-		return true;
-	}
 
-	else if (0 == ndstricmp(objName, "FormatMsgData"))	{
-		userDefineDataType_map_t &msgObj = get_msgFormat();
-		val.InitSet((void*)&msgObj);
-		return true;
-	}
+// 	else if (0 == ndstricmp(objName, "world-connector"))	{
+// 		NDConnector &conn = getWorldConnect();
+// 		val.InitSet((void*)conn.GetHandle(), OT_OBJ_NDHANDLE);
+// 		return true;
+// 	}
+// 
+// 	else if (0 == ndstricmp(objName, "FormatMsgData"))	{
+// 		userDefineDataType_map_t &msgObj = get_msgFormat();
+// 		val.InitSet((void*)&msgObj);
+// 		return true;
+// 	}
 
 	else if (0 == ndstricmp(objName, "LogPath")) {
 		NDInstanceBase *pInst = getbase_inst();

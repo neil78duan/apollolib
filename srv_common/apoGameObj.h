@@ -41,7 +41,7 @@ public:
 	int getScriptError() { return m_logicEngine.getErrno(); }
 
 
-	//LogicObjectBase *getObjectMgr(const char* destName);
+	LogicObjectBase *getObjectMgr(const char* destName);
 	bool getOtherObject(const char*objName, DBLDataNode &val);
 
 	typedef std::map<std::string, LogicObjectBase*, apoStringLess<std::string> > objectMgr_vct;
@@ -54,9 +54,6 @@ protected:
 
 bool apollo_func_machine_version(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 
-extern const char *getGameDataFile();
-extern const char *getGameScriptFile();
-extern userDefineDataType_map_t &get_msgFormat();
 
 
 #endif 
