@@ -40,6 +40,10 @@ public:
 	bool SendEvent1(int event, const DBLDataNode &val1);
 	int getScriptError() { return m_logicEngine.getErrno(); }
 
+	bool opRead(const DBLDataNode& id, DBLDataNode &val);
+	bool opWrite(const DBLDataNode& id, const DBLDataNode &val);
+	bool opAdd(const DBLDataNode& id, const DBLDataNode &val);
+	bool opSub(const DBLDataNode& id, const  DBLDataNode &val);
 
 	LogicObjectBase *getObjectMgr(const char* destName);
 	bool getOtherObject(const char*objName, DBLDataNode &val);

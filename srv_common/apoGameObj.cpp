@@ -104,6 +104,37 @@ bool ApoGameObj::SendEvent1(int event, const DBLDataNode &val1)
 }
 
 //////////////////////////////////////////////////////////////////////////
+
+bool ApoGameObj::opRead(const DBLDataNode& id, DBLDataNode &val)
+{
+	PARSE_TRACE("logic_engine_test: opRead(%d) \n", id.GetInt());
+	//_setval(val);
+	return true;
+}
+
+bool ApoGameObj::opWrite(const DBLDataNode& id, const DBLDataNode &val)
+{
+	PARSE_TRACE("logic_engine_test: opWrite(%d) \n", id.GetInt());
+	//_setval(val);
+	return true;
+}
+
+
+bool ApoGameObj::opAdd(const DBLDataNode& id, const DBLDataNode &val)
+{
+	PARSE_TRACE("logic_engine_test: opAdd(%d) \n", id.GetInt());
+	//_setval(val);
+	return true;
+}
+
+
+bool ApoGameObj::opSub(const DBLDataNode& id, const  DBLDataNode &val)
+{
+	PARSE_TRACE("logic_engine_test: opSub(%d) \n", id.GetInt());
+	//_setval(val);
+	return true;
+}
+
 LogicObjectBase *ApoGameObj::getObjectMgr(const char* destName)
 {
 	if (0 == ndstricmp(destName, "owner")) {
