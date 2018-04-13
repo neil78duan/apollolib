@@ -25,6 +25,7 @@ LOCAL_SRC_FILES := ../../../ndsdk/src/nd_common/src/bintree.c \
 ../../../ndsdk/src/nd_common/src/recbuf.c \
 ../../../ndsdk/src/nd_common/src/nd_iconv.c \
 ../../../ndsdk/src/nd_common/src/source_log.c \
+../../../ndsdk/src/nd_common/src/cJSON.c \
 ../../../ndsdk/src/nd_vm/src/nd_asm.c \
 ../../../ndsdk/src/nd_vm/src/nd_formula.c \
 ../../../ndsdk/src/nd_vm/src/nd_vm.c \
