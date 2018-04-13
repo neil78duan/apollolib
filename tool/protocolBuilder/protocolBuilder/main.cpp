@@ -673,13 +673,13 @@ int build_dataType(ndxml_root *xmlfile, const char *out_file,bool saveDB)
 		snprintf(buf, sizeof(buf), "%s.h",out_file );
 		FILE *pf = fopen(buf, "w") ;
 		if (!pf){
-			fprintf(stderr, " open out put file %s error \n", buf ) ;
+			fprintf(stderr, " open out put file %s error: %s \n", buf , nd_last_error() ) ;
 			return -1 ;
 		}
 		snprintf(buf, sizeof(buf), "%s.cpp",out_file );
 		FILE *pfCpp = fopen(buf, "w") ;
 		if (!pf){
-			fprintf(stderr, " open out put file %s error \n", buf ) ;
+			fprintf(stderr, " open out put file %s error: %s \n", buf, nd_last_error());
 			return -1 ;
 		}
 
@@ -1205,10 +1205,10 @@ int main(int argc, char *argv[])
 		if(0 == strcmp(argv[i],"-d" ) && i< argc-1) {
 			_input_dir = argv[++i] ;
 		}
-		if (0 == strcmp(argv[i], "-o") && i < argc - 1) {
+		else if (0 == strcmp(argv[i], "-o") && i < argc - 1) {
 			_output_dir = argv[++i];
 		}
-		if (0==strcmp("-encode", argv[i])) {
+		else if (0==strcmp("-encode", argv[i])) {
 			encode = argv[++i] ;
 		}
 	}
@@ -1229,7 +1229,7 @@ int main(int argc, char *argv[])
 #define RESET_OUT_PATH(_name) do {	\
 		std::string myPath = _output_dir + _name ;	\
 		nd_rmdir(myPath.c_str());			\
-		nd_mkdir(myPath.c_str());			\
+		if(-1==nd_mkdir(myPath.c_str()) ) { nd_logerror("create direct %s error\n", myPath.c_str());}	\
 	}while(0)
 
 	RESET_OUT_PATH("/cpp");

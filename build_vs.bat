@@ -2,12 +2,12 @@
 
 @set apo_dir=%CD%
 
+@rem @SET VS_BIN=%VS140COMNTOOLS%
+@rem @set VS_BIN=%VS_BIN:Tools=IDE%
+@rem @set vsbuild="%VS_BIN%devenv"
+@rem @SET builder=%vsbuild%
 
-@SET VS_BIN=%VS140COMNTOOLS%
-@set VS_BIN=%VS_BIN:Tools=IDE%
-@set vsbuild="%VS_BIN%devenv"
-@SET builder=%vsbuild%
-
+@SET builder=devenv.exe
 
 cd vs
 %builder% "vsApo.sln" /rebuild "debug|x64" 

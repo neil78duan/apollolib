@@ -13,7 +13,8 @@ macx:{
     QMAKE_MAC_SDK = macosx10.13
     DEFINES += __ND_MAC__
     platform_name = darwin_x86_64
-#    LIBS += -lnd_vm_dbg -lndclient_darwin_x86_64_d -liconv
+
+    LIBS += -lndclient_darwin_x86_64_d -llogic_parser_d -lapoBluePrint_d -liconv
 
 }
 unix:!macx{
@@ -21,29 +22,26 @@ unix:!macx{
     DEFINES += __ND_LINUX__
     platform_name = linux_x86_64
 
-    LIBS += -lnd_vm_dbg -lndclient_linux_x86_64_d -liconv
+    LIBS += -lndclient_linux_x86_64_d -llogic_parser_d -lapoBluePrint_d -liconv
 }
 
 win32{
     message(WIN32!)
     platform_name = Win64
-    LIBS += -L$$ndsdk_dir/lib/win64
 
     CONFIG(debug, debug|release) {
         message(BUILD win32 -debug)
-        LIBS += -lndclient_s_d
+        LIBS += -lndclient_s_d -llogic_parser_d -lapoBluePrint_d
         DEFINES +=  ND_DEBUG
     } else {
         message(BUILD win32 -release)
-        LIBS += -lndclient_s
+        LIBS += -lndclient_s -llogic_parser -lapoBluePrint
     }
 
     DEFINES += __ND_WIN__ DO_NOT_CONVERT_PRINT_TEXT
 }
 
-
-#LIBS += -L$$ndsdk_dir/lib -L$$apolib_dir/lib/$$platform_name  -L$$ndsdk_dir/lib/$$platform_name \
-#        -L$$apoBP_dir/lib/$$platform_name -lapoBluePrint -llogic_parser_d
+LIBS += -L$$ndsdk_dir/lib  -L$$ndsdk_dir/lib/$$platform_name -L$$apolib_dir/lib/$$platform_name
 
 DEFINES += X86_64
 
@@ -59,7 +57,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = ../../editor/apolloEditor
+TARGET = ../../../editor/apolloEditor
 TEMPLATE = app
 
 
