@@ -25,6 +25,7 @@ typedef MYSQL_ROW ROW_SQL ;					//结果集的行指针
 typedef MYSQL_STMT *STMT_CONTEXT ;
 typedef MYSQL_STMT **STMT_HANDLE ;
 typedef MYSQL *HANDLE_DB;
+typedef MYSQL_FIELD *FIELD_INFO;
 
 #define STMT_CONTEXT_T0_HANDLE(_context) (&(_context))
 #define STMT_HANDLE_TO_CONTEXT(_handle) (*(_handle))
@@ -116,11 +117,14 @@ public:
 	ROW_SQL sql_fetch() ;
 	/* 结果集合中的记录数 */
 	int sql_affected_rows();
-	/*返回select时得到的记录*/
-	
 
-	 /*得到结果集中的记录数,在mysql_store_result() 后使用*/
+	int sql_num_rows();		/* get num of rows */
+	int sql_num_fields();	/* get num of fields */
+	FIELD_INFO sql_field_info(int filed_index);
+
+	 /*得到结果集中的列数,在mysql_store_result() 后使用*/
 	 int sql_field_count() ;
+
 	/*释放结果集*/
 	 void sql_free_result() ;
 	/* 关闭数据库 */

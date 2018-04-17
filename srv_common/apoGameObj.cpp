@@ -186,10 +186,6 @@ bool ApoGameObj::getOtherObject(const char*objName, DBLDataNode &val)
 		return true;
 	}
 
-	else if (0 == ndstricmp(objName, "SelfName")) {
-		val.InitSet("gameserverInst");
-		return true;
-	}
 	else if (0 == ndstricmp(objName, "self")) {
 		val.InitSet((void*)this, OT_OBJ_BASE_OBJ);
 		return true;

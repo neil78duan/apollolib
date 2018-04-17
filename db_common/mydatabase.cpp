@@ -143,6 +143,32 @@ RE_EXE:
 	return 0;
 }
 
+
+int CMyDatabase::sql_num_rows()
+{
+	if (m_result_sql) {
+		return mysql_num_rows(m_result_sql);
+	}
+	return 0;
+}
+int CMyDatabase::sql_num_fields()
+{
+	if (m_result_sql) {
+		return mysql_num_fields(m_result_sql);
+	}
+	return 0;
+}
+
+FIELD_INFO CMyDatabase::sql_field_info(int filed_index)
+{
+
+	if (m_result_sql) {
+		return mysql_fetch_field_direct(m_result_sql, filed_index);
+	}
+	return 0;
+	
+}
+
 int  CMyDatabase::sql_affected_rows( )
 {
 	 return (int) mysql_affected_rows(db_handle);

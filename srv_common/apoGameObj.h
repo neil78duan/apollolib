@@ -56,7 +56,7 @@ protected:
 };
 
 
-bool apollo_func_machine_version(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+//bool apollo_func_machine_version(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
 
 
 
