@@ -54,7 +54,7 @@ namespace ClientMsgHandler
 	void ApoConnectScriptOwner::Destroy()
 	{
 		m_conn = 0;
-		m_dataType.clear();
+		//m_dataType.clear();
 		m_msgIdName.clear();
 	}
 	void ApoConnectScriptOwner::setConn(NDIConn *conn)
@@ -72,8 +72,7 @@ namespace ClientMsgHandler
 			return true;
 		}
 		else if (0==ndstricmp(objName, "FormatMsgData")){
-
-			val.InitSet((void*)&m_dataType);
+			val.InitSet((void*)&(LogicEngineRoot::get_Instant()->getGlobalDataType()));
 			return true;
 		}
 		else if (0 == ndstricmp(objName, "msgIdNameFormat")) {
@@ -135,7 +134,7 @@ namespace ClientMsgHandler
 
 	bool ApoConnectScriptOwner::loadDataType(const char *file)
 	{
-		if (-1 == loadUserDefFromMsgCfg(file, m_dataType)){
+		if (-1 == loadUserDefFromMsgCfg(file, LogicEngineRoot::get_Instant()->getGlobalDataType())){
 			return false;
 		}
 		return true;

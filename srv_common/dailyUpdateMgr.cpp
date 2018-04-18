@@ -36,7 +36,7 @@ int AlarmBase::Init(const DBLDataNode *data, int version)
 
 	const user_addition_map& datas = saveData.getDataMap();
 	for (user_addition_map::const_iterator it = datas.begin(); it != datas.end(); it++){
-		NDUINT64 val = it->second.GetInt64();
+		NDUINT64 val = it->second.value.GetInt64();
 		NDUINT32 id = (val >> 48);
 		time_t t = val & 0xffffffffffff;
 		const char *name = getNameFromCfg(id);

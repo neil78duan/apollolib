@@ -158,11 +158,11 @@ bool ApoGameObj::getOtherObject(const char*objName, DBLDataNode &val)
 // 		return true;
 // 	}
 // 
-// 	else if (0 == ndstricmp(objName, "FormatMsgData"))	{
-// 		userDefineDataType_map_t &msgObj = get_msgFormat();
-// 		val.InitSet((void*)&msgObj);
-// 		return true;
-// 	}
+	else if (0 == ndstricmp(objName, "FormatMsgData"))	{
+		userDefineDataType_map_t &msgObj = LogicEngineRoot::get_Instant()->getGlobalDataType();
+		val.InitSet((void*)&msgObj);
+		return true;
+	}
 
 	else if (0 == ndstricmp(objName, "LogPath")) {
 		NDInstanceBase *pInst = getbase_inst();

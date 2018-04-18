@@ -17,11 +17,33 @@
 #include <string>
 #include "logic_parser/objectBaseMgr.h"
 
+struct additionDataNode
+{
+	std::string typeName;
+	DBLDataNode value;
 
-typedef std::map<std::string, DBLDataNode> user_addition_map;
+	additionDataNode() 
+	{}
+	additionDataNode(const char *name, const DBLDataNode &val) :  value(val)
+	{
+		if (name && *name) {
+			typeName = name;
+		}
+	}
 
-typedef NDAffair<std::string, DBLDataNode> AdditionDataAffair;
-// store player addition data key-value (string, DBLDataNode)
+	additionDataNode& operator = (const additionDataNode &r)
+	{
+		typeName = r.typeName;
+		value = r.value;
+		return *this;
+	}
+};
+
+typedef std::map<std::string, additionDataNode> user_addition_map;
+typedef NDAffair<std::string, additionDataNode> AdditionDataAffair;
+
+#define USER_ADDITION_DATA_TYPE "UserAdditionData"
+
 class UserAdditionData :public LogicObjectBase, public AdditionDataAffair
 {
 	typedef AdditionDataAffair myBaseAff;
@@ -30,16 +52,16 @@ public:
 	~UserAdditionData ();
 
 	int FromStream(void *data, size_t size, int byteOrder = 1);
-	int ToStream(void *buf, size_t bufsize, int byteOrder = 1) const;
+	int ToStream(void *buf, size_t bufsize, int byteOrder = 1, bool withTypeName = true) const;
 	
 	const DBLDataNode *getData(const char *name) const;
-	bool setData(const char *name, const DBLDataNode &val);
+	bool setData(const char *name, const DBLDataNode &val, const char*typeName=NULL);
 	bool removeData(const char *name);
-	bool setData(const char *name, void*binData, size_t size);
-	bool setData(const char *name, const userdata_info* data);
+	bool setData(const char *name, void*binData, size_t size, const char*typeName = NULL);
+	bool setData(const char *name, const userdata_info* data, const char*typeName = NULL);
 	
 	
-	bool convert2node(DBLDataNode &val, int byteOrder = 1) const;
+	bool convert2node(DBLDataNode &val, int byteOrder = 1,bool withTypeName= true) const;
 	bool Init(const DBLDataNode *val, int version = 0, int byteOrder = 1);
 	int toStream(DBLDataNode *outData, int byteOrder = 1) const
 	{
@@ -63,7 +85,7 @@ public:
 	bool RollbackAffair();
 protected:
 
-	void Undo(const std::string &index, const  DBLDataNode &old_val, int optype);
+	void Undo(const std::string &index, const  additionDataNode &old_val, int optype);
 private:
 	user_addition_map m_data_map;
 };

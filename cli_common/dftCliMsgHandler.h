@@ -63,7 +63,7 @@ int apollo_cli_msg_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t
 		void LoadMsgDataTypeFromServer();
 	protected:
 		NDIConn *m_conn;
-		userDefineDataType_map_t m_dataType;
+		//userDefineDataType_map_t m_dataType;
 		msgIdNameFormat_vct m_msgIdName;
 	};
 	

@@ -82,11 +82,11 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_runsql, "db_Ö´ÐÐsql(db_connector, sql_text)")
 	do {
 		const char *pVarName = strchr(pInput, '$');
 		if (pVarName) {
+			//find var name 
 			char myName[128];
 			int len = ndstr_parse_variant_n(pVarName, myName,sizeof(myName));
 			if (len == 0) {
 				nd_logerror("parse %s error\n", pVarName);
-
 				parser->setErrno(NDERR_PARAM_INVALID);
 				return false;
 			}
@@ -102,23 +102,35 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_runsql, "db_Ö´ÐÐsql(db_connector, sql_text)")
 			}
 			if (!var1.CheckValid()) {
 				nd_logerror("var %s is invalid\n", pVarName);
+				parser->setErrno(NDERR_PARAM_INVALID);
 				return false;
 			}
 			
+			//copy before this var
 			size_t datalen = pVarName - pInput;
-			memcpy(pOutaddr, pInput, datalen);
-			
+			memcpy(pOutaddr, pInput, datalen);			
 			pOutaddr += datalen;
 			size -= datalen;
 			pInput = pVarName + len;
 
-			datalen = snprintf(pOutaddr, size, "%s", var1.GetText());
+			//copy this var text-value
+			if (var1.GetDataType() == OT_BINARY_DATA) {
+				datalen = pDBconn->escape_sql_string(pOutaddr, (char*)var1.GetBinary(), var1.GetBinarySize());
+			}
+			else {
+				std::string varString = var1.GetString();
+				if (varString.empty()) {
+					nd_logerror("var %s is invalid\n", pVarName);
+					parser->setErrno(NDERR_PARAM_INVALID);
+					return false;
+				}
+				datalen = pDBconn->escape_sql_string(pOutaddr, (char*)varString.c_str(), varString.size());
+			}
 			pOutaddr += datalen;
 			size -= datalen;
 		}
 		else {
 			strncpy(pOutaddr, pInput, size);
-
 			break;
 		}
 	} while (pInput);

@@ -198,7 +198,12 @@ bool apoHttpScriptMgr::getOtherObject(const char*objName, DBLDataNode &val)
 		val.InitSet((void*)hListen, OT_OBJ_NDHANDLE);
 		return true;
 	}
-	
+
+	else if (0 == ndstricmp(objName, "FormatMsgData")) {
+		userDefineDataType_map_t &msgObj = LogicEngineRoot::get_Instant()->getGlobalDataType();
+		val.InitSet((void*)&msgObj);
+		return true;
+	}
 	else if (0 == ndstricmp(objName, "LogPath")) {
 		NDInstanceBase *pInst = getbase_inst();
 		server_config *pcfg = pInst->GetInstConfig();
