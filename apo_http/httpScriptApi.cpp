@@ -105,6 +105,9 @@ APOLLO_SCRIPT_API_DEF(apollo_http_respone, "HTTP_发送回复(session,status, header
 	}
 
 	if (args[4].CheckValid()) {
+		if (args[4].GetDataType() == OT_USER_DEFINED) {
+			args[4].setOutAsJson(true);
+		}
 		args[4].toStdString(response.m_body);
 	}
 
@@ -142,7 +145,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_get_header, "http_获得header(requestObj)")
 	return true;
 }
 
-APOLLO_SCRIPT_API_DEF(apollo_http_get_body, "http_获得body(requestObj)")
+APOLLO_SCRIPT_API_DEF(apollo_http_get_body, "http_获得请求body(requestObj)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
 	if (args[1].GetDataType() != OT_OBJ_NDOBJECT) {
@@ -179,6 +182,71 @@ APOLLO_SCRIPT_API_DEF(apollo_http_get_listener, "http_获得Listener(requestObj)")
 	result.InitSet(request->m_userData, OT_OBJ_NDOBJECT);
 	return true;
 }
+
+
+APOLLO_SCRIPT_API_DEF(apollo_http_build_body, "http_生成body( body_text)")
+{
+	CHECK_ARGS_NUM(args, 2, parser);
+	CHECK_DATA_TYPE(args[1], OT_STRING, parser);
+
+	const char *pInput = args[1].GetText();
+	if (!pInput) {
+		parser->setErrno(NDERR_PARAM_INVALID);
+		return false;
+	}
+
+	char sql_buf[0x10000];
+	char *pOutaddr = sql_buf;
+	size_t size = sizeof(sql_buf);
+	//std::string 
+	do {
+		const char *pVarName = strchr(pInput, '$');
+		if (pVarName) {
+			//find var name 
+			char myName[USER_DEF_VAR_NAME_SIZE];
+			int len = ndstr_parse_variant_n(pVarName, myName, sizeof(myName));
+			if (len == 0) {
+				nd_logerror("parse %s error\n", pVarName);
+				parser->setErrno(NDERR_PARAM_INVALID);
+				return false;
+			}
+			int offset = 1;
+			if (IS_NUMERALS(myName[1]) || 0 == ndstricmp(&myName[1], "value")) {
+				offset = 0;
+			}
+			DBLDataNode var1;
+			if (!parser->getVarValue(&myName[offset], var1)) {
+				nd_logerror("can not found %s \n", pVarName);
+				parser->setErrno(NDERR_PARAM_INVALID);
+				return false;
+			}
+			if (!var1.CheckValid()) {
+				nd_logerror("var %s is invalid\n", pVarName);
+				parser->setErrno(NDERR_PARAM_INVALID);
+				return false;
+			}
+
+			//copy before this var
+			size_t datalen = pVarName - pInput;
+			memcpy(pOutaddr, pInput, datalen);
+			pOutaddr += datalen;
+			size -= datalen;
+			pInput = pVarName + len;
+
+			datalen = var1.Sprint(pOutaddr, size);
+			pOutaddr += datalen;
+			size -= datalen;
+		}
+		else {
+			strncpy(pOutaddr, pInput, size);
+			break;
+		}
+	} while (pInput && size > 0);
+	result.InitSet(sql_buf);
+
+	return true;
+}
+
 ///////////////////////////////////////////////
 
 apoHttpScriptMgr::apoHttpScriptMgr(): m_logicEngine(this)

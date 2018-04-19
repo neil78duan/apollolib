@@ -4,5 +4,4 @@
 	<file name="apoClient" main_file="client_script.xml">../../../code/resource/script/client</file>
 	<file name="apoSample" main_file="sample_script.xml" delete="no">../cfg</file>
 	<file name="gmHttp" main_file="gmHttp.xml">../../../code/resource/script/gmHttp</file>
-	<file name="httptest4" main_file="httptest4.xml">../../../code/resource/script/httptest4</file>
 </script_file_manager>
