@@ -67,24 +67,21 @@ function beginDownload(filePath, req, resp, down) {
 function Download(filePath,resp, req ) {
     
     fs.exists(filePath, function(exist) {
-                if(exist) {
-                beginDownload(filePath,req, resp, function(config) {
-                              
-                           fReadStream = fs.createReadStream(filePath, {
-                                                             encoding : 'binary',
-                                                             bufferSize : 1024 * 128,
-                                                             start : config.startPos,
-                                                             end : config.fileSize
-                                                             });
-                           fReadStream.on('data', function(chunk) {
-                                          resp.write(chunk, 'binary');
-                                          });
-                           fReadStream.on('end', function() {
-                                          resp.end();
-                                          });
-                           });
-                }
+        if(exist) {
+            beginDownload(filePath,req, resp, function(config) {
+                fReadStream = fs.createReadStream(filePath, {
+                    encoding: 'binary',
+                    bufferSize: 1024 * 128,
+                    start: config.startPos,
+                    end: config.fileSize
                 });
+                fReadStream.on('data', function (chunk) {
+                    resp.write(chunk, 'binary');
+                });
+                fReadStream.on('end', function () { resp.end(); });
+            });
+        }
+    });
 }
 exports.resumableBuffer = function(resp, req,buf)
 {

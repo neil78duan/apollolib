@@ -219,7 +219,7 @@
 	</create_function_filter>
 	
 	<create_http_filter name="标签页" create_type="1">
-		<function_filter name="类型_消息类"  create_template="create_http_handler" auto_index="1" expand_stat="1" accept_drag_in="create_http_handler">
+		<function_filter name="类型_消息类"  create_template="create_http_handler" auto_index="1" expand_stat="1" accept_drag_in="msg_handler_node">
 		</function_filter>
 	</create_http_filter>
 	
@@ -347,24 +347,26 @@
 	
 	
 	<create_http_handler name="http处理函数" create_type="1">	
-		<msg_handler_node name="http_handler" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="1" preFillCmd="_localinit_msg_entry">
+		<msg_handler_node name="http_req_test" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="1" preFillCmd="_localinit_msg_entry">			
 			<func_params kinds="hide">
 				<input_param name="Param1">session</input_param>
 				<input_param name="Param2">Form</input_param>
 				<input_param name="Param3">requestObj</input_param>
 			</func_params>
+			<apoEditorPos kinds="hide" x="20" y="400" offset_x="0" offset_y="0"/>
 			<comment name="函数说明" expand="yes">
 				<desc>消息处理handle(session, request, listener)</desc>
 				<isGlobal kinds="bool">1</isGlobal>
 			</comment>
 			<function_init_block name="block_加载时运行" create_template="create_list2" expand_list="condition" auto_index="0">
 				<comment name="功能说明" rw_stat="read">加载时运行</comment>
+				<apoEditorPos kinds="hide" x="10" y="20" offset_x="0" offset_y="0"/>
 				<op_call_func name="节点_安装HTTP处理器" expand="yes" expand_list="comment">
 					<comment name="功能说明" rw_stat="read">安装http处理函数(listenName, reqPath,scriptName)</comment>
 					<apoEditorPos kinds="hide" x="210" y="40" offset_x="0" offset_y="0"/>
 					<func_name name="函数" kinds="hide" delete="no">CPP.apollo_set_http_handler</func_name>
 					<var name="监听器" kinds="string" delete="no">listener</var>
-					<var name="req路径" kinds="string" delete="no"/>
+					<var name="req路径" kinds="string" delete="no">helloworld</var>
 					<param_collect name="脚本名" kinds="hide" delete="no">
 						<type name="类型" kinds="reference" reference_type="type_data_type" delete="no">14</type>
 						<var name="值" kinds="string" delete="no" restrict="type">none</var>
@@ -373,6 +375,7 @@
 			</function_init_block>
 			<exception_catch_block name="节点_异常处理" create_template="create_list1" expand_list="comment" auto_index="2" expand_stat="1">
 				<comment name="功能说明" rw_stat="read">catch{}</comment>
+				<apoEditorPos kinds="hide" x="10" y="200" offset_x="0" offset_y="0"/>
 				<op_get_last_error name="节点_获得错误号" expand="yes">
 					<comment name="功能说明" rw_stat="read">get_last_error()</comment>
 					<apoEditorPos kinds="hide" x="210" y="220" offset_x="0" offset_y="0"/>
@@ -392,28 +395,48 @@
 					<var name="错误说明" kinds="string" delete="no" restrict="type">not found</var>
 				</op_call_func>
 			</exception_catch_block>
+			
+			<op_build_json_data name="节点_创建json数据$myHeader$" create_template="create_user_def_param" var_name="var" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+				<comment name="功能说明" rw_stat="read">define  name{...}</comment>
+				<apoEditorPos kinds="hide" x="322" y="553" offset_x="0" offset_y="0"/>
+				<var name="变量名" kinds="string" delete="no" replace_val="../.name">myHeader</var>
+				<param_collect name="参数" expand="yes">
+					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">Content-Type</func_name>
+					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+					<var kinds="string" delete="no" restrict="type">text/html</var>
+				</param_collect>
+			</op_build_json_data>
+			<op_call_func name="节点_调用$http_生成body( body_text)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
+				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+				<apoEditorPos kinds="hide" x="347" y="418" offset_x="0" offset_y="0"/>
+				<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_http_build_body&amp;_dispname=http_生成body( body_text)</func_name>
+				<param_collect name="参数" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+					<var kinds="string" delete="no" restrict="type">&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;/&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;</var>
+				</param_collect>
+			</op_call_func>
 			<op_call_func name="节点_发送http回复" expand_list="comment,func_name" expand_stat="1">
 				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-				<apoEditorPos kinds="hide" x="314" y="397" offset_x="0" offset_y="0"/>
+				<apoEditorPos kinds="hide" x="801" y="446" offset_x="0" offset_y="0"/>
 				<func_name kinds="user_define" user_param="func_list">_realval=CPP.apollo_http_respone&amp;_dispname=发送HTTP回复(session,header, body)</func_name>
 				<param_collect name="参数" expand="yes">
 					<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
 					<var kinds="string" delete="no" restrict="type">1</var>
 				</param_collect>
-					
 				<param_collect name="status" expand="yes" delete="no">
 					<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 					<var kinds="string" delete="no" restrict="type">200</var>
 				</param_collect>
 				<param_collect name="Header" expand="yes" delete="no">
-					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-					<var kinds="string" delete="no" restrict="type">none</var>
+					<type kinds="reference" reference_type="type_data_type" delete="no">9</type>
+					<var kinds="string" delete="no" restrict="type">myHeader</var>
 				</param_collect>
 				<param_collect name="Body" expand="yes" delete="no">
-					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-					<var kinds="string" delete="no" restrict="type">none</var>
+					<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+					<var kinds="string" delete="no" restrict="type">$value</var>
 				</param_collect>
-			</op_call_func>
+			</op_call_func>			
+			<unConnect kinds="hide"/>
 		</msg_handler_node>
 	</create_http_handler>
 	<!-- create create func argment lists -->

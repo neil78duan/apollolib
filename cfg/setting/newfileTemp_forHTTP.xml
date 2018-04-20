@@ -18,7 +18,7 @@
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="0" expand_stat="0" accept_drag_in="func_node">	
 </baseFunction>
-<message_handler name="http请求处理" delete="no" create_template="create_http_filter,create_http_handler" auto_index="0" expand_stat="0" accept_drag_in="create_http_handler">
+<message_handler name="http请求处理" delete="no" create_template="create_http_filter,create_http_handler" auto_index="0" expand_stat="0" accept_drag_in="msg_handler_node">
 </message_handler>
 
 <event_callback name="事件处理" delete="no" create_template="create_event_function_filter,create_event_callback" auto_index="0" expand_stat="1" accept_drag_in="event_callback_node">	
