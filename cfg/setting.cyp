@@ -235,6 +235,10 @@
 	
 	<create_msg_handler name="消息处理函数" create_type="1">		
 		<msg_handler_node name="message_handler" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="1"  preFillCmd="_localinit_msg_entry">
+			<func_params kinds="hide">
+				<input_param name="Param1">session</input_param>
+				<input_param name="Param2">MessageStream</input_param>
+			</func_params>
 			<comment name="函数说明" expand="yes">
 				<desc>消息处理handle(player, message)</desc>
 				<isGlobal kinds="bool">1</isGlobal>

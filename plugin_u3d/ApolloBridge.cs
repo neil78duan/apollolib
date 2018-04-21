@@ -23,6 +23,8 @@ public enum ACCOUNT_TYPE{
     ACC_NUMBER,
 };
 
+//如果函数返回值定义成RESULT_T 类型，通常情况下返回0表示成功， 其他值代表错误号，可以通过查表来获得错误描述
+//如果返回值是int型，返回-1时表示出错，通过apoCli_GetLastError()函数获得错误号
 
 public class apoClient {	
 	/* Interface to native implementation */
@@ -33,7 +35,7 @@ public class apoClient {
 #else    
     const string APO_DLL_NAME = "apollo_u3d";
 #endif
-
+    //客户端网络和登陆接口初始
     [DllImport (APO_DLL_NAME)]
 	private static extern  bool apoCli_init(string workingPath, string logPath, string udid, string deviceInfo);		
     
@@ -41,41 +43,53 @@ public class apoClient {
 	[DllImport (APO_DLL_NAME)]
 	private static extern  bool apoCli_CheckConnValid();//检查网络是否有效
 
+    //网络接口销毁
     [DllImport (APO_DLL_NAME)]
 	private static extern  void apoCli_destroy();    
     
+    //打开网络
     [DllImport (APO_DLL_NAME)]
 	private static extern  RESULT_T apoCli_open(string host, int port);
 
+    //关闭网络，如果没有登出，顺便登出
     [DllImport (APO_DLL_NAME)]
 	private static extern RESULT_T apoCli_close();
 
+    //把connector重新reset一下，不要再次初始化
     [DllImport(APO_DLL_NAME)]
     private static extern void apoCli_resetConnector();
     
+    //发送消息，只有登陆成功后才能用
     [DllImport (APO_DLL_NAME)]
     private static extern unsafe RESULT_T apoCli_sendMsg(int messageId, IntPtr messageBody, int bodySize);
 
+    //发送消息，只有登陆成功后才能用
     [DllImport (APO_DLL_NAME)]
     private static extern unsafe RESULT_T apoCli_send(IntPtr bufferFram, int frameSize);
 
-
+    //接受消息， @timeOutMS 阻塞时间， 0 表示不阻塞 ，
     [DllImport (APO_DLL_NAME)]
     private static extern unsafe int apoCli_recvMsg(int* messageId, IntPtr msgBody, int bufsize, int timeOutMS);
 
+
+    //接受消息， @timeOutMS 阻塞时间， 0 表示不阻塞
     [DllImport(APO_DLL_NAME)]
     private static extern unsafe int apoCli_recv(IntPtr bufferFram, int bufsize, int timeOutMS);
 
+    //获得错误号
     [DllImport (APO_DLL_NAME)]
 	public static extern RESULT_T apoCli_GetLastError();
 
+    //获得当前连接状态
     [DllImport (APO_DLL_NAME)]
 	public static extern int apoCli_getConnStat(); //0 unconnect ,1 connected, 2 login, 3 ingame ,4 GM
 
-    
+
+    //通过保存上次登陆的sessiondata免密码登陆，bReloginOffline 通知服务器是否把这次登录作为一次新的登录，还是掉线重连
     [DllImport (APO_DLL_NAME)]
     public static extern unsafe RESULT_T apoCli_ReloginEx(IntPtr sessionData, int sessionSize, bool bReloginOffline);  //relogin without account name and password
 
+    //获取当前登陆的session token data
     [DllImport (APO_DLL_NAME)]
     public static extern unsafe int apoCli_fetchSessionKey(IntPtr sessionBuf, int bufsize); //fetch the current session-info when login success
 
@@ -85,73 +99,85 @@ public class apoClient {
     //[DllImport (APO_DLL_NAME)]
 	//public static extern  RESULT_T apoCli_TrytoRelogin();
 
+    //一键登录，进入游戏
     [DllImport (APO_DLL_NAME)]
     public static extern RESULT_T apoCli_LoginAccount(string account, string passwd, ACCOUNT_TYPE accType = ACCOUNT_TYPE.ACC_APOLLO, int channel =0, bool bSkipAuth=false);
 
+    //一键创建账号并登陆进入游戏
     [DllImport (APO_DLL_NAME)]
 	public static extern  RESULT_T apoCli_CreateAccount(string userName, string passwd, int channel =0);
 	
+    //创建账号，不进入游戏
     [DllImport (APO_DLL_NAME)]
 	public static extern  RESULT_T apoCli_CreateAccountOnly(string userName, string passwd, int channel =0);
 	
     //[DllImport (APO_DLL_NAME)]
 	//public static extern  RESULT_T apoCli_testOneKeyLogin(string host, int port, string user, string passwd);
 
+    //登出
     [DllImport (APO_DLL_NAME)]
 	public static extern  void apoCli_Logout();
 
     //[DllImport (APO_DLL_NAME)]
 	//public static extern  void apoCli_ClearLoginHistory();
 
+        //获得当前账号id
     [DllImport (APO_DLL_NAME)]
 	public static extern  uint apoCli_GetCurAccId();
 
+    //获得当前角色ID
     [DllImport (APO_DLL_NAME)]
 	public static extern  uint apoCli_GetCurRoleId();
         
-    ///    
+    //获得网络句柄
     [DllImport (APO_DLL_NAME)]
     private static extern IntPtr get_NDNetObject();
 	
 	
-
+    // 收到消息时是否打印日志
     [DllImport (APO_DLL_NAME)]
 	public static extern void apoCli_EnableRecvLog(bool bIsEnable);
 
+    // 发送消息时是否打印日志
     [DllImport (APO_DLL_NAME)]
 	public static extern void apoCli_EnableSendLog(bool bIsEnable);
 
-
+    // 是否把消息流保存下来
     [DllImport (APO_DLL_NAME)]
 	public static extern void apoCli_EnableStreamRecord();
 
-
+    //登陆，不进入游戏
     [DllImport (APO_DLL_NAME)]
     public static extern RESULT_T apoCli_LoginOnly(string account, string passwd, ACCOUNT_TYPE accType = ACCOUNT_TYPE.ACC_APOLLO,int channel =0, bool bSkipAuth = false);
 
+    //获得服务器列表
     [DllImport (APO_DLL_NAME)]
 	public static extern int apoCli_GetServerList(IntPtr sessionBuf, int bufsize);//xml
 	
-	
+	//选择服务器并进入
     [DllImport (APO_DLL_NAME)]
     public static extern RESULT_T apoCli_SelectServer(string host, int port); // use select server
 	
+    //获得角色列表
     [DllImport (APO_DLL_NAME)]
     public static extern int apoCli_GetRoleList(IntPtr sessionBuf, int bufsize); // xml
 
+    //创建角色
     [DllImport (APO_DLL_NAME)]
     public static extern RESULT_T apoCli_CreateRole(string roleName);
 
+    //选择角色
     [DllImport (APO_DLL_NAME)]
     public static extern RESULT_T apoCli_SelectRole(int roleId);
 	
+    //设置网络心跳超时
 	[DllImport (APO_DLL_NAME)]
     public static extern int apoCli_SetTimeout(int timeoutValMs);
     
 	[DllImport (APO_DLL_NAME)]
     public static extern int apoCli_GetRoleBeloneServerId();		//get the server id that the player will enter 
 	
-
+    //获得客户端程序自己的token值
 	[DllImport (APO_DLL_NAME)]
     public static extern unsafe IntPtr apoCli_GetLocalToken();
 

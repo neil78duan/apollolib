@@ -48,10 +48,12 @@ public:
 	apoHttpListener(nd_fectory_base *sf = NULL);
 	virtual ~apoHttpListener();
 protected:
-
+	virtual void *getScriptEngine();
 	virtual int onRequestScript(const char* script, NDHttpSession *session, const NDHttpRequest &request);
+
 };
 
-extern apoHttpScriptMgr * getHttpScriptObj();
+extern apoHttpScriptMgr * getHttpScriptObj(); //need implement this function
+int apollo_message_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t *msg, const char *script);
 
 #endif
