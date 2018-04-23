@@ -31,43 +31,6 @@ APOLLO_SCRIPT_API_DEF_GLOBAL(apollo_func_machine_version, "获取主机信息()")
 }
 
 
-int apollo_message_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t *msg, const char *script)
-{
-	NDObject *pObj = NDObject::FromHandle(handle);
-	if (!pObj) {
-		return -1;
-	}
-	
-	LogicParserEngine *scriptEngine =(LogicParserEngine *) pObj->getScriptEngine();
-	if (!scriptEngine) {
-		nd_logerror("can not get role script parser\n");
-		return 0;
-	}
-	NDIStreamMsg inmsg(msg);
-	//call function 
-	//DBLDataNode data;
-	parse_arg_list_t params;
-
-	//function name 
-	//data.InitSet(script);
-	params.push_back(DBLDataNode(script));
-
-	//receive message user
-	//data.InitSet((void*)pSession, OT_OBJ_BASE_OBJ);
-	params.push_back(DBLDataNode((void*)handle, OT_OBJ_NDHANDLE));
-
-	//message object
-	//data.InitSet((void*)&inmsg, OT_OBJ_MSGSTREAM);
-	params.push_back(DBLDataNode((void*)&inmsg, OT_OBJ_MSGSTREAM));
-
-	DBLDataNode result;
-	scriptEngine->runScript(script, params, result);
-	//bool ret = LogicEngineRoot::get_Instant()->runScript(script, scriptEngine, params, result);
-
-	return 0;
-
-}
-
 ApoGameObj::ApoGameObj() : m_logicEngine(this)
 {
 

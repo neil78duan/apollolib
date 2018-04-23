@@ -21,7 +21,7 @@ namespace ClientMsgHandler
 {
 void InstallDftClientHandler(NDIConn *pconn) ;	
 int apollo_dft_message_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
-int apollo_cli_msg_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t *msg, const char *script);
+//int apollo_cli_msg_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t *msg, const char *script);
 // 
 // #ifndef WITHOUT_LOGIC_PARSER
 // void destroyDftClientMsgHandler(NDIConn *pConn);

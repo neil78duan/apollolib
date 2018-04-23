@@ -54,6 +54,5 @@ protected:
 };
 
 extern apoHttpScriptMgr * getHttpScriptObj(); //need implement this function
-int apollo_message_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t *msg, const char *script);
 
 #endif

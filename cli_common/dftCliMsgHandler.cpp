@@ -371,38 +371,38 @@ namespace ClientMsgHandler
 		nd_logmsg("get message protocol build time %lld\n", build_tm);
 		return 0;
 	}
-
-	int apollo_cli_msg_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t *msg, const char *script)
-	{
-		NDIConn *pconn = (NDIConn *)handle;
-		nd_assert(pconn);
-
-		NDIStreamMsg inmsg(msg);
-
-		LogicParserEngine *scriptEngine = (LogicParserEngine *)pconn->GetUserData();
-		nd_assert(scriptEngine);
-
-		//call function 
-		//DBLDataNode data;
-		parse_arg_list_t params;
-
-		//function name 
-		//data.InitSet(script);
-		params.push_back(DBLDataNode(script));
-
-		//receive message user
-		//data.InitSet((void*)pSession, OT_OBJ_BASE_OBJ);
-		params.push_back(DBLDataNode(handle, OT_OBJ_NDHANDLE));
-
-		//message object
-		//data.InitSet((void*)&inmsg, OT_OBJ_MSGSTREAM);
-		params.push_back(DBLDataNode((void*)&inmsg, OT_OBJ_MSGSTREAM));
-
-		DBLDataNode result;
-		scriptEngine->runScript(script, params, result);
-		//bool ret = LogicEngineRoot::get_Instant()->runScript(script, scriptEngine, params, result);
-		return 0;
-	}
+// 
+// 	int apollo_cli_msg_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t *msg, const char *script)
+// 	{
+// 		NDIConn *pconn = (NDIConn *)handle;
+// 		nd_assert(pconn);
+// 
+// 		NDIStreamMsg inmsg(msg);
+// 
+// 		LogicParserEngine *scriptEngine = (LogicParserEngine *)pconn->GetUserData();
+// 		nd_assert(scriptEngine);
+// 
+// 		//call function 
+// 		//DBLDataNode data;
+// 		parse_arg_list_t params;
+// 
+// 		//function name 
+// 		//data.InitSet(script);
+// 		params.push_back(DBLDataNode(script));
+// 
+// 		//receive message user
+// 		//data.InitSet((void*)pSession, OT_OBJ_BASE_OBJ);
+// 		params.push_back(DBLDataNode(handle, OT_OBJ_NDHANDLE));
+// 
+// 		//message object
+// 		//data.InitSet((void*)&inmsg, OT_OBJ_MSGSTREAM);
+// 		params.push_back(DBLDataNode((void*)&inmsg, OT_OBJ_MSGSTREAM));
+// 
+// 		DBLDataNode result;
+// 		scriptEngine->runScript(script, params, result);
+// 		//bool ret = LogicEngineRoot::get_Instant()->runScript(script, scriptEngine, params, result);
+// 		return 0;
+// 	}
 
 
 	bool outPutMessageFromconfig(NDIConn* pconn, const char *formatText, NDIStreamMsg &inmsg, userDefineDataType_map_t &dataDef)

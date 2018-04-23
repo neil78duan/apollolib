@@ -95,7 +95,7 @@ static bool init_apollo_object(NDIConn *pConn, const char*script_file)
 	scriptRoot->setOutPutEncode(E_SRC_CODE_UTF_8);
     nd_assert(scriptRoot);
     LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
-    nd_message_set_script_engine(pConn->GetHandle(), (void*)&parser, ClientMsgHandler::apollo_cli_msg_script_entry);
+    nd_message_set_script_engine(pConn->GetHandle(), (void*)&parser, apollo_message_script_entry);
     parser.setOwner(&__myScriptOwner);
 
 	scriptRoot->setPrint(ND_LOG_WRAPPER_PRINT(ConnectDialog), NULL);

@@ -85,18 +85,12 @@ static ApoScriptOwner  __scriptObjOwner;
 
 static NDIConn*  _create_connector_object()
 {
-// 	nd_handle pconn = nd_object_create("tcp-connector");
-// 	if (-1 == nd_msgtable_create(pconn, ND_MAIN_MSG_CAPACITY, ND_MSG_BASE_ID)) {
-// 		nd_object_destroy(pconn, 0);
-// 		return NULL;
-// 	}
 	NDIConn* p =CreateConnectorObj("tcp-connector");
 	__scriptObjOwner.setConn(p);
 
 	LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
-	nd_message_set_script_engine(p->GetHandle(), (void*)&parser, ClientMsgHandler::apollo_cli_msg_script_entry);
-	p->SetUserData(&parser);
-
+	nd_message_set_script_engine(p->GetHandle(), (void*)&parser, apollo_message_script_entry);
+	
 	ClientMsgHandler::InstallDftClientHandler(p);
 	return p;
 }
