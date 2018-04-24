@@ -153,7 +153,7 @@ void ApoClient::setLogPath(const char *logPath)
 	m_logPath = logPath;
 }
 
-void ApoClient::Destroy()
+void ApoClient::Destroy(int)
 {
 	if (m_login) {
 		delete m_login;
@@ -216,7 +216,7 @@ void ApoClient::trytoHandle(nd_usermsgbuf_t *msg)
 	}
 }
 
-int ApoClient::Init()
+int ApoClient::Create(const char*)
 {
 	
 #ifndef WITHOUT_LOGIC_PARSER

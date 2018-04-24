@@ -210,6 +210,9 @@
     <ClInclude Include="..\..\cli_common\apoClientU3d.h">
       <Filter>apollo\login</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\ndcli\nd_iconn.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp">

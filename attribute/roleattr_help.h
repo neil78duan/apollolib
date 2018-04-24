@@ -144,7 +144,7 @@ public:
 	attrid_t GetIDEx(const char *name,int &MinOrMax);		//得到战斗属性MinOrMax =1 min , 2max , 0 none (ref 资质min	资质max)
 	const char *Getname(attrid_t wa_id);
 	const char *GetRealname(attrid_t wa_id);
-	attrid_t GetwaIDBase() ;
+	//attrid_t GetwaIDBase() ;
 	int GetAttrNum(){ return m_wa_num; }
 	
 	int FetchAttr2Others(attrval_t *inbufs,int bufsize, attrval_node *out_nodes, int out_size ) ;
@@ -164,8 +164,8 @@ public:
 
 	int parse_form(const char *cmd_txt, ndvm_cmd_node *cmdnode) ;
 	
-	void Destroy() ;
-	int Init() ;
+	void Destroy(int flag=0) ;
+	int Create(const char*name = NULL);
 	int Load(const char *attr_file, const char *up_level_file);
 
 	RoleAttrHelper() ;
@@ -173,7 +173,7 @@ public:
 private:
 	int loadUplevelExp(const char *file);
 	int parse_run_sort();
-	int load_rank() ;
+	//int load_rank() ;
 	int check_canbe_run(role_attr_description *node, attrid_t *buf);
 public:
 	int m_current_parse ;

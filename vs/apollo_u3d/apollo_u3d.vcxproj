@@ -180,6 +180,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\ndsdk\include\ndapplib\nd_msgpacket.h" />
     <ClInclude Include="..\..\..\ndsdk\include\ndcli\nd_api_c.h" />
+    <ClInclude Include="..\..\..\ndsdk\include\ndcli\nd_iconn.h" />
     <ClInclude Include="..\..\..\ndsdk\include\ndlib.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\list.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\ndchar.h" />

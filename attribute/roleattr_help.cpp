@@ -37,7 +37,7 @@ RoleAttrHelper::~RoleAttrHelper()
 {
 }
 
-void RoleAttrHelper::Destroy() 
+void RoleAttrHelper::Destroy(int ) 
 {
 	//m_level_nums = 0 ;
 	m_current_parse = 0 ;
@@ -65,11 +65,10 @@ void RoleAttrHelper::Destroy()
 	}*/
 }
 
-int RoleAttrHelper::Init()
+int RoleAttrHelper::Create(const char*)
 {
 	return 0;
 }
-
 
 int RoleAttrHelper::loadUplevelExp(const char *file)
 {

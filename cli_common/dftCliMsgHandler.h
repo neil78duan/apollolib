@@ -53,7 +53,7 @@ int apollo_dft_message_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
 	public:
 		ApoConnectScriptOwner();
 		virtual ~ApoConnectScriptOwner();
-		void Destroy();
+		void Destroy(int flag = 0);
 		void setConn(NDIConn *conn);
 		bool getOtherObject(const char*objName, DBLDataNode &val);
 		virtual const char *getMsgName(int msgId);

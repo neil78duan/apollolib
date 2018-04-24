@@ -51,7 +51,7 @@ namespace ClientMsgHandler
 	{
 		Destroy();
 	}
-	void ApoConnectScriptOwner::Destroy()
+	void ApoConnectScriptOwner::Destroy(int)
 	{
 		m_conn = 0;
 		//m_dataType.clear();

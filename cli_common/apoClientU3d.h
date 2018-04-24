@@ -88,8 +88,8 @@ public:
 	
 	bool Update();
 	
-	int Init();
-	void Destroy();
+	int Create(const char*name=NULL);
+	void Destroy(int flag=0);
 	bool IsLoginOk();
 	bool CheckValid();
 	bool IsInConnect();
