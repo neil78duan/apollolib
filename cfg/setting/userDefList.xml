@@ -30,6 +30,7 @@
 			<node desc="日志目录">LogPath</node>			
 			<node desc="网络消息数据格式">FormatMsgData</node>			
 			<node desc="消息名字ID对照表">msgIdNameFormat</node>		
+			<node desc="配置文件名">configFile</node>		
 		</external_objects>
 	</data_list>
 	

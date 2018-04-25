@@ -151,12 +151,15 @@ bool ApoGameObj::getOtherObject(const char*objName, DBLDataNode &val)
 		return true;
 	}
 
-// 	else if (0 == ndstricmp(objName, "world-connector"))	{
-// 		NDConnector &conn = getWorldConnect();
-// 		val.InitSet((void*)conn.GetHandle(), OT_OBJ_NDHANDLE);
-// 		return true;
-// 	}
-// 
+	else if (0 == ndstricmp(objName, "config-file"))	{
+
+		const char *pFile = getbase_inst()->Getcfgfile();
+		if (pFile) {
+			val.InitSet(pFile);
+			return true;
+		}
+	}
+
 	else if (0 == ndstricmp(objName, "FormatMsgData"))	{
 		userDefineDataType_map_t &msgObj = LogicEngineRoot::get_Instant()->getGlobalDataType();
 		val.InitSet((void*)&msgObj);
