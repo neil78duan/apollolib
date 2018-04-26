@@ -14,7 +14,7 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">./setting/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1523861644</LastMod>
+	<LastMod name="最后修改" kinds="hide">1524726909</LastMod>
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="41" expand_stat="1" accept_drag_in="func_node">
 	<func_node name="sample_selector" create_template="create_list1" auto_index="5" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
@@ -48,7 +48,7 @@
 						</op_print>
 						<op_set_error name="节点_设置错误$1030$" expand="yes">
 							<comment name="功能说明" rw_stat="read">set_error(id)</comment>
-							<apoEditorPos kinds="hide" x="715" y="609" offset_x="0" offset_y="0"/>
+							<apoEditorPos kinds="hide" x="764" y="605" offset_x="0" offset_y="0"/>
 							<param_collect name="错误号" expand="yes">
 								<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 								<var kinds="string" delete="no" restrict="type">1030</var>
@@ -211,7 +211,7 @@
 				<var kinds="string" delete="no" restrict="type">0</var>
 			</param_collect>
 		</op_print>
-		<apoEditorPos kinds="hide" x="53" y="147" offset_x="117" offset_y="-40"/>
+		<apoEditorPos kinds="hide" x="53" y="147" offset_x="-25" offset_y="-163"/>
 		<unConnect kinds="hide">
 			<steps_bt_sequence name="BT-Sequence" auto_index="0">
 				<comment name="功能说明" rw_stat="read">run until one of children success </comment>
@@ -305,7 +305,7 @@
 				</op_print>
 			</steps_collection>
 		</op_loop_entry>
-		<apoEditorPos kinds="hide" x="111" y="202" offset_x="-4" offset_y="83"/>
+		<apoEditorPos kinds="hide" x="111" y="202" offset_x="27" offset_y="100"/>
 		<unConnect kinds="hide">
 			<steps_collection/>
 		</unConnect>

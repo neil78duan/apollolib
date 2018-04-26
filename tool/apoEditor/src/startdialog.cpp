@@ -279,6 +279,7 @@ bool startDialog::compileScript(const char *scriptFile)
 	}
 
 	WriteLog("start run script...\n");
+	scriptRoot->setDftScriptModule(scriptRoot->getMainModuleName());
 	if (0 != scriptRoot->test()){
 		WriteLog("run script error\n");
 
@@ -595,7 +596,7 @@ void startDialog::on_Compile_clicked()
         WriteLog("compile script error");
         return;
     }
-    WriteLog("=========compile script success===========\n");
+     WriteLog("=========compile script success===========\n");
 
     const char *packaged_cmd = _getFromIocfg("compiled_rum_cmd");
 

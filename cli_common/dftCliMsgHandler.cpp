@@ -88,14 +88,25 @@ namespace ClientMsgHandler
 			val.InitSet((void*)this, OT_OBJ_BASE_OBJ);
 			return true;
 		}
+		else if (0 == ndstricmp(objName, "machineInfo")) {
+			char buf[256];
+			val.InitSet(nd_common_machine_info(buf, sizeof(buf)));
+			return true;
+		}
+		else if (0 == ndstricmp(objName, "settingFile")) {
+			const char *pSettingFile = LogicEngineRoot::getSettingFile();
+			val.InitSet(pSettingFile);
+			return true;
+		}
+
 // 		else if (0 == ndstricmp(objName, "machineInfo")) {
 // 			char buf[256];
 // 			val.InitSet(nd_common_machine_info(buf, sizeof(buf)));
 // 			return true;
 // 		}
-		else {
-			return TestLogicObject::getOtherObject(objName, val);
-		}
+// 		else {
+// 			return TestLogicObject::getOtherObject(objName, val);
+// 		}
 
 		return false;
 	}

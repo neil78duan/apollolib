@@ -102,9 +102,9 @@
 	<list instruction="1" ins_id="41" size="0" record_param_num="1" >op_create_struct_type</list>
 	<list instruction="1" ins_id="42" size="0"  >op_math_operate</list>
 	<list instruction="1" ins_id="43" size="0" desc="赋值操作" >op_assignin</list>	
-	<list instruction="1" ins_id="44" size="0"  >op_chdir</list>
+	<!-- list instruction="1" ins_id="44" size="0"  >op_chdir</list>
 	<list instruction="1" ins_id="45" size="0"  >op_rmfile</list>
-	<list instruction="1" ins_id="46" size="0"  >op_mkdir</list>
+	<list instruction="1" ins_id="46" size="0"  >op_mkdir</list -->
 	<list instruction="1" ins_id="47" size="0" >op_test</list>
 	<list instruction="1" ins_id="48" size="8" >op_skip_error</list>
 	<list instruction="1" ins_id="49" size="0" >op_get_arrsize</list>
@@ -768,7 +768,7 @@
 	</create_step_calc>
 	
 	
-	<create_step_chdir name="更改目录" create_type="1" >
+	<!-- create_step_chdir name="更改目录" create_type="1" >
 		<op_chdir name="节点_更改目录" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">cd(path_name)</comment>
 			<param name="目录名" kinds="string"  delete="no">0</param>
@@ -787,7 +787,7 @@
 			<comment name="创建目录" rw_stat="read">mkdir(newpath)</comment>
 			<param name="新目录" kinds="string" delete="no">0</param>
 		</op_mkdir>
-	</create_step_mkdir>
+	</create_step_mkdir -->
 	
 	
 	<create_step_waitevent name="等待事件节点" create_type="1" >
@@ -1366,10 +1366,6 @@
 		<list>create_step_commit_affair</list>
 		
 		<list>create_step_read_excel_attr</list>
-		
-		<list>create_step_chdir</list>
-		<list>create_step_rmfile</list>	
-		<list>create_step_mkdir</list>
 		<list>create_step_process_exit</list>	
 		<list>create_step_process_abort</list>	
 		
