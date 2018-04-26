@@ -14,7 +14,7 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">./setting/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1524726909</LastMod>
+	<LastMod name="最后修改" kinds="hide">1524738701</LastMod>
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="41" expand_stat="1" accept_drag_in="func_node">
 	<func_node name="sample_selector" create_template="create_list1" auto_index="5" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
@@ -211,7 +211,7 @@
 				<var kinds="string" delete="no" restrict="type">0</var>
 			</param_collect>
 		</op_print>
-		<apoEditorPos kinds="hide" x="53" y="147" offset_x="-25" offset_y="-163"/>
+		<apoEditorPos kinds="hide" x="53" y="147" offset_x="-58" offset_y="-98"/>
 		<unConnect kinds="hide">
 			<steps_bt_sequence name="BT-Sequence" auto_index="0">
 				<comment name="功能说明" rw_stat="read">run until one of children success </comment>
@@ -239,7 +239,6 @@
 					<ref_from name="跳转地址">../../op_set_label/param</ref_from>
 				</op_goto_label>
 			</steps_bt_selector>
-			<steps_collection/>
 		</unConnect>
 	</func_node>
 	<func_node name="test_var_pos" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="10" name_auto_index="auto_index">
@@ -2916,7 +2915,7 @@
 			</exception_catch_block>
 			<op_skip_error name="节点_忽略错误_for_test" kinds="hide" expand="yes">
 				<comment name="功能说明" rw_stat="read">skip_error(value)</comment>
-				<num name="错误类型" kinds="user_define" user_param="error_list" delete="no">_realval=47&amp;_dispname=system(NDERR_VARIANT_NOT_EXIST):variant not found</num>
+				<varInt name="错误类型" kinds="user_define" user_param="error_list" delete="no">_realval=47&amp;_dispname=system(NDERR_VARIANT_NOT_EXIST):variant not found</varInt>
 			</op_skip_error>
 			<op_begin_affair name="节点_出错时回滚角色数据" expand="yes" expand_stat="1">
 				<comment name="功能说明" rw_stat="read">player_affair_rollback()</comment>
@@ -2952,7 +2951,7 @@
 				<comment name="功能说明" rw_stat="read">op_cmd(aim,cmd, index,value)</comment>
 				<apoEditorPos kinds="hide" x="888" y="440" offset_x="0" offset_y="0"/>
 				<aim kinds="user_define" user_param="internal_object" replace_val="../.name" delete="no">_realval=package&amp;_dispname=背包</aim>
-				<param name="命令" kinds="string" delete="no">init</param>
+				<func_name name="命令" kinds="string" delete="no">init</func_name>
 				<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
 					<type name="命令索引类型" kinds="reference" reference_type="type_data_type" delete="no">9</type>
 					<var name="索引值" kinds="string" delete="no" restrict="type">itemId</var>
@@ -3018,7 +3017,7 @@
 			</exception_catch_block>
 			<op_skip_error name="节点_忽略错误_for_test" kinds="hide" expand="yes">
 				<comment name="功能说明" rw_stat="read">skip_error(value)</comment>
-				<num name="错误类型" kinds="user_define" user_param="error_list" delete="no">_realval=47&amp;_dispname=system(NDERR_VARIANT_NOT_EXIST):variant not found</num>
+				<varInt name="错误类型" kinds="user_define" user_param="error_list" delete="no">_realval=47&amp;_dispname=system(NDERR_VARIANT_NOT_EXIST):variant not found</varInt>
 			</op_skip_error>
 			<unConnect kinds="hide">
 				<op_process_exit name="节点_process_exit" expand="yes">

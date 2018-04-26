@@ -130,10 +130,10 @@
 	
 	<!-- param type description 'need_type_stream' will wirte 16 bit data type before data-value  -->
 	<!-- datatype 0 int 1 float 2 string-->
-	<list instruction="0" size="0" datatype="2" >aim</list>
+	<list instruction="0" size="0" datatype="2" need_type_stream="1">aim</list>
 	<list instruction="0" size="4" datatype="0" >index</list>
-	<list instruction="0" size="4" datatype="1" >val</list>
-	<list instruction="0" size="4" datatype="0" >num</list>
+	<!-- list instruction="0" size="4" datatype="1" >val</list>
+	<list instruction="0" size="4" datatype="0" >num</list -->
 	<list instruction="0" size="0" datatype="2" >param</list>
 	<list instruction="0" size="0" datatype="2" >tablename</list>
 	<list instruction="0" size="0" datatype="2" >varname</list>
@@ -275,7 +275,7 @@
 			
 			<op_skip_error name="节点_忽略错误_for_test"  kinds="hide" expand="yes">
 				<comment name="功能说明" rw_stat="read">skip_error(value)</comment>
-				<num name="错误类型" kinds="user_define" user_param="error_list" delete="no">_realval=47&amp;_dispname=system(NDERR_VARIANT_NOT_EXIST):variant not found</num>
+				<varInt name="错误类型" kinds="user_define" user_param="error_list" delete="no">_realval=47&amp;_dispname=system(NDERR_VARIANT_NOT_EXIST):variant not found</varInt>
 			</op_skip_error>		
 			<op_begin_affair name="节点_出错时自动恢复数据" expand="yes" expand_stat="1">
 				<comment name="功能说明" rw_stat="read">player_affair_rollback()</comment>
@@ -637,7 +637,7 @@
 		<op_operate name="节点_$name$操作" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">op_cmd(aim,cmd, index,value)</comment>
 			<aim kinds="user_define" user_param="internal_object" replace_val="../.name" delete="no">none</aim>
-			<param name="命令" kinds="string" delete="no">none</param>
+			<func_name name="命令" kinds="string" delete="no">none</func_name>
 			<param_collect name="索引" expand="yes" expand_stat="1" delete="no">
 				<type name="命令索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
@@ -1136,9 +1136,8 @@
 			<comment name="功能说明" rw_stat="read">if($curval==true)exit</comment>
 			<op_sub_comp_entry name="上一步true时执行" kinds="hide" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
 				<condition no_comp="1" kinds="hide" delete="no">1</condition>
-				<op_exit name="节点_退出" expand="yes">			
-					<comment name="功能说明" rw_stat="read">op_exit(value)</comment>
-					<num name="返回结果" kinds="user_define" user_param="error_list" delete="no">0</num>
+				<op_exit name="节点_退出" expand="yes">	
+					<varInt name="返回结果" kinds="user_define" user_param="error_list" delete="no">0</varInt>
 				</op_exit>
 			</op_sub_comp_entry>
 		</op_bool_entry>
@@ -1149,9 +1148,8 @@
 			<comment name="功能说明" rw_stat="read">if($curval==false)exit</comment>
 			<op_sub_comp_entry name="上一步false时执行" kinds="hide" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
 				<condition no_comp="1" kinds="hide"  delete="no">0</condition>				
-				<op_exit name="节点_退出" expand="yes">			
-					<comment name="功能说明" rw_stat="read">op_exit(value)</comment>
-					<num name="返回结果" kinds="user_define" user_param="error_list" delete="no">0</num>
+				<op_exit name="节点_退出" expand="yes">	
+					<varInt name="返回结果" kinds="user_define" user_param="error_list" delete="no">0</varInt>
 				</op_exit>
 			</op_sub_comp_entry>
 		</op_bool_entry>
