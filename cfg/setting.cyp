@@ -79,8 +79,6 @@
 	<list instruction="1" ins_id="14" size="8" >op_short_jump</list>	
 	<list instruction="1" ins_id="16" size="8" >op_error_short_jump</list>
 	<list instruction="1" ins_id="18" size="8" >op_success_short_jump</list>
-	<!-- list instruction="1" ins_id="19" size="0" >op_save_register</list>	
-	<list instruction="1" ins_id="18" size="0" >op_set_result</list -->
 	<list instruction="1" ins_id="21" size="0" record_param_num="1">op_print</list>	
 	<list instruction="1" ins_id="22" size="0" record_param_num="1">op_log</list>
 	<list instruction="1" ins_id="23" size="8" >op_set_error</list>
@@ -102,9 +100,6 @@
 	<list instruction="1" ins_id="41" size="0" record_param_num="1" >op_create_struct_type</list>
 	<list instruction="1" ins_id="42" size="0"  >op_math_operate</list>
 	<list instruction="1" ins_id="43" size="0" desc="赋值操作" >op_assignin</list>	
-	<!-- list instruction="1" ins_id="44" size="0"  >op_chdir</list>
-	<list instruction="1" ins_id="45" size="0"  >op_rmfile</list>
-	<list instruction="1" ins_id="46" size="0"  >op_mkdir</list -->
 	<list instruction="1" ins_id="47" size="0" >op_test</list>
 	<list instruction="1" ins_id="48" size="8" >op_skip_error</list>
 	<list instruction="1" ins_id="49" size="0" >op_get_arrsize</list>
@@ -121,8 +116,6 @@
 	<list instruction="1" ins_id="63" size="4" >op_process_exit</list>
 	<list instruction="1" ins_id="64" size="4" >op_process_abort</list>
 	
-	<!-- list instruction="1" ins_id="24" size="0" >op_set_loops</list>	
-	<list instruction="1" ins_id="25" size="0" >op_count_jump</list -->	
 	
 	<list instruction="2" >op_bool_entry</list>
 	<list instruction="2" >op_comp_entry</list>
@@ -132,10 +125,8 @@
 	<!-- datatype 0 int 1 float 2 string-->
 	<list instruction="0" size="0" datatype="2" need_type_stream="1">aim</list>
 	<list instruction="0" size="4" datatype="0" >index</list>
-	<!-- list instruction="0" size="4" datatype="1" >val</list>
-	<list instruction="0" size="4" datatype="0" >num</list -->
 	<list instruction="0" size="0" datatype="2" >param</list>
-	<list instruction="0" size="0" datatype="2" >tablename</list>
+	<list instruction="0" size="0" datatype="2" need_type_stream="1">tablename</list>
 	<list instruction="0" size="0" datatype="2" >varname</list>
 	<list instruction="0" size="0" datatype="2" need_type_stream="1">func_name</list>
 	<list instruction="0" size="0" datatype="2" need_type_stream="1" >var</list>
@@ -163,9 +154,6 @@
 	<list instruction="9" >steps_bt_sequence</list>
 	<list instruction="9" >steps_compound_test</list>
 	
-	<!-- list instruction="9" >steps_compound_test_debug</list>
-	<list instruction="9" >steps_compound_test_host_debug</list -->
-		
 	<list instruction="9" >function_filter</list>
 	<list instruction="10" desc="if-else sub entry" >op_sub_comp_entry</list>	
 	<list instruction="11" desc="function" >func_node</list>	
@@ -751,13 +739,16 @@
 	
 	
 	<create_read_table name="读取excel节点" create_type="1" >
-		<op_read_table name="节点_读取表格" expand="yes" create_label="create_internal_label">
-			<comment name="功能说明" rw_stat="read">function:read_excel_table(table,col, index)</comment>
+		<op_call_func name="节点_读取表格" expand="yes" expand_list="comment">
+			<comment name="功能说明" rw_stat="read">read_excel_table(table,col, index)</comment>
+			<func_name name="函数" kinds="hide" delete="no" >apollo_read_excel_node</func_name>
 			<tablename name="excel表" kinds="user_define" user_param="dbl_excel" delete="no">none</tablename>
-			<param name="列名" kinds="user_define" user_param="dbl_excel_col" delete="no">none</param>						
-			<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-			<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
-		</op_read_table>
+			<var name="列名" kinds="user_define" user_param="dbl_excel_col" delete="no">none</var>
+			<param_collect name="行号ID" expand="yes" expand_stat="1" delete="no">
+				<type name="类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="参数值" kinds="string" delete="no" restrict="type">0</var>
+			</param_collect>			
+		</op_call_func>
 	</create_read_table>
 	
 	<create_step_calc name="公式" create_type="1" >
@@ -766,30 +757,7 @@
 			<param name="公式内容" kinds="string"  delete="no">0</param>
 		</op_calc>
 	</create_step_calc>
-	
-	
-	<!-- create_step_chdir name="更改目录" create_type="1" >
-		<op_chdir name="节点_更改目录" expand="yes" create_label="create_internal_label">
-			<comment name="功能说明" rw_stat="read">cd(path_name)</comment>
-			<param name="目录名" kinds="string"  delete="no">0</param>
-		</op_chdir>
-	</create_step_chdir>
-	
-	<create_step_rmfile name="删除文件" create_type="1" >
-		<op_rmfile name="节点_删除文件" expand="yes" create_label="create_internal_label">
-			<comment name="功能说明" rw_stat="read">rm(filename)</comment>
-			<param name="文件名" kinds="string" delete="no">0</param>
-		</op_rmfile>
-	</create_step_rmfile>
-	
-	<create_step_mkdir name="创建目录" create_type="1" >
-		<op_mkdir name="节点_公式" expand="yes" create_label="create_internal_label">
-			<comment name="创建目录" rw_stat="read">mkdir(newpath)</comment>
-			<param name="新目录" kinds="string" delete="no">0</param>
-		</op_mkdir>
-	</create_step_mkdir -->
-	
-	
+		
 	<create_step_waitevent name="等待事件节点" create_type="1" >
 		<op_waitevent name="节点_等待事件($id$)" create_template="create_input_param" auto_index="0"  create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">wait_event(event_id)</comment>
