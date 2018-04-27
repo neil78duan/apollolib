@@ -14,7 +14,7 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">./setting/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1524797737</LastMod>
+	<LastMod name="最后修改" kinds="hide">1524810869</LastMod>
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="41" expand_stat="1" accept_drag_in="func_node">
 	<func_node name="sample_selector" create_template="create_list1" auto_index="5" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
@@ -284,7 +284,7 @@
 		<op_calc name="节点_公式" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">run_formulate(formulate_text)</comment>
 			<apoEditorPos kinds="hide" x="708" y="48" offset_x="0" offset_y="0"/>
-			<param name="公式内容" kinds="string" delete="no">0</param>
+			<var name="公式内容" kinds="string" delete="no">0</var>
 		</op_calc>
 		<op_loop_entry name="节点_循环" expand_list="param_collect" auto_index="1" comp_cond="param_collect" expand_stat="0">
 			<comment name="功能说明" rw_stat="read">loop{}</comment>
@@ -359,7 +359,7 @@
 				</param_collect>
 			</op_print>
 			<op_calc name="节点_公式1" expand="yes" expand_stat="1">
-				<param name="公式内容" kinds="string">var1 + 1</param>
+				<var name="公式内容" kinds="string">var1 + 1</var>
 				<apoEditorPos kinds="hide" x="428" y="-8" offset_x="0" offset_y="0"/>
 			</op_calc>
 		</op_loop_entry>
@@ -378,7 +378,7 @@
 			<var name="初始只" kinds="string" delete="no" restrict="type">0</var>
 		</op_make_var>
 		<op_calc name="节点_公式8" expand="yes" expand_stat="1">
-			<param name="公式内容" kinds="string">var2 * 0.5</param>
+			<var name="公式内容" kinds="string">var2 * 0.5</var>
 			<apoEditorPos kinds="hide" x="345" y="206" offset_x="0" offset_y="0"/>
 		</op_calc>
 		<op_write name="节点_写入11" expand="yes" expand_stat="1">
@@ -558,7 +558,7 @@
 		<op_calc name="节点_公式2" expand="yes" breakPoint="yes">
 			<comment name="功能说明" rw_stat="read">run_formulate(formulate_text)</comment>
 			<apoEditorPos kinds="hide" x="432" y="196" offset_x="0" offset_y="0"/>
-			<param name="公式内容" kinds="string">(10 + var1 * 8 - testvar * 3) * 5</param>
+			<var name="公式内容" kinds="string">(10 + var1 * 8 - testvar * 3) * 5</var>
 		</op_calc>
 		<op_print name="节点_打印5" create_template="create_input_param" auto_index="2" expand_list="comment" expand_stat="1">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
@@ -1255,7 +1255,7 @@
 				<var kinds="string" delete="no" restrict="type">g_var9</var>
 			</param_collect>
 		</op_print>
-		<apoEditorPos kinds="hide" x="-99" y="257" offset_x="112" offset_y="17"/>
+		<apoEditorPos kinds="hide" x="-99" y="257" offset_x="195" offset_y="34"/>
 		<unConnect kinds="hide"/>
 	</func_node>
 	<func_node name="sample_call" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
@@ -1706,14 +1706,14 @@
 		</func_params>
 		<op_make_var name="节点_申明变量$result$" expand="yes" var_name="param">
 			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="858" y="689" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="904" y="502" offset_x="0" offset_y="0"/>
 			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">result</param>
 			<type kinds="reference" reference_type="type_data_type" delete="no">5</type>
 			<var name="初始值" kinds="string" delete="no" restrict="type">1</var>
 		</op_make_var>
 		<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
 			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="218" y="551" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="264" y="364" offset_x="0" offset_y="0"/>
 			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
 			<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
 			<var name="初始值" kinds="string" delete="no" restrict="type">1</var>
@@ -1732,13 +1732,13 @@
 					<var name="操作数2值" kinds="string" delete="no" restrict="type">15</var>
 				</param_collect>
 			</op_comp>
-			<apoEditorPos kinds="hide" x="225" y="386" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="271" y="199" offset_x="0" offset_y="0"/>
 			<op_bool_entry name="比较成功就执行" delete="no">
 				<op_sub_comp_entry name="执行块" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
 					<condition no_comp="1" kinds="hide" delete="no">1</condition>
 					<op_assignin name="节点_赋值" expand="yes" create_label="create_internal_label">
 						<comment name="功能说明" rw_stat="read">var = value</comment>
-						<apoEditorPos kinds="hide" x="497" y="276" offset_x="0" offset_y="0"/>
+						<apoEditorPos kinds="hide" x="543" y="89" offset_x="0" offset_y="0"/>
 						<varname name="变量名" kinds="string" delete="no" restrict="type">var1</varname>
 						<param_collect name="值" expand="yes" expand_stat="1" delete="no">
 							<type name="赋值类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
@@ -1750,7 +1750,7 @@
 		</steps_block_valcomp>
 		<op_loop_entry name="节点_循环" expand_list="param_collect" auto_index="1" comp_cond="param_collect" expand_stat="0">
 			<comment name="功能说明" rw_stat="read">loop{}</comment>
-			<apoEditorPos kinds="hide" x="487" y="429" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="533" y="242" offset_x="0" offset_y="0"/>
 			<param_collect name="次数" expand="yes" expand_stat="1" delete="no" referenced_only="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">9</type>
 				<var kinds="string" delete="no" restrict="type">var1</var>
@@ -1758,7 +1758,7 @@
 			<steps_collection name="loop body" create_template="create_list1" delete="no">
 				<op_math_operate name="节点_数学运算" expand="yes" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">+-*/</comment>
-					<apoEditorPos kinds="hide" x="743" y="418" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="789" y="231" offset_x="0" offset_y="0"/>
 					<index kinds="enum" enum_value="+,-,*,/,sqrt,max,min,rand" delete="no">0</index>
 					<param_collect name="操作数1" expand="yes" expand_stat="1" delete="no">
 						<type name="操作数1类型" kinds="reference" reference_type="type_data_type" delete="no">9</type>
@@ -1771,7 +1771,7 @@
 				</op_math_operate>
 				<op_math_operate name="节点_数学运算" expand="yes" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">+-*/</comment>
-					<apoEditorPos kinds="hide" x="962" y="409" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="1008" y="222" offset_x="0" offset_y="0"/>
 					<index kinds="enum" enum_value="+,-,*,/,sqrt,max,min,rand" delete="no">2</index>
 					<param_collect name="操作数1" expand="yes" expand_stat="1" delete="no">
 						<type name="操作数1类型" kinds="reference" reference_type="type_data_type" delete="no">9</type>
@@ -1784,7 +1784,7 @@
 				</op_math_operate>
 				<op_assignin name="节点_赋值" expand="yes" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">var = value</comment>
-					<apoEditorPos kinds="hide" x="1170" y="424" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="1216" y="237" offset_x="0" offset_y="0"/>
 					<varname name="变量名" kinds="string" delete="no" restrict="type">result</varname>
 					<param_collect name="值" expand="yes" expand_stat="1" delete="no">
 						<type name="赋值类型" kinds="reference" reference_type="type_data_type" delete="no">11</type>
@@ -1795,7 +1795,7 @@
 		</op_loop_entry>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
-			<apoEditorPos kinds="hide" x="635" y="669" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="681" y="482" offset_x="0" offset_y="0"/>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 				<var kinds="string" delete="no" restrict="type">factorial </var>
@@ -1809,7 +1809,7 @@
 				<var kinds="string" delete="no" restrict="type">$curValue</var>
 			</param_collect>
 		</op_print>
-		<apoEditorPos kinds="hide" x="20" y="400" offset_x="46" offset_y="-187"/>
+		<apoEditorPos kinds="hide" x="66" y="213" offset_x="0" offset_y="0"/>
 		<unConnect kinds="hide">
 			<steps_collection/>
 		</unConnect>
@@ -2255,7 +2255,7 @@
 				<op_calc name="节点_公式" expand="yes" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">run_formulate(formulate_text)</comment>
 					<apoEditorPos kinds="hide" x="306" y="444" offset_x="0" offset_y="0"/>
-					<param name="公式内容" kinds="string" delete="no">0</param>
+					<var name="公式内容" kinds="string" delete="no">0</var>
 				</op_calc>
 				<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
 					<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>

@@ -734,9 +734,7 @@
 			</param_collect>
 		</op_bit_operate>
 	</create_bit_operate>
-	
-	
-	
+		
 	
 	<create_read_table name="读取excel节点" create_type="1" >
 		<op_call_func name="节点_读取表格" expand="yes" expand_list="comment">
@@ -754,7 +752,7 @@
 	<create_step_calc name="公式" create_type="1" >
 		<op_calc name="节点_公式" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">run_formulate(formulate_text)</comment>
-			<param name="公式内容" kinds="string"  delete="no">0</param>
+			<var name="公式内容" kinds="string"  delete="no">0</var>
 		</op_calc>
 	</create_step_calc>
 		
