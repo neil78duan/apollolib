@@ -478,7 +478,7 @@
 		<op_getobj name="节点_获得其他对象_程序信息" expand="yes" breakPoint="yes">
 			<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
 			<apoEditorPos kinds="hide" x="245" y="420" offset_x="0" offset_y="0"/>
-			<param name="对象名" kinds="string">machineInfo</param>
+			<aim name="对象名" kinds="string">machineInfo</aim>
 		</op_getobj>
 		<op_call_func name="节点_调用函数_查找DEVELOP" create_template="create_input_param" auto_index="2" expand_list="comment,func_name" expand_stat="1">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
@@ -511,7 +511,7 @@
 		<op_getobj name="节点_获得其他对象_输出目录" expand="yes">
 			<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
 			<apoEditorPos kinds="hide" x="245" y="40" offset_x="0" offset_y="0"/>
-			<param name="对象名" kinds="string">WritablePath</param>
+			<aim name="对象名" kinds="string">WritablePath</aim>
 		</op_getobj>
 		<op_call_func name="节点_调用函数_获得绝对路径" create_template="create_input_param" auto_index="2" expand_list="comment,func_name" expand_stat="0">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
@@ -1382,7 +1382,7 @@
 		<op_getobj name="节点_获得其他对象:$输出目录$" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
 			<apoEditorPos kinds="hide" x="195" y="275" offset_x="0" offset_y="0"/>
-			<param name="对象名" kinds="user_define" user_param="external_objects" delete="no" replace_val="../.name">_realval=WritablePath&amp;_dispname=输出目录</param>
+			<aim name="对象名" kinds="user_define" user_param="external_objects" delete="no" replace_val="../.name">_realval=WritablePath&amp;_dispname=输出目录</aim>
 		</op_getobj>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
@@ -1399,7 +1399,7 @@
 		<op_getobj name="节点_获得其他对象:$宿主名字$" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
 			<apoEditorPos kinds="hide" x="490" y="273" offset_x="0" offset_y="0"/>
-			<param name="对象名" kinds="user_define" user_param="external_objects" delete="no" replace_val="../.name">_realval=SelfName&amp;_dispname=宿主名字</param>
+			<aim name="对象名" kinds="user_define" user_param="external_objects" delete="no" replace_val="../.name">_realval=SelfName&amp;_dispname=宿主名字</aim>
 		</op_getobj>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
@@ -1416,7 +1416,7 @@
 		<op_getobj name="节点_获得其他对象:$程序信息$" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
 			<apoEditorPos kinds="hide" x="735" y="270" offset_x="0" offset_y="0"/>
-			<param name="对象名" kinds="user_define" user_param="external_objects" delete="no" replace_val="../.name">_realval=machineInfo&amp;_dispname=程序信息</param>
+			<aim name="对象名" kinds="user_define" user_param="external_objects" delete="no" replace_val="../.name">_realval=machineInfo&amp;_dispname=程序信息</aim>
 		</op_getobj>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
@@ -1439,7 +1439,7 @@
 		<op_getobj name="节点_获得其他对象:$输出目录$" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
 			<apoEditorPos kinds="hide" x="271" y="329" offset_x="0" offset_y="0"/>
-			<param name="对象名" kinds="user_define" user_param="external_objects" delete="no" replace_val="../.name">_realval=WritablePath&amp;_dispname=输出目录</param>
+			<aim name="对象名" kinds="user_define" user_param="external_objects" delete="no" replace_val="../.name">_realval=WritablePath&amp;_dispname=输出目录</aim>
 		</op_getobj>
 		<op_check_valide name="节点_检测结果" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">check_last_return_value_is_valid()</comment>
@@ -2461,7 +2461,7 @@
 							<op_getobj name="节点_获得其他对象:$editor_settig_file$" expand="yes" create_label="create_internal_label">
 								<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
 								<apoEditorPos kinds="hide" x="541" y="415" offset_x="0" offset_y="0"/>
-								<param name="对象名" kinds="user_define" user_param="external_objects" delete="no" replace_val="../.name">_realval=settingFile&amp;_dispname=editor_settig_file</param>
+								<aim name="对象名" kinds="user_define" user_param="external_objects" delete="no" replace_val="../.name">_realval=settingFile&amp;_dispname=editor_settig_file</aim>
 							</op_getobj>
 							<op_make_var name="节点_申明变量$textdata$" expand="yes" var_name="param">
 								<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
@@ -2700,7 +2700,7 @@
 				<op_getobj name="节点_获得其他对象:$editor_settig_file$" expand="yes" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
 					<apoEditorPos kinds="hide" x="236" y="403" offset_x="0" offset_y="0"/>
-					<param name="对象名" kinds="user_define" user_param="external_objects" delete="no" replace_val="../.name">_realval=settingFile&amp;_dispname=editor_settig_file</param>
+					<aim name="对象名" kinds="user_define" user_param="external_objects" delete="no" replace_val="../.name">_realval=settingFile&amp;_dispname=editor_settig_file</aim>
 				</op_getobj>
 				<op_call_func name="节点_调用$读取整个文件(filename)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>

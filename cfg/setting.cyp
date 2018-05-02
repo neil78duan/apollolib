@@ -640,7 +640,7 @@
 	<create_step_getother_object name="获得其他对象" create_type="1" >
 		<op_getobj name="节点_获得其他对象:$name$" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
-			<param name="对象名" kinds="user_define" user_param="external_objects"  delete="no" replace_val="../.name">none</param>
+			<aim name="对象名" kinds="user_define" user_param="external_objects"  delete="no" replace_val="../.name">none</aim>
 		</op_getobj>
 	</create_step_getother_object>
 	
