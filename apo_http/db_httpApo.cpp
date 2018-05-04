@@ -6,11 +6,7 @@
  *
  * 2018.4.17
  */
- 
 
-#include "ndapplib/applib.h"
-#include "ndapplib/nd_httpListener.h"
-#include "logic_parser/logicEngineRoot.h"
 #include "logic_parser/dbldata2netstream.h"
 #include "apo_http/httpScriptApi.h"
 #include "apo_http/db_httpApo.h"
@@ -289,4 +285,10 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_fetch, "db_提前当前行(db_connector)")
 		return true;
 	}
 	return false;
+}
+
+int apoMysqlDBInit()
+{
+	nd_logmsg("mysql api for apollo init success!\n");
+	return 0;
 }
