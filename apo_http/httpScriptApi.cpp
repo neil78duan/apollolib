@@ -248,183 +248,253 @@ APOLLO_SCRIPT_API_DEF(apollo_http_build_body, "http_Éú³Ébody( body_text)")
 }
 
 ///////////////////////////////////////////////
+// 
+// apoHttpScriptMgr::apoHttpScriptMgr(): m_logicEngine(this)
+// {
+// }
+// 
+// apoHttpScriptMgr::~apoHttpScriptMgr()
+// {
+// }
+// 
+// 
+// bool apoHttpScriptMgr::getOtherObject(const char*objName, DBLDataNode &val)
+// {
+// 	ND_TRACE_FUNC();
+// 	if (0 == ndstricmp(objName, "listener")) {
+// 		nd_handle hListen = getbase_inst()->GetDeftListener()->GetHandle();
+// 		val.InitSet((void*)hListen, OT_OBJ_NDHANDLE);
+// 		return true;
+// 	}
+// 
+// 	else if (0 == ndstricmp(objName, "configFile")) {
+// 		const char *pFile = getbase_inst()->Getcfgfile();
+// 		if (pFile) {
+// 			val.InitSet(pFile);
+// 			return true;
+// 		}
+// 	}
+// 
+// 	else if (0 == ndstricmp(objName, "FormatMsgData")) {
+// 		userDefineDataType_map_t &msgObj = LogicEngineRoot::get_Instant()->getGlobalDataType();
+// 		val.InitSet((void*)&msgObj);
+// 		return true;
+// 	}
+// 	else if (0 == ndstricmp(objName, "LogPath")) {
+// 		NDInstanceBase *pInst = getbase_inst();
+// 		server_config *pcfg = pInst->GetInstConfig();
+// 		if (pcfg && pcfg->i_cfg.log_file[0]) {
+// 			char buf[ND_FILE_PATH_SIZE];
+// 			val.InitSet(nd_getpath(pcfg->i_cfg.log_file, buf, sizeof(buf)));
+// 			return true;
+// 		}
+// 	}
+// 	else if (0 == ndstricmp(objName, "LogFile")) {
+// 		NDInstanceBase *pInst = getbase_inst();
+// 		server_config *pcfg = pInst->GetInstConfig();
+// 		if (pcfg && pcfg->i_cfg.log_file[0]) {
+// 			val.InitSet(pcfg->i_cfg.log_file);
+// 			return true;
+// 		}
+// 	}
+// 	else if (0 == ndstricmp(objName, "WritablePath")) {
+// 		val.InitSet(nd_getcwd());
+// 		return true;
+// 	}
+// 
+// 	else if (0 == ndstricmp(objName, "self")) {
+// 		val.InitSet((void*)this, OT_OBJ_BASE_OBJ);
+// 		return true;
+// 	}
+// 
+// 	else if (0 == ndstricmp(objName, "machineInfo")) {
+// 		char buf[512];
+// 		nd_common_machine_info(buf, sizeof(buf));
+// 		val.InitSet(buf);
+// 		return true;
+// 	}
+// 	else if (0 == ndstricmp(objName, "SelfName")) {
+// 		val.InitSet("httpServer");
+// 		return true;
+// 	}
+// 	else {
+// 		return _myBase::getOtherObject(objName, val);
+// 	}
+// 	return false;
+// 	
+// }
+// 
+// bool apoHttpScriptMgr::RunScript(parse_arg_list_t &args, DBLDataNode &result)
+// {
+// 	ND_TRACE_FUNC();
+// 	if (args.size() < 1 || args[0].GetDataType() != OT_STRING) {
+// 		return false;
+// 	}
+// 	const char *script = args[0].GetText();
+// 
+// 	bool ret = m_logicEngine.runScript(script, args, result);
+// 	if (!ret) {
+// 		nd_logerror("run %s error %d\n", script, m_logicEngine.getErrno());
+// 	}
+// 	return ret;
+// }
+// 
+// bool apoHttpScriptMgr::RunScript(const char *script)
+// {
+// 	ND_TRACE_FUNC();
+// 
+// 	parse_arg_list_t args;
+// 	DBLDataNode val, result;
+// 	val.InitSet(script);
+// 	args.push_back(val);
+// 
+// 	bool ret = m_logicEngine.runScript(script, args, result);
+// 	if (!ret) {
+// 		nd_logerror("run %s error %d\n", script, m_logicEngine.getErrno());
+// 	}
+// 	return ret;
+// 
+// }
+// bool apoHttpScriptMgr::SendScriptEvent(int event_id, int argc, ...)
+// {
+// 	ND_TRACE_FUNC();
+// 
+// 	parse_arg_list_t params;
+// 
+// 	params.push_back(DBLDataNode((void*)this, OT_OBJ_BASE_OBJ));
+// 
+// 	va_list arg;
+// 	va_start(arg, argc);
+// 	while (argc-- > 0) {
+// 		DBLDataNode *data1 = va_arg(arg, DBLDataNode*);
+// 		params.push_back(*data1);
+// 	}
+// 	va_end(arg);
+// 
+// 	return m_logicEngine.eventNtf(event_id, params);
+// }
+// 
+// bool apoHttpScriptMgr::SendEvent0(int event)
+// {
+// 	ND_TRACE_FUNC();
+// 	return SendScriptEvent(event, 0);
+// }
+// bool apoHttpScriptMgr::SendEvent1(int event, const DBLDataNode &val1)
+// {
+// 	ND_TRACE_FUNC();
+// 	return SendScriptEvent(event, 1, &val1);
+// }
+// 
+// //////////////////////////////////////////////////////////////////////////
+// 
+// bool apoHttpScriptMgr::opRead(const DBLDataNode& id, DBLDataNode &val)
+// {
+// 	PARSE_TRACE("logic_engine_test: opRead(%d) \n", id.GetInt());
+// 	//_setval(val);
+// 	return true;
+// }
+// 
+// bool apoHttpScriptMgr::opWrite(const DBLDataNode& id, const DBLDataNode &val)
+// {
+// 	PARSE_TRACE("logic_engine_test: opWrite(%d) \n", id.GetInt());
+// 	//_setval(val);
+// 	return true;
+// }
+// 
+// 
+// bool apoHttpScriptMgr::opAdd(const DBLDataNode& id, const DBLDataNode &val)
+// {
+// 	PARSE_TRACE("logic_engine_test: opAdd(%d) \n", id.GetInt());
+// 	//_setval(val);
+// 	return true;
+// }
+// 
+// 
+// bool apoHttpScriptMgr::opSub(const DBLDataNode& id, const  DBLDataNode &val)
+// {
+// 	PARSE_TRACE("logic_engine_test: opSub(%d) \n", id.GetInt());
+// 	//_setval(val);
+// 	return true;
+// }
+// 
+// LogicObjectBase *apoHttpScriptMgr::getObjectMgr(const char* destName)
+// {
+// 	if (0 == ndstricmp(destName, "owner")) {
+// 		return  this;
+// 	}
+// 	return NULL;
+// }
 
-apoHttpScriptMgr::apoHttpScriptMgr(): m_logicEngine(this)
+
+////////////////////////////////////
+
+
+static void _deattach_from_listen(nd_handle handle, void *param)
 {
+	NDInstanceBase *pBase = getbase_inst();
+	if (pBase && pBase->GetDeftListener()) {
+		nd_listensrv_deattach(pBase->GetDeftListener()->GetHandle(), handle, 0);
+	}
+	ApoHttpClientShort *pobj = dynamic_cast<ApoHttpClientShort *>( NDObject::FromHandle(handle));
+	if (pobj) {
+		delete pobj;
+	}
 }
 
-apoHttpScriptMgr::~apoHttpScriptMgr()
+ApoHttpClientShort::ApoHttpClientShort()
 {
+
+}
+ApoHttpClientShort::~ApoHttpClientShort()
+{
+
 }
 
-
-bool apoHttpScriptMgr::getOtherObject(const char*objName, DBLDataNode &val)
+int ApoHttpClientShort::Request(NDHttpRequest &request, const char *host, int port, const char *path, const char* repHandler)
 {
-	ND_TRACE_FUNC();
-	if (0 == ndstricmp(objName, "listener")) {
-		nd_handle hListen = getbase_inst()->GetDeftListener()->GetHandle();
-		val.InitSet((void*)hListen, OT_OBJ_NDHANDLE);
-		return true;
+	m_handler = repHandler;
+
+	if (-1 == Create(NULL)) {
+		nd_logerror("create http connector error\n");
+		return -1;
 	}
 
-	else if (0 == ndstricmp(objName, "configFile")) {
-		const char *pFile = getbase_inst()->Getcfgfile();
-		if (pFile) {
-			val.InitSet(pFile);
-			return true;
-		}
+
+	if (-1 == Open(host, port)) {
+		nd_logerror("connector %s : %d\n", host, port);
+		return -1;
 	}
 
-	else if (0 == ndstricmp(objName, "FormatMsgData")) {
-		userDefineDataType_map_t &msgObj = LogicEngineRoot::get_Instant()->getGlobalDataType();
-		val.InitSet((void*)&msgObj);
-		return true;
-	}
-	else if (0 == ndstricmp(objName, "LogPath")) {
-		NDInstanceBase *pInst = getbase_inst();
-		server_config *pcfg = pInst->GetInstConfig();
-		if (pcfg && pcfg->i_cfg.log_file[0]) {
-			char buf[ND_FILE_PATH_SIZE];
-			val.InitSet(nd_getpath(pcfg->i_cfg.log_file, buf, sizeof(buf)));
-			return true;
-		}
-	}
-	else if (0 == ndstricmp(objName, "LogFile")) {
-		NDInstanceBase *pInst = getbase_inst();
-		server_config *pcfg = pInst->GetInstConfig();
-		if (pcfg && pcfg->i_cfg.log_file[0]) {
-			val.InitSet(pcfg->i_cfg.log_file);
-			return true;
-		}
-	}
-	else if (0 == ndstricmp(objName, "WritablePath")) {
-		val.InitSet(nd_getcwd());
-		return true;
+	nd_connector_add_close_callback(GetHandle(), _deattach_from_listen, NULL);
+
+	NDInstanceBase *pBase = getbase_inst();
+	if (pBase && pBase->GetDeftListener()) {
+		pBase->GetDeftListener()->Attach(*this);
 	}
 
-	else if (0 == ndstricmp(objName, "self")) {
-		val.InitSet((void*)this, OT_OBJ_BASE_OBJ);
-		return true;
-	}
-
-	else if (0 == ndstricmp(objName, "machineInfo")) {
-		char buf[512];
-		nd_common_machine_info(buf, sizeof(buf));
-		val.InitSet(buf);
-		return true;
-	}
-	else if (0 == ndstricmp(objName, "SelfName")) {
-		val.InitSet("httpServer");
-		return true;
-	}
-	else {
-		return _myBase::getOtherObject(objName, val);
-	}
-	return false;
-	
+	return SendRequest(request, host, port, path);
 }
 
-bool apoHttpScriptMgr::RunScript(parse_arg_list_t &args, DBLDataNode &result)
+void ApoHttpClientShort::onResponse(NDHttpResponse *response)
 {
-	ND_TRACE_FUNC();
-	if (args.size() < 1 || args[0].GetDataType() != OT_STRING) {
-		return false;
-	}
-	const char *script = args[0].GetText();
-
-	bool ret = m_logicEngine.runScript(script, args, result);
-	if (!ret) {
-		nd_logerror("run %s error %d\n", script, m_logicEngine.getErrno());
-	}
-	return ret;
-}
-
-bool apoHttpScriptMgr::RunScript(const char *script)
-{
-	ND_TRACE_FUNC();
+// 	LogicUserDefStruct formJson;
+// 	NDHttpRequest::HttpHeader_t::const_iterator it = request.m_requestForms.begin();
+// 	for (; it != request.m_requestForms.end(); ++it) {
+// 		formJson.push_back(it->name.c_str(), it->value.c_str());
+// 	}
 
 	parse_arg_list_t args;
-	DBLDataNode val, result;
-	val.InitSet(script);
-	args.push_back(val);
+	args.push_back(DBLDataNode(m_handler.c_str()));
+	args.push_back(DBLDataNode((void*)this, OT_OBJ_NDOBJECT));
+	args.push_back(DBLDataNode(response->getBody()));
+	args.push_back(DBLDataNode((void*)&response, OT_OBJ_NDOBJECT));
 
-	bool ret = m_logicEngine.runScript(script, args, result);
-	if (!ret) {
-		nd_logerror("run %s error %d\n", script, m_logicEngine.getErrno());
+	DBLDataNode result;
+	if (!getHttpScriptObj()->RunScript(args, result)) {
+		nd_logerror("run http script %s error\n", m_handler.c_str());
 	}
-	return ret;
-
+	Close();
 }
-bool apoHttpScriptMgr::SendScriptEvent(int event_id, int argc, ...)
-{
-	ND_TRACE_FUNC();
-
-	parse_arg_list_t params;
-
-	params.push_back(DBLDataNode((void*)this, OT_OBJ_BASE_OBJ));
-
-	va_list arg;
-	va_start(arg, argc);
-	while (argc-- > 0) {
-		DBLDataNode *data1 = va_arg(arg, DBLDataNode*);
-		params.push_back(*data1);
-	}
-	va_end(arg);
-
-	return m_logicEngine.eventNtf(event_id, params);
-}
-
-bool apoHttpScriptMgr::SendEvent0(int event)
-{
-	ND_TRACE_FUNC();
-	return SendScriptEvent(event, 0);
-}
-bool apoHttpScriptMgr::SendEvent1(int event, const DBLDataNode &val1)
-{
-	ND_TRACE_FUNC();
-	return SendScriptEvent(event, 1, &val1);
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-bool apoHttpScriptMgr::opRead(const DBLDataNode& id, DBLDataNode &val)
-{
-	PARSE_TRACE("logic_engine_test: opRead(%d) \n", id.GetInt());
-	//_setval(val);
-	return true;
-}
-
-bool apoHttpScriptMgr::opWrite(const DBLDataNode& id, const DBLDataNode &val)
-{
-	PARSE_TRACE("logic_engine_test: opWrite(%d) \n", id.GetInt());
-	//_setval(val);
-	return true;
-}
-
-
-bool apoHttpScriptMgr::opAdd(const DBLDataNode& id, const DBLDataNode &val)
-{
-	PARSE_TRACE("logic_engine_test: opAdd(%d) \n", id.GetInt());
-	//_setval(val);
-	return true;
-}
-
-
-bool apoHttpScriptMgr::opSub(const DBLDataNode& id, const  DBLDataNode &val)
-{
-	PARSE_TRACE("logic_engine_test: opSub(%d) \n", id.GetInt());
-	//_setval(val);
-	return true;
-}
-
-LogicObjectBase *apoHttpScriptMgr::getObjectMgr(const char* destName)
-{
-	if (0 == ndstricmp(destName, "owner")) {
-		return  this;
-	}
-	return NULL;
-}
-
 
 ///////////////////////
 

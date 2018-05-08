@@ -7,11 +7,11 @@
 */
 
 
-#include "srv_common/apoGameObj.h"
+#include "apo_http/apoGameObj.h"
 #include "ndapplib/applib.h"
 #include "logic_parser/logicEngineRoot.h"
 #include "logic_parser/dbldata2netstream.h"
-#include "srv_common/playerMgr.h"
+//#include "srv_common/playerMgr.h"
 
 
 //bool apollo_func_machine_version(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)

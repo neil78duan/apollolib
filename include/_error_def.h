@@ -55,5 +55,4 @@ ErrorElement(ESERVER_ERR_MAIL_FULL, "邮件满了"),
 ErrorElement(ESERVER_ERR_ITEM_TOO_MUCH, "物品满了"),
 
 
-
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),
