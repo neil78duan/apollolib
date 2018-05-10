@@ -31,6 +31,36 @@ APOLLO_SCRIPT_API_DEF_GLOBAL(apollo_func_machine_version, "获取主机信息()")
 }
 
 
+APOLLO_SCRIPT_API_DEF(apollo_create_tcp_connector, "TCP_connector_create(host,port)")
+{
+	CHECK_ARGS_NUM(args, 3, parser);
+
+	NDConnector *pConnector = new NDConnector;
+
+	if (-1 == pConnector->Create("tcp-connector")) {
+		nd_logerror("create tcp connector error\n");
+		return false;
+	}
+
+	if (-1 == pConnector->Open(args[1].GetText(), args[2].GetInt(), "tcp-connector")) {
+		nd_logerror("con not open %s %d\n", args[1].GetText(), args[2].GetInt());
+		return false;
+	}
+
+	LogicParserEngine &logicEngine = LogicEngineRoot::get_Instant()->getGlobalParser();
+	if (-1 == nd_message_set_script_engine(pConnector->GetHandle(), &logicEngine, apollo_message_script_entry)) {
+		nd_logerror("set script engine for GMConnector error\n");
+	}
+
+	NDInstanceBase *pBase = getbase_inst();
+	if (pBase && pBase->GetDeftListener()) {
+		pBase->GetDeftListener()->Attach(*pConnector);
+	}
+
+	result.InitSet(pConnector);
+	return true;
+}
+
 ApoGameObj::ApoGameObj() : m_logicEngine(this)
 {
 

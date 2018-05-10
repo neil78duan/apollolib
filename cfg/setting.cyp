@@ -69,7 +69,7 @@
 	<list instruction="1" ins_id="4" size="0" >op_sub</list>
 	<list instruction="1" ins_id="5" size="0" >op_operate</list>
 	<list instruction="1" ins_id="6" size="0" >op_make_var</list>
-	<list instruction="1" ins_id="7" size="0" >op_read_table</list>
+	<list instruction="1" ins_id="7" size="4" >op_cur_parser</list>
 	<list instruction="1" ins_id="8" size="0" >op_comp</list>
 	<list instruction="1" ins_id="9" size="0" >op_calc</list>
 	<list instruction="1" ins_id="10" size="0" record_param_num="1">op_waitevent</list>
@@ -455,6 +455,14 @@
 	
 	<op_idle name="idle"> </op_idle>
 	<breakPointInfo kinds="hide">yes</breakPointInfo>
+	
+	
+	<create_cur_parser name="获得当前解释器" create_type="1" expand="yes" >
+		<op_cur_parser name="节点_获得当前解释器" expand="yes">
+			<comment name="功能说明" rw_stat="read">获得当前解释器对象</comment>
+		</op_cur_parser>
+	</create_cur_parser>
+	
 	
 	<create_get_last_error name="获得错误id" create_type="1" expand="yes" >
 		<op_get_last_error name="节点_获得错误号" expand="yes" create_label="create_internal_label">			
@@ -1332,7 +1340,7 @@
 		<list>create_step_read_excel_attr</list>
 		<list>create_step_process_exit</list>	
 		<list>create_step_process_abort</list>	
-		
+		<list>create_cur_parser</list>
 		<list>create_bt_selector</list>
 		<list>create_bt_sequence</list>
 	</create_list1>		
