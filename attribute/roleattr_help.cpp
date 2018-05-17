@@ -102,14 +102,11 @@ int RoleAttrHelper::loadUplevelExp(const char *file)
 int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 {
 	std::string attrmax[ROLE_ATTR_CAPACITY][3];
-	//const char *attrmax[ROLE_ATTR_CAPACITY][2] = { 0 };
 	const char *pfields[] = { "id", "name", "formula", "save_db", "sync", "min_val", "max_val",			//7
-		"client_change", "real_name", "forBuilding", "affect_buildings", "forRole", "affect_card",	"forCard", //14
-		"showInGuild", "save_log", "lostOnAttacked", "unlimited_max"};
-	
+		"client_change", "real_name","forRole", "affect_card",	"forCard", "friend_read", "save_log", //14
+		 "unlimited_max"};
 	m_wa_num = 0 ;
 	role_attr_description *pwa_desc ;
-
 	int i = 0 ;
 	//DBL_BEGIN_CURSOR(attr_file, pfields) {
 	DBLTable * pTable = DBL_FindTable(attr_file);
@@ -149,16 +146,16 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 		pwa_desc->issync = cursor[4].GetInt();
 		pwa_desc->isChangeByclient = cursor[7].GetInt();
 
-		pwa_desc->forBuilding = cursor[9].GetInt();
-		pwa_desc->isSyncBuilding = cursor[10].GetInt();
-		pwa_desc->forRole = cursor[11].GetInt();
+		pwa_desc->forRole = cursor[9].GetInt();
 
-		pwa_desc->isAffectCard = cursor[12].GetInt();
-		pwa_desc->forCard = cursor[13].GetInt();
-		pwa_desc->showInGuild = cursor[14].GetInt();
-		pwa_desc->islog = cursor[15].GetInt();
-		pwa_desc->isLostOnAttacked = cursor[16].GetInt();
-		//pwa_desc->issyncai = cursor[7].GetInt();
+		const char *pfields[] = { "id", "name", "formula", "save_db", "sync", "min_val", "max_val",			//7
+			"client_change", "real_name","forRole", "affect_card",	"forCard", "friend_read", "save_log", //14
+			"unlimited_max" };
+
+		pwa_desc->isAffectCard = cursor[10].GetInt();
+		pwa_desc->forCard = cursor[11].GetInt();
+		pwa_desc->friend_get = cursor[12].GetInt();
+		pwa_desc->islog = cursor[13].GetInt();
 
 		pwa_desc->wa_id = (attrid_t ) aid ;
 		if (m_wa_num < aid)
@@ -166,7 +163,7 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 
 		attrmax[aid][1] = cursor[5].GetString();
 		attrmax[aid][0] = cursor[6].GetString();
-		attrmax[aid][2] = cursor[17].GetString();
+		attrmax[aid][2] = cursor[14].GetString();
 		++i;
 	}
 	m_wa_num++ ;

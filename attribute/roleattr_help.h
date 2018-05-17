@@ -107,10 +107,10 @@ struct attr_node_buf
 struct role_attr_description{
 	attrid_t wa_id ;
 	unsigned char issave, issync,isChangeByclient,iscallEvent,islog ;	//是否存档，是否同步  
-	unsigned char isSyncBuilding, forRole, forBuilding; //玩家属性是否影响的是建筑物， 玩家属性，建筑物属性
+	unsigned char forRole, forAssistant; //玩家属性是否影响的是建筑物， 玩家属性，建筑物属性
 	unsigned char isAffectCard, forCard; 
-	unsigned char showInGuild;
-	unsigned char isLostOnAttacked;
+	unsigned char friend_get;
+	//unsigned char isLostOnAttacked;
 	unsigned char isReadOnly;
 	int infection_num ;				//受当前属性影响的属性
 	int need_num ;					//当前属性计算需要的属性个数

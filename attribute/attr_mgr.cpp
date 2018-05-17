@@ -100,7 +100,14 @@ bool RoleAttrAsset::setVal(attrid_t index, attrval_t val)
 
 bool RoleAttrAsset::setValRaw(attrid_t index, attrval_t val)
 {
-	_set_val(val, index);
+	RoleAttrHelper  *pwah = get_attr_helper();
+	role_attr_description *pdesc = pwah->get_wa_desc(index);
+	if (!pdesc) {
+		setLastError(NDSYS_ERR_INVALID_INPUT);
+		setLastErrorAttrID(index);
+		return false;
+	}
+	m_data->datas[index] = val;
 	return true;
 }
 
@@ -109,9 +116,11 @@ bool RoleAttrAsset::setValRaw(const char *name, attrval_t newval)
 	RoleAttrHelper  *pwah = get_attr_helper();
 	attrid_t waid = pwah->GetID(name);
 	if (waid != INVALID_ATTR_ID){
-		_set_val(newval, waid);
+		m_data->datas[waid] = newval;
+		return true;
 	}
-	return true;
+	setLastError(NDSYS_ERR_INVALID_INPUT);
+	return false;
 }
 
 bool RoleAttrAsset::setValRaw(const attr_node_buf &attrs)
