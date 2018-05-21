@@ -55,6 +55,7 @@ namespace NetMessage
             ENDSTREAM_MARKER_IP32,
             ENDSTREAM_MARKER_IP64,
             ENDSTREAM_CMD_SKIP_STRUCT_MARK,
+            ENDSTREAM_CMD_ENABLE_STRUCT_MARK,
 
         };
 
@@ -69,10 +70,11 @@ namespace NetMessage
         private int m_readIndex;
         private int m_writeIndex;
         private bool m_bStruckEndMarker ;
-		private bool m_bDataReadEnd ;		
+		private bool m_bDataReadEnd ;
 
+        private bool m_bSkipEndMarker ;
 
-		public bool IsReachedEnd()
+        public bool IsReachedEnd()
 		{
 			return m_bDataReadEnd ;
 		}
@@ -99,6 +101,7 @@ namespace NetMessage
             m_writeIndex = 0;
             m_bStruckEndMarker = false;
 			m_bDataReadEnd = false ;
+            m_bSkipEndMarker = false;
         }
 
         public byte[] ToArray()
@@ -632,6 +635,16 @@ namespace NetMessage
 
         public bool TrytoMoveStructEnd() 
         {
+            if(m_bSkipEndMarker)
+            {
+                return true;
+            }
+            if (m_bStruckEndMarker)
+            {
+                m_bStruckEndMarker = false;
+                return true;
+            }
+
             int orgIndex =   m_readIndex;
             while(m_readIndex < m_buf.Length) 
             {
@@ -642,8 +655,9 @@ namespace NetMessage
                     m_readIndex = orgIndex ;
                     return false ;
                 }
-                if( m_bStruckEndMarker) 
+                if( m_bStruckEndMarker)
                 {
+                    m_bStruckEndMarker = false;
                     return true ;
                 }
                 if(type == eNDnetStreamMarker.ENDSTREAM_MARKER_UNDEFINE) {
@@ -693,19 +707,38 @@ namespace NetMessage
             type = 0;
             size = 0;
             m_bStruckEndMarker = false;
-            byte marker = OrgReadUint8();
+            byte marker;
+
+            BEGIN_READ_MARKER:
+            marker = OrgReadUint8();
             if (marker == 0 || m_bDataReadEnd)
             {
                 return -1;
             }
+            
             if (marker == NET_STREAM_STRUCT_END_MARK)
             {
+                if (m_bSkipEndMarker)
+                {
+                    goto BEGIN_READ_MARKER;
+                }
                 m_bStruckEndMarker = true;
                 return 0;
             }
-            
             type = (eNDnetStreamMarker)((marker & 0xf0) >> 4);
             size =(byte)( marker & 0xf);
+            
+            if (type == eNDnetStreamMarker.ENDSTREAM_CMD_SKIP_STRUCT_MARK)
+            {
+                m_bSkipEndMarker = true;
+                goto BEGIN_READ_MARKER;
+            }
+            else if (type == eNDnetStreamMarker.ENDSTREAM_CMD_ENABLE_STRUCT_MARK)
+            {
+                m_bSkipEndMarker = false;
+                goto BEGIN_READ_MARKER;
+            }
+
             return 0;
         }
       

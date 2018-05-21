@@ -54,5 +54,9 @@ ErrorElement(ESERVER_ERR_MAIL_FULL, "邮件满了"),
 
 ErrorElement(ESERVER_ERR_ITEM_TOO_MUCH, "物品满了"),
 
+ErrorElement(ESERVER_ERR_NO_EQUIP, "没有装备"),
+ErrorElement(ESERVER_ERR_NO_STAR_CARD, "没有明星"),
+ErrorElement(ESERVER_ERR_NO_ASSISTANT, "没有助理"),
+ErrorElement(ESERVER_ERR_ITEM_INUSING, "物品使用中"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),
