@@ -410,13 +410,9 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 	if (!pdesc){
 		return 0;
 	}
-
-
+	
 	setLastError(ESERVER_ERR_SUCCESS);
 	setLastErrorAttrID(INVALID_ATTR_ID);
-
-	//m_lastErrorID = INVALID_ATTR_ID;
-	//m_lastErrorCode = (int)ESERVER_ERR_SUCCESS;
 
 	attrval_t  *pdata = &m_data->datas[aid];
 	attrval_t oldval = *pdata;
@@ -427,9 +423,6 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 
 			setLastError(ESERVER_ERR_ATTR_TOO_MUCH);
 			setLastErrorAttrID(aid);
-
-			//m_lastErrorID = aid;
-			//m_lastErrorCode = (int) ESERVER_ERR_ATTR_TOO_MUCH;
 		}
 	}
 	else if (2 == pdesc->ismax){
@@ -439,9 +432,6 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 
 			setLastError(ESERVER_ERR_ATTR_TOO_MUCH);
 			setLastErrorAttrID(aid);
-
-			//m_lastErrorID = aid;
-			//m_lastErrorCode = ESERVER_ERR_ATTR_TOO_MUCH;
 		}
 	}
 
@@ -451,9 +441,6 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 
 			setLastError(ESERVER_ERR_ATTR_NOT_ENOUGH);
 			setLastErrorAttrID(aid);
-
-			//m_lastErrorID = aid;
-			//m_lastErrorCode = ESERVER_ERR_ATTR_NOT_ENOUGH;
 		}
 	}
 	else if (2 == pdesc->ismin){
@@ -463,9 +450,6 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 
 			setLastError(ESERVER_ERR_ATTR_NOT_ENOUGH);
 			setLastErrorAttrID(aid);
-
-			//m_lastErrorID = aid;
-			//m_lastErrorCode = ESERVER_ERR_ATTR_TOO_MUCH;
 		}
 	}
 
@@ -479,7 +463,7 @@ int RoleAttrAsset::_set_val(attrval_t val, attrid_t aid)
 		else {
 			OnChanged(aid, *pdata, oldval);
 		}
-		m_dataChanged = 1;
+		SetDataChanged();
 		if (pdesc->infection_num > 0) {
 			return 1;
 		}

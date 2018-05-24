@@ -58,5 +58,6 @@ ErrorElement(ESERVER_ERR_NO_EQUIP, "没有装备"),
 ErrorElement(ESERVER_ERR_NO_STAR_CARD, "没有明星"),
 ErrorElement(ESERVER_ERR_NO_ASSISTANT, "没有助理"),
 ErrorElement(ESERVER_ERR_ITEM_INUSING, "物品使用中"),
+ErrorElement(ESERVER_ERR_BAD_REQUEST, "非法请求"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),
