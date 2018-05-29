@@ -239,7 +239,21 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 				fprintf(pf,"\t\tpublic ushort  %sCount; \t\n",pValName ) ;
 				fprintf(pf,"\t\tpublic %s  []%s; \t//%s \n",realType?realType:pType,
 						pValName,ndxml_getattr_val(node1, "comment") ) ;
-				
+
+				const char *pNodeTypeName = realType ? realType : pType;
+				std::string _strArrNum = ndxml_getattr_val(node1, "arrayMarco");
+				if (_strArrNum.size()>0) {
+					if (!IS_NUMERALS(_strArrNum[0])) {
+						_strArrNum = "AutoDataMarco." + _strArrNum;
+					}
+				}
+				const char*pArrayNumber = _strArrNum.c_str();
+
+				fprintf(pf, "\n\t\tpublic bool push_%s(ref %s __refInData)\n\t\t{\n", pValName, pNodeTypeName);
+				fprintf(pf, "\t\t\tif (this.%s == null || this.%s.Length == 0)\n\t\t\t\t %s = new %s[%s];\n", pValName, pValName, pValName, pNodeTypeName, pArrayNumber);
+				fprintf(pf, "\t\t\tif (%sCount < %s)\n\t\t\t{\n\t\t\t\tthis.%s[%sCount++] = __refInData;\n", pValName, pArrayNumber, pValName, pValName);
+				fprintf(pf, "\t\t\t\treturn true; \n\t\t\t}\n\t\t\treturn false;\n\t\t}");
+
 				int size = 0 ;
 				//readstream array
 				
@@ -254,7 +268,7 @@ int build_csDataStruct(ndxml_root *xmlfile, FILE *pf)
 								"\t\t\tfor(int i=0; i<%sCount;++i){\n",pValName ) ;
 				pReadStream += size ;
 				
-				
+
 				
 				//write stream
 				if (realOp)	{
