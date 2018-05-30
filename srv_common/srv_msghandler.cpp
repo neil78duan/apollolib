@@ -36,22 +36,6 @@ MSG_ENTRY_INSTANCE(register2MgrAck)
 }
 
 
-MSG_ENTRY_INSTANCE(echo_handler)
-{
-	ND_TRACE_FUNC() ;
-	ND_MSG_SEND( nethandle,(nd_usermsghdr_t *)msg, h_listen) ;
-	nd_logdebug("receive echo message ECHO length=%d\n", ND_USERMSG_LEN(msg));
-	return 0 ;
-}
-
-MSG_ENTRY_INSTANCE(broadcast_handler)
-{
-	//ND_BROAD_CAST(nethandle,(nd_usermsghdr_t *)msg,ESF_URGENCY,0) ;
-	return 0 ;
-}
-
-
-
 MSG_ENTRY_INSTANCE(unwrap_sendto_player_entry)
 {
 	ND_TRACE_FUNC() ;
