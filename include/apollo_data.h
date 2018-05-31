@@ -14,12 +14,14 @@
 
 #ifdef BUILD_AS_THIRD_PARTY
 #include "ndlib.h"
+#define ND_IP_TEXT_SIZE 64
 #else
 #include "nd_common/nd_common.h"
 #include "nd_crypt/nd_crypt.h"
 #include "nd_net/nd_netlib.h"
 #include "nd_crypt/nd_crypt.h"
 #include "ndapplib/nd_msgpacket.h"
+#include "ndapplib/readcfg.h"
 #endif 
 
 
@@ -370,7 +372,7 @@ struct host_list_node {
 	NDUINT8 isdefault_entry;
 	NDUINT8 isDebug;
 	NDUINT32 version_id ;
-	NDUINT8 inet_ip[20];
+	NDUINT8 inet_ip[ND_IP_TEXT_SIZE];
 	NDUINT8 name[HOST_NAME_SIZE] ;
 
 	host_list_node() 
@@ -425,10 +427,10 @@ struct host_list_node {
 		if (-1 == inmsg.Read(version_id)) {
 			return -1;
 		}
-                if (0 == inmsg.Read(inet_ip, sizeof(inet_ip))) {
+        if (0 == inmsg.Read(inet_ip, sizeof(inet_ip))) {
 			return -1;
 		}
-                if (0 == inmsg.Read(name, sizeof(name))) {
+        if (0 == inmsg.Read(name, sizeof(name))) {
 			return -1;
 		}
 		return 0;

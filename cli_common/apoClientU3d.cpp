@@ -736,7 +736,7 @@ void ApoClient::onLogin()
 bool ApoClient::openSendStreamLog()
 {
 	const char *pFielName = "./apoGameNetStream.data";
-	int length = strlen(pFielName);
+	int length = (int)strlen(pFielName);
 	if (m_pconn->ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)pFielName, &length) == -1){
 		nd_logmsg("log net message bin-data errror\n");
 		return false;
