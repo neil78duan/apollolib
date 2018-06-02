@@ -148,7 +148,7 @@ protected:
 	int checkCryptVersion(char *savedVersion) ;
 	int switchServer(ndip_t ip, NDUINT16 port, int sendMsg, int waitMsg, bool bNotLoadBalance = false);
 	int switchServer(const char *host, NDUINT16 port, int sendMsg, int waitMsg, bool bNotLoadBalance = false);
-	int jumptoGame(NDUINT64 serverid) ;
+	int jumptoGame(const char *host, NDUINT16 port) ;
 	int relogin(void *tokenBuf, int sendMsgID, int waitMsgID, bool bNotLoadBalance = false);
 	int getReloginSessionInfo(login_session_load *outbuf);
 	int getLoginToken(login_token_info *outToken);

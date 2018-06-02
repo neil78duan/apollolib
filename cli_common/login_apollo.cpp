@@ -730,16 +730,16 @@ int LoginApollo::EnterServer(const char *host_name, NDUINT16 port, const char *s
 }
 
 
-int LoginApollo::jumptoGame(NDUINT64 serverid)
+int LoginApollo::jumptoGame(const char *host, NDUINT16 port)
 {
 	char buf[128];
 	NDOStreamMsg msgClose(NETMSG_MAX_LOGIN, LOGIN_MSG_JUMPTO_SERVER_NTF) ;
 	nd_connector_send(m_conn, (nd_packhdr_t*) (msgClose.GetMsgAddr()), ESF_URGENCY) ;
 	
-	if(0!=nd_reconnect(m_conn, HOST_ID_GET_IP(serverid), HOST_ID_GET_PORT(serverid), NULL)  ) {
+	if(0!=nd_reconnectex(m_conn, host,port, NULL)  ) {
 		nd_object_seterror(m_conn, NDSYS_ERR_HOST_UNAVAILABLE) ;
 		
-		nd_logerror("re-connect to %s : %d error\n",nd_inet_ntoa( HOST_ID_GET_IP(serverid),buf),(int) HOST_ID_GET_PORT(serverid));
+		nd_logerror("re-connect to %s : %d error\n",host,port);
 		return -1;
 	}
 	memcpy(buf, &m_sessionID, sizeof(m_sessionID)) ;
@@ -942,10 +942,14 @@ int LoginApollo::onLogin(NDIStreamMsg &inmsg)
 	}
 		
 	//jump to new game server
-	NDUINT64 redirectHost = 0 ;
-	if (0==inmsg.Read(redirectHost) && redirectHost!=0) {
+	NDUINT16 redirectPort = 0 ;
+
+	if (0==inmsg.Read(redirectPort) && redirectPort !=0) {
+		char iptext[64];
+		inmsg.Read(iptext, sizeof(iptext));
+
 		if (inmsg.MsgMinid() == LOGIN_MSG_SELECT_SERVER_ACK ) {
-			if (-1==jumptoGame(redirectHost)) {
+			if (-1==jumptoGame(iptext, redirectPort)) {
 				return -1 ;
 			}
 		}
