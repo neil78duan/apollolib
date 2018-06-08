@@ -60,4 +60,6 @@ ErrorElement(ESERVER_ERR_NO_ASSISTANT, "没有助理"),
 ErrorElement(ESERVER_ERR_ITEM_INUSING, "物品使用中"),
 ErrorElement(ESERVER_ERR_BAD_REQUEST, "非法请求"),
 
+ErrorElement(ESERVER_ERR_STAR_ENERGY_LOWER, "明星体力不足"),
+
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

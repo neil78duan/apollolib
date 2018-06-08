@@ -14,7 +14,7 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">./setting/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1524810869</LastMod>
+	<LastMod name="最后修改" kinds="hide">1525947476</LastMod>
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="41" expand_stat="1" accept_drag_in="func_node">
 	<func_node name="sample_selector" create_template="create_list1" auto_index="5" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
@@ -2865,7 +2865,7 @@
 				<var kinds="string" delete="no" restrict="type">$value</var>
 			</param_collect>
 		</op_print>
-		<apoEditorPos kinds="hide" x="20" y="400" offset_x="0" offset_y="0"/>
+		<apoEditorPos kinds="hide" x="20" y="400" offset_x="65" offset_y="-91"/>
 		<unConnect kinds="hide">
 			<steps_collection>
 				<op_call_func name="节点_调用$加载json文件(jsonFilePath)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">

@@ -35,11 +35,11 @@ RESULT_T CreateCommonDataSql::CommonDataCreate(const char *name ,int serverId, v
 	RESULT_T ret = ESERVER_ERR_SUCCESS;
 	
 	memcpy(&m_databuf, data, size) ;
-	m_data_len = size ;
+	m_data_len =(unsigned long) size ;
 	
 	m_serverId = serverId ;
 	
-	m_name_len = strlen(name) ;
+	m_name_len = (unsigned long)strlen(name) ;
 	if (m_name_len > 0) {
 		strncpy(m_name, name, sizeof(m_name)) ;
 	}
@@ -81,7 +81,7 @@ RESULT_T LoadCommonDataSql::LoadData(const char *name , int serverId, char *buf,
 	
 	m_serverId = serverId ;
 	
-	m_name_len = strlen(name) ;
+	m_name_len = (unsigned long)strlen(name) ;
 	if (m_name_len > 0) {
 		strncpy(m_name, name, sizeof(m_name)) ;
 	}
@@ -134,11 +134,11 @@ RESULT_T SaveCommonDataSql::SaveData(const char *name, int serverId, void *data,
 	RESULT_T ret = ESERVER_ERR_SUCCESS;
 	
 	memcpy(&m_databuf, data, size) ;
-	m_data_len = size ;
+	m_data_len = (unsigned long)size ;
 	
 	m_serverId = serverId ;
 	
-	m_name_len = strlen(name) ;
+	m_name_len = (unsigned long)strlen(name) ;
 	if (m_name_len > 0) {
 		strncpy(m_name, name, sizeof(m_name)) ;
 	}
@@ -237,12 +237,12 @@ RESULT_T SaveMail::Save(NDUINT32 to_id, NDUINT32 from_id, NDUINT32 server_id, ND
 	m_nationId = nation_id;
 	
 	if (title && *title) {
-		m_titleLen = strlen(title) ;
+		m_titleLen = (long)strlen(title);
 		strncpy(m_title, title, sizeof(m_title)) ;
 	}
 	
 	memcpy(m_data, data, size) ;
-	m_dataLen = size ;
+	m_dataLen = (long)size;
 	
 	
 	if (stmt_execute()){
@@ -283,7 +283,7 @@ RESULT_T ReceiveMail::Receive(NDUINT32 mailId, void *data, size_t size)
 	
 	mail_id = mailId;
 	memcpy(m_data, data, size);
-	m_dataLen = size;
+	m_dataLen = (long)size;
 	
 	if (stmt_execute()){
 		return NDSYS_ERR_SYSTEM;

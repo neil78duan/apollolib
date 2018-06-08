@@ -315,11 +315,11 @@ ND_CMDLINE_FUNC_INSTANCE(get_per_hosts_online_number)
 				inmsg.Read(serverID) ;
 				inmsg.Read(number) ;
 				
-				ndip_t ip = ND_HIDWORD(serverID) ;
+				NDUINT32 ip = ND_HIDWORD(serverID) ;
 				NDUINT32 port = ND_LODWORD(serverID) ;
 				port = ND_HIWORD(port) ;
 				
-				fprintf(stdout, "%s:%d online_number =%d\n", nd_inet_ntoa(ip, NULL),port, number) ;
+				//fprintf(stdout, "%s:%d online_number =%d\n", nd_inet_ntoa(ip, NULL),port, number) ;
 			}
 		}
 		
