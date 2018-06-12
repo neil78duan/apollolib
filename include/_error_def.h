@@ -62,4 +62,10 @@ ErrorElement(ESERVER_ERR_BAD_REQUEST, "非法请求"),
 
 ErrorElement(ESERVER_ERR_STAR_ENERGY_LOWER, "明星体力不足"),
 
+ErrorElement(ESERVER_ERR_EQUIP_NOTFIND, "未找到此装备"),
+ErrorElement(ESERVER_ERR_EQUIP_STRENGTH_MAXLEV, "装备强化达到最大等级"),
+ErrorElement(ESERVER_ERR_EQUIP_STRENGTH, "装备强化内部错误"),
+ErrorElement(ESERVER_ERR_EQUIP_REFIT, "装备改造错误"),
+ErrorElement(ESERVER_ERR_SHORT_EQUIPMENTMONEY, "舞台精华不足"),
+
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

@@ -62,10 +62,14 @@ int ProbSamplingEx( int prob[],int result[], int num)
 int SamplingSpecial(int prob[], int prob_num, int result[], int res_num)
 {
 	int sum = 0;
+	int validNum = 0;
 	for(int i=0; i<prob_num; i++) {
 		sum += prob[i] ;
+		if (prob[i]) {
+			++validNum;
+		}
 	}
-	if (sum <= 0){
+	if (sum <= 0 || validNum==0){
 		return -1 ;
 	}
 
@@ -75,10 +79,12 @@ int SamplingSpecial(int prob[], int prob_num, int result[], int res_num)
 		int left_num = prob_num - i ;
 		int need_num = res_num - ret;
 		//剩余样本少于结果, 为了保证采样个数,后面都100%
-		if (left_num <= need_num){
+		if ((validNum-ret) <= need_num){
 			for(int xx =0 ; xx<left_num; xx++) {
-				result[ret] = i+xx;
-				++ret;
+				if (prob[i+xx]) {
+					result[ret] = i + xx;
+					++ret;
+				}
 			}
 			return ret ;
 		}
