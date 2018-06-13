@@ -724,6 +724,7 @@ int Dbl_TableStringToAttr(const DBLDataNode &dataString, attr_node_buf &attrbuf)
 				if (node.StringToArrayString(p)) {
 					attrid_t aid = root->GetID( node.GetarrayText(0));
 					if (aid == INVALID_ATTR_ID) {
+						nd_logerror("can not find %s in attribute table \n", node.GetarrayText(0));
 						return -1;
 					}
 					attrval_t val = node.GetarrayFloat(1);
