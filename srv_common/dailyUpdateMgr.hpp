@@ -55,7 +55,7 @@ class AlarmBase
 {
 public:
 	AlarmBase(NDAlarm *pObject, int timezone = -1);
-	~AlarmBase();
+	virtual~AlarmBase();
 
 	int Init(const DBLDataNode *data, int version);
 	int toStream(DBLDataNode *outData);
@@ -119,17 +119,17 @@ protected:
 struct WeeklyUpdateCfg
 {
 	int id;
-	int weekDay;
+	int dayIndex;
 	int timeOffset;
 	std::string name;
 	DBLDataNode param;
-	WeeklyUpdateCfg() :id(0), weekDay(0), timeOffset(0)
+	WeeklyUpdateCfg() :id(0), dayIndex(0), timeOffset(0)
 	{
 
 	}
 	WeeklyUpdateCfg &operator= (const WeeklyUpdateCfg &r)
 	{
-		weekDay=r.weekDay;
+		dayIndex =r.dayIndex;
 		id = r.id;
 		timeOffset = r.timeOffset;
 		name = r.name;
@@ -145,7 +145,7 @@ class WeekAlarmMgr : public AlarmBase
 {
 public:
 	WeekAlarmMgr(NDAlarm *pObject, int timezone = 0);
-	~WeekAlarmMgr();
+	virtual~WeekAlarmMgr();
 
 	void Update();
 	const char *getNameFromCfg(int id);
@@ -156,12 +156,35 @@ public:
 	static int GetOffsetSeconds(int id);
 
 protected:
-
+	static const WeeklyUpdateCfg *_getWeeklyConfgInfo(weeklyUpCfg_vct &cfgVct, int id);
+	static bool _loadConfigInfo(weeklyUpCfg_vct &cfgVct, const char *table);
 	bool _UpdateNode(const WeeklyUpdateCfg *weeklyCfg, dailyEventInfo *eventInfo, int timezone);
 
 private:	
 	static weeklyUpCfg_vct s_global_weeklyCfgInfo;
 };
 
+
+class MonthAlarmMgr : public WeekAlarmMgr
+{
+public:
+	MonthAlarmMgr(NDAlarm *pObject, int timezone = 0);
+	virtual~MonthAlarmMgr();
+
+	void Update();
+	const char *getNameFromCfg(int id);
+
+	static int LoadMonthlyConfig(const char *tablename);
+	static void Destroy();
+	static const WeeklyUpdateCfg *GetMonthlyConfgInfo(int id);
+	static int GetOffsetSeconds(int id);
+
+	time_t _getGmTime(int dayOfMon, int timeOffset, int timezone);
+protected:
+	bool _UpdateNode(const WeeklyUpdateCfg *weeklyCfg, dailyEventInfo *eventInfo, int timezone);
+
+private:
+	static weeklyUpCfg_vct s_global_monthlyCfgInfo;
+};
 
 #endif /* dailyUpdateMgr_hpp */

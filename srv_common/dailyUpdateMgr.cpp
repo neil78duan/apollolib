@@ -317,7 +317,7 @@ bool DailyUpdateMgr::_UpdateNode(const dailyUpdateCfg *pCfg , dailyEventInfo *ev
 	}
 
 	for (size_t i = 0; i < pCfg->timeOffsets.size(); i++){
-		time_t t = nd_time_getgm_from_offset(pCfg->timeOffsets[i], now, timezone);
+		time_t t = nd_time_from_offset(pCfg->timeOffsets[i], now, timezone);
 		clock_seconds.push_back(t);
 	}
 
@@ -373,37 +373,63 @@ int WeekAlarmMgr::LoadWeeklyConfig(const char *tablename)
 	ND_TRACE_FUNC();
 	Destroy();
 
-	const char *pfields[] = { "ID", "name", "update_time", "param", "update_week"};
+	if (!WeekAlarmMgr::_loadConfigInfo(WeekAlarmMgr::s_global_weeklyCfgInfo, tablename)) {
+		return -1;
+	}
 
-	DBL_BEGIN_CURSOR(tablename, pfields) 	{
+	return 0;
+}
+
+bool WeekAlarmMgr::_loadConfigInfo(weeklyUpCfg_vct &cfgVct, const char *table)
+{
+	ND_TRACE_FUNC();
+
+	const char *pfields[] = { "ID", "name", "update_time", "param", "update_day" };
+
+	DBL_FOR_EACH(table, pfields, false) {
 		if (cursor[0].CheckValid() && cursor[1].CheckValid()) {
 			WeeklyUpdateCfg node;
 
-			if (!cursor[1].CheckValid() || !cursor[2].CheckValid())	{
+			if (!cursor[1].CheckValid() || !cursor[2].CheckValid()) {
 				continue;
 			}
-			if (cursor[3].CheckValid())	{
+			if (cursor[3].CheckValid()) {
 				node.param = cursor[3];
 			}
 
-			node.weekDay = cursor[4].GetInt();
+			node.dayIndex = cursor[4].GetInt();
 
 			node.timeOffset = nd_time_clock_to_seconds(cursor[2].GetarrayText(0));
 
-			if (-1 == node.timeOffset)	{
+			if (-1 == node.timeOffset) {
 				nd_logfatal("load alarm time error line =%d update_time=%s\n", cursor[0].GetInt(), cursor[2].GetText());
 			}
 			else {
 				node.id = cursor[0].GetInt();
 				node.name = cursor[1].GetText();
-				s_global_weeklyCfgInfo.push_back(node);
+				cfgVct.push_back(node);
 			}
-
-
 		}
 	}
-	return 0;
+	return true;
 }
+
+
+const WeeklyUpdateCfg *WeekAlarmMgr::_getWeeklyConfgInfo(weeklyUpCfg_vct &cfgVct, int id)
+{
+	ND_TRACE_FUNC();
+	if (0 == cfgVct.size()) {
+		return NULL;
+	}
+
+	for (weeklyUpCfg_vct::const_iterator it = cfgVct.begin(); it != cfgVct.end(); it++) {
+		if (it->id == id) {
+			return &(*it);
+		}
+	}
+	return NULL;
+}
+
 void WeekAlarmMgr::Destroy()
 {
 	ND_TRACE_FUNC();
@@ -413,17 +439,7 @@ void WeekAlarmMgr::Destroy()
 
 const WeeklyUpdateCfg *WeekAlarmMgr::GetWeeklyConfgInfo(int id)
 {
-	ND_TRACE_FUNC();
-	if (0 == s_global_weeklyCfgInfo.size()) {
-		return NULL;
-	}
-
-	for (weeklyUpCfg_vct::const_iterator it = s_global_weeklyCfgInfo.begin(); it != s_global_weeklyCfgInfo.end(); it++) {
-		if (it->id == id){
-			return &(*it);
-		}
-	}
-	return NULL;
+	return _getWeeklyConfgInfo(s_global_weeklyCfgInfo, id);
 }
 
 int WeekAlarmMgr::GetOffsetSeconds(int id)
@@ -456,7 +472,7 @@ bool WeekAlarmMgr::_UpdateNode(const WeeklyUpdateCfg *pCfg, dailyEventInfo *even
 		return false;
 	}
 
-	time_t eventTm = nd_time_from_week(pCfg->weekDay, pCfg->timeOffset, now, timezone);
+	time_t eventTm = nd_time_from_week(pCfg->dayIndex, pCfg->timeOffset, now, timezone);
 	if (eventTm > now  )	{
 		return false;
 	}
@@ -518,3 +534,130 @@ void WeekAlarmMgr::Update()
 		}
 	}
 }
+
+///////////////////////////////////////////////////////////////////
+// -------------------------------monthly update ------------------------------
+
+weeklyUpCfg_vct MonthAlarmMgr::s_global_monthlyCfgInfo;
+
+MonthAlarmMgr::MonthAlarmMgr(NDAlarm *pObject, int timezone) :WeekAlarmMgr(pObject, timezone)
+{
+
+}
+MonthAlarmMgr::~MonthAlarmMgr()
+{
+
+}
+
+void MonthAlarmMgr::Destroy()
+{
+	MonthAlarmMgr::s_global_monthlyCfgInfo.clear();
+}
+
+const char *MonthAlarmMgr::getNameFromCfg(int id)
+{
+	ND_TRACE_FUNC();
+	const WeeklyUpdateCfg *pcfg = GetMonthlyConfgInfo(id);
+
+	if (pcfg) {
+		return pcfg->name.c_str();
+	}
+	return 0;
+}
+
+int MonthAlarmMgr::LoadMonthlyConfig(const char *tablename)
+{
+	ND_TRACE_FUNC();
+	Destroy();
+	if (!_loadConfigInfo(s_global_monthlyCfgInfo, tablename)) {
+		return -1;
+	}
+	return 0;
+}
+ 
+const WeeklyUpdateCfg *MonthAlarmMgr::GetMonthlyConfgInfo(int id)
+{
+	return _getWeeklyConfgInfo(s_global_monthlyCfgInfo, id);
+}
+int MonthAlarmMgr::GetOffsetSeconds(int id)
+{
+	ND_TRACE_FUNC();
+	const WeeklyUpdateCfg *pcfg = GetMonthlyConfgInfo(id);
+	if (pcfg) {
+		return pcfg->timeOffset;
+	}
+	return 0;
+}
+ time_t MonthAlarmMgr::_getGmTime(int dayOfMon, int timeOffset, int timezone)
+ {
+	 return nd_time_from_month(dayOfMon, timeOffset, app_inst_time(NULL), timezone);
+ }
+
+void MonthAlarmMgr::Update()
+{
+	ND_TRACE_FUNC();
+	time_t now = app_inst_time(NULL);
+	weeklyUpCfg_vct::const_iterator it = s_global_monthlyCfgInfo.begin();
+
+	for (; it != s_global_monthlyCfgInfo.end(); it++) {
+
+		dailyEventInfo *pEventInfo = getEventInfo(it->id);
+		if (!pEventInfo) {
+
+			time_t eventTm = _getGmTime(it->dayIndex, it->timeOffset, m_timeZone);
+			if (now >= eventTm) {
+				//on event
+				m_owner->UpdateMonth(it->name.c_str(), (void*)&it->param);
+				Add(it->id, it->name.c_str(), now);
+				m_bChanged = true;
+			}
+
+		}
+		else {
+			_UpdateNode(&(*it), pEventInfo, m_timeZone);
+		}
+	}
+}
+
+bool MonthAlarmMgr::_UpdateNode(const WeeklyUpdateCfg *pCfg, dailyEventInfo *eventInfo, int timezone)
+{
+	ND_TRACE_FUNC();
+	time_t now = app_inst_time(NULL);
+	time_t lastRenewTm = eventInfo->lastRunTm;
+
+	now += timezone * 3600;
+	lastRenewTm += timezone * 3600;
+
+	struct tm gtmNow, gtmLast;
+
+	gmtime_r(&now, &gtmNow);
+	gmtime_r(&lastRenewTm, &gtmLast);
+
+	if (gtmNow.tm_year == (gtmLast.tm_year +1)) {
+		
+		if ((now - lastRenewTm ) < 31 * 24 * 3600) {
+			return false;
+		}
+	}
+	else if(gtmNow.tm_year == gtmLast.tm_year) {
+		int monInterval = gtmNow.tm_mon - gtmLast.tm_mon;
+		if (monInterval <= 0) {
+			return false;
+		}
+		if (monInterval == 1) {
+			time_t eventTm = _getGmTime(pCfg->dayIndex, pCfg->timeOffset, m_timeZone);
+			if (now < eventTm) {
+				return false;
+			}
+		}
+		
+	}
+
+	//on alarm 
+	m_owner->UpdateMonth(pCfg->name.c_str(), (void*)&pCfg->param);
+	eventInfo->lastRunTm = app_inst_time(NULL);
+	m_bChanged = true;
+	nd_logdebug("montyly alarm %d %s \n", pCfg->id, pCfg->name.c_str());
+	return true;
+}
+

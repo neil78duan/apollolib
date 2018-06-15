@@ -39,12 +39,12 @@
 //
 //	time_t tm3 = nd_time_from_clock(buf,now,1)/ (3600 * 24) ;
 //	
-//	//int second_index1 = nd_time_second_index_day(now) ;
+//	//int second_index1 = nd_time_second_offset_fromday(now) ;
 //	
-//	//int second_index2 = nd_time_second_index_day(tm2) ;//loca_tm.tm_hour * 3600 + loca_tm.tm_min * 60 + loca_tm.tm_sec ;
+//	//int second_index2 = nd_time_second_offset_fromday(tm2) ;//loca_tm.tm_hour * 3600 + loca_tm.tm_min * 60 + loca_tm.tm_sec ;
 //	
 //	
-//	//int second_index3 = nd_time_second_index_day(tm3) ;
+//	//int second_index3 = nd_time_second_offset_fromday(tm3) ;
 //	
 //	//int interval1 = tm1 - tm2 ;
 //	
