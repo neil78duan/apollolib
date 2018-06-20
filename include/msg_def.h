@@ -96,8 +96,13 @@ enum ATLANTIS_SERVER_MSG {
 	SERVER_MSG_GET_OTHER_ROLE_DATA, //int32:role-id, int8:field-type, int16:callback-msg, int64:callback_param
 	SERVER_MSG_CLIENT_SESSION_SYNC,//notify worldserver or social server client session changed after the connector re-connect
 
+	SERVER_MSG_SERVER_INFO_RENEW,		//RENEW the game server info (capacit and online number)
+	SERVER_MSG_REPUSH_ROLES_REQ,			//WORLD reuqest game repush its roles
+	SERVER_MSG_REPUSH_ROLE_TO_MANAGER,		//repush role data from gameserver to world
+
 	SERVER_MSG_TEST_DISCONNECT1 , //test disconnect between game and world 
 	SERVER_MSG_TEST_DISCONNECT2,  //test disconnect between game and social
+	/*
 	SERVER_MSG_GM_ADD_NOTICE_REQ,	  //gm send notice msg
 	SERVER_MSG_GM_ADD_NOTICE_ACK,	  //gm send notice msg ack
 
@@ -111,17 +116,14 @@ enum ATLANTIS_SERVER_MSG {
 	SERVER_MSG_GM_SETSERVERSTATUS_REQ,    //gm set server status req
 	SERVER_MSG_GM_SETSERVERSTATUS_ACK,    //gm set server status ack
 	SERVER_MSG_GM_OPER_ACK,			      //gm common aper ack
-	SERVER_MSG_SERVER_INFO_RENEW,		//RENEW the game server info (capacit and online number)
 	//SERVER_MSG_ERROR_DIRECT_TO_CLIENT,	// from account or world send error code to client 
 
 	SERVER_MSG_ACTIVE_CLONE_INFO_REQ,    //gm get server status req
 	SERVER_MSG_ACTIVE_CLONE_INFO_NTF,    //gm get server status ack
 	SERVER_MSG_ACTIVE_CLONE_INFO_ACK,    //gm get server status ack
 
-	SERVER_MSG_REPUSH_ROLES_REQ,			//WORLD reuqest game repush its roles
-	SERVER_MSG_REPUSH_ROLE_TO_MANAGER,		//repush role data from gameserver to world
 	SERVER_MSG_FRESH_LEVEL_DATA,
-
+	*/
 	SERVER_MSG_NUMBER
 };
 // 

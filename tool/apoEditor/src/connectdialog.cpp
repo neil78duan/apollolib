@@ -695,7 +695,7 @@ int ConnectDialog::ShowServers(void *hostsAddr, int size, const char *tips)
 	int num = size;
 
 	for (int i = 0; i < num; i++)	{
-		nd_logmsg("ONLINE-NUMBER >>> host %s:%d : %d / %d \n", (const char*)bufs[i].inet_ip, bufs[i].port,
+		nd_logmsg("%s >>> host %s:%d : %d / %d \n",tips, (const char*)bufs[i].inet_ip, bufs[i].port,
 			bufs[i].cur_number, bufs[i].max_number);
 	}
 
