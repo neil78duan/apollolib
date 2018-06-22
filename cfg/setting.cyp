@@ -704,6 +704,17 @@
 		</op_assignin>
 	</create_assignin>
 	
+	<create_set_CurValue name="设置返回值" create_type="1" >
+		<op_assignin name="节点_设置返回值" expand="yes" create_label="create_internal_label">
+			<comment name="功能说明" rw_stat="read">$CurValue = value</comment>
+			<varname name="变量名" kinds="hide" delete="no">$CurValue</varname>
+			<param_collect name="值" expand="yes" expand_stat="1" delete="no">
+				<type name="赋值类型" kinds="reference" reference_type="type_data_type" delete="no">18</type>
+				<var name="值" kinds="string" delete="no" restrict="type">0</var>
+			</param_collect>
+		</op_assignin>
+	</create_set_CurValue>
+	
 	<create_step_type_transfer name="类型转换" create_type="1" >
 		<op_type_transfer name="节点_类型转换" expand_list="comment,varname,index" create_label="create_internal_label" >			
 			<comment name="功能说明" rw_stat="read">data.convert( type )</comment>			
@@ -1323,6 +1334,8 @@
 		<list>create_bit_operate</list>
 		
 		<list>create_assignin</list>
+		<list>create_set_CurValue</list>
+		
 		
 		<list>create_step_inistall_msg_handler</list>
 		<list>create_step_send_msg</list>	

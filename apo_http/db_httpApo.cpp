@@ -247,7 +247,7 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_affected_rows, "db_受影响记录数(db_connector)"
 	return true;
 }
 
-APOLLO_SCRIPT_API_DEF(apoDb_mysql_fetch, "db_提前当前行(db_connector)")
+APOLLO_SCRIPT_API_DEF(apoDb_mysql_fetch, "db_提取当前行(db_connector)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
 	CHECK_DATA_TYPE(args[1], OT_OBJECT_VOID, parser);
