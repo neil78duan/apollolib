@@ -35,6 +35,13 @@ protected:
 	DBLDataNode m_userData;
 };
 
+struct fileCacheInfo
+{
+	size_t size;
+	char md5[33];
+	char *dataAddr;
+};
+typedef std::map<std::string, fileCacheInfo> fileCache_map_t;
 
 class apoHttpListener : public NDHttpListener
 {
@@ -42,10 +49,26 @@ class apoHttpListener : public NDHttpListener
 public:
 	apoHttpListener(nd_fectory_base *sf = NULL);
 	virtual ~apoHttpListener();
+	void setPath(const char *readable, const char *writable);
+	bool downloadFile(const char *filePath, NDHttpSession *session, const NDHttpRequest &request);
+	bool cacheFile(const char *filePath);
+	bool uncacheFile(const char*filePath);
+
+	void Destroy(int flag);
 protected:
 	virtual void *getScriptEngine();
 	virtual int onRequestScript(const char* script, NDHttpSession *session, const NDHttpRequest &request);
+	void *loadFile(const char *filePath, NDINT64 offset, NDINT64 &size, size_t &fileSize);
+	void *_loadFile(const char *filePath, NDINT64 offset, NDINT64 &size, size_t &fileSize);
+	void releaseFile(void *fileData);
+	bool getFileOffset(const char*range, NDINT64 &size, NDINT64 &offset);
 
+	void destroyCache();
+
+	std::string m_readablePath;
+	std::string m_writablePath;
+
+	fileCache_map_t m_fileCache;
 };
 
 extern apoHttpScriptMgr * getHttpScriptObj(); //need implement this function

@@ -13,6 +13,19 @@
 #include "logic_parser/dbldata2netstream.h"
 #include "apo_http/httpScriptApi.h"
 
+static NDHttpSession *_getSession(const DBLDataNode &objData)
+{
+
+	NDHttpSession *pSession = NULL;
+	if (objData == OT_OBJ_NDHANDLE) {
+		pSession = dynamic_cast<NDHttpSession*>(NDObject::FromHandle(objData.GetNDHandle()));
+	}
+	else if (objData.GetDataType() == OT_OBJ_NDOBJECT) {
+		pSession = dynamic_cast<NDHttpSession*>(objData.GetNDObj());
+	}
+	return pSession;
+}
+
 APOLLO_SCRIPT_API_DEF(apollo_set_http_handler, "http_install_req_handler(listenerName, reqPath,scriptName)")
 {
 	CHECK_ARGS_NUM(args, 4, parser);
@@ -39,22 +52,13 @@ APOLLO_SCRIPT_API_DEF(apollo_http_error, "HTTP_error_response(session, errorId, 
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 
-	NDHttpSession *pSession = NULL;
-	if (args[1].GetDataType() == OT_OBJ_NDHANDLE) {
-		nd_handle h = (nd_handle)args[1].GetObjectAddr();
-		if (!h) {
-			parser->setErrno(NDERR_PARAM_TYPE_NOT_MATCH);
-			return false;
-		}
-		pSession = dynamic_cast<NDHttpSession*>(NDGetSession(h));
-	}
-	else if (args[1].GetDataType() == OT_OBJ_NDOBJECT) {
-		pSession = dynamic_cast<NDHttpSession*>((NDObject*)args[1].GetObjectAddr());
-	}
+	NDHttpSession *pSession = _getSession(args[1]);
 	if (!pSession) {
 		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		nd_logerror("get session error \n");
 		return false;
 	}
+		
 	const char *errorDesc = "unknown-error";
 	if (args.size() > 3) {
 		errorDesc = args[3].GetText();
@@ -69,20 +73,10 @@ APOLLO_SCRIPT_API_DEF(apollo_http_respone, "HTTP_response(session,status, header
 	CHECK_ARGS_NUM_ONLY(args, 5, parser);
 	CHECK_ARGS_NUM(args, 2, parser);
 
-	NDHttpSession *pSession = NULL;
-	if (args[1].GetDataType() == OT_OBJ_NDHANDLE) {
-		nd_handle h = (nd_handle)args[1].GetObjectAddr();
-		if (!h) {
-			parser->setErrno(NDERR_PARAM_TYPE_NOT_MATCH);
-			return false;
-		}
-		pSession = dynamic_cast<NDHttpSession*>(NDGetSession(h));
-	}
-	else if (args[1].GetDataType() == OT_OBJ_NDOBJECT) {
-		pSession = dynamic_cast<NDHttpSession*>((NDObject*)args[1].GetObjectAddr());
-	}
+	NDHttpSession *pSession = _getSession(args[1]);
 	if (!pSession) {
 		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		nd_logerror("get session error \n");
 		return false;
 	}
 
@@ -116,18 +110,94 @@ APOLLO_SCRIPT_API_DEF(apollo_http_respone, "HTTP_response(session,status, header
 }
 
 
-APOLLO_SCRIPT_API_DEF(apollo_http_get_header, "http_get_header(requestObj)")
+APOLLO_SCRIPT_API_DEF(apollo_http_file_down, "HTTP_download_file(session,request,filepath)")
 {
-	CHECK_ARGS_NUM(args, 2, parser);
-	if (args[1].GetDataType() != OT_OBJ_NDOBJECT) {
-		nd_logerror("argment 1 need OT_OBJ_NDOBJECT\n");
-		parser->setErrno(NDERR_PARAM_TYPE_NOT_MATCH);
+	CHECK_ARGS_NUM(args, 4, parser);
+	
+	NDHttpSession *pSession = _getSession(args[1]);
+	if (!pSession) {
+		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		nd_logerror("get session error \n");
 		return false;
 	}
 
-	NDHttpRequest *request = (NDHttpRequest *)args[1].GetObjectAddr();
+	NDHttpRequest *request = dynamic_cast<NDHttpRequest*>(args[2].GetNDObj());
 	if (!request) {
 		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		nd_logerror("get request error \n");
+		return false;
+	}
+
+
+	LogicObjectBase *owner = parser->getOwner();
+	nd_assert(owner);
+	DBLDataNode val;
+	if (!owner->getOtherObject("listener", val)) {
+		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		return false;
+	}
+	apoHttpListener *pListen = dynamic_cast<apoHttpListener*>(NDObject::FromHandle((nd_handle)val.GetObjectAddr()));
+	if (!pListen) {
+		parser->setErrno(NDERR_SYSTEM);
+		return false;
+	}
+	return pListen->downloadFile(args[3].GetText(), pSession, *request);
+}
+
+APOLLO_SCRIPT_API_DEF(apollo_http_cache_file, "HTTP_cache_to_mem(filepath)")
+{
+	CHECK_ARGS_NUM(args, 2, parser);
+	if (!args[1].GetText()) {
+		parser->setErrno(NDERR_INVALID_INPUT);
+		return false;
+	}
+	LogicObjectBase *owner = parser->getOwner();
+	nd_assert(owner);
+	DBLDataNode val;
+	if (!owner->getOtherObject("listener", val)) {
+		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		return false;
+	}
+	apoHttpListener *pListen = dynamic_cast<apoHttpListener*>(NDObject::FromHandle((nd_handle)val.GetObjectAddr()));
+	if (!pListen) {
+		parser->setErrno(NDERR_SYSTEM);
+		return false;
+	}
+	
+	return pListen->cacheFile(args[1].GetText());
+}
+
+APOLLO_SCRIPT_API_DEF(apollo_http_uncache_file, "HTTP_uncache_from_mem(filepath)")
+{
+	CHECK_ARGS_NUM(args, 2, parser);
+	if (!args[1].GetText()) {
+		parser->setErrno(NDERR_INVALID_INPUT);
+		return false;
+	}
+	LogicObjectBase *owner = parser->getOwner();
+	nd_assert(owner);
+	DBLDataNode val;
+	if (!owner->getOtherObject("listener", val)) {
+		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		return false;
+	}
+	apoHttpListener *pListen = dynamic_cast<apoHttpListener*>(NDObject::FromHandle((nd_handle)val.GetObjectAddr()));
+	if (!pListen) {
+		parser->setErrno(NDERR_SYSTEM);
+		return false;
+	}
+
+	return pListen->uncacheFile(args[1].GetText());
+}
+
+APOLLO_SCRIPT_API_DEF(apollo_http_get_header, "http_get_header(requestObj)")
+{
+	CHECK_ARGS_NUM(args, 2, parser);
+	
+	NDHttpRequest *request = dynamic_cast<NDHttpRequest*>(args[1].GetNDObj());
+	if (!request) {
+		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		nd_logerror("argment 1 need OT_OBJ_NDOBJECT\n");
 		return false;
 	}
 
@@ -148,15 +218,11 @@ APOLLO_SCRIPT_API_DEF(apollo_http_get_header, "http_get_header(requestObj)")
 APOLLO_SCRIPT_API_DEF(apollo_http_get_body, "http_get_body(requestObj)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
-	if (args[1].GetDataType() != OT_OBJ_NDOBJECT) {
-		nd_logerror("argment 1 need OT_OBJ_NDOBJECT\n");
-		parser->setErrno(NDERR_PARAM_TYPE_NOT_MATCH);
-		return false;
-	}
-
-	NDHttpRequest *request = (NDHttpRequest *)args[1].GetObjectAddr();
+	
+	NDHttpRequest *request = dynamic_cast<NDHttpRequest*>(args[1].GetNDObj());
 	if (!request) {
 		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		nd_logerror("argment 1 need OT_OBJ_NDOBJECT\n");
 		return false;
 	}
 
@@ -167,15 +233,11 @@ APOLLO_SCRIPT_API_DEF(apollo_http_get_body, "http_get_body(requestObj)")
 APOLLO_SCRIPT_API_DEF(apollo_http_get_listener, "http_get_Listener(requestObj)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
-	if (args[1].GetDataType() != OT_OBJ_NDOBJECT) {
-		nd_logerror("argment 1 need OT_OBJ_NDOBJECT\n");
-		parser->setErrno(NDERR_PARAM_TYPE_NOT_MATCH);
-		return false;
-	}
-
-	NDHttpRequest *request = (NDHttpRequest *)args[1].GetObjectAddr();
+	
+	NDHttpRequest *request = dynamic_cast<NDHttpRequest*>(args[1].GetNDObj());
 	if (!request) {
 		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		nd_logerror("argment 1 need OT_OBJ_NDOBJECT\n");
 		return false;
 	}
 
@@ -367,9 +429,9 @@ void ApoHttpClientShort::onResponse(NDHttpResponse *response)
 
 	parse_arg_list_t args;
 	args.push_back(DBLDataNode(m_handler.c_str()));
-	args.push_back(DBLDataNode((void*)this, OT_OBJ_NDOBJECT));
+	args.push_back(DBLDataNode(this));
 	args.push_back(DBLDataNode(response->getBody()));
-	args.push_back(DBLDataNode((void*)&response, OT_OBJ_NDOBJECT));
+	args.push_back(DBLDataNode(response));
 	args.push_back(m_userData);
 
 	DBLDataNode result;
@@ -384,6 +446,7 @@ void ApoHttpClientShort::OnClose()
 	//delete this;
 }
 
+
 ///////////////////////
 
 apoHttpListener::apoHttpListener(nd_fectory_base *sf) : _myBase(sf)
@@ -393,6 +456,19 @@ apoHttpListener::apoHttpListener(nd_fectory_base *sf) : _myBase(sf)
 apoHttpListener::~apoHttpListener()
 {
 
+}
+
+void apoHttpListener::Destroy(int flag)
+{
+	destroyCache();
+	NDHttpListener::Destroy(flag);
+
+}
+
+void apoHttpListener::setPath(const char *readable, const char *writable)
+{
+	m_readablePath = readable;
+	m_writablePath = writable;
 }
 
 void *apoHttpListener::getScriptEngine()
@@ -410,9 +486,9 @@ int apoHttpListener::onRequestScript(const char* script, NDHttpSession *session,
 
 	parse_arg_list_t args;
 	args.push_back(DBLDataNode(script));
-	args.push_back(DBLDataNode((void*)session, OT_OBJ_NDOBJECT));
+	args.push_back(DBLDataNode(session));
 	args.push_back(DBLDataNode(formJson));
-	args.push_back(DBLDataNode((void*)&request, OT_OBJ_NDOBJECT));
+	args.push_back(DBLDataNode((NDIBaseObj*)&request));
 
 	DBLDataNode result;
 	if (!getHttpScriptObj()->RunScript(args, result)) {
@@ -420,4 +496,182 @@ int apoHttpListener::onRequestScript(const char* script, NDHttpSession *session,
 		return -1;
 	}
 	return 0;
+}
+
+void apoHttpListener::destroyCache()
+{
+	for (fileCache_map_t::iterator it = m_fileCache.begin(); it != m_fileCache.end(); ++it) {
+		if (it->second.dataAddr) {
+			nd_unload_file(it->second.dataAddr);
+			it->second.dataAddr;
+		}
+	}
+	m_fileCache.clear();
+}
+
+bool apoHttpListener::cacheFile(const char *filePath)
+{
+	size_t size = 0;
+	fileCacheInfo cacheInfo;
+	cacheInfo.dataAddr = (char*) nd_load_file(filePath, &size); 
+	if (!cacheInfo.dataAddr) {
+		return false;
+	}
+	MD5CryptToStr32(cacheInfo.dataAddr,(int)size, cacheInfo.md5);
+	cacheInfo.size = size;
+
+	m_fileCache[filePath] = cacheInfo;
+	return true;
+}
+
+bool apoHttpListener::uncacheFile(const char*filePath)
+{
+	fileCache_map_t::iterator it = m_fileCache.find(filePath);
+	if (it != m_fileCache.end()) {
+		nd_unload_file(it->second.dataAddr);
+		m_fileCache.erase(it);
+	}
+	return true;
+}
+
+bool apoHttpListener::downloadFile(const char *filePath, NDHttpSession *session, const NDHttpRequest &request)
+{
+	NDINT64 offset = 0;
+	NDINT64 size = 0;
+	size_t totalSize = 0;
+
+	const char *pRange = request.getHeader("Range");
+	if (pRange && *pRange) {
+		if (!getFileOffset( pRange, size, offset)) {
+			return false;
+		}
+	}
+	char *pData = (char*) loadFile( filePath,  offset, size,totalSize);
+	if (!pData) {
+		return false;
+	}
+	//send data from session
+	NDHttpResponse response;
+
+	if (pRange) {
+		char tmp[128];
+		snprintf(tmp, sizeof(tmp), "bytes %lld-%lld/%lld", offset, (offset + size), totalSize);
+		response.addHeader("Content-Range", tmp);
+		response.setStatus(206);
+	}
+	else {
+		response.addHeader("Content-Range", "bytes");
+		response.setStatus(200);
+	}
+	response.addHeader("Content-Type","application/octet-stream");
+	
+	session->sendBinaryData(response,pData,size, response.getStatus() == 206 ? "Partial Content" : "OK");
+	
+	releaseFile(pData);
+	return true;
+}
+
+bool apoHttpListener::getFileOffset(const char*pRange, NDINT64 &size, NDINT64 &offset)
+{
+	char *p = (char*)ndstr_first_valid(pRange);
+	if (!p) {
+		return false;
+	}
+	offset = strtoll(p, &p, 0);
+	if (offset < 0) {
+		size = 0;
+	}
+	else {
+		p = (char*)ndstr_first_valid(p);
+		if (*p != '-') {
+			return false;
+		}
+		++p;
+		if (!*p) {
+			size = 0;
+		}
+		else {
+			NDINT64 endPos = strtoll(p, &p, 0);
+			if (endPos < offset) {
+				return false;
+			}
+			size = endPos - offset + 1;
+		}
+	}
+	return true;
+
+
+}
+
+void apoHttpListener::releaseFile(void *fileData)
+{
+	for (fileCache_map_t::iterator it = m_fileCache.begin(); it != m_fileCache.end(); ++it) {
+		if (fileData >= it->second.dataAddr && fileData< it->second.dataAddr + it->second.size) {
+			return;
+		}
+	}
+	free(fileData);
+}
+void *apoHttpListener::loadFile(const char *filePath, NDINT64 offset, NDINT64 &size, size_t &fileSize)
+{
+	fileCache_map_t::iterator it = m_fileCache.find(filePath);
+	if (it == m_fileCache.end()) {
+		return _loadFile(filePath, offset, size, fileSize);
+	}
+
+	const char *pRet = NULL;
+	fileCacheInfo &fileInfo = it->second;
+
+	fileSize = fileInfo.size;
+	if (offset < 0) {
+		size = -offset;
+		if (size > fileSize)
+			return NULL;
+		return fileInfo.dataAddr + fileInfo.size  + offset;
+	}
+	else if (size == 0) {
+		size = fileSize;
+		return fileInfo.dataAddr;
+	}
+	else {
+		if (offset >= fileSize) {
+			return NULL;
+		}
+		NDINT64 dataSize = fileSize - offset;
+		if (size > dataSize)
+			size = dataSize;
+
+		return fileInfo.dataAddr +  offset;
+	}
+
+}
+void *apoHttpListener::_loadFile(const char *filePath, NDINT64 offset, NDINT64 &size, size_t &fileSize)
+{
+	FILE *fp = fopen(filePath, "rb");
+	if (!fp) {
+		return NULL;
+	}
+	//get total size 
+	fseek(fp, 0, SEEK_END);
+	fileSize = ftell(fp);
+	fseek(fp, 0, SEEK_SET);
+
+
+	if (offset < 0) {
+		fseek(fp, offset, SEEK_END);
+		size = -offset;
+	}
+	else if (size == 0) {
+		size = fileSize;
+	}
+	else {
+		fseek(fp, offset, SEEK_SET);
+	}
+	char *pData = (char*)malloc(size);
+	nd_assert(pData);
+
+	size_t readlen = fread(pData,1,size,fp);
+	fclose(fp);
+	size = readlen;
+	return pData;
 }

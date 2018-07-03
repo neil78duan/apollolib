@@ -20,55 +20,56 @@ function getStartPos(Range) {
     return startPos;
 }
 
-function configHeader (Config, resp) {
+function configHeader(Config, resp) {
     var startPos = Config.startPos,
-    fileSize = Config.fileSize;
-    
-    if(startPos == 0) {
+        fileSize = Config.fileSize;
+
+    if (startPos == 0) {
         resp.setHeader('Accept-Range', 'bytes');
     } else {
         resp.setHeader('Content-Range', 'bytes ' + startPos + '-' + (fileSize - 1) + '/' + fileSize);
     }
     resp.writeHead(206, 'Partial Content', {
-                   'Content-Type' : 'application/octet-stream',
-                   });
+        'Content-Type': 'application/octet-stream',
+    });
 }
+
 
 function beginDownload(filePath, req, resp, down) {
-    
+
     var config = {};
-    
-    fs.stat(filePath, function(error, state) {
-            if(error)
-                throw error;
-            
-            config.fileSize = state.size;
-            
-            
-            sheldonLog.debug("download file header.range = ", req.headers.range) ;
-            
-            config.startPos = getStartPos(req.headers.range);
-            if(0==config.startPos) {
-                resp.writeHead(200,{
-                          "Content-Type": getFileType(filePath),
-                          "Content-Length": config.fileSize,
-                          "Server":"NodeJs("+process.version+")"
-                          });
-            }
-            else {
-                configHeader(config, resp);
-            }
-            
-            down(config);
+
+    fs.stat(filePath, function (error, state) {
+        if (error)
+            throw error;
+
+        config.fileSize = state.size;
+
+
+        sheldonLog.debug("download file header.range = ", req.headers.range);
+
+        config.startPos = getStartPos(req.headers.range);
+        if (0 == config.startPos) {
+            resp.writeHead(200, {
+                "Content-Type": getFileType(filePath),
+                "Content-Length": config.fileSize,
+                "Server": "NodeJs(" + process.version + ")"
             });
+        }
+        else {
+            configHeader(config, resp);
+        }
+
+        down(config);
+    });
 }
 
 
-function Download(filePath,resp, req ) {
-    
-    fs.exists(filePath, function(exist) {
-        if(exist) {
-            beginDownload(filePath,req, resp, function(config) {
+function Download(filePath, resp, req) {
+
+    fs.exists(filePath, function (exist) {
+        if (exist) {
+            beginDownload(filePath, req, resp, function (config) {
                 fReadStream = fs.createReadStream(filePath, {
                     encoding: 'binary',
                     bufferSize: 1024 * 128,
@@ -83,6 +84,8 @@ function Download(filePath,resp, req ) {
         }
     });
 }
+
+/*
 exports.resumableBuffer = function(resp, req,buf)
 {
     var config = {};
@@ -155,7 +158,7 @@ exports.sendBuffByFragment = function(writer, buf,fragmentSize, end_callback)
     }
     
 }
-
+*/
 
 exports.resumableDownload = Download ;
 
@@ -331,7 +334,7 @@ var path=require("path");
 function getFileType( fileName )
 {
 	var extName = path.extname(fileName).toLowerCase();
-	return fileTypeList.extName || 'text/plain' ;
+    return fileTypeList.extName || "application/octet-stream";
 }
 
 exports.getFileType = getFileType;

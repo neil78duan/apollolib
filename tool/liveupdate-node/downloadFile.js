@@ -76,7 +76,7 @@ exports.DownLoadData = function (response , request)
 		var dataJson = url.parse(request.url, true).query;
         sheldonLog.debug("getVersionData() ", JSON.stringify(dataJson) ) ;
 		
-		var dataID = dataJson.data ;
+        var dataID = dataJson.dataver ;
 		var name = dataJson.name ;
 		
 		var filePath = config_info.liveUpdateDir + '/' + dataID + '/' + name;

@@ -106,7 +106,7 @@ function saveFiles(response,FileVersion, FileData,FileMd5, desc, md5Json) {
 			sheldonLog.info("upload version file success version-id = ", verID);
 			
 			var downUrl =config_info.my_domain_name +':' +
-				config_info.port.toString() + '/loaddata?data=' + verID +'&name=' + FileData.name;
+				config_info.port.toString() + '/loaddata?dataver=' + verID +'&name=' + FileData.name;
 			
 			var backTip = '<a href="/">Home</a><br /><br />Upload version success ! ' +
 				'<br />  url is : ' + downUrl ;
