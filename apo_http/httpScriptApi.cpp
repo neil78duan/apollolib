@@ -13,15 +13,15 @@
 #include "logic_parser/dbldata2netstream.h"
 #include "apo_http/httpScriptApi.h"
 
-static NDHttpSession *_getSession(const DBLDataNode &objData)
+static  NDHttpSession *_getSession(const DBLDataNode &objData)
 {
 
-	NDHttpSession *pSession = NULL;
+	 NDHttpSession *pSession = NULL;
 	if (objData == OT_OBJ_NDHANDLE) {
-		pSession = dynamic_cast<NDHttpSession*>(NDObject::FromHandle(objData.GetNDHandle()));
+		pSession = dynamic_cast< NDHttpSession*>(NDObject::FromHandle(objData.GetNDHandle()));
 	}
 	else if (objData.GetDataType() == OT_OBJ_NDOBJECT) {
-		pSession = dynamic_cast<NDHttpSession*>(objData.GetNDObj());
+		pSession = dynamic_cast< NDHttpSession*>(objData.GetNDObj());
 	}
 	return pSession;
 }
@@ -121,7 +121,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_file_down, "HTTP_download_file(session,request
 		return false;
 	}
 
-	NDHttpRequest *request = dynamic_cast<NDHttpRequest*>(args[2].GetNDObj());
+	const NDHttpRequest *request = dynamic_cast<const NDHttpRequest*>(args[2].GetNDObj());
 	if (!request) {
 		parser->setErrno(NDERR_BAD_GAME_OBJECT);
 		nd_logerror("get request error \n");
@@ -541,11 +541,16 @@ bool apoHttpListener::downloadFile(const char *filePath, NDHttpSession *session,
 	size_t totalSize = 0;
 
 	const char *pRange = request.getHeader("Range");
-	if (pRange && *pRange) {
-		if (!getFileOffset( pRange, size, offset)) {
-			return false;
+	if (pRange ) {
+		pRange = ndstristr(pRange, "bytes=");
+		if (pRange) {
+			pRange += 6;
+			if (!getFileOffset(pRange, size, offset)) {
+				return false;
+			}
 		}
 	}
+
 	char *pData = (char*) loadFile( filePath,  offset, size,totalSize);
 	if (!pData) {
 		return false;
@@ -558,11 +563,14 @@ bool apoHttpListener::downloadFile(const char *filePath, NDHttpSession *session,
 		snprintf(tmp, sizeof(tmp), "bytes %lld-%lld/%lld", offset, (offset + size), totalSize);
 		response.addHeader("Content-Range", tmp);
 		response.setStatus(206);
+		response.addHeader("Connection", "Keep-Alive");
 	}
 	else {
-		response.addHeader("Content-Range", "bytes");
 		response.setStatus(200);
+		response.addHeader("Connection", "Closed");
 	}
+
+	response.addHeader("Accept-Ranges", "bytes");
 	response.addHeader("Content-Type","application/octet-stream");
 	
 	session->sendBinaryData(response,pData,size, response.getStatus() == 206 ? "Partial Content" : "OK");
