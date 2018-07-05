@@ -102,7 +102,10 @@ APOLLO_SCRIPT_API_DEF(apollo_http_respone, "HTTP_response(session,status, header
 		if (args[4].GetDataType() == OT_USER_DEFINED) {
 			args[4].setOutAsJson(true);
 		}
-		args[4].toStdString(response.m_body);
+		std::string bodyString;
+		if (args[4].toStdString(bodyString) > 0) {
+			response.setBody(bodyString.c_str());
+		}
 	}
 
 	pSession->SendResponse(response, "success");
@@ -142,6 +145,27 @@ APOLLO_SCRIPT_API_DEF(apollo_http_file_down, "HTTP_download_file(session,request
 		return false;
 	}
 	return pListen->downloadFile(args[3].GetText(), pSession, *request);
+}
+
+
+APOLLO_SCRIPT_API_DEF(apollo_get_upload_file, "HTTP_get_upload_file(request,varName)")
+{
+	CHECK_ARGS_NUM(args, 3, parser);
+
+	const NDHttpRequest *request = dynamic_cast<const NDHttpRequest*>(args[1].GetNDObj());
+	if (!request) {
+		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		nd_logerror("get request error \n");
+		return false;
+	}
+	const NDHttpRequest::fileCacheInfo *fileInfo = request->getUploadFile(args[2].GetText());
+	if (!fileInfo) {
+		parser->setErrno(NDERR_FILE_NOT_EXIST);
+		nd_logerror("%s file not upload from client \n", args[2].GetText());
+		return false;
+	}
+	result.InitSet((void*)fileInfo->dataAddr, fileInfo->size);
+	return true;
 }
 
 APOLLO_SCRIPT_API_DEF(apollo_http_cache_file, "HTTP_cache_to_mem(filepath)")

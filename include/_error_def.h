@@ -68,4 +68,7 @@ ErrorElement(ESERVER_ERR_EQUIP_STRENGTH, "装备强化内部错误"),
 ErrorElement(ESERVER_ERR_EQUIP_REFIT, "装备改造错误"),
 ErrorElement(ESERVER_ERR_SHORT_EQUIPMENTMONEY, "舞台精华不足"),
 
+ErrorElement(ESERVER_ERR_CARD_STARLEVMAX, "明星星级达到最大等级"),
+
+
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),
