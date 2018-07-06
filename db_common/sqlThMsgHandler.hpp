@@ -54,7 +54,6 @@ struct db_mail_data_msg : public db_msg_header
 		to_id = 0 ;
 		from_id = 0;
 		serverId = 0;
-		nationId = 0;
 		is_system = 0;
 		body_size = 0 ;
 		title[0] = 0 ;
@@ -63,7 +62,6 @@ struct db_mail_data_msg : public db_msg_header
 	roleid_t to_id, from_id ;
 	int is_system ;
 	NDUINT32 serverId;
-	NDUINT32 nationId;
 	int body_size ;
 	char title[MAIL_TITLE_SIZE];
 	char body[MAIL_BODY_SIZE] ;

@@ -205,17 +205,15 @@ RESULT_T SaveOutlineMsgSql::SaveMsg(roleid_t rid,  void *data , NDUINT32 msg_len
 int SaveMail::Create( CMyDatabase* dbhandle )
 {
 	ND_TRACE_FUNC() ;
-	const char *SQL_STM = "select save_mail(?, ?, ? ,?, ?, ? , ?)" ;
-	//a_from int unsigned ,a_to int unsigned, a_title char(40), is_system int , a_data BLOB
+	const char *SQL_STM = "select save_mail(?, ?, ? ,?, ?, ? )" ;
 	memset(m_binds, 0, sizeof(m_binds));
 	
 	SET_BIND_CONTEXT(&m_binds[0], MYSQL_TYPE_LONG, &m_fromId,0, 0, 0 ) ;
 	SET_BIND_CONTEXT(&m_binds[1], MYSQL_TYPE_LONG, &m_toId,0, 0, 0 ) ;
 	SET_BIND_CONTEXT(&m_binds[2], MYSQL_TYPE_LONG, &m_serverId, 0, 0, 0);
-	SET_BIND_CONTEXT(&m_binds[3], MYSQL_TYPE_LONG, &m_nationId, 0, 0, 0);
-	SET_BIND_CONTEXT(&m_binds[4], MYSQL_TYPE_STRING, &m_title,sizeof(m_title), 0, &m_titleLen ) ;
-	SET_BIND_CONTEXT(&m_binds[5], MYSQL_TYPE_LONG, &m_isSystem,0, 0, 0 ) ;
-	SET_BIND_CONTEXT(&m_binds[6], MYSQL_TYPE_MEDIUM_BLOB, &m_data,sizeof(m_data), 0, &m_dataLen) ;
+	SET_BIND_CONTEXT(&m_binds[3], MYSQL_TYPE_STRING, &m_title,sizeof(m_title), 0, &m_titleLen ) ;
+	SET_BIND_CONTEXT(&m_binds[4], MYSQL_TYPE_LONG, &m_isSystem,0, 0, 0 ) ;
+	SET_BIND_CONTEXT(&m_binds[5], MYSQL_TYPE_MEDIUM_BLOB, &m_data,sizeof(m_data), 0, &m_dataLen) ;
 	
 	m_dbhandle = dbhandle;
 	PREPARE_STM(m_stmt, dbhandle,SQL_STM, m_binds,BIND_NUMB) ;
@@ -223,7 +221,7 @@ int SaveMail::Create( CMyDatabase* dbhandle )
 	
 }
 
-RESULT_T SaveMail::Save(NDUINT32 to_id, NDUINT32 from_id, NDUINT32 server_id, NDUINT32 nation_id, bool isSystem, const char *title, void *data, size_t size)
+RESULT_T SaveMail::Save(NDUINT32 to_id, NDUINT32 from_id, NDUINT32 server_id, bool isSystem, const char *title, void *data, size_t size)
 {
 	ND_TRACE_FUNC() ;
 	int ret =-1;
@@ -234,7 +232,6 @@ RESULT_T SaveMail::Save(NDUINT32 to_id, NDUINT32 from_id, NDUINT32 server_id, ND
 	m_toId = to_id ;
 	m_isSystem = isSystem ;
 	m_serverId = server_id;
-	m_nationId = nation_id;
 	
 	if (title && *title) {
 		m_titleLen = (long)strlen(title);
@@ -243,8 +240,7 @@ RESULT_T SaveMail::Save(NDUINT32 to_id, NDUINT32 from_id, NDUINT32 server_id, ND
 	
 	memcpy(m_data, data, size) ;
 	m_dataLen = (long)size;
-	
-	
+		
 	if (stmt_execute()){
 		return NDSYS_ERR_SYSTEM;
 	}

@@ -168,7 +168,7 @@ int dbThread_save_mail(nd_thsrv_msg *msg)
 	ND_TRACE_FUNC() ;
 	db_mail_data_msg *recvmsg = (db_mail_data_msg*) msg->data ;
 	
-	get_SaveMail()->Save(recvmsg->to_id, recvmsg->from_id, recvmsg->serverId,recvmsg->nationId,
+	get_SaveMail()->Save(recvmsg->to_id, recvmsg->from_id, recvmsg->serverId,
 									   recvmsg->is_system?true:false, recvmsg->title,
 									   recvmsg->body, recvmsg->body_size) ;
 	
