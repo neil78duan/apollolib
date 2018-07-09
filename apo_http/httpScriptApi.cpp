@@ -289,12 +289,24 @@ APOLLO_SCRIPT_API_DEF(apollo_http_build_body, "http_build_body( body_text)")
 		const char *pVarName = strchr(pInput, '$');
 		if (pVarName) {
 			//find var name 
+			int len = 0;
 			char myName[USER_DEF_VAR_NAME_SIZE];
-			int len = ndstr_parse_variant_n(pVarName, myName, sizeof(myName));
-			if (len == 0) {
-				nd_logerror("parse %s error\n", pVarName);
-				parser->setErrno(NDERR_PARAM_INVALID);
-				return false;
+			if (pVarName[1] == '(') {
+				const char *pReadEnd = ndstr_nstr_end(pVarName +1 , myName, ')',sizeof(myName));
+				if (!pReadEnd || !*pReadEnd) {
+					nd_logerror("parse %s error\n", pVarName);
+					parser->setErrno(NDERR_PARAM_INVALID);
+					return false;
+				}
+				len = (int)(pReadEnd + 1 - pVarName);
+			}
+			else {
+				len = ndstr_parse_variant_n(pVarName, myName, sizeof(myName));
+				if (len == 0) {
+					nd_logerror("parse %s error\n", pVarName);
+					parser->setErrno(NDERR_PARAM_INVALID);
+					return false;
+				}
 			}
 			int offset = 1;
 			if (IS_NUMERALS(myName[1]) || 0 == ndstricmp(&myName[1], "value")) {
@@ -395,6 +407,18 @@ APOLLO_SCRIPT_API_DEF(apollo_http_post, "httpShort_post(host,port, path,body,han
 }
 
 
+APOLLO_SCRIPT_API_DEF(apollo_convert_sysErr_to_http, "http_get_response_error(systemError)")
+{
+	CHECK_ARGS_NUM(args, 2, parser);
+
+	int inputError = args[1].GetInt();
+	int outError = 200;
+	if (inputError != 0) {
+		outError = 500;
+	}
+
+	return true;
+}
 
 ////////////////////////////////////
 

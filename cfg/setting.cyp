@@ -345,7 +345,7 @@
 				<input_param name="Param2">Form</input_param>
 				<input_param name="Param3">requestObj</input_param>
 			</func_params>
-			<apoEditorPos kinds="hide" x="20" y="400" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="20" y="400" offset_x="67" offset_y="-154"/>
 			<comment name="函数说明" expand="yes">
 				<desc>消息处理handle(session, request, listener)</desc>
 				<isGlobal kinds="bool">1</isGlobal>
@@ -372,9 +372,18 @@
 					<comment name="功能说明" rw_stat="read">get_last_error()</comment>
 					<apoEditorPos kinds="hide" x="210" y="220" offset_x="0" offset_y="0"/>
 				</op_get_last_error>
+				<op_call_func name="节点_调用$http_get_response_error(systemError)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
+					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+					<apoEditorPos kinds="hide" x="419" y="226" offset_x="0" offset_y="0"/>
+					<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_convert_sysErr_to_http&amp;_dispname=http_get_response_error(systemError)</func_name>
+					<param_collect name="参数" expand="yes">
+						<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+						<var kinds="string" delete="no" restrict="type">$value</var>
+					</param_collect>
+				</op_call_func>
 				<op_call_func name="节点_调用: send_error()" create_template="create_input_param" auto_index="1" expand_list="comment,func_name" expand_stat="0">
 					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-					<apoEditorPos kinds="hide" x="481" y="208" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="627" y="210" offset_x="0" offset_y="0"/>
 					<func_name kinds="user_define" user_param="func_list">_realval=CPP.apollo_http_error&amp;_dispname=发送HTTP错误(session,errorId,desc)</func_name>
 					<param_collect name="参数" expand="yes">
 						<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
@@ -387,10 +396,9 @@
 					<var name="错误说明" kinds="string" delete="no" restrict="type">not found</var>
 				</op_call_func>
 			</exception_catch_block>
-			
 			<op_build_json_data name="节点_创建json数据$myHeader$" create_template="create_user_def_param" var_name="var" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
 				<comment name="功能说明" rw_stat="read">define  name{...}</comment>
-				<apoEditorPos kinds="hide" x="322" y="553" offset_x="0" offset_y="0"/>
+				<apoEditorPos kinds="hide" x="727" y="694" offset_x="0" offset_y="0"/>
 				<var name="变量名" kinds="string" delete="no" replace_val="../.name">myHeader</var>
 				<param_collect name="参数" expand="yes">
 					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">Content-Type</func_name>
@@ -400,7 +408,7 @@
 			</op_build_json_data>
 			<op_call_func name="节点_调用$http_生成body( body_text)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-				<apoEditorPos kinds="hide" x="347" y="418" offset_x="0" offset_y="0"/>
+				<apoEditorPos kinds="hide" x="657" y="452" offset_x="0" offset_y="0"/>
 				<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_http_build_body&amp;_dispname=http_生成body( body_text)</func_name>
 				<param_collect name="参数" expand="yes">
 					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
@@ -409,7 +417,7 @@
 			</op_call_func>
 			<op_call_func name="节点_发送http回复" expand_list="comment,func_name" expand_stat="1">
 				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-				<apoEditorPos kinds="hide" x="801" y="446" offset_x="0" offset_y="0"/>
+				<apoEditorPos kinds="hide" x="896" y="476" offset_x="0" offset_y="0"/>
 				<func_name kinds="user_define" user_param="func_list">_realval=CPP.apollo_http_respone&amp;_dispname=发送HTTP回复(session,header, body)</func_name>
 				<param_collect name="参数" expand="yes">
 					<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
@@ -427,7 +435,7 @@
 					<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
 					<var kinds="string" delete="no" restrict="type">$value</var>
 				</param_collect>
-			</op_call_func>			
+			</op_call_func>
 			<unConnect kinds="hide"/>
 		</msg_handler_node>
 	</create_http_handler>
