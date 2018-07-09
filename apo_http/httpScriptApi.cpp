@@ -15,7 +15,7 @@
 
 static  NDHttpSession *_getSession(const DBLDataNode &objData)
 {
-
+	ND_TRACE_FUNC();
 	 NDHttpSession *pSession = NULL;
 	if (objData == OT_OBJ_NDHANDLE) {
 		pSession = dynamic_cast< NDHttpSession*>(NDObject::FromHandle(objData.GetNDHandle()));
@@ -28,6 +28,7 @@ static  NDHttpSession *_getSession(const DBLDataNode &objData)
 
 APOLLO_SCRIPT_API_DEF(apollo_set_http_handler, "http_install_req_handler(listenerName, reqPath,scriptName)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 4, parser);
 
 	DBLDataNode netHandle;
@@ -50,6 +51,7 @@ APOLLO_SCRIPT_API_DEF(apollo_set_http_handler, "http_install_req_handler(listene
 
 APOLLO_SCRIPT_API_DEF(apollo_http_error, "HTTP_error_response(session, errorId, desc)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 3, parser);
 
 	NDHttpSession *pSession = _getSession(args[1]);
@@ -70,6 +72,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_error, "HTTP_error_response(session, errorId, 
 
 APOLLO_SCRIPT_API_DEF(apollo_http_respone, "HTTP_response(session,status, header, body)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM_ONLY(args, 5, parser);
 	CHECK_ARGS_NUM(args, 2, parser);
 
@@ -115,6 +118,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_respone, "HTTP_response(session,status, header
 
 APOLLO_SCRIPT_API_DEF(apollo_http_file_down, "HTTP_download_file(session,request,filepath)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 4, parser);
 	
 	NDHttpSession *pSession = _getSession(args[1]);
@@ -150,6 +154,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_file_down, "HTTP_download_file(session,request
 
 APOLLO_SCRIPT_API_DEF(apollo_get_upload_file, "HTTP_get_upload_file(request,varName)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 3, parser);
 
 	const NDHttpRequest *request = dynamic_cast<const NDHttpRequest*>(args[1].GetNDObj());
@@ -170,6 +175,7 @@ APOLLO_SCRIPT_API_DEF(apollo_get_upload_file, "HTTP_get_upload_file(request,varN
 
 APOLLO_SCRIPT_API_DEF(apollo_http_cache_file, "HTTP_cache_to_mem(filepath)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 2, parser);
 	if (!args[1].GetText()) {
 		parser->setErrno(NDERR_INVALID_INPUT);
@@ -193,6 +199,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_cache_file, "HTTP_cache_to_mem(filepath)")
 
 APOLLO_SCRIPT_API_DEF(apollo_http_uncache_file, "HTTP_uncache_from_mem(filepath)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 2, parser);
 	if (!args[1].GetText()) {
 		parser->setErrno(NDERR_INVALID_INPUT);
@@ -216,6 +223,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_uncache_file, "HTTP_uncache_from_mem(filepath)
 
 APOLLO_SCRIPT_API_DEF(apollo_http_get_header, "http_get_header(requestObj)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 2, parser);
 	
 	NDHttpRequest *request = dynamic_cast<NDHttpRequest*>(args[1].GetNDObj());
@@ -241,6 +249,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_get_header, "http_get_header(requestObj)")
 
 APOLLO_SCRIPT_API_DEF(apollo_http_get_body, "http_get_body(requestObj)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 2, parser);
 	
 	NDHttpRequest *request = dynamic_cast<NDHttpRequest*>(args[1].GetNDObj());
@@ -256,6 +265,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_get_body, "http_get_body(requestObj)")
 
 APOLLO_SCRIPT_API_DEF(apollo_http_get_listener, "http_get_Listener(requestObj)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 2, parser);
 	
 	NDHttpRequest *request = dynamic_cast<NDHttpRequest*>(args[1].GetNDObj());
@@ -272,6 +282,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_get_listener, "http_get_Listener(requestObj)")
 
 APOLLO_SCRIPT_API_DEF(apollo_http_build_body, "http_build_body( body_text)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 2, parser);
 	CHECK_DATA_TYPE(args[1], OT_STRING, parser);
 
@@ -348,6 +359,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_build_body, "http_build_body( body_text)")
 
 APOLLO_SCRIPT_API_DEF(apollo_http_get, "httpShort_get(host,port, path, handler,userData)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 5, parser);
 
 	ApoHttpClientShort *pConn = new ApoHttpClientShort;
@@ -370,6 +382,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_get, "httpShort_get(host,port, path, handler,u
 
 APOLLO_SCRIPT_API_DEF(apollo_http_post, "httpShort_post(host,port, path,body,handler,userData)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args,6, parser);
 
 	ApoHttpClientShort *pConn = new ApoHttpClientShort;
@@ -409,6 +422,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_post, "httpShort_post(host,port, path,body,han
 
 APOLLO_SCRIPT_API_DEF(apollo_convert_sysErr_to_http, "http_get_response_error(systemError)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 2, parser);
 
 	int inputError = args[1].GetInt();
@@ -425,6 +439,7 @@ APOLLO_SCRIPT_API_DEF(apollo_convert_sysErr_to_http, "http_get_response_error(sy
 
 static void _deattach_from_listen(nd_handle handle, void *param)
 {
+	ND_TRACE_FUNC();
 	NDInstanceBase *pBase = getbase_inst();
 	if (pBase && pBase->GetDeftListener()) {
 		nd_listensrv_deattach(pBase->GetDeftListener()->GetHandle(), handle, 0);
@@ -447,6 +462,7 @@ ApoHttpClientShort::~ApoHttpClientShort()
 
 int ApoHttpClientShort::Request(NDHttpRequest &request, const char *host, int port, const char *path, const char* repHandler)
 {
+	ND_TRACE_FUNC();
 	m_handler = repHandler;
 
 	if (-1 == Create(NULL)) {
@@ -474,6 +490,7 @@ int ApoHttpClientShort::Request(NDHttpRequest &request, const char *host, int po
 
 void ApoHttpClientShort::onResponse(NDHttpResponse *response)
 {
+	ND_TRACE_FUNC();
 
 	parse_arg_list_t args;
 	args.push_back(DBLDataNode(m_handler.c_str()));
@@ -508,6 +525,7 @@ apoHttpListener::~apoHttpListener()
 
 void apoHttpListener::Destroy(int flag)
 {
+	ND_TRACE_FUNC();
 	destroyCache();
 	NDHttpListener::Destroy(flag);
 
@@ -525,6 +543,7 @@ void *apoHttpListener::getScriptEngine()
 }
 int apoHttpListener::onRequestScript(const char* script, NDHttpSession *session, const NDHttpRequest &request)
 {
+	ND_TRACE_FUNC();
 	LogicUserDefStruct formJson;
 
 	NDHttpRequest::HttpHeader_t::const_iterator it = request.m_requestForms.begin();
@@ -548,6 +567,7 @@ int apoHttpListener::onRequestScript(const char* script, NDHttpSession *session,
 
 void apoHttpListener::destroyCache()
 {
+	ND_TRACE_FUNC();
 	for (fileCache_map_t::iterator it = m_fileCache.begin(); it != m_fileCache.end(); ++it) {
 		if (it->second.dataAddr) {
 			nd_unload_file(it->second.dataAddr);
@@ -559,6 +579,7 @@ void apoHttpListener::destroyCache()
 
 bool apoHttpListener::cacheFile(const char *filePath)
 {
+	ND_TRACE_FUNC();
 	size_t size = 0;
 	fileCacheInfo cacheInfo;
 	cacheInfo.dataAddr = (char*) nd_load_file(filePath, &size); 
@@ -574,6 +595,7 @@ bool apoHttpListener::cacheFile(const char *filePath)
 
 bool apoHttpListener::uncacheFile(const char*filePath)
 {
+	ND_TRACE_FUNC();
 	fileCache_map_t::iterator it = m_fileCache.find(filePath);
 	if (it != m_fileCache.end()) {
 		nd_unload_file(it->second.dataAddr);
@@ -584,6 +606,7 @@ bool apoHttpListener::uncacheFile(const char*filePath)
 
 bool apoHttpListener::downloadFile(const char *filePath, NDHttpSession *session, const NDHttpRequest &request)
 {
+	ND_TRACE_FUNC();
 	NDINT64 offset = 0;
 	NDINT64 size = 0;
 	size_t totalSize = 0;
@@ -629,6 +652,7 @@ bool apoHttpListener::downloadFile(const char *filePath, NDHttpSession *session,
 
 bool apoHttpListener::getFileOffset(const char*pRange, NDINT64 &size, NDINT64 &offset)
 {
+	ND_TRACE_FUNC();
 	char *p = (char*)ndstr_first_valid(pRange);
 	if (!p) {
 		return false;
@@ -661,6 +685,7 @@ bool apoHttpListener::getFileOffset(const char*pRange, NDINT64 &size, NDINT64 &o
 
 void apoHttpListener::releaseFile(void *fileData)
 {
+	ND_TRACE_FUNC();
 	for (fileCache_map_t::iterator it = m_fileCache.begin(); it != m_fileCache.end(); ++it) {
 		if (fileData >= it->second.dataAddr && fileData< it->second.dataAddr + it->second.size) {
 			return;
@@ -670,6 +695,7 @@ void apoHttpListener::releaseFile(void *fileData)
 }
 void *apoHttpListener::loadFile(const char *filePath, NDINT64 offset, NDINT64 &size, size_t &fileSize)
 {
+	ND_TRACE_FUNC();
 	fileCache_map_t::iterator it = m_fileCache.find(filePath);
 	if (it == m_fileCache.end()) {
 		return _loadFile(filePath, offset, size, fileSize);
@@ -703,6 +729,7 @@ void *apoHttpListener::loadFile(const char *filePath, NDINT64 offset, NDINT64 &s
 }
 void *apoHttpListener::_loadFile(const char *filePath, NDINT64 offset, NDINT64 &size, size_t &fileSize)
 {
+	ND_TRACE_FUNC();
 	FILE *fp = fopen(filePath, "rb");
 	if (!fp) {
 		return NULL;

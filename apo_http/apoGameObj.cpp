@@ -17,6 +17,7 @@
 //bool apollo_func_machine_version(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result)
 APOLLO_SCRIPT_API_DEF_GLOBAL(apollo_func_machine_version, "获取主机信息()")
 {
+	ND_TRACE_FUNC();
 	char buf[512];
 
 	if (getbase_inst()->CheckIsDeveVer()) {
@@ -33,6 +34,7 @@ APOLLO_SCRIPT_API_DEF_GLOBAL(apollo_func_machine_version, "获取主机信息()")
 
 APOLLO_SCRIPT_API_DEF(apollo_create_tcp_connector, "TCP_connector_create(host,port)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 3, parser);
 
 	NDConnector *pConnector = new NDConnector;
@@ -166,6 +168,7 @@ bool ApoGameObj::opSub(const DBLDataNode& id, const  DBLDataNode &val)
 
 LogicObjectBase *ApoGameObj::getObjectMgr(const char* destName)
 {
+	ND_TRACE_FUNC();
 	if (0 == ndstricmp(destName, "owner")) {
 		return  this;
 	}

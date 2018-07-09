@@ -14,6 +14,7 @@
 
 APOLLO_SCRIPT_API_DEF(apoDb_mysql_open, "db_连接数据库(host,port,user, passwd, dbInst)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 5, parser);
 	const char *dbInst = NULL;
 	CMyDatabase *pDBconn = new CMyDatabase;
@@ -37,6 +38,7 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_open, "db_连接数据库(host,port,user, passwd, d
 
 APOLLO_SCRIPT_API_DEF(apoDb_mysql_close, "db_关闭连接(db_connector)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 2, parser);
 	CHECK_DATA_TYPE(args[1], OT_OBJECT_VOID, parser);
 
@@ -55,6 +57,7 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_close, "db_关闭连接(db_connector)")
 
 APOLLO_SCRIPT_API_DEF(apoDb_mysql_runsql, "db_执行sql(db_connector, sql_text)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 3, parser);
 	CHECK_DATA_TYPE(args[1], OT_OBJECT_VOID, parser);
 	CHECK_DATA_TYPE(args[2], OT_STRING, parser);
@@ -144,6 +147,7 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_runsql, "db_执行sql(db_connector, sql_text)")
 
 APOLLO_SCRIPT_API_DEF(apoDb_mysql_store, "db_保存结果(db_connector)return rows")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 2, parser);
 	CHECK_DATA_TYPE(args[1], OT_OBJECT_VOID, parser);
 
@@ -163,6 +167,7 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_store, "db_保存结果(db_connector)return rows")
 
 APOLLO_SCRIPT_API_DEF(apoDb_mysql_release, "db_释放结果(db_connector)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 2, parser);
 	CHECK_DATA_TYPE(args[1], OT_OBJECT_VOID, parser);
 
@@ -178,6 +183,7 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_release, "db_释放结果(db_connector)")
 
 APOLLO_SCRIPT_API_DEF(apoDb_mysql_num_rows, "db_结果行数(db_connector)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 2, parser);
 	CHECK_DATA_TYPE(args[1], OT_OBJECT_VOID, parser);
 
@@ -196,6 +202,7 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_num_rows, "db_结果行数(db_connector)")
 
 APOLLO_SCRIPT_API_DEF(apoDb_mysql_num_cols, "db_结果列数(db_connector)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 2, parser);
 	CHECK_DATA_TYPE(args[1], OT_OBJECT_VOID, parser);
 
@@ -214,6 +221,7 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_num_cols, "db_结果列数(db_connector)")
 
 APOLLO_SCRIPT_API_DEF(apoDb_mysql_insert_id, "db_当前插入ID(db_connector)")
 {
+	ND_TRACE_FUNC();
 
 	CHECK_ARGS_NUM(args, 2, parser);
 	CHECK_DATA_TYPE(args[1], OT_OBJECT_VOID, parser);
@@ -232,6 +240,7 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_insert_id, "db_当前插入ID(db_connector)")
 
 APOLLO_SCRIPT_API_DEF(apoDb_mysql_affected_rows, "db_受影响记录数(db_connector)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 2, parser);
 	CHECK_DATA_TYPE(args[1], OT_OBJECT_VOID, parser);
 
@@ -249,6 +258,7 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_affected_rows, "db_受影响记录数(db_connector)"
 
 APOLLO_SCRIPT_API_DEF(apoDb_mysql_fetch, "db_提取当前行(db_connector)")
 {
+	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 2, parser);
 	CHECK_DATA_TYPE(args[1], OT_OBJECT_VOID, parser);
 
@@ -289,6 +299,7 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_fetch, "db_提取当前行(db_connector)")
 
 int apoMysqlDBInit()
 {
+	ND_TRACE_FUNC();
 	nd_logmsg("mysql api for apollo init success!\n");
 	return 0;
 }
