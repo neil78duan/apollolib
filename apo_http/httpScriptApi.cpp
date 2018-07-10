@@ -60,12 +60,18 @@ APOLLO_SCRIPT_API_DEF(apollo_http_error, "HTTP_error_response(session, errorId, 
 		nd_logerror("get session error \n");
 		return false;
 	}
-		
-	const char *errorDesc = "unknown-error";
+	int outEncode = E_SRC_CODE_UTF_8;
+	apoHttpListener*pListen = dynamic_cast<apoHttpListener*>( pSession->GetParent());
+	if (pListen) {
+		outEncode = pListen->getEncodeType();
+	}
+
+	std::string errorDesc = "unknown-error"; 
 	if (args.size() > 3) {
+		args[3].ConvertEncode(ND_ENCODE_TYPE,outEncode);
 		errorDesc = args[3].GetText();
 	}
-	pSession->sendErrorResponse(args[2].GetInt(), errorDesc);
+	pSession->sendErrorResponse(args[2].GetInt(), errorDesc.c_str());
 	nd_logmsg("send http error response %d\n", args[2].GetInt());
 	return true;
 }
@@ -102,6 +108,13 @@ APOLLO_SCRIPT_API_DEF(apollo_http_respone, "HTTP_response(session,status, header
 	}
 
 	if (args[4].CheckValid()) {
+		int outEncode = E_SRC_CODE_UTF_8;
+		apoHttpListener*pListen = dynamic_cast<apoHttpListener*>(pSession->GetParent());
+		if (pListen) {
+			outEncode = pListen->getEncodeType();
+		}
+		args[4].ConvertEncode(ND_ENCODE_TYPE, outEncode);
+
 		if (args[4].GetDataType() == OT_USER_DEFINED) {
 			args[4].setOutAsJson(true);
 		}
@@ -514,7 +527,7 @@ void ApoHttpClientShort::OnClose()
 
 ///////////////////////
 
-apoHttpListener::apoHttpListener(nd_fectory_base *sf) : _myBase(sf)
+apoHttpListener::apoHttpListener(nd_fectory_base *sf) : _myBase(sf), m_encodeType(E_SRC_CODE_UTF_8)
 {
 
 }
@@ -529,6 +542,15 @@ void apoHttpListener::Destroy(int flag)
 	destroyCache();
 	NDHttpListener::Destroy(flag);
 
+}
+
+void apoHttpListener::SetHttpEncode(const char *encodeName)
+{
+	m_encodeType = nd_get_encode_val(encodeName);
+}
+int apoHttpListener::getEncodeType()
+{
+	return m_encodeType;
 }
 
 void apoHttpListener::setPath(const char *readable, const char *writable)

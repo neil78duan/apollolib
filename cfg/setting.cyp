@@ -403,7 +403,7 @@
 				<param_collect name="参数" expand="yes">
 					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">Content-Type</func_name>
 					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-					<var kinds="string" delete="no" restrict="type">text/html</var>
+					<var kinds="string" delete="no" restrict="type">text/html;charset=UTF-8</var>
 				</param_collect>
 			</op_build_json_data>
 			<op_call_func name="节点_调用$http_生成body( body_text)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">

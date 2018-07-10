@@ -53,8 +53,9 @@ public:
 	bool downloadFile(const char *filePath, NDHttpSession *session, const NDHttpRequest &request);
 	bool cacheFile(const char *filePath);
 	bool uncacheFile(const char*filePath);
-
 	void Destroy(int flag);
+	void SetHttpEncode(const char *encodeName);
+	int getEncodeType();
 protected:
 	virtual void *getScriptEngine();
 	virtual int onRequestScript(const char* script, NDHttpSession *session, const NDHttpRequest &request);
@@ -65,6 +66,7 @@ protected:
 
 	void destroyCache();
 
+	int m_encodeType;
 	std::string m_readablePath;
 	std::string m_writablePath;
 
