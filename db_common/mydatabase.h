@@ -74,10 +74,12 @@ public:
 	MYSQL *get_mysql_handle() {return db_handle;}
 	/* 打开数据库 on error return -1  */
 	int open_database(const char *host, 		/*数据库服务器*/
-						int port ,
-						const char *user, 		/*用户名*/
-						const char* passwd, 	/* 密码*/
-						const char *dbinstance);/*数据库实例*/						
+		int port ,
+		const char *user, 		/*用户名*/
+		const char* passwd, 	/* 密码*/
+		const char *dbinstance,
+		const char *characterSet = "utf8"
+		);/*数据库实例*/	
 	
 	/*得到客户端的版本号*/
 	/* for mysql

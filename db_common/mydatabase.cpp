@@ -33,16 +33,18 @@ CMyDatabase::CMyDatabase()
 #endif
 }
 
-int  CMyDatabase::open_database(const char *host,int port, const char *user, const char* passwd, const char *dbinstance) 
+int  CMyDatabase::open_database(const char *host, int port, const char *user, const char* passwd, const char *dbinstance,const char *characterSet )
 {
-	if (!host || host[0]==0 || !user || user[0]==0) {
-		
+	if (!host || host[0]==0 || !user || user[0]==0) {		
 		nd_logerror("Please input host or user \n") ;
 		return -1 ;
 	}
 	m_port = port;
-	//int reflag = 0 ;
 	mysql_init(&m_mysqlinst );
+	if (characterSet && *characterSet) {
+		mysql_set_character_set(&m_mysqlinst, characterSet);
+	}
+
 // 	unsigned int oflag = 360 ;//²âÊÔ120Ãë¶Ï¿ª
 // 	my_bool reconn = 1 ;
 // 	mysql_options(&m_mysqlinst, MYSQL_OPT_CONNECT_TIMEOUT,(const void*) &oflag) ;
