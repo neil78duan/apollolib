@@ -608,7 +608,7 @@ bool apoHttpListener::cacheFile(const char *filePath)
 	if (!cacheInfo.dataAddr) {
 		return false;
 	}
-	MD5CryptToStr32(cacheInfo.dataAddr,(int)size, cacheInfo.md5);
+	MD5Crypt32(cacheInfo.dataAddr,(int)size, cacheInfo.md5);
 	cacheInfo.size = size;
 
 	m_fileCache[filePath] = cacheInfo;

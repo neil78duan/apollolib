@@ -199,6 +199,16 @@ int PlayerMgr::BroadCastInWorld(nd_usermsghdr_t *msghdr,bool encrypt)
 
 }
 
+int PlayerMgr::BroadCastInHost(NDOStreamMsg &omsg, bool encrypt)
+{
+	return BroadCastInHost((nd_usermsghdr_t *)omsg.GetMsgAddr(), encrypt);
+}
+int PlayerMgr::BroadCastInWorld(NDOStreamMsg &omsg, bool encrypt)
+{
+	return BroadCastInWorld((nd_usermsghdr_t *)omsg.GetMsgAddr(), encrypt);
+}
+
+
 int PlayerMgr::CallMsgProcInHost(nd_usermsghdr_t *msghdr)
 {
 	ND_TRACE_FUNC() ;
@@ -218,6 +228,17 @@ int PlayerMgr::CallMsgProcInWorld(nd_usermsghdr_t *msghdr)
 #endif 
 	return 0;
 }
+
+int PlayerMgr::CallMsgProcInHost(NDOStreamMsg &omsg)
+{
+	return CallMsgProcInHost((nd_usermsghdr_t *)omsg.GetMsgAddr());
+
+}
+int PlayerMgr::CallMsgProcInWorld(NDOStreamMsg &omsg)
+{
+	return CallMsgProcInWorld((nd_usermsghdr_t *)omsg.GetMsgAddr());
+}
+
 
 int PlayerMgr::wrapToWorld(nd_usermsghdr_t *msg, int wrap_maxID, int wrap_minID, NDUINT32 playerID , bool ecnrypt, bool isSaved)
 {

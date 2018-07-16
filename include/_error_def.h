@@ -70,5 +70,10 @@ ErrorElement(ESERVER_ERR_SHORT_EQUIPMENTMONEY, "舞台精华不足"),
 
 ErrorElement(ESERVER_ERR_CARD_STARLEVMAX, "明星星级达到最大等级"),
 
+ErrorElement(ESERVER_ERR_MAIL_RECEIVED, "邮件已经被领取过了"),
+
+ErrorElement(ESERVER_ERR_NEED_COMPLETED_CHAPTER, "前置章节没有通过"),
+ErrorElement(ESERVER_ERR_NEED_TRIG_EVENT, "需要先处理事件"),
+ErrorElement(ESERVER_ERR_CHAPTER_NOT_COMPLETE, "当前章节没有完成"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

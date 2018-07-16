@@ -196,7 +196,7 @@ const char *LoginApollo::GetLocalToken()
 
 		char inbuf[32];
 		int len = snprintf(inbuf, sizeof(inbuf), "apo_%llu", m_localToken);
-		return MD5CryptToStr32(inbuf, len, out_buf);
+		return MD5Crypt32(inbuf, len, out_buf);
 	}
 	return out_buf;
 }

@@ -35,21 +35,21 @@ public:
 	
 	int Send(roleid_t playerid, nd_usermsghdr_t *msghdr, bool encrypt = false, bool isSaved = false );
 	int Send(roleid_t playerid, NDOStreamMsg &omsg, bool encrypt = false, bool isSaved = false );
-// 
-// 	int SendToNation(roleid_t playerid, nd_usermsghdr_t *msghdr, bool encrypt = false, bool isSaved = false);
-// 	int SendToNation(roleid_t playerid, NDOStreamMsg &omsg, bool encrypt = false, bool isSaved = false);
+
 	
 	int BroadCastInHost(nd_usermsghdr_t *msghdr, bool encrypt = false);	
 	int BroadCastInWorld(nd_usermsghdr_t *msghdr, bool encrypt = false);
-	
+	int BroadCastInHost(NDOStreamMsg &omsg, bool encrypt = false);
+	int BroadCastInWorld(NDOStreamMsg &omsg, bool encrypt = false);
+		
 	int CallMsgProc(roleid_t playerid, nd_usermsghdr_t *msghdr, bool isSaved = false);
 	int CallMsgProc(roleid_t playerid, NDOStreamMsg &omsg, bool isSaved = false);
-// 	
-// 	int CallMsgProcToNation(account_index_t playerid, nd_usermsghdr_t *msghdr, bool isSaved = false);
-// 	int CallMsgProcToNation(account_index_t playerid, NDOStreamMsg &omsg, bool isSaved = false);
 
 	int CallMsgProcInHost(nd_usermsghdr_t *msghdr);	
 	int CallMsgProcInWorld(nd_usermsghdr_t *msghdr);
+	int CallMsgProcInHost(NDOStreamMsg &omsg);
+	int CallMsgProcInWorld(NDOStreamMsg &omsg);
+
 	
 	int GetNumOfPlayers(){ return (int)m_player_map.size(); }
 		
