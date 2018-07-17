@@ -22,7 +22,10 @@ public class apoFormula {
     
     [DllImport (APO_DLL_NAME)]
 	public static extern  bool apoFormulaSetValue(int id, float value);
-    
+	
+    [DllImport (APO_DLL_NAME)]
+	public static extern  bool apoFormulaAddValue(int id, float value);
+	
     [DllImport (APO_DLL_NAME)]
 	public static extern unsafe bool apoFormulaRun(string formulaText, float *result);
 	

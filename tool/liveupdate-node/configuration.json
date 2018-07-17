@@ -1,5 +1,5 @@
 {
-  "port": 80,
+  "port": 1080,
   "liveUpdateDir": "./uploadversion",
 
   "openGMTool": "yes",
@@ -22,7 +22,7 @@
       "appenders": [
         {
           "type": "file",
-          "filename": "./log1/sheldon.log",
+          "filename": "./log/sheldon.log",
           "maxLogSize": "1048576",
           "backups": "10"
         }

@@ -67,7 +67,15 @@ bool apoFormulaSetValue(int id, float value)
 	}
 	apoAttrValue[id] = value;
 	return true;
-
+}
+bool apoFormulaAddValue(int id, float value)
+{
+	if (id >= APO_ATTR_CAPACITY) {
+		nd_logmsg("id=%d is overflow capacity=%d\n", id, APO_ATTR_CAPACITY);
+		return false;
+	}
+	apoAttrValue[id] += value;
+	return true;
 }
 
 void apoFromulaResetValue()
