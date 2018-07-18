@@ -39,7 +39,7 @@ static inline int RandRange2(int range[2])
 bool ProbSampling1(int rate); // 针对一个概率采样
 
 int ProbSampling( int prob[], int num); //概率抽样 prob概率分布,只抽一次
-int RandRange(int lowlimit, int hilimit);
+
 int ProbSamplingEx( int prob[],int result[], int num); //一次抽样,结果索引放到result中 ,返回抽中个数
 int SamplingSpecial(int prob[], int prob_num, int result[], int res_num) ;//从概率中采样指定的个数放到result中
 

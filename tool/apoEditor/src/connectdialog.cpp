@@ -229,7 +229,7 @@ void ConnectDialog::saveHost(const QString &hostName)
 void ConnectDialog::InitHostList()
 {
 	QSettings settings("duanxiuyun", "ApolloEditor");
-	QString lastHost = settings.value("lastHost", "10.20.20.248").toString();
+	QString lastHost = settings.value("lastHost", "localhost").toString();
 
 	ui->hostCombo->addItem(lastHost);
 
@@ -528,8 +528,8 @@ void ConnectDialog::on_loginButton_clicked()
     }while (0)
         //SET_EDIT_DFTVAL(host, "192.168.8.49") ;
         SET_EDIT_DFTVAL(port, "6600") ;
-        SET_EDIT_DFTVAL(name, "tRobort1") ;
-        SET_EDIT_DFTVAL(passwd, "test123") ;
+        SET_EDIT_DFTVAL(name, "test1") ;
+        SET_EDIT_DFTVAL(passwd, "123456") ;
 #undef  SET_EDIT_DFTVAL
 		saveHost(ui->hostCombo->currentText()) ;
     }

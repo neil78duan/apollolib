@@ -18,6 +18,7 @@ bool ProbSampling1(int rate)
 	}
 	return false;
 }
+
 //¸ÅÂÊ³éÑù
 int ProbSampling(int prob[], int num)
 {
