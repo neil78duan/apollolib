@@ -62,6 +62,13 @@ struct attr_node_buf
 		++number;
 		return true;
 	}
+	void addvals(const attr_node_buf &r)
+	{
+		for (int i = 0; i < r.number; i++) {
+			addval(r.buf[i].id, r.buf[i].val);
+		}
+
+	}
 	void addval(attrid_t id, attrval_t val)
 	{
 		for (int i = 0; i < number; i++) {
@@ -222,6 +229,7 @@ static inline void Attrbuf2LogicType(DBLDataNode &toData, attr_node_buf *from_bu
 }
 
 //dataString read from excel-table
+// Convert DBLDataNode -> attr_node_buf 
 int Dbl_TableStringToAttr(const DBLDataNode &dataString, attr_node_buf &attrbuf);
 
 #endif
