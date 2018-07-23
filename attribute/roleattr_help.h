@@ -193,9 +193,7 @@ public:
 	role_attr_description m_wahelper_bufs[ROLE_ATTR_CAPACITY] ;
 
 	int m_maxLevel;
-	NDUINT32 m_upLevelExp[MAX_PLAYER_LEVEL]; //the cost exp that update next level 
-	
-
+	NDUINT32 m_upLevelExp[MAX_PLAYER_LEVEL]; //the cost exp that update next level
 };
 
 extern RoleAttrHelper *get_attr_helper();

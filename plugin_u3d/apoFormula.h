@@ -20,4 +20,20 @@ APOLLO_CLI_API bool apoFormulaAddValue(int id, float value);
 APOLLO_CLI_API bool apoFormulaRun(const char *formulaText, float *result);
 APOLLO_CLI_API void apoFromulaResetValue();
 
+APOLLO_CLI_API void *apoCreateAttrForHelper();
+APOLLO_CLI_API void apoDestroyAttrForHelper(void *);
+APOLLO_CLI_API void apoAttrForInit(void *helper, int aid, const char *name, const char*realName, const char *formula);
+APOLLO_CLI_API void apoAttrForPreParse(void *helper);
+
+APOLLO_CLI_API bool apoAttrForSetValue(void *helper,int id, float value);
+APOLLO_CLI_API bool apoAttrForAddValue(void *helper, int id, float value);
+APOLLO_CLI_API float apoAttrForGetValue(void *helper, int id);
+APOLLO_CLI_API void apoAttrForResetValues(void *helper);
+APOLLO_CLI_API int apoAttrForGetCount(void *helper);
+
+APOLLO_CLI_API int apoAttrForCalcAll(void *helper);
+
+APOLLO_CLI_API bool apoAttrForRun(void *helper, const char *formulaText, float *result);
+
+
 #endif

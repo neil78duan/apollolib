@@ -234,6 +234,7 @@
     <ClInclude Include="..\..\cli_common\apoClientU3d.h" />
     <ClInclude Include="..\..\cli_common\dftCliMsgHandler.h" />
     <ClInclude Include="..\..\cli_common\login_apollo.h" />
+    <ClInclude Include="..\..\plugin_u3d\apoAttrCalcHelper.h" />
     <ClInclude Include="..\..\plugin_u3d\apoCliApi.h" />
     <ClInclude Include="..\..\plugin_u3d\apoFormula.h" />
   </ItemGroup>
@@ -306,6 +307,7 @@
     <ClCompile Include="..\..\cli_common\apoClientU3d.cpp" />
     <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp" />
     <ClCompile Include="..\..\cli_common\login_apollo.cpp" />
+    <ClCompile Include="..\..\plugin_u3d\apoAttrCalcHelper.cpp" />
     <ClCompile Include="..\..\plugin_u3d\apoCliApi.cpp" />
     <ClCompile Include="..\..\plugin_u3d\apoFormula.cpp" />
   </ItemGroup>

@@ -510,7 +510,7 @@ int RoleAttrHelper::parse_run_sort()
 	}while(done && (--number > 0) ) ;
 	if(number <= 0) {
 
-		nd_logfatal("公式嵌套过深,请检查公式") ;
+		nd_logfatal("公式解析错误,变量相互嵌套,请检查公式") ;
 		//show_error( "公式嵌套过深,请检查公式")  ;
 		return -1 ;
 	}

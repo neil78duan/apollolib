@@ -132,7 +132,7 @@
 	<list instruction="0" size="0" datatype="2" need_type_stream="1" >var</list>
 	<list instruction="0" size="0" datatype="0" need_type_stream="1" >msgtype</list>
 	<list instruction="0" size="0" datatype="0" need_type_stream="1" >varInt</list>
-	<list instruction="0" size="0" datatype="1" need_type_stream="1" >varFloat</list>	
+	<list instruction="0" size="0" datatype="1" need_type_stream="1" >varFloat</list>
 	<list instruction="0" size="0" datatype="0" need_refill_offset="1">jumpOffset</list>
 	
 	<list instruction="4" size="0">param_collect</list>
@@ -412,7 +412,7 @@
 				<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_http_build_body&amp;_dispname=http_生成body( body_text)</func_name>
 				<param_collect name="参数" expand="yes">
 					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-					<var kinds="string" delete="no" restrict="type">&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;/&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;</var>
+					<var kinds="multi_text" delete="no" restrict="type">&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;/&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;</var>
 				</param_collect>
 			</op_call_func>
 			<op_call_func name="节点_发送http回复" expand_list="comment,func_name" expand_stat="1">
@@ -1171,7 +1171,17 @@
 		<internal_goto name="goto:$name$" kinds="string" replace_val=".name">Lab1</internal_goto>		
 	</create_internal_goto>
 	
-	
+	<create_http_body_build name="http_生成body" create_type="1" >
+		<op_call_func name="节点_调用$http_生成body( body_text)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
+			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+			<apoEditorPos kinds="hide" x="657" y="452" offset_x="0" offset_y="0"/>
+			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_http_build_body&amp;_dispname=http_生成body( body_text)</func_name>
+			<param_collect name="参数" expand="yes">
+				<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+				<var kinds="multi_text" delete="no" restrict="type">&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;/&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;</var>
+			</param_collect>
+		</op_call_func>
+	</create_http_body_build>	
 	<!--- selector -->		
 	<create_bt_selector name="BT-Selector" create_type="1" >
 		<steps_bt_selector name="BT-Selector" auto_index="0" breakPointAnchor="op_idle" >
@@ -1357,6 +1367,7 @@
 		
 		<list>create_step_begin_affair</list>
 		<list>create_step_commit_affair</list>
+		<list>create_http_body_build</list>
 		
 		<list>create_step_read_excel_attr</list>
 		<list>create_step_process_exit</list>	
@@ -1364,6 +1375,7 @@
 		<list>create_cur_parser</list>
 		<list>create_bt_selector</list>
 		<list>create_bt_sequence</list>
+		
 	</create_list1>		
 	<create_list2 name="create_message_handler" create_type="2" ref_from="yes">../create_list1</create_list2>
 </create_template>
