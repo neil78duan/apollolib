@@ -305,7 +305,7 @@ int RoleAttrHelper::place_param_name(char *input, char *buf, int size)
 		if(0==strcmp(input,pwa->name.attrname)) {
 			snprintf(buf,size,"[%d]", pwa->wa_id ) ;
 			if(m_current_parse != i) {
-				pwa->infections[(pwa->infection_num)++] =  i ;		//记录属性相关
+				pwa->infections[(pwa->infection_num)++] = m_current_parse;		//记录属性相关
 				m_wahelper_bufs[m_current_parse].need_buf[(m_wahelper_bufs[m_current_parse].need_num)++] = i  ;		//记录属性相关
 			}
 			return 0 ;

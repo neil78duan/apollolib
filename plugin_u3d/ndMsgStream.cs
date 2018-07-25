@@ -116,7 +116,8 @@ namespace NetMessage
             m_bDataReadEnd = false;
 
             m_readIndex = 0;
-            data.CopyTo(_m_buf, 0);
+            //data.CopyTo(_m_buf, 0);
+			Array.Copy(data,_m_buf,data.Length);
             return data.Length;
         }
 

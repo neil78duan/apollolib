@@ -26,7 +26,7 @@ typedef float attrval_t;
 #define INVALID_ATTR_ID 0xff
 #define ATTR_VALUE_DETA 0.0001f
 
-//虚拟机指令
+//ndvm instruct stream
 struct ndvm_cmd_node
 {
 	int size;
@@ -62,8 +62,8 @@ struct role_attr_description {
 	std::string real_name;
 	std::string input_for;
 
-	attrid_vct_t infections;	//受当前属性影响的属性
-	attrid_vct_t need_buf;		//当前属性计算需要的属性个数
+	attrid_vct_t infections;	//the attribute id lists infected by current 
+	attrid_vct_t need_buf;		//needed by current
 	ndvm_cmd_node cmd_data;
 	role_attr_description() : wa_id(0)
 	{}
@@ -73,14 +73,14 @@ struct role_attr_description {
 		real_name.clear();
 		input_for.clear();
 
-		infections.clear();	//受当前属性影响的属性
-		need_buf.clear();		//当前属性计算需要的属性个数
+		infections.clear();	
+		need_buf.clear();
 		cmd_data.Reset();
 	}
 };
 
 
-//战斗属性描述管理器
+//attribute calc helper 
 class apoAttrCalcHelper
 {
 public:
@@ -91,7 +91,6 @@ public:
 	int GetAttrNum() { return m_wa_num; }
 	
 	int preParseFormula();
-	int place_param_name(char *input, char *buf, int size);
 
 	role_attr_description *get_wa_desc(attrid_t wa_id);	
 
@@ -104,14 +103,17 @@ public:
 	void resetValues();
 
 	int CalcAll();
+	float calcOne(attrid_t aid);
 
 	bool FormulaRun(const char *formulaText, float *result);
-
 	int getValueCount() { return m_wa_num; }
+
+	bool getInfections(attrid_t aid, attrid_vct_t &attrids);
 
 
 	apoAttrCalcHelper();
 	~apoAttrCalcHelper();
+	int place_param_name(char *input, char *buf, int size);
 private:
 	void Destroy(int flag = 0);
 	int Create(const char*name = NULL);
@@ -120,10 +122,10 @@ private:
 	int check_canbe_run(role_attr_description *node, attrid_t *buf);
 public:
 	int m_current_parse;
-	int m_wa_num;
-
-	attrid_vct_t m_run_sort;
-	role_attr_description m_wahelper_bufs[APO_ATTR_CAPACITY];
+	
+	static int m_wa_num;
+	static  attrid_vct_t m_run_sort;
+	static  role_attr_description m_wahelper_bufs[APO_ATTR_CAPACITY];
 
 	attrval_t m_values[APO_ATTR_CAPACITY];
 };

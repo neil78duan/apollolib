@@ -16,7 +16,7 @@
 
 //preparse
 static int place_name_entry(char *input, char *buf, int size, void *user_data);
-//运行时名字替换
+//replace name on running
 static int apo_place_name_runtime(char *input, char *buf, int size, void *user_data)
 {
 	int i;
@@ -33,12 +33,19 @@ static int apo_place_name_runtime(char *input, char *buf, int size, void *user_d
 	}
 
 
-	nd_logfatal("公式解析错误:不能找到变量[%s]\n" AND input);
+	nd_logfatal("parse error, can not found[%s]\n" AND input);
 	return -1;
 }
 
+
+int apoAttrCalcHelper::m_wa_num = 0;
+attrid_vct_t apoAttrCalcHelper::m_run_sort;
+ role_attr_description apoAttrCalcHelper::m_wahelper_bufs[APO_ATTR_CAPACITY];
+
 apoAttrCalcHelper::apoAttrCalcHelper()
 {
+
+	m_current_parse = 0;
 	Destroy();
 }
 
@@ -48,11 +55,13 @@ apoAttrCalcHelper::~apoAttrCalcHelper()
 
 void apoAttrCalcHelper::Destroy(int)
 {
-	m_current_parse = 0;
-	m_wa_num = 0;	
-
-	for (int i = 0; i<APO_ATTR_CAPACITY; i++) {
-		m_wahelper_bufs[i].Reset();
+// 	m_wa_num = 0;	
+// 
+// 	for (int i = 0; i<APO_ATTR_CAPACITY; i++) {
+// 		m_wahelper_bufs[i].Reset();
+// 	}
+	for (int i = 0; i < APO_ATTR_CAPACITY; i++) {
+		m_values[i] = 0;
 	}
 }
 
@@ -146,6 +155,29 @@ int apoAttrCalcHelper::CalcAll()
 	return ret;
 }
 
+float apoAttrCalcHelper::calcOne(attrid_t aid)
+{
+	//init vm
+	int ret = 0;
+	vm_cpu	formula;
+
+	vm_machine_init(&formula, m_values, m_wa_num);
+
+	vm_set_echo_ins(&formula, 0);
+	vm_set_echo_result(&formula, 0);
+	vm_set_outfunc(NULL);
+	vm_set_errfunc(NULL);
+
+	role_attr_description  *pdesc = get_wa_desc(aid);
+	if (pdesc && pdesc->cmd_data.size) {
+		if (0 == vm_run_cmd(&formula, pdesc->cmd_data.cmd_buf, pdesc->cmd_data.size)) {
+			return vm_return_val(&formula);
+		}
+	}
+
+	return 0;
+}
+
 bool apoAttrCalcHelper::FormulaRun(const char *text, float *result)
 {
 	//init vm
@@ -184,6 +216,33 @@ bool apoAttrCalcHelper::FormulaRun(const char *text, float *result)
 	return ret;
 }
 
+static void _addLists(attrid_t aid,attrid_vct_t &attrids)
+{
+	for (int i = 0; i < attrids.size(); i++) {
+		if (aid == attrids[i]) {
+			return;
+		}
+	}
+	attrids.push_back(aid);
+}
+
+bool apoAttrCalcHelper::getInfections(attrid_t aid, attrid_vct_t &attrids)
+{
+	role_attr_description *pdesc = get_wa_desc(aid);
+	if (pdesc) {
+		for (int i = 0; i < pdesc->infections.size(); i++) {
+			attrid_t tmpId = pdesc->infections[i];
+			if (tmpId != INVALID_ATTR_ID && tmpId && tmpId != aid) {
+
+				_addLists(tmpId, attrids);
+				getInfections(tmpId, attrids);
+
+			}
+		}
+		return true;
+	}
+	return false;
+}
 
 bool apoAttrCalcHelper::InitAttrNode(attrid_t aid, const char *name, const char*realName, const char *formula)
 {
@@ -192,9 +251,11 @@ bool apoAttrCalcHelper::InitAttrNode(attrid_t aid, const char *name, const char*
 	}
 	role_attr_description node;
 	node.wa_id = aid;
-	node.name = name;
-	node.real_name = realName;
-	node.input_for = formula;
+#define SET_NAME(_NAME,_INPUTNAME) if(_INPUTNAME && *_INPUTNAME) {node._NAME = _INPUTNAME;}
+
+	SET_NAME(name, name);
+	SET_NAME(real_name, realName);
+	SET_NAME(input_for, formula);
 
 	m_wahelper_bufs[aid] = node;
 	int curNum = aid + 1;
@@ -215,10 +276,10 @@ int apoAttrCalcHelper::place_param_name(char *input, char *buf, int size)
 		if (0 == strcmp(input, pwa->name.c_str()) || 0 == ndstricmp(input, pwa->real_name.c_str())) {
 			snprintf(buf, size, "[%d]", pwa->wa_id);
 			if (m_current_parse != i) {
-				//pwa->infections[(pwa->infection_num)++] = i;		//记录属性相关
-				//m_wahelper_bufs[m_current_parse].need_buf[(m_wahelper_bufs[m_current_parse].need_num)++] = i;		//记录属性相关
+				//pwa->infections[(pwa->infection_num)++] = i;		
+				//m_wahelper_bufs[m_current_parse].need_buf[(m_wahelper_bufs[m_current_parse].need_num)++] = i;		
 
-				pwa->infections.push_back(i);
+				pwa->infections.push_back(m_current_parse);
 				m_wahelper_bufs[m_current_parse].need_buf.push_back(i);
 			}
 			return 0;
@@ -226,7 +287,7 @@ int apoAttrCalcHelper::place_param_name(char *input, char *buf, int size)
 	}
 
 	//
-	nd_logfatal("公式解析错误:不能找到变量[%s]\n" AND input);
+	nd_logfatal("parse error :can not find[%s]\n" AND input);
 	return -1;
 }
 
@@ -246,20 +307,20 @@ int apoAttrCalcHelper::place_param_name(char *input, char *buf, int size)
 
 int apoAttrCalcHelper::preParseFormula()
 {
-	//翻译公式
+	m_current_parse = 0;
 	role_attr_description  *pwa = m_wahelper_bufs;
 	for (int i = 0; i<m_wa_num; i++, pwa++) {
 		if (pwa->wa_id == INVALID_ATTR_ID) {
 			continue;
 		}
 		
-		if (pwa->input_for[0]) {
+		if (!pwa->input_for.empty()) {
 			m_current_parse = i;
 
 			char f_buf[APO_FORMULA_SIZE] ;
 			size_t size = vm_parse_expression(pwa->input_for.c_str(),f_buf, sizeof(f_buf), (vm_param_replace_func)place_name_entry, this);
 			if (size == 0) {
-				nd_logfatal("解析公式%s错误 \n row = %d " AND(char*)pwa->input_for AND i + 1);
+				nd_logfatal("parse [%d] formula %s error " ,i, pwa->input_for.c_str());
 				return -1;
 			}
 			pwa->cmd_data.Setcmd(f_buf, (int)size);
@@ -286,8 +347,7 @@ int apoAttrCalcHelper::check_canbe_run(role_attr_description *node, attrid_t *bu
 	return 0;
 
 }
-
-//解析公式的执行顺序,如果A使用了B,那么应该先运算B
+// parse run-sort
 int apoAttrCalcHelper::parse_run_sort()
 {
 	int i;
@@ -325,8 +385,7 @@ int apoAttrCalcHelper::parse_run_sort()
 	} while (done && (--number > 0));
 	if (number <= 0) {
 
-		nd_logfatal("公式解析错误,变量相互嵌套,请检查公式");
-		//show_error( "公式嵌套过深,请检查公式")  ;
+		nd_logfatal("parse error the input-param reference each other\n");
 		return -1;
 	}
 

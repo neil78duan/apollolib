@@ -16,12 +16,15 @@ public class apoFormula {
     const string APO_DLL_NAME = "apollo_u3d";
 #endif
 
-    [DllImport (APO_DLL_NAME)]
-	public static extern bool apoFormulaNameInit(int id, string name, string alias);
-	
 	[DllImport (APO_DLL_NAME)]
-	public static extern void apoFormulaSetEncode(string encodeName);
-    
+	public static extern void apoFormulaSetEncode(string encodeName); ////全局函数
+
+    [DllImport (APO_DLL_NAME)]
+	public static extern bool apoFormulaNameInit(int id, string name, string alias,string formulaText= ""); //全局函数
+
+    [DllImport(APO_DLL_NAME)]
+    public static extern void apoFormulaPreParse();     //全局函数
+
     [DllImport (APO_DLL_NAME)]
 	public static extern  bool apoFormulaSetValue(int id, float value);
 	
@@ -34,41 +37,19 @@ public class apoFormula {
     [DllImport (APO_DLL_NAME)]
 	public static extern unsafe void apoFromulaResetValue();
 	
-	public unsafe bool runTestFormula() 
-    {
-		apoFormulaSetEncode(@"utf8");
-		//init role attribute list 
-		apoFormulaNameInit(1, @"attack", @"攻击力");
-		apoFormulaNameInit(2, @"def", @"防御力");
-
-		apoFromulaResetValue();
-
-		//set new value
-		apoFormulaSetValue(1, 100);
-		apoFormulaSetValue(2, 50);
-		
-		float result =0;
-		
-		bool ret = apoFormulaRun(@"攻击力 * 1.5 - 防御力 * 2", &result);
-		if(!ret) {
-			Debug.LogError("read message error \n");
-		}
-		return ret;
-    }
 	
-	// add new function 
-	
+	// add new function 	
     [DllImport (APO_DLL_NAME)]
 	public static extern unsafe IntPtr apoCreateAttrForHelper();
 	
 	[DllImport (APO_DLL_NAME)]
 	public static extern unsafe void apoDestroyAttrForHelper(IntPtr calcHelperObj);
 
-	[DllImport (APO_DLL_NAME)]
-	public static extern  void apoAttrForInit(IntPtr calcHelperObj, int aid, string name, string alias, string formula);
+	//[DllImport (APO_DLL_NAME)]
+	//public static extern  void apoAttrForInit(IntPtr calcHelperObj, int aid, string name, string alias, string formula);
 
-	[DllImport (APO_DLL_NAME)]
-	public static extern  void apoAttrForPreParse(IntPtr calcHelperObj);
+	//[DllImport (APO_DLL_NAME)]
+	//public static extern  void apoAttrForPreParse(IntPtr calcHelperObj);
 
 	[DllImport (APO_DLL_NAME)]
 	public static extern bool apoAttrForSetValue(IntPtr calcHelperObj,int id, float value);
@@ -88,9 +69,66 @@ public class apoFormula {
 
     [DllImport (APO_DLL_NAME)]
 	public static extern int apoAttrForCalcAll(IntPtr calcHelperObj);
+	
+
+    [DllImport (APO_DLL_NAME)]
+	public static extern float apoAttrForCalcOne(IntPtr calcHelperObj, int id);
 
 	[DllImport (APO_DLL_NAME)]
 	public static extern unsafe  bool apoAttrForRun(IntPtr calcHelperObj, string formulaText, float *result);
+
+
+    [DllImport(APO_DLL_NAME)]
+    public static extern unsafe bool apoAttrForSetValues(IntPtr calcHelperObj, float []value, int count);
+
+
+    struct transferFloatArray
+    {
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
+        public float[] dst_addr;
+    }
+
+    [DllImport(APO_DLL_NAME)]
+    private static extern unsafe int apoAttrForGetValues(IntPtr calcHelperObj, ref transferFloatArray outArray, int count);
+
+    struct transferIntArray
+    {
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
+        public int[] dst_addr;
+    }
+
+    [DllImport(APO_DLL_NAME)]
+    private static extern unsafe int apoFromulaGetCalcSort(ref transferIntArray outArray, int bufsize);
+
+    [DllImport(APO_DLL_NAME)]
+    private static extern unsafe int apoAttrForGetInfections(IntPtr calcHelperObj, int attrid, ref transferIntArray outArray, int bufsize);
+
+
+    public static int getAllValues(IntPtr calcHelperObj, ref float[] attrVals)
+    {
+        transferFloatArray tdata;
+        tdata.dst_addr = new float[256];
+
+        int ret = apoAttrForGetValues( calcHelperObj,ref tdata, 256);
+        for (int i = 0; i < ret; ++i)
+        {
+            attrVals[i] = tdata.dst_addr[i];
+        }
+        return ret;
+    }
+
+    public static int getInfections(IntPtr calcHelperObj, int attrid, ref int[] attrIds)
+    {
+        transferIntArray tdata;
+        tdata.dst_addr = new int[256];
+
+        int ret = apoAttrForGetInfections(calcHelperObj, attrid, ref tdata, 256);
+        for (int i = 0; i < ret; ++i)
+        {
+            attrIds[i] = tdata.dst_addr[i];
+        }
+        return ret;
+    }
 
     public struct attrCfgInfo
     {
@@ -100,24 +138,23 @@ public class apoFormula {
         public string formulaText;
     }
 
-    //创建一个属性计算器
-    public unsafe IntPtr creatAttrHelper(ref attrCfgInfo []attrCfgs)
+    public static void globalInitConfig(ref attrCfgInfo[] attrCfgs)
     {
-        IntPtr pHelper = apoCreateAttrForHelper();
-        if(pHelper==null)
-        {
-            return pHelper;
-        }
         for (int i = 0; i < attrCfgs.Length; ++i)
         {
-            apoAttrForInit(pHelper, attrCfgs[i].aId, attrCfgs[i].name, attrCfgs[i].aliasname, attrCfgs[i].formulaText);
+            apoFormulaNameInit( attrCfgs[i].aId, attrCfgs[i].name, attrCfgs[i].aliasname, attrCfgs[i].formulaText);
         }
-        apoAttrForPreParse(pHelper);
-        return pHelper;
+        apoFormulaPreParse();        
     }
 
-    //
-    public  int creatAttrHelper(IntPtr pHelper, ref float[] attrVals)
+    //创建一个属性计算器
+    public static unsafe IntPtr creatAttrHelper()
+    {
+        return apoCreateAttrForHelper();
+    }
+
+    //通过属性计算器调用表格中所有公式计算，并输出结果到attrVals
+    public static int calcAllAttr(IntPtr pHelper, ref float[] attrVals)
     {
         int ret = 0;
         for (int i = 0; i < attrVals.Length; ++i)
@@ -134,6 +171,47 @@ public class apoFormula {
             attrVals[i] = apoAttrForGetValue(pHelper, i);
         }
         return ret;
+    }
+
+
+    public unsafe bool testOfNeWObject()
+    {
+        apoFormulaSetEncode(@"utf8");
+        //global init role attribute list 
+        apoFormulaNameInit(1, @"attack", @"攻击力", @"(力量+基础加成) * (1+力量百分比)");
+
+        apoFormulaNameInit(2, @"power", @"力量", @"基础力量+力量加成");
+        apoFormulaNameInit(3, @"powerBase", @"基础力量");
+        apoFormulaNameInit(4, @"powerAddon", @"力量加成");
+
+        apoFormulaNameInit(5, @"powerRate", @"力量百分比", @"力量百分百基础+力量百分百加成");
+        apoFormulaNameInit(6, @"powerRateBase", @"力量百分百基础");
+        apoFormulaNameInit(7, @"powerRateAddon", @"力量百分百加成");
+        apoFormulaNameInit(8, @"powerBaseAddon", @"基础加成");
+
+        apoFormulaPreParse();
+
+        // end global init 
+
+        IntPtr pInst = apoCreateAttrForHelper();
+        
+        //set new value
+        apoAttrForSetValue(pInst, 3, 80f);
+        apoAttrForSetValue(pInst, 4, 20f);
+
+        apoAttrForSetValue(pInst, 6, 0.10f);
+        apoAttrForSetValue(pInst, 7, 0.10f);
+
+        int changedNum = apoAttrForCalcAll(pInst);
+
+        float[] results = new float[10];
+
+        int allNum = getAllValues(pInst, ref results);
+
+        int[] attrIds = new int[10];
+        int nInrefecNum = getInfections(pInst, 7, ref attrIds);
+
+        return true;
     }
 
     /*
@@ -188,4 +266,24 @@ public class apoFormula {
         return true;
     }
     */
+}
+
+//sample 
+public class AttrCalculator
+{
+    protected IntPtr m_calcObj = apoFormula.creatAttrHelper();
+
+    public void SetValue(int id, float val)
+    {
+        apoFormula.apoAttrForSetValue(m_calcObj, id, val);
+    }
+
+    public float GetValue(int id)
+    {
+        return apoFormula.apoAttrForGetValue(m_calcObj, id);
+    }
+    public int CalcAll()
+    {
+        return apoFormula.apoAttrForCalcAll(m_calcObj);
+    }    
 }
