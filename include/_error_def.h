@@ -78,5 +78,7 @@ ErrorElement(ESERVER_ERR_CHAPTER_NOT_COMPLETE, "当前章节没有完成"),
 
 ErrorElement(ESERVER_ERR_SEND_CHAT_WORLDTIME, "世界频道发送频繁"),
 ErrorElement(ESERVER_ERR_SEND_CHAT_LEV_NOTENOUGHenough, "发送世界频道需要的等级不足"),
+ErrorElement(ESERVER_ERR_SEND_CHAT_LEN, "聊天文字长度过长"),
+
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

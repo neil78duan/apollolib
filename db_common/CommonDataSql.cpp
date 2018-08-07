@@ -217,6 +217,9 @@ int SaveMail::Create( CMyDatabase* dbhandle )
 	
 	m_dbhandle = dbhandle;
 	PREPARE_STM(m_stmt, dbhandle,SQL_STM, m_binds,BIND_NUMB) ;
+	
+	strncpy(m_title,"unknow-title",sizeof(m_title)) ;
+	m_titleLen = strlen(m_title);
 	return 0 ;
 	
 }
@@ -233,10 +236,12 @@ RESULT_T SaveMail::Save(NDUINT32 to_id, NDUINT32 from_id, NDUINT32 server_id, bo
 	m_isSystem = isSystem ;
 	m_serverId = server_id;
 	
-	if (title && *title) {
-		m_titleLen = (long)strlen(title);
-		strncpy(m_title, title, sizeof(m_title)) ;
-	}
+//	if (title && *title) {
+//		m_titleLen = m_dbhandle->escape_sql_string(m_title, (char*)title, strlen(title));
+//	}
+//	else {
+//		m_titleLen = 0;
+//	}
 	
 	memcpy(m_data, data, size) ;
 	m_dataLen = (long)size;

@@ -75,6 +75,7 @@ LOCAL_SRC_FILES := ../../../ndsdk/src/nd_common/src/bintree.c \
 ../../attribute/roleattr_help.cpp \
 ../../plugin_u3d/apoCliApi.cpp	\
 ../../plugin_u3d/apoFormula.cpp	\
+../../plugin_u3d/apoAttrCalcHelper.cpp	\
 ../../../apolloBP/src/parser/dbl_mgr.cpp	\
 ../../../apolloBP/src/parser/logicParser.cpp	\
 ../../../apolloBP/src/parser/logic_function.cpp	\
