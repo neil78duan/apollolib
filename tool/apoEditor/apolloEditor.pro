@@ -14,7 +14,7 @@ macx:{
     DEFINES += __ND_MAC__
     platform_name = darwin_x86_64
 
-    LIBS += -lndclient_darwin_x86_64_d -llogic_parser_d -lapoBluePrint_d -liconv
+#    LIBS += -lndclient_darwin_x86_64_d -llogic_parser_d -lapoBluePrint_d -liconv
 
 }
 unix:!macx{

@@ -99,7 +99,8 @@
 	<list instruction="1" ins_id="40" size="0" record_param_num="1" >op_build_json_data</list>
 	<list instruction="1" ins_id="41" size="0" record_param_num="1" >op_create_struct_type</list>
 	<list instruction="1" ins_id="42" size="0"  >op_math_operate</list>
-	<list instruction="1" ins_id="43" size="0" desc="赋值操作" >op_assignin</list>	
+	<list instruction="1" ins_id="43" size="0" desc="赋值操作" >op_assignin</list>
+	<list instruction="1" ins_id="44" size="0" desc="判断变量" >op_var_test</list>	
 	<list instruction="1" ins_id="47" size="0" >op_test</list>
 	<list instruction="1" ins_id="48" size="8" >op_skip_error</list>
 	<list instruction="1" ins_id="49" size="0" >op_get_arrsize</list>
@@ -140,7 +141,8 @@
 	<list instruction="100" size="0">comment</list>
 	<list instruction="100" size="0">apoEditorPos</list>
 	<list instruction="100" size="0">breakPointInfo</list>	
-	<list instruction="100" size="0">func_params</list>	
+	<list instruction="100" size="0">func_params</list>
+	<list instruction="100" size="0">bluePrint_info</list>
 	<list instruction="5" size="0">user_define_function</list>
 	<list instruction="6" size="0" datatype="2">function_info</list>	
 	<list instruction="6" size="0" datatype="2">is_open_role_affair</list>
@@ -930,10 +932,11 @@
 		</op_call_func>
 	</create_step_read_excel_attr>
 	
-	
-	<create_op_comp name="比较运算" create_type="1" >
-		<op_comp name="节点_比较运算" expand="yes" create_label="create_internal_label">
-			<comment name="功能说明" rw_stat="read"> 大于小于等级 </comment>
+	<!------------------test node------------------ -->
+	<create_op_comp name="测试大小" create_type="1" >
+		<op_comp name="节点_测试大小" expand="yes" create_label="create_internal_label">
+			<comment name="功能说明" rw_stat="read">大于小于等级(不改变$value)</comment>
+			<bluePrint_info kinds="hide" delete="no" desc="this instruct set control register of vm">SetControlRegister</bluePrint_info>
 			<index  name="逻辑运算" kinds="reference" reference_type="type_compare_sub_entry" delete="no">0</index>	
 			<param_collect name="操作数1" expand="yes" expand_stat="1" delete="no">
 				<type name="操作数1类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
@@ -946,23 +949,50 @@
 		</op_comp>
 	</create_op_comp>
 	
+	<create_step_var_test name="测试变量有效" create_type="1" >
+		<op_var_test name="节点_测试变量有效" expand_list="comment"  create_label="create_internal_label">			
+			<comment name="功能说明" rw_stat="read">if(var==true)</comment>	
+			<bluePrint_info kinds="hide" delete="no" desc="this instruct set control register of vm">SetControlRegister</bluePrint_info>
+			<param_collect name="操作数" expand="yes" expand_stat="1" delete="no">
+				<type name="条件类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="条件值" kinds="string" delete="no" restrict="type">0</var>
+			</param_collect>			
+		</op_var_test>
+	</create_step_var_test>
 	
-	<create_get_simulate_stat name="检测模拟状态" create_type="1" expand="yes" >
-		<op_get_simulate_stat name="节点_检测模拟状态" expand="yes" create_label="create_internal_label">			
-			<comment name="功能说明" rw_stat="read">check_simulate_stat()</comment>
+	
+	<create_get_simulate_test name="测试模拟状态" create_type="1" expand="yes" >
+		<op_get_simulate_stat name="节点_测试模拟状态" expand="yes" create_label="create_internal_label">			
+			<comment name="功能说明" rw_stat="read">test_run_in_simulate()</comment>
+			<bluePrint_info kinds="hide" delete="no" desc="this instruct set control register of vm">SetControlRegister</bluePrint_info>
 		</op_get_simulate_stat>
-	</create_get_simulate_stat>
+	</create_get_simulate_test >	
 	
-	<create_step_check_valid name="测试返回值" create_type="1" >
-		<op_check_valide name="节点_测试返回值" expand_list="comment"  create_label="create_internal_label">			
-			<comment name="功能说明" rw_stat="read">check_last_return_value_is_valid()</comment>
+	<create_step_curvalue_test name="测试当前值有效" create_type="1" >
+		<op_check_valide name="节点_测试当前值有效" expand_list="comment"  create_label="create_internal_label">			
+			<comment name="功能说明" rw_stat="read">test_variant( var )</comment>
+			<bluePrint_info kinds="hide" delete="no" desc="this instruct set control register of vm">SetControlRegister</bluePrint_info>
 		</op_check_valide>
-	</create_step_check_valid>
-		
+	</create_step_curvalue_test>
+	
+	<create_host_debug_test name="测试进程debug" create_type="1" >
+		<op_check_host_debug name="节点_测试进程debug" expand="yes" create_label="create_internal_label">			
+			<comment name="功能说明" rw_stat="read">test_this_progress_is_debug()</comment>
+			<bluePrint_info kinds="hide" delete="no" desc="this instruct set control register of vm">SetControlRegister</bluePrint_info>
+		</op_check_host_debug>
+	</create_host_debug_test>
+	
+	<create_script_debug_test name="测试脚本debug" create_type="1" >
+		<op_check_debug name="节点_测试脚本debug" expand="yes" create_label="create_internal_label">			
+			<comment name="功能说明" rw_stat="read">test_this_script_is_debug()</comment>
+			<bluePrint_info kinds="hide" delete="no" desc="this instruct set control register of vm">SetControlRegister</bluePrint_info>
+		</op_check_debug>
+	</create_script_debug_test>	
+			
 	<!------------ compount test ------------>	
 	
-	<create_test_current_value name="检测返回值" create_type="1" >
-		<steps_compound_test name="节点_测试上一步结果"  breakPointAnchor="op_check_valide"  blueprintCtrl="CompoundTest"  blueprintTips="if($curValue)">
+	<!-- create_test_current_value name="检测当前值分支" create_type="1" >
+		<steps_compound_test name="节点_检测当前值分支"  breakPointAnchor="op_check_valide"  blueprintCtrl="CompoundTest"  blueprintTips="if($curValue)">
 			<op_check_valide kinds="hide" delete="no" create_label="create_internal_label" />
 			<op_bool_entry name="节点_bool上一步结果分支" expand_list="comment">
 				<op_sub_comp_entry name="LastValue true" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
@@ -975,8 +1005,8 @@
 		</steps_compound_test>
 	</create_test_current_value>
 	
-	<create_test_machine_is_simulate name="检测虚拟机状态" create_type="1" >
-		<steps_compound_test name="节点_检测虚拟机状态"  breakPointAnchor="op_get_simulate_stat"  blueprintCtrl="CompoundTest"  blueprintTips="if(Simulate==true)">
+	<create_test_machine_is_simulate name="检测模拟状态分支" create_type="1" >
+		<steps_compound_test name="节点_检测模拟状态分支"  breakPointAnchor="op_get_simulate_stat"  blueprintCtrl="CompoundTest"  blueprintTips="if(Simulate==true)">
 			<op_get_simulate_stat kinds="hide" delete="no"  create_label="create_internal_label" />
 			<op_bool_entry name="节点_bool上一步结果分支" expand_list="comment">
 				<op_sub_comp_entry name="VM is Simulate" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
@@ -989,8 +1019,8 @@
 		</steps_compound_test>
 	</create_test_machine_is_simulate>
 	
-	<create_test_script_debug name="测试脚本debug" create_type="1" >
-		<steps_compound_test name="节点_测试脚本debug"  breakPointAnchor="op_check_debug" blueprintCtrl="CompoundTest" blueprintTips="if(Script-debug)">
+	<create_test_script_debug name="检测脚本debug分支" create_type="1" >
+		<steps_compound_test name="节点_检测脚本debug分支"  breakPointAnchor="op_check_debug" blueprintCtrl="CompoundTest" blueprintTips="if(Script-debug)">
 			<op_check_debug kinds="hide" delete="no"  create_label="create_internal_label" />
 			<op_bool_entry name="节点_bool上一步结果分支" expand_list="comment">
 				<op_sub_comp_entry name="This script Debug" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
@@ -1003,8 +1033,8 @@
 		</steps_compound_test>
 	</create_test_script_debug>
 	
-	<create_test_host_debug name="测试进程debug" create_type="1" >
-		<steps_compound_test name="节点_测试进程debug"  breakPointAnchor="op_check_host_debug"  blueprintCtrl="CompoundTest"  blueprintTips="if(Progress-debug)">
+	<create_test_host_debug name="检测进程debug分支" create_type="1" >
+		<steps_compound_test name="节点_检测进程debug分支"  breakPointAnchor="op_check_host_debug"  blueprintCtrl="CompoundTest"  blueprintTips="if(Progress-debug)">
 			<op_check_host_debug kinds="hide" delete="no" />
 			<op_bool_entry name="节点_bool上一步结果分支" expand_list="comment">
 				<op_sub_comp_entry name="Program is Debug" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
@@ -1015,15 +1045,16 @@
 				</op_sub_comp_entry>
 			</op_bool_entry>			
 		</steps_compound_test>
-	</create_test_host_debug>
+	</create_test_host_debug -->
+	
 	<!------------ login control entry ------------>
-	<create_step_bool_entry name="bool分支" create_type="1" >
-		<op_bool_entry name="节点_bool上一步结果分支" expand_list="comment" >			
-			<comment name="功能说明" rw_stat="read">if{}</comment>
-			<op_sub_comp_entry name="上一步true时执行" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
+	<create_step_bool_entry name="bool判断上一步" create_type="1" >
+		<op_bool_entry name="节点_bool判断上一步" expand_list="comment" >			
+			<comment name="功能说明" rw_stat="read">if(上一步测试结果){}</comment>
+			<op_sub_comp_entry name="true时执行" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
 				<condition no_comp="1" kinds="hide" delete="no">1</condition>
 			</op_sub_comp_entry>
-			<op_sub_comp_entry name="上一步false时执行" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
+			<op_sub_comp_entry name="false时执行" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
 				<condition no_comp="1" kinds="hide"  delete="no">0</condition>
 			</op_sub_comp_entry>
 		</op_bool_entry>
@@ -1031,7 +1062,7 @@
 	
 	
 	<create_comp_steps name="数值比较分支" create_type="1" >
-		<steps_block_valcomp name="节点_数值比较分支" auto_index="0" breakPointAnchor="op_comp">	
+		<steps_block_valcomp name="节点_数值比较" auto_index="0" breakPointAnchor="op_comp">	
 			<op_comp name="比较运行" expand="yes"  delete="no">
 				<comment name="功能说明" rw_stat="read"> 大于小于等级 </comment>
 				<index  name="逻辑运算" kinds="reference" reference_type="type_compare_sub_entry" delete="no">0</index>	
@@ -1311,6 +1342,10 @@
 		<list>create_step_calc</list>
 		<list>create_step_getother_object</list>
 		
+		<list>create_step_call_func</list>
+		<list>create_make_var</list>
+		<list>create_global_var</list>		
+		<list>create_step_type_transfer</list>
 		
 		<list>create_step_waitevent</list>
 		<list>create_step_send_event</list>
@@ -1318,31 +1353,32 @@
 		<list>create_remove_event</list>
 		<list>create_add_timer</list>
 		<list>create_del_timer</list>
-		<list>create_step_call_func</list>
-		<list>create_op_comp</list>
-		<!-- list>create_step_check_valid</list -->
-		<list>create_step_bool_entry</list>
-		<list>create_step_loop_entry</list>	
-		<list>create_comp_steps</list>
-		<list>create_switch_case</list>
 		
+		<list>create_op_comp</list>
+		<list>create_step_var_test</list>
+		<list>create_get_simulate_test</list>
+		<list>create_step_curvalue_test</list>
+		<list>create_host_debug_test</list>
+		<list>create_script_debug_test</list>
+	
 		
 		<list>create_break</list>
 		<list>create_success_break</list>		
 		<list>op_error_break</list>
 		<list>create_step_true_exit</list>	
 		<list>create_step_false_eixt</list>	
+	
+		<list>create_step_bool_entry</list>
+		<list>create_step_loop_entry</list>	
+		<list>create_comp_steps</list>
+		<list>create_switch_case</list>
 		
-		<list>create_test_current_value</list>
+		<!-- list>create_test_current_value</list>
 		<list>create_test_machine_is_simulate</list>		
 		<list>create_test_script_debug</list>	
-		<list>create_test_host_debug</list>
+		<list>create_test_host_debug</list -->
 		
-		<list>create_get_arrsize</list>		
-		<list>create_make_var</list>
-		<list>create_global_var</list>
-		
-		<list>create_step_type_transfer</list>
+		<list>create_get_arrsize</list>
 		
 		<list>create_build_json_data</list>
 		<list>create_build_struct_type</list>
