@@ -1049,8 +1049,9 @@
 	
 	<!------------ login control entry ------------>
 	<create_step_bool_entry name="bool判断上一步" create_type="1" >
-		<op_bool_entry name="节点_bool判断上一步" expand_list="comment" >			
-			<comment name="功能说明" rw_stat="read">if(上一步测试结果){}</comment>
+		<op_bool_entry name="节点_bool判断上一步" expand_list="comment" >
+			<comment name="功能说明" rw_stat="read">if(上一步测试结果){}</comment>	
+			<bluePrint_info kinds="hide" delete="no" desc="this instruct test control register of vm and chose cmd subentry">TestControlRegister</bluePrint_info>
 			<op_sub_comp_entry name="true时执行" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
 				<condition no_comp="1" kinds="hide" delete="no">1</condition>
 			</op_sub_comp_entry>
@@ -1143,6 +1144,7 @@
 	<op_error_break name="break-on-error" create_type="1" >
 		<op_error_short_jump name="节点_break_on_error" expand_list="comment"  >
 			<comment name="功能说明" rw_stat="read">break when last false</comment>
+			<bluePrint_info kinds="hide" delete="no" desc="this instruct test control register of vm and chose cmd subentry">TestControlRegister</bluePrint_info>
 			<jumpOffset kinds="hide" delete="no" >0</jumpOffset>
 		</op_error_short_jump>
 	</op_error_break>
@@ -1150,6 +1152,7 @@
 	<create_success_break name="break-on-success" create_type="1" >
 		<op_success_short_jump name="节点_break_on_success" expand_list="comment"  >
 			<comment name="功能说明" rw_stat="read">break when last success</comment>
+			<bluePrint_info kinds="hide" delete="no" desc="this instruct test control register of vm and chose cmd subentry">TestControlRegister</bluePrint_info>
 			<jumpOffset kinds="hide" delete="no" >0</jumpOffset>
 		</op_success_short_jump>
 	</create_success_break>
@@ -1158,6 +1161,7 @@
 	<create_step_true_exit name="true时返回" create_type="1" >
 		<op_bool_entry name="节点_return_on_success" expand_list="comment" >			
 			<comment name="功能说明" rw_stat="read">if($curval==true)exit</comment>
+			<bluePrint_info kinds="hide" delete="no" desc="this instruct test control register of vm and chose cmd subentry">TestControlRegister</bluePrint_info>
 			<op_sub_comp_entry name="上一步true时执行" kinds="hide" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
 				<condition no_comp="1" kinds="hide" delete="no">1</condition>
 				<op_exit name="节点_退出" expand="yes">	
@@ -1170,6 +1174,7 @@
 	<create_step_false_eixt name="false时返回" create_type="1" >
 		<op_bool_entry name="节点_return_on_error" expand_list="comment" >			
 			<comment name="功能说明" rw_stat="read">if($curval==false)exit</comment>
+			<bluePrint_info kinds="hide" delete="no" desc="this instruct test control register of vm and chose cmd subentry">TestControlRegister</bluePrint_info>
 			<op_sub_comp_entry name="上一步false时执行" kinds="hide" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
 				<condition no_comp="1" kinds="hide"  delete="no">0</condition>				
 				<op_exit name="节点_退出" expand="yes">	

@@ -22,7 +22,7 @@
 #include <QMessageBox>
 
 #include "ndlog_wrapper.h"
-ND_LOG_WRAPPER_IMPLEMENTION(startDialog, __glogWrapper);
+ND_LOG_WRAPPER_IMPLEMENTION(startDialog);
 
 // static startDialog *__g_loginDlg ;
 // static void *__oldFunc ;
@@ -47,13 +47,13 @@ startDialog::startDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-	__glogWrapper = ND_LOG_WRAPPER_NEW(startDialog);
+	ND_LOG_WRAPPER_NEW(startDialog);
 }
 
 startDialog::~startDialog()
 {
     delete ui;
-	ND_LOG_WRAPPER_DELETE(__glogWrapper);
+	ND_LOG_WRAPPER_DELETE(startDialog);
 }
 
 

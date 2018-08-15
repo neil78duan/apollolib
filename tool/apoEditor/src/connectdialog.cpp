@@ -26,7 +26,7 @@
 #include <string>
 
 #include "ndlog_wrapper.h"
-ND_LOG_WRAPPER_IMPLEMENTION(ConnectDialog, __glogWrapper);
+ND_LOG_WRAPPER_IMPLEMENTION(ConnectDialog);
 
 NDOStreamMsg __sendMsg;
 
@@ -151,7 +151,7 @@ ConnectDialog::ConnectDialog(QWidget *parent) :
 	
     InitNet();
 
-	__glogWrapper = ND_LOG_WRAPPER_NEW(ConnectDialog);
+	ND_LOG_WRAPPER_NEW(ConnectDialog);
 
 
     //get init setting
@@ -186,7 +186,7 @@ ConnectDialog::~ConnectDialog()
     destroy_apollo_object(m_pConn);
 	destroyConnect();
 	
-	ND_LOG_WRAPPER_DELETE(__glogWrapper);
+	ND_LOG_WRAPPER_DELETE(ConnectDialog);
 
 
 	DBLDatabase *pdbl = DBLDatabase::get_Instant();
