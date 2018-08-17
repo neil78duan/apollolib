@@ -36,7 +36,7 @@ static inline int RandRange2(int range[2])
 	return ndrand_range(range[0], range[1]);
 }
 
-bool ProbSampling1(int rate); // 针对一个概率采样
+bool ProbSampling1(int rate,int area = SAMPLE_TOTAL_TIMES); // 针对一个概率采样
 
 int ProbSampling( int prob[], int num); //概率抽样 prob概率分布,只抽一次
 

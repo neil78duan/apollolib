@@ -10,9 +10,12 @@
 #include "srv_common/ndrand.h"
 
 
-bool ProbSampling1(int rate)
+bool ProbSampling1(int rate, int area)
 {
-	int rval = ndrand_range(0, SAMPLE_TOTAL_TIMES);
+	if (rate >= area) {
+		return true;
+	}
+	int rval = ndrand_range(0, area);
 	if (rate >= rval) {
 		return true;
 	}
@@ -60,44 +63,72 @@ int ProbSamplingEx( int prob[],int result[], int num)
 	return ret;
 }
 
+
 int SamplingSpecial(int prob[], int prob_num, int result[], int res_num)
 {
-	int sum = 0;
-	int validNum = 0;
-	for(int i=0; i<prob_num; i++) {
-		sum += prob[i] ;
-		if (prob[i]) {
-			++validNum;
-		}
-	}
-	if (sum <= 0 || validNum==0){
-		return -1 ;
+	if (res_num <= 0)
+		return 0;
+	if (res_num>=prob_num) {
+		for (int i = 0; i < prob_num; i++)
+			result[i] = i;
+		return prob_num;
 	}
 
-	//逐个采样
-	int ret = 0 ;
-	for(int i=0; i<prob_num; i++) {
-		int left_num = prob_num - i ;
-		int need_num = res_num - ret;
-		//剩余样本少于结果, 为了保证采样个数,后面都100%
-		if ((validNum-ret) <= need_num){
-			for(int xx =0 ; xx<left_num; xx++) {
-				if (prob[i+xx]) {
-					result[ret] = i + xx;
-					++ret;
-				}
-			}
-			return ret ;
-		}
-		int sampled = ndrand_range(0, sum);
-		if (sampled<( prob[i] * res_num)){
-			result[ret++] = i;
-			if (ret >= res_num)	{
-				break;
-			}
+	int ret = 0;
+	char pTmpBuf[256] = { 0 };
+
+
+	while (ret < res_num) {
+		int valIndex = ProbSampling(prob, prob_num);
+		if (pTmpBuf[valIndex] == 0) {
+			pTmpBuf[valIndex] = 1;
+			++ret;
 		}
 	}
+	ret = 0;
+	for (int i = 0; i < prob_num; i++) {
+		if (pTmpBuf[i] ==1 ) {
+			result[ret++] = i;
+		}
+	}	
+
 	return ret;
+// 	int sum = 0;
+// 	int validNum = 0;
+// 	for(int i=0; i<prob_num; i++) {
+// 		sum += prob[i] ;
+// 		if (prob[i]) {
+// 			++validNum;
+// 		}
+// 	}
+// 	if (sum <= 0 || validNum==0){
+// 		return -1 ;
+// 	}
+// 
+// 	//逐个采样
+// 	int ret = 0 ;
+// 	for(int i=0; i<prob_num; i++) {
+// 		int left_num = prob_num - i ;
+// 		int need_num = res_num - ret;
+// 		//剩余样本少于结果, 为了保证采样个数,后面都100%
+// 		if ((validNum-ret) <= need_num){
+// 			for(int xx =0 ; xx<left_num; xx++) {
+// 				if (prob[i+xx]) {
+// 					result[ret] = i + xx;
+// 					++ret;
+// 				}
+// 			}
+// 			return ret ;
+// 		}
+// 		int sampled = ndrand_range(0, sum);
+// 		if (sampled<( prob[i] * res_num)){
+// 			result[ret++] = i;
+// 			if (ret >= res_num)	{
+// 				break;
+// 			}
+// 		}
+// 	}
+// 	return ret;
 }
 
 ///////////////////////////////////////////////////////////////
