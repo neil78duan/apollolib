@@ -17,13 +17,13 @@
 #include <string>
  ///-------------------------------------------------------------------
 
-#define APO_ATTR_CAPACITY 256
+#define APO_ATTR_CAPACITY 512
 #define APO_FORMULA_SIZE 1024 
 
-typedef unsigned char attrid_t;
+typedef unsigned short attrid_t;
 typedef float attrval_t;
 
-#define INVALID_ATTR_ID 0xff
+#define INVALID_ATTR_ID (attrid_t)-1
 #define ATTR_VALUE_DETA 0.0001f
 
 //ndvm instruct stream
