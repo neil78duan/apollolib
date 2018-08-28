@@ -20,6 +20,10 @@ static int place_name_entry(char *input, char *buf, int size, void *user_data);
 static int apo_place_name_runtime(char *input, char *buf, int size, void *user_data)
 {
 	int i;
+	if (!input || *input == 0) {
+		nd_logfatal("parse error input param is NUMM\n");
+		return -1;
+	}
 	apoAttrCalcHelper *waHelper = (apoAttrCalcHelper*)user_data;
 	role_attr_description  *pwa = waHelper->m_wahelper_bufs;
 	for (i = 0; i < waHelper->m_wa_num; i++, pwa++) {
@@ -268,6 +272,12 @@ bool apoAttrCalcHelper::InitAttrNode(attrid_t aid, const char *name, const char*
 int apoAttrCalcHelper::place_param_name(char *input, char *buf, int size)
 {
 	int i;
+
+	if (!input || *input == 0) {
+		nd_logfatal("parse error input param is NUMM\n");
+		return -1;
+	}
+
 	role_attr_description  *pwa = m_wahelper_bufs;
 	for (i = 0; i<m_wa_num; i++, pwa++) {
 		if (pwa->wa_id == INVALID_ATTR_ID || !pwa->name.c_str()) {

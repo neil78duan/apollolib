@@ -74,6 +74,7 @@ int SamplingSpecial(int prob[], int prob_num, int result[], int res_num)
 		return prob_num;
 	}
 
+	int runtimes = prob_num * 2;
 	int ret = 0;
 	char pTmpBuf[256] = { 0 };
 
@@ -84,14 +85,28 @@ int SamplingSpecial(int prob[], int prob_num, int result[], int res_num)
 			pTmpBuf[valIndex] = 1;
 			++ret;
 		}
+		if (--runtimes <= 0) {
+			break;
+		}
+	}
+	if (ret < res_num) {
+		int leftFillNum = res_num - ret;
+		for (int i = 0; i < prob_num; i++) {
+			if (pTmpBuf[i] == 0 ) {
+				pTmpBuf[i] = 1;
+				--leftFillNum;
+				if (leftFillNum <= 0) {
+					break;
+				}
+			}
+		}
 	}
 	ret = 0;
 	for (int i = 0; i < prob_num; i++) {
-		if (pTmpBuf[i] ==1 ) {
+		if (pTmpBuf[i] == 1) {
 			result[ret++] = i;
 		}
-	}	
-
+	}
 	return ret;
 // 	int sum = 0;
 // 	int validNum = 0;

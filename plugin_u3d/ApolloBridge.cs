@@ -9,8 +9,23 @@ using System.Runtime.InteropServices;
 using System.Net;
 using NetMessage ;
 
+using RESULT_T=System.Int32;
 
-using RESULT_T=System.Int32;  
+
+[UnityEditor.InitializeOnLoad]
+public class ApolloPluginsPathSetHelper
+{
+    static ApolloPluginsPathSetHelper() // static Constructor
+    {
+        var currentPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process);
+        var dllPath = Application.dataPath + Path.DirectorySeparatorChar + "Plugins";
+        if (currentPath != null && currentPath.Contains(dllPath) == false)
+        {
+            Environment.SetEnvironmentVariable("PATH", currentPath + Path.PathSeparator + dllPath, EnvironmentVariableTarget.Process);
+        }
+    }
+
+}
 
 public enum ACCOUNT_TYPE{
     ACC_FACEBOOK = 0,

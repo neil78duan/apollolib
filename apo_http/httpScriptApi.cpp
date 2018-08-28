@@ -234,6 +234,28 @@ APOLLO_SCRIPT_API_DEF(apollo_http_uncache_file, "HTTP_uncache_from_mem(filepath)
 	return pListen->uncacheFile(args[1].GetText());
 }
 
+APOLLO_SCRIPT_API_DEF(apollo_http_set_working_path, "HTTP_working_path(readPath, writePath)")
+{
+	ND_TRACE_FUNC();
+	CHECK_ARGS_NUM(args, 3, parser);
+	
+	LogicObjectBase *owner = parser->getOwner();
+	nd_assert(owner);
+	DBLDataNode val;
+	if (!owner->getOtherObject("listener", val)) {
+		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		return false;
+	}
+	apoHttpListener *pListen = dynamic_cast<apoHttpListener*>(NDObject::FromHandle((nd_handle)val.GetObjectAddr()));
+	if (!pListen) {
+		parser->setErrno(NDERR_SYSTEM);
+		return false;
+	}
+
+	pListen->setPath(args[1].GetText(), args[2].GetText());
+	return true;
+}
+
 APOLLO_SCRIPT_API_DEF(apollo_http_get_header, "http_get_header(requestObj)")
 {
 	ND_TRACE_FUNC();
@@ -555,8 +577,14 @@ int apoHttpListener::getEncodeType()
 
 void apoHttpListener::setPath(const char *readable, const char *writable)
 {
-	m_readablePath = readable;
-	m_writablePath = writable;
+
+	char tmp_path[ND_FILE_PATH_SIZE];
+	if (readable && *readable) {
+		m_readablePath = nd_absolute_path(readable, tmp_path, sizeof(tmp_path));
+	}
+	if (writable && *writable) {
+		m_writablePath = nd_absolute_path(writable, tmp_path, sizeof(tmp_path));
+	}
 }
 
 void *apoHttpListener::getScriptEngine()
@@ -632,6 +660,16 @@ bool apoHttpListener::downloadFile(const char *filePath, NDHttpSession *session,
 	NDINT64 offset = 0;
 	NDINT64 size = 0;
 	size_t totalSize = 0;
+
+	//
+	char tmp_path[ND_FILE_PATH_SIZE];
+	const char *pLoadPath = nd_getpath(filePath,tmp_path, sizeof(tmp_path));
+	if (!nd_is_subpath(m_readablePath.c_str(), pLoadPath)) {
+		if (!nd_is_subpath(m_writablePath.c_str(), pLoadPath)) {
+			nd_logerror("Can not acccess %s\n", filePath);
+			return false; 
+		}
+	}
 
 	const char *pRange = request.getHeader("Range");
 	if (pRange ) {

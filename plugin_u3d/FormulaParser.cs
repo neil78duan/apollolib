@@ -188,6 +188,7 @@ public class apoFormula {
         apoFormulaNameInit(6, @"powerRateBase", @"力量百分百基础");
         apoFormulaNameInit(7, @"powerRateAddon", @"力量百分百加成");
         apoFormulaNameInit(8, @"powerBaseAddon", @"基础加成");
+        apoFormulaNameInit(108, @"@powerBaseAddon", @"@基础加成");
 
         apoFormulaPreParse();
 
@@ -204,12 +205,19 @@ public class apoFormula {
 
         int changedNum = apoAttrForCalcAll(pInst);
 
-        float[] results = new float[10];
+        float[] results = new float[200];
 
         int allNum = getAllValues(pInst, ref results);
 
-        int[] attrIds = new int[10];
+        int[] attrIds = new int[200];
         int nInrefecNum = getInfections(pInst, 7, ref attrIds);
+
+
+        apoAttrForSetValue(pInst, 108, 10);
+        apoAttrForSetValue(pInst, 8, 20);
+
+        float res = 0;
+        apoAttrForRun(pInst, @"@基础加成-基础加成", &res);
 
         return true;
     }

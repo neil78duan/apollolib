@@ -934,7 +934,7 @@
 	
 	<!------------------test node------------------ -->
 	<create_op_comp name="测试大小" create_type="1" >
-		<op_comp name="节点_测试大小" expand="yes" create_label="create_internal_label">
+		<op_comp name="节点_测试大小" expand="yes" create_label="create_internal_label" defaultNext="create_step_bool_entry">
 			<comment name="功能说明" rw_stat="read">大于小于等级(不改变$value)</comment>
 			<bluePrint_info kinds="hide" delete="no" desc="this instruct set control register of vm">SetControlRegister</bluePrint_info>
 			<index  name="逻辑运算" kinds="reference" reference_type="type_compare_sub_entry" delete="no">0</index>	
@@ -950,7 +950,7 @@
 	</create_op_comp>
 	
 	<create_step_var_test name="测试变量有效" create_type="1" >
-		<op_var_test name="节点_测试变量有效" expand_list="comment"  create_label="create_internal_label">			
+		<op_var_test name="节点_测试变量有效" expand_list="comment"  create_label="create_internal_label" defaultNext="create_step_bool_entry">
 			<comment name="功能说明" rw_stat="read">if(var==true)</comment>	
 			<bluePrint_info kinds="hide" delete="no" desc="this instruct set control register of vm">SetControlRegister</bluePrint_info>
 			<param_collect name="操作数" expand="yes" expand_stat="1" delete="no">
@@ -962,28 +962,28 @@
 	
 	
 	<create_get_simulate_test name="测试模拟状态" create_type="1" expand="yes" >
-		<op_get_simulate_stat name="节点_测试模拟状态" expand="yes" create_label="create_internal_label">			
+		<op_get_simulate_stat name="节点_测试模拟状态" expand="yes" create_label="create_internal_label"  defaultNext="create_step_bool_entry">			
 			<comment name="功能说明" rw_stat="read">test_run_in_simulate()</comment>
 			<bluePrint_info kinds="hide" delete="no" desc="this instruct set control register of vm">SetControlRegister</bluePrint_info>
 		</op_get_simulate_stat>
 	</create_get_simulate_test >	
 	
 	<create_step_curvalue_test name="测试当前值有效" create_type="1" >
-		<op_check_valide name="节点_测试当前值有效" expand_list="comment"  create_label="create_internal_label">			
+		<op_check_valide name="节点_测试当前值有效" expand_list="comment"  create_label="create_internal_label" defaultNext="create_step_bool_entry">
 			<comment name="功能说明" rw_stat="read">test_variant( var )</comment>
 			<bluePrint_info kinds="hide" delete="no" desc="this instruct set control register of vm">SetControlRegister</bluePrint_info>
 		</op_check_valide>
 	</create_step_curvalue_test>
 	
 	<create_host_debug_test name="测试进程debug" create_type="1" >
-		<op_check_host_debug name="节点_测试进程debug" expand="yes" create_label="create_internal_label">			
+		<op_check_host_debug name="节点_测试进程debug" expand="yes" create_label="create_internal_label" defaultNext="create_step_bool_entry">			
 			<comment name="功能说明" rw_stat="read">test_this_progress_is_debug()</comment>
 			<bluePrint_info kinds="hide" delete="no" desc="this instruct set control register of vm">SetControlRegister</bluePrint_info>
 		</op_check_host_debug>
 	</create_host_debug_test>
 	
 	<create_script_debug_test name="测试脚本debug" create_type="1" >
-		<op_check_debug name="节点_测试脚本debug" expand="yes" create_label="create_internal_label">			
+		<op_check_debug name="节点_测试脚本debug" expand="yes" create_label="create_internal_label" defaultNext="create_step_bool_entry">
 			<comment name="功能说明" rw_stat="read">test_this_script_is_debug()</comment>
 			<bluePrint_info kinds="hide" delete="no" desc="this instruct set control register of vm">SetControlRegister</bluePrint_info>
 		</op_check_debug>
