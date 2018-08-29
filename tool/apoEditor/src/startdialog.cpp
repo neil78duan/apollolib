@@ -592,6 +592,11 @@ void startDialog::on_ScriptEdit_clicked()
 void startDialog::on_Compile_clicked()
 {
     ClearLog();
+
+	if (!loadDataBase()) {
+		nd_logerror("load database error\n");
+	}
+
     if (false == compile()){
         WriteLog("compile script error");
         return;

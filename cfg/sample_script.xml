@@ -14,7 +14,7 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">./setting/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1535450805</LastMod>
+	<LastMod name="最后修改" kinds="hide">1535513034</LastMod>
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="41" expand_stat="1" accept_drag_in="func_node">
 	<func_node name="sample_selector" create_template="create_list1" auto_index="5" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
@@ -2237,7 +2237,7 @@
 		<comment>函数说明</comment>
 		<op_call_func name="节点_调用$cryptFile(filename,outFileName, password)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-			<apoEditorPos kinds="hide" x="516" y="181" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="457" y="312" offset_x="0" offset_y="0"/>
 			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_encrypt_file&amp;_dispname=cryptFile(filename,outFileName, password)</func_name>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
@@ -2252,7 +2252,7 @@
 				<var kinds="string" delete="no" restrict="type">apoloKey</var>
 			</param_collect>
 		</op_call_func>
-		<apoEditorPos kinds="hide" x="154" y="255" offset_x="-59" offset_y="131"/>
+		<apoEditorPos kinds="hide" x="95" y="386" offset_x="0" offset_y="0"/>
 		<unConnect kinds="hide">
 			<steps_collection>
 				<op_read_table name="节点_读取表格" expand="yes" create_label="create_internal_label">
@@ -2266,7 +2266,7 @@
 			</steps_collection>
 			<op_call_func name="节点_调用$deyptFile(filename,outFileName, password)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-				<apoEditorPos kinds="hide" x="389" y="-27" offset_x="0" offset_y="0"/>
+				<apoEditorPos kinds="hide" x="330" y="104" offset_x="0" offset_y="0"/>
 				<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_decrypt_file&amp;_dispname=deyptFile(filename,outFileName, password)</func_name>
 				<param_collect name="参数" expand="yes">
 					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
@@ -2284,57 +2284,57 @@
 			<steps_collection>
 				<op_calc name="节点_公式" expand="yes" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">run_formulate(formulate_text)</comment>
-					<apoEditorPos kinds="hide" x="396" y="399" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="337" y="530" offset_x="0" offset_y="0"/>
 					<var name="公式内容" kinds="string" delete="no">0</var>
 				</op_calc>
 				<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
 					<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-					<apoEditorPos kinds="hide" x="530" y="534" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="471" y="665" offset_x="0" offset_y="0"/>
 					<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var2</param>
 					<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
 					<var name="初始值" kinds="string" delete="no" restrict="type">$value</var>
 				</op_make_var>
 				<op_sendevent name="节点_产生事件($id$)" create_template="create_input_param" auto_index="0" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">generate_event(event_id)</comment>
-					<apoEditorPos kinds="hide" x="656" y="394" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="597" y="525" offset_x="0" offset_y="0"/>
 					<varInt name="事件名" kinds="user_define" user_param="event_list" delete="no" replace_val="../.name">none</varInt>
 				</op_sendevent>
 			</steps_collection>
 			<steps_collection>
-				<op_check_host_debug name="节点_测试进程debug" expand="yes" create_label="create_internal_label" defaultNext="create_step_bool_entry">
-					<comment name="功能说明" rw_stat="read">test_this_progress_is_debug()</comment>
-					<apoEditorPos kinds="hide" x="813" y="269" offset_x="0" offset_y="0"/>
-					<bluePrint_info kinds="hide" delete="no" desc="this instruct set control register of vm">SetControlRegister</bluePrint_info>
-				</op_check_host_debug>
-				<op_bool_entry name="节点_bool判断上一步" expand_list="comment">
-					<comment name="功能说明" rw_stat="read">if(上一步测试结果){}</comment>
-					<apoEditorPos kinds="hide" x="775" y="107" offset_x="0" offset_y="0"/>
-					<bluePrint_info kinds="hide" delete="no" desc="this instruct test control register of vm and chose cmd subentry">TestControlRegister</bluePrint_info>
-					<op_sub_comp_entry name="true时执行" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
-						<condition no_comp="1" kinds="hide" delete="no">1</condition>
-					</op_sub_comp_entry>
-					<op_sub_comp_entry name="false时执行" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
-						<condition no_comp="1" kinds="hide" delete="no">0</condition>
-					</op_sub_comp_entry>
-				</op_bool_entry>
 				<op_calc name="节点_公式" expand="yes" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">run_formulate(formulate_text)</comment>
-					<apoEditorPos kinds="hide" x="967" y="1" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="908" y="132" offset_x="0" offset_y="0"/>
 					<var name="公式内容" kinds="string" delete="no">0</var>
 				</op_calc>
 				<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
 					<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-					<apoEditorPos kinds="hide" x="1170" y="19" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="1111" y="150" offset_x="0" offset_y="0"/>
 					<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var4</param>
 					<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
 					<var name="初始值" kinds="string" delete="no" restrict="type">$value</var>
 				</op_make_var>
 				<op_calc name="节点_公式" expand="yes" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">run_formulate(formulate_text)</comment>
-					<apoEditorPos kinds="hide" x="1078" y="199" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="1019" y="330" offset_x="0" offset_y="0"/>
 					<var name="公式内容" kinds="string" delete="no">0</var>
 				</op_calc>
 			</steps_collection>
+			<op_check_host_debug name="节点_测试进程debug" expand="yes" create_label="create_internal_label" defaultNext="create_step_bool_entry">
+				<comment name="功能说明" rw_stat="read">test_this_progress_is_debug()</comment>
+				<apoEditorPos kinds="hide" x="741" y="270" offset_x="0" offset_y="0"/>
+				<bluePrint_info kinds="hide" delete="no" desc="this instruct set control register of vm">SetControlRegister</bluePrint_info>
+			</op_check_host_debug>
+			<op_bool_entry name="节点_bool判断上一步" expand_list="comment">
+				<comment name="功能说明" rw_stat="read">if(上一步测试结果){}</comment>
+				<apoEditorPos kinds="hide" x="911" y="270" offset_x="0" offset_y="0"/>
+				<bluePrint_info kinds="hide" delete="no" desc="this instruct test control register of vm and chose cmd subentry">TestControlRegister</bluePrint_info>
+				<op_sub_comp_entry name="true时执行" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
+					<condition no_comp="1" kinds="hide" delete="no">1</condition>
+				</op_sub_comp_entry>
+				<op_sub_comp_entry name="false时执行" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
+					<condition no_comp="1" kinds="hide" delete="no">0</condition>
+				</op_sub_comp_entry>
+			</op_bool_entry>
 		</unConnect>
 	</func_node>
 	<func_node name="test_misc_function" create_template="create_list1" auto_index="7" expand_list="comment" enable_drag="yes" expand_stat="1" var_name_index="3">
@@ -2945,7 +2945,7 @@
 	</func_node>
 </baseFunction>
 <message_handler name="消息处理入口" delete="no" create_template="create_function_filter,create_msg_handler" auto_index="1" expand_stat="1" accept_drag_in="msg_handler_node">
-	<function_filter name="测试消息" create_template="create_msg_handler" auto_index="7" expand_stat="0" accept_drag_in="msg_handler_node">
+	<function_filter name="测试消息" create_template="create_msg_handler" auto_index="7" expand_stat="1" accept_drag_in="msg_handler_node">
 		<msg_handler_node name="message_test" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="4">
 			<func_params kinds="hide"/>
 			<comment name="函数说明" expand="yes">
