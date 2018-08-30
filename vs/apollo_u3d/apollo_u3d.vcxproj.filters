@@ -54,9 +54,6 @@
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\list.h">
       <Filter>include\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\ndsdk\include\nd_common\ndchar.h">
-      <Filter>include\common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\nddir.h">
       <Filter>include\common</Filter>
     </ClInclude>
@@ -75,13 +72,7 @@
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_comcfg.h">
       <Filter>include\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_comdef.h">
-      <Filter>include\common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_common.h">
-      <Filter>include\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_dbg.h">
       <Filter>include\common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_define.h">
@@ -302,9 +293,6 @@
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\recbuf.c">
       <Filter>src\common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\source_log.c">
-      <Filter>src\common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\desc.c">
       <Filter>src\nd_crypt</Filter>
     </ClCompile>
@@ -430,6 +418,9 @@
     </ClCompile>
     <ClCompile Include="..\..\plugin_u3d\apoAttrCalcHelper.cpp">
       <Filter>apollo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_logger.c">
+      <Filter>src\common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

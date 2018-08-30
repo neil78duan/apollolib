@@ -183,16 +183,13 @@
     <ClInclude Include="..\..\..\ndsdk\include\ndcli\nd_iconn.h" />
     <ClInclude Include="..\..\..\ndsdk\include\ndlib.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\list.h" />
-    <ClInclude Include="..\..\..\ndsdk\include\nd_common\ndchar.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\nddir.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_alloc.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_atomic.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_bintree.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_cmdline.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_comcfg.h" />
-    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_comdef.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_common.h" />
-    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_dbg.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_define.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_handle.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_iconv.h" />
@@ -253,6 +250,7 @@
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_cmdline.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_handle.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_iconv.c" />
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_logger.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_mempool.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_mutex.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_static_alloc.c" />
@@ -265,7 +263,6 @@
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_xml.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\node_mgr.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\recbuf.c" />
-    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\source_log.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\desc.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\digit.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\md2c.c" />

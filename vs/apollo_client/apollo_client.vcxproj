@@ -218,6 +218,7 @@
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_cmdline.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_handle.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_iconv.c" />
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_logger.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_mempool.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_mutex.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_static_alloc.c" />
@@ -230,7 +231,6 @@
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_xml.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\node_mgr.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\recbuf.c" />
-    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\source_log.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\desc.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\digit.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\md2c.c" />

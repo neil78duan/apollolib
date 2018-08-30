@@ -275,9 +275,6 @@
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\recbuf.c">
       <Filter>src\common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\source_log.c">
-      <Filter>src\common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\ndsdk\src\nd_crypt\rsa\desc.c">
       <Filter>src\nd_crypt</Filter>
     </ClCompile>
@@ -405,6 +402,9 @@
       <Filter>apollo\attribute</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\cJSON.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_logger.c">
       <Filter>src\common</Filter>
     </ClCompile>
   </ItemGroup>

@@ -12,7 +12,7 @@
 #if defined(BUILD_AS_THIRD_PARTY)
 #include "ndlib.h"
 #else 
-#include "nd_common/nd_comdef.h"
+#include "nd_common/nd_define.h"
 #endif
 
 enum eApollo_errors {
