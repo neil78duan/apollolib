@@ -15,7 +15,7 @@
 <data_type_define kinds="hide" desc="define enum data type">
 	<!-- type_operate_dest kinds="enum" enum_value="无,角色属性,背包,任务,基地,卡牌,附加属性" enum_type="text" enum_text="none,attr,package,task,home,card,addition"/ -->
 	<type_compare_sub_entry kinds="enum" enum_value="其他,等于,小于,大于,小于等于,大于等于"/>
-	<type_data_type kinds="enum" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,time,变量,参数,当前结果,user_def,compile_time,func_name, mod_name,bin_data,user_def_array,auto,orgMsgStream"/>	
+	<type_data_type kinds="enum" enum_value="整数,浮点,文本,8bits,16bits,64bits,bool,数组,time,变量,参数,当前结果,user_def,compile_time,func_name,mod_name,bin_data,user_def_array,auto,orgMsgStream,closure"/>	
 	<type_netmsg_privilege kinds="enum" enum_value="不限制,连接,登录,进入游戏,GM"/>
 	<type_encode kinds="enum" enum_value="ansi,gbk,utf8"/>
 	<type_time_unit kinds="enum" enum_value="秒,分钟,小时,天,月,年,星期"/>
@@ -30,13 +30,11 @@
 	<msg_handler_node>FuncEntry</msg_handler_node>	
 	<function_init_block>ModuleInitEntry</function_init_block>
 	<exception_catch_block>ExceptionEntry</exception_catch_block>
+	<closure_entry>ClosureEntry</closure_entry>
 	<op_make_var>NewVar</op_make_var>
 	<op_global_var>NewVar</op_global_var>
 	
-	<op_build_json_data>NewVar</op_build_json_data>	
-	<!--op_build_json_data>NewJson</op_build_json_data>
-	<op_create_struct_type>NewStruct</op_create_struct_type>
-	<op_assignin>Assignment</op_assignin -->
+	<op_build_json_data>NewVar</op_build_json_data>
 	<op_short_jump>Break</op_short_jump>
 	<op_success_short_jump>TrueBreak</op_success_short_jump>
 	<op_error_short_jump>FalseBreak</op_error_short_jump>
@@ -143,6 +141,7 @@
 	<list instruction="100" size="0">breakPointInfo</list>	
 	<list instruction="100" size="0">func_params</list>
 	<list instruction="100" size="0">bluePrint_info</list>
+	<list instruction="100" size="0">closure_name</list>
 	<list instruction="5" size="0">user_define_function</list>
 	<list instruction="6" size="0" datatype="2">function_info</list>	
 	<list instruction="6" size="0" datatype="2">is_open_role_affair</list>
@@ -171,6 +170,8 @@
 	<list instruction="15" desc="inter label in exe-node" >internal_label</list>
 	<list instruction="16" desc="goto cmd" >op_goto_label</list>
 	<list instruction="16" desc="internal goto" >internal_goto</list>
+	
+	<list instruction="17" desc="closure entry node" >closure_entry</list>
 </compile_setting>
 
 <create_template kinds="hide" desc="新建节点的创建模板">
@@ -444,6 +445,16 @@
 	<!-- create create func argment lists -->
 	
 	<!-- create step in function -->
+		
+	<create_closure name="闭包" create_type="1" >
+		<closure_entry name="闭包" create_template="create_list2" auto_index="0" >
+			<comment name="功能说明" rw_stat="read">闭包(...){}</comment>
+			<closure_name name="闭包名字" kinds="hide" delete="no" auto_index_ref="var_name_index">__closure_</closure_name>
+			<func_params kinds="hide"/>
+		</closure_entry>	
+	</create_closure>
+	
+	
 	<create_step_exit name="退出节点" create_type="1" expand="yes" >
 		<op_exit name="节点_退出($errno$)" expand="yes">			
 			<comment name="功能说明" rw_stat="read">op_exit(value)</comment>
@@ -847,6 +858,17 @@
 			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name" >none</func_name>
 		</op_call_func>
 	</create_step_call_func>
+	
+	
+	<create_step_call_manual name="执行手动输入函数" create_type="1" >
+		<op_call_func name="节点_调用$Function$" create_template="create_input_param"  auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
+			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+			<param_collect name="函数名" delete="no">
+				<type name="类型" kinds="reference" reference_type="type_data_type" delete="no">2</type>
+				<var name="值" kinds="string" delete="no" restrict="type" replace_val="../../.name">none</var>
+			</param_collect>
+		</op_call_func>
+	</create_step_call_manual>
 	
 	<create_step_print name="打印输出" create_type="1" >
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0"  expand_list="comment" create_label="create_internal_label">
@@ -1414,6 +1436,8 @@
 		<list>create_step_process_exit</list>	
 		<list>create_step_process_abort</list>	
 		<list>create_cur_parser</list>
+		<list>create_closure</list>
+		<list>create_step_call_manual</list>
 		<list>create_bt_selector</list>
 		<list>create_bt_sequence</list>
 		

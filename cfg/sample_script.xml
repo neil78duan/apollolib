@@ -14,7 +14,7 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">./setting/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1535513034</LastMod>
+	<LastMod name="最后修改" kinds="hide">1536229331</LastMod>
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="41" expand_stat="1" accept_drag_in="func_node">
 	<func_node name="sample_selector" create_template="create_list1" auto_index="5" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
@@ -211,7 +211,7 @@
 				<var kinds="string" delete="no" restrict="type">0</var>
 			</param_collect>
 		</op_print>
-		<apoEditorPos kinds="hide" x="-44" y="151" offset_x="33" offset_y="82"/>
+		<apoEditorPos kinds="hide" x="-37" y="148" offset_x="33" offset_y="82"/>
 		<unConnect kinds="hide">
 			<steps_bt_sequence name="BT-Sequence" auto_index="0">
 				<comment name="功能说明" rw_stat="read">run until one of children success </comment>
@@ -2319,22 +2319,6 @@
 					<var name="公式内容" kinds="string" delete="no">0</var>
 				</op_calc>
 			</steps_collection>
-			<op_check_host_debug name="节点_测试进程debug" expand="yes" create_label="create_internal_label" defaultNext="create_step_bool_entry">
-				<comment name="功能说明" rw_stat="read">test_this_progress_is_debug()</comment>
-				<apoEditorPos kinds="hide" x="741" y="270" offset_x="0" offset_y="0"/>
-				<bluePrint_info kinds="hide" delete="no" desc="this instruct set control register of vm">SetControlRegister</bluePrint_info>
-			</op_check_host_debug>
-			<op_bool_entry name="节点_bool判断上一步" expand_list="comment">
-				<comment name="功能说明" rw_stat="read">if(上一步测试结果){}</comment>
-				<apoEditorPos kinds="hide" x="911" y="270" offset_x="0" offset_y="0"/>
-				<bluePrint_info kinds="hide" delete="no" desc="this instruct test control register of vm and chose cmd subentry">TestControlRegister</bluePrint_info>
-				<op_sub_comp_entry name="true时执行" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
-					<condition no_comp="1" kinds="hide" delete="no">1</condition>
-				</op_sub_comp_entry>
-				<op_sub_comp_entry name="false时执行" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
-					<condition no_comp="1" kinds="hide" delete="no">0</condition>
-				</op_sub_comp_entry>
-			</op_bool_entry>
 		</unConnect>
 	</func_node>
 	<func_node name="test_misc_function" create_template="create_list1" auto_index="7" expand_list="comment" enable_drag="yes" expand_stat="1" var_name_index="3">
@@ -2843,8 +2827,13 @@
 		<apoEditorPos kinds="hide" x="80" y="356" offset_x="0" offset_y="0"/>
 		<unConnect kinds="hide"/>
 	</func_node>
-	<func_node name="main" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="2" name_auto_index="auto_index">
-		<func_params kinds="hide"/>
+	<func_node name="main" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="5" name_auto_index="auto_index">
+		<func_params kinds="hide">
+			<input_param name="Param1">$1</input_param>
+			<input_param name="Param2">$2</input_param>
+			<input_param name="Param3">$3</input_param>
+			<input_param name="Param4">$4</input_param>
+		</func_params>
 		<comment>函数说明</comment>
 		<op_call_func name="节点_调用$sample_call_fibo$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
@@ -2853,6 +2842,10 @@
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
 				<var kinds="string" delete="no" restrict="type">10</var>
+			</param_collect>
+			<param_collect name="参数" expand="yes">
+				<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+				<var kinds="string" delete="no" restrict="type">0</var>
 			</param_collect>
 		</op_call_func>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
@@ -2880,13 +2873,38 @@
 		</op_call_func>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
-			<apoEditorPos kinds="hide" x="1108" y="363" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="1074" y="415" offset_x="0" offset_y="0"/>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
 				<var kinds="string" delete="no" restrict="type">$value</var>
 			</param_collect>
 		</op_print>
-		<apoEditorPos kinds="hide" x="20" y="400" offset_x="0" offset_y="0"/>
+		<op_call_func name="节点_执行$Function$函数" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
+			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+			<apoEditorPos kinds="hide" x="1194" y="238" offset_x="0" offset_y="0"/>
+			<param_collect name="定时器名称" delete="no">
+				<type name="类型" kinds="reference" reference_type="type_data_type" delete="no">20</type>
+				<var name="值" kinds="string" delete="no" restrict="type" replace_val="../../.name">_realval=__closure_3&amp;_dispname=Closure</var>
+			</param_collect>
+		</op_call_func>
+		<apoEditorPos kinds="hide" x="20" y="400" offset_x="-142" offset_y="-53"/>
+		<closure_entry name="闭包" create_template="create_list2" auto_index="0">
+			<comment name="功能说明" rw_stat="read">闭包(...){}</comment>
+			<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
+				<comment name="功能说明" rw_stat="read">print(...)</comment>
+				<apoEditorPos kinds="hide" x="495" y="159" offset_x="0" offset_y="0"/>
+				<param_collect name="参数" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+					<var kinds="string" delete="no" restrict="type">hello closure</var>
+				</param_collect>
+			</op_print>
+			<apoEditorPos kinds="hide" x="278" y="167" offset_x="0" offset_y="0"/>
+			<closure_name name="闭包名字" kinds="hide" delete="no" auto_index_ref="var_name_index" replace_val="../.name">__closure_3</closure_name>
+			<func_params kinds="hide">
+				<input_param name="Param1">$1</input_param>
+				<input_param name="Param2">$2</input_param>
+			</func_params>
+		</closure_entry>
 		<unConnect kinds="hide"/>
 	</func_node>
 	<func_node name="func_export_apis" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="2" name_auto_index="auto_index">
@@ -2944,8 +2962,8 @@
 		</unConnect>
 	</func_node>
 </baseFunction>
-<message_handler name="消息处理入口" delete="no" create_template="create_function_filter,create_msg_handler" auto_index="1" expand_stat="1" accept_drag_in="msg_handler_node">
-	<function_filter name="测试消息" create_template="create_msg_handler" auto_index="7" expand_stat="1" accept_drag_in="msg_handler_node">
+<message_handler name="消息处理入口" delete="no" create_template="create_function_filter,create_msg_handler" auto_index="1" expand_stat="0" accept_drag_in="msg_handler_node">
+	<function_filter name="测试消息" create_template="create_msg_handler" auto_index="7" expand_stat="0" accept_drag_in="msg_handler_node">
 		<msg_handler_node name="message_test" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="4">
 			<func_params kinds="hide"/>
 			<comment name="函数说明" expand="yes">
