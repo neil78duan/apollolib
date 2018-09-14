@@ -49,7 +49,55 @@ APOLLO_SCRIPT_API_DEF(apollo_set_http_handler, "http_install_req_handler(listene
 	return false;
 }
 
-APOLLO_SCRIPT_API_DEF(apollo_http_error, "HTTP_error_response(session, errorId, desc)")
+APOLLO_SCRIPT_API_DEF(apollo_http_save_session, "HTTP_session_value_set(connectObj, name, value)")
+{
+	ND_TRACE_FUNC();
+	CHECK_ARGS_NUM(args, 4, parser);
+
+	NDHttpSession *pSession = _getSession(args[1]);
+	if (!pSession) {
+		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		nd_logerror("get session error \n");
+		return false;
+	}
+
+	return pSession->sessionIdSetValue(args[2].GetText(), args[3].GetText());
+
+}
+
+APOLLO_SCRIPT_API_DEF(apollo_http_get_session, "HTTP_session_value_get(connectObj, name)")
+{
+	ND_TRACE_FUNC();
+	CHECK_ARGS_NUM(args, 3, parser);
+
+	NDHttpSession *pSession = _getSession(args[1]);
+	if (!pSession) {
+		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		nd_logerror("get session error \n");
+		return false;
+	}
+
+	result = pSession->sessionIdGetValue(args[2].GetText());
+	
+	return true;
+}
+
+APOLLO_SCRIPT_API_DEF(apollo_http_session_id, "HTTP_session_get_id(connectObj)")
+{
+	ND_TRACE_FUNC();
+	
+	NDHttpSession *pSession = _getSession(args[1]);
+	if (!pSession) {
+		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		nd_logerror("get session error \n");
+		return false;
+	}
+	result = pSession->sessionIdGet();
+	return true;
+}
+
+
+APOLLO_SCRIPT_API_DEF(apollo_http_error, "HTTP_error_response(connectObj, errorId, desc)")
 {
 	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 3, parser);
@@ -76,7 +124,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_error, "HTTP_error_response(session, errorId, 
 	return true;
 }
 
-APOLLO_SCRIPT_API_DEF(apollo_http_respone, "HTTP_response(session,status, header, body)")
+APOLLO_SCRIPT_API_DEF(apollo_http_respone, "HTTP_response(connectObj,status, header, body)")
 {
 	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM_ONLY(args, 5, parser);
@@ -129,7 +177,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_respone, "HTTP_response(session,status, header
 }
 
 
-APOLLO_SCRIPT_API_DEF(apollo_http_file_down, "HTTP_download_file(session,request,filepath)")
+APOLLO_SCRIPT_API_DEF(apollo_http_file_down, "HTTP_download_file(connectObj,request,filepath)")
 {
 	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 4, parser);

@@ -14,7 +14,7 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">./setting/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1536229331</LastMod>
+	<LastMod name="最后修改" kinds="hide">1536289350</LastMod>
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="41" expand_stat="1" accept_drag_in="func_node">
 	<func_node name="sample_selector" create_template="create_list1" auto_index="5" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
@@ -2837,7 +2837,7 @@
 		<comment>函数说明</comment>
 		<op_call_func name="节点_调用$sample_call_fibo$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-			<apoEditorPos kinds="hide" x="320" y="386" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="221" y="468" offset_x="0" offset_y="0"/>
 			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">sample_call_fibo</func_name>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
@@ -2850,7 +2850,7 @@
 		</op_call_func>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
-			<apoEditorPos kinds="hide" x="604" y="383" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="505" y="465" offset_x="0" offset_y="0"/>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
 				<var kinds="string" delete="no" restrict="type">斐波切纳10=</var>
@@ -2862,7 +2862,7 @@
 		</op_print>
 		<op_call_func name="节点_读取表格" expand="yes" expand_list="comment">
 			<comment name="功能说明" rw_stat="read">read_excel_table(table,col, index)</comment>
-			<apoEditorPos kinds="hide" x="844" y="392" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="745" y="474" offset_x="0" offset_y="0"/>
 			<func_name name="函数" kinds="hide" delete="no">apollo_read_excel_node</func_name>
 			<tablename name="excel表" kinds="user_define" user_param="dbl_excel" delete="no">drop_items.xlsx</tablename>
 			<var name="列名" kinds="user_define" user_param="dbl_excel_col" delete="no">属性奖励</var>
@@ -2873,32 +2873,52 @@
 		</op_call_func>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
-			<apoEditorPos kinds="hide" x="1074" y="415" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="975" y="547" offset_x="0" offset_y="0"/>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
 				<var kinds="string" delete="no" restrict="type">$value</var>
 			</param_collect>
+			<param_collect name="参数" expand="yes">
+				<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
+				<var kinds="string" delete="no" restrict="type">4</var>
+			</param_collect>
 		</op_print>
 		<op_call_func name="节点_执行$Function$函数" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-			<apoEditorPos kinds="hide" x="1194" y="238" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="1174" y="336" offset_x="0" offset_y="0"/>
 			<param_collect name="定时器名称" delete="no">
 				<type name="类型" kinds="reference" reference_type="type_data_type" delete="no">20</type>
 				<var name="值" kinds="string" delete="no" restrict="type" replace_val="../../.name">_realval=__closure_3&amp;_dispname=Closure</var>
 			</param_collect>
+			<param_collect name="参数" expand="yes">
+				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
+				<var kinds="string" delete="no" restrict="type">yes </var>
+			</param_collect>
+			<param_collect name="参数" expand="yes">
+				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
+				<var kinds="string" delete="no" restrict="type">i can</var>
+			</param_collect>
 		</op_call_func>
-		<apoEditorPos kinds="hide" x="20" y="400" offset_x="-142" offset_y="-53"/>
+		<apoEditorPos kinds="hide" x="-79" y="482" offset_x="0" offset_y="0"/>
 		<closure_entry name="闭包" create_template="create_list2" auto_index="0">
 			<comment name="功能说明" rw_stat="read">闭包(...){}</comment>
 			<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 				<comment name="功能说明" rw_stat="read">print(...)</comment>
-				<apoEditorPos kinds="hide" x="495" y="159" offset_x="0" offset_y="0"/>
+				<apoEditorPos kinds="hide" x="963" y="93" offset_x="0" offset_y="0"/>
 				<param_collect name="参数" expand="yes">
-					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+					<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 					<var kinds="string" delete="no" restrict="type">hello closure</var>
 				</param_collect>
+				<param_collect name="参数" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
+					<var kinds="string" delete="no" restrict="type">1</var>
+				</param_collect>
+				<param_collect name="参数" expand="yes">
+					<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
+					<var kinds="string" delete="no" restrict="type">2</var>
+				</param_collect>
 			</op_print>
-			<apoEditorPos kinds="hide" x="278" y="167" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="705" y="170" offset_x="0" offset_y="0"/>
 			<closure_name name="闭包名字" kinds="hide" delete="no" auto_index_ref="var_name_index" replace_val="../.name">__closure_3</closure_name>
 			<func_params kinds="hide">
 				<input_param name="Param1">$1</input_param>
