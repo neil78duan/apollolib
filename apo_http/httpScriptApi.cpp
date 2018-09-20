@@ -49,7 +49,7 @@ APOLLO_SCRIPT_API_DEF(apollo_set_http_handler, "http_install_req_handler(listene
 	return false;
 }
 
-APOLLO_SCRIPT_API_DEF(apollo_http_save_session, "HTTP_session_value_set(connectObj, name, value)")
+APOLLO_SCRIPT_API_DEF(apollo_http_save_session, "HTTP_set_session_val(connectObj, session_name, value)")
 {
 	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 4, parser);
@@ -65,7 +65,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_save_session, "HTTP_session_value_set(connectO
 
 }
 
-APOLLO_SCRIPT_API_DEF(apollo_http_get_session, "HTTP_session_value_get(connectObj, name)")
+APOLLO_SCRIPT_API_DEF(apollo_http_get_session, "HTTP_get_session_val(connectObj, name)")
 {
 	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 3, parser);
@@ -82,7 +82,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_get_session, "HTTP_session_value_get(connectOb
 	return true;
 }
 
-APOLLO_SCRIPT_API_DEF(apollo_http_session_id, "HTTP_session_get_id(connectObj)")
+APOLLO_SCRIPT_API_DEF(apollo_http_session_id, "HTTP_get_sessionId(connectObj)")
 {
 	ND_TRACE_FUNC();
 	

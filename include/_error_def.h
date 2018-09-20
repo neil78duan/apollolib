@@ -80,5 +80,9 @@ ErrorElement(ESERVER_ERR_SEND_CHAT_WORLDTIME, "世界频道发送频繁"),
 ErrorElement(ESERVER_ERR_SEND_CHAT_LEV_NOTENOUGHenough, "发送世界频道需要的等级不足"),
 ErrorElement(ESERVER_ERR_SEND_CHAT_LEN, "聊天文字长度过长"),
 
+ErrorElement(ESERVER_ERR_TRAINING_ID, "训练装备ID错误"),
+ErrorElement(ESERVER_ERR_TRAINING_FAIL, "训练失败"),
+ErrorElement(ESERVER_ERR_TRAINING_ADD, "训练增加属性错误"),
+ErrorElement(ESERVER_ERR_TRAINING_LIMINT, "训练点数不足 不能升级"),
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),
