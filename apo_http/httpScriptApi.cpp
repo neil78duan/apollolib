@@ -177,6 +177,21 @@ APOLLO_SCRIPT_API_DEF(apollo_http_respone, "HTTP_response(connectObj,status, hea
 }
 
 
+APOLLO_SCRIPT_API_DEF(apollo_http_redirect, "HTTP_redirect(connectObj, newURL)")
+{
+	ND_TRACE_FUNC();
+	CHECK_ARGS_NUM(args, 3, parser);
+
+	NDHttpSession *pSession = _getSession(args[1]);
+	if (!pSession) {
+		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		nd_logerror("get session error \n");
+		return false;
+	}
+	return -1==pSession->SendRedirect(args[2].GetText()) ? false : true;
+}
+
+
 APOLLO_SCRIPT_API_DEF(apollo_http_file_down, "HTTP_download_file(connectObj,request,filepath)")
 {
 	ND_TRACE_FUNC();
@@ -233,6 +248,44 @@ APOLLO_SCRIPT_API_DEF(apollo_get_upload_file, "HTTP_get_upload_file(request,varN
 	result.InitSet((void*)fileInfo->dataAddr, fileInfo->size);
 	return true;
 }
+
+APOLLO_SCRIPT_API_DEF(apollo_http_set_session_age, "HTTP_set_session_age(connectObj, ageOfSeconds)")
+{
+	ND_TRACE_FUNC();
+	CHECK_ARGS_NUM(args, 3, parser);
+
+	NDHttpSession *pSession = _getSession(args[1]);
+	if (!pSession) {
+		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		nd_logerror("get session error \n");
+		return false;
+	}
+	pSession->setSessionAge(args[2].GetInt());
+	return true;
+}
+
+
+APOLLO_SCRIPT_API_DEF(apollo_http_set_root_session_age, "HTTP_set_root_session_age( ageOfSeconds)")
+{
+	ND_TRACE_FUNC();
+	CHECK_ARGS_NUM(args, 2, parser);
+
+	LogicObjectBase *owner = parser->getOwner();
+	nd_assert(owner);
+	DBLDataNode val;
+	if (!owner->getOtherObject("listener", val)) {
+		parser->setErrno(NDERR_BAD_GAME_OBJECT);
+		return false;
+	}
+	apoHttpListener *pListen = dynamic_cast<apoHttpListener*>(NDObject::FromHandle((nd_handle)val.GetObjectAddr()));
+	if (!pListen) {
+		parser->setErrno(NDERR_SYSTEM);
+		return false;
+	}
+	pListen->setSessionAge(args[1].GetInt());
+	return true;
+}
+
 
 APOLLO_SCRIPT_API_DEF(apollo_http_cache_file, "HTTP_cache_to_mem(filepath)")
 {
@@ -510,7 +563,14 @@ APOLLO_SCRIPT_API_DEF(apollo_convert_sysErr_to_http, "http_get_response_error(sy
 
 	int inputError = args[1].GetInt();
 	int outError = 200;
-	if (inputError != 0) {
+	if (NDERR_NO_PRIVILAGE == inputError) {
+		outError = 401;
+
+	}
+	else if (NDERR_SKIP == inputError) {
+		outError = 204;
+	}
+	else if (inputError != 0) {
 		outError = 500;
 	}
 

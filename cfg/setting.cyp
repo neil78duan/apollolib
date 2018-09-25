@@ -144,6 +144,7 @@
 	<list instruction="100" size="0">func_params</list>
 	<list instruction="100" size="0">bluePrint_info</list>
 	<list instruction="100" size="0">closure_name</list>
+	<list instruction="18" size="0">var_init_block</list>
 	<list instruction="5" size="0">user_define_function</list>
 	<list instruction="6" size="0" datatype="2">function_info</list>	
 	<list instruction="6" size="0" datatype="2">is_open_role_affair</list>
@@ -167,6 +168,7 @@
 	<list instruction="13" desc="switch -default ,else" >default_collection</list>	
 	<list instruction="13" desc="switch -default ,else" >last_run_collection</list>	
 	<list instruction="14" desc="switch -default ,else" >steps_collection</list>
+	<list instruction="14" desc="switch -default ,else" >return_val_set_var</list>
 	
 	<list instruction="15" desc="label for goto " >op_set_label</list>
 	<list instruction="15" desc="inter label in exe-node" >internal_label</list>
