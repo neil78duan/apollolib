@@ -282,24 +282,7 @@
 			</op_skip_error>		
 			<op_begin_affair name="节点_出错时自动恢复数据" expand="yes" expand_stat="1">
 				<comment name="功能说明" rw_stat="read">player_affair_rollback()</comment>
-			</op_begin_affair>
-						
-			<op_call_func name="节点_读DataType消息:$none$" >
-				<comment name="功能说明" rw_stat="read">function_read_fromat_message(data_type_name)</comment>
-				<func_name name="函数" kinds="hide" delete="no">apollo_func_read_userData_from_msg</func_name>
-				<param_collect name="参数1_输入消息对象" kinds="hide" delete="no">
-					<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
-					<var kinds="string" delete="no" restrict="type">2</var>
-				</param_collect>
-				<var name="类型名字" kinds="string" replace_val="../.name" >none</var>
-			</op_call_func>
-				
-			<op_make_var name="节点_申明变量:$none$" >
-				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-				<param name="名字" kinds="string" delete="no" replace_val="../.name" >none</param>
-				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-				<var name="初始值" kinds="string" delete="no" restrict="type" >none</var>
-			</op_make_var>
+			</op_begin_affair>					
 		
 			<op_call_func name="节点_发送处理结果" create_template="create_input_param" auto_index="4" >
 				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
@@ -423,16 +406,18 @@
 					<var name="错误说明" kinds="string" delete="no" restrict="type">not found</var>
 				</op_call_func>
 			</exception_catch_block>
-			<op_build_json_data name="节点_创建json数据$myHeader$" create_template="create_user_def_param" var_name="var" auto_index="0" >
-				<comment name="功能说明" rw_stat="read">define  name{...}</comment>
-				<apoEditorPos kinds="hide" x="727" y="694" offset_x="0" offset_y="0"/>
-				<var name="变量名" kinds="string" delete="no" replace_val="../.name">myHeader</var>
-				<param_collect name="参数" expand="yes">
-					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">Content-Type</func_name>
-					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-					<var kinds="string" delete="no" restrict="type">text/html;charset=UTF-8</var>
-				</param_collect>
-			</op_build_json_data>
+			<var_init_block>
+				<op_build_json_data name="节点_创建json数据$myHeader$" create_template="create_user_def_param" var_name="var" auto_index="0">
+					<comment name="功能说明" rw_stat="read">define  name{...}</comment>
+					<apoEditorPos kinds="hide" x="568" y="656" offset_x="0" offset_y="0"/>
+					<var name="变量名" kinds="string" delete="no" replace_val="../.name">myHeader</var>
+					<param_collect name="参数">
+						<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">Content-Type</func_name>
+						<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+						<var kinds="string" delete="no" restrict="type">text/html;charset=UTF-8</var>
+					</param_collect>
+				</op_build_json_data>
+			</var_init_block>
 			<op_call_func name="节点_调用$http_生成body( body_text)$" create_template="create_input_param" auto_index="0" create_label="create_internal_label">
 				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
 				<apoEditorPos kinds="hide" x="657" y="452" offset_x="0" offset_y="0"/>
@@ -725,9 +710,11 @@
 	<create_make_var name="申明变量" create_type="1" auto_index_list="param" auto_index_reference="variant_index">
 		<op_make_var name="节点_申明变量$var$"  var_name="param">
 			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">0</var>
+			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var</param>			
+			<param_collect name="参数" delete="no">
+				<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">0</var>			
+			</param_collect>
 		</op_make_var>
 	</create_make_var>
 	
