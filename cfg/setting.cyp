@@ -34,6 +34,7 @@
 	<op_make_var>NewVar</op_make_var>
 	<op_global_var>NewVar</op_global_var>
 	<op_build_json_data>NewVar</op_build_json_data>
+	<op_create_struct_type>NewStruct</op_create_struct_type>
 	
 	<!-- op_short_jump>Break</op_short_jump>
 	<op_success_short_jump>TrueBreak</op_success_short_jump>

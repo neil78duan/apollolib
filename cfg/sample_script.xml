@@ -14,11 +14,14 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">./setting/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1537951088</LastMod>
+	<LastMod name="最后修改" kinds="hide">1538113623</LastMod>
+	<EditorVersion kinds="hide">1.1.0</EditorVersion>
 </moduleInfo>
-<baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="43" expand_stat="1" accept_drag_in="func_node">
-	<func_node name="test_create_new_var" create_template="create_list1" auto_index="0" nextAnchor="comment" enable_drag="yes" var_name_index="8" name_auto_index="auto_index">
-		<func_params kinds="hide"/>
+<baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="43" expand_stat="0" accept_drag_in="func_node">
+	<func_node name="test_create_new_var" create_template="create_list1" auto_index="0" nextAnchor="comment" enable_drag="yes" var_name_index="14" name_auto_index="auto_index">
+		<func_params kinds="hide">
+			<input_param name="Param1">$1</input_param>
+		</func_params>
 		<comment>函数说明</comment>
 		<op_call_func name="节点_调用$sys_获取工作目录()$" create_template="create_input_param" auto_index="0" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
@@ -26,7 +29,7 @@
 			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP._sys_get_path&amp;_dispname=sys_获取工作目录()</func_name>
 			<return_val_set_var kinds="hide">
 				<op_assignin kinds="hide">
-					<varname>varpath</varname>
+					<varname>var12</varname>
 					<param_collect>
 						<type kinds="reference" reference_type="type_data_type">11</type>
 						<var restrict="type">$value</var>
@@ -34,24 +37,40 @@
 				</op_assignin>
 			</return_val_set_var>
 		</op_call_func>
+		<op_call_func name="节点_调用$editor_version()$" create_template="create_input_param" auto_index="0" create_label="create_internal_label">
+			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+			<apoEditorPos kinds="hide" x="504" y="154" offset_x="0" offset_y="0"/>
+			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_editor_version&amp;_dispname=editor_version()</func_name>
+			<return_val_set_var kinds="hide"/>
+		</op_call_func>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
-			<apoEditorPos kinds="hide" x="648" y="255" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="910" y="331" offset_x="0" offset_y="0"/>
+			<param_collect name="参数">
+				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var kinds="string" delete="no" restrict="type">0</var>
+			</param_collect>
 			<param_collect name="参数">
 				<type kinds="reference" reference_type="type_data_type" delete="no">9</type>
-				<var kinds="string" delete="no" restrict="type">varpath</var>
+				<var kinds="string" delete="no" restrict="type">var12</var>
 			</param_collect>
 			<param_collect name="参数">
 				<type kinds="reference" reference_type="type_data_type" delete="no">9</type>
 				<var kinds="string" delete="no" restrict="type">j2</var>
 			</param_collect>
+			<param_collect name="参数">
+				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var kinds="string" delete="no" restrict="type">0</var>
+			</param_collect>
 		</op_print>
-		<apoEditorPos kinds="hide" x="20" y="400" offset_x="0" offset_y="0"/>
-		<unConnect kinds="hide"/>
+		<apoEditorPos kinds="hide" x="20" y="400" offset_x="8" offset_y="-104"/>
+		<unConnect kinds="hide">
+			<steps_collection/>
+		</unConnect>
 		<var_init_block>
 			<op_build_json_data name="节点_创建json数据$j2$" create_template="create_user_def_param" var_name="var" auto_index="0">
 				<comment name="功能说明" rw_stat="read">define  name{...}</comment>
-				<apoEditorPos kinds="hide" x="692" y="523" offset_x="0" offset_y="0"/>
+				<apoEditorPos kinds="hide" x="732" y="536" offset_x="0" offset_y="0"/>
 				<var name="变量名" kinds="string" delete="no" replace_val="../.name">j2</var>
 				<param_collect name="参数">
 					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">member1</func_name>
@@ -64,13 +83,31 @@
 					<var kinds="string" delete="no" restrict="type">world</var>
 				</param_collect>
 			</op_build_json_data>
-			<op_make_var name="节点_申明变量$varpath$" var_name="param">
+			<op_make_var name="节点_申明变量$var$" var_name="param">
 				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-				<apoEditorPos kinds="hide" x="283" y="565" offset_x="0" offset_y="0"/>
-				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">varpath</param>
+				<apoEditorPos kinds="hide" x="210" y="597" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var11</param>
+				<param_collect name="参数" delete="no">
+					<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
+					<var name="初始值" kinds="string" delete="no" restrict="type">1</var>
+				</param_collect>
+			</op_make_var>
+			<op_make_var name="节点_申明变量$var$" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="450" y="540" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var12</param>
 				<param_collect name="参数" delete="no">
 					<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
 					<var name="初始值" kinds="string" delete="no" restrict="type">$value</var>
+				</param_collect>
+			</op_make_var>
+			<op_make_var name="节点_申明变量$var$" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="202" y="267" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var13</param>
+				<param_collect name="参数" delete="no">
+					<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
+					<var name="初始值" kinds="string" delete="no" restrict="type">1</var>
 				</param_collect>
 			</op_make_var>
 		</var_init_block>
@@ -80,6 +117,7 @@
 			<input_param name="Param">param1</input_param>
 		</func_params>
 		<comment>函数说明</comment>
+		<var_init_block/>
 		<op_set_error_continue name="节点_出错继续" expand="yes" breakPoint="yes">
 			<comment name="功能说明" rw_stat="read">on_error_continue</comment>
 			<apoEditorPos kinds="hide" x="142" y="67" offset_x="0" offset_y="0"/>
@@ -269,7 +307,7 @@
 				<var kinds="string" delete="no" restrict="type">0</var>
 			</param_collect>
 		</op_print>
-		<apoEditorPos kinds="hide" x="-37" y="148" offset_x="55" offset_y="-42"/>
+		<apoEditorPos kinds="hide" x="-37" y="148" offset_x="87" offset_y="-178"/>
 		<unConnect kinds="hide">
 			<steps_bt_sequence name="BT-Sequence" auto_index="0">
 				<comment name="功能说明" rw_stat="read">run until one of children success </comment>
@@ -302,27 +340,29 @@
 	<func_node name="test_var_pos" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="10" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
-		<op_global_var name="节点_全局变量$var$" expand="yes" var_name="param" connect_in_seq="yes">
-			<comment name="功能说明" rw_stat="read">global_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="341" y="195" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">g_var2</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">global var2</var>
-		</op_global_var>
-		<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="329" y="71" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">local var1</var>
-		</op_make_var>
-		<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="353" y="327" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var3</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">0</var>
-		</op_make_var>
+		<var_init_block>
+			<op_global_var name="节点_全局变量$var$" expand="yes" var_name="param" connect_in_seq="yes">
+				<comment name="功能说明" rw_stat="read">global_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="341" y="195" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">g_var2</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">global var2</var>
+			</op_global_var>
+			<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="329" y="71" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">local var1</var>
+			</op_make_var>
+			<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="362" y="345" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var3</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">0</var>
+			</op_make_var>
+		</var_init_block>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
 			<apoEditorPos kinds="hide" x="634" y="279" offset_x="0" offset_y="0"/>
@@ -341,7 +381,7 @@
 		</op_print>
 		<op_calc name="节点_公式" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">run_formulate(formulate_text)</comment>
-			<apoEditorPos kinds="hide" x="735" y="148" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="754" y="148" offset_x="0" offset_y="0"/>
 			<var name="公式内容" kinds="string" delete="no">0</var>
 		</op_calc>
 		<op_loop_entry name="节点_循环" expand_list="param_collect" auto_index="1" comp_cond="param_collect" expand_stat="0">
@@ -370,7 +410,7 @@
 			<comment name="功能说明" rw_stat="read">脚本被加载到内存是运行这部分代码</comment>
 			<op_global_var name="节点_全局变量$var$" expand="yes" var_name="param" connect_in_seq="yes" breakPoint="yes">
 				<comment name="功能说明" rw_stat="read">global_variant(name,value)</comment>
-				<apoEditorPos kinds="hide" x="353" y="611" offset_x="0" offset_y="0"/>
+				<apoEditorPos kinds="hide" x="386" y="548" offset_x="0" offset_y="0"/>
 				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">g_var9</param>
 				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 				<var name="初始值" kinds="string" delete="no" restrict="type">this is test global var</var>
@@ -381,7 +421,28 @@
 	<func_node name="sample_test_all" create_template="create_list1" auto_index="22" expand_list="comment" enable_drag="yes" expand_stat="0">
 		<func_params kinds="hide"/>
 		<comment>函数说明: 普通测试</comment>
-		<apoEditorPos kinds="hide" x="121" y="-52" offset_x="-393" offset_y="277"/>
+		<var_init_block>
+			<op_make_var name="节点_申明变量3" expand="yes" expand_stat="1">
+				<param name="名字" kinds="string" delete="no">var1</param>
+				<apoEditorPos kinds="hide" x="569" y="-167" offset_x="0" offset_y="0"/>
+				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="初始只" kinds="string" delete="no" restrict="type">1</var>
+			</op_make_var>
+			<op_make_var name="节点_申明变量7" expand="yes" expand_stat="1">
+				<param name="名字" kinds="string" delete="no">var2</param>
+				<apoEditorPos kinds="hide" x="1065" y="213" offset_x="0" offset_y="0"/>
+				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+				<var name="初始只" kinds="string" delete="no" restrict="type">0</var>
+			</op_make_var>
+			<op_make_var name="节点_申明变量15" expand="yes" expand_stat="1">
+				<comment name="功能" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="1962" y="289" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no">var_compile_tm</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">none</var>
+			</op_make_var>
+		</var_init_block>
+		<apoEditorPos kinds="hide" x="121" y="-52" offset_x="-276" offset_y="115"/>
 		<op_print name="节点_打印0" create_template="create_input_param" auto_index="2" expand_stat="0">
 			<param_collect name="参数0" expand="yes" expand_stat="1">
 				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
@@ -393,12 +454,6 @@
 				<var kinds="string" delete="no" restrict="type">1992-2-29 18:30:00</var>
 			</param_collect>
 		</op_print>
-		<op_make_var name="节点_申明变量3" expand="yes" expand_stat="1">
-			<param name="名字" kinds="string" delete="no">var1</param>
-			<apoEditorPos kinds="hide" x="569" y="-167" offset_x="0" offset_y="0"/>
-			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-			<var name="初始只" kinds="string" delete="no" restrict="type">1</var>
-		</op_make_var>
 		<op_loop_entry name="节点_循环2" create_template="create_list2" expand_list="param_collect" auto_index="3" comp_cond="param_collect" expand_stat="1">
 			<param_collect name="loop_count" delete="no" referenced_only="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
@@ -428,13 +483,16 @@
 				<type name="索引类型" kinds="reference" reference_type="type_data_type" delete="no">2</type>
 				<var name="索引值" kinds="string" delete="no" restrict="type">hp</var>
 			</param_collect>
+			<return_val_set_var kinds="hide">
+				<op_assignin kinds="hide">
+					<varname>var2</varname>
+					<param_collect>
+						<type kinds="reference" reference_type="type_data_type">11</type>
+						<var restrict="type">$value</var>
+					</param_collect>
+				</op_assignin>
+			</return_val_set_var>
 		</op_read>
-		<op_make_var name="节点_申明变量7" expand="yes" expand_stat="1">
-			<param name="名字" kinds="string" delete="no">var2</param>
-			<apoEditorPos kinds="hide" x="1065" y="213" offset_x="0" offset_y="0"/>
-			<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-			<var name="初始只" kinds="string" delete="no" restrict="type">0</var>
-		</op_make_var>
 		<op_calc name="节点_公式8" expand="yes" expand_stat="1">
 			<var name="公式内容" kinds="string">var2 * 0.5</var>
 			<apoEditorPos kinds="hide" x="1119" y="18" offset_x="0" offset_y="0"/>
@@ -452,14 +510,16 @@
 		<op_get_last_changed_time name="节点_脚本修改时间" expand="yes">
 			<comment name="功能" rw_stat="read">get_compile_time()</comment>
 			<apoEditorPos kinds="hide" x="1641" y="166" offset_x="0" offset_y="0"/>
+			<return_val_set_var kinds="hide">
+				<op_assignin kinds="hide">
+					<varname>var_compile_tm</varname>
+					<param_collect>
+						<type kinds="reference" reference_type="type_data_type">11</type>
+						<var restrict="type">$value</var>
+					</param_collect>
+				</op_assignin>
+			</return_val_set_var>
 		</op_get_last_changed_time>
-		<op_make_var name="节点_申明变量15" expand="yes" expand_stat="1">
-			<comment name="功能" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="1962" y="289" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no">var_compile_tm</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">none</var>
-		</op_make_var>
 		<op_get_time name="节点_时间16" expand="yes" expand_stat="0">
 			<comment name="功能" rw_stat="read">get_time()</comment>
 			<apoEditorPos kinds="hide" x="1818" y="-22" offset_x="0" offset_y="0"/>
@@ -535,6 +595,7 @@
 	<func_node name="sample_check_is_development" create_template="create_list1" auto_index="3" expand_list="comment" enable_drag="yes" expand_stat="0" var_name_index="2">
 		<func_params kinds="hide"/>
 		<comment>测试是否是开发版本:通过计算开发版本字符信息实现</comment>
+		<var_init_block/>
 		<apoEditorPos kinds="hide" x="20" y="400" offset_x="109" offset_y="-199"/>
 		<op_getobj name="节点_获得其他对象_程序信息" expand="yes" breakPoint="yes">
 			<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
@@ -568,6 +629,7 @@
 	<func_node name="export_c_functions" create_template="create_list1" auto_index="3" expand_list="comment" enable_drag="yes" expand_stat="0" var_name_index="2">
 		<func_params kinds="hide"/>
 		<comment>export_functions(filename)</comment>
+		<var_init_block/>
 		<apoEditorPos kinds="hide" x="20" y="20" offset_x="130" offset_y="99"/>
 		<op_getobj name="节点_获得其他对象_输出目录" expand="yes">
 			<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
@@ -601,22 +663,24 @@
 	<func_node name="sample_formular" create_template="create_list1" auto_index="6" expand_list="comment" enable_drag="yes" expand_stat="0">
 		<func_params kinds="hide"/>
 		<comment>公式测试</comment>
+		<var_init_block>
+			<op_make_var name="节点_申明变量_var1" expand="yes">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="235" y="361" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no">var1</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">1</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">10.0</var>
+			</op_make_var>
+			<op_make_var name="节点_申明变量_var2" expand="yes">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="434" y="428" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no">testvar</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">1</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">20</var>
+			</op_make_var>
+		</var_init_block>
 		<apoEditorPos kinds="hide" x="138" y="198" offset_x="49" offset_y="-94"/>
-		<op_make_var name="节点_申明变量_var1" expand="yes">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="235" y="361" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no">var1</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">1</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">10.0</var>
-		</op_make_var>
-		<op_make_var name="节点_申明变量_var2" expand="yes">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="434" y="428" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no">testvar</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">1</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">20</var>
-		</op_make_var>
-		<op_calc name="节点_公式2" expand="yes" breakPoint="yes">
+		<op_calc name="节点_公式2" expand="yes">
 			<comment name="功能说明" rw_stat="read">run_formulate(formulate_text)</comment>
 			<apoEditorPos kinds="hide" x="432" y="196" offset_x="0" offset_y="0"/>
 			<var name="公式内容" kinds="string">(10 + var1 * 8 - testvar * 3) * 5</var>
@@ -645,64 +709,90 @@
 			<steps_collection/>
 		</unConnect>
 	</func_node>
-	<func_node name="sample_user_def_struct" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="2" name_auto_index="auto_index">
+	<func_node name="sample_user_def_struct" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="3" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
-		<op_create_struct_type name="节点_创建新类型$student$" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
-			<comment name="功能说明" rw_stat="read">typedef struct{...}</comment>
-			<apoEditorPos kinds="hide" x="272" y="221" offset_x="0" offset_y="0"/>
-			<var name="类型名" kinds="string" delete="no" replace_val="../.name">student</var>
-			<param_collect name="参数" expand="yes">
-				<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">name</func_name>
-				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
-				<var kinds="string" delete="no" restrict="type">unknow</var>
-			</param_collect>
-			<param_collect name="参数" expand="yes">
-				<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">id</func_name>
-				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var kinds="string" delete="no" restrict="type">0</var>
-			</param_collect>
-			<param_collect name="参数" expand="yes">
-				<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">score</func_name>
-				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var kinds="string" delete="no" restrict="type">0</var>
-			</param_collect>
-			<param_collect name="参数" expand="yes">
-				<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">desc</func_name>
-				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
-				<var kinds="string" delete="no" restrict="type">I dont know</var>
-			</param_collect>
-		</op_create_struct_type>
-		<op_create_struct_type name="节点_创建新类型$class$" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
-			<comment name="功能说明" rw_stat="read">typedef struct{...}</comment>
-			<apoEditorPos kinds="hide" x="491" y="202" offset_x="0" offset_y="0"/>
-			<var name="类型名" kinds="string" delete="no" replace_val="../.name">class</var>
-			<param_collect name="参数" expand="yes">
-				<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">num</func_name>
-				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var kinds="string" delete="no" restrict="type">0</var>
-			</param_collect>
-			<param_collect name="参数" expand="yes">
-				<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">className</func_name>
-				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
-				<var kinds="string" delete="no" restrict="type">5.4class</var>
-			</param_collect>
-			<param_collect name="参数" expand="yes">
-				<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">members</func_name>
-				<type kinds="reference" reference_type="type_data_type" delete="no">12</type>
-				<var kinds="string" delete="no" restrict="type">student(&apos;s1&apos;,1)</var>
-			</param_collect>
-		</op_create_struct_type>
-		<op_make_var name="节点_申明变量$var$" expand="yes">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="251" y="468" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">17</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">class[2]</var>
-		</op_make_var>
+		<var_init_block>
+			<op_create_struct_type name="节点_创建新类型$student$" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+				<comment name="功能说明" rw_stat="read">typedef struct{...}</comment>
+				<apoEditorPos kinds="hide" x="225" y="62" offset_x="0" offset_y="0"/>
+				<var name="类型名" kinds="string" delete="no" replace_val="../.name">student</var>
+				<param_collect name="参数" expand="yes">
+					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">name</func_name>
+					<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
+					<var kinds="string" delete="no" restrict="type">unknow</var>
+				</param_collect>
+				<param_collect name="参数" expand="yes">
+					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">id</func_name>
+					<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+					<var kinds="string" delete="no" restrict="type">0</var>
+				</param_collect>
+				<param_collect name="参数" expand="yes">
+					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">score</func_name>
+					<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+					<var kinds="string" delete="no" restrict="type">0</var>
+				</param_collect>
+				<param_collect name="参数" expand="yes">
+					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">desc</func_name>
+					<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
+					<var kinds="string" delete="no" restrict="type">I dont know</var>
+				</param_collect>
+			</op_create_struct_type>
+			<op_create_struct_type name="节点_创建新类型$class$" create_template="create_user_def_param" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+				<comment name="功能说明" rw_stat="read">typedef struct{...}</comment>
+				<apoEditorPos kinds="hide" x="438" y="70" offset_x="0" offset_y="0"/>
+				<var name="类型名" kinds="string" delete="no" replace_val="../.name">class</var>
+				<param_collect name="参数" expand="yes">
+					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">num</func_name>
+					<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+					<var kinds="string" delete="no" restrict="type">0</var>
+				</param_collect>
+				<param_collect name="参数" expand="yes">
+					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">className</func_name>
+					<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
+					<var kinds="string" delete="no" restrict="type">aabbc</var>
+				</param_collect>
+				<param_collect name="参数" expand="yes">
+					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">members</func_name>
+					<type kinds="reference" reference_type="type_data_type" delete="no">12</type>
+					<var kinds="string" delete="no" restrict="type">student(&apos;s1&apos;,1)</var>
+				</param_collect>
+			</op_create_struct_type>
+			<op_make_var name="节点_申明变量$var$" expand="yes">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="251" y="468" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">17</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">class[2]</var>
+			</op_make_var>
+			<op_create_struct_type name="节点_创建新类型$school$" create_template="create_user_def_param" var_name="var" auto_index="0">
+				<comment name="功能说明" rw_stat="read">typedef struct{...}</comment>
+				<apoEditorPos kinds="hide" x="679" y="100" offset_x="0" offset_y="0"/>
+				<var name="类型名" kinds="string" delete="no" replace_val="../.name">school</var>
+				<param_collect name="参数">
+					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">class1</func_name>
+					<type kinds="reference" reference_type="type_data_type" delete="no">12</type>
+					<var kinds="string" delete="no" restrict="type">class</var>
+				</param_collect>
+				<param_collect name="参数">
+					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">students</func_name>
+					<type kinds="reference" reference_type="type_data_type" delete="no">12</type>
+					<var kinds="string" delete="no" restrict="type">student</var>
+				</param_collect>
+			</op_create_struct_type>
+			<op_make_var name="节点_申明变量$mySchool$" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="904" y="150" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">mySchool</param>
+				<param_collect name="参数" delete="no">
+					<type kinds="reference" reference_type="type_data_type" delete="no">12</type>
+					<var name="初始值" kinds="string" delete="no" restrict="type">school</var>
+				</param_collect>
+			</op_make_var>
+		</var_init_block>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
-			<apoEditorPos kinds="hide" x="497" y="437" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="415" y="326" offset_x="0" offset_y="0"/>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 				<var kinds="string" delete="no" restrict="type">var1=</var>
@@ -714,7 +804,7 @@
 		</op_print>
 		<op_assignin name="节点_赋值" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">var = value</comment>
-			<apoEditorPos kinds="hide" x="735" y="231" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="679" y="299" offset_x="0" offset_y="0"/>
 			<varname name="变量名称" kinds="string" delete="no" restrict="type">var1[0].members.name</varname>
 			<param_collect name="值" expand="yes" expand_stat="1" delete="no">
 				<type name="赋值类型" kinds="reference" reference_type="type_data_type" delete="no">2</type>
@@ -723,7 +813,7 @@
 		</op_assignin>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
-			<apoEditorPos kinds="hide" x="786" y="435" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="692" y="458" offset_x="0" offset_y="0"/>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 				<var kinds="string" delete="no" restrict="type">变量名:</var>
@@ -733,49 +823,61 @@
 				<var kinds="string" delete="no" restrict="type">var1[0].members.name</var>
 			</param_collect>
 		</op_print>
+		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" create_label="create_internal_label">
+			<comment name="功能说明" rw_stat="read">print(...)</comment>
+			<apoEditorPos kinds="hide" x="1042" y="389" offset_x="0" offset_y="0"/>
+			<param_collect name="参数">
+				<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+				<var kinds="string" delete="no" restrict="type">school:</var>
+			</param_collect>
+			<param_collect name="参数">
+				<type kinds="reference" reference_type="type_data_type" delete="no">9</type>
+				<var kinds="string" delete="no" restrict="type">mySchool</var>
+			</param_collect>
+		</op_print>
 		<apoEditorPos kinds="hide" x="73" y="299" offset_x="0" offset_y="0"/>
-		<unConnect kinds="hide">
-			<steps_collection/>
-		</unConnect>
+		<unConnect kinds="hide"/>
 	</func_node>
 	<func_node name="sample_json_data" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="2" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
-		<op_build_json_data name="节点_创建json数据$json1$" create_template="create_user_def_param" auto_index="0" var_name="var" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
-			<comment name="功能说明" rw_stat="read">define  name{...}</comment>
-			<apoEditorPos kinds="hide" x="239" y="354" offset_x="0" offset_y="0"/>
-			<var name="变量名" kinds="string" delete="no" replace_val="../.name">json1</var>
-			<param_collect name="参数" expand="yes">
-				<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">id</func_name>
-				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var kinds="string" delete="no" restrict="type">10</var>
-			</param_collect>
-			<param_collect name="参数" expand="yes">
-				<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">name</func_name>
-				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
-				<var kinds="string" delete="no" restrict="type">duan</var>
-			</param_collect>
-			<param_collect name="参数" expand="yes">
-				<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">member1</func_name>
-				<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-				<var kinds="string" delete="no" restrict="type">0</var>
-			</param_collect>
-		</op_build_json_data>
-		<op_build_json_data name="节点_创建json数据$j2$" create_template="create_user_def_param" var_name="var" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
-			<comment name="功能说明" rw_stat="read">define  name{...}</comment>
-			<apoEditorPos kinds="hide" x="233" y="529" offset_x="0" offset_y="0"/>
-			<var name="变量名" kinds="string" delete="no" replace_val="../.name">j2</var>
-			<param_collect name="参数" expand="yes">
-				<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">m1</func_name>
-				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var kinds="string" delete="no" restrict="type">0</var>
-			</param_collect>
-			<param_collect name="参数" expand="yes">
-				<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">m2</func_name>
-				<type kinds="reference" reference_type="type_data_type" delete="no">1</type>
-				<var kinds="string" delete="no" restrict="type">12.345</var>
-			</param_collect>
-		</op_build_json_data>
+		<var_init_block>
+			<op_build_json_data name="节点_创建json数据$json1$" create_template="create_user_def_param" auto_index="0" var_name="var" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+				<comment name="功能说明" rw_stat="read">define  name{...}</comment>
+				<apoEditorPos kinds="hide" x="239" y="354" offset_x="0" offset_y="0"/>
+				<var name="变量名" kinds="string" delete="no" replace_val="../.name">json1</var>
+				<param_collect name="参数" expand="yes">
+					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">id</func_name>
+					<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+					<var kinds="string" delete="no" restrict="type">10</var>
+				</param_collect>
+				<param_collect name="参数" expand="yes">
+					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">name</func_name>
+					<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
+					<var kinds="string" delete="no" restrict="type">duan</var>
+				</param_collect>
+				<param_collect name="参数" expand="yes">
+					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">member1</func_name>
+					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+					<var kinds="string" delete="no" restrict="type">0</var>
+				</param_collect>
+			</op_build_json_data>
+			<op_build_json_data name="节点_创建json数据$j2$" create_template="create_user_def_param" var_name="var" auto_index="0" expand_list="comment,msgtype,varInt,varFloat,var,func_name">
+				<comment name="功能说明" rw_stat="read">define  name{...}</comment>
+				<apoEditorPos kinds="hide" x="233" y="529" offset_x="0" offset_y="0"/>
+				<var name="变量名" kinds="string" delete="no" replace_val="../.name">j2</var>
+				<param_collect name="参数" expand="yes">
+					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">m1</func_name>
+					<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+					<var kinds="string" delete="no" restrict="type">0</var>
+				</param_collect>
+				<param_collect name="参数" expand="yes">
+					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">m2</func_name>
+					<type kinds="reference" reference_type="type_data_type" delete="no">1</type>
+					<var kinds="string" delete="no" restrict="type">12.345</var>
+				</param_collect>
+			</op_build_json_data>
+		</var_init_block>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
 			<apoEditorPos kinds="hide" x="458" y="321" offset_x="0" offset_y="0"/>
@@ -798,6 +900,7 @@
 			<input_param name="Param1">$1</input_param>
 		</func_params>
 		<comment>test</comment>
+		<var_init_block/>
 		<op_loop_entry name="节点_循环" expand_list="param_collect" auto_index="1" comp_cond="param_collect" expand_stat="0">
 			<comment name="功能说明" rw_stat="read">loop{}</comment>
 			<apoEditorPos kinds="hide" x="263" y="232" offset_x="0" offset_y="0"/>
@@ -926,15 +1029,17 @@
 	<func_node name="sample_goto_label" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="2" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
+		<var_init_block>
+			<op_make_var name="节点_申明变量$count$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="92" y="470" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">count</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">0</var>
+				<internal_goto name="goto:$name$" kinds="string" replace_val=".name">Lab_start</internal_goto>
+			</op_make_var>
+		</var_init_block>
 		<apoEditorPos kinds="hide" x="33" y="313" offset_x="81" offset_y="-51"/>
-		<op_make_var name="节点_申明变量$count$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="92" y="470" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">count</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">0</var>
-			<internal_goto name="goto:$name$" kinds="string" replace_val=".name">Lab_start</internal_goto>
-		</op_make_var>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<internal_label name="标签$lab_start$" kinds="string" replace_val=".name" auto_index_ref="auto_index">lab_start</internal_label>
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
@@ -1000,13 +1105,15 @@
 	<func_node name="sample_base_array" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="2" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
-		<op_make_var name="节点_申明变量$arr1$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="41" y="612" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">arr1</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">7</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">[1,2,3,4,5]</var>
-		</op_make_var>
+		<var_init_block>
+			<op_make_var name="节点_申明变量$arr1$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="41" y="612" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">arr1</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">7</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">[1,2,3,4,5]</var>
+			</op_make_var>
+		</var_init_block>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
 			<apoEditorPos kinds="hide" x="230" y="401" offset_x="0" offset_y="0"/>
@@ -1046,6 +1153,15 @@
 	<func_node name="sample_time_func" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="5" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
+		<var_init_block>
+			<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="461" y="795" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">$value</var>
+			</op_make_var>
+		</var_init_block>
 		<op_get_last_changed_time name="节点_脚本修改时间" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">get_compile_time()</comment>
 			<apoEditorPos kinds="hide" x="21" y="596" offset_x="0" offset_y="0"/>
@@ -1065,14 +1181,16 @@
 		<op_get_time name="节点_时间" expand="yes" create_label="create_internal_label" breakPoint="yes">
 			<comment name="功能说明" rw_stat="read">get_time()</comment>
 			<apoEditorPos kinds="hide" x="258" y="570" offset_x="0" offset_y="0"/>
+			<return_val_set_var kinds="hide">
+				<op_assignin kinds="hide">
+					<varname>var1</varname>
+					<param_collect>
+						<type kinds="reference" reference_type="type_data_type">11</type>
+						<var restrict="type">$value</var>
+					</param_collect>
+				</op_assignin>
+			</return_val_set_var>
 		</op_get_time>
-		<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="461" y="795" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">$value</var>
-		</op_make_var>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
 			<apoEditorPos kinds="hide" x="494" y="382" offset_x="0" offset_y="0"/>
@@ -1138,6 +1256,7 @@
 	<func_node name="sample_test_message" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>演示如何本地测试消息处理函数</comment>
+		<var_init_block/>
 		<op_call_func name="节点_调用$测试消息处理(script, maxId,minId, data1,data2...)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
 			<apoEditorPos kinds="hide" x="285" y="124" offset_x="0" offset_y="0"/>
@@ -1165,6 +1284,7 @@
 	<func_node name="sample_event_wait" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
+		<var_init_block/>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
 			<apoEditorPos kinds="hide" x="211" y="291" offset_x="0" offset_y="0"/>
@@ -1192,23 +1312,32 @@
 	<func_node name="sample_var_str" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="4" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
-		<op_global_var name="节点_全局变量$var$" expand="yes" var_name="param" connect_in_seq="yes" breakPoint="yes">
-			<comment name="功能说明" rw_stat="read">global_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="98" y="281" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">g_var3</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">&apos;hello world &apos;</var>
-		</op_global_var>
-		<op_make_var name="节点_申明变量$var_test$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="140" y="460" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var_test</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">9</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">g_var3</var>
-		</op_make_var>
+		<var_init_block>
+			<op_global_var name="节点_全局变量$var$" expand="yes" var_name="param" connect_in_seq="yes">
+				<comment name="功能说明" rw_stat="read">global_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="-83" y="257" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">g_var3</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">&apos;hello world &apos;</var>
+			</op_global_var>
+			<op_make_var name="节点_申明变量$var_test$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="-65" y="411" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var_test</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">9</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">g_var3</var>
+			</op_make_var>
+			<op_make_var name="节点_申明变量$newText$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="456" y="358" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">newText</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">0</var>
+			</op_make_var>
+		</var_init_block>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
-			<apoEditorPos kinds="hide" x="286" y="116" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="130" y="-6" offset_x="0" offset_y="0"/>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">9</type>
 				<var kinds="string" delete="no" restrict="type">var_test</var>
@@ -1216,7 +1345,7 @@
 		</op_print>
 		<op_call_func name="节点_调用$字符串查找(str1,str2)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-			<apoEditorPos kinds="hide" x="364" y="268" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="139" y="168" offset_x="0" offset_y="0"/>
 			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_str_str&amp;_dispname=字符串查找(str1,str2)</func_name>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">9</type>
@@ -1229,7 +1358,7 @@
 		</op_call_func>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
-			<apoEditorPos kinds="hide" x="675" y="77" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="363" y="-37" offset_x="0" offset_y="0"/>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 				<var kinds="string" delete="no" restrict="type">查找字符串</var>
@@ -1241,7 +1370,7 @@
 		</op_print>
 		<op_call_func name="节点_调用$字符串替换(aim_str, replaced_text)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-			<apoEditorPos kinds="hide" x="736" y="270" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="366" y="148" offset_x="0" offset_y="0"/>
 			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_str_replace&amp;_dispname=字符串替换(aim_str, replaced_text)</func_name>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">9</type>
@@ -1255,17 +1384,19 @@
 				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 				<var kinds="string" delete="no" restrict="type">duan</var>
 			</param_collect>
+			<return_val_set_var kinds="hide">
+				<op_assignin kinds="hide">
+					<varname>newText</varname>
+					<param_collect>
+						<type kinds="reference" reference_type="type_data_type">11</type>
+						<var restrict="type">$value</var>
+					</param_collect>
+				</op_assignin>
+			</return_val_set_var>
 		</op_call_func>
-		<op_make_var name="节点_申明变量$newText$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="967" y="74" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">newText</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">0</var>
-		</op_make_var>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
-			<apoEditorPos kinds="hide" x="1110" y="264" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="589" y="-32" offset_x="0" offset_y="0"/>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 				<var kinds="string" delete="no" restrict="type">替换前</var>
@@ -1285,7 +1416,7 @@
 		</op_print>
 		<op_call_func name="节点_调用$字符串相加(str1, str2)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-			<apoEditorPos kinds="hide" x="1323" y="95" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="606" y="146" offset_x="0" offset_y="0"/>
 			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_str_add&amp;_dispname=字符串相加(str1, str2)</func_name>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">9</type>
@@ -1298,7 +1429,7 @@
 		</op_call_func>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
-			<apoEditorPos kinds="hide" x="1307" y="497" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="661" y="342" offset_x="0" offset_y="0"/>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 				<var kinds="string" delete="no" restrict="type">新旧字符串相加:</var>
@@ -1310,18 +1441,19 @@
 		</op_print>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
-			<apoEditorPos kinds="hide" x="1567" y="393" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="849" y="136" offset_x="0" offset_y="0"/>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">9</type>
 				<var kinds="string" delete="no" restrict="type">g_var9</var>
 			</param_collect>
 		</op_print>
-		<apoEditorPos kinds="hide" x="-99" y="257" offset_x="79" offset_y="-58"/>
+		<apoEditorPos kinds="hide" x="-80" y="113" offset_x="243" offset_y="126"/>
 		<unConnect kinds="hide"/>
 	</func_node>
 	<func_node name="sample_call" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
+		<var_init_block/>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
 			<apoEditorPos kinds="hide" x="211" y="187" offset_x="0" offset_y="0"/>
@@ -1378,13 +1510,22 @@
 	<func_node name="sample_type_transfer" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="6" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
-		<op_make_var name="节点_申明变量$f1$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="184" y="202" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">f1</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">1</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">3.1415</var>
-		</op_make_var>
+		<var_init_block>
+			<op_make_var name="节点_申明变量$f1$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="184" y="202" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">f1</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">1</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">3.1415</var>
+			</op_make_var>
+			<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="761" y="352" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var5</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">0</var>
+			</op_make_var>
+		</var_init_block>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
 			<apoEditorPos kinds="hide" x="262" y="428" offset_x="0" offset_y="0"/>
@@ -1402,14 +1543,16 @@
 			<apoEditorPos kinds="hide" x="551" y="306" offset_x="0" offset_y="0"/>
 			<varname name="变量名" kinds="string" delete="no" restrict="type">f1</varname>
 			<index name="新类型" kinds="reference" reference_type="type_data_type" delete="no">0</index>
+			<return_val_set_var kinds="hide">
+				<op_assignin kinds="hide">
+					<varname>var5</varname>
+					<param_collect>
+						<type kinds="reference" reference_type="type_data_type">11</type>
+						<var restrict="type">$value</var>
+					</param_collect>
+				</op_assignin>
+			</return_val_set_var>
 		</op_type_transfer>
-		<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="761" y="352" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var5</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">0</var>
-		</op_make_var>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
 			<apoEditorPos kinds="hide" x="563" y="484" offset_x="0" offset_y="0"/>
@@ -1440,6 +1583,7 @@
 	<func_node name="sample_other_object" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
+		<var_init_block/>
 		<op_getobj name="节点_获得其他对象:$输出目录$" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
 			<apoEditorPos kinds="hide" x="195" y="275" offset_x="0" offset_y="0"/>
@@ -1497,6 +1641,7 @@
 	<func_node name="sample_if_test" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
+		<var_init_block/>
 		<op_getobj name="节点_获得其他对象:$输出目录$" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
 			<apoEditorPos kinds="hide" x="260" y="108" offset_x="0" offset_y="0"/>
@@ -1546,13 +1691,15 @@
 		<func_params kinds="hide">
 			<input_param name="Param1">$1</input_param>
 		</func_params>
-		<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="183" y="250" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">10</var>
-		</op_make_var>
+		<var_init_block>
+			<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="183" y="250" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">10</var>
+			</op_make_var>
+		</var_init_block>
 		<comment>函数说明</comment>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
@@ -1594,13 +1741,15 @@
 		<func_params kinds="hide">
 			<input_param name="Param1">$1</input_param>
 		</func_params>
-		<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="340" y="474" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">1</var>
-		</op_make_var>
+		<var_init_block>
+			<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="340" y="474" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">1</var>
+			</op_make_var>
+		</var_init_block>
 		<comment>函数说明</comment>
 		<steps_block_valcomp name="节点_数值比较分支" auto_index="0">
 			<op_comp name="比较运行" expand="yes" delete="no">
@@ -1660,6 +1809,15 @@
 			<input_param name="Param1">$1</input_param>
 		</func_params>
 		<comment>函数说明</comment>
+		<var_init_block>
+			<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="812" y="533" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">0</var>
+			</op_make_var>
+		</var_init_block>
 		<steps_block_valcomp name="节点_数值比较分支" auto_index="0">
 			<op_comp name="比较运行" expand="yes" delete="no">
 				<comment name="功能说明" rw_stat="read">大于小于等级 </comment>
@@ -1718,14 +1876,16 @@
 				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
 				<var kinds="string" delete="no" restrict="type">0</var>
 			</param_collect>
+			<return_val_set_var kinds="hide">
+				<op_assignin kinds="hide">
+					<varname>var1</varname>
+					<param_collect>
+						<type kinds="reference" reference_type="type_data_type">11</type>
+						<var restrict="type">$value</var>
+					</param_collect>
+				</op_assignin>
+			</return_val_set_var>
 		</op_call_func>
-		<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="812" y="533" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">0</var>
-		</op_make_var>
 		<op_math_operate name="节点_数学运算" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">+-*/</comment>
 			<apoEditorPos kinds="hide" x="712" y="373" offset_x="0" offset_y="0"/>
@@ -1768,20 +1928,22 @@
 		<func_params kinds="hide">
 			<input_param name="Param1">$1</input_param>
 		</func_params>
-		<op_make_var name="节点_申明变量$result$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="904" y="502" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">result</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">5</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">1</var>
-		</op_make_var>
-		<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="264" y="364" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">1</var>
-		</op_make_var>
+		<var_init_block>
+			<op_make_var name="节点_申明变量$result$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="904" y="502" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">result</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">5</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">1</var>
+			</op_make_var>
+			<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="264" y="364" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">1</var>
+			</op_make_var>
+		</var_init_block>
 		<comment>函数说明</comment>
 		<steps_block_valcomp name="节点_数值比较分支" auto_index="0">
 			<op_comp name="比较运行" expand="yes" delete="no">
@@ -1880,13 +2042,15 @@
 	</func_node>
 	<func_node name="sample_loop" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="2" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
-		<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="223" y="296" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">5</var>
-		</op_make_var>
+		<var_init_block>
+			<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="223" y="296" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">5</var>
+			</op_make_var>
+		</var_init_block>
 		<comment>函数说明</comment>
 		<op_loop_entry name="节点_循环" expand_list="param_collect" auto_index="1" comp_cond="param_collect" expand_stat="0">
 			<comment name="功能说明" rw_stat="read">loop{}</comment>
@@ -2005,6 +2169,7 @@
 	<func_node name="test_bt" create_template="create_list1" auto_index="5" expand_list="comment" enable_drag="yes" var_name_index="2" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
+		<var_init_block/>
 		<op_set_error_continue name="节点_出错继续" expand="yes">
 			<comment name="功能说明" rw_stat="read">on_error_continue</comment>
 			<apoEditorPos kinds="hide" x="263" y="234" offset_x="0" offset_y="0"/>
@@ -2086,13 +2251,15 @@
 	</func_node>
 	<func_node name="sample_auto_var" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="6" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
-		<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="705" y="66" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var2</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">[hello,world]</var>
-		</op_make_var>
+		<var_init_block>
+			<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="705" y="66" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var2</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">[hello,world]</var>
+			</op_make_var>
+		</var_init_block>
 		<comment>函数说明</comment>
 		<op_math_operate name="节点_数学运算" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">+-*/</comment>
@@ -2141,6 +2308,7 @@
 	<func_node name="sample_bit_logic" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
+		<var_init_block/>
 		<op_bit_operate name="节点_逻辑运算" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">and_or_not</comment>
 			<apoEditorPos kinds="hide" x="-175" y="122" offset_x="0" offset_y="0"/>
@@ -2299,6 +2467,7 @@
 	<func_node name="test_crypt" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="5" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
+		<var_init_block/>
 		<op_call_func name="节点_调用$cryptFile(filename,outFileName, password)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
 			<apoEditorPos kinds="hide" x="457" y="312" offset_x="0" offset_y="0"/>
@@ -2386,15 +2555,17 @@
 		</unConnect>
 	</func_node>
 	<func_node name="test_misc_function" create_template="create_list1" auto_index="7" expand_list="comment" enable_drag="yes" expand_stat="1" var_name_index="3">
-		<op_make_var name="节点_申明变量$__varInitSetVal$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="724" y="385" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">__varInitSetVal</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">5</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">1535697720</var>
-		</op_make_var>
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
+		<var_init_block>
+			<op_make_var name="节点_申明变量$__varInitSetVal$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="724" y="385" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">__varInitSetVal</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">5</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">1535697720</var>
+			</op_make_var>
+		</var_init_block>
 		<op_call_func name="节点_调用函数$sys_用户名()$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label" breakPoint="yes">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
 			<apoEditorPos kinds="hide" x="257" y="169" offset_x="0" offset_y="0"/>
@@ -2504,19 +2675,21 @@
 				</op_bool_entry>
 			</op_sub_comp_entry>
 		</op_bool_entry>
-		<apoEditorPos kinds="hide" x="51" y="163" offset_x="-570" offset_y="-52"/>
+		<apoEditorPos kinds="hide" x="51" y="163" offset_x="-202" offset_y="-50"/>
 		<unConnect kinds="hide"/>
 	</func_node>
 	<func_node name="test_misc_2" create_template="create_list1" auto_index="7" expand_list="comment" enable_drag="yes" expand_stat="1" var_name_index="5">
-		<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="63" y="30" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var3</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">8</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">2018-10-1 10:00:00</var>
-		</op_make_var>
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
+		<var_init_block>
+			<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="63" y="30" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var3</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">8</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">2018-10-1 10:00:00</var>
+			</op_make_var>
+		</var_init_block>
 		<op_set_error_continue name="节点_出错继续" expand="yes">
 			<comment name="功能说明" rw_stat="read">on_error_continue</comment>
 			<apoEditorPos kinds="hide" x="29" y="321" offset_x="0" offset_y="0"/>
@@ -2619,7 +2792,7 @@
 				</op_sub_comp_entry>
 			</op_bool_entry>
 		</steps_compound_test>
-		<apoEditorPos kinds="hide" x="-22" y="206" offset_x="-14" offset_y="32"/>
+		<apoEditorPos kinds="hide" x="-22" y="206" offset_x="70" offset_y="-20"/>
 		<unConnect kinds="hide">
 			<steps_collection>
 				<op_type_transfer name="节点_类型转换" expand_list="comment,varname,index" create_label="create_internal_label">
@@ -2642,6 +2815,7 @@
 	<func_node name="new_debug" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="2" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
+		<var_init_block/>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
 			<apoEditorPos kinds="hide" x="204" y="221" offset_x="0" offset_y="0"/>
@@ -2777,9 +2951,27 @@
 	<func_node name="test_process_exit" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="2" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
+		<var_init_block>
+			<op_make_var name="节点_申明变量$textdata$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="443" y="510" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">textdata</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">$value</var>
+			</op_make_var>
+		</var_init_block>
 		<op_get_time name="节点_时间" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">get_time()</comment>
 			<apoEditorPos kinds="hide" x="145" y="629" offset_x="0" offset_y="0"/>
+			<return_val_set_var kinds="hide">
+				<op_assignin kinds="hide">
+					<varname>textdata</varname>
+					<param_collect>
+						<type kinds="reference" reference_type="type_data_type">11</type>
+						<var restrict="type">$value</var>
+					</param_collect>
+				</op_assignin>
+			</return_val_set_var>
 		</op_get_time>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
@@ -2789,13 +2981,6 @@
 				<var kinds="string" delete="no" restrict="type">$value</var>
 			</param_collect>
 		</op_print>
-		<op_make_var name="节点_申明变量$textdata$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="443" y="510" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">textdata</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">$value</var>
-		</op_make_var>
 		<apoEditorPos kinds="hide" x="20" y="400" offset_x="42" offset_y="-52"/>
 		<unConnect kinds="hide">
 			<steps_collection>
@@ -2856,15 +3041,17 @@
 		</unConnect>
 	</func_node>
 	<func_node name="func_get_time_stamp" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="2" name_auto_index="auto_index">
-		<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
-			<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-			<apoEditorPos kinds="hide" x="305" y="468" offset_x="0" offset_y="0"/>
-			<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
-			<type kinds="reference" reference_type="type_data_type" delete="no">8</type>
-			<var name="初始值" kinds="string" delete="no" restrict="type">2019-10-1 00:00:00</var>
-		</op_make_var>
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
+		<var_init_block>
+			<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="305" y="468" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var1</param>
+				<type kinds="reference" reference_type="type_data_type" delete="no">8</type>
+				<var name="初始值" kinds="string" delete="no" restrict="type">2019-10-1 00:00:00</var>
+			</op_make_var>
+		</var_init_block>
 		<op_get_time name="节点_时间" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">get_time()</comment>
 			<apoEditorPos kinds="hide" x="298" y="253" offset_x="0" offset_y="0"/>
@@ -2890,7 +3077,7 @@
 		<apoEditorPos kinds="hide" x="80" y="356" offset_x="0" offset_y="0"/>
 		<unConnect kinds="hide"/>
 	</func_node>
-	<func_node name="main" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="6" name_auto_index="auto_index">
+	<func_node name="main" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="12" name_auto_index="auto_index">
 		<func_params kinds="hide">
 			<input_param name="Param1">$1</input_param>
 			<input_param name="Param2">$2</input_param>
@@ -2898,6 +3085,7 @@
 			<input_param name="Param4">$4</input_param>
 		</func_params>
 		<comment>函数说明</comment>
+		<var_init_block/>
 		<op_call_func name="节点_调用$sample_call_fibo$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
 			<apoEditorPos kinds="hide" x="221" y="468" offset_x="0" offset_y="0"/>
@@ -2962,63 +3150,77 @@
 				<var kinds="string" delete="no" restrict="type">i can</var>
 			</param_collect>
 		</op_call_func>
-		<apoEditorPos kinds="hide" x="-79" y="482" offset_x="92" offset_y="19"/>
+		<apoEditorPos kinds="hide" x="-79" y="482" offset_x="21" offset_y="-140"/>
 		<unConnect kinds="hide"/>
 		<closure_entry name="闭包" create_template="create_list2" auto_index="0" nextAnchor="comment" tips="Closure">
 			<comment name="功能说明" rw_stat="read">闭包(...){}</comment>
 			<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 				<comment name="功能说明" rw_stat="read">print(...)</comment>
-				<apoEditorPos kinds="hide" x="909" y="203" offset_x="0" offset_y="0"/>
+				<apoEditorPos kinds="hide" x="1031" y="211" offset_x="0" offset_y="0"/>
 				<param_collect name="参数" expand="yes">
 					<type kinds="reference" reference_type="type_data_type" delete="no">2</type>
 					<var kinds="string" delete="no" restrict="type">hello closure</var>
 				</param_collect>
 				<param_collect name="参数" expand="yes">
-					<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
-					<var kinds="string" delete="no" restrict="type">1</var>
+					<type kinds="reference" reference_type="type_data_type" delete="no">9</type>
+					<var kinds="string" delete="no" restrict="type">var11</var>
 				</param_collect>
 				<param_collect name="参数" expand="yes">
 					<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
 					<var kinds="string" delete="no" restrict="type">2</var>
 				</param_collect>
+				<return_val_set_var kinds="hide">
+					<op_assignin kinds="hide">
+						<varname>var10</varname>
+						<param_collect>
+							<type kinds="reference" reference_type="type_data_type">11</type>
+							<var restrict="type">$value</var>
+						</param_collect>
+					</op_assignin>
+				</return_val_set_var>
 			</op_print>
-			<apoEditorPos kinds="hide" x="571" y="241" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="578" y="161" offset_x="0" offset_y="0"/>
 			<closure_name name="闭包名字" kinds="hide" delete="no" auto_index_ref="var_name_index">__closure_5</closure_name>
 			<func_params kinds="hide">
 				<input_param name="Param1">$1</input_param>
 				<input_param name="Param2">$2</input_param>
 			</func_params>
+			<var_init_block>
+				<op_make_var name="节点_申明变量$var$" var_name="param">
+					<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+					<apoEditorPos kinds="hide" x="1249" y="294" offset_x="0" offset_y="0"/>
+					<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var10</param>
+					<param_collect name="参数" delete="no">
+						<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+						<var name="初始值" kinds="string" delete="no" restrict="type">$value</var>
+					</param_collect>
+				</op_make_var>
+				<op_make_var name="节点_申明变量$var$" var_name="param">
+					<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+					<apoEditorPos kinds="hide" x="816" y="298" offset_x="0" offset_y="0"/>
+					<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var11</param>
+					<param_collect name="参数" delete="no">
+						<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
+						<var name="初始值" kinds="string" delete="no" restrict="type">1</var>
+					</param_collect>
+				</op_make_var>
+			</var_init_block>
 		</closure_entry>
+		<var_init_block/>
 	</func_node>
 	<func_node name="func_export_apis" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="2" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>导出api</comment>
-		<op_call_func name="节点_调用$读取文件作为字符串(filename)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
+		<var_init_block/>
+		<op_call_func name="节点_调用$导出c函数(filename)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-			<apoEditorPos kinds="hide" x="323" y="372" offset_x="0" offset_y="0"/>
-			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_load_file_as_string&amp;_dispname=读取文件作为字符串(filename)</func_name>
+			<apoEditorPos kinds="hide" x="370" y="124" offset_x="0" offset_y="0"/>
+			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_export_cpp_api&amp;_dispname=导出c函数(filename)</func_name>
 			<param_collect name="参数" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-				<var kinds="string" delete="no" restrict="type">MainBase.json</var>
+				<var kinds="string" delete="no" restrict="type">./setting/func_list.xml</var>
 			</param_collect>
 		</op_call_func>
-		<op_call_func name="节点_调用$文本转成JSON(json_text)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
-			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-			<apoEditorPos kinds="hide" x="606" y="293" offset_x="0" offset_y="0"/>
-			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_text_to_json&amp;_dispname=文本转成JSON(json_text)</func_name>
-			<param_collect name="参数" expand="yes">
-				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-				<var kinds="string" delete="no" restrict="type">$value</var>
-			</param_collect>
-		</op_call_func>
-		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
-			<comment name="功能说明" rw_stat="read">print(...)</comment>
-			<apoEditorPos kinds="hide" x="910" y="365" offset_x="0" offset_y="0"/>
-			<param_collect name="参数" expand="yes">
-				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-				<var kinds="string" delete="no" restrict="type">$value</var>
-			</param_collect>
-		</op_print>
 		<apoEditorPos kinds="hide" x="85" y="309" offset_x="0" offset_y="0"/>
 		<unConnect kinds="hide">
 			<steps_collection>
@@ -3032,21 +3234,40 @@
 					</param_collect>
 				</op_call_func>
 			</steps_collection>
-			<steps_collection/>
-			<op_call_func name="节点_调用$导出c函数(filename)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
-				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-				<apoEditorPos kinds="hide" x="370" y="124" offset_x="0" offset_y="0"/>
-				<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_export_cpp_api&amp;_dispname=导出c函数(filename)</func_name>
-				<param_collect name="参数" expand="yes">
-					<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
-					<var kinds="string" delete="no" restrict="type">./setting/func_list.xml</var>
-				</param_collect>
-			</op_call_func>
+			<steps_collection>
+				<op_call_func name="节点_调用$读取文件作为字符串(filename)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
+					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+					<apoEditorPos kinds="hide" x="323" y="372" offset_x="0" offset_y="0"/>
+					<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_load_file_as_string&amp;_dispname=读取文件作为字符串(filename)</func_name>
+					<param_collect name="参数" expand="yes">
+						<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+						<var kinds="string" delete="no" restrict="type">MainBase.json</var>
+					</param_collect>
+				</op_call_func>
+				<op_call_func name="节点_调用$文本转成JSON(json_text)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
+					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+					<apoEditorPos kinds="hide" x="606" y="293" offset_x="0" offset_y="0"/>
+					<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_text_to_json&amp;_dispname=文本转成JSON(json_text)</func_name>
+					<param_collect name="参数" expand="yes">
+						<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+						<var kinds="string" delete="no" restrict="type">$value</var>
+					</param_collect>
+				</op_call_func>
+				<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
+					<comment name="功能说明" rw_stat="read">print(...)</comment>
+					<apoEditorPos kinds="hide" x="910" y="365" offset_x="0" offset_y="0"/>
+					<param_collect name="参数" expand="yes">
+						<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+						<var kinds="string" delete="no" restrict="type">$value</var>
+					</param_collect>
+				</op_print>
+			</steps_collection>
 		</unConnect>
 	</func_node>
 	<func_node name="test_return_error" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>函数说明</comment>
+		<var_init_block/>
 		<op_assignin name="节点_赋值" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">var = value</comment>
 			<apoEditorPos kinds="hide" x="317" y="352" offset_x="0" offset_y="0"/>
@@ -3105,13 +3326,22 @@
 	</func_node>
 </baseFunction>
 <message_handler name="消息处理入口" delete="no" create_template="create_function_filter,create_msg_handler" auto_index="1" expand_stat="0" accept_drag_in="msg_handler_node">
-	<function_filter name="测试消息" create_template="create_msg_handler" auto_index="7" expand_stat="0" accept_drag_in="msg_handler_node">
+	<function_filter name="测试消息" create_template="create_msg_handler" auto_index="7" expand_stat="1" accept_drag_in="msg_handler_node">
 		<msg_handler_node name="message_test" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="4">
 			<func_params kinds="hide"/>
 			<comment name="函数说明" expand="yes">
 				<desc>消息处理handle(player, message)</desc>
 				<isGlobal kinds="bool">1</isGlobal>
 			</comment>
+			<var_init_block>
+				<op_make_var name="节点_申明变量$itemId$" expand="yes" var_name="param">
+					<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+					<apoEditorPos kinds="hide" x="598" y="558" offset_x="0" offset_y="0"/>
+					<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">itemId</param>
+					<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+					<var name="初始值" kinds="string" delete="no" restrict="type">0</var>
+				</op_make_var>
+			</var_init_block>
 			<apoEditorPos kinds="hide" x="74" y="333" offset_x="0" offset_y="0"/>
 			<function_init_block name="block_加载时运行" create_template="create_list2" expand_list="condition" auto_index="0">
 				<comment name="功能说明" rw_stat="read">加载时运行</comment>
@@ -3167,14 +3397,16 @@
 					<type kinds="hide" delete="no">0</type>
 					<msgtype name="读取数据类型" kinds="reference" reference_type="type_data_type" delete="no" restrict="type">0</msgtype>
 				</param_collect>
+				<return_val_set_var kinds="hide">
+					<op_assignin kinds="hide">
+						<varname>itemId</varname>
+						<param_collect>
+							<type kinds="reference" reference_type="type_data_type">11</type>
+							<var restrict="type">$value</var>
+						</param_collect>
+					</op_assignin>
+				</return_val_set_var>
 			</op_call_func>
-			<op_make_var name="节点_申明变量$itemId$" expand="yes" var_name="param">
-				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-				<apoEditorPos kinds="hide" x="598" y="558" offset_x="0" offset_y="0"/>
-				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">itemId</param>
-				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-				<var name="初始值" kinds="string" delete="no" restrict="type">0</var>
-			</op_make_var>
 			<op_type_transfer name="节点_类型转换" expand_list="comment,varname,index" create_label="create_internal_label">
 				<comment name="功能说明" rw_stat="read">data.convert( type )</comment>
 				<apoEditorPos kinds="hide" x="756" y="300" offset_x="0" offset_y="0"/>
@@ -3193,13 +3425,6 @@
 				<type name="命令值类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var name="命令值" kinds="string" delete="no" restrict="type">0</var>
 			</op_operate>
-			<op_make_var name="节点_申明变量$var$" expand="yes" var_name="param">
-				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-				<apoEditorPos kinds="hide" x="1148" y="571" offset_x="0" offset_y="0"/>
-				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var3</param>
-				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-				<var name="初始值" kinds="string" delete="no" restrict="type">$value</var>
-			</op_make_var>
 			<unConnect kinds="hide"/>
 		</msg_handler_node>
 		<msg_handler_node name="message_my_exit" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="1" preFillCmd="_localinit_msg_entry">
@@ -3208,6 +3433,7 @@
 				<desc>消息处理handle(player, message)</desc>
 				<isGlobal kinds="bool">1</isGlobal>
 			</comment>
+			<var_init_block/>
 			<op_call_func name="节点_发送消息" create_template="create_input_param" auto_index="0" expand_list="comment,varInt,msgtype" create_label="create_internal_label">
 				<comment name="功能说明" rw_stat="read">function_send_message(msg_id,...)</comment>
 				<apoEditorPos kinds="hide" x="316" y="461" offset_x="0" offset_y="0"/>
@@ -3261,13 +3487,14 @@
 		</msg_handler_node>
 	</function_filter>
 </message_handler>
-<event_callback name="事件处理" delete="no" create_template="create_event_function_filter,create_event_callback" auto_index="1" expand_stat="0" accept_drag_in="event_callback_node">
+<event_callback name="事件处理" delete="no" create_template="create_event_function_filter,create_event_callback" auto_index="1" expand_stat="1" accept_drag_in="event_callback_node">
 	<event_callback_node name="event_callback0" enable_drag="yes" create_template="create_list2" name_auto_index="auto_index" auto_index="0" expand_list="comment,event_id" expand_stat="1" var_name_index="1">
 		<func_params kinds="hide"/>
 		<comment name="函数说明" expand="yes">
 			<desc>事件处理函数</desc>
 			<isGlobal kinds="bool">1</isGlobal>
 		</comment>
+		<var_init_block/>
 		<op_get_time name="节点_时间" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">get_time()</comment>
 			<apoEditorPos kinds="hide" x="236" y="369" offset_x="0" offset_y="0"/>
