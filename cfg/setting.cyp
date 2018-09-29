@@ -137,7 +137,6 @@
 	<list instruction="0" size="0" datatype="0" need_refill_offset="1">jumpOffset</list>
 	
 	<list instruction="4" size="0">param_collect</list>
-	<list instruction="3" size="0">formula_text</list>
 	<list instruction="100" size="0">comment</list>
 	<list instruction="100" size="0">Tips</list>
 	<list instruction="100" size="0">apoEditorPos</list>
@@ -159,7 +158,7 @@
 	<list instruction="9" >steps_bt_sequence</list>
 	<list instruction="9" >steps_compound_test</list>
 	
-	<list instruction="9" >function_filter</list>
+	<list instruction="19" >function_filter</list>
 	<list instruction="10" desc="if-else sub entry" >op_sub_comp_entry</list>	
 	<list instruction="11" desc="function" >func_node</list>	
 	<list instruction="11" desc="net message function" >msg_handler_node</list>	
