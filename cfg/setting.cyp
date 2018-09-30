@@ -159,6 +159,10 @@
 	<list instruction="9" >steps_compound_test</list>
 	
 	<list instruction="19" >function_filter</list>
+	<list instruction="19" >baseFunction</list>
+	<list instruction="19" >message_handler</list>
+	<list instruction="19" >event_callback</list>
+	
 	<list instruction="10" desc="if-else sub entry" >op_sub_comp_entry</list>	
 	<list instruction="11" desc="function" >func_node</list>	
 	<list instruction="11" desc="net message function" >msg_handler_node</list>	
