@@ -769,14 +769,17 @@ bool apoHttpListener::downloadFile(const char *filePath, NDHttpSession *session,
 	NDINT64 size = 0;
 	size_t totalSize = 0;
 
-	//
+	//check file path is valid
+	if (strstr(filePath,"..") ){
+		nd_logerror("request file is invalid : %s\n", filePath);
+		return false; 
+	}
 	char tmp_path[ND_FILE_PATH_SIZE];
-	const char *pLoadPath = nd_getpath(filePath,tmp_path, sizeof(tmp_path));
-	if (!nd_is_subpath(m_readablePath.c_str(), pLoadPath)) {
-		if (!nd_is_subpath(m_writablePath.c_str(), pLoadPath)) {
-			nd_logerror("Can not acccess %s\n", filePath);
-			return false; 
-		}
+
+	filePath = nd_full_path(m_readablePath.c_str(),filePath, tmp_path, sizeof(tmp_path));
+	if (!filePath) {
+		nd_logerror("Can not acccess %s\n", filePath);
+		return false;
 	}
 
 	const char *pRange = request.getHeader("Range");

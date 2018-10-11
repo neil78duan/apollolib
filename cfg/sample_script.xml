@@ -14,11 +14,11 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">./setting/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1539155973</LastMod>
+	<LastMod name="最后修改" kinds="hide">1539250121</LastMod>
 	<EditorVersion kinds="hide">1.1.0</EditorVersion>
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="43" expand_stat="1" accept_drag_in="func_node">
-	<func_node name="test_create_new_var" create_template="create_list1" auto_index="0" nextAnchor="comment" enable_drag="yes" var_name_index="16" name_auto_index="auto_index">
+	<func_node name="test_create_new_var" create_template="create_list1" auto_index="0" nextAnchor="comment" enable_drag="yes" var_name_index="19" name_auto_index="auto_index">
 		<func_params kinds="hide">
 			<input_param name="Param1">$1</input_param>
 			<input_param name="Param2">$2</input_param>
@@ -63,11 +63,36 @@
 				<type kinds="reference" reference_type="type_data_type" delete="no">9</type>
 				<var kinds="string" delete="no" restrict="type">var1</var>
 			</param_collect>
+			<return_val_set_var kinds="hide">
+				<op_assignin kinds="hide">
+					<varname>var18</varname>
+					<param_collect>
+						<type kinds="reference" reference_type="type_data_type">11</type>
+						<var restrict="type">$value</var>
+					</param_collect>
+				</op_assignin>
+			</return_val_set_var>
 		</op_print>
-		<apoEditorPos kinds="hide" x="20" y="400" offset_x="46" offset_y="15"/>
-		<unConnect kinds="hide">
-			<steps_collection/>
-		</unConnect>
+		<op_assignin name="节点_函数返回">
+			<comment name="功能说明" rw_stat="read">reutnr (value) </comment>
+			<apoEditorPos kinds="hide" x="1144" y="326" offset_x="0" offset_y="0"/>
+			<bluePrint_info kinds="hide" delete="no">DisableReturnVal</bluePrint_info>
+			<bluePrint_info kinds="hide" delete="no">DisableToNext</bluePrint_info>
+			<varname name="变量名" kinds="hide" delete="no">$CurValue</varname>
+			<param_collect name="返回值" delete="no">
+				<type name="赋值类型" kinds="reference" reference_type="type_data_type" delete="no">18</type>
+				<var name="值" kinds="string" delete="no" restrict="type">0</var>
+			</param_collect>
+			<op_exit name="节点_退出($errno$)" kinds="hide">
+				<comment name="功能说明" rw_stat="read">op_exit(value)</comment>
+				<param_collect name="exitCode">
+					<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
+					<var kinds="string" delete="no" restrict="type" replace_val="../../.name">0</var>
+				</param_collect>
+			</op_exit>
+		</op_assignin>
+		<apoEditorPos kinds="hide" x="6" y="429" offset_x="-2" offset_y="-86"/>
+		<unConnect kinds="hide"/>
 		<var_init_block>
 			<op_build_json_data name="节点_创建json数据$j2$" create_template="create_user_def_param" var_name="var" auto_index="0">
 				<comment name="功能说明" rw_stat="read">define  name{...}</comment>
@@ -104,7 +129,7 @@
 			</op_make_var>
 			<op_build_json_data name="节点_创建json数据$var1$" create_template="create_user_def_param" var_name="var" auto_index="0">
 				<comment name="功能说明" rw_stat="read">define  name{...}</comment>
-				<apoEditorPos kinds="hide" x="721" y="564" offset_x="0" offset_y="0"/>
+				<apoEditorPos kinds="hide" x="710" y="556" offset_x="0" offset_y="0"/>
 				<var name="变量名" kinds="string" delete="no" replace_val="../.name">var1</var>
 				<param_collect name="参数">
 					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">member1</func_name>
@@ -117,6 +142,15 @@
 					<var kinds="string" delete="no" restrict="type">world</var>
 				</param_collect>
 			</op_build_json_data>
+			<op_make_var name="节点_申明变量$var$" var_name="param">
+				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
+				<apoEditorPos kinds="hide" x="1025" y="550" offset_x="0" offset_y="0"/>
+				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var18</param>
+				<param_collect name="参数" delete="no">
+					<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+					<var name="初始值" kinds="string" delete="no" restrict="type">$value</var>
+				</param_collect>
+			</op_make_var>
 		</var_init_block>
 	</func_node>
 	<func_node name="sample_selector" create_template="create_list1" auto_index="5" expand_list="comment" enable_drag="yes" var_name_index="1" name_auto_index="auto_index">
@@ -3353,7 +3387,7 @@
 					<var name="初始值" kinds="string" delete="no" restrict="type">0</var>
 				</op_make_var>
 			</var_init_block>
-			<apoEditorPos kinds="hide" x="74" y="333" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="74" y="333" offset_x="49" offset_y="66"/>
 			<function_init_block name="block_加载时运行" create_template="create_list2" expand_list="condition" auto_index="0">
 				<comment name="功能说明" rw_stat="read">加载时运行</comment>
 				<apoEditorPos kinds="hide" x="63" y="-46" offset_x="0" offset_y="0"/>
@@ -3498,7 +3532,7 @@
 		</msg_handler_node>
 	</function_filter>
 </message_handler>
-<event_callback name="事件处理" delete="no" create_template="create_event_function_filter,create_event_callback" auto_index="1" expand_stat="0" accept_drag_in="event_callback_node">
+<event_callback name="事件处理" delete="no" create_template="create_event_function_filter,create_event_callback" auto_index="1" expand_stat="1" accept_drag_in="event_callback_node">
 	<event_callback_node name="event_callback0" enable_drag="yes" create_template="create_list2" name_auto_index="auto_index" auto_index="0" expand_list="comment,event_id" expand_stat="1" var_name_index="1">
 		<func_params kinds="hide"/>
 		<comment name="函数说明" expand="yes">
