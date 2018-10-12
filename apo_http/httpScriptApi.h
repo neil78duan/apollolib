@@ -56,7 +56,7 @@ public:
 	void Destroy(int flag);
 	void SetHttpEncode(const char *encodeName);
 	int getEncodeType();
-
+	static const char *getFileType(const char *fileName);
 protected:
 	virtual void *getScriptEngine();
 	virtual int onRequestScript(const char* script, NDHttpSession *session, const NDHttpRequest &request);

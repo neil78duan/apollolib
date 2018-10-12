@@ -114,7 +114,7 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_runsql, "db_Ö´ÐÐsql(db_connector, sql_text)")
 
 			//copy this var text-value
 			if (var1.GetDataType() == OT_BINARY_DATA) {
-				datalen = pDBconn->escape_sql_string(pOutaddr, (char*)var1.GetBinary(), var1.GetBinarySize());
+				datalen =(size_t) pDBconn->escape_sql_string(pOutaddr, (char*)var1.GetBinary(), var1.GetBinarySize());
 			}
 			else {
 				std::string varString = var1.GetString();
@@ -123,7 +123,7 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_runsql, "db_Ö´ÐÐsql(db_connector, sql_text)")
 					parser->setErrno(NDERR_PARAM_INVALID);
 					return false;
 				}
-				datalen = pDBconn->escape_sql_string(pOutaddr, (char*)varString.c_str(), varString.size());
+				datalen =(size_t) pDBconn->escape_sql_string(pOutaddr, (char*)varString.c_str(), varString.size());
 			}
 			pOutaddr += datalen;
 			size -= datalen;
