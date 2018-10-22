@@ -14,7 +14,7 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">./setting/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1539250121</LastMod>
+	<LastMod name="最后修改" kinds="hide">1540197835</LastMod>
 	<EditorVersion kinds="hide">1.1.0</EditorVersion>
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="43" expand_stat="1" accept_drag_in="func_node">
@@ -26,7 +26,7 @@
 		<comment>函数说明</comment>
 		<op_call_func name="节点_调用$sys_获取工作目录()$" create_template="create_input_param" auto_index="0" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-			<apoEditorPos kinds="hide" x="295" y="355" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="317" y="269" offset_x="0" offset_y="0"/>
 			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP._sys_get_path&amp;_dispname=sys_获取工作目录()</func_name>
 			<return_val_set_var kinds="hide">
 				<op_assignin kinds="hide">
@@ -40,13 +40,13 @@
 		</op_call_func>
 		<op_call_func name="节点_调用$editor_version()$" create_template="create_input_param" auto_index="0" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-			<apoEditorPos kinds="hide" x="504" y="154" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="526" y="68" offset_x="0" offset_y="0"/>
 			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_editor_version&amp;_dispname=editor_version()</func_name>
 			<return_val_set_var kinds="hide"/>
 		</op_call_func>
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">print(...)</comment>
-			<apoEditorPos kinds="hide" x="910" y="331" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="932" y="245" offset_x="0" offset_y="0"/>
 			<param_collect name="参数">
 				<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var kinds="string" delete="no" restrict="type">0</var>
@@ -75,7 +75,7 @@
 		</op_print>
 		<op_assignin name="节点_函数返回">
 			<comment name="功能说明" rw_stat="read">reutnr (value) </comment>
-			<apoEditorPos kinds="hide" x="1144" y="326" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="1166" y="240" offset_x="0" offset_y="0"/>
 			<bluePrint_info kinds="hide" delete="no">DisableReturnVal</bluePrint_info>
 			<bluePrint_info kinds="hide" delete="no">DisableToNext</bluePrint_info>
 			<varname name="变量名" kinds="hide" delete="no">$CurValue</varname>
@@ -91,12 +91,12 @@
 				</param_collect>
 			</op_exit>
 		</op_assignin>
-		<apoEditorPos kinds="hide" x="6" y="429" offset_x="-2" offset_y="-86"/>
+		<apoEditorPos kinds="hide" x="28" y="343" offset_x="0" offset_y="0"/>
 		<unConnect kinds="hide"/>
 		<var_init_block>
 			<op_build_json_data name="节点_创建json数据$j2$" create_template="create_user_def_param" var_name="var" auto_index="0">
 				<comment name="功能说明" rw_stat="read">define  name{...}</comment>
-				<apoEditorPos kinds="hide" x="560" y="323" offset_x="0" offset_y="0"/>
+				<apoEditorPos kinds="hide" x="582" y="237" offset_x="0" offset_y="0"/>
 				<var name="变量名" kinds="string" delete="no" replace_val="../.name">j2</var>
 				<param_collect name="参数">
 					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">member1</func_name>
@@ -111,7 +111,7 @@
 			</op_build_json_data>
 			<op_make_var name="节点_申明变量$var$" var_name="param">
 				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-				<apoEditorPos kinds="hide" x="450" y="540" offset_x="0" offset_y="0"/>
+				<apoEditorPos kinds="hide" x="472" y="454" offset_x="0" offset_y="0"/>
 				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var12</param>
 				<param_collect name="参数" delete="no">
 					<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
@@ -120,7 +120,7 @@
 			</op_make_var>
 			<op_make_var name="节点_申明变量$var$" var_name="param">
 				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-				<apoEditorPos kinds="hide" x="171" y="238" offset_x="0" offset_y="0"/>
+				<apoEditorPos kinds="hide" x="193" y="152" offset_x="0" offset_y="0"/>
 				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var13</param>
 				<param_collect name="参数" delete="no">
 					<type kinds="reference" reference_type="type_data_type" delete="no">10</type>
@@ -129,7 +129,7 @@
 			</op_make_var>
 			<op_build_json_data name="节点_创建json数据$var1$" create_template="create_user_def_param" var_name="var" auto_index="0">
 				<comment name="功能说明" rw_stat="read">define  name{...}</comment>
-				<apoEditorPos kinds="hide" x="710" y="556" offset_x="0" offset_y="0"/>
+				<apoEditorPos kinds="hide" x="733" y="470" offset_x="0" offset_y="0"/>
 				<var name="变量名" kinds="string" delete="no" replace_val="../.name">var1</var>
 				<param_collect name="参数">
 					<func_name name="成员名" kinds="string" delete="no" is_param_name="yes">member1</func_name>
@@ -144,7 +144,7 @@
 			</op_build_json_data>
 			<op_make_var name="节点_申明变量$var$" var_name="param">
 				<comment name="功能说明" rw_stat="read">create_variant(name,value)</comment>
-				<apoEditorPos kinds="hide" x="1025" y="550" offset_x="0" offset_y="0"/>
+				<apoEditorPos kinds="hide" x="1047" y="464" offset_x="0" offset_y="0"/>
 				<param name="名字" kinds="string" delete="no" auto_index_ref="var_name_index" replace_val="../.name">var18</param>
 				<param_collect name="参数" delete="no">
 					<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
@@ -348,7 +348,7 @@
 				<var kinds="string" delete="no" restrict="type">0</var>
 			</param_collect>
 		</op_print>
-		<apoEditorPos kinds="hide" x="-37" y="148" offset_x="102" offset_y="-74"/>
+		<apoEditorPos kinds="hide" x="-37" y="148" offset_x="119" offset_y="-27"/>
 		<unConnect kinds="hide">
 			<steps_bt_sequence name="BT-Sequence" auto_index="0">
 				<comment name="功能说明" rw_stat="read">run until one of children success </comment>
@@ -639,15 +639,15 @@
 		<func_params kinds="hide"/>
 		<comment>测试是否是开发版本:通过计算开发版本字符信息实现</comment>
 		<var_init_block/>
-		<apoEditorPos kinds="hide" x="20" y="400" offset_x="109" offset_y="-199"/>
+		<apoEditorPos kinds="hide" x="129" y="201" offset_x="0" offset_y="0"/>
 		<op_getobj name="节点_获得其他对象_程序信息" expand="yes" breakPoint="yes">
 			<comment name="功能说明" rw_stat="read">get_other_object(object_name)</comment>
-			<apoEditorPos kinds="hide" x="245" y="420" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="354" y="221" offset_x="0" offset_y="0"/>
 			<aim name="对象名" kinds="string">machineInfo</aim>
 		</op_getobj>
 		<op_call_func name="节点_调用函数_查找DEVELOP" create_template="create_input_param" auto_index="2" expand_list="comment,func_name" expand_stat="1">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-			<apoEditorPos kinds="hide" x="483" y="399" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="592" y="200" offset_x="0" offset_y="0"/>
 			<func_name kinds="user_define" user_param="func_list">_realval=CPP.apollo_str_str&amp;_dispname=字符串查找(str1,str2)</func_name>
 			<param_collect name="参数0" expand="yes" expand_stat="1">
 				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
@@ -660,7 +660,7 @@
 		</op_call_func>
 		<op_call_func name="节点_调用函数_计算字符串长度" create_template="create_input_param" auto_index="1" expand_list="comment,func_name" expand_stat="1">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-			<apoEditorPos kinds="hide" x="734" y="403" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="843" y="204" offset_x="0" offset_y="0"/>
 			<func_name kinds="user_define" user_param="func_list">_realval=CPP.apollo_str_len&amp;_dispname=字符串长度(str1)</func_name>
 			<param_collect name="参数0" expand="yes">
 				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
@@ -1131,13 +1131,13 @@
 					<var name="操作数2值" kinds="string" delete="no" restrict="type">10</var>
 				</param_collect>
 			</op_comp>
-			<apoEditorPos kinds="hide" x="642" y="163" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="980" y="425" offset_x="0" offset_y="0"/>
 			<op_bool_entry name="比较成功就执行" delete="no">
 				<op_sub_comp_entry name="执行块" create_template="create_list1" delete="no" comp_cond="condition" auto_index="0">
 					<condition no_comp="1" kinds="hide" delete="no">1</condition>
 					<op_short_jump name="节点_break" expand_list="comment">
 						<comment name="功能说明" rw_stat="read">break</comment>
-						<apoEditorPos kinds="hide" x="877" y="189" offset_x="0" offset_y="0"/>
+						<apoEditorPos kinds="hide" x="939" y="199" offset_x="0" offset_y="0"/>
 						<jumpOffset kinds="hide" delete="no">0</jumpOffset>
 					</op_short_jump>
 				</op_sub_comp_entry>
@@ -2718,7 +2718,7 @@
 				</op_bool_entry>
 			</op_sub_comp_entry>
 		</op_bool_entry>
-		<apoEditorPos kinds="hide" x="51" y="163" offset_x="-202" offset_y="-50"/>
+		<apoEditorPos kinds="hide" x="51" y="163" offset_x="-16" offset_y="-60"/>
 		<unConnect kinds="hide"/>
 	</func_node>
 	<func_node name="test_misc_2" create_template="create_list1" auto_index="7" expand_list="comment" enable_drag="yes" expand_stat="1" var_name_index="5">
