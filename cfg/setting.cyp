@@ -261,7 +261,7 @@
 				</op_call_func>
 			</function_init_block>
 			
-			<exception_catch_block name="block_加载时运行" create_template="create_list2" auto_index="0" nextAnchor="comment"  tips="Run-on-except" >	
+			<exception_catch_block name="catch_异常处理" create_template="create_list2" auto_index="0" nextAnchor="comment"  tips="Run-on-except" >	
 				<bluePrint_info kinds="hide" delete="no">DisableReturnVal</bluePrint_info>
 				<bluePrint_info kinds="hide" delete="no">DisableNewParam</bluePrint_info>
 				<bluePrint_info kinds="hide" delete="no">DisableConnectIn</bluePrint_info>
