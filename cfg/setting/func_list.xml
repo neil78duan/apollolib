@@ -59,5 +59,7 @@
 	<node desc="str字符串替换(aim_str, replaced, new_text)">CPP.apollo_str_replace</node>
 	<node desc="str字符串查找(str1,str2)">CPP.apollo_str_str</node>
 	<node desc="文本转成JSON(json_text)">CPP.apollo_text_to_json</node>
+	<node desc="tool_compile_file(file,outFile,isDebug)">CPP.apollo_tool_compile_file</node>
+	<node desc="tool_compile_project(project_path)">CPP.apollo_tool_compile_project</node>
 	<node desc="写入文件(filename,var1,var2...)">CPP.apollo_write_file</node>
 </func_list>

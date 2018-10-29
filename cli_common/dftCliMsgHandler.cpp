@@ -17,6 +17,7 @@
 #include "logic_parser/dbl_mgr.h"
 #include "logic_parser/logicEngineRoot.h"
 #include "logic_parser/dbldata2netstream.h"
+#include "logic_parser/logic_compile.h"
 #endif 
 
 #include "cli_common/dftCliMsgHandler.h"
@@ -94,7 +95,7 @@ namespace ClientMsgHandler
 			return true;
 		}
 		else if (0 == ndstricmp(objName, "settingFile")) {
-			const char *pSettingFile = LogicEngineRoot::getSettingFile();
+			const char *pSettingFile = LogicCompiler::get_Instant()->getConfigFileName();
 			val.InitSet(pSettingFile);
 			return true;
 		}

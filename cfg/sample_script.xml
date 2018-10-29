@@ -14,7 +14,7 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">./setting/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1540370376</LastMod>
+	<LastMod name="最后修改" kinds="hide">1540808630</LastMod>
 	<EditorVersion kinds="hide">1.1.0</EditorVersion>
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="43" expand_stat="0" accept_drag_in="func_node">
@@ -445,7 +445,7 @@
 				</op_print>
 			</steps_collection>
 		</op_loop_entry>
-		<apoEditorPos kinds="hide" x="138" y="302" offset_x="0" offset_y="0"/>
+		<apoEditorPos kinds="hide" x="138" y="302" offset_x="14" offset_y="5"/>
 		<unConnect kinds="hide">
 			<steps_collection/>
 		</unConnect>
@@ -3256,7 +3256,6 @@
 	<func_node name="func_export_apis" create_template="create_list1" auto_index="0" expand_list="comment" enable_drag="yes" var_name_index="2" name_auto_index="auto_index">
 		<func_params kinds="hide"/>
 		<comment>导出api</comment>
-		<var_init_block/>
 		<op_call_func name="节点_调用$导出c函数(filename)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
 			<apoEditorPos kinds="hide" x="370" y="124" offset_x="0" offset_y="0"/>
@@ -3266,12 +3265,13 @@
 				<var kinds="string" delete="no" restrict="type">./setting/func_list.xml</var>
 			</param_collect>
 		</op_call_func>
+		<var_init_block/>
 		<apoEditorPos kinds="hide" x="85" y="309" offset_x="0" offset_y="0"/>
 		<unConnect kinds="hide">
 			<steps_collection>
 				<op_call_func name="节点_调用$加载json文件(jsonFilePath)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-					<apoEditorPos kinds="hide" x="586" y="510" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="691" y="498" offset_x="0" offset_y="0"/>
 					<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_load_json_file&amp;_dispname=加载json文件(jsonFilePath)</func_name>
 					<param_collect name="参数" expand="yes">
 						<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
@@ -3282,7 +3282,7 @@
 			<steps_collection>
 				<op_call_func name="节点_调用$读取文件作为字符串(filename)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-					<apoEditorPos kinds="hide" x="323" y="372" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="558" y="335" offset_x="0" offset_y="0"/>
 					<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_load_file_as_string&amp;_dispname=读取文件作为字符串(filename)</func_name>
 					<param_collect name="参数" expand="yes">
 						<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
@@ -3291,7 +3291,7 @@
 				</op_call_func>
 				<op_call_func name="节点_调用$文本转成JSON(json_text)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-					<apoEditorPos kinds="hide" x="606" y="293" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="736" y="277" offset_x="0" offset_y="0"/>
 					<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_text_to_json&amp;_dispname=文本转成JSON(json_text)</func_name>
 					<param_collect name="参数" expand="yes">
 						<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
@@ -3306,6 +3306,17 @@
 						<var kinds="string" delete="no" restrict="type">$value</var>
 					</param_collect>
 				</op_print>
+			</steps_collection>
+			<steps_collection>
+				<op_call_func name="节点_调用$tool_compile_project(project_path)$" create_template="create_input_param" auto_index="0" create_label="create_internal_label">
+					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+					<apoEditorPos kinds="hide" x="284" y="463" offset_x="0" offset_y="0"/>
+					<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_tool_compile_project&amp;_dispname=tool_compile_project(project_path)</func_name>
+					<param_collect name="参数">
+						<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+						<var kinds="string" delete="no" restrict="type">../../../code/resource/script/game/apollo_script.xml</var>
+					</param_collect>
+				</op_call_func>
 			</steps_collection>
 		</unConnect>
 	</func_node>
@@ -3371,7 +3382,7 @@
 	</func_node>
 </baseFunction>
 <message_handler name="消息处理入口" delete="no" create_template="create_function_filter,create_msg_handler" auto_index="1" expand_stat="1" accept_drag_in="msg_handler_node">
-	<function_filter name="测试消息" create_template="create_msg_handler" auto_index="13" expand_stat="1" accept_drag_in="msg_handler_node">
+	<function_filter name="测试消息" create_template="create_msg_handler" auto_index="13" expand_stat="0" accept_drag_in="msg_handler_node">
 		<msg_handler_node name="message_test" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="4">
 			<func_params kinds="hide"/>
 			<comment name="函数说明" expand="yes">
@@ -3529,86 +3540,6 @@
 					<apoEditorPos kinds="hide" x="630" y="383" offset_x="0" offset_y="0"/>
 				</op_process_exit>
 			</unConnect>
-		</msg_handler_node>
-		<msg_handler_node name="message_handler12" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" nextAnchor="comment" var_name_index="1" preFillCmd="_localinit_msg_entry">
-			<func_params kinds="hide">
-				<input_param name="Param1">session</input_param>
-				<input_param name="Param2">MessageStream</input_param>
-			</func_params>
-			<apoEditorPos kinds="hide" x="20" y="400" offset_x="0" offset_y="0"/>
-			<comment name="函数说明" expand="yes">
-				<desc>消息处理handle(player, message)</desc>
-				<isGlobal kinds="bool">1</isGlobal>
-			</comment>
-			<function_init_block name="block_加载时运行" create_template="create_list2" nextAnchor="comment" auto_index="0" tips="Run-in-loaded">
-				<bluePrint_info kinds="hide" delete="no">DisableReturnVal</bluePrint_info>
-				<apoEditorPos kinds="hide" x="20" y="20" offset_x="0" offset_y="0"/>
-				<bluePrint_info kinds="hide" delete="no">DisableNewParam</bluePrint_info>
-				<bluePrint_info kinds="hide" delete="no">DisableConnectIn</bluePrint_info>
-				<comment name="功能说明" rw_stat="read">加载时运行</comment>
-				<op_call_func name="节点_安装消息处理器" expand="yes" expand_list="comment">
-					<comment name="功能说明" rw_stat="read">function_install_msg_handler(netModuleName, scriptName,maxId, minId,privilege)</comment>
-					<apoEditorPos kinds="hide" x="220" y="40" offset_x="0" offset_y="0"/>
-					<func_name name="函数" kinds="hide" delete="no">apollo_set_message_handler</func_name>
-					<var name="网络接收器" kinds="string" delete="no">listener</var>
-					<param_collect name="脚本名" kinds="hide" delete="no">
-						<type name="类型" kinds="reference" reference_type="type_data_type" delete="no">14</type>
-						<var name="值" kinds="string" delete="no" restrict="type">none</var>
-					</param_collect>
-					<msgtype name="主消息" kinds="numeral" delete="no">0</msgtype>
-					<msgtype name="次消息" kinds="numeral" delete="no">0</msgtype>
-					<varInt name="权限" kinds="enum" enum_value="none,connect,login,ingame,hight" delete="no">2</varInt>
-				</op_call_func>
-			</function_init_block>
-			<exception_catch_block name="catch_异常处理" create_template="create_list2" auto_index="0" nextAnchor="comment" tips="Run-on-except">
-				<bluePrint_info kinds="hide" delete="no">DisableReturnVal</bluePrint_info>
-				<apoEditorPos kinds="hide" x="20" y="200" offset_x="0" offset_y="0"/>
-				<bluePrint_info kinds="hide" delete="no">DisableNewParam</bluePrint_info>
-				<bluePrint_info kinds="hide" delete="no">DisableConnectIn</bluePrint_info>
-				<comment name="功能说明" rw_stat="read">catch{}</comment>
-				<op_get_last_error name="节点_获得错误号" expand="yes">
-					<comment name="功能说明" rw_stat="read">get_last_error()</comment>
-					<apoEditorPos kinds="hide" x="220" y="220" offset_x="0" offset_y="0"/>
-				</op_get_last_error>
-				<op_call_func name="节点_调用: send_error()" create_template="create_input_param" auto_index="1">
-					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-					<apoEditorPos kinds="hide" x="420" y="240" offset_x="0" offset_y="0"/>
-					<func_name kinds="user_define" user_param="func_list">_realval=CPP.gscript_send_client_error&amp;_dispname=发送错误通知(errorId)</func_name>
-					<param_collect name="参数_错误号" expand="yes" expand_stat="1">
-						<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
-						<var kinds="string" delete="no" restrict="type">0</var>
-					</param_collect>
-				</op_call_func>
-			</exception_catch_block>
-			<op_skip_error name="节点_忽略错误_for_test" kinds="hide" expand="yes">
-				<comment name="功能说明" rw_stat="read">skip_error(value)</comment>
-				<varInt name="错误类型" kinds="user_define" user_param="error_list" delete="no">_realval=47&amp;_dispname=system(NDERR_VARIANT_NOT_EXIST):variant not found</varInt>
-			</op_skip_error>
-			<op_begin_affair name="节点_出错时自动恢复数据" expand="yes" expand_stat="1">
-				<comment name="功能说明" rw_stat="read">player_affair_rollback()</comment>
-				<apoEditorPos kinds="hide" x="220" y="420" offset_x="0" offset_y="0"/>
-			</op_begin_affair>
-			<op_call_func name="节点_发送处理结果" create_template="create_input_param" auto_index="4">
-				<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-				<apoEditorPos kinds="hide" x="420" y="440" offset_x="0" offset_y="0"/>
-				<func_name kinds="user_define" user_param="func_list">send_common_reply_msg</func_name>
-				<param_collect name="参数_主消息号" expand="yes" delete="no">
-					<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-					<var kinds="string" delete="no" restrict="type">0</var>
-				</param_collect>
-				<param_collect name="参数_次消息号" expand="yes" delete="no">
-					<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-					<var kinds="string" delete="no" restrict="type">0</var>
-				</param_collect>
-				<param_collect name="参数_是否成功" expand="yes" delete="no">
-					<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-					<var kinds="string" delete="no" restrict="type">0</var>
-				</param_collect>
-				<param_collect name="参数_处理参数" expand="yes" delete="no">
-					<type kinds="reference" reference_type="type_data_type" delete="no">0</type>
-					<var kinds="string" delete="no" restrict="type">none</var>
-				</param_collect>
-			</op_call_func>
 		</msg_handler_node>
 	</function_filter>
 </message_handler>

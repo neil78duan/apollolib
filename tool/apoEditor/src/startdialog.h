@@ -96,8 +96,8 @@ private:
     ndxml_root &m_editor_setting;
     ndxml_root &m_io_setting;
 
-	std::string &editorConfigFile ;
-	std::string &ioConfigFile;
+	std::string editorConfigFile ;
+	std::string ioConfigFile;
 
 };
 

@@ -42,7 +42,7 @@ startDialog::startDialog(QWidget *parent) :
     ui(new Ui::startDialog),
 	m_editor_setting(*(apoEditorSetting::getInstant()->getConfig())),
 	m_io_setting(*(apoEditorSetting::getInstant()->getIoConfig())),
-	editorConfigFile(apoEditorSetting::getInstant()->m_edirotSettingFile),
+	editorConfigFile(apoEditorSetting::getInstant()->getConfigFileName()),
 	ioConfigFile(apoEditorSetting::getInstant()->m_ioConfigFile)
 {
     ui->setupUi(this);
@@ -234,13 +234,14 @@ bool startDialog::compileScript(const char *scriptFile)
 		orderType = atoi(orderName);
 	}
 
-	LogicCompiler lgcompile;
+	LogicCompiler &lgcompile= *LogicCompiler::get_Instant();
 
-	apoEditorSetting* setting = apoEditorSetting::getInstant();
+// 	apoEditorSetting* setting = apoEditorSetting::getInstant();
+// 
+// 	if (!lgcompile.setConfigFile(setting->getConfigFileName())) {
+// 		return false;
+// 	}
 
-	if (!lgcompile.setConfigFile(setting->m_edirotSettingFile.c_str())) {
-		return false;
-	}
 	if (!lgcompile.compileXml(inFile, outFile, outEncode, withDebug, orderType)) {
 
 		const char *pFunc = lgcompile.m_cur_function.c_str();

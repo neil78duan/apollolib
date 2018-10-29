@@ -103,7 +103,8 @@ int runDevelopTool(int argc, char *argv[])
 		exit(1);
 	}
 
-	LogicEngineRoot::setSettingFile(scriptConfig);
+	LogicCompiler::get_Instant()->setConfigFile(scriptConfig);
+	//LogicEngineRoot::setSettingFile(scriptConfig);
 	apoEditorSetting*setting = apoEditorSetting::getInstant();
 	nd_assert(setting);
 
@@ -139,9 +140,13 @@ int runGm(int argc, char *argv[])
 	_LOAD_XML(editorSetting, CONFIG_FILE_PATH, "utf8", 0);
 	_LOAD_XML(xmlSend, "../cfg/gm_msg.xml", "utf8", 0);
 	
-	LogicEngineRoot::setSettingFile(CONFIG_FILE_PATH);
+	//LogicEngineRoot::setSettingFile(CONFIG_FILE_PATH);
+	if (!LogicCompiler::get_Instant()->setConfigFile(CONFIG_FILE_PATH, ND_ENCODE_UTF8)) {
+		QMessageBox::critical(NULL, "Error", "open config file error");
+		exit(1);
+	}
 
-	dlg.m_editor_setting = &editorSetting;
+	dlg.m_editor_setting = LogicCompiler::get_Instant()->getConfig();
 	dlg.m_gmCfg = &xmlSend;
 
 	dlg.LoadClientScript("../data/client_script.bin","../data/cehua_data.dat");
