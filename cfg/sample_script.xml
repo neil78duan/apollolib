@@ -14,7 +14,7 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">./setting/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1540808630</LastMod>
+	<LastMod name="最后修改" kinds="hide">1540982728</LastMod>
 	<EditorVersion kinds="hide">1.1.0</EditorVersion>
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="43" expand_stat="0" accept_drag_in="func_node">
@@ -3172,7 +3172,7 @@
 		</op_print>
 		<op_call_func name="节点_调用$Function$" create_template="create_input_param" auto_index="0" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-			<apoEditorPos kinds="hide" x="1062" y="569" offset_x="0" offset_y="0"/>
+			<apoEditorPos kinds="hide" x="1060" y="568" offset_x="0" offset_y="0"/>
 			<param_collect name="函数名" delete="no">
 				<type name="类型" kinds="reference" reference_type="type_data_type" delete="no">20</type>
 				<var name="值" kinds="string" delete="no" restrict="type" replace_val="../../.name">_realval=__closure_5&amp;_dispname=Closure</var>
@@ -3190,7 +3190,7 @@
 				<var kinds="string" delete="no" restrict="type">var1</var>
 			</param_collect>
 		</op_call_func>
-		<apoEditorPos kinds="hide" x="-79" y="482" offset_x="48" offset_y="-117"/>
+		<apoEditorPos kinds="hide" x="-79" y="482" offset_x="-12" offset_y="-129"/>
 		<unConnect kinds="hide"/>
 		<closure_entry name="闭包" create_template="create_list2" auto_index="0" nextAnchor="comment" tips="Closure">
 			<comment name="功能说明" rw_stat="read">闭包(...){}</comment>
@@ -3266,12 +3266,12 @@
 			</param_collect>
 		</op_call_func>
 		<var_init_block/>
-		<apoEditorPos kinds="hide" x="85" y="309" offset_x="0" offset_y="0"/>
+		<apoEditorPos kinds="hide" x="21" y="242" offset_x="0" offset_y="0"/>
 		<unConnect kinds="hide">
 			<steps_collection>
 				<op_call_func name="节点_调用$加载json文件(jsonFilePath)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-					<apoEditorPos kinds="hide" x="691" y="498" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="757" y="487" offset_x="0" offset_y="0"/>
 					<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_load_json_file&amp;_dispname=加载json文件(jsonFilePath)</func_name>
 					<param_collect name="参数" expand="yes">
 						<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
@@ -3282,7 +3282,7 @@
 			<steps_collection>
 				<op_call_func name="节点_调用$读取文件作为字符串(filename)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-					<apoEditorPos kinds="hide" x="558" y="335" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="571" y="323" offset_x="0" offset_y="0"/>
 					<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_load_file_as_string&amp;_dispname=读取文件作为字符串(filename)</func_name>
 					<param_collect name="参数" expand="yes">
 						<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
@@ -3291,7 +3291,7 @@
 				</op_call_func>
 				<op_call_func name="节点_调用$文本转成JSON(json_text)$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-					<apoEditorPos kinds="hide" x="736" y="277" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="778" y="282" offset_x="0" offset_y="0"/>
 					<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_text_to_json&amp;_dispname=文本转成JSON(json_text)</func_name>
 					<param_collect name="参数" expand="yes">
 						<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
@@ -3300,7 +3300,7 @@
 				</op_call_func>
 				<op_print name="节点_打印" create_template="create_input_param" auto_index="0" expand_list="comment" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">print(...)</comment>
-					<apoEditorPos kinds="hide" x="910" y="365" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="970" y="363" offset_x="0" offset_y="0"/>
 					<param_collect name="参数" expand="yes">
 						<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
 						<var kinds="string" delete="no" restrict="type">$value</var>
@@ -3310,13 +3310,33 @@
 			<steps_collection>
 				<op_call_func name="节点_调用$tool_compile_project(project_path)$" create_template="create_input_param" auto_index="0" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-					<apoEditorPos kinds="hide" x="284" y="463" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="634" y="90" offset_x="0" offset_y="0"/>
 					<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_tool_compile_project&amp;_dispname=tool_compile_project(project_path)</func_name>
 					<param_collect name="参数">
 						<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
 						<var kinds="string" delete="no" restrict="type">../../../code/resource/script/game/apollo_script.xml</var>
 					</param_collect>
 				</op_call_func>
+			</steps_collection>
+			<steps_collection>
+				<op_call_func name="节点_调用$加载脚本(scriptn_name)$" create_template="create_input_param" auto_index="0" create_label="create_internal_label">
+					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+					<apoEditorPos kinds="hide" x="174" y="396" offset_x="0" offset_y="0"/>
+					<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_load_script_file&amp;_dispname=加载脚本(scriptn_name)</func_name>
+					<param_collect name="参数">
+						<type kinds="reference" reference_type="type_data_type" delete="no">18</type>
+						<var kinds="string" delete="no" restrict="type">../../../code/data/client_script.bin</var>
+					</param_collect>
+				</op_call_func>
+				<op_remote_call name="节点_远程调用$export_c_functions$" create_template="create_input_param" auto_index="0" create_label="create_internal_label">
+					<comment name="功能说明" rw_stat="read">remote_call(module, func_name,...)</comment>
+					<apoEditorPos kinds="hide" x="410" y="493" offset_x="0" offset_y="0"/>
+					<func_name name="模块名" kinds="string">apoClient</func_name>
+					<param_collect name="函数名" delete="no">
+						<type name="类型" kinds="reference" reference_type="type_data_type" delete="no">2</type>
+						<var name="值" kinds="string" delete="no" restrict="type" replace_val="../../.name">export_c_functions</var>
+					</param_collect>
+				</op_remote_call>
 			</steps_collection>
 		</unConnect>
 	</func_node>
@@ -3382,8 +3402,8 @@
 	</func_node>
 </baseFunction>
 <message_handler name="消息处理入口" delete="no" create_template="create_function_filter,create_msg_handler" auto_index="1" expand_stat="1" accept_drag_in="msg_handler_node">
-	<function_filter name="测试消息" create_template="create_msg_handler" auto_index="13" expand_stat="0" accept_drag_in="msg_handler_node">
-		<msg_handler_node name="message_test" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="4">
+	<function_filter name="测试消息" create_template="create_msg_handler" auto_index="13" expand_stat="1" accept_drag_in="msg_handler_node">
+		<msg_handler_node name="message_test" enable_drag="yes" name_auto_index="auto_index" create_template="create_list2" auto_index="0" expand_list="comment" expand_stat="1" var_name_index="6">
 			<func_params kinds="hide"/>
 			<comment name="函数说明" expand="yes">
 				<desc>消息处理handle(player, message)</desc>

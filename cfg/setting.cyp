@@ -101,6 +101,7 @@
 	<list instruction="1" ins_id="42" size="0"  >op_math_operate</list>
 	<list instruction="1" ins_id="43" size="0" desc="赋值操作" >op_assignin</list>
 	<list instruction="1" ins_id="44" size="0" desc="判断变量" >op_var_test</list>	
+	<list instruction="1" ins_id="45" size="0" record_param_num="1" >op_remote_call</list>
 	<list instruction="1" ins_id="47" size="0" >op_test</list>
 	<list instruction="1" ins_id="48" size="8" >op_skip_error</list>
 	<list instruction="1" ins_id="49" size="0" >op_get_arrsize</list>
@@ -898,9 +899,8 @@
 			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name" >none</func_name>
 		</op_call_func>
 	</create_step_call_func>
-	
-	
-	<create_step_call_manual name="执行手动输入函数" create_type="1" >
+		
+	<create_step_call_manual name="手动调用函数" create_type="1" >
 		<op_call_func name="节点_调用$Function$" create_template="create_input_param"  auto_index="0"  create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
 			<param_collect name="函数名" delete="no">
@@ -909,6 +909,18 @@
 			</param_collect>
 		</op_call_func>
 	</create_step_call_manual>
+	
+	<create_step_remote_call name="跨模块调用" create_type="1" >
+		<op_remote_call name="节点_远程调用$Function$" create_template="create_input_param"  auto_index="0"  create_label="create_internal_label">
+			<comment name="功能说明" rw_stat="read">remote_call(module, func_name,...)</comment>			
+			<func_name name="模块名" kinds="string" >module</func_name>			
+			<param_collect name="函数名" delete="no">
+				<type name="类型" kinds="reference" reference_type="type_data_type" delete="no">2</type>
+				<var name="值" kinds="string" delete="no" restrict="type" replace_val="../../.name">none</var>
+			</param_collect>
+		</op_remote_call>
+	</create_step_remote_call>
+	
 	
 	<create_step_print name="打印输出" create_type="1" >
 		<op_print name="节点_打印" create_template="create_input_param" auto_index="0"  create_label="create_internal_label">
@@ -1394,104 +1406,99 @@
 	</create_function_init_block>
 	
 	<create_list1 name="create_base_function" create_type="2">
-		<list>create_function_init_block</list>
-		<list>create_step_error_catch_block</list>		
-		<list>create_step_print</list>
-		<list>create_step_log</list>
-		<list>create_step_throw</list>		
-		<list>create_step_exit</list>
-		<list>create_function_return</list>
-		<list>create_get_last_error</list>	
-		<list>create_step_set_error</list>
+		<filter name="入口出口">
+			<list>create_function_init_block</list>
+			<list>create_closure</list>		
+			<list>create_step_exit</list>
+			<list>create_function_return</list>
+			<list>create_step_process_exit</list>
+			<list>create_step_process_abort</list>
+		</filter>
+		<filter name="异常错误">
+			<list>create_step_error_catch_block</list>
+			<list>create_step_throw</list>
+			<list>create_get_last_error</list>	
+			<list>create_step_set_error</list>		
+			<list>create_skip_error</list>
+			<list>create_error_continue</list>			
+		</filter>
 		
-		<list>create_skip_error</list>
-		<!-- list>create_get_simulate_stat</list -->
-		<list>create_error_continue</list>
+		<filter name="基础功能">
+			<list>create_step_call_func</list>
+			<list>create_step_call_manual</list>
+			<list>create_step_remote_call</list>
+			<list>create_make_var</list>
+			<list>create_global_var</list>
+			<list>create_step_type_transfer</list>			
+			<list>create_step_print</list>
+			<list>create_step_log</list>			
+			<list>create_assignin</list>
+			<list>create_set_CurValue</list>			
+			<list>create_build_json_data</list>
+			<list>create_build_struct_type</list>		
+			<list>create_get_arrsize</list>
+		</filter>
+				
+		<filter name="逻辑控制">
+			<list>create_op_comp</list>
+			<list>create_step_var_test</list>
+			<list>create_get_simulate_test</list>
+			<list>create_step_curvalue_test</list>
+			<list>create_host_debug_test</list>
+			<list>create_script_debug_test</list>
+			<list>create_break</list>
+			<list>create_success_break</list>		
+			<list>op_error_break</list>
+			<list>create_step_true_exit</list>	
+			<list>create_step_false_eixt</list>
+			<list>create_step_bool_entry</list>
+			<list>create_step_loop_entry</list>	
+			<list>create_comp_steps</list>
+			<list>create_switch_case</list>
+		</filter>
 		
-		<list>create_step_read</list>
-		<list>create_step_write</list>
-		<list>create_step_add</list>
-		<list>create_step_sub</list>
-		<list>create_step_test</list>	
-		<list>create_step_operate</list>	
-		
-		
-		<list>create_read_table</list>
-		<list>create_step_calc</list>
-		<list>create_step_getother_object</list>
-		
-		<list>create_step_call_func</list>
-		<list>create_make_var</list>
-		<list>create_global_var</list>		
-		<list>create_step_type_transfer</list>
-		
-		<list>create_step_waitevent</list>
-		<list>create_step_send_event</list>
-		<list>create_install_event</list>
-		<list>create_remove_event</list>
-		<list>create_add_timer</list>
-		<list>create_del_timer</list>
-		
-		<list>create_op_comp</list>
-		<list>create_step_var_test</list>
-		<list>create_get_simulate_test</list>
-		<list>create_step_curvalue_test</list>
-		<list>create_host_debug_test</list>
-		<list>create_script_debug_test</list>
-	
-		
-		<list>create_break</list>
-		<list>create_success_break</list>		
-		<list>op_error_break</list>
-		<list>create_step_true_exit</list>	
-		<list>create_step_false_eixt</list>	
-	
-		<list>create_step_bool_entry</list>
-		<list>create_step_loop_entry</list>	
-		<list>create_comp_steps</list>
-		<list>create_switch_case</list>
-		
-		<!-- list>create_test_current_value</list>
-		<list>create_test_machine_is_simulate</list>		
-		<list>create_test_script_debug</list>	
-		<list>create_test_host_debug</list -->
-		
-		<list>create_get_arrsize</list>
-		
-		<list>create_build_json_data</list>
-		<list>create_build_struct_type</list>
-		<list>create_step_get_user_data_type</list>
-		
-		<list>create_math_operate</list>
-		<list>create_bit_operate</list>
-		
-		<list>create_assignin</list>
-		<list>create_set_CurValue</list>
-		
-		
-		<list>create_step_inistall_msg_handler</list>
-		<list>create_step_send_msg</list>	
-		
-		<list>create_step_read_msg</list>	
-		<list>create_step_read_datatype_msg</list>
-		
-		<list>create_step_get_time</list>
-		<list>create_step_changed_time</list>
-		<list>create_step_time_function</list>
-		
-		<list>create_step_begin_affair</list>
-		<list>create_step_commit_affair</list>
-		<list>create_http_body_build</list>
-		
-		<list>create_step_read_excel_attr</list>
-		<list>create_step_process_exit</list>	
-		<list>create_step_process_abort</list>	
-		<list>create_cur_parser</list>
-		<list>create_closure</list>
-		<list>create_step_call_manual</list>
-		<list>create_bt_selector</list>
-		<list>create_bt_sequence</list>
-		
+		<filter name="数学运算">
+			<list>create_step_calc</list>
+			<list>create_math_operate</list>
+			<list>create_bit_operate</list>
+		</filter>
+		<filter name="系统功能">
+			<list>create_step_waitevent</list>
+			<list>create_step_send_event</list>
+			<list>create_install_event</list>
+			<list>create_remove_event</list>		
+			<list>create_step_get_time</list>
+			<list>create_step_changed_time</list>
+			<list>create_step_time_function</list>
+			<list>create_add_timer</list>
+			<list>create_del_timer</list>
+			<list>create_cur_parser</list>
+			<list>create_http_body_build</list>
+		</filter>
+		<filter name="对象操作">		
+			<list>create_step_read</list>
+			<list>create_step_write</list>
+			<list>create_step_add</list>
+			<list>create_step_sub</list>
+			<list>create_step_test</list>	
+			<list>create_step_operate</list>			
+			<list>create_step_getother_object</list>
+		</filter>
+		<filter name="游戏开发">
+			<list>create_read_table</list>
+			<list>create_step_begin_affair</list>
+			<list>create_step_commit_affair</list>
+			<list>create_step_read_excel_attr</list>
+			<list>create_step_get_user_data_type</list>
+			<list>create_step_inistall_msg_handler</list>
+			<list>create_step_send_msg</list>		
+			<list>create_step_read_msg</list>	
+			<list>create_step_read_datatype_msg</list>
+		</filter>		
+		<filter name="行为树">		
+			<list>create_bt_selector</list>
+			<list>create_bt_sequence</list>
+		</filter>
 	</create_list1>		
 	<create_list2 name="create_message_handler" create_type="2" ref_from="yes">../create_list1</create_list2>
 </create_template>

@@ -236,12 +236,6 @@ bool startDialog::compileScript(const char *scriptFile)
 
 	LogicCompiler &lgcompile= *LogicCompiler::get_Instant();
 
-// 	apoEditorSetting* setting = apoEditorSetting::getInstant();
-// 
-// 	if (!lgcompile.setConfigFile(setting->getConfigFileName())) {
-// 		return false;
-// 	}
-
 	if (!lgcompile.compileXml(inFile, outFile, outEncode, withDebug, orderType)) {
 
 		const char *pFunc = lgcompile.m_cur_function.c_str();
@@ -467,9 +461,6 @@ bool startDialog::runTest()
 
     do 	{
         const char*attr_table = _getFromIocfg("role_attr_table");
-        //const char*state_table = _getFromIocfg("role_state_table");
-        //const char*forbid_table = _getFromIocfg("role_forbid_table");
-        //const char*operate_table = _getFromIocfg("role_operate_check_table");
         NDSingleton<RoleAttrHelper>::Destroy();
         StatMachine::Destroy();
 
@@ -532,9 +523,7 @@ void startDialog::on_Connect_clicked()
     WriteLog("begin connect to server....");
 
     const char*filename = _getFromIocfg("gm_send_msg");
-	//const char *dataTypeFile = _getFromIocfg("net_data_def");
 	const char *client_script = _getFromIocfg("connect_script");
-	//const char *message_file = _getFromIocfg("net_protocol");
 	const char *package_file = _getFromIocfg("game_data_package_file");
 
 	_LOAD_XML(xmlSend, filename, "utf8", 0);
@@ -542,9 +531,6 @@ void startDialog::on_Connect_clicked()
 
     ConnectDialog dlg(NULL) ;
 	
-	//dlg.setWindowFlags(Qt::Popup);
-	//dlg.setWindowFlags(Qt::Window);
-
     dlg.m_editor_setting =&m_editor_setting;
     dlg.m_gmCfg = &xmlSend;
 	
