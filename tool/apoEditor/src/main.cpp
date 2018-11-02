@@ -103,18 +103,10 @@ int runDevelopTool(int argc, char *argv[])
 		exit(1);
 	}
 
-	LogicCompiler::get_Instant()->setConfigFile(scriptConfig);
-	//LogicEngineRoot::setSettingFile(scriptConfig);
-	apoEditorSetting*setting = apoEditorSetting::getInstant();
-	nd_assert(setting);
-
-	if (!setting->Init(rootConfog, scriptConfig, APO_QT_SRC_TEXT_ENCODE)){
-		QMessageBox::warning(NULL, "Error", "load config file error, Please Reload", QMessageBox::Yes);
-		exit(1);
-	}
-
 	startDialog dlg;
-
+	if (!dlg.InitConfigFile(rootConfog, scriptConfig)) {
+		QMessageBox::warning(NULL, "Error", "load config file error, Please Restart", QMessageBox::Yes);
+	}
 	dlg.show();
 	return a.exec();
 }

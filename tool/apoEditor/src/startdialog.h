@@ -48,6 +48,7 @@ public:
 
     void ClearLog() ;
     void WriteLog(const char *logText) ;
+	bool InitConfigFile(const char *ioConfig, const char *scriptSetting);
 	
 private slots:
     void on_Exit_clicked();

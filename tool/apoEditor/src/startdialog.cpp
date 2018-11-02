@@ -57,6 +57,18 @@ startDialog::~startDialog()
 }
 
 
+bool startDialog::InitConfigFile(const char *ioConfig, const char *scriptSetting)
+{
+	if (!LogicCompiler::get_Instant()->setConfigFile(scriptSetting)) {
+		return false;
+	}
+
+	if (!apoEditorSetting::getInstant()->Init(ioConfig, scriptSetting, APO_QT_SRC_TEXT_ENCODE)) {
+		return false;
+	}
+	return true;
+}
+
 void startDialog::ClearLog()
 {
     ui->LogText->clear();
@@ -66,11 +78,6 @@ void startDialog::ClearLog()
 
 void startDialog::WriteLog(const char *logText)
 {
-// #ifdef WIN32
-// 	char buf[1024];
-// 	nd_gbk_to_utf8(logText, buf, sizeof(buf));
-// 	logText = buf ;
-// #endif
 	QTextEdit *pEdit = ui->LogText;
 	pEdit->moveCursor(QTextCursor::End);
 	pEdit->insertPlainText(QString(logText));
