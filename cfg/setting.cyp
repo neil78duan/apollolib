@@ -20,7 +20,8 @@
 	<type_encode kinds="enum" enum_value="ansi,gbk,utf8"/>
 	<type_time_unit kinds="enum" enum_value="秒,分钟,小时,天,月,年,星期"/>
 	<type_time_cmd kinds="enum" enum_value="获得,增加,减少,计数间隔"/>
-	<type_week kinds="key_value" key="星期1,星期2,星期3,星期4,星期5,星期6,星期天" value="1,2,3,4,5,6,0"/>
+	<type_week kinds="key_value" key="星期1,星期2,星期3,星期4,星期5,星期6,星期天" value="1,2,3,4,5,6,0"/>	
+	<type_input_text_data kinds="key_value" key="整数,浮点,文本,长整数,数组,时间,jSON" value="0,1,2,5,7,8,12"/>
 </data_type_define>
 
 <blueprint_node_name kinds="hide"  desc="define exe-node and blue-printf ui relation">
@@ -102,6 +103,7 @@
 	<list instruction="1" ins_id="43" size="0" desc="赋值操作" >op_assignin</list>
 	<list instruction="1" ins_id="44" size="0" desc="判断变量" >op_var_test</list>	
 	<list instruction="1" ins_id="45" size="0" record_param_num="1" >op_remote_call</list>
+	<list instruction="1" ins_id="46" size="0">op_text_to_data</list>
 	<list instruction="1" ins_id="47" size="0" >op_test</list>
 	<list instruction="1" ins_id="48" size="8" >op_skip_error</list>
 	<list instruction="1" ins_id="49" size="0" >op_get_arrsize</list>
@@ -602,7 +604,7 @@
 		<op_time_function name="节点_时间计算"   create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">time_fun(cmd, unit, time1, val)</comment>			
 			<varInt name="操作类型"  kinds="reference" reference_type="type_time_cmd" delete="no">0</varInt>
-			<varInt name="时间单位"  kinds="reference" reference_type="type_time_unit" delete="no">0</varInt>			
+			<varInt name="时间单位"  kinds="reference" reference_type="type_time_unit" delete="no">0</varInt>
 			<param_collect name="参数1"  delete="no">
 				<type name="参数1类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
 				<var name="参数1值" kinds="string" delete="no" restrict="type">none</var>
@@ -784,6 +786,20 @@
 			<index name="新类型" kinds="reference" reference_type="type_data_type" delete="no">0</index>
 		</op_type_transfer>
 	</create_step_type_transfer>
+	
+	
+	<create_step_text_to_type name="文本转其他类型" create_type="1" >
+		<op_text_to_data name="节点_文本转类型"  create_label="create_internal_label" >			
+			<comment name="功能说明" rw_stat="read">data.Text2Data( text,typeIndex )</comment>
+			<param_collect name="文本变量" delete="no">
+				<type name="类型" kinds="reference" reference_type="type_data_type" delete="no">2</type>
+				<var name="内容" kinds="string" delete="no" restrict="type">0</var>
+			</param_collect>			
+			<varInt name="类型"  kinds="reference" reference_type="type_input_text_data" delete="no">0</varInt>
+		</op_text_to_data>
+	</create_step_text_to_type>
+	
+	
 	
 	
 	<create_math_operate name="数学运算符" create_type="1" >
@@ -1437,6 +1453,7 @@
 			<list>create_build_json_data</list>
 			<list>create_build_struct_type</list>		
 			<list>create_get_arrsize</list>
+			<list>create_step_text_to_type</list>			
 		</filter>
 				
 		<filter name="逻辑控制">
