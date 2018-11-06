@@ -19,9 +19,6 @@
     <Filter Include="apollo\login">
       <UniqueIdentifier>{2a9e2e84-5966-4c1b-b78d-7839273bc3af}</UniqueIdentifier>
     </Filter>
-    <Filter Include="apollo\attribute">
-      <UniqueIdentifier>{92f4ee1f-00b8-4350-89c1-a09a1d31b1df}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{58e4e73a-82b8-44a1-bcca-0f76afea7d4f}</UniqueIdentifier>
     </Filter>
@@ -36,6 +33,9 @@
     </Filter>
     <Filter Include="src\nd_vm">
       <UniqueIdentifier>{ce78ea7f-4115-4bd4-86b5-5b0d69effb78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="apollo\parser4game">
+      <UniqueIdentifier>{7476a78a-5c34-4b23-8e4e-93bd1550cd6f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -180,12 +180,6 @@
     <ClInclude Include="..\..\cli_common\login_apollo.h">
       <Filter>apollo\login</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\attribute\attr_mgr.h">
-      <Filter>apollo\attribute</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\attribute\roleattr_help.h">
-      <Filter>apollo\attribute</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\plugin_u3d\apoCliApi.h">
       <Filter>apollo</Filter>
     </ClInclude>
@@ -207,6 +201,15 @@
     <ClInclude Include="..\..\plugin_u3d\apoAttrCalcHelper.h">
       <Filter>apollo</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\game_parser\apoGameCommon.h">
+      <Filter>apollo\parser4game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\game_parser\dbldata2netstream.h">
+      <Filter>apollo\parser4game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\game_parser\dbl_mgr.h">
+      <Filter>apollo\parser4game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp">
@@ -214,12 +217,6 @@
     </ClCompile>
     <ClCompile Include="..\..\cli_common\login_apollo.cpp">
       <Filter>apollo\login</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\attribute\attr_mgr.cpp">
-      <Filter>apollo\attribute</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\attribute\roleattr_help.cpp">
-      <Filter>apollo\attribute</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_datatransfer.cpp">
       <Filter>src</Filter>
@@ -421,6 +418,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_logger.c">
       <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\game_parser\apoGameCommon.cpp">
+      <Filter>apollo\parser4game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\game_parser\dbldata2netstream.cpp">
+      <Filter>apollo\parser4game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\game_parser\dbl_mgr.cpp">
+      <Filter>apollo\parser4game</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

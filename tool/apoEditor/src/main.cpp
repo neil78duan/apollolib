@@ -157,6 +157,8 @@ int runGm(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
+	initGlobalParser();
+
 	for (int i = 1; i < argc ; i++){
 		if (0 == ndstricmp(argv[i], "--rungmtool"))	{
 			return runGm( argc, argv);
@@ -165,6 +167,8 @@ int main(int argc, char *argv[])
 			return runDevelopTool(argc, argv);
 		}
 	}
+
+
 #if defined (__ND_MAC__)
     return runDevelopTool(argc, argv);
 #endif

@@ -14,9 +14,9 @@
 
 #ifndef WITHOUT_LOGIC_PARSER
 //#include "netMessage/message_inc.h"
-#include "logic_parser/dbl_mgr.h"
+#include "game_parser/dbl_mgr.h"
+#include "game_parser/dbldata2netstream.h"
 #include "logic_parser/logicEngineRoot.h"
-#include "logic_parser/dbldata2netstream.h"
 #include "logic_parser/logic_compile.h"
 #endif 
 
@@ -62,7 +62,7 @@ namespace ClientMsgHandler
 	{
 		m_conn = conn;
 	}
-	bool ApoConnectScriptOwner::getOtherObject(const char*objName, DBLDataNode &val)
+	bool ApoConnectScriptOwner::getOtherObject(const char*objName, LogicDataObj &val)
 	{
 		if (0==ndstricmp(objName, "connector") || 0 == ndstricmp(objName, "session")){
 			if (!m_conn) {
@@ -73,7 +73,7 @@ namespace ClientMsgHandler
 			return true;
 		}
 		else if (0==ndstricmp(objName, "FormatMsgData")){
-			val.InitSet((void*)&(LogicEngineRoot::get_Instant()->getGlobalDataType()));
+			val.InitSet((void*)&getGlobalNetMsgFormat());
 			return true;
 		}
 		else if (0 == ndstricmp(objName, "msgIdNameFormat")) {
@@ -146,7 +146,7 @@ namespace ClientMsgHandler
 
 	bool ApoConnectScriptOwner::loadDataType(const char *file)
 	{
-		if (-1 == loadUserDefFromMsgCfg(file, LogicEngineRoot::get_Instant()->getGlobalDataType())){
+		if (-1 == InitLoadNetMsgFormat(file)){
 			return false;
 		}
 		return true;
@@ -169,13 +169,13 @@ namespace ClientMsgHandler
 
 	userDefineDataType_map_t *getDataFormat(NDIConn *pconn)
 	{
-		DBLDataNode val;
+		LogicDataObj val;
 		_GET_OBJ_FROM_MGR(pconn, "FormatMsgData", val);
 		return (userDefineDataType_map_t *)val.GetObjectAddr();
 	}
 	logic_print getLogFunction(NDIConn *pconn)
 	{
-		DBLDataNode val;
+		LogicDataObj val;
 
 		_GET_OBJ_FROM_MGR(pconn, "LogFunction", val);
 		return (logic_print)val.GetObjectAddr();
@@ -183,13 +183,13 @@ namespace ClientMsgHandler
 
 	std::string getWritablePath(NDIConn *pconn)
 	{
-		DBLDataNode val;
+		LogicDataObj val;
 		_GET_OBJ_FROM_MGR(pconn, "WritablePath", val);
 		return val.GetString();
 	}
 	std::string getLogPath(NDIConn *pconn)
 	{
-		DBLDataNode val;
+		LogicDataObj val;
 
 		_GET_OBJ_FROM_MGR(pconn, "LogPath", val);
 		return val.GetString();
@@ -197,7 +197,7 @@ namespace ClientMsgHandler
 
 	std::string getDataPath(NDIConn *pconn)
 	{
-		DBLDataNode val;
+		LogicDataObj val;
 
 		_GET_OBJ_FROM_MGR(pconn, "DataPath", val);
 		return val.GetString();
@@ -223,7 +223,7 @@ namespace ClientMsgHandler
 
 	ApoConnectScriptOwner *getScriptOwner(NDIConn *pconn) 
 	{
-		DBLDataNode val;
+		LogicDataObj val;
 		_GET_OBJ_FROM_MGR(pconn, "LogPath", val);
 		return (ApoConnectScriptOwner *)val.GetObjectAddr();
 	}
@@ -261,7 +261,7 @@ namespace ClientMsgHandler
 
 	void* getLogFile(NDIConn *pconn)
 	{
-		DBLDataNode val;
+		LogicDataObj val;
 
 		_GET_OBJ_FROM_MGR(pconn, "LogFile", val);
 		return val.GetObjectAddr();
@@ -270,7 +270,7 @@ namespace ClientMsgHandler
 
 	msgIdNameFormat_vct* getMsgIdNameFormat(NDIConn *pconn)
 	{
-		DBLDataNode val;
+		LogicDataObj val;
 
 		_GET_OBJ_FROM_MGR(pconn, "msgIdNameFormat", val);
 		return (msgIdNameFormat_vct*)val.GetObjectAddr();
@@ -395,22 +395,22 @@ namespace ClientMsgHandler
 // 		nd_assert(scriptEngine);
 // 
 // 		//call function 
-// 		//DBLDataNode data;
+// 		//LogicDataObj data;
 // 		parse_arg_list_t params;
 // 
 // 		//function name 
 // 		//data.InitSet(script);
-// 		params.push_back(DBLDataNode(script));
+// 		params.push_back(LogicDataObj(script));
 // 
 // 		//receive message user
 // 		//data.InitSet((void*)pSession, OT_OBJ_BASE_OBJ);
-// 		params.push_back(DBLDataNode(handle, OT_OBJ_NDHANDLE));
+// 		params.push_back(LogicDataObj(handle, OT_OBJ_NDHANDLE));
 // 
 // 		//message object
 // 		//data.InitSet((void*)&inmsg, OT_OBJ_MSGSTREAM);
-// 		params.push_back(DBLDataNode((void*)&inmsg, OT_OBJ_MSGSTREAM));
+// 		params.push_back(LogicDataObj((void*)&inmsg, OT_OBJ_MSGSTREAM));
 // 
-// 		DBLDataNode result;
+// 		LogicDataObj result;
 // 		scriptEngine->runScript(script, params, result);
 // 		//bool ret = LogicEngineRoot::get_Instant()->runScript(script, scriptEngine, params, result);
 // 		return 0;
@@ -477,7 +477,7 @@ namespace ClientMsgHandler
 			return msg_default_handler(pconn, msg);
 		}
 
-		DBLDataNode dataFormat;
+		LogicDataObj dataFormat;
 		char namebuf[128];
 		outfunc(NULL, "%s (%d,%d): ", convert_msg_name(pName, namebuf, 128), inmsg.MsgMaxid(), inmsg.MsgMinid());
 		outPutMessageFromconfig(pconn, body, inmsg, *pFormat);
@@ -502,7 +502,7 @@ namespace ClientMsgHandler
 		NetMessage::ReadStream(inmsg, reply);
 
 		if (reply.errtType == NetMessage::COMMON_ERROR_TYPE_SHORT_ITEM){
-		DBLDataNode data = DBL_FindDataObjectByname("item.xlsx", reply.param, "name");
+		LogicDataObj data = DBL_FindDataObjectByname("item.xlsx", reply.param, "name");
 		if (!data.CheckValid())	{
 		data = DBL_FindDataObjectByname("equip_attr.xlsx", reply.param, "name");
 		if (!data.CheckValid())		{
@@ -513,7 +513,7 @@ namespace ClientMsgHandler
 		nd_logmsg("COMMON-ERROR-MESSAGE:short item [ %s ] \n", data.GetText());
 		}
 		else if (reply.errtType == NetMessage::COMMON_ERROR_TYPE_ATTR_LOW) {
-		DBLDataNode data = DBL_FindDataObjectByname("role_attr_config.xlsx", reply.param, "name");
+		LogicDataObj data = DBL_FindDataObjectByname("role_attr_config.xlsx", reply.param, "name");
 		if (!data.CheckValid())	{
 		nd_logmsg("COMMON-ERROR-MESSAGE:[ %d ] 不够\n", reply.param);
 		}
@@ -527,7 +527,7 @@ namespace ClientMsgHandler
 		}
 		else if (reply.errtType == NetMessage::COMMON_ERROR_TYPE_IN_TABLE) {
 
-		DBLDataNode data = DBL_FindDataObjectByname("error.xlsx", reply.param, "desc");
+		LogicDataObj data = DBL_FindDataObjectByname("error.xlsx", reply.param, "desc");
 		if (!data.CheckValid())	{
 		nd_logmsg("COMMON-ERROR-MESSAGE: error-id =%d\n", reply.param);
 		}

@@ -56,7 +56,7 @@ int UserAdditionData::FromStream(void *data, size_t size, int byteOrder )
 		p += len;
 		size -= len;
 
-		DBLDataNode val;
+		LogicDataObj val;
 		len = val.ReadStream(p,size,byteOrder);
 		if (-1== len){
 			return -1;
@@ -128,7 +128,7 @@ int UserAdditionData::ToStream(void *buf, size_t bufsize,int byteOrder, bool wit
 	return (int) (p - (char*)buf);
 }
 
-bool UserAdditionData::convert2node(DBLDataNode &val, int byteOrder, bool withTypeName ) const
+bool UserAdditionData::convert2node(LogicDataObj &val, int byteOrder, bool withTypeName ) const
 {
 	int len ;
 	char buf[0x10000] ;
@@ -144,7 +144,7 @@ bool UserAdditionData::convert2node(DBLDataNode &val, int byteOrder, bool withTy
 	
 }
 
-bool UserAdditionData::Init(const DBLDataNode *val, int version ,int byteOrder)
+bool UserAdditionData::Init(const LogicDataObj *val, int version ,int byteOrder)
 {
 	if (val->GetDataType() == OT_BINARY_DATA) {
 		FromStream(val->GetBinary(),val->GetBinarySize(),byteOrder);
@@ -155,7 +155,7 @@ bool UserAdditionData::Init(const DBLDataNode *val, int version ,int byteOrder)
 }
 
 
-const DBLDataNode *UserAdditionData::getData(const char *name) const
+const LogicDataObj *UserAdditionData::getData(const char *name) const
 {
 	user_addition_map::const_iterator it = m_data_map.find(std::string(name));
 	if (it == m_data_map.end()) {
@@ -173,7 +173,7 @@ bool UserAdditionData::removeData(const char *name)
 	}
 	return true;
 }
-bool UserAdditionData::setData(const char *name, const  DBLDataNode &val, const char*typeName)
+bool UserAdditionData::setData(const char *name, const  LogicDataObj &val, const char*typeName)
 {
 	user_addition_map::iterator it = m_data_map.find(std::string(name));
 	if (it == m_data_map.end()) {
@@ -189,20 +189,20 @@ bool UserAdditionData::setData(const char *name, const  DBLDataNode &val, const 
 
 bool UserAdditionData::setData(const char *name, void*binData, size_t size, const char*typeName)
 {
-	return setData(name, DBLDataNode(binData, size),typeName);
+	return setData(name, LogicDataObj(binData, size),typeName);
 }
 bool UserAdditionData::setData(const char *name, const userdata_info*data, const char*typeName)
 {
-	return setData(name, DBLDataNode((void*)data, data->get_stream_len()), typeName);
+	return setData(name, LogicDataObj((void*)data, data->get_stream_len()), typeName);
 }
 
-bool UserAdditionData::opRead(const DBLDataNode& id, DBLDataNode &val)
+bool UserAdditionData::opRead(const LogicDataObj& id, LogicDataObj &val)
 {
 	const char *name = id.GetText();
 	if (!name || !*name) {
 		return false;
 	}
-	const DBLDataNode *pdata = getData(name);
+	const LogicDataObj *pdata = getData(name);
 	if (!pdata)	{
 		//m_error = NDSYS_ERR_PROGRAM_OBJ_NOT_FOUND;
 		return false;
@@ -210,7 +210,7 @@ bool UserAdditionData::opRead(const DBLDataNode& id, DBLDataNode &val)
 	val = *pdata;
 	return true;
 }
-bool UserAdditionData::opWrite(const DBLDataNode& id, const DBLDataNode &val)
+bool UserAdditionData::opWrite(const LogicDataObj& id, const LogicDataObj &val)
 {
 	const char *name = id.GetText();
 	if (!name || !*name) {
@@ -219,7 +219,7 @@ bool UserAdditionData::opWrite(const DBLDataNode& id, const DBLDataNode &val)
 	return setData(name, val);
 }
 
-bool UserAdditionData::opAdd(const DBLDataNode& id, const  DBLDataNode &val)
+bool UserAdditionData::opAdd(const LogicDataObj& id, const  LogicDataObj &val)
 {
 	const char *name = id.GetText();
 	if (!name || !*name) {
@@ -227,7 +227,7 @@ bool UserAdditionData::opAdd(const DBLDataNode& id, const  DBLDataNode &val)
 	}
 	return setData(name, val);
 }
-bool UserAdditionData::opSub(const DBLDataNode& id, const DBLDataNode &val)
+bool UserAdditionData::opSub(const LogicDataObj& id, const LogicDataObj &val)
 {
 	const char *name = id.GetText();
 	if (!name || !*name) {

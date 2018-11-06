@@ -12,7 +12,7 @@
 
 #include "ndcli/nd_iconn.h"
 #ifndef WITHOUT_LOGIC_PARSER
-#include "logic_parser/dbldata2netstream.h"
+#include "game_parser/dbldata2netstream.h"
 #include "logic_parser/objectBaseMgr.h"
 #include "logic_parser/logicEngineRoot.h"
 #endif
@@ -55,7 +55,7 @@ int apollo_dft_message_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
 		virtual ~ApoConnectScriptOwner();
 		void Destroy(int flag = 0);
 		void setConn(NDIConn *conn);
-		bool getOtherObject(const char*objName, DBLDataNode &val);
+		bool getOtherObject(const char*objName, LogicDataObj &val);
 		virtual const char *getMsgName(int msgId);
 		virtual const char *getMsgBody(int msgId);
 		//virtual bool loadScript() ;

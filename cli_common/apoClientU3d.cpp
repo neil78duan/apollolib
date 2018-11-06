@@ -12,7 +12,8 @@
 #include "script_event_id.h"
 
 #ifndef WITHOUT_LOGIC_PARSER
-#include "logic_parser/dbldata2netstream.h"
+#include "game_parser/dbldata2netstream.h"
+#include "game_parser/apoGameCommon.h"
 
 class ApoScriptOwner : public  ClientMsgHandler::ApoConnectScriptOwner
 {
@@ -22,7 +23,7 @@ public:
 	{
 
 	}
-	bool getOtherObject(const char*objName, DBLDataNode &val)
+	bool getOtherObject(const char*objName, LogicDataObj &val)
 	{
 		bool ret = ClientMsgHandler::ApoConnectScriptOwner::getOtherObject(objName, val);
 		if (ret) {
@@ -164,7 +165,7 @@ void ApoClient::Destroy(int)
 
 #ifndef WITHOUT_LOGIC_PARSER
 	LogicEngineRoot::destroy_Instant();
-	DBLDatabase::destroy_Instant();
+	//DBLDatabase::destroy_Instant();
 #endif
 	ndDeinitNet(); 
 }
@@ -241,10 +242,10 @@ int ApoClient::Create(const char*)
 }
 
 #ifndef WITHOUT_LOGIC_PARSER
-DBLDatabase *ApoClient::getExcelDatabase()
-{
-	return DBLDatabase::get_Instant();
-}
+// DBLDatabase *ApoClient::getExcelDatabase()
+// {
+// 	return DBLDatabase::get_Instant();
+// }
 
 
 LogicParserEngine *ApoClient::getScriptParser()

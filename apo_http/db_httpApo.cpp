@@ -7,7 +7,7 @@
  * 2018.4.17
  */
 
-#include "logic_parser/dbldata2netstream.h"
+#include "game_parser/dbldata2netstream.h"
 #include "apo_http/httpScriptApi.h"
 #include "apo_http/db_httpApo.h"
 #include "db_common/mydatabase.h"
@@ -93,7 +93,7 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_runsql, "db_执行sql(db_connector, sql_text)")
 			if (IS_NUMERALS(myName[1]) || 0 == ndstricmp(&myName[1], "value")) {
 				offset = 0;
 			}
-			DBLDataNode var1;
+			LogicDataObj var1;
 			if (!parser->getVarValue(&myName[offset], var1)) {
 				nd_logerror("can not found %s \n", pVarName);
 				parser->setErrno(NDERR_PARAM_INVALID);
@@ -285,10 +285,10 @@ APOLLO_SCRIPT_API_DEF(apoDb_mysql_fetch, "db_提取当前行(db_connector)")
 				MYSQL_TYPE_LONG_BLOB == pField->type,
 				MYSQL_TYPE_BLOB == pField->type) {
 
-				usrData.push_back(pField->name, DBLDataNode((void*)rows[i], (size_t)pLength[i]));
+				usrData.push_back(pField->name, LogicDataObj((void*)rows[i], (size_t)pLength[i]));
 			}
 			else {
-				usrData.push_back(pField->name, DBLDataNode((const char*)rows[i]));
+				usrData.push_back(pField->name, LogicDataObj((const char*)rows[i]));
 			}
 		}
 		result.InitSet(usrData);

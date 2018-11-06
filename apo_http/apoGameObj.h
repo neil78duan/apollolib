@@ -11,7 +11,7 @@
 
 #include "ndapplib/applib.h"
 #include "logic_parser/logicEngineRoot.h"
-#include "logic_parser/dbldata2netstream.h"
+#include "game_parser/dbldata2netstream.h"
 
 template <class _Tk>
 struct apoStringLess
@@ -33,20 +33,20 @@ public:
 	virtual ~ApoGameObj();
 
 	LogicParserEngine *getScriptHandler() { return &m_logicEngine; }
-	bool RunScript(parse_arg_list_t &args, DBLDataNode &result);
+	bool RunScript(parse_arg_list_t &args, LogicDataObj &result);
 	bool RunScript(const char *script);
 	bool SendScriptEvent(int event_id, int args, ...);
 	bool SendEvent0(int event);
-	bool SendEvent1(int event, const DBLDataNode &val1);
+	bool SendEvent1(int event, const LogicDataObj &val1);
 	int getScriptError() { return m_logicEngine.getErrno(); }
 
-	bool opRead(const DBLDataNode& id, DBLDataNode &val);
-	bool opWrite(const DBLDataNode& id, const DBLDataNode &val);
-	bool opAdd(const DBLDataNode& id, const DBLDataNode &val);
-	bool opSub(const DBLDataNode& id, const  DBLDataNode &val);
+	bool opRead(const LogicDataObj& id, LogicDataObj &val);
+	bool opWrite(const LogicDataObj& id, const LogicDataObj &val);
+	bool opAdd(const LogicDataObj& id, const LogicDataObj &val);
+	bool opSub(const LogicDataObj& id, const  LogicDataObj &val);
 
 	LogicObjectBase *getObjectMgr(const char* destName);
-	bool getOtherObject(const char*objName, DBLDataNode &val);
+	bool getOtherObject(const char*objName, LogicDataObj &val);
 
 	typedef std::map<std::string, LogicObjectBase*, apoStringLess<std::string> > objectMgr_vct;
 protected:
@@ -56,7 +56,7 @@ protected:
 };
 
 
-//bool apollo_func_machine_version(LogicParserEngine*parser, parse_arg_list_t &args, DBLDataNode &result);
+//bool apollo_func_machine_version(LogicParserEngine*parser, parse_arg_list_t &args, LogicDataObj &result);
 
 
 

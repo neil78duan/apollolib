@@ -20,11 +20,11 @@
 struct additionDataNode
 {
 	std::string typeName;
-	DBLDataNode value;
+	LogicDataObj value;
 
 	additionDataNode() 
 	{}
-	additionDataNode(const char *name, const DBLDataNode &val) :  value(val)
+	additionDataNode(const char *name, const LogicDataObj &val) :  value(val)
 	{
 		if (name && *name) {
 			typeName = name;
@@ -54,16 +54,16 @@ public:
 	int FromStream(void *data, size_t size, int byteOrder = 1);
 	int ToStream(void *buf, size_t bufsize, int byteOrder = 1, bool withTypeName = true) const;
 	
-	const DBLDataNode *getData(const char *name) const;
-	bool setData(const char *name, const DBLDataNode &val, const char*typeName=NULL);
+	const LogicDataObj *getData(const char *name) const;
+	bool setData(const char *name, const LogicDataObj &val, const char*typeName=NULL);
 	bool removeData(const char *name);
 	bool setData(const char *name, void*binData, size_t size, const char*typeName = NULL);
 	bool setData(const char *name, const userdata_info* data, const char*typeName = NULL);
 	
 	
-	bool convert2node(DBLDataNode &val, int byteOrder = 1,bool withTypeName= true) const;
-	bool Init(const DBLDataNode *val, int version = 0, int byteOrder = 1);
-	int toStream(DBLDataNode *outData, int byteOrder = 1) const
+	bool convert2node(LogicDataObj &val, int byteOrder = 1,bool withTypeName= true) const;
+	bool Init(const LogicDataObj *val, int version = 0, int byteOrder = 1);
+	int toStream(LogicDataObj *outData, int byteOrder = 1) const
 	{
 		return convert2node(*outData,byteOrder)?0:-1;
 	}
@@ -73,11 +73,11 @@ public:
 	const user_addition_map& getDataMap() const { return m_data_map; }
 public:
 	void Destroy();
-	bool opRead(const DBLDataNode& id, DBLDataNode &val);
-	bool opWrite(const DBLDataNode& id, const DBLDataNode &val);
-	bool opAdd(const DBLDataNode& id, const  DBLDataNode &val);
-	bool opSub(const DBLDataNode& id, const DBLDataNode &val);
-	//bool opClear(const DBLDataNode& id, const DBLDataNode &val);
+	bool opRead(const LogicDataObj& id, LogicDataObj &val);
+	bool opWrite(const LogicDataObj& id, const LogicDataObj &val);
+	bool opAdd(const LogicDataObj& id, const  LogicDataObj &val);
+	bool opSub(const LogicDataObj& id, const LogicDataObj &val);
+	//bool opClear(const LogicDataObj& id, const LogicDataObj &val);
 	
 	bool CheckInAffair();
 	bool BeginAffair();

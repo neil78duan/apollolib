@@ -198,7 +198,7 @@ public:
 
 extern RoleAttrHelper *get_attr_helper();
 
-#include "logic_parser/dbl_mgr.h"
+#include "game_parser/dbl_mgr.h"
 #include "logic_parser/logicDataType.h"
 
 //通过表查询属性ID和列名 return value ,number of attributes , return -1 on error
@@ -208,7 +208,7 @@ int DBL_GetAttrIDName(const char *table, attrid_t ids[], const char *[], int buf
 //从表中读取角色属性 return value ,number of attributes , return -1 on error
 int DBL_ReadAttrList(const char *table, int index, attr_node_buf &attrbuf);
 
-static inline void LogicType2Attrbuf(attr_node_buf *to_buf,DBLDataNode &fromData )
+static inline void LogicType2Attrbuf(attr_node_buf *to_buf,LogicDataObj &fromData )
 {
 	//size_t size = fromData.GetBinarySize();
 	attr_node_buf *p = (attr_node_buf*)fromData.GetBinary();
@@ -219,7 +219,7 @@ static inline void LogicType2Attrbuf(attr_node_buf *to_buf,DBLDataNode &fromData
 }
 
 //void InitSet(void *binary, size_t size, DBL_ELEMENT_TYPE eleType = OT_BINARY_DATA);
-static inline void Attrbuf2LogicType(DBLDataNode &toData, attr_node_buf *from_buf )
+static inline void Attrbuf2LogicType(LogicDataObj &toData, attr_node_buf *from_buf )
 {
 	nd_assert(from_buf);
 	size_t size = sizeof(attr_node_buf) - sizeof(from_buf->buf) + from_buf->number * sizeof(attrval_node);
@@ -227,7 +227,7 @@ static inline void Attrbuf2LogicType(DBLDataNode &toData, attr_node_buf *from_bu
 }
 
 //dataString read from excel-table
-// Convert DBLDataNode -> attr_node_buf 
-int Dbl_TableStringToAttr(const DBLDataNode &dataString, attr_node_buf &attrbuf);
+// Convert LogicDataObj -> attr_node_buf 
+int Dbl_TableStringToAttr(const LogicDataObj &dataString, attr_node_buf &attrbuf);
 
 #endif

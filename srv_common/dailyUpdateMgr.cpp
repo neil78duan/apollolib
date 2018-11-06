@@ -8,7 +8,7 @@
 
 #include "dailyUpdateMgr.hpp"
 #include "common_inc.h"
-#include "logic_parser/dbl_mgr.h"
+#include "game_parser/dbl_mgr.h"
 #include "srv_common/userAddtionData.h"
 #include <algorithm>
 
@@ -24,7 +24,7 @@ AlarmBase::~AlarmBase()
 {
 }
 
-int AlarmBase::Init(const DBLDataNode *data, int version)
+int AlarmBase::Init(const LogicDataObj *data, int version)
 {
 	ND_TRACE_FUNC();
 	UserAdditionData saveData;
@@ -47,7 +47,7 @@ int AlarmBase::Init(const DBLDataNode *data, int version)
 	return 0;
 }
 
-int AlarmBase::toStream(DBLDataNode *outData)
+int AlarmBase::toStream(LogicDataObj *outData)
 {
 	ND_TRACE_FUNC();
 	UserAdditionData saveData;
@@ -58,7 +58,7 @@ int AlarmBase::toStream(DBLDataNode *outData)
 		char buf[128];
 		snprintf(buf, sizeof(buf), "%s_%d", it->name.c_str(), it->id);
 
-		saveData.setData(buf, DBLDataNode(val));
+		saveData.setData(buf, LogicDataObj(val));
 	}
 	saveData.convert2node(*outData);
 	return 0;

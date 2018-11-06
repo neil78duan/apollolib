@@ -10,10 +10,10 @@
 #include "ndapplib/applib.h"
 #include "ndapplib/nd_httpListener.h"
 #include "logic_parser/logicEngineRoot.h"
-#include "logic_parser/dbldata2netstream.h"
+#include "game_parser/dbldata2netstream.h"
 #include "apo_http/httpScriptApi.h"
 
-static  NDHttpSession *_getSession(const DBLDataNode &objData)
+static  NDHttpSession *_getSession(const LogicDataObj &objData)
 {
 	ND_TRACE_FUNC();
 	 NDHttpSession *pSession = NULL;
@@ -31,7 +31,7 @@ APOLLO_SCRIPT_API_DEF(apollo_set_http_handler, "http_install_req_handler(listene
 	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 4, parser);
 
-	DBLDataNode netHandle;
+	LogicDataObj netHandle;
 	LogicObjectBase *owner = parser->getOwner();
 
 	if (owner && owner->getOtherObject(args[1].GetText(), netHandle)) {
@@ -144,7 +144,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_respone, "HTTP_response(connectObj,status, hea
 			LogicUserDefStruct *pHeader =(LogicUserDefStruct *) args[3].getUserDef() ;
 			if (pHeader) {
 				for (size_t i = 0; i < pHeader->count(); i++) {
-					const DBLDataNode *valNode = pHeader->ref(i);
+					const LogicDataObj *valNode = pHeader->ref(i);
 					const char *pName = pHeader->getName((int)i);
 					if (pName && valNode) {
 						std::string valText = valNode->GetString();
@@ -214,7 +214,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_file_down, "HTTP_download_file(connectObj,requ
 
 	LogicObjectBase *owner = parser->getOwner();
 	nd_assert(owner);
-	DBLDataNode val;
+	LogicDataObj val;
 	if (!owner->getOtherObject("listener", val)) {
 		parser->setErrno(NDERR_BAD_GAME_OBJECT);
 		return false;
@@ -272,7 +272,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_set_root_session_age, "HTTP_set_root_session_a
 
 	LogicObjectBase *owner = parser->getOwner();
 	nd_assert(owner);
-	DBLDataNode val;
+	LogicDataObj val;
 	if (!owner->getOtherObject("listener", val)) {
 		parser->setErrno(NDERR_BAD_GAME_OBJECT);
 		return false;
@@ -297,7 +297,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_cache_file, "HTTP_cache_to_mem(filepath)")
 	}
 	LogicObjectBase *owner = parser->getOwner();
 	nd_assert(owner);
-	DBLDataNode val;
+	LogicDataObj val;
 	if (!owner->getOtherObject("listener", val)) {
 		parser->setErrno(NDERR_BAD_GAME_OBJECT);
 		return false;
@@ -321,7 +321,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_uncache_file, "HTTP_uncache_from_mem(filepath)
 	}
 	LogicObjectBase *owner = parser->getOwner();
 	nd_assert(owner);
-	DBLDataNode val;
+	LogicDataObj val;
 	if (!owner->getOtherObject("listener", val)) {
 		parser->setErrno(NDERR_BAD_GAME_OBJECT);
 		return false;
@@ -342,7 +342,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_set_working_path, "HTTP_working_path(readPath,
 	
 	LogicObjectBase *owner = parser->getOwner();
 	nd_assert(owner);
-	DBLDataNode val;
+	LogicDataObj val;
 	if (!owner->getOtherObject("listener", val)) {
 		parser->setErrno(NDERR_BAD_GAME_OBJECT);
 		return false;
@@ -459,7 +459,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_build_body, "http_build_body( body_text)")
 			if (IS_NUMERALS(myName[1]) || 0 == ndstricmp(&myName[1], "value")) {
 				offset = 0;
 			}
-			DBLDataNode var1;
+			LogicDataObj var1;
 			if (!parser->getVarValue(&myName[offset], var1)) {
 				nd_logerror("can not found %s \n", pVarName);
 				parser->setErrno(NDERR_PARAM_INVALID);
@@ -533,7 +533,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_post, "httpShort_post(host,port, path,body,han
 		LogicUserDefStruct *pJson = (LogicUserDefStruct *) args[4].getUserDef();
 		if (pJson) {
 			for (int i = 0; i < pJson->count(); i++) {
-				DBLDataNode *pData = pJson->ref(i);
+				LogicDataObj *pData = pJson->ref(i);
 				const char *name = pJson->getName(i);
 				if (pData->GetText()) {
 					req.addRequestFormVal(name, pData->GetText());
@@ -636,13 +636,13 @@ void ApoHttpClientShort::onResponse(NDHttpResponse *response)
 	ND_TRACE_FUNC();
 
 	parse_arg_list_t args;
-	args.push_back(DBLDataNode(m_handler.c_str()));
-	args.push_back(DBLDataNode(this));
-	args.push_back(DBLDataNode(response->getBody()));
-	args.push_back(DBLDataNode(response));
+	args.push_back(LogicDataObj(m_handler.c_str()));
+	args.push_back(LogicDataObj(this));
+	args.push_back(LogicDataObj(response->getBody()));
+	args.push_back(LogicDataObj(response));
 	args.push_back(m_userData);
 
-	DBLDataNode result;
+	LogicDataObj result;
 	if (!getHttpScriptObj()->RunScript(args, result)) {
 		nd_logerror("run http script %s error\n", m_handler.c_str());
 	}
@@ -710,12 +710,12 @@ int apoHttpListener::onRequestScript(const char* script, NDHttpSession *session,
 	}
 
 	parse_arg_list_t args;
-	args.push_back(DBLDataNode(script));
-	args.push_back(DBLDataNode(session));
-	args.push_back(DBLDataNode(formJson));
-	args.push_back(DBLDataNode((NDIBaseObj*)&request));
+	args.push_back(LogicDataObj(script));
+	args.push_back(LogicDataObj(session));
+	args.push_back(LogicDataObj(formJson));
+	args.push_back(LogicDataObj((NDIBaseObj*)&request));
 
-	DBLDataNode result;
+	LogicDataObj result;
 	if (!getHttpScriptObj()->RunScript(args, result)) {
 		nd_logerror("run http script %s error\n", script);
 		return -1;

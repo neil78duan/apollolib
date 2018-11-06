@@ -24,7 +24,7 @@ struct dailyUpdateCfg
 	//int timeoffset;
 	std::vector<int> timeOffsets;
 	std::string name;
-	DBLDataNode param;
+	LogicDataObj param;
 	dailyUpdateCfg() :id(0)
 	{
 
@@ -57,8 +57,8 @@ public:
 	AlarmBase(NDAlarm *pObject, int timezone = -1);
 	virtual~AlarmBase();
 
-	int Init(const DBLDataNode *data, int version);
-	int toStream(DBLDataNode *outData);
+	int Init(const LogicDataObj *data, int version);
+	int toStream(LogicDataObj *outData);
 
 	//void UpdateMinute(int timezone = 0xff) ;
 	virtual void Update();
@@ -122,7 +122,7 @@ struct WeeklyUpdateCfg
 	int dayIndex;
 	int timeOffset;
 	std::string name;
-	DBLDataNode param;
+	LogicDataObj param;
 	WeeklyUpdateCfg() :id(0), dayIndex(0), timeOffset(0)
 	{
 

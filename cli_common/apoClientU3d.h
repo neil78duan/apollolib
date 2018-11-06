@@ -14,7 +14,7 @@
 
 #ifndef WITHOUT_LOGIC_PARSER
 #include "logic_parser/logicEngineRoot.h"
-#include "logic_parser/dbl_mgr.h"
+//#include "logic_parser/dbl_mgr.h"
 #endif
 #include "ndapplib/ndsingleton.h"
 
@@ -56,7 +56,7 @@ public:
 	std::string getPath() { return m_path; }
 #ifndef WITHOUT_LOGIC_PARSER
 	
-	DBLDatabase *getExcelDatabase();
+	//DBLDatabase *getExcelDatabase();
 	LogicParserEngine *getScriptParser();
 	LogicEngineRoot *getScriptRoot();
 #endif

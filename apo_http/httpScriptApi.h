@@ -27,12 +27,12 @@ public:
 
 	virtual void onResponse(NDHttpResponse *response);
 	void setHandler(const char*handler) { m_handler = handler; }
-	void setUserData(const DBLDataNode&userData) { m_userData = userData; }
+	void setUserData(const LogicDataObj&userData) { m_userData = userData; }
 
 	virtual void OnClose();
 protected:
 	std::string m_handler;
-	DBLDataNode m_userData;
+	LogicDataObj m_userData;
 };
 
 struct fileCacheInfo

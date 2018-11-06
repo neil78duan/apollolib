@@ -5,11 +5,11 @@
 #include "apoScript/xmldialog.h"
 #include "ndlib.h"
 
-#include "logic_parser/dbl_mgr.h"
+#include "game_parser/dbl_mgr.h"
+
 #include "logic_parser/logic_compile.h"
 #include "logic_parser/logicParser.h"
 #include "logic_parser/logicEngineRoot.h"
-#include "logic_parser/dbl_mgr.h"
 #include "attribute/roleattr_help.h"
 #include "attribute/stat_machine.h"
 #include "ndapplib/ndsingleton.h"
@@ -441,12 +441,12 @@ bool startDialog::loadDataBase()
 bool startDialog::expLua(const char *outPath, const DBLDatabase &db)
 {
 	nd_mkdir(outPath);
-	bool outflag = DBLDataNode::setOutLua(true);
+	bool outflag = LogicDataObj::setOutLua(true);
 	if (-1 == db.OutputLua(outPath)) {
-		DBLDataNode::setOutLua(outflag);
+		LogicDataObj::setOutLua(outflag);
 		return false;
 	}
-	DBLDataNode::setOutLua(outflag);
+	LogicDataObj::setOutLua(outflag);
 	return true;
 }
 

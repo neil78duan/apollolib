@@ -87,4 +87,5 @@ private:
 	MsgHistoryVct_t m_msgHistory;
 };
 
+void initGlobalParser();
 #endif // CONNECTDIALOG_H

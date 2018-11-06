@@ -9,15 +9,14 @@
 
 #include "ndlib.h"
 #include "cli_common/login_apollo.h"
-//#include "cli_common/netui_atl.h"
-//#include "cli_common/gameMessage.h"
 #include "cli_common/login_apollo.h"
 #include "cli_common/dftCliMsgHandler.h"
 
-#include "logic_parser/dbldata2netstream.h"
+#include "game_parser/apoGameCommon.h"
+#include "game_parser/dbl_mgr.h"
+
 #include "logic_parser/logicEngineRoot.h"
 #include "logic_parser/logicDataType.h"
-#include "logic_parser/dbl_mgr.h"
 
 #include "apollo_errors.h"
 //#include "netMessage/message_inc.h"
@@ -35,7 +34,7 @@ NDOStreamMsg __sendMsg;
 class ConnectScriptOwner :public  ClientMsgHandler::ApoConnectScriptOwner
 {
 public:
-    bool getOtherObject(const char*objName, DBLDataNode &val)
+    bool getOtherObject(const char*objName, LogicDataObj &val)
     {
         if (0 == ndstricmp(objName, "LogFunction")) {
 			val.InitSet((void*)ND_LOG_WRAPPER_PRINT(ConnectDialog));
@@ -73,6 +72,74 @@ public:
 		}
         return false;
     }
+
+	bool opOperate(const char *cmd, const LogicDataObj& id, LogicDataObj &val)
+	{
+		if (0 == ndstricmp(cmd, "dbl_excel")) {
+			DBLDatabase *pdbl = DBLDatabase::get_Instant();
+			if (!pdbl) {
+				nd_logerror("need load excel data");
+				return false;
+			}
+			int encode = pdbl->GetEncodeType();
+			val.InitReservedArray(pdbl->m_tables.size(), OT_STRING);
+
+			DBLDatabase::table_vct_t::iterator it = pdbl->m_tables.begin();
+			for (; it != pdbl->m_tables.end(); it++) {
+
+				if (encode != E_SRC_CODE_UTF_8) {
+					LogicDataObj data;
+					data.InitSet(it->first.c_str());
+					data.ConvertEncode(encode, E_SRC_CODE_UTF_8);
+
+					val.pushArray(data);
+				}
+				else {
+					val.pushArray(LogicDataObj(it->first.c_str()));
+				}
+			}
+			return true;
+		}
+		else if (0 == ndstricmp(cmd, "dbl_excel_col")) {
+			DBLDatabase *pdbl = DBLDatabase::get_Instant();
+			if (!pdbl) {
+				nd_logerror("need load excel data");
+				return false;
+			}
+			
+			int encode = pdbl->GetEncodeType();
+			const char *pname = id.GetText();
+
+			if (!pname || 0 == ndstricmp((char*)pname, (char*)"none")) {
+				nd_logerror("param not be none");
+				return false;
+			}
+			DBLTable *ptable = pdbl->FindTable(pname);
+			if (!ptable) {
+				nd_logerror("table not found");
+				return false;
+			}
+
+			int total = ptable->GetCols();
+			val.InitReservedArray(total, OT_STRING);
+
+			for (int i = 0; i < total; i++) {
+				if (encode != E_SRC_CODE_UTF_8) {
+					LogicDataObj data;
+					data.InitSet(ptable->GetColName(i));
+					data.ConvertEncode(encode, E_SRC_CODE_UTF_8);
+
+					val.pushArray(data);
+				}
+				else {
+					val.pushArray(LogicDataObj(ptable->GetColName(i)));
+				}
+
+			}
+			return true;
+		}
+		return false;
+	}
 };
 static ConnectScriptOwner  __myScriptOwner;
 
@@ -80,13 +147,18 @@ static ConnectScriptOwner  __myScriptOwner;
 void destroy_apollo_object(NDIConn *)
 {
 
-    __myScriptOwner.Destroy();
-    LogicEngineRoot::destroy_Instant();
+    //__myScriptOwner.Destroy();
+    //LogicEngineRoot::destroy_Instant();
 }
 
+void initGlobalParser()
+{
+	LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
+	parser.setOwner(&__myScriptOwner);
+
+}
 static bool init_apollo_object(NDIConn *pConn, const char*script_file)
 {
-    destroy_apollo_object(pConn);
 
     __myScriptOwner.setConn( pConn);
 
@@ -94,9 +166,10 @@ static bool init_apollo_object(NDIConn *pConn, const char*script_file)
     LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
 	scriptRoot->setOutPutEncode(E_SRC_CODE_UTF_8);
     nd_assert(scriptRoot);
-    LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
-    nd_message_set_script_engine(pConn->GetHandle(), (void*)&parser, apollo_message_script_entry);
-    parser.setOwner(&__myScriptOwner);
+
+	LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
+	nd_message_set_script_engine(pConn->GetHandle(), (void*)&parser, apollo_message_script_entry);
+	initGlobalParser();
 
 	scriptRoot->setPrint(ND_LOG_WRAPPER_PRINT(ConnectDialog), NULL);
     scriptRoot->getGlobalParser().setSimulate(false);
@@ -511,7 +584,7 @@ void ConnectDialog::on_loginButton_clicked()
 		LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
 		if (scriptRoot) {
 			parse_arg_list_t arg;
-			arg.push_back(DBLDataNode(m_pConn, OT_OBJ_NDOBJECT));
+			arg.push_back(LogicDataObj(m_pConn, OT_OBJ_NDOBJECT));
 			scriptRoot->getGlobalParser().eventNtf(APOLLO_EVENT_LOGIN, arg);
 		}
 
@@ -987,10 +1060,10 @@ void ConnectDialog::on_pushButton_clicked()
 void ConnectDialog::on_checkBox16Hex_clicked()
 {
 	if (ui->checkBox16Hex->checkState() == Qt::Checked)  {
-		DBLDataNode::setOutHex(true);
+		LogicDataObj::setOutHex(true);
 	}
 	else {
-		DBLDataNode::setOutHex(false);
+		LogicDataObj::setOutHex(false);
 	}
 	//ui->checkBox16Hex
 }

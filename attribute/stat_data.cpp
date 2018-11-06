@@ -11,7 +11,7 @@
 #include "attribute/stat_data.h"
 
 #include "ndapplib/applib.h"
-#include "logic_parser/dbl_mgr.h"
+#include "game_parser/dbl_mgr.h"
 
 
 int StatMachine::s_forbid_num = 0 ;	//策划填的禁止列表个数
@@ -191,7 +191,7 @@ int StatMachine::load_op_info(const char *tablename)
 // 
 // 	const char *pfields[] =  {"状态名称","玩家进入事件","玩家退出事件","怪物进入事件","怪物退出事件"};
 // 	
-// 	DBLDataNode *pDataObj = NULL;
+// 	LogicDataObj *pDataObj = NULL;
 // 	DBL_BEGIN_CURSOR("角色_状态_事件通知", pfields) {
 // 		statindex_t stindx = StatMachine::get_index(cursor[0].GetText()) ;
 // 		if (-1==stindx) {

@@ -9,7 +9,7 @@
 #include "attribute/roleattr_help.h"
 #include "nd_vm/nd_vm.h"
 #include "nd_common/nd_common.h"
-#include "logic_parser/dbl_mgr.h"
+#include "game_parser/dbl_mgr.h"
 #include "ndapplib/ndsingleton.h"
 
 #include <math.h>
@@ -708,19 +708,19 @@ int DBL_ReadAttrList(const char *tableName, int index, attr_node_buf &attrbuf)
 }
 
 
-int Dbl_TableStringToAttr(const DBLDataNode &dataString, attr_node_buf &attrbuf)
+int Dbl_TableStringToAttr(const LogicDataObj &dataString, attr_node_buf &attrbuf)
 {
 	RoleAttrHelper *root = get_attr_helper();
 	nd_assert(root);
 
 	if (dataString.GetDataType() == OT_ARRAY && dataString.GetArrayType() == OT_STRING) {
-		DBLDataNode tmp;
+		LogicDataObj tmp;
 		if (tmp.StringToArrayString(dataString.GetarrayText(0))) {
 			for (int i = 0; i < dataString.GetArraySize(); i++)	{
 				const char *p = dataString.GetarrayText(i);
 				if (!p || !*p)
 					continue;
-				DBLDataNode node;
+				LogicDataObj node;
 				if (node.StringToArrayString(p)) {
 					attrid_t aid = root->GetID( node.GetarrayText(0));
 					if (aid == INVALID_ATTR_ID) {
