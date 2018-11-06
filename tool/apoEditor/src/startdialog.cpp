@@ -18,6 +18,7 @@
 #include "apoScript/apoEditorSetting.h"
 
 #include "apoScript/editorFrame.h"
+#include "logic_parser/logicApi4c.h"
 
 #include <QMessageBox>
 
@@ -66,6 +67,9 @@ bool startDialog::InitConfigFile(const char *ioConfig, const char *scriptSetting
 	if (!apoEditorSetting::getInstant()->Init(ioConfig, scriptSetting, APO_QT_SRC_TEXT_ENCODE)) {
 		return false;
 	}
+	// 
+	//for test
+	//logicRootInstallFunc(logic_c_hello_world, "c_api_testHelloWorld", "²âÊÔc½Ó¿Ú");
 	return true;
 }
 

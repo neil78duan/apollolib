@@ -14,10 +14,10 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">./setting/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1541405102</LastMod>
+	<LastMod name="最后修改" kinds="hide">1541407010</LastMod>
 	<EditorVersion kinds="hide">1.1.0</EditorVersion>
 </moduleInfo>
-<baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="43" expand_stat="0" accept_drag_in="func_node">
+<baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="43" expand_stat="1" accept_drag_in="func_node">
 	<func_node name="test_create_new_var" create_template="create_list1" auto_index="0" nextAnchor="comment" enable_drag="yes" var_name_index="20" name_auto_index="auto_index">
 		<func_params kinds="hide">
 			<input_param name="Param1">$1</input_param>
@@ -3289,6 +3289,19 @@
 				<var kinds="string" delete="no" restrict="type">./setting/func_list.xml</var>
 			</param_collect>
 		</op_call_func>
+		<op_call_func name="节点_调用$测试c接口$" create_template="create_input_param" auto_index="0" create_label="create_internal_label">
+			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
+			<apoEditorPos kinds="hide" x="464" y="77" offset_x="0" offset_y="0"/>
+			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.c_api_testHelloWorld&amp;_dispname=测试c接口</func_name>
+		</op_call_func>
+		<op_print name="节点_打印" create_template="create_input_param" auto_index="0" create_label="create_internal_label">
+			<comment name="功能说明" rw_stat="read">print(...)</comment>
+			<apoEditorPos kinds="hide" x="658" y="89" offset_x="0" offset_y="0"/>
+			<param_collect name="参数">
+				<type kinds="reference" reference_type="type_data_type" delete="no">11</type>
+				<var kinds="string" delete="no" restrict="type">$value</var>
+			</param_collect>
+		</op_print>
 		<var_init_block/>
 		<apoEditorPos kinds="hide" x="21" y="242" offset_x="-1" offset_y="0"/>
 		<unConnect kinds="hide">
@@ -3306,7 +3319,7 @@
 			<steps_collection>
 				<op_call_func name="节点_调用$tool_compile_project(project_path)$" create_template="create_input_param" auto_index="0" create_label="create_internal_label">
 					<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
-					<apoEditorPos kinds="hide" x="778" y="119" offset_x="0" offset_y="0"/>
+					<apoEditorPos kinds="hide" x="797" y="146" offset_x="0" offset_y="0"/>
 					<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">_realval=CPP.apollo_tool_compile_project&amp;_dispname=tool_compile_project(project_path)</func_name>
 					<param_collect name="参数">
 						<type kinds="reference" reference_type="type_data_type" delete="no">18</type>

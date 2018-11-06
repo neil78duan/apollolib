@@ -62,4 +62,5 @@
 	<node desc="tool_compile_file(file,outFile,isDebug)">CPP.apollo_tool_compile_file</node>
 	<node desc="tool_compile_project(project_path)">CPP.apollo_tool_compile_project</node>
 	<node desc="写入文件(filename,var1,var2...)">CPP.apollo_write_file</node>
+	<node desc="测试c接口">CPP.c_api_testHelloWorld</node>
 </func_list>

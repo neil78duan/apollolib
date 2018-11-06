@@ -831,21 +831,7 @@
 			</param_collect>
 		</op_bit_operate>
 	</create_bit_operate>
-		
-	
-	<create_read_table name="读取excel节点" create_type="1" >
-		<op_call_func name="节点_读取表格" >
-			<comment name="功能说明" rw_stat="read">read_excel_table(table,col, index)</comment>
-			<func_name name="函数" kinds="hide" delete="no" >apollo_read_excel_node</func_name>
-			<tablename name="excel表" kinds="user_define" user_param="dbl_excel" delete="no">none</tablename>
-			<var name="列名" kinds="user_define" user_param="dbl_excel_col" delete="no">none</var>
-			<param_collect name="行号ID" delete="no">
-				<type name="类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
-				<var name="参数值" kinds="string" delete="no" restrict="type">0</var>
-			</param_collect>			
-		</op_call_func>
-	</create_read_table>
-	
+			
 	<create_step_calc name="公式" create_type="1" >
 		<op_calc name="节点_公式" expand="yes" create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">run_formulate(formulate_text)</comment>
@@ -950,7 +936,7 @@
 		</op_log>
 	</create_step_log>
 		
-	<create_step_inistall_msg_handler name="安裝网络消息处理器" create_type="1">
+	<!-- create_step_inistall_msg_handler name="安裝网络消息处理器" create_type="1">
 		<op_call_func name="节点_安装消息处理器"  create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">function_install_msg_handler(netModuleName, scriptName,maxId, minId,privilege)</comment>
 			<func_name name="函数" kinds="hide" delete="no" >apollo_set_message_handler</func_name>
@@ -974,7 +960,6 @@
 		</op_call_func>		
 	</create_step_send_msg>
 	
-	<!-- 通过调用外部函数的方法来读取消息 参数1 -->
 	<create_step_read_msg name="读取网络消息" create_type="1">
 		<op_call_func name="节点_读取网络数据" expand="yes"  create_label="create_internal_label">
 			<comment name="功能说明" rw_stat="read">function_read_message(read_type)</comment>
@@ -1021,6 +1006,19 @@
 			<var name="索引值" kinds="string" delete="no" restrict="type">none</var>
 		</op_call_func>
 	</create_step_read_excel_attr>
+	
+	<create_read_table name="读取excel节点" create_type="1" >
+		<op_call_func name="节点_读取表格" >
+			<comment name="功能说明" rw_stat="read">read_excel_table(table,col, index)</comment>
+			<func_name name="函数" kinds="hide" delete="no" >apollo_read_excel_node</func_name>
+			<tablename name="excel表" kinds="user_define" user_param="dbl_excel" delete="no">none</tablename>
+			<var name="列名" kinds="user_define" user_param="dbl_excel_col" delete="no">none</var>
+			<param_collect name="行号ID" delete="no">
+				<type name="类型" kinds="reference" reference_type="type_data_type" delete="no">0</type>
+				<var name="参数值" kinds="string" delete="no" restrict="type">0</var>
+			</param_collect>			
+		</op_call_func>
+	</create_read_table -->
 	
 	<!------------------test node------------------ -->
 	<create_op_comp name="测试大小" create_type="1" >
@@ -1316,7 +1314,7 @@
 		</op_call_func>
 	</create_http_body_build>	
 	<!--- selector -->		
-	<create_bt_selector name="BT-Selector" create_type="1" >
+	<!-- create_bt_selector name="BT-Selector" create_type="1" >
 		<steps_bt_selector name="BT-Selector" auto_index="0" breakPointAnchor="op_idle" >
 			<comment name="功能说明" rw_stat="read">run until one of children success </comment>
 			<op_idle name="idle"  kinds="hide" onlyForDebug="yes"></op_idle>
@@ -1348,9 +1346,7 @@
 				<jumpOffset kinds="hide" delete="no" >0</jumpOffset>
 			</op_error_short_jump>			
 		</steps_collection>
-	</create_bt_selector_child>	
-	<!--- -->
-		
+	</create_bt_selector_child>			
 	<create_bt_sequence name="BT-Sequence" create_type="1" >
 		<steps_bt_sequence name="BT-Sequence" auto_index="0" breakPointAnchor="op_idle" >
 			<comment name="功能说明" rw_stat="read">run until one of children success </comment>
@@ -1490,7 +1486,9 @@
 			<list>create_add_timer</list>
 			<list>create_del_timer</list>
 			<list>create_cur_parser</list>
-			<list>create_http_body_build</list>
+			<list>create_http_body_build</list>			
+			<list>create_step_begin_affair</list>
+			<list>create_step_commit_affair</list>
 		</filter>
 		<filter name="对象操作">		
 			<list>create_step_read</list>
@@ -1501,10 +1499,8 @@
 			<list>create_step_operate</list>			
 			<list>create_step_getother_object</list>
 		</filter>
-		<filter name="游戏开发">
+		<!-- filter name="游戏开发">
 			<list>create_read_table</list>
-			<list>create_step_begin_affair</list>
-			<list>create_step_commit_affair</list>
 			<list>create_step_read_excel_attr</list>
 			<list>create_step_get_user_data_type</list>
 			<list>create_step_inistall_msg_handler</list>
@@ -1515,7 +1511,7 @@
 		<filter name="行为树">		
 			<list>create_bt_selector</list>
 			<list>create_bt_sequence</list>
-		</filter>
+		</filter -->
 	</create_list1>		
 	<create_list2 name="create_message_handler" create_type="2" ref_from="yes">../create_list1</create_list2>
 </create_template>
