@@ -11,7 +11,7 @@
 
 #include "ndapplib/applib.h"
 #include "common_inc.h"
-#include "apo_http/apoGameObj.h"
+#include "game_parser/apoObjSrv.h"
 
 //class NDSession ;
 class Role;

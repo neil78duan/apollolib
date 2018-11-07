@@ -12,10 +12,38 @@
 #include "ndapplib/applib.h"
 #include "ndapplib/nd_httpListener.h"
 #include "logic_parser/logicEngineRoot.h"
-#include "apo_http/apoGameObj.h"
+#include "game_parser/apoObjSrv.h"
 
-typedef ApoGameObj apoHttpScriptMgr;
-
+//typedef ApoGameObj apoHttpScriptMgr;
+
+class apoHttpScriptMgr : public LogicObjectBase
+{
+public:
+	apoHttpScriptMgr();
+	virtual ~apoHttpScriptMgr();
+
+	LogicParserEngine *getScriptHandler() { return &m_logicEngine; }
+	bool RunScript(parse_arg_list_t &args, LogicDataObj &result);
+	bool RunScript(const char *script);
+	bool SendScriptEvent(int event_id, int args, ...);
+	bool SendEvent0(int event);
+	bool SendEvent1(int event, const LogicDataObj &val1);
+	int getScriptError() { return m_logicEngine.getErrno(); }
+
+	bool opRead(const LogicDataObj& id, LogicDataObj &val);
+	bool opWrite(const LogicDataObj& id, const LogicDataObj &val);
+	bool opAdd(const LogicDataObj& id, const LogicDataObj &val);
+	bool opSub(const LogicDataObj& id, const  LogicDataObj &val);
+	LogicObjectBase *getObjectMgr(const char* destName);
+
+	bool getOtherObject(const char*objName, LogicDataObj &val);
+
+	typedef std::map<std::string, LogicObjectBase*, apoStringLess<std::string> > objectMgr_vct;
+protected:
+
+	//objectMgr_vct m_objectMgr;
+	LogicParserEngine m_logicEngine;
+};
 class ApoHttpClientShort : public HttpConnector
 {
 	typedef HttpConnector _myBase;

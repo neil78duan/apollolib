@@ -266,10 +266,10 @@ bool startDialog::compileScript(const char *scriptFile)
 	nd_logmsg("!!!!!!!!!!COMPILE %s success !!!!!!!!!!!\n begining run script...\n", scriptFile);
 
 	ClientMsgHandler::ApoConnectScriptOwner apoOwner;
-	if (!apoOwner.loadDataType(_getFromIocfg("net_data_def"))) {
-		WriteLog("load data type error\n");
-		return false;
-	}
+// 	if (!apoOwner.loadDataType(_getFromIocfg("net_data_def"))) {
+// 		WriteLog("load data type error\n");
+// 		return false;
+// 	}
 	
 	LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
 	nd_assert(scriptRoot);

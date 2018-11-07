@@ -12,6 +12,7 @@
 #include "ndapplib/applib.h"
 #include "logic_parser/logicEngineRoot.h"
 #include "game_parser/dbldata2netstream.h"
+#include "game_parser/apoGameCommon.h"
 
 template <class _Tk>
 struct apoStringLess
@@ -26,11 +27,12 @@ struct apoStringLess
 
 };
 
-class ApoGameObj : public LogicObjectBase
+//parser owner for game server
+class LogicObject4Server : public apoLogicObject4Game
 {
 public:	
-	ApoGameObj();
-	virtual ~ApoGameObj();
+	LogicObject4Server();
+	virtual ~LogicObject4Server();
 
 	LogicParserEngine *getScriptHandler() { return &m_logicEngine; }
 	bool RunScript(parse_arg_list_t &args, LogicDataObj &result);
@@ -40,25 +42,15 @@ public:
 	bool SendEvent1(int event, const LogicDataObj &val1);
 	int getScriptError() { return m_logicEngine.getErrno(); }
 
-	bool opRead(const LogicDataObj& id, LogicDataObj &val);
-	bool opWrite(const LogicDataObj& id, const LogicDataObj &val);
-	bool opAdd(const LogicDataObj& id, const LogicDataObj &val);
-	bool opSub(const LogicDataObj& id, const  LogicDataObj &val);
-
-	LogicObjectBase *getObjectMgr(const char* destName);
 	bool getOtherObject(const char*objName, LogicDataObj &val);
 
 	typedef std::map<std::string, LogicObjectBase*, apoStringLess<std::string> > objectMgr_vct;
 protected:
-	
-	//objectMgr_vct m_objectMgr;
+
 	LogicParserEngine m_logicEngine;
 };
 
-
-//bool apollo_func_machine_version(LogicParserEngine*parser, parse_arg_list_t &args, LogicDataObj &result);
-
-
+typedef LogicObject4Server ApoGameObj;
 
 #endif 
 

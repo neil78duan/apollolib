@@ -52,6 +52,12 @@ namespace ClientMsgHandler
 	{
 		Destroy();
 	}
+
+	LogicParserEngine *ApoConnectScriptOwner::getScriptHandler()
+	{
+		return &LogicEngineRoot::get_Instant()->getGlobalParser(); 
+	}
+
 	void ApoConnectScriptOwner::Destroy(int)
 	{
 		m_conn = 0;
@@ -72,44 +78,17 @@ namespace ClientMsgHandler
 			val.InitSet((void*)h, OT_OBJ_NDHANDLE);
 			return true;
 		}
-		else if (0==ndstricmp(objName, "FormatMsgData")){
-			val.InitSet((void*)&getGlobalNetMsgFormat());
-			return true;
-		}
 		else if (0 == ndstricmp(objName, "msgIdNameFormat")) {
 			val.InitSet((void*)&m_msgIdName);
 			return true;
 		}
-
 		else if (0 == ndstricmp(objName, "SelfName")) {
 			val.InitSet("client");
 			return true;
 		}
-		else if (0 == ndstricmp(objName, "self")) {
-			val.InitSet((void*)this, OT_OBJ_BASE_OBJ);
-			return true;
+		else {
+			return apoLogicObject4Game::getOtherObject(objName, val);
 		}
-		else if (0 == ndstricmp(objName, "machineInfo")) {
-			char buf[256];
-			val.InitSet(nd_common_machine_info(buf, sizeof(buf)));
-			return true;
-		}
-		else if (0 == ndstricmp(objName, "settingFile")) {
-			const char *pSettingFile = LogicCompiler::get_Instant()->getConfigFileName();
-			val.InitSet(pSettingFile);
-			return true;
-		}
-
-// 		else if (0 == ndstricmp(objName, "machineInfo")) {
-// 			char buf[256];
-// 			val.InitSet(nd_common_machine_info(buf, sizeof(buf)));
-// 			return true;
-// 		}
-// 		else {
-// 			return TestLogicObject::getOtherObject(objName, val);
-// 		}
-
-		return false;
 	}
 
 	void ApoConnectScriptOwner::LoadMsgDataTypeFromServer( )
@@ -138,19 +117,13 @@ namespace ClientMsgHandler
 		return NULL;
 	}
 
-// 	bool ApoConnectScriptOwner::loadScript() 
+// 	bool ApoConnectScriptOwner::loadDataType(const char *file)
 // 	{
-// 		
-// 		return false;
+// 		if (!InitLoadNetMsgFormat(file)){
+// 			return false;
+// 		}
+// 		return true;
 // 	}
-
-	bool ApoConnectScriptOwner::loadDataType(const char *file)
-	{
-		if (-1 == InitLoadNetMsgFormat(file)){
-			return false;
-		}
-		return true;
-	}
 
 #define _GET_OBJ_FROM_MGR(_conn,_name,_val) \
 	do{				\
@@ -383,38 +356,6 @@ namespace ClientMsgHandler
 		nd_logmsg("get message protocol build time %lld\n", build_tm);
 		return 0;
 	}
-// 
-// 	int apollo_cli_msg_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t *msg, const char *script)
-// 	{
-// 		NDIConn *pconn = (NDIConn *)handle;
-// 		nd_assert(pconn);
-// 
-// 		NDIStreamMsg inmsg(msg);
-// 
-// 		LogicParserEngine *scriptEngine = (LogicParserEngine *)pconn->GetUserData();
-// 		nd_assert(scriptEngine);
-// 
-// 		//call function 
-// 		//LogicDataObj data;
-// 		parse_arg_list_t params;
-// 
-// 		//function name 
-// 		//data.InitSet(script);
-// 		params.push_back(LogicDataObj(script));
-// 
-// 		//receive message user
-// 		//data.InitSet((void*)pSession, OT_OBJ_BASE_OBJ);
-// 		params.push_back(LogicDataObj(handle, OT_OBJ_NDHANDLE));
-// 
-// 		//message object
-// 		//data.InitSet((void*)&inmsg, OT_OBJ_MSGSTREAM);
-// 		params.push_back(LogicDataObj((void*)&inmsg, OT_OBJ_MSGSTREAM));
-// 
-// 		LogicDataObj result;
-// 		scriptEngine->runScript(script, params, result);
-// 		//bool ret = LogicEngineRoot::get_Instant()->runScript(script, scriptEngine, params, result);
-// 		return 0;
-// 	}
 
 
 	bool outPutMessageFromconfig(NDIConn* pconn, const char *formatText, NDIStreamMsg &inmsg, userDefineDataType_map_t &dataDef)
@@ -495,49 +436,10 @@ namespace ClientMsgHandler
 		NDUINT32 errParam = 0;
 		inmsg.Read(errtype);
 		inmsg.Read(errParam);
-		nd_logerror("received error message %d %d\n", errtype, errParam);
-
-		/*
-		NetMessage::CommonErrorReply reply;
-		NetMessage::ReadStream(inmsg, reply);
-
-		if (reply.errtType == NetMessage::COMMON_ERROR_TYPE_SHORT_ITEM){
-		LogicDataObj data = DBL_FindDataObjectByname("item.xlsx", reply.param, "name");
-		if (!data.CheckValid())	{
-		data = DBL_FindDataObjectByname("equip_attr.xlsx", reply.param, "name");
-		if (!data.CheckValid())		{
-		nd_logmsg("COMMON-ERROR-MESSAGE: short item [ %d ] \n",reply.param);
-		return 0;
-		}
-		}
-		nd_logmsg("COMMON-ERROR-MESSAGE:short item [ %s ] \n", data.GetText());
-		}
-		else if (reply.errtType == NetMessage::COMMON_ERROR_TYPE_ATTR_LOW) {
-		LogicDataObj data = DBL_FindDataObjectByname("role_attr_config.xlsx", reply.param, "name");
-		if (!data.CheckValid())	{
-		nd_logmsg("COMMON-ERROR-MESSAGE:[ %d ] 不够\n", reply.param);
-		}
-		else {
-		nd_logmsg("COMMON-ERROR-MESSAGE:[ %s ] 不够\n", data.GetText());
-		}
-
-		}
-		else if (reply.errtType == NetMessage::COMMON_ERROR_TYPE_IN_CD) {
-		nd_logmsg("COMMON-ERROR-MESSAGE: skill [ %s ] IN CD\n",reply.param);
-		}
-		else if (reply.errtType == NetMessage::COMMON_ERROR_TYPE_IN_TABLE) {
-
-		LogicDataObj data = DBL_FindDataObjectByname("error.xlsx", reply.param, "desc");
-		if (!data.CheckValid())	{
-		nd_logmsg("COMMON-ERROR-MESSAGE: error-id =%d\n", reply.param);
-		}
-		else {
-		nd_logmsg("COMMON-ERROR-MESSAGE:[ %s ]\n", data.GetText());
-		}
-		}
-		*/
+		nd_logerror("received error message %d %d\n", errtype, errParam);		
 		return 0;
 	}
+
 	int msg_store_file(NDIConn* pconn, nd_usermsgbuf_t *msg)
 	{
 		NDIStreamMsg inmsg(msg);
@@ -620,18 +522,7 @@ namespace ClientMsgHandler
 		return 0;
 	}
 #endif 
-	// 
-	// int msg_logout_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
-	// {
-	// 	NDIStreamMsg inmsg(msg);
-	// 	NDUINT32 errorCode = 0;
-	// 
-	// 	inmsg.Read(errorCode);
-	// 
-	// 	myfprintf(stdout, "Received logout Message errorcode = %d \n", errorCode);
-	// 	return 0;
-	// }
-
+	
 	int msg_get_version_handler(NDIConn* pconn, nd_usermsgbuf_t *msg)
 	{
 		NDIStreamMsg inmsg(msg);
@@ -749,7 +640,6 @@ namespace ClientMsgHandler
 	{
 		CONNECT_INSTALL_MSG(pconn, msg_show_server_time_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_TIME);
 		CONNECT_INSTALL_MSG(pconn, msg_show_game_time_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GAME_TIME);
-		//CONNECT_INSTALL_MSG(pconn, msg_logout_handler, NETMSG_MAX_LOGIN, LOGIN_MSG_LOGOUT_NTF);
 
 		CONNECT_INSTALL_MSG(pconn, msg_show_msg_name_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_MESSAGE_NAME);
 		CONNECT_INSTALL_MSG(pconn, msg_get_version_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GETVERSION);

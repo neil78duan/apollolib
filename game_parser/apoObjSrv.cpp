@@ -1,4 +1,4 @@
-/*  file apoGameObj.h
+/*  file LogicObject4Server.h
 * implemention of apollo logic parser for game
 *
 * create by duan
@@ -7,9 +7,9 @@
 */
 
 
-#include "apo_http/apoGameObj.h"
 #include "ndapplib/applib.h"
 #include "logic_parser/logicEngineRoot.h"
+#include "game_parser/apoObjSrv.h"
 #include "game_parser/dbldata2netstream.h"
 #include "game_parser/apoGameCommon.h"
 //#include "srv_common/playerMgr.h"
@@ -33,17 +33,17 @@ APOLLO_SCRIPT_API_DEF_GLOBAL(apollo_func_machine_version, "获取主机信息()")
 }
 
 
-ApoGameObj::ApoGameObj() : m_logicEngine(this)
+LogicObject4Server::LogicObject4Server() : m_logicEngine(this)
 {
 
 }
-ApoGameObj::~ApoGameObj()
+LogicObject4Server::~LogicObject4Server()
 {
 	
 }
 
 
-bool ApoGameObj::RunScript(parse_arg_list_t &args, LogicDataObj &result)
+bool LogicObject4Server::RunScript(parse_arg_list_t &args, LogicDataObj &result)
 {
 	ND_TRACE_FUNC();
 	if (args.size() < 1 || args[0].GetDataType() != OT_STRING){
@@ -58,7 +58,7 @@ bool ApoGameObj::RunScript(parse_arg_list_t &args, LogicDataObj &result)
 	return ret;
 }
 
-bool ApoGameObj::RunScript(const char *script)
+bool LogicObject4Server::RunScript(const char *script)
 {
 	ND_TRACE_FUNC();
 
@@ -74,7 +74,7 @@ bool ApoGameObj::RunScript(const char *script)
 	return ret;
 
 }
-bool ApoGameObj::SendScriptEvent(int event_id, int argc, ...)
+bool LogicObject4Server::SendScriptEvent(int event_id, int argc, ...)
 {
 	ND_TRACE_FUNC();
 
@@ -93,59 +93,19 @@ bool ApoGameObj::SendScriptEvent(int event_id, int argc, ...)
 	return m_logicEngine.eventNtf(event_id, params);
 }
 
-bool ApoGameObj::SendEvent0(int event)
+bool LogicObject4Server::SendEvent0(int event)
 {
 	ND_TRACE_FUNC();
 	return SendScriptEvent(event, 0);
 }
-bool ApoGameObj::SendEvent1(int event, const LogicDataObj &val1)
+bool LogicObject4Server::SendEvent1(int event, const LogicDataObj &val1)
 {
 	ND_TRACE_FUNC();
 	return SendScriptEvent(event, 1, &val1);
 }
 
-//////////////////////////////////////////////////////////////////////////
 
-bool ApoGameObj::opRead(const LogicDataObj& id, LogicDataObj &val)
-{
-	PARSE_TRACE("logic_engine_test: opRead(%d) \n", id.GetInt());
-	//_setval(val);
-	return true;
-}
-
-bool ApoGameObj::opWrite(const LogicDataObj& id, const LogicDataObj &val)
-{
-	PARSE_TRACE("logic_engine_test: opWrite(%d) \n", id.GetInt());
-	//_setval(val);
-	return true;
-}
-
-
-bool ApoGameObj::opAdd(const LogicDataObj& id, const LogicDataObj &val)
-{
-	PARSE_TRACE("logic_engine_test: opAdd(%d) \n", id.GetInt());
-	//_setval(val);
-	return true;
-}
-
-
-bool ApoGameObj::opSub(const LogicDataObj& id, const  LogicDataObj &val)
-{
-	PARSE_TRACE("logic_engine_test: opSub(%d) \n", id.GetInt());
-	//_setval(val);
-	return true;
-}
-
-LogicObjectBase *ApoGameObj::getObjectMgr(const char* destName)
-{
-	ND_TRACE_FUNC();
-	if (0 == ndstricmp(destName, "owner")) {
-		return  this;
-	}
-	return NULL;
-}
-
-bool ApoGameObj::getOtherObject(const char*objName, LogicDataObj &val)
+bool LogicObject4Server::getOtherObject(const char*objName, LogicDataObj &val)
 {
 	ND_TRACE_FUNC();
 	if (0 == ndstricmp(objName, "listener"))	{
@@ -162,13 +122,7 @@ bool ApoGameObj::getOtherObject(const char*objName, LogicDataObj &val)
 			return true;
 		}
 	}
-
-// 	else if (0 == ndstricmp(objName, "FormatMsgData"))	{
-// 		userDefineDataType_map_t &msgObj = LogicEngineRoot::get_Instant()->getGlobalDataType();
-// 		val.InitSet((void*)&msgObj);
-// 		return true;
-// 	}
-
+	
 	else if (0 == ndstricmp(objName, "LogPath")) {
 		NDInstanceBase *pInst = getbase_inst();
 		server_config *pcfg = pInst->GetInstConfig();
@@ -186,20 +140,14 @@ bool ApoGameObj::getOtherObject(const char*objName, LogicDataObj &val)
 			return true;
 		}
 	}
-	else if (0 == ndstricmp(objName, "WritablePath")) {
-		val.InitSet(nd_getcwd());
-		return true;
-	}
-
-	else if (0 == ndstricmp(objName, "self")) {
-		val.InitSet((void*)this, OT_OBJ_BASE_OBJ);
-		return true;
-	}
 
 	else if (0 == ndstricmp(objName, "machineInfo")) {
 		parse_arg_list_t lists;
 		apollo_func_machine_version(NULL, lists, val);
 		return true;
+	}
+	else {
+		return apoLogicObject4Game::getOtherObject(objName, val);
 	}
 
 	return false;

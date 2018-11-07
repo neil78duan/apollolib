@@ -13,20 +13,15 @@
 #include "ndcli/nd_iconn.h"
 #ifndef WITHOUT_LOGIC_PARSER
 #include "game_parser/dbldata2netstream.h"
+#include "game_parser/apoGameCommon.h"
 #include "logic_parser/objectBaseMgr.h"
 #include "logic_parser/logicEngineRoot.h"
 #endif
 
 namespace ClientMsgHandler
 {
-void InstallDftClientHandler(NDIConn *pconn) ;	
-int apollo_dft_message_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
-//int apollo_cli_msg_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t *msg, const char *script);
-// 
-// #ifndef WITHOUT_LOGIC_PARSER
-// void destroyDftClientMsgHandler(NDIConn *pConn);
-// bool initDftClientMsgHandler(NDIConn *pConn, const char*script_file, logic_print outfunc);
-// #endif
+	void InstallDftClientHandler(NDIConn *pconn) ;	
+	int apollo_dft_message_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
 	
 	int msg_get_version_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
 	int msg_get_rlimit_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
@@ -48,7 +43,7 @@ int apollo_dft_message_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
 	};
 	typedef::std::vector<msgIDNameFormat> msgIdNameFormat_vct;
 
-	class ApoConnectScriptOwner : public TestLogicObject
+	class ApoConnectScriptOwner : public apoLogicObject4Game
 	{
 	public:
 		ApoConnectScriptOwner();
@@ -58,12 +53,11 @@ int apollo_dft_message_handler(NDIConn* pconn, nd_usermsgbuf_t *msg);
 		bool getOtherObject(const char*objName, LogicDataObj &val);
 		virtual const char *getMsgName(int msgId);
 		virtual const char *getMsgBody(int msgId);
-		//virtual bool loadScript() ;
-		bool loadDataType(const char *file);
+		//bool loadDataType(const char *file);
 		void LoadMsgDataTypeFromServer();
 	protected:
+		LogicParserEngine * getScriptHandler();
 		NDIConn *m_conn;
-		//userDefineDataType_map_t m_dataType;
 		msgIdNameFormat_vct m_msgIdName;
 	};
 	

@@ -13,10 +13,144 @@
 #include "game_parser/dbldata2netstream.h"
 #include "apo_http/httpScriptApi.h"
 
+
+apoHttpScriptMgr::apoHttpScriptMgr():m_logicEngine(this)
+{
+
+}
+apoHttpScriptMgr::~apoHttpScriptMgr()
+{
+
+}
+
+bool apoHttpScriptMgr::RunScript(parse_arg_list_t &args, LogicDataObj &result)
+{
+	ND_TRACE_FUNC();
+	if (args.size() < 1 || args[0].GetDataType() != OT_STRING) {
+		return false;
+	}
+	const char *script = args[0].GetText();
+
+	bool ret = m_logicEngine.runScript(script, args, result);
+	if (!ret) {
+		nd_logerror("run %s error %d\n", script, m_logicEngine.getErrno());
+	}
+	return ret;
+}
+
+bool apoHttpScriptMgr::RunScript(const char *script)
+{
+	ND_TRACE_FUNC();
+
+	parse_arg_list_t args;
+	LogicDataObj val, result;
+	val.InitSet(script);
+	args.push_back(val);
+
+	bool ret = m_logicEngine.runScript(script, args, result);
+	if (!ret) {
+		nd_logerror("run %s error %d\n", script, m_logicEngine.getErrno());
+	}
+	return ret;
+
+}
+bool apoHttpScriptMgr::SendScriptEvent(int event_id, int argc, ...)
+{
+	ND_TRACE_FUNC();
+
+	parse_arg_list_t params;
+
+	params.push_back(LogicDataObj((void*)this, OT_OBJ_BASE_OBJ));
+
+	va_list arg;
+	va_start(arg, argc);
+	while (argc-- > 0) {
+		LogicDataObj *data1 = va_arg(arg, LogicDataObj*);
+		params.push_back(*data1);
+	}
+	va_end(arg);
+
+	return m_logicEngine.eventNtf(event_id, params);
+}
+
+bool apoHttpScriptMgr::SendEvent0(int event)
+{
+	ND_TRACE_FUNC();
+	return SendScriptEvent(event, 0);
+}
+bool apoHttpScriptMgr::SendEvent1(int event, const LogicDataObj &val1)
+{
+	ND_TRACE_FUNC();
+	return SendScriptEvent(event, 1, &val1);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+bool apoHttpScriptMgr::opRead(const LogicDataObj& id, LogicDataObj &val)
+{
+	PARSE_TRACE("logic_engine_test: opRead(%d) \n", id.GetInt());
+	//_setval(val);
+	return true;
+}
+
+bool apoHttpScriptMgr::opWrite(const LogicDataObj& id, const LogicDataObj &val)
+{
+	PARSE_TRACE("logic_engine_test: opWrite(%d) \n", id.GetInt());
+	//_setval(val);
+	return true;
+}
+
+
+bool apoHttpScriptMgr::opAdd(const LogicDataObj& id, const LogicDataObj &val)
+{
+	PARSE_TRACE("logic_engine_test: opAdd(%d) \n", id.GetInt());
+	//_setval(val);
+	return true;
+}
+
+
+bool apoHttpScriptMgr::opSub(const LogicDataObj& id, const  LogicDataObj &val)
+{
+	PARSE_TRACE("logic_engine_test: opSub(%d) \n", id.GetInt());
+	//_setval(val);
+	return true;
+}
+
+LogicObjectBase *apoHttpScriptMgr::getObjectMgr(const char* destName)
+{
+	ND_TRACE_FUNC();
+	if (0 == ndstricmp(destName, "owner")) {
+		return  this;
+	}
+	return NULL;
+}
+
+bool apoHttpScriptMgr::getOtherObject(const char*objName, LogicDataObj &val)
+{
+	ND_TRACE_FUNC();
+	if (0 == ndstricmp(objName, "machineInfo")) {
+		char buf[256];
+		val.InitSet(nd_common_machine_info(buf, sizeof(buf)));
+	}
+	else if (0 == ndstricmp(objName, "self")) {
+		val.InitSet((void*)this, OT_OBJ_BASE_OBJ);
+	}
+	
+	if (0 == ndstricmp(objName, "listener")) {
+		nd_handle hListen = getbase_inst()->GetDeftListener()->GetHandle();
+		val.InitSet((void*)hListen, OT_OBJ_NDHANDLE);
+		return true;
+	}
+	m_error = LOGIC_ERR_AIM_OBJECT_NOT_FOUND;
+	return false;
+}
+
+
+//////////////////////////////////////////
 static  NDHttpSession *_getSession(const LogicDataObj &objData)
 {
 	ND_TRACE_FUNC();
-	 NDHttpSession *pSession = NULL;
+	NDHttpSession *pSession = NULL;
 	if (objData == OT_OBJ_NDHANDLE) {
 		pSession = dynamic_cast< NDHttpSession*>(NDObject::FromHandle(objData.GetNDHandle()));
 	}

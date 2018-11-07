@@ -428,5 +428,8 @@
     <ClCompile Include="..\..\game_parser\dbl_mgr.cpp">
       <Filter>apollo\parser4game</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\game_parser\logicGameObj.cpp">
+      <Filter>apollo\parser4game</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

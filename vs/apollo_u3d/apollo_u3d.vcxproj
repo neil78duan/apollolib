@@ -306,6 +306,7 @@
     <ClCompile Include="..\..\game_parser\apoGameCommon.cpp" />
     <ClCompile Include="..\..\game_parser\dbldata2netstream.cpp" />
     <ClCompile Include="..\..\game_parser\dbl_mgr.cpp" />
+    <ClCompile Include="..\..\game_parser\logicGameObj.cpp" />
     <ClCompile Include="..\..\plugin_u3d\apoAttrCalcHelper.cpp" />
     <ClCompile Include="..\..\plugin_u3d\apoCliApi.cpp" />
     <ClCompile Include="..\..\plugin_u3d\apoFormula.cpp" />
