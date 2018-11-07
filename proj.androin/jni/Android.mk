@@ -76,10 +76,8 @@ LOCAL_SRC_FILES := ../../../ndsdk/src/nd_common/src/bintree.c \
 ../../plugin_u3d/apoCliApi.cpp	\
 ../../plugin_u3d/apoFormula.cpp	\
 ../../plugin_u3d/apoAttrCalcHelper.cpp	\
-../../../apolloBP/src/parser/dbl_mgr.cpp	\
 ../../../apolloBP/src/parser/logicParser.cpp	\
 ../../../apolloBP/src/parser/logic_function.cpp	\
-../../../apolloBP/src/parser/dbldata2netstream.cpp	\
 ../../../apolloBP/src/parser/logicStruct.cpp	\
 ../../../apolloBP/src/parser/objectBaseMgr.cpp	\
 ../../../apolloBP/src/parser/logicDataType.cpp	\
@@ -87,7 +85,9 @@ LOCAL_SRC_FILES := ../../../ndsdk/src/nd_common/src/bintree.c \
 ../../../apolloBP/src/parser/logicEngineRoot.cpp	\
 ../../../apolloBP/src/parser/logic_editor_helper.cpp \
 ../../../apolloBP/src/parser/logic_debugger.cpp \
-
+../../game_parser/dbl_mgr.cpp	\
+../../game_parser/dbldata2netstream.cpp	\
+../../game_parser/apoGameCommon.cpp	\
 
 LOCAL_CFLAGS := -D__ND_ADNROID__ -DND_CLIENT_ONLY
 LOCAL_CPPFLAGS := -D__ND_ANDROID__  -DWITHOUT_LOGIC_PARSER -DND_CLIENT_ONLY

@@ -49,8 +49,6 @@
 		0764F69F1D631C7F00E91673 /* nd_formula.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6951D631C1600E91673 /* nd_formula.c */; };
 		0764F6A01D631C7F00E91673 /* nd_vm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6961D631C1600E91673 /* nd_vm.c */; };
 		0764F6A11D631C7F00E91673 /* nd_vmdbg.c in Sources */ = {isa = PBXBuildFile; fileRef = 0764F6971D631C1600E91673 /* nd_vmdbg.c */; };
-		0774B91A1D991E1F00C6401F /* attr_mgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0774B90D1D991E1F00C6401F /* attr_mgr.cpp */; };
-		0774B91C1D991E1F00C6401F /* roleattr_help.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0774B9101D991E1F00C6401F /* roleattr_help.cpp */; };
 		0776F8F81E31BECD005DCB69 /* apoCliApi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0776F8F11E31BECD005DCB69 /* apoCliApi.cpp */; };
 		0776F8F91E31BECD005DCB69 /* apoCliApi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0776F8F11E31BECD005DCB69 /* apoCliApi.cpp */; };
 		0776F8FA1E31BECD005DCB69 /* apoCliApi.h in Headers */ = {isa = PBXBuildFile; fileRef = 0776F8F21E31BECD005DCB69 /* apoCliApi.h */; };
@@ -117,8 +115,6 @@
 		0776F9451E31C1AE005DCB69 /* nd_exch_key.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85901D54400300C32925 /* nd_exch_key.cpp */; };
 		0776F9461E31C1AE005DCB69 /* nd_client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85921D54400300C32925 /* nd_client.cpp */; };
 		0776F9481E31C1AE005DCB69 /* apoCliApi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0776F8F11E31BECD005DCB69 /* apoCliApi.cpp */; };
-		0776F94C1E31C1DF005DCB69 /* attr_mgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0774B90D1D991E1F00C6401F /* attr_mgr.cpp */; };
-		0776F94D1E31C1DF005DCB69 /* roleattr_help.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0774B9101D991E1F00C6401F /* roleattr_help.cpp */; };
 		0776F9591E31C1DF005DCB69 /* dftCliMsgHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07533A2A1D6EF0B9004DD290 /* dftCliMsgHandler.cpp */; };
 		0776F95A1E31C1DF005DCB69 /* login_apollo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC86581D54411E00C32925 /* login_apollo.cpp */; };
 		0778FE47207B50F90057D91B /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = 0778FE46207B50F90057D91B /* cJSON.c */; };
@@ -129,12 +125,6 @@
 		0796E066202BF32100B7C9E5 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */; };
 		0796E067202BF3D100B7C9E5 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */; };
 		0796E068202BF3E700B7C9E5 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */; };
-		07B84B13205D12F2002F2224 /* dbl_mgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B84AE6205D12F2002F2224 /* dbl_mgr.cpp */; };
-		07B84B14205D12F2002F2224 /* dbl_mgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B84AE6205D12F2002F2224 /* dbl_mgr.cpp */; };
-		07B84B15205D12F2002F2224 /* dbl_mgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B84AE6205D12F2002F2224 /* dbl_mgr.cpp */; };
-		07B84B16205D12F2002F2224 /* dbldata2netstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B84AE7205D12F2002F2224 /* dbldata2netstream.cpp */; };
-		07B84B17205D12F2002F2224 /* dbldata2netstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B84AE7205D12F2002F2224 /* dbldata2netstream.cpp */; };
-		07B84B18205D12F2002F2224 /* dbldata2netstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B84AE7205D12F2002F2224 /* dbldata2netstream.cpp */; };
 		07B84B19205D12F2002F2224 /* logic_compile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B84AE8205D12F2002F2224 /* logic_compile.cpp */; };
 		07B84B1A205D12F2002F2224 /* logic_compile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B84AE8205D12F2002F2224 /* logic_compile.cpp */; };
 		07B84B1B205D12F2002F2224 /* logic_compile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B84AE8205D12F2002F2224 /* logic_compile.cpp */; };
@@ -165,6 +155,13 @@
 		07B84B34205D12F2002F2224 /* objectBaseMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B84AF1205D12F2002F2224 /* objectBaseMgr.cpp */; };
 		07B84B35205D12F2002F2224 /* objectBaseMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B84AF1205D12F2002F2224 /* objectBaseMgr.cpp */; };
 		07B84B36205D12F2002F2224 /* objectBaseMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B84AF1205D12F2002F2224 /* objectBaseMgr.cpp */; };
+		07D8041A2191A86F001D437C /* apoGameCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07D804132191A86E001D437C /* apoGameCommon.cpp */; };
+		07D8041B2191A86F001D437C /* dbl_mgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07D804152191A86E001D437C /* dbl_mgr.cpp */; };
+		07D8041C2191A86F001D437C /* dbldata2netstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07D804172191A86E001D437C /* dbldata2netstream.cpp */; };
+		07D8041D2191A86F001D437C /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07D804192191A86E001D437C /* Makefile */; };
+		07D8041E2191A9A7001D437C /* apoGameCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07D804132191A86E001D437C /* apoGameCommon.cpp */; };
+		07D8041F2191A9A7001D437C /* dbl_mgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07D804152191A86E001D437C /* dbl_mgr.cpp */; };
+		07D804202191A9A7001D437C /* dbldata2netstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07D804172191A86E001D437C /* dbldata2netstream.cpp */; };
 		07EC85F01D54400400C32925 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07EC851E1D54400300C32925 /* Makefile */; };
 		07EC85F11D54400400C32925 /* bintree.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85201D54400300C32925 /* bintree.c */; };
 		07EC85F21D54400400C32925 /* callstack.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85211D54400300C32925 /* callstack.c */; };
@@ -330,11 +327,6 @@
 		0764F6951D631C1600E91673 /* nd_formula.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_formula.c; path = nd_vm/src/nd_formula.c; sourceTree = "<group>"; };
 		0764F6961D631C1600E91673 /* nd_vm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_vm.c; path = nd_vm/src/nd_vm.c; sourceTree = "<group>"; };
 		0764F6971D631C1600E91673 /* nd_vmdbg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nd_vmdbg.c; path = nd_vm/src/nd_vmdbg.c; sourceTree = "<group>"; };
-		0774B90D1D991E1F00C6401F /* attr_mgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = attr_mgr.cpp; sourceTree = "<group>"; };
-		0774B90E1D991E1F00C6401F /* attr_mgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = attr_mgr.h; sourceTree = "<group>"; };
-		0774B90F1D991E1F00C6401F /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		0774B9101D991E1F00C6401F /* roleattr_help.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = roleattr_help.cpp; sourceTree = "<group>"; };
-		0774B9111D991E1F00C6401F /* roleattr_help.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = roleattr_help.h; sourceTree = "<group>"; };
 		0776F8F11E31BECD005DCB69 /* apoCliApi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apoCliApi.cpp; sourceTree = "<group>"; };
 		0776F8F21E31BECD005DCB69 /* apoCliApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apoCliApi.h; sourceTree = "<group>"; };
 		0776F8F51E31BECD005DCB69 /* ApolloBridge.cs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ApolloBridge.cs; sourceTree = "<group>"; };
@@ -348,8 +340,6 @@
 		077C59382105E2A900BB4D44 /* apoAttrCalcHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apoAttrCalcHelper.cpp; sourceTree = "<group>"; };
 		0796E064202BF32100B7C9E5 /* apoClientU3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = apoClientU3d.h; path = ../../../cli_common/apoClientU3d.h; sourceTree = "<group>"; };
 		0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = apoClientU3d.cpp; path = ../../../cli_common/apoClientU3d.cpp; sourceTree = "<group>"; };
-		07B84ACC205D12C0002F2224 /* dbl_mgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dbl_mgr.h; sourceTree = "<group>"; };
-		07B84ACD205D12C0002F2224 /* dbldata2netstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dbldata2netstream.h; sourceTree = "<group>"; };
 		07B84ACE205D12C0002F2224 /* logic_compile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logic_compile.h; sourceTree = "<group>"; };
 		07B84ACF205D12C0002F2224 /* logic_debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logic_debugger.h; sourceTree = "<group>"; };
 		07B84AD0205D12C0002F2224 /* logic_editor_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logic_editor_helper.h; sourceTree = "<group>"; };
@@ -360,8 +350,6 @@
 		07B84AD5205D12C0002F2224 /* logicParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logicParser.h; sourceTree = "<group>"; };
 		07B84AD6205D12C0002F2224 /* logicStruct.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = logicStruct.hpp; sourceTree = "<group>"; };
 		07B84AD7205D12C0002F2224 /* objectBaseMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objectBaseMgr.h; sourceTree = "<group>"; };
-		07B84AE6205D12F2002F2224 /* dbl_mgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dbl_mgr.cpp; sourceTree = "<group>"; };
-		07B84AE7205D12F2002F2224 /* dbldata2netstream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dbldata2netstream.cpp; sourceTree = "<group>"; };
 		07B84AE8205D12F2002F2224 /* logic_compile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logic_compile.cpp; sourceTree = "<group>"; };
 		07B84AE9205D12F2002F2224 /* logic_debugger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logic_debugger.cpp; sourceTree = "<group>"; };
 		07B84AEA205D12F2002F2224 /* logic_editor_helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logic_editor_helper.cpp; sourceTree = "<group>"; };
@@ -372,6 +360,13 @@
 		07B84AEF205D12F2002F2224 /* logicStruct.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logicStruct.cpp; sourceTree = "<group>"; };
 		07B84AF0205D12F2002F2224 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		07B84AF1205D12F2002F2224 /* objectBaseMgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objectBaseMgr.cpp; sourceTree = "<group>"; };
+		07D804132191A86E001D437C /* apoGameCommon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apoGameCommon.cpp; sourceTree = "<group>"; };
+		07D804142191A86E001D437C /* apoGameCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apoGameCommon.h; sourceTree = "<group>"; };
+		07D804152191A86E001D437C /* dbl_mgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dbl_mgr.cpp; sourceTree = "<group>"; };
+		07D804162191A86E001D437C /* dbl_mgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dbl_mgr.h; sourceTree = "<group>"; };
+		07D804172191A86E001D437C /* dbldata2netstream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dbldata2netstream.cpp; sourceTree = "<group>"; };
+		07D804182191A86E001D437C /* dbldata2netstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dbldata2netstream.h; sourceTree = "<group>"; };
+		07D804192191A86E001D437C /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		07EC848A1D543B8400C32925 /* libapollo_client_ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libapollo_client_ios.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		07EC84A81D543E6200C32925 /* libapollo_client_mac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libapollo_client_mac.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		07EC84AF1D54400300C32925 /* _nderr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _nderr.h; sourceTree = "<group>"; };
@@ -589,19 +584,6 @@
 			name = vm;
 			sourceTree = "<group>";
 		};
-		0774B9071D991E1F00C6401F /* attribute */ = {
-			isa = PBXGroup;
-			children = (
-				0774B90D1D991E1F00C6401F /* attr_mgr.cpp */,
-				0774B90E1D991E1F00C6401F /* attr_mgr.h */,
-				0774B90F1D991E1F00C6401F /* Makefile */,
-				0774B9101D991E1F00C6401F /* roleattr_help.cpp */,
-				0774B9111D991E1F00C6401F /* roleattr_help.h */,
-			);
-			name = attribute;
-			path = ../../../attribute;
-			sourceTree = "<group>";
-		};
 		0776F8F01E31BECD005DCB69 /* plugin_u3d */ = {
 			isa = PBXGroup;
 			children = (
@@ -649,8 +631,6 @@
 		07B84ACA205D12C0002F2224 /* logic_parser */ = {
 			isa = PBXGroup;
 			children = (
-				07B84ACC205D12C0002F2224 /* dbl_mgr.h */,
-				07B84ACD205D12C0002F2224 /* dbldata2netstream.h */,
 				07B84ACE205D12C0002F2224 /* logic_compile.h */,
 				07B84ACF205D12C0002F2224 /* logic_debugger.h */,
 				07B84AD0205D12C0002F2224 /* logic_editor_helper.h */,
@@ -668,8 +648,6 @@
 		07B84AD9205D12F2002F2224 /* parser */ = {
 			isa = PBXGroup;
 			children = (
-				07B84AE6205D12F2002F2224 /* dbl_mgr.cpp */,
-				07B84AE7205D12F2002F2224 /* dbldata2netstream.cpp */,
 				07B84AE8205D12F2002F2224 /* logic_compile.cpp */,
 				07B84AE9205D12F2002F2224 /* logic_debugger.cpp */,
 				07B84AEA205D12F2002F2224 /* logic_editor_helper.cpp */,
@@ -683,6 +661,21 @@
 			);
 			name = parser;
 			path = ../../../apolloBP/src/parser;
+			sourceTree = "<group>";
+		};
+		07D804122191A86E001D437C /* game_parser */ = {
+			isa = PBXGroup;
+			children = (
+				07D804132191A86E001D437C /* apoGameCommon.cpp */,
+				07D804142191A86E001D437C /* apoGameCommon.h */,
+				07D804152191A86E001D437C /* dbl_mgr.cpp */,
+				07D804162191A86E001D437C /* dbl_mgr.h */,
+				07D804172191A86E001D437C /* dbldata2netstream.cpp */,
+				07D804182191A86E001D437C /* dbldata2netstream.h */,
+				07D804192191A86E001D437C /* Makefile */,
+			);
+			name = game_parser;
+			path = ../../../game_parser;
 			sourceTree = "<group>";
 		};
 		07EC84811D543B8400C32925 = {
@@ -709,8 +702,8 @@
 		07EC848C1D543B8400C32925 /* apollo_client */ = {
 			isa = PBXGroup;
 			children = (
+				07D804122191A86E001D437C /* game_parser */,
 				0776F8F01E31BECD005DCB69 /* plugin_u3d */,
-				0774B9071D991E1F00C6401F /* attribute */,
 				074C8F711D66A85000590A34 /* login */,
 			);
 			path = apollo_client;
@@ -1132,18 +1125,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07D8041E2191A9A7001D437C /* apoGameCommon.cpp in Sources */,
+				07D8041F2191A9A7001D437C /* dbl_mgr.cpp in Sources */,
+				07D804202191A9A7001D437C /* dbldata2netstream.cpp in Sources */,
 				07272F522137FFAF00D66BB0 /* nd_logger.c in Sources */,
 				07253495207C8D69001FD566 /* cJSON.c in Sources */,
 				0796E067202BF3D100B7C9E5 /* apoClientU3d.cpp in Sources */,
 				07B84B1E205D12F2002F2224 /* logic_debugger.cpp in Sources */,
 				075A8E7F1EA77CC900710AEA /* apoFormula.cpp in Sources */,
-				0776F94C1E31C1DF005DCB69 /* attr_mgr.cpp in Sources */,
 				07B84B27205D12F2002F2224 /* logicDataType.cpp in Sources */,
-				07B84B15205D12F2002F2224 /* dbl_mgr.cpp in Sources */,
-				0776F94D1E31C1DF005DCB69 /* roleattr_help.cpp in Sources */,
 				0776F9591E31C1DF005DCB69 /* dftCliMsgHandler.cpp in Sources */,
 				0776F95A1E31C1DF005DCB69 /* login_apollo.cpp in Sources */,
-				07B84B18205D12F2002F2224 /* dbldata2netstream.cpp in Sources */,
 				0776F9221E31C1AE005DCB69 /* desc.c in Sources */,
 				07B84B2D205D12F2002F2224 /* logicParser.cpp in Sources */,
 				0776F9231E31C1AE005DCB69 /* digit.c in Sources */,
@@ -1226,9 +1218,9 @@
 				07533A2C1D6EF0B9004DD290 /* dftCliMsgHandler.cpp in Sources */,
 				07EC86181D54400400C32925 /* ipraw.c in Sources */,
 				07272F4A2137FEC900D66BB0 /* nd_trace.c in Sources */,
-				0774B91A1D991E1F00C6401F /* attr_mgr.cpp in Sources */,
 				07EC861F1D54400400C32925 /* nd_udp.c in Sources */,
 				07EC85F31D54400400C32925 /* common.c in Sources */,
+				07D8041A2191A86F001D437C /* apoGameCommon.cpp in Sources */,
 				07272F462137FEC900D66BB0 /* nd_static_alloc.c in Sources */,
 				07EC86061D54400400C32925 /* digit.c in Sources */,
 				07EC85F71D54400400C32925 /* nd_mempool.c in Sources */,
@@ -1237,7 +1229,6 @@
 				07EC860C1D54400400C32925 /* r_encode.c in Sources */,
 				07EC86211D54400400C32925 /* proxy_cli.c in Sources */,
 				07272F3C2137FEC900D66BB0 /* bintree.c in Sources */,
-				07B84B16205D12F2002F2224 /* dbldata2netstream.cpp in Sources */,
 				0764F6991D631C1600E91673 /* nd_asm.c in Sources */,
 				07EC86531D54400400C32925 /* Makefile in Sources */,
 				07EC85F51D54400400C32925 /* nd_handle.c in Sources */,
@@ -1245,6 +1236,7 @@
 				07EC86021D54400400C32925 /* recbuf.c in Sources */,
 				07EC86511D54400400C32925 /* nd_exch_key.cpp in Sources */,
 				07B84B31205D12F2002F2224 /* Makefile in Sources */,
+				07D8041D2191A86F001D437C /* Makefile in Sources */,
 				07EC85F81D54400400C32925 /* nd_mutex.c in Sources */,
 				07EC86561D5440A100C32925 /* nd_datatransfer.cpp in Sources */,
 				07EC86521D54400400C32925 /* nd_client.cpp in Sources */,
@@ -1282,11 +1274,11 @@
 				07EC86141D54400400C32925 /* ndcrypt.c in Sources */,
 				07EC85F41D54400400C32925 /* nd_cmdline.c in Sources */,
 				07EC85FC1D54400400C32925 /* nd_trace.c in Sources */,
-				0774B91C1D991E1F00C6401F /* roleattr_help.cpp in Sources */,
 				07EC85F21D54400400C32925 /* callstack.c in Sources */,
 				07272F252137FE2100D66BB0 /* nd_logger.c in Sources */,
 				07EC86201D54400400C32925 /* net_srv.c in Sources */,
 				07EC86571D5440A100C32925 /* nd_msgpack.cpp in Sources */,
+				07D8041B2191A86F001D437C /* dbl_mgr.cpp in Sources */,
 				074D850E1D6C2C2A00201121 /* nd_time.c in Sources */,
 				07EC85FE1D54400400C32925 /* nd_win.c in Sources */,
 				07EC86221D54400400C32925 /* udt_icmp.c in Sources */,
@@ -1302,6 +1294,7 @@
 				07B84B22205D12F2002F2224 /* logic_function.cpp in Sources */,
 				07272F4C2137FEC900D66BB0 /* nd_win.c in Sources */,
 				07272F3F2137FEC900D66BB0 /* common.c in Sources */,
+				07D8041C2191A86F001D437C /* dbldata2netstream.cpp in Sources */,
 				07EC86191D54400400C32925 /* nd_msgentry.c in Sources */,
 				07EC861E1D54400400C32925 /* nd_tcp.c in Sources */,
 				07272F4F2137FEC900D66BB0 /* node_mgr.c in Sources */,
@@ -1316,7 +1309,6 @@
 				07EC860F1D54400400C32925 /* r_random.c in Sources */,
 				07EC861C1D54400400C32925 /* nd_netui.c in Sources */,
 				07EC86251D54400400C32925 /* udt_srv.c in Sources */,
-				07B84B13205D12F2002F2224 /* dbl_mgr.cpp in Sources */,
 				07EC861B1D54400400C32925 /* nd_netobj.c in Sources */,
 				07272F422137FEC900D66BB0 /* nd_iconv.c in Sources */,
 				07272F402137FEC900D66BB0 /* nd_cmdline.c in Sources */,
@@ -1367,7 +1359,6 @@
 				07EC866B1D54433700C32925 /* nd_timer.c in Sources */,
 				07EC866C1D54433700C32925 /* nd_trace.c in Sources */,
 				07EC866D1D54433700C32925 /* nd_unix.c in Sources */,
-				07B84B14205D12F2002F2224 /* dbl_mgr.cpp in Sources */,
 				07B84B1D205D12F2002F2224 /* logic_debugger.cpp in Sources */,
 				07EC866E1D54433700C32925 /* nd_win.c in Sources */,
 				07EC866F1D54433700C32925 /* nd_xml.c in Sources */,
@@ -1386,7 +1377,6 @@
 				07EC867A1D54433700C32925 /* r_dh.c in Sources */,
 				07EC867B1D54433700C32925 /* r_encode.c in Sources */,
 				07EC867C1D54433700C32925 /* r_enhanc.c in Sources */,
-				07B84B17205D12F2002F2224 /* dbldata2netstream.cpp in Sources */,
 				07EC867D1D54433700C32925 /* r_keygen.c in Sources */,
 				07B84B2C205D12F2002F2224 /* logicParser.cpp in Sources */,
 				07EC867E1D54433700C32925 /* r_random.c in Sources */,
