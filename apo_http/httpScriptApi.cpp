@@ -166,7 +166,7 @@ APOLLO_SCRIPT_API_DEF(apollo_set_http_handler, "http_install_req_handler(listene
 	CHECK_ARGS_NUM(args, 4, parser);
 
 	LogicDataObj netHandle;
-	LogicObjectBase *owner = parser->getOwner();
+	LogicObjectBase *owner = (LogicObjectBase *)parser->getOwner();
 
 	if (owner && owner->getOtherObject(args[1].GetText(), netHandle)) {
 		nd_handle hListen = (nd_handle)netHandle.GetObjectAddr();
@@ -346,7 +346,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_file_down, "HTTP_download_file(connectObj,requ
 	}
 
 
-	LogicObjectBase *owner = parser->getOwner();
+	LogicObjectBase *owner = (LogicObjectBase *)parser->getOwner();
 	nd_assert(owner);
 	LogicDataObj val;
 	if (!owner->getOtherObject("listener", val)) {
@@ -404,7 +404,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_set_root_session_age, "HTTP_set_root_session_a
 	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 2, parser);
 
-	LogicObjectBase *owner = parser->getOwner();
+	LogicObjectBase *owner = (LogicObjectBase *)parser->getOwner();
 	nd_assert(owner);
 	LogicDataObj val;
 	if (!owner->getOtherObject("listener", val)) {
@@ -429,7 +429,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_cache_file, "HTTP_cache_to_mem(filepath)")
 		parser->setErrno(NDERR_INVALID_INPUT);
 		return false;
 	}
-	LogicObjectBase *owner = parser->getOwner();
+	LogicObjectBase *owner = (LogicObjectBase *)parser->getOwner();
 	nd_assert(owner);
 	LogicDataObj val;
 	if (!owner->getOtherObject("listener", val)) {
@@ -453,7 +453,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_uncache_file, "HTTP_uncache_from_mem(filepath)
 		parser->setErrno(NDERR_INVALID_INPUT);
 		return false;
 	}
-	LogicObjectBase *owner = parser->getOwner();
+	LogicObjectBase *owner = (LogicObjectBase *)parser->getOwner();
 	nd_assert(owner);
 	LogicDataObj val;
 	if (!owner->getOtherObject("listener", val)) {
@@ -474,7 +474,7 @@ APOLLO_SCRIPT_API_DEF(apollo_http_set_working_path, "HTTP_working_path(readPath,
 	ND_TRACE_FUNC();
 	CHECK_ARGS_NUM(args, 3, parser);
 	
-	LogicObjectBase *owner = parser->getOwner();
+	LogicObjectBase *owner = (LogicObjectBase *)parser->getOwner();
 	nd_assert(owner);
 	LogicDataObj val;
 	if (!owner->getOtherObject("listener", val)) {

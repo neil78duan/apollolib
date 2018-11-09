@@ -45,9 +45,6 @@ workDirDialog::workDirDialog(QWidget *parent) :
 	if(curPath && *curPath)
 		ui->workingEdit->setText(curPath);
 	
-//
-//     if(dftSettingFile && *dftSettingFile)
-//         ui->settingEdit->setText(dftSettingFile);
 }
 
 workDirDialog::~workDirDialog()
@@ -57,6 +54,7 @@ workDirDialog::~workDirDialog()
 
 void workDirDialog::on_okPushButton_clicked()
 {
+	m_workPaht = ui->workingEdit->text();
     if(m_workPaht.isEmpty()) {
         QMessageBox::question(this,tr("Error"), tr("Please select set working path !"),QMessageBox::Ok );
         ui->workingEdit->setFocus();

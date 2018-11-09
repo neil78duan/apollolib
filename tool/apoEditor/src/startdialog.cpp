@@ -44,7 +44,7 @@ startDialog::startDialog(QWidget *parent) :
 	m_editor_setting(*(apoEditorSetting::getInstant()->getConfig())),
 	m_io_setting(*(apoEditorSetting::getInstant()->getIoConfig())),
 	editorConfigFile(apoEditorSetting::getInstant()->getConfigFileName()),
-	ioConfigFile(apoEditorSetting::getInstant()->m_ioConfigFile)
+	ioConfigFile(apoEditorSetting::getInstant()->m_projConfigFile)
 {
     ui->setupUi(this);
 
@@ -57,21 +57,6 @@ startDialog::~startDialog()
 	ND_LOG_WRAPPER_DELETE(startDialog);
 }
 
-
-bool startDialog::InitConfigFile(const char *ioConfig, const char *scriptSetting)
-{
-	if (!LogicCompiler::get_Instant()->setConfigFile(scriptSetting)) {
-		return false;
-	}
-
-	if (!apoEditorSetting::getInstant()->Init(ioConfig, scriptSetting, APO_QT_SRC_TEXT_ENCODE)) {
-		return false;
-	}
-	// 
-	//for test
-	//logicRootInstallFunc(logic_c_hello_world, "c_api_testHelloWorld", "²âÊÔc½Ó¿Ú");
-	return true;
-}
 
 void startDialog::ClearLog()
 {
@@ -99,7 +84,7 @@ const char *startDialog::getGameDateEncodeType()
 
 const char *startDialog::_getFromIocfg(const char *cfgName)
 {
-	return	apoEditorSetting::getInstant()->getIoConfigValue(cfgName);
+	return	apoEditorSetting::getInstant()->getProjectConfig(cfgName);
 
 }
 
@@ -565,14 +550,9 @@ void startDialog::on_Connect_clicked()
 
 void startDialog::on_ScriptEdit_clicked()
 {
-	const char *toExeCmd = _getFromIocfg("compile_to_exe_cmd");
-
 	EditorFrame *pMain = new EditorFrame();
 	pMain->setHostWidget(this);
 	pMain->setAttribute(Qt::WA_DeleteOnClose, true);
-	if (toExeCmd) {
-		pMain->SetCompileExeCmd(toExeCmd);
-	}
 
 	if (!loadDataBase()) {
 		nd_logerror("load database error\n");
@@ -669,6 +649,6 @@ void startDialog::on_WorkingPath_clicked()
 		exit(0);
 	}
 	else {
-		QMessageBox::critical(NULL, "Warning", "Set work path error!");
+		//QMessageBox::critical(NULL, "Warning", "Set work path error!");
 	}
 }

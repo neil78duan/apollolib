@@ -122,6 +122,9 @@
 		077C593A2105E2A900BB4D44 /* apoAttrCalcHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 077C59382105E2A900BB4D44 /* apoAttrCalcHelper.cpp */; };
 		077C593B2105E2A900BB4D44 /* apoAttrCalcHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 077C59382105E2A900BB4D44 /* apoAttrCalcHelper.cpp */; };
 		077C593C2105E2A900BB4D44 /* apoAttrCalcHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 077C59382105E2A900BB4D44 /* apoAttrCalcHelper.cpp */; };
+		078014822193EA1F00BFF5D0 /* apoGameCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07D804132191A86E001D437C /* apoGameCommon.cpp */; };
+		078014862193EA8C00BFF5D0 /* logicGameObj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 078014852193EA8C00BFF5D0 /* logicGameObj.cpp */; };
+		078014872193EA8C00BFF5D0 /* logicGameObj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 078014852193EA8C00BFF5D0 /* logicGameObj.cpp */; };
 		0796E066202BF32100B7C9E5 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */; };
 		0796E067202BF3D100B7C9E5 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */; };
 		0796E068202BF3E700B7C9E5 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */; };
@@ -338,6 +341,7 @@
 		0778FE46207B50F90057D91B /* cJSON.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cJSON.c; sourceTree = "<group>"; };
 		077C59372105E2A900BB4D44 /* apoAttrCalcHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apoAttrCalcHelper.h; sourceTree = "<group>"; };
 		077C59382105E2A900BB4D44 /* apoAttrCalcHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apoAttrCalcHelper.cpp; sourceTree = "<group>"; };
+		078014852193EA8C00BFF5D0 /* logicGameObj.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logicGameObj.cpp; sourceTree = "<group>"; };
 		0796E064202BF32100B7C9E5 /* apoClientU3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = apoClientU3d.h; path = ../../../cli_common/apoClientU3d.h; sourceTree = "<group>"; };
 		0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = apoClientU3d.cpp; path = ../../../cli_common/apoClientU3d.cpp; sourceTree = "<group>"; };
 		07B84ACE205D12C0002F2224 /* logic_compile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logic_compile.h; sourceTree = "<group>"; };
@@ -666,6 +670,7 @@
 		07D804122191A86E001D437C /* game_parser */ = {
 			isa = PBXGroup;
 			children = (
+				078014852193EA8C00BFF5D0 /* logicGameObj.cpp */,
 				07D804132191A86E001D437C /* apoGameCommon.cpp */,
 				07D804142191A86E001D437C /* apoGameCommon.h */,
 				07D804152191A86E001D437C /* dbl_mgr.cpp */,
@@ -1145,6 +1150,7 @@
 				0776F9271E31C1AE005DCB69 /* prime.c in Sources */,
 				0776F9281E31C1AE005DCB69 /* r_dh.c in Sources */,
 				0776F9291E31C1AE005DCB69 /* r_encode.c in Sources */,
+				078014872193EA8C00BFF5D0 /* logicGameObj.cpp in Sources */,
 				0776F92A1E31C1AE005DCB69 /* r_enhanc.c in Sources */,
 				0776F92B1E31C1AE005DCB69 /* r_keygen.c in Sources */,
 				0776F92C1E31C1AE005DCB69 /* r_random.c in Sources */,
@@ -1235,6 +1241,7 @@
 				07EC85FB1D54400400C32925 /* nd_timer.c in Sources */,
 				07EC86021D54400400C32925 /* recbuf.c in Sources */,
 				07EC86511D54400400C32925 /* nd_exch_key.cpp in Sources */,
+				078014862193EA8C00BFF5D0 /* logicGameObj.cpp in Sources */,
 				07B84B31205D12F2002F2224 /* Makefile in Sources */,
 				07D8041D2191A86F001D437C /* Makefile in Sources */,
 				07EC85F81D54400400C32925 /* nd_mutex.c in Sources */,
@@ -1329,6 +1336,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				078014822193EA1F00BFF5D0 /* apoGameCommon.cpp in Sources */,
 				07272F512137FF9500D66BB0 /* nd_logger.c in Sources */,
 				07253494207C8D5C001FD566 /* cJSON.c in Sources */,
 				0796E068202BF3E700B7C9E5 /* apoClientU3d.cpp in Sources */,

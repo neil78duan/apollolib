@@ -88,6 +88,7 @@ LOCAL_SRC_FILES := ../../../ndsdk/src/nd_common/src/bintree.c \
 ../../game_parser/dbl_mgr.cpp	\
 ../../game_parser/dbldata2netstream.cpp	\
 ../../game_parser/apoGameCommon.cpp	\
+../../game_parser/logicGameObj.cpp	\
 
 LOCAL_CFLAGS := -D__ND_ADNROID__ -DND_CLIENT_ONLY
 LOCAL_CPPFLAGS := -D__ND_ANDROID__  -DWITHOUT_LOGIC_PARSER -DND_CLIENT_ONLY

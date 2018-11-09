@@ -2,9 +2,13 @@
 
 #include "workdirdialog.h"
 #include "nd_common/nd_common.h"
-#include "apoScript/apoEditorSetting.h"
 #include "logic_parser/logicEngineRoot.h"
+
+#include "apoScript/apoEditorSetting.h"
+#include "apoScript/editorFrame.h"
 #include "connectdialog.h"
+
+#include "game_parser/dbl_mgr.h"
 
 #include <QApplication>
 #include <QCoreApplication>
@@ -61,17 +65,11 @@ int test_time1()
 	return 0;
 }
 
-
-int runDevelopTool(int argc, char *argv[])
+static void workingConfigInit()
 {
 	QString workingPath;
-    QApplication a(argc, argv);
 #if defined (__ND_MAC__)
 	const char *rootConfog = "../cfg/io_config_mac.xml";
-    //QString curPath = QCoreApplication::applicationDirPath();
-    //QDir::setCurrent(curPath) ;
-    //QDir::setCurrent("../../..") ;
-
 	if (!trytoGetSetting(workingPath)) {
 		QMessageBox::critical(NULL, "Error", "can not get working path !");
 		exit(1);
@@ -83,18 +81,18 @@ int runDevelopTool(int argc, char *argv[])
 #endif
 	const char *scriptConfig = "../cfg/editor_config_setting.json";
 
-    if (!QDir::setCurrent(workingPath)) {
-        QMessageBox::critical(NULL, "Error", "can not enter working path !");
-        exit(1);
-    }
+	if (!QDir::setCurrent(workingPath)) {
+		QMessageBox::critical(NULL, "Error", "can not enter working path !");
+		exit(1);
+	}
 
 	//use utf8 
 	ndstr_set_code(APO_QT_SRC_TEXT_ENCODE);
 
 	if (!nd_existfile(scriptConfig)) {
-        QString errTips ;
-        errTips.sprintf("can not open script setting file ,currentpath=%s!",nd_getcwd()) ;
-        QMessageBox::critical(NULL, "Error", errTips);
+		QString errTips;
+		errTips.sprintf("can not open script setting file ,currentpath=%s!", nd_getcwd());
+		QMessageBox::critical(NULL, "Error", errTips);
 
 		exit(1);
 	}
@@ -103,10 +101,44 @@ int runDevelopTool(int argc, char *argv[])
 		exit(1);
 	}
 
-	startDialog dlg;
-	if (!dlg.InitConfigFile(rootConfog, scriptConfig)) {
-		QMessageBox::warning(NULL, "Error", "load config file error, Please Restart", QMessageBox::Yes);
+	if (!apoEditorSetting::getInstant()->Init(rootConfog, scriptConfig, APO_QT_SRC_TEXT_ENCODE)) {
+		QMessageBox::critical(NULL, "Error", "can not found root config file !");
+		exit(1);
 	}
+	if (!LogicCompiler::get_Instant()->setConfigFile(scriptConfig)) {
+		QMessageBox::critical(NULL, "Error", "load config file error, Please Restart", QMessageBox::Yes);
+		exit(1);
+	}
+
+}
+
+int runEditor(int argc, char *argv[])
+{
+	QApplication a(argc, argv);
+	workingConfigInit();
+
+	//load dbl data
+	const char *package_file = apoEditorSetting::getInstant()->getProjectConfig("game_data_package_file");
+	if (package_file) {
+		DBLDatabase::get_Instant()->LoadBinStream(package_file);
+	}
+
+	EditorFrame mainFrame;
+	if (!mainFrame.myInit()) {
+		QMessageBox::critical(NULL, "Error", "init setting error!");
+		exit(1);
+	}
+	mainFrame.showMaximized();
+	return a.exec();
+
+}
+
+int runDevelopTool(int argc, char *argv[])
+{
+	QApplication a(argc, argv);
+	workingConfigInit();
+
+	startDialog dlg;
 	dlg.show();
 	return a.exec();
 }
@@ -165,6 +197,9 @@ int main(int argc, char *argv[])
 		}
 		else if (0 == ndstricmp(argv[i], "--runEditor"))	{
 			return runDevelopTool(argc, argv);
+		}
+		else if (0 == ndstricmp(argv[i], "--runBaseEditor")) {
+			return runEditor(argc, argv);
 		}
 	}
 
