@@ -50,15 +50,19 @@ namespace ClientMsgHandler
 		virtual ~ApoConnectScriptOwner();
 		void Destroy(int flag = 0);
 		void setConn(NDIConn *conn);
+
 		bool getOtherObject(const char*objName, LogicDataObj &val);
 		virtual const char *getMsgName(int msgId);
 		virtual const char *getMsgBody(int msgId);
 		//bool loadDataType(const char *file);
 		void LoadMsgDataTypeFromServer();
+
+
 	protected:
 		LogicParserEngine * getScriptHandler();
 		NDIConn *m_conn;
 		msgIdNameFormat_vct m_msgIdName;
+
 	};
 	
 	userDefineDataType_map_t *getDataFormat(NDIConn *pconn);

@@ -68,6 +68,7 @@ namespace ClientMsgHandler
 	{
 		m_conn = conn;
 	}
+
 	bool ApoConnectScriptOwner::getOtherObject(const char*objName, LogicDataObj &val)
 	{
 		if (0==ndstricmp(objName, "connector") || 0 == ndstricmp(objName, "session")){
@@ -116,6 +117,8 @@ namespace ClientMsgHandler
 		}
 		return NULL;
 	}
+
+
 
 // 	bool ApoConnectScriptOwner::loadDataType(const char *file)
 // 	{
