@@ -77,19 +77,17 @@ namespace ClientMsgHandler
 			}
 			nd_handle h = m_conn->GetHandle();
 			val.InitSet((void*)h, OT_OBJ_NDHANDLE);
-			return true;
 		}
 		else if (0 == ndstricmp(objName, "msgIdNameFormat")) {
 			val.InitSet((void*)&m_msgIdName);
-			return true;
 		}
 		else if (0 == ndstricmp(objName, "SelfName")) {
 			val.InitSet("client");
-			return true;
 		}
 		else {
 			return apoLogicObject4Game::getOtherObject(objName, val);
 		}
+		return true;
 	}
 
 	void ApoConnectScriptOwner::LoadMsgDataTypeFromServer( )

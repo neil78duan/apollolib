@@ -114,18 +114,14 @@ bool apoLogicObject4Game::opCheck(const LogicDataObj& id, const  LogicDataObj &v
 	}
 	return true;
 }
-
-bool apoLogicObject4Game::opOperate(const char *cmd, const LogicDataObj& id, LogicDataObj &val)
-{
-	return callUserOperate(cmd, id, val);
-}
+// 
+// bool apoLogicObject4Game::opOperate(const char *cmd, const LogicDataObj& id, LogicDataObj &val)
+// {
+// 	return callUserOperate(cmd, id, val);
+// }
 
 bool apoLogicObject4Game::getOtherObject(const char*objName, LogicDataObj &val)
 {
-	if (callGetOtherObj(objName, val)) {
-		return true;
-	}
-
 	if (0 == ndstricmp(objName, "machineInfo")) {
 		char buf[256];
 		val.InitSet(nd_common_machine_info(buf, sizeof(buf)));
@@ -159,8 +155,7 @@ bool apoLogicObject4Game::getOtherObject(const char*objName, LogicDataObj &val)
 		}
 	}
 	else {
-		m_error = LOGIC_ERR_AIM_OBJECT_NOT_FOUND;
-		return false;
+		return _myBase::getOtherObject(objName, val);
 	}
 	return true;
 }
@@ -205,47 +200,47 @@ LogicParserEngine *apoLogicObject4Game::getScriptHandler()
 	PARSE_TRACE("LogicParserEngine: get my parser not implemention \n");
 	return NULL;
 }
-
-bool apoLogicObject4Game::setOperateCmdFunction(logic_operate_func func)
-{
-	for (int i = 0; i < m_operate_funcs.size(); i++) {
-		if (m_operate_funcs[i] == func) {
-			return true;
-		}
-	}
-	m_operate_funcs.push_back(func);
-	return true;
-}
-bool apoLogicObject4Game::setOtherObjectFunc(logic_getother_func func)
-{
-	for (int i = 0; i < m_otherobj_funcs.size(); i++) {
-		if (m_otherobj_funcs[i] == func) {
-			return true;
-		}
-	}
-	m_otherobj_funcs.push_back(func);
-	return true;
-}
-
-
-bool apoLogicObject4Game::callUserOperate(const char *cmd, const LogicDataObj& id, LogicDataObj &val)
-{
-	for (int i = 0; i < m_operate_funcs.size(); i++) {
-		logic_operate_func func = m_operate_funcs[i];
-		if (func(this, cmd, id, val)) {
-			return true;
-		}
-	}
-	return false;
-}
-bool apoLogicObject4Game::callGetOtherObj(const char*objName, LogicDataObj &val)
-{
-	for (int i = 0; i < m_otherobj_funcs.size(); i++) {
-		logic_getother_func func = m_otherobj_funcs[i];
-		if (func(this, objName, val)) {
-			return true;
-		}
-	}
-	return false;
-}
+// 
+// bool apoLogicObject4Game::setOperateCmdFunction(logic_operate_func func)
+// {
+// 	for (int i = 0; i < m_operate_funcs.size(); i++) {
+// 		if (m_operate_funcs[i] == func) {
+// 			return true;
+// 		}
+// 	}
+// 	m_operate_funcs.push_back(func);
+// 	return true;
+// }
+// bool apoLogicObject4Game::setOtherObjectFunc(logic_getother_func func)
+// {
+// 	for (int i = 0; i < m_otherobj_funcs.size(); i++) {
+// 		if (m_otherobj_funcs[i] == func) {
+// 			return true;
+// 		}
+// 	}
+// 	m_otherobj_funcs.push_back(func);
+// 	return true;
+// }
+// 
+// 
+// bool apoLogicObject4Game::callUserOperate(const char *cmd, const LogicDataObj& id, LogicDataObj &val)
+// {
+// 	for (int i = 0; i < m_operate_funcs.size(); i++) {
+// 		logic_operate_func func = m_operate_funcs[i];
+// 		if (func(this, cmd, id, val)) {
+// 			return true;
+// 		}
+// 	}
+// 	return false;
+// }
+// bool apoLogicObject4Game::callGetOtherObj(const char*objName, LogicDataObj &val)
+// {
+// 	for (int i = 0; i < m_otherobj_funcs.size(); i++) {
+// 		logic_getother_func func = m_otherobj_funcs[i];
+// 		if (func(this, objName, val)) {
+// 			return true;
+// 		}
+// 	}
+// 	return false;
+// }
 

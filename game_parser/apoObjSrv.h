@@ -13,6 +13,8 @@
 #include "logic_parser/logicEngineRoot.h"
 #include "game_parser/dbldata2netstream.h"
 #include "game_parser/apoGameCommon.h"
+#include "game_parser/dbl_mgr.h"
+
 
 template <class _Tk>
 struct apoStringLess
