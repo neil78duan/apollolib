@@ -4,7 +4,7 @@ VPATH = .
 
 include ./Rules.make
 
-SUBDIRS = cli_common srv_common db_common attribute apo_http game_parser
+SUBDIRS = cli_common srv_common db_common attribute game_parser
 
 
 all: debug
