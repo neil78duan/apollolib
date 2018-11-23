@@ -49,7 +49,7 @@ LFLAGS +=  -lpthread  -lm
 
 #FOR NDSDK
 CFLAGS += -I$(NDHOME)/include -I$(TOPDIR) -I$(TOPDIR)/include -I$(BPAPOLLO)/include
-LFLAGS += -L$(NDHOME)/lib 
+LFLAGS += -L$(NDHOME)/lib/$(AIM_NAME)
 
 ifeq ($(DEBUG),y)
     CFLAGS +=  -g -DDEBUG  -DND_DEBUG
@@ -58,26 +58,27 @@ ifeq ($(DEBUG),y)
     else
     endif
 
+	CLIENT_LIB := ndclient_s_d
+	SRV_LIB := ndsrv_s_d
+	COMMON_LIB := ndcommon_s_d
 
-    CLIENT_LIB := ndclient_$(AIM_NAME)_d
-    SRV_LIB := ndsdk_$(AIM_NAME)_d
-
-	COMMON_LIB := ndcommon_$(AIM_NAME)_d
-
+	CLIENT_DLL := ndclient_d
+	SRV_DLL := ndsrv_d
+	COMMON_DLL := ndcommon_d
 else
+	CFLAGS += -DNDEBUG
 
-    CFLAGS += -DNDEBUG
-    CLIENT_LIB := ndclient_$(AIM_NAME)
-    SRV_LIB := ndsdk_$(AIM_NAME)
+	CLIENT_LIB := ndclient_s
+	SRV_LIB := ndsrv_s
+	COMMON_LIB := ndcommon_s
 
-	COMMON_LIB := ndcommon_$(AIM_NAME)
+	CLIENT_DLL := ndclient
+	SRV_DLL := ndsrv
+	COMMON_DLL := ndcommon
 endif
 
-
-
-ND_CLIENT_LIB := $(NDHOME)/lib/lib$(CLIENT_LIB).a
-ND_SRV_LIB := $(NDHOME)/lib/lib$(SRV_LIB).a
-
+ND_CLIENT_LIB := $(NDHOME)/lib/$(AIM_NAME)/lib$(CLIENT_LIB).a
+ND_SRV_LIB := $(NDHOME)/lib/$(AIM_NAME)/lib$(SRV_LIB).a
 
 
 PLATFORM_BITS =  $(shell  getconf LONG_BIT )

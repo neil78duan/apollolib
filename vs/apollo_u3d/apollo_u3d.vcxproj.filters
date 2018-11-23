@@ -186,12 +186,6 @@
     <ClInclude Include="..\..\plugin_u3d\apoFormula.h">
       <Filter>apollo</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\ndsdk\include\nd_common\_client_config.h">
-      <Filter>include\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\ndsdk\include\nd_common\_server_config.h">
-      <Filter>include\common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\cli_common\apoClientU3d.h">
       <Filter>apollo\login</Filter>
     </ClInclude>
@@ -426,9 +420,6 @@
       <Filter>apollo\parser4game</Filter>
     </ClCompile>
     <ClCompile Include="..\..\game_parser\dbl_mgr.cpp">
-      <Filter>apollo\parser4game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game_parser\logicGameObj.cpp">
       <Filter>apollo\parser4game</Filter>
     </ClCompile>
   </ItemGroup>

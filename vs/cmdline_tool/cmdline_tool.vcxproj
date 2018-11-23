@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../../cli_common;../../include;../../../ndsdk/include;../../;../../../apolloBP/include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_GUI_TOOL_;ND_DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WITHOUT_LOGIC_PARSER;ND_DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../../../ndsdk/lib/Win64;../../lib/Win64</AdditionalLibraryDirectories>
@@ -132,7 +132,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../../cli_common;../../include;../../../ndsdk/include;../../;../../../apolloBP/include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_GUI_TOOL_;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WITHOUT_LOGIC_PARSER;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

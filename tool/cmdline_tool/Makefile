@@ -10,7 +10,7 @@ TOOLOBJS := $(OBJS) client_cmdline.o test_msgsend.o atlantis_test.o rsa_gen.o
 
 CFLAGS += -I$(TOPDIR)/include  -I$(LIBAPOLLO)/cli_common -DWITHOUT_LOGIC_PARSER
 
-MYLIBS := $(NDHOME)/lib/lib$(CLIENT_LIB).a
+MYLIBS := $(ND_CLIENT_LIB)
 
 
 ifeq ($(DEBUG),y)
