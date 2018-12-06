@@ -261,7 +261,8 @@ bool startDialog::compileScript(const char *scriptFile)
 	scriptRoot->setOutPutEncode(E_SRC_CODE_UTF_8);
 
 	scriptRoot->setPrint(ND_LOG_WRAPPER_PRINT(startDialog), NULL);
-	scriptRoot->getGlobalParser().setSimulate(true,&apoOwner);
+	scriptRoot->getGlobalParser().setSimulate(true);
+	//scriptRoot->getGlobalParser().setOwner(&apoOwner);
 
 	if (0 != scriptRoot->LoadScript(outFile, &scriptRoot->getGlobalParser())){
 		WriteLog("load script error n");

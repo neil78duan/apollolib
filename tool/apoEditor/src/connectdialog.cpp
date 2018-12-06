@@ -154,8 +154,9 @@ void destroy_apollo_object(NDIConn *)
 void initGlobalParser()
 {
 	LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
-	parser.setSimulate(true, &__myScriptOwner);
-	//parser.setOwner(&__myScriptOwner);
+	parser.setSimulate(true);
+	
+	parser.setOwner(&__myScriptOwner);
 
 }
 static bool init_apollo_object(NDIConn *pConn, const char*script_file)

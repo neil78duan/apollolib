@@ -17,8 +17,19 @@ release:
 	for n in $(SUBDIRS); do $(MAKE) -C $$n DEBUG="n" PROFILE="n" || exit 1; done
 	cd tool ; make release
 
+dll: dll_release
+
+dll_debug:
+	cd game_parser ; make dll DEBUG="y" PROFILE="y" BUILD_DLL="y"
+
+dll_release:
+	cd game_parser ; make dll DEBUG="n" PROFILE="n" BUILD_DLL="y"
+
 tool:
 	cd tool ;make 
+
+clean_dll:
+	cd game_parser ;make clean_dll
 
 clean:
 	for n in $(SUBDIRS); do $(MAKE) -C $$n clean DEBUG="n" PROFILE="n"; done

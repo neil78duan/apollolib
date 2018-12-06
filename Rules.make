@@ -31,11 +31,13 @@ AIM_NAME = $(OS_kernel)_$(ARCH_MACHINE)
 ifeq ($(OS_kernel),linux)
 	CFLAGS += -D__ND_LINUX__
 	LFLAGS += -lrt -ldl -L/usr/lib64/mysql
+	DLL_EXT_NAME := so
 endif
 
 ifeq ($(OS_kernel),darwin)
     CFLAGS += -D__ND_MAC__
 	LFLAGS += -liconv
+	DLL_EXT_NAME := dylib
 endif
 
 TOPDIR = $(LIBAPOLLO)
@@ -49,7 +51,7 @@ LFLAGS +=  -lpthread  -lm
 
 #FOR NDSDK
 CFLAGS += -I$(NDHOME)/include -I$(TOPDIR) -I$(TOPDIR)/include -I$(BPAPOLLO)/include
-LFLAGS += -L$(NDHOME)/lib/$(AIM_NAME)
+LFLAGS += -L$(NDHOME)/lib/$(AIM_NAME) -L$(BPAPOLLO)/lib/$(AIM_NAME)
 
 ifeq ($(DEBUG),y)
     CFLAGS +=  -g -DDEBUG  -DND_DEBUG
@@ -65,6 +67,9 @@ ifeq ($(DEBUG),y)
 	CLIENT_DLL := ndclient_d
 	SRV_DLL := ndsrv_d
 	COMMON_DLL := ndcommon_d
+
+	NF_PARSER = nfParser_d
+
 else
 	CFLAGS += -DNDEBUG
 
@@ -75,6 +80,8 @@ else
 	CLIENT_DLL := ndclient
 	SRV_DLL := ndsrv
 	COMMON_DLL := ndcommon
+
+	NF_PARSER = nfParser
 endif
 
 ND_LIBOUTPUT := $(NDHOME)/lib/$(AIM_NAME)
@@ -99,6 +106,8 @@ CC = cc
 CPP = c++
 AR = ar rv
 
+CC_DLL= cc -shared
+CPP_DLL= c++ -shared
 
 #set obj and src path
 
