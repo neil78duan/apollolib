@@ -14,7 +14,7 @@
 	<user_define_enum name="用户定义类型表" kinds="in_file">./setting/userDefList.xml</user_define_enum>
 	<script_out_encode name="输出编码" kinds="reference" reference_type="type_encode">2</script_out_encode>
 	<Author name="作者" kinds="string">duan</Author>
-	<LastMod name="最后修改" kinds="hide">1542252678</LastMod>
+	<LastMod name="最后修改" kinds="hide">1544092839</LastMod>
 	<EditorVersion kinds="hide">1.1.0</EditorVersion>
 </moduleInfo>
 <baseFunction name="基本功能" delete="no" create_template="create_common_function_filter,create_func" auto_index="43" expand_stat="1" accept_drag_in="func_node">
@@ -3146,7 +3146,7 @@
 				</param_collect>
 			</op_build_json_data>
 		</var_init_block>
-		<op_call_func name="节点_调用$sample_call_fibo$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label">
+		<op_call_func name="节点_调用$sample_call_fibo$" create_template="create_input_param" auto_index="0" expand_list="comment,func_name" create_label="create_internal_label" breakPoint="yes">
 			<comment name="功能说明" rw_stat="read">call_function(name,...)</comment>
 			<apoEditorPos kinds="hide" x="150" y="458" offset_x="0" offset_y="0"/>
 			<func_name kinds="user_define" user_param="func_list" delete="no" replace_val="../.name">sample_call_fibo</func_name>
@@ -3214,7 +3214,7 @@
 				<var kinds="string" delete="no" restrict="type">var1</var>
 			</param_collect>
 		</op_call_func>
-		<apoEditorPos kinds="hide" x="-79" y="482" offset_x="77" offset_y="-165"/>
+		<apoEditorPos kinds="hide" x="-79" y="482" offset_x="-166" offset_y="-88"/>
 		<unConnect kinds="hide"/>
 		<closure_entry name="闭包" create_template="create_list2" auto_index="0" nextAnchor="comment" tips="Closure">
 			<comment name="功能说明" rw_stat="read">闭包(...){}</comment>
