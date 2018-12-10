@@ -233,7 +233,7 @@ int ApoClient::Create(const char*)
 	ndInitNet();	
 	//m_pconn = nd_object_create("tcp-connector");
 	m_pconn = _create_connector_object() ;
-	parser.eventNtf(APOLLO_EVENT_SERVER_START, 0); //program start up
+	parser.eventNtf(APOLLO_EVENT_START, 0); //program start up
 #else 
 	ndInitNet();
 #endif 

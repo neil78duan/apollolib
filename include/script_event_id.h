@@ -10,14 +10,24 @@
 #ifndef _SCRIPT_EVENT_H_
 #define _SCRIPT_EVENT_H_
 
+
+#ifdef _APOLLO_DEFINE_EVENT_VAL 
+#undef _APOLLO_DEFINE_EVENT_VAL
+#endif 
+#define _APOLLO_DEFINE_EVENT_VAL(enum_name, _id, _desc) APOLLO_##enum_name = _id ,
+
+
 #ifdef _APOLLO_DEFINE_EVENT 
 #undef _APOLLO_DEFINE_EVENT
 #endif 
 #define _APOLLO_DEFINE_EVENT(_id, _comment) _id,
-enum eApolloEventID{
+enum eApolloEventID {
+	#include "logic_parser/_logicEventId.h"
 	#include "_event_def.h"
 	APOLLO_EVENT_NUMBER
 } ;
+
+#undef _APOLLO_DEFINE_EVENT_VAL
 
 #undef _APOLLO_DEFINE_EVENT
 /*
