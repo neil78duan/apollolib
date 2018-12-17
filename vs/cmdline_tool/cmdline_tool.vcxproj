@@ -87,12 +87,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../cli_common;../../include;../../../ndsdk/include;../../;../../../apolloBP/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../cli_common;../../include;../../../ndsdk/include;../../;../../../nodeflow/include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WITHOUT_LOGIC_PARSER;ND_DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>../../../ndsdk/lib/Win64;../../lib/Win64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>logic_parser_d.lib;apollo_client_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../../ndsdk/lib/Win64;../../../nodeflow/lib/Win64;../../lib/Win64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>nfParser_s_d.lib;apollo_client_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -131,14 +131,14 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../cli_common;../../include;../../../ndsdk/include;../../;../../../apolloBP/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../cli_common;../../include;../../../ndsdk/include;../../;../../../nodeflow/include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WITHOUT_LOGIC_PARSER;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>../../../ndsdk/lib/Win64;../../lib/Win64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>logic_parser.lib;apollo_client.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../../ndsdk/lib/Win64;../../../nodeflow/lib/Win64;../../lib/Win64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>nfParser_s.lib;apollo_client.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

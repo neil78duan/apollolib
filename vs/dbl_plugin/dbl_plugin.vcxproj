@@ -101,7 +101,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>ND_COMPILE_AS_DLL;X86_64;NDEBUG;DBLPLUGIN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;..\..\..\apolloBP\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;..\..\..\nodeflow\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -109,7 +109,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>ndcommon.lib;nfParser.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\apolloBP\lib\Win64; ..\..\..\ndsdk\lib\Win64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\nodeflow\lib\Win64; ..\..\..\ndsdk\lib\Win64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -134,13 +134,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>ND_COMPILE_AS_DLL;X86_64;_DEBUG;DBLPLUGIN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;..\..\..\apolloBP\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;..\..\..\nodeflow\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>ndcommon_d.lib;nfParser_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\apolloBP\lib\Win64; ..\..\..\ndsdk\lib\Win64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\nodeflow\lib\Win64; ..\..\..\ndsdk\lib\Win64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

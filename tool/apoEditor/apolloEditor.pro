@@ -6,42 +6,39 @@
 
 ndsdk_dir = ../../../ndsdk
 apolib_dir = ../..
-apoBP_dir = ../../../apolloBP
+apoBP_dir = ../../../nodeflow
 
 macx:{
 
     QMAKE_MAC_SDK = macosx10.13
     DEFINES += __ND_MAC__
     platform_name = darwin_x86_64
-
-#    LIBS += -lndclient_darwin_x86_64_d -llogic_parser_d -lapoBluePrint_d -liconv
-
 }
+
 unix:!macx{
     message(BUILD LINUX!)
     DEFINES += __ND_LINUX__
     platform_name = linux_x86_64
-
-    LIBS += -lndclient_linux_x86_64_d -llogic_parser_d -lapoBluePrint_d -liconv
+    LIBS += -liconv
 }
 
 win32{
     message(WIN32!)
     platform_name = Win64
-
-    CONFIG(debug, debug|release) {
-        message(BUILD win32 -debug)
-        LIBS += -lndclient_s_d -llogic_parser_d -lapoBluePrint_d
-        DEFINES +=  ND_DEBUG
-    } else {
-        message(BUILD win32 -release)
-        LIBS += -lndclient_s -llogic_parser -lapoBluePrint
-    }
-
     DEFINES += __ND_WIN__ DO_NOT_CONVERT_PRINT_TEXT
 }
 
-LIBS += -L$$ndsdk_dir/lib  -L$$ndsdk_dir/lib/$$platform_name -L$$apolib_dir/lib/$$platform_name
+CONFIG(debug, debug|release) {
+    message(BUILD win32 -debug)
+    LIBS += -lndclient_s_d -lnfParser_d -lapoBluePrint_d
+    DEFINES +=  ND_DEBUG
+} else {
+    message(BUILD win32 -release)
+    LIBS += -lndclient_s -lnfParser -lapoBluePrint
+}
+
+libsub = lib/$$platform_name
+LIBS += -L$$ndsdk_dir/lib  -L$$ndsdk_dir/$$libsub  -L$$apoBP_dir/$$libsub
 
 DEFINES += X86_64
 
@@ -64,12 +61,19 @@ TEMPLATE = app
 SOURCES += src/main.cpp\
     src/startdialog.cpp \
     src/workdirdialog.cpp \
-    src/connectdialog.cpp
+    src/connectdialog.cpp \
+    ../../game_parser/apoGameCommon.cpp \
+    ../../game_parser/dbl_mgr.cpp \
+    ../../game_parser/dbl_plugin.cpp \
+    ../../game_parser/dbldata2netstream.cpp
 
 HEADERS  += \
     src/startdialog.h \
     src/workdirdialog.h \
-    src/connectdialog.h
+    src/connectdialog.h \
+    ../../game_parser/apoGameCommon.h \
+    ../../game_parser/dbl_mgr.h \
+    ../../game_parser/dbldata2netstream.h
 
 FORMS    += \
     src/startdialog.ui \
