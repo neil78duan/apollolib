@@ -17,6 +17,7 @@
 	<node desc="sys_BinWriteStream(fileName, var1,var2....)">CPP._sys_write_binfile</node>
 	<node desc="sys_text写入文件(fileName, var1,var2....)">CPP._sys_write_textfile</node>
 	<node desc="测试消息处理(script, maxId,minId, data1,data2...)">CPP.apollo_call_script_msgHandler_test</node>
+	<node desc="改变默认模块(module_name)">CPP.apollo_change_def_module</node>
 	<node desc="deyptFile(filename,outFileName, password)">CPP.apollo_decrypt_file</node>
 	<node desc="dumpFunction(funcName,outFileName)">CPP.apollo_dump_function</node>
 	<node desc="editor_version()">CPP.apollo_editor_version</node>
@@ -41,7 +42,8 @@
 	<node desc="读取文件作为字符串(filename)">CPP.apollo_load_file_as_string</node>
 	<node desc="读取整个文件(filename)">CPP.apollo_load_file_data</node>
 	<node desc="加载json文件(jsonFilePath)">CPP.apollo_load_json_file</node>
-	<node desc="加载脚本(scriptn_name)">CPP.apollo_load_script_file</node>
+	<node desc="plugin_load(str:name, str:path)">CPP.apollo_load_plugin</node>
+	<node desc="加载脚本(script_name)">CPP.apollo_load_script_file</node>
 	<node desc="合成文件名(path,filename)">CPP.apollo_make_full_path</node>
 	<node desc="str_get_md5(inTextOrBin)">CPP.apollo_md5</node>
 	<node desc="读取excel行json(tablename, index)">CPP.apollo_read_excel_line</node>
@@ -61,5 +63,6 @@
 	<node desc="文本转成JSON(json_text)">CPP.apollo_text_to_json</node>
 	<node desc="tool_compile_file(file,outFile,isDebug)">CPP.apollo_tool_compile_file</node>
 	<node desc="tool_compile_project(project_path)">CPP.apollo_tool_compile_project</node>
+	<node desc="plugin_destroy(str:name)">CPP.apollo_unload_plugin</node>
 	<node desc="写入文件(filename,var1,var2...)">CPP.apollo_write_file</node>
 </func_list>

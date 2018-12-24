@@ -146,6 +146,16 @@ void startDialog::on_Setting_clicked()
 bool startDialog::compile()
 {
 	const char *script_root = _getFromIocfg("script_root");
+	
+	char tmpbuf[ND_FILE_PATH_SIZE];
+	if (!nd_absolute_filename(script_root, tmpbuf, sizeof(tmpbuf))) {
+		nd_logerror("can not found file %s\n", script_root);
+		return false;
+	}
+	
+	std::string absPath = tmpbuf;
+	absPath = nd_getpath(absPath.c_str(), tmpbuf, sizeof(tmpbuf));
+
 
 	ndxml_root xmlEntry;
 	ndxml_initroot(&xmlEntry);
@@ -158,6 +168,9 @@ bool startDialog::compile()
 		return false;
 	}
 	
+	std::string curPath = nd_getcwd();
+	nd_chdir(absPath.c_str());
+
 	bool ret = true;
 	int num = ndxml_num(xml);
 	for (int i = 0; i < num; i++) {
@@ -177,6 +190,8 @@ bool startDialog::compile()
 	}
 
 	ndxml_destroy(&xmlEntry);
+
+	nd_chdir(curPath.c_str());
 	return true;
 }
 
@@ -558,7 +573,11 @@ void startDialog::on_ScriptEdit_clicked()
 	if (!loadDataBase()) {
 		nd_logerror("load database error\n");
 	}
-	if (pMain->myInit()) {
+
+	apoEditorSetting *g_seting = apoEditorSetting::getInstant();
+	const char *defProj = g_seting->getProjectConfig("script_root");
+
+	if (pMain->myInit(defProj)) {
 		this->setVisible(false);
 		pMain->showMaximized();
 	}

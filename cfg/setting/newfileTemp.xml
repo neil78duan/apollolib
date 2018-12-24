@@ -1,6 +1,6 @@
 <?xml  version="1.0" encoding="utf-8" ?>
 <file_list>
 	<node desc="Common">newfileTemp_common.xml</node>
-	<node desc="Game develop">newfileTemp_forGame.xml</node>
+	<node desc="User define">newfileTemp_forGame.xml</node>
 	<node desc="Http server">newfileTemp_forHTTP.xml</node>
 </file_list>
