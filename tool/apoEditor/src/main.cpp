@@ -1,14 +1,10 @@
 //#include "mainwindow.h"
 
-#include "workdirdialog.h"
-#include "nd_common/nd_common.h"
-#include "logic_parser/logicEngineRoot.h"
-
 #include "apoScript/apoEditorSetting.h"
 #include "apoScript/editorFrame.h"
+#include "apoScript/workdirdialog.h"
 #include "connectdialog.h"
 
-#include "game_parser/dbl_mgr.h"
 
 #include <QApplication>
 #include <QCoreApplication>
@@ -18,6 +14,10 @@
 #include <qtextcodec.h>
 #include <QString>
 #include <QDir>
+
+#include "nd_common/nd_common.h"
+#include "logic_parser/logicEngineRoot.h"
+#include "game_parser/dbl_mgr.h"
 
 #ifdef WIN32
 #pragma comment(lib,"User32.lib")
@@ -190,6 +190,8 @@ int runGm(int argc, char *argv[])
 int main(int argc, char *argv[])
 {
 	initGlobalParser();
+
+	setRegisterRootName("apoEditor");
 
 	for (int i = 1; i < argc ; i++){
 		if (0 == ndstricmp(argv[i], "--rungmtool"))	{
