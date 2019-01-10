@@ -60,7 +60,6 @@ TEMPLATE = app
 
 SOURCES += src/main.cpp\
     src/startdialog.cpp \
-    src/workdirdialog.cpp \
     src/connectdialog.cpp \
     ../../game_parser/apoGameCommon.cpp \
     ../../game_parser/dbl_mgr.cpp \
@@ -69,7 +68,6 @@ SOURCES += src/main.cpp\
 
 HEADERS  += \
     src/startdialog.h \
-    src/workdirdialog.h \
     src/connectdialog.h \
     ../../game_parser/apoGameCommon.h \
     ../../game_parser/dbl_mgr.h \
@@ -77,8 +75,7 @@ HEADERS  += \
 
 FORMS    += \
     src/startdialog.ui \
-    src/connectdialog.ui \
-    src/workdirdialog.ui
+    src/connectdialog.ui
 
 #cli-common
 SOURCES += \

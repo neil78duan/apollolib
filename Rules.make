@@ -50,8 +50,8 @@ CFLAGS += -c -w -O
 LFLAGS +=  -lpthread  -lm
 
 #FOR NDSDK
-CFLAGS += -I$(NDHOME)/include -I$(TOPDIR) -I$(TOPDIR)/include -I$(BPAPOLLO)/include
-LFLAGS += -L$(NDHOME)/lib/$(AIM_NAME) -L$(BPAPOLLO)/lib/$(AIM_NAME)
+CFLAGS += -I$(NDHOME)/include -I$(TOPDIR) -I$(TOPDIR)/include -I$(NODEFLOW_WORKING)/include
+LFLAGS += -L$(NDHOME)/lib/$(AIM_NAME) -L$(NODEFLOW_WORKING)/lib/$(AIM_NAME)
 
 ifeq ($(DEBUG),y)
     CFLAGS +=  -g -DDEBUG  -DND_DEBUG
