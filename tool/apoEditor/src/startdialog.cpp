@@ -659,7 +659,7 @@ void startDialog::on_CompleteAll_clicked()
     WriteLog("==========one key complete success===========\n");
 }
 
-#include "workdirdialog.h"
+#include "apoScript/workdirdialog.h"
 void startDialog::on_WorkingPath_clicked()
 {
 	QString workPath;

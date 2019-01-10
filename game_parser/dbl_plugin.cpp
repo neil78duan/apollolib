@@ -82,7 +82,7 @@ static bool getDblTableName(LogicObjectBase *pObj, const char* cmd, const LogicD
 }
 
 
-CPPAPI  DLL_EXPORT void nodeflow_init_dbl_plugin()
+CPPAPI  DLL_EXPORT void nodeflow_plugin_init()
 {
 	DBLDatabase *pdbl = DBLDatabase::get_Instant();
 	if (!pdbl) {
@@ -100,7 +100,8 @@ CPPAPI  DLL_EXPORT void nodeflow_init_dbl_plugin()
 
 	
 }
-CPPAPI  DLL_EXPORT void nodeflow_destroy_dbl_plugin()
+
+CPPAPI  DLL_EXPORT void nodeflow_plugin_destroy()
 {
 	LogicParserEngine &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
 	LogicObjectBase *pobjOwner = (LogicObjectBase *)parser.getOwner();
@@ -109,4 +110,12 @@ CPPAPI  DLL_EXPORT void nodeflow_destroy_dbl_plugin()
 	if (pdbl) {
 		pdbl->Destroy();
 	}
+}
+CPPAPI  DLL_EXPORT void nodeflow_plugin_run()
+{
+	nd_logmsg("plugin dbl not need this function\n") ;
+}
+CPPAPI  DLL_EXPORT const char* nodeflow_plugin_name()
+{
+	return "dbl" ;
 }
