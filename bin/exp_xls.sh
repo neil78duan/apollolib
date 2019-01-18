@@ -8,7 +8,7 @@
 #
 
 if [ $# -lt 4 ]; then
-	echo "usage: exp_xls.sh file-list.txt input-excel-path output-text-path [encode-type(gbk|utf8)] [is-auto-svn-up 0|1]"
+	echo "usage: exp_xls.sh file-list.txt input-excel-path output-text-path "
 	exit 1
 fi
 
@@ -64,7 +64,7 @@ cat $in_filelist | col -b > ./filelist-unix.txt
 #outputPath=$workDir"/"$outputPath
 #inputPath=$workDir"/"$inputPath
 
-READEXCL="python ./xls2txt_unix.py"
+READEXCL="python3 ./xls2txt.py"
 
 run_export()
 {
