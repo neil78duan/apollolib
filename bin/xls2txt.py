@@ -4,14 +4,14 @@ import xlrd
 import codecs
 
 import xml.dom.minidom as xmldom
-import sys
+import sys,io
 
 import os
 
-reload(sys)
-#sys.setdefaultencoding('utf8')
-sys.setdefaultencoding(sys.argv[3])
-
+#reload(imp)
+#sys.setdefaultencoding(sys.argv[3])
+#sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding="utf-8")
+#sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding="utf-8")
 
 def getSheetCols(table):
 	try:
@@ -22,8 +22,12 @@ def getSheetCols(table):
 				return nRet 
 			nRet += 1
 		return nRet
-	except Exception,e:
-		return nRet
+	except SystemExit:
+		return nRet 
+	except:
+		return nRet 
+	finally:
+		return nRet 
 		
 
 def ReadExcel(fileName, outfileName):
@@ -33,11 +37,10 @@ def ReadExcel(fileName, outfileName):
 		table = data.sheet_by_index(0) #通过索引顺序获取
 		
 		nrows = table.nrows
-		#ncols = table.ncols
 		ncols = getSheetCols(table) 
 		
 		
-		print "data [ %d, %d]" %(nrows,ncols)
+		print( "data [ %d, %d]" %(nrows,ncols))
 		
 		for i in range(0, nrows ):
 		
@@ -52,19 +55,13 @@ def ReadExcel(fileName, outfileName):
 		
 		outfile.close() ;
 		return 0
-	except Exception,e:
-		print "parse error [ %d, %d]" %(i,j)
-		print str(e)
+	except :
+		print("parse error [ %d, %d]" %(i,j))
+		print("read Unexpected error:", sys.exc_info()[0])
 		return 1
 
 def main(argv):
-	try:
-		ret = ReadExcel(argv[1],argv[2])
-		sys.exit(ret)
-	except Exception as e:
-		print e
-		print "%s convert error" % argv[1]
-		sys.exit(1) ;
-
+	ret = ReadExcel(argv[1],argv[2])
+	sys.exit(ret)	
 if __name__ == "__main__":
 	main(sys.argv)

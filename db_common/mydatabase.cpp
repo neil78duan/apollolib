@@ -53,7 +53,7 @@ int  CMyDatabase::open_database(const char *host, int port, const char *user, co
 	db_handle =   mysql_real_connect(&m_mysqlinst,host, user, passwd, dbinstance,m_port,NULL,CLIENT_MULTI_RESULTS|CLIENT_MULTI_STATEMENTS);
 	if(!db_handle || 0!=mysql_errno(&m_mysqlinst)){		
 		db_handle = 0;
-		nd_logerror("connect %s %s error \n" AND host AND dbinstance) ;
+		nd_logerror("connect %s %s error %d %s\n" AND host AND dbinstance, mysql_errno(&m_mysqlinst),mysql_error(&m_mysqlinst)) ;
 		if (db_handle) {			
 			nd_logerror("mysql error =%s \n" ,mysql_error(&m_mysqlinst)) ;
 		}

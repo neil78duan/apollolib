@@ -22,7 +22,7 @@
     <ProjectGuid>{7898DB31-725C-464D-ABB0-663D8459DDB6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>apollo_u3d</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
