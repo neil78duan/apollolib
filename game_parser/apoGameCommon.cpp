@@ -19,7 +19,6 @@
 #include "logic_parser/logic_editor_helper.h"
 #include "nd_common/cJSON.h"
 
-
 int apollo_message_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t *msg, const char *script)
 {
 	LogicParserEngine *scriptEngine = (LogicParserEngine *)engine;

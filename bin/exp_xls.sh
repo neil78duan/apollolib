@@ -8,7 +8,7 @@
 #
 
 if [ $# -lt 4 ]; then
-	echo "usage: exp_xls.sh file-list.txt input-excel-path output-text-path "
+	echo "usage: exp_xls.sh file-list.txt input-excel-path output-text-path"
 	exit 1
 fi
 
@@ -18,8 +18,6 @@ in_filelist=$1
 inputPath=$2
 outputPath=$3
 
-ENCODE_TYPE="utf8"
-[ "x$4" == "x" ] || ENCODE_TYPE=$4
 
 if [ $# -ge 6 ]; then
 	if [ "x$5" == "x0" ]; then
@@ -76,7 +74,7 @@ run_export()
 		return 0 ;
 	fi
 
-	$READEXCL $inputPath/$infile $ENCODE_TYPE > $outputPath/$outfile
+	$READEXCL $inputPath/$infile $outputPath/$outfile
 	if [ $? -ne 0 ]; then
 		echo "coever $1 error "
 		exit 1

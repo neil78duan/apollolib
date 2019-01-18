@@ -193,15 +193,20 @@ int main(int argc, char *argv[])
 
 	setRegisterRootName("apoEditor");
 
-	for (int i = 1; i < argc ; i++){
-		if (0 == ndstricmp(argv[i], "--rungmtool"))	{
-			return runGm( argc, argv);
-		}
-		else if (0 == ndstricmp(argv[i], "--runEditor"))	{
-			return runDevelopTool(argc, argv);
-		}
-		else if (0 == ndstricmp(argv[i], "--runBaseEditor")) {
-			return runEditor(argc, argv);
+	if (argc == 1) {
+		return runDevelopTool(argc, argv);
+	}
+	else {
+		for (int i = 1; i < argc; i++) {
+			if (0 == ndstricmp(argv[i], "--rungmtool")) {
+				return runGm(argc, argv);
+			}
+			else if (0 == ndstricmp(argv[i], "--runEditor")) {
+				return runDevelopTool(argc, argv);
+			}
+			else if (0 == ndstricmp(argv[i], "--runBaseEditor")) {
+				return runEditor(argc, argv);
+			}
 		}
 	}
 

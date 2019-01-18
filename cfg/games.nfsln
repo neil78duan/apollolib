@@ -1,9 +1,8 @@
 <?xml  version="1.0" encoding="utf-8" ?>
-<script_file_manager name="脚本" kinds="hide" delete="no" create_template="create_new_file" last_edited="httpUpdate">
-	<file name="apoGameServer" main_file="apollo_script.xml">../../../code/resource/script/game</file>
-	<file name="apoClient" main_file="client_script.xml">../../../code/resource/script/client</file>
-	<file name="apoSample" main_file="sample_script.xml" delete="no">../cfg</file>
-	<file name="commonTemp" main_file="commonTemp.xml" delete="no">../cfg</file>
-	<file name="gmHttp" main_file="gmHttp.xml">../../../code/resource/script/gmHttp</file>
-	<file name="httpUpdate" main_file="httpUpdate.xml">../../../code/resource/script/httpUpdate</file>
+<script_file_manager name="脚本" kinds="hide" delete="no" create_template="create_new_file" last_edited="apoGameServer">
+	<file name="apoGameServer" main_file="apollo_script.xnf">../../../code/resource/script/game</file>
+	<file name="apoClient" main_file="client_script.xnf">../../../code/resource/script/client</file>
+	<file name="apoSample" main_file="sample_script.xnf" delete="no">../cfg</file>
+	<file name="gmHttp" main_file="gmHttp.xnf">../../../code/resource/script/gmHttp</file>
+	<file name="httpUpdate" main_file="httpUpdate.xnf">../../../code/resource/script/httpUpdate</file>
 </script_file_manager>

@@ -22,7 +22,7 @@
     <ProjectGuid>{2565503F-5B91-49F0-A48C-CE533AE6DCC0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>apollo_client</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
