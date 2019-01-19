@@ -13,6 +13,8 @@ macx:{
     QMAKE_MAC_SDK = macosx10.13
     DEFINES += __ND_MAC__
     platform_name = darwin_x86_64
+
+    LIBS += -liconv
 }
 
 unix:!macx{
@@ -30,11 +32,11 @@ win32{
 
 CONFIG(debug, debug|release) {
     message(BUILD win32 -debug)
-    LIBS += -lndclient_s_d -lnfParser_d -lapoBluePrint_d
+    LIBS += -lndclient_s_d -lnfParser_s_d -lapoBluePrint_d
     DEFINES +=  ND_DEBUG
 } else {
     message(BUILD win32 -release)
-    LIBS += -lndclient_s -lnfParser -lapoBluePrint
+    LIBS += -lndclient_s -lnfParser_s -lapoBluePrint
 }
 
 libsub = lib/$$platform_name
@@ -64,40 +66,31 @@ SOURCES += src/main.cpp\
     ../../game_parser/apoGameCommon.cpp \
     ../../game_parser/dbl_mgr.cpp \
     ../../game_parser/dbl_plugin.cpp \
-    ../../game_parser/dbldata2netstream.cpp
+    ../../game_parser/dbldata2netstream.cpp \
+    $$apolib_dir/cli_common/apollo_robort.cpp\
+    $$apolib_dir/cli_common/dftCliMsgHandler.cpp \
+    $$apolib_dir/cli_common/login_apollo.cpp    \
+    $$apolib_dir/attribute/roleattr_help.cpp	\
+    $$apolib_dir/attribute/stat_machine.cpp \
+    $$apolib_dir/attribute/attr_mgr.cpp	   \
+    $$apolib_dir/attribute/stat_data.cpp
+
 
 HEADERS  += \
     src/startdialog.h \
     src/connectdialog.h \
     ../../game_parser/apoGameCommon.h \
     ../../game_parser/dbl_mgr.h \
-    ../../game_parser/dbldata2netstream.h
+    ../../game_parser/dbldata2netstream.h \
+    $$apolib_dir/cli_common/dftCliMsgHandler.h \
+    $$apolib_dir/cli_common/login_apollo.h \
+    $$apolib_dir/cli_common/apollo_robort.h \
+    $$apolib_dir/attribute/stat_data.h \
+    $$apolib_dir/attribute/stat_machine.h \
+    $$apolib_dir/attribute/attr_mgr.h \
+    $$apolib_dir/attribute/roleattr_help.h
 
 FORMS    += \
     src/startdialog.ui \
     src/connectdialog.ui
 
-#cli-common
-SOURCES += \
-    $$apolib_dir/cli_common/apollo_robort.cpp\
-    $$apolib_dir/cli_common/dftCliMsgHandler.cpp \
-    $$apolib_dir/cli_common/login_apollo.cpp
-
-HEADERS  += $$apolib_dir/cli_common/dftCliMsgHandler.h \
-    $$apolib_dir/cli_common/login_apollo.h \
-    $$apolib_dir/cli_common/apollo_robort.h
-
-# attribute 
-
-SOURCES += \
-    $$apolib_dir/attribute/roleattr_help.cpp	\
-    $$apolib_dir/attribute/stat_machine.cpp \
-    $$apolib_dir/attribute/attr_mgr.cpp	   \
-    $$apolib_dir/attribute/stat_data.cpp
-    
-HEADERS  += $$apolib_dir/attribute/stat_data.h \
-    $$apolib_dir/attribute/stat_machine.h \
-    $$apolib_dir/attribute/attr_mgr.h \
-    $$apolib_dir/attribute/roleattr_help.h
-
-RESOURCES +=

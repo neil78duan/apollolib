@@ -1,20 +1,20 @@
 <?xml  version="1.0" encoding="utf-8" ?>
 <setting_config name="设置" expand="yes" delete="no">
-	<script_root name="脚本文件列表" kinds="in_file">../cfg/script_root.xml</script_root>
+	<script_root name="脚本文件入口" kinds="in_file">../cfg/games.nfsln</script_root>
+	<solution_templ name="工程文件模板" kinds="in_file">../cfg/setting/templ.nfsln</solution_templ>
 	<new_template name="新建模板" kinds="in_file">../cfg/setting/newfileTemp.xml</new_template>
-	<net_protocol name="网络协议配置文件" kinds="in_file">../../../code/resource/msg_config/message.xml</net_protocol>
 	<net_data_def name="网络数据格式" kinds="in_file">../../../code/resource/msg_config/datatype.xml</net_data_def>
 	<connect_script name="客户端脚本" kinds="in_file">../../../code/data/client_script.bin</connect_script>
 	<excel_data_in_path name="游戏数据excel输入目录" kinds="dir" delete="no">../../../data/</excel_data_in_path>
 	<text_data_out_path name="游戏数据text输出目录" kinds="dir" delete="no">../../../code/resource/text_output/</text_data_out_path>
+	<lua_data_out_path name="游戏数据lua输出目录" kinds="dir" delete="no">../../../code/resource/lua_out/</lua_data_out_path>
 	<game_data_listfile name="excel列表" kinds="in_file">../../../data/excel_filelist.txt</game_data_listfile>
 	<game_data_package_file name="数据打包文件" kinds="out_file">../../../code/data/cehua_data.dat</game_data_package_file>
 	<game_data_export_cmd name="策划数据导出工具" kinds="in_file">../bin/exp_xls.sh</game_data_export_cmd>
 	<game_data_out_encode name="游戏数据输出编码" kinds="reference" reference_type="type_encode">2</game_data_out_encode>
 	<bin_data_byte_order name="输出字节顺序" kinds="enum" enum_value="big-end, little-end">1</bin_data_byte_order>
-	<role_attr_table name="角色属性表" kinds="string">role_attr_config.xlsx</role_attr_table>
-	<gm_send_msg name="gm消息配置表" kinds="in_file">../cfg/gm_msg.xml</gm_send_msg>
+	<role_attr_table name="角色属性表" kinds="string">attribute_config.xlsx</role_attr_table>
+	<gm_send_msg name="gm消息配置表" kinds="in_file">../../../code/cfg/apollo_gm.xml</gm_send_msg>
 	<compiled_rum_cmd name="编译后输出命令" kinds="string"/>
 	<packeaged_rum_cmd name="打包后输出命令" kinds="string"/>
-	<compile_to_exe_cmd name="脚本编译成exe命令">./script_2exe.sh</compile_to_exe_cmd>
 </setting_config>

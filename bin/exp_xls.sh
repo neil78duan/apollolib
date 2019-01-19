@@ -7,7 +7,9 @@
 #  Created by duanxiuyun on 15-3-6.
 #
 
-if [ $# -lt 4 ]; then
+echo "python xlrd begin to export"
+
+if [ $# -lt 3 ]; then
 	echo "usage: exp_xls.sh file-list.txt input-excel-path output-text-path"
 	exit 1
 fi
@@ -19,13 +21,13 @@ inputPath=$2
 outputPath=$3
 
 
-if [ $# -ge 6 ]; then
-	if [ "x$5" == "x0" ]; then
-		cd $inputPath
-		svn up
-		cd $workDir
-	fi
-fi
+#if [ $# -ge 6 ]; then
+#	if [ "x$5" == "x0" ]; then
+#		cd $inputPath
+#		svn up
+#		cd $workDir
+#	fi
+# fi
 
 [ -d $outputPath ] || mkdir $outputPath
 
@@ -62,7 +64,7 @@ cat $in_filelist | col -b > ./filelist-unix.txt
 #outputPath=$workDir"/"$outputPath
 #inputPath=$workDir"/"$inputPath
 
-READEXCL="python3 ./xls2txt.py"
+READEXCL="/usr/local/bin/python3 ./xls2txt.py"
 
 run_export()
 {

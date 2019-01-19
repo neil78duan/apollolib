@@ -327,15 +327,17 @@ bool startDialog::expExcel()
 	const char *encodeName = getGameDateEncodeType();
 	
 #ifdef WIN32
+	const char *inputCode = "gbk" ;
 	snprintf(exp_cmdbuf, sizeof(exp_cmdbuf), " %s %s %s %s ",  exp_cmd, excel_list, excel_path, text_path);
 #else
-    snprintf(exp_cmdbuf, sizeof(exp_cmdbuf), "sh %s %s %s %s  ",  exp_cmd, excel_list, excel_path, text_path);
+	const char *inputCode = "utf8" ;
+    snprintf(exp_cmdbuf, sizeof(exp_cmdbuf), "sh %s %s %s %s",  exp_cmd, excel_list, excel_path, text_path);
 	
 #endif
-	int ret = system(exp_cmdbuf);
+	int ret = ::system(exp_cmdbuf);
 	
     if (0 != ret)	{
-		nd_logerror("run export shell %s\nerror: %s \n", exp_cmdbuf,nd_last_error());
+		nd_logerror("[%s] run export shell %s\nerror: %s \n",nd_getcwd(), exp_cmdbuf,nd_last_error());
         return false;
 	}
 
@@ -356,7 +358,7 @@ bool startDialog::expExcel()
 		strWinPack += ".gbk";
 
 		DBLDatabase dbwin;
-		if (0 != dbwin.LoadFromText(text_path, excel_list, "gbk", "gbk")) {
+		if (0 != dbwin.LoadFromText(text_path, excel_list, inputCode, "gbk")) {
 			nd_logerror("can not read from text gbk\n");
 			return false;
 		}
@@ -369,7 +371,7 @@ bool startDialog::expExcel()
 #endif
 
 	DBLDatabase dbtmp;
-	if (0 != dbtmp.LoadFromText(text_path, excel_list, "gbk", encodeName)) {
+	if (0 != dbtmp.LoadFromText(text_path, excel_list, inputCode, encodeName)) {
 		nd_logerror("load data from text file error");
 		return false;
 	}
