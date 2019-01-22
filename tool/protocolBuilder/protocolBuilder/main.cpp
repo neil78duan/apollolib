@@ -886,7 +886,7 @@ int _out_data_forUE(ndxml *sub, FILE *pf,FILE *pfCpp)
 	fprintf(pfCpp, "%s\n\tTRYTO_MOVE_STRUCT_END(inmsg);\n\treturn 0; \n}\n\n", buf_read_func) ;
 	
 	fprintf(pfCpp, "int WriteStream(NDOStreamMsg &omsg,const %s &data)\n{\n",pName) ;
-	fprintf(pfCpp, "%s\n\t\tEND_STRUCT_STREAM(omsg); \n\t\treturn 0; \n\t}\n", buf_write_func);
+	fprintf(pfCpp, "%s\n\tEND_STRUCT_STREAM(omsg); \n\treturn 0; \n}\n", buf_write_func);
 	
 	fprintf(pf, "int ReadStream(NDIStreamMsg &inmsg,%s &data);\n", pName) ;
 	fprintf(pf, "int WriteStream(NDOStreamMsg &omsg,const %s &data);\n",pName) ;
@@ -1074,113 +1074,6 @@ int build_marco(ndxml_root *xmlfile, const char *out_file)
 	return 0 ;
 }
 
-//build message handler function
-/*
-int build_messageHandler(ndxml_root *xmlfile, const char *out_file, const char *install_entry)
-{
-	ndxml *xnode = ndxml_getnode(xmlfile, "MessageDefine") ;
-	if (!xnode) {
-		fprintf(stderr, " build marco error MarcoDefine node unexist\n" ) ;
-		return -1 ;
-	}
-	//OUTPUT HEADFILE
-	do {
-		FILE *pf = fopen(out_file, "w") ;
-		if (!pf){
-			fprintf(stderr, " open out put file %s error \n", out_file ) ;
-			return -1 ;
-		}
-		
-		_OUT_PUT_TIME(pf) ;
-		fprintf(pf, "#ifndef _AUTO_MESSAGE_HANDLER_H_\n" );
-		fprintf(pf, "#define _AUTO_MESSAGE_HANDLER_H_\n" );
-		
-		fprintf(pf, "\n#include \"msgHandlerDft.h\"\n\n") ;
-		
-		fprintf(pf, "extern void install_message_handler(nd_handle h); \n\n" );
-		fprintf(pf, "namespace NetMessage \n { \n" );
-		
-		fprintf(pf, "class MessageHandlerBase : public NDObject \n{\npublic:\n\n" );
-		
-		int total = ndxml_getsub_num(xnode) ;
-		
-		for (int i=0; i<total; ++i) {
-			ndxml *sub = ndxml_refsubi(xnode, i) ;
-			const char *body = ndxml_getattr_val(sub, "body") ;
-			const char *msgName = ndxml_getattr_val(sub, "id") ;
-			
-			if (body && body[0]) {
-				
-				fprintf(pf,"\tvirtual int  Handler%s(NDObject *h,NDIStreamMsg &inmsg,const NetMessage::%s& data)\n"
-						"\t{\n\t\tDEFAULT_MESSAGE_HANDLE(%s) ;\n\t}\n",msgName, body,msgName ) ;
-			}
-			else {
-				
-				fprintf(pf,"\tvirtual int  Handler%s(NDObject *h,NDIStreamMsg &inmsg)\n"
-						"\t{\n\t\tDEFAULT_MESSAGE_HANDLE(%s);\n\t}\n",msgName,msgName ) ;
-			}
-			
-		}
-				
-		fprintf(pf,"};\n};\n#endif\n") ;
-		fclose(pf) ;
-	}while(0) ;
-	
-	//output message entry
-	do {
-		//create install function
-		FILE *pf = fopen(install_entry, "w") ;
-		if (!pf){
-			fprintf(stderr, " open out put file %s error \n", out_file ) ;
-			return -1 ;
-		}
-		
-		_OUT_PUT_TIME(pf) ;
-		fprintf(pf, "//create by auto tool \n//message handler function \n\n" );
-		
-		fprintf(pf, "#include \"ndapplib/applib.h\" \n\n" );
-		
-		fprintf(pf, "#include \"apollo_msg_entry.h\" \n\n" );
-		
-		int total = ndxml_getsub_num(xnode) ;
-		//function entry
-		for (int i=0; i<total; ++i) {
-			ndxml *sub = ndxml_refsubi(xnode, i) ;
-			const char *body = ndxml_getattr_val(sub, "body") ;
-			
-			if (body && body[0]) {
-				
-				fprintf(pf,"MSG_ENTRY_INSTANCE(%s_entry)\n"
-						"{\n\tCALL_APOLLO_FUNCTION_ENTRY(nethandle,msg,%s,%s);\n}\n",
-						ndxml_getattr_val(sub, "id"),body,ndxml_getattr_val(sub, "id")) ;
-			}
-			else {
-				fprintf(pf,"MSG_ENTRY_INSTANCE(%s_entry)\n"
-						"{\n\tCALL_APOLLO_FUNCTION_NO_PARAM_ENTRY(nethandle,msg,%s);\n}\n",
-						ndxml_getattr_val(sub, "id"),ndxml_getattr_val(sub, "id")) ;
-			}
-			
-		}
-		//function install
-		fprintf(pf, "void install_message_handler(nd_handle h)\n{\n\n" );
-
-		
-		for (int i=0; i<total; ++i) {
-			ndxml *sub = ndxml_refsubi(xnode, i) ;
-			fprintf(pf,"\t APOLLO_INSTALL_ENTRY(%s,h);\n",ndxml_getattr_val(sub, "id")) ;
-			
-		}
-		fprintf(pf, "}//end install_message_handler function  \n\n" );
-
-		
-		fclose(pf) ;
-
-	}while (0);
-	
-	return 0 ;
-}
-*/
-
 #define LOAD_XML_FROM_FILE(_xmlRoot,_pathDir, _fileName,_encode) \
 do { 			\
 	std::string fileName = _pathDir + _fileName ;				\
@@ -1193,6 +1086,7 @@ do { 			\
 extern int build_CSharp(ndxml_root *xmlID, ndxml_root *xmlMarco, ndxml_root *xmlData, const char *outPath);
 extern int build_luaDataStruct(ndxml_root *xmlfile, const char *outFileName);
 extern int build_luaMessageID(ndxml_root *xmlfile, const char *out_file);
+
 int main(int argc, char *argv[])
 {
 	int i ;
@@ -1233,9 +1127,16 @@ int main(int argc, char *argv[])
 	}while(0)
 
 	RESET_OUT_PATH("/cpp");
-	
+	RESET_OUT_PATH("/cpp_ue");
+
 	std::string outFile;
 	
+	outFile = _output_dir + "/cpp_ue/auto_dataType";
+	if (-1 == build_dataTypeForUE4(&xmlDatatype, outFile.c_str())) {
+		fprintf(stderr, "export datatype error \n");
+		exit(1);
+	}
+
 	outFile = _output_dir + "/cpp/auto_dataType";
 	if(-1==build_dataType(&xmlDatatype, outFile.c_str(),false ) ) {
 		fprintf(stderr, "export datatype error \n")  ;
@@ -1261,21 +1162,15 @@ int main(int argc, char *argv[])
 		exit(1) ;
 	}
 
-	
-//	if(build_messageHandler(&xmlMessage, "./cpp/UserMsgHandler.h","./cpp/UserMsgInstall.cpp")) {
-//		fprintf(stderr, "export Macro error \n")  ;
-//		exit(1) ;
-//	}
-	//export cs
-	
-	RESET_OUT_PATH("/csharp");
-	RESET_OUT_PATH("/luaOut");
-
-	//load for utf8
 	ndxml_destroy(&xmlMarco);
 	ndxml_destroy(&xmlDatatype);
 	ndxml_destroy(&xmlMessage);
 
+	/*
+	//export cs
+	//load for utf8
+	RESET_OUT_PATH("/csharp");
+	RESET_OUT_PATH("/luaOut");
 
 	ndstr_set_code(E_SRC_CODE_UTF_8);
 	LOAD_XML_FROM_FILE(&xmlMarco, _input_dir, "/marco.xml", "utf8");
@@ -1303,7 +1198,8 @@ int main(int argc, char *argv[])
 	}
 	
 	ndxml_destroy(&xmlMarco); ndxml_destroy(&xmlDatatype); ndxml_destroy(&xmlMessage) ;
-	
+	*/
+
 	exit(0) ;
 }
 
