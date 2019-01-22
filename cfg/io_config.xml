@@ -17,5 +17,4 @@
 	<gm_send_msg name="gm消息配置表" kinds="in_file">../../../code/cfg/apollo_gm.xml</gm_send_msg>
 	<compiled_rum_cmd name="编译后输出命令" kinds="string"/>
 	<packeaged_rum_cmd name="打包后输出命令" kinds="string"></packeaged_rum_cmd>
-	<compile_to_exe_cmd name="脚本编译成exe命令">script_2exe.bat</compile_to_exe_cmd>
 </setting_config>
