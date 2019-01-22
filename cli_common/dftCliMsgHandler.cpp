@@ -20,7 +20,7 @@
 #include "logic_parser/logic_compile.h"
 #endif 
 
-#include "cli_common/dftCliMsgHandler.h"
+#include "dftCliMsgHandler.h"
 
 namespace ClientMsgHandler
 {

@@ -38,7 +38,7 @@
 #define APO_LOGIN_SESSION_FILE "acc_login.sec"
 #define APO_LOG_FILE_NAME "apoclient.log"
 
-class ApoClient
+class ND_CONNCLI_CLASS ApoClient
 {
 public:
 	ApoClient ();

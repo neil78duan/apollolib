@@ -98,7 +98,7 @@ ND_CONNCLI_API LoginApollo *ApolloCreateLoginInst();
 ND_CONNCLI_API void ApolloDestroyLoginInst(LoginApollo *pLogin);
 //typedef LoginApollo LoginBase;
 #define LoginBase LoginApollo
-class  LoginApollo 
+class ND_CONNCLI_CLASS LoginApollo
 #endif 
 {
 public:
