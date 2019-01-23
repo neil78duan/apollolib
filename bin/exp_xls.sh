@@ -10,7 +10,7 @@
 echo "python xlrd begin to export"
 
 if [ $# -lt 3 ]; then
-	echo "usage: exp_xls.sh file-list.txt input-excel-path output-text-path"
+	echo "usage: exp_xls.sh file-list.txt input-excel-path output-text-path [encode]"
 	exit 1
 fi
 
@@ -64,7 +64,7 @@ cat $in_filelist | col -b > ./filelist-unix.txt
 #outputPath=$workDir"/"$outputPath
 #inputPath=$workDir"/"$inputPath
 
-READEXCL="/usr/local/bin/python3 ./xls2txt.py"
+READEXCL="python ./xls2txt_unix.py"
 
 run_export()
 {
@@ -76,7 +76,7 @@ run_export()
 		return 0 ;
 	fi
 
-	$READEXCL $inputPath/$infile $outputPath/$outfile
+	$READEXCL $inputPath/$infile "utf8" > $outputPath/$outfile
 	if [ $? -ne 0 ]; then
 		echo "coever $1 error "
 		exit 1

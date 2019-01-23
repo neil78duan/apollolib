@@ -8,7 +8,7 @@ include ../Rules.make
 
 ##############set flag
 
-CFLAGS += -I$(TOPDIR)/include -I$(TOPDIR)/logic_parser -I$(TOPDIR)/include/mysql
+CFLAGS += -I$(TOPDIR)/include -I$(TOPDIR)/include/mysql
 
 ifeq ($(DEBUG),y)
     PROJS = $(LIBDIR)/libatls_srv_common_d.a

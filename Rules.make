@@ -36,7 +36,6 @@ endif
 
 ifeq ($(OS_kernel),darwin)
     CFLAGS += -D__ND_MAC__
-	LFLAGS += -liconv
 	DLL_EXT_NAME := dylib
 endif
 
@@ -47,7 +46,7 @@ WORKDIR = $(TOPDIR)/bin/
 LIBDIR = $(TOPDIR)/lib/$(AIM_NAME)
 
 CFLAGS += -c -w -O 
-LFLAGS +=  -lpthread  -lm
+LFLAGS +=  -lpthread  -lm -liconv
 
 #FOR NDSDK
 CFLAGS += -I$(NDHOME)/include -I$(TOPDIR) -I$(TOPDIR)/include -I$(NODEFLOW_WORKING)/include
