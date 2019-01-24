@@ -82,8 +82,11 @@ static void workingConfigInit()
 	const char *scriptConfig = "../cfg/editor_config_setting.json";
 
 	if (!QDir::setCurrent(workingPath)) {
-		QMessageBox::critical(NULL, "Error", "can not enter working path !");
-		exit(1);
+		if(!inputSetting(workingPath,NULL) ) {
+			QMessageBox::critical(NULL, "Error", "can not enter working path !");
+			exit(1);
+		}
+		QDir::setCurrent(workingPath) ;
 	}
 
 	//use utf8 
