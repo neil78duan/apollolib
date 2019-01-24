@@ -6,7 +6,6 @@
 
 del /Q /S .\ndcliForUe4
 
-
 mkdir %myTarget%
 cd %myTarget% 
 mkdir include 
