@@ -316,6 +316,7 @@ bool startDialog::expExcel()
 	const char *text_path = _getFromIocfg("text_data_out_path");
 	const char *package_file = _getFromIocfg("game_data_package_file");
 	const char *excel_list = _getFromIocfg("game_data_listfile");
+	const char *python_version = _getFromIocfg("python_ver");
 
     char exp_cmdbuf[1024];
 
@@ -325,17 +326,26 @@ bool startDialog::expExcel()
 	}
 
 	const char *encodeName = getGameDateEncodeType();
-	
+	const char *inputCode = encodeName;
+
+	if (python_version && *python_version == '3') {
 #ifdef WIN32
-	const char *inputCode = "gbk" ;
-	snprintf(exp_cmdbuf, sizeof(exp_cmdbuf), " %s %s %s %s ",  exp_cmd, excel_list, excel_path, text_path);
+		inputCode = "gbk";
+		snprintf(exp_cmdbuf, sizeof(exp_cmdbuf), " %s %s %s %s ", exp_cmd, excel_list, excel_path, text_path);
 #else
-	const char *inputCode = "utf8" ;
-    snprintf(exp_cmdbuf, sizeof(exp_cmdbuf), "sh %s %s %s %s",  exp_cmd, excel_list, excel_path, text_path);
-	
+		inputCode = "utf8";
+		snprintf(exp_cmdbuf, sizeof(exp_cmdbuf), "sh %s %s %s %s", exp_cmd, excel_list, excel_path, text_path);
 #endif
-	int ret = ::system(exp_cmdbuf);
-	
+
+	}
+	else {
+#ifdef WIN32
+		snprintf(exp_cmdbuf, sizeof(exp_cmdbuf), " %s %s %s %s %s ", exp_cmd, excel_list, excel_path, text_path, encodeName);
+#else
+		snprintf(exp_cmdbuf, sizeof(exp_cmdbuf), "sh %s %s %s %s %s ", exp_cmd, excel_list, excel_path, text_path, encodeName);
+#endif
+	}	
+	int ret = ::system(exp_cmdbuf);	
     if (0 != ret)	{
 		nd_logerror("[%s] run export shell %s\nerror: %s \n",nd_getcwd(), exp_cmdbuf,nd_last_error());
         return false;
@@ -419,9 +429,7 @@ bool startDialog::expExcel()
         nd_logmsg("dump from bin-stream to text file error\n");
         DBLDatabase::destroy_Instant();
         return false;
-
     }
-
 
     DBLDatabase::destroy_Instant();
     return true;

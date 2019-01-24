@@ -7,10 +7,8 @@
 #  Created by duanxiuyun on 15-3-6.
 #
 
-echo "python xlrd begin to export"
-
-if [ $# -lt 3 ]; then
-	echo "usage: exp_xls.sh file-list.txt input-excel-path output-text-path [encode]"
+if [ $# -lt 4 ]; then
+	echo "usage: exp_xls.sh file-list.txt input-excel-path output-text-path [encode-type(gbk|utf8)] [is-auto-svn-up 0|1]"
 	exit 1
 fi
 
@@ -20,14 +18,16 @@ in_filelist=$1
 inputPath=$2
 outputPath=$3
 
+ENCODE_TYPE="utf8"
+[ "x$4" == "x" ] || ENCODE_TYPE=$4
 
-#if [ $# -ge 6 ]; then
-#	if [ "x$5" == "x0" ]; then
-#		cd $inputPath
-#		svn up
-#		cd $workDir
-#	fi
-# fi
+if [ $# -ge 6 ]; then
+	if [ "x$5" == "x0" ]; then
+		cd $inputPath
+		svn up
+		cd $workDir
+	fi
+fi
 
 [ -d $outputPath ] || mkdir $outputPath
 
@@ -64,6 +64,9 @@ cat $in_filelist | col -b > ./filelist-unix.txt
 #outputPath=$workDir"/"$outputPath
 #inputPath=$workDir"/"$inputPath
 
+chmod u+x ./get_svn_ver.sh
+./get_svn_ver.sh $inputPath > $outputPath\version.txt
+
 READEXCL="python ./xls2txt_unix.py"
 
 run_export()
@@ -76,7 +79,7 @@ run_export()
 		return 0 ;
 	fi
 
-	$READEXCL $inputPath/$infile "utf8" > $outputPath/$outfile
+	$READEXCL $inputPath/$infile $ENCODE_TYPE > $outputPath/$outfile
 	if [ $? -ne 0 ]; then
 		echo "coever $1 error "
 		exit 1
