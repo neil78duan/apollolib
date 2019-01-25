@@ -24,6 +24,14 @@
 #pragma comment(lib,"Advapi32.lib")
 #endif
 
+#define CONFIG_FILE_PATH "../cfg/editor_config_setting.json"
+#ifdef __MAC_OS__
+#define CONFIG_IO_SETTING "../cfg/io_config_mac.xml"
+#else
+#define CONFIG_IO_SETTING "../cfg/io_config.xml"
+#endif
+
+
 //int time_test()
 //{
 //	char buf[128] ;
@@ -65,57 +73,14 @@ int test_time1()
 	return 0;
 }
 
-static void workingConfigInit()
-{
-	QString workingPath;
-#if defined (__ND_MAC__)
-	const char *rootConfog = "../cfg/io_config_mac.xml";
-	if (!trytoGetSetting(workingPath)) {
-		QMessageBox::critical(NULL, "Error", "can not get working path !");
-		exit(1);
-	}
-#else
-	const char *rootConfog = "../cfg/io_config.xml";
-	workingPath = "../bin";
+static const char *__in_working_path = NULL;
+static const char *__in_config = NULL;
+static const char *__in_proj_path = NULL;
+static int __run_type = 0;		// 0 develop tool 1 gmtool 2 base-editor
 
-#endif
-	const char *scriptConfig = "../cfg/editor_config_setting.json";
+static void workingConfigInit();
 
-	if (!QDir::setCurrent(workingPath)) {
-		if(!inputSetting(workingPath,NULL) ) {
-			QMessageBox::critical(NULL, "Error", "can not enter working path !");
-			exit(1);
-		}
-		QDir::setCurrent(workingPath) ;
-	}
-
-	//use utf8 
-	ndstr_set_code(APO_QT_SRC_TEXT_ENCODE);
-
-	if (!nd_existfile(scriptConfig)) {
-		QString errTips;
-		errTips.sprintf("can not open script setting file ,currentpath=%s!", nd_getcwd());
-		QMessageBox::critical(NULL, "Error", errTips);
-
-		exit(1);
-	}
-	if (!nd_existfile(rootConfog)) {
-		QMessageBox::critical(NULL, "Error", "can not found root config file !");
-		exit(1);
-	}
-
-	if (!apoEditorSetting::getInstant()->Init(rootConfog, scriptConfig, APO_QT_SRC_TEXT_ENCODE)) {
-		QMessageBox::critical(NULL, "Error", "can not found root config file !");
-		exit(1);
-	}
-	if (!LogicCompiler::get_Instant()->setConfigFile(scriptConfig)) {
-		QMessageBox::critical(NULL, "Error", "load config file error, Please Restart", QMessageBox::Yes);
-		exit(1);
-	}
-
-}
-
-int runEditor(int argc, char *argv[])
+int runEditor(int argc,  char *argv[])
 {
 	QApplication a(argc, argv);
 	workingConfigInit();
@@ -142,6 +107,7 @@ int runDevelopTool(int argc, char *argv[])
 	workingConfigInit();
 
 	startDialog dlg;
+	dlg.setProjectPath(__in_proj_path);
 	dlg.show();
 	return a.exec();
 }
@@ -154,9 +120,9 @@ int runDevelopTool(int argc, char *argv[])
     if (ndxml_load_ex((char*)_filename, &_xml_name,_encode)) {	\
         nd_logerror("open file %s error", _filename);	\
         if(_isexit) return 1;							\
-		    }
+	}
 
-int runGm(int argc, char *argv[])
+int runGm(int argc,  char *argv[])
 {
     QApplication a(argc, argv);
 	//use utf8 
@@ -190,6 +156,64 @@ int runGm(int argc, char *argv[])
 	return a.exec();
 }
 
+
+int parser_args(int argc, char *argv[])
+{
+	for (int i = 1; i < argc; i++) {
+		if (0 == ndstricmp(argv[i], "--runEditor")) {
+			__run_type = 0;
+		}
+		else if (0 == ndstricmp(argv[i], "--rungmtool")) {
+			__run_type = 1;
+		}
+		else if (0 == ndstricmp(argv[i], "--runBaseEditor")) {
+			__run_type = 2;
+		}
+		else if (0 == ndstricmp(argv[i], "--workdir")) {
+			__in_working_path = argv[++i];
+		}
+		else if (0 == ndstricmp(argv[i], "--porjdir")) {
+			__in_proj_path = argv[++i];
+		}
+		else if (0 == ndstricmp(argv[i], "-f")) {
+			__in_config = argv[++i];
+		}
+	}
+	return 0;
+}
+
+void workingConfigInit()
+{
+	if (__in_working_path && *__in_working_path) {
+		if (!QDir::setCurrent(__in_working_path)) {
+			QString workingPath ;
+			if (!inputSetting(workingPath, NULL)) {
+				QMessageBox::critical(NULL, "Error", "can not enter working path !");
+				exit(1);
+			}
+			QDir::setCurrent(workingPath);
+		}
+	}
+
+	if (!__in_config) {
+		__in_config = CONFIG_IO_SETTING;
+	}
+
+	//use utf8 
+	ndstr_set_code(APO_QT_SRC_TEXT_ENCODE);
+
+	if (!nd_existfile(__in_config)) {
+		QMessageBox::critical(NULL, "Error", "can not found root config file !");
+		exit(1);
+	}
+
+	if (!apoEditorSetting::getInstant()->Init(__in_config, APO_QT_SRC_TEXT_ENCODE)) {
+		QMessageBox::critical(NULL, "Error", "can not found root config file !");
+		exit(1);
+	}
+	
+
+}
 int main(int argc, char *argv[])
 {
 	initGlobalParser();
@@ -199,24 +223,19 @@ int main(int argc, char *argv[])
 	if (argc == 1) {
 		return runDevelopTool(argc, argv);
 	}
-	else {
-		for (int i = 1; i < argc; i++) {
-			if (0 == ndstricmp(argv[i], "--rungmtool")) {
-				return runGm(argc, argv);
-			}
-			else if (0 == ndstricmp(argv[i], "--runEditor")) {
-				return runDevelopTool(argc, argv);
-			}
-			else if (0 == ndstricmp(argv[i], "--runBaseEditor")) {
-				return runEditor(argc, argv);
-			}
-		}
+
+	parser_args(argc, argv);
+ 
+	if (__run_type == 1) {
+		return runGm(argc, argv);
+	}
+	else if (__run_type == 2) {
+		return runEditor(argc, argv);
+	}
+
+	else  {
+		return runDevelopTool(argc, argv);
 	}
 
 
-#if defined (__ND_MAC__)
-    return runDevelopTool(argc, argv);
-#endif
-	fprintf(stderr, "unknow run mode \n");
-	exit(1);
 }

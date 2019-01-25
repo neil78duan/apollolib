@@ -75,6 +75,46 @@ void startDialog::WriteLog(const char *logText)
 }
 
 
+void startDialog::setProjectPath(const char *Path)
+{
+	if (Path) {
+		if (nd_path_is_relative) {
+			char buf[ND_FILE_PATH_SIZE];
+			if (nd_absolute_path(Path, buf, sizeof(buf))) {
+				m_projectPath = buf;
+			}
+		}
+		else {
+
+			m_projectPath = Path;
+		}
+	}
+	else {
+		m_projectPath = nd_getcwd();
+	}
+}
+
+std::string startDialog::getPathFromProject(const char *relativePath)
+{
+	WorkingPathSwitchHelper __pathHelper(m_projectPath.c_str());
+	char buf[ND_FILE_PATH_SIZE];
+	if (!nd_absolute_filename(relativePath, buf, sizeof(buf))) {
+		return std::string();
+	}
+	return buf;
+}
+
+std::string startDialog::getPathFromConfig(const char *configName)
+{
+	apoEditorSetting *g_seting = apoEditorSetting::getInstant();
+	const char *cfgVal = g_seting->getProjectConfig(configName);
+	if (!cfgVal) {
+		return std::string();
+	}
+	return getPathFromProject(cfgVal);
+}
+
+
 const char *startDialog::getGameDateEncodeType()
 {
     int codeType = atoi(_getFromIocfg("game_data_out_encode"));
@@ -145,21 +185,22 @@ void startDialog::on_Setting_clicked()
 
 bool startDialog::compile()
 {
-	const char *script_root = _getFromIocfg("script_root");
+	std::string script_root = getPathFromConfig("script_root");
 	
-	char tmpbuf[ND_FILE_PATH_SIZE];
-	if (!nd_absolute_filename(script_root, tmpbuf, sizeof(tmpbuf))) {
-		nd_logerror("can not found file %s\n", script_root);
+	/*
+	if (!nd_absolute_filename(script_root.c_str(), tmpbuf, sizeof(tmpbuf))) {
+		nd_logerror("can not found file %s\n", script_root.c_str());
 		return false;
 	}
 	
+	char tmpbuf[ND_FILE_PATH_SIZE];
 	std::string absPath = tmpbuf;
 	absPath = nd_getpath(absPath.c_str(), tmpbuf, sizeof(tmpbuf));
-
+	*/
 
 	ndxml_root xmlEntry;
 	ndxml_initroot(&xmlEntry);
-	if (-1 == ndxml_load_ex(script_root, &xmlEntry, apoEditorSetting::getInstant()->m_encodeName.c_str())) {
+	if (-1 == ndxml_load_ex(script_root.c_str(), &xmlEntry, apoEditorSetting::getInstant()->m_encodeName.c_str())) {
 		return false;
 	}
 
@@ -168,9 +209,12 @@ bool startDialog::compile()
 		return false;
 	}
 	
-	std::string curPath = nd_getcwd();
-	nd_chdir(absPath.c_str());
 
+	char projPath[ND_FILE_PATH_SIZE];
+	nd_getpath(script_root.c_str(), projPath, sizeof(projPath));
+
+	WorkingPathSwitchHelper __pathHelper(projPath);
+	
 	bool ret = true;
 	int num = ndxml_num(xml);
 	for (int i = 0; i < num; i++) {
@@ -191,7 +235,6 @@ bool startDialog::compile()
 
 	ndxml_destroy(&xmlEntry);
 
-	nd_chdir(curPath.c_str());
 	return true;
 }
 
@@ -312,11 +355,17 @@ bool startDialog::expExcel()
 
     DBLDatabase::destroy_Instant();
 	const char *exp_cmd = _getFromIocfg("game_data_export_cmd");
-	const char *excel_path = _getFromIocfg("excel_data_in_path");
-	const char *text_path = _getFromIocfg("text_data_out_path");
-	const char *package_file = _getFromIocfg("game_data_package_file");
-	const char *excel_list = _getFromIocfg("game_data_listfile");
 	const char *python_version = _getFromIocfg("python_ver");
+
+	std::string stdstr_excel_path = getPathFromConfig("excel_data_in_path");
+	std::string stdstr_text_path = getPathFromConfig("text_data_out_path");
+	std::string stdstr_package_file = getPathFromConfig("game_data_package_file");
+	std::string stdstr_excel_list = getPathFromConfig("game_data_listfile");
+
+	const char *excel_path = stdstr_excel_path.c_str();
+	const char *text_path = stdstr_text_path.c_str();
+	const char *package_file = stdstr_package_file.c_str();
+	const char *excel_list = stdstr_excel_list.c_str(); 
 
     char exp_cmdbuf[1024];
 
@@ -439,10 +488,12 @@ bool startDialog::expExcel()
 bool startDialog::loadDataBase()
 {
 
-	const char *package_file = _getFromIocfg("game_data_package_file");
+	//const char *package_file = _getFromIocfg("game_data_package_file");
+	std::string package_file = getPathFromConfig("game_data_package_file");
+
 	DBLDatabase *pdbl = DBLDatabase::get_Instant();
 	if (pdbl){
-		if (0 == pdbl->LoadBinStream(package_file)) {
+		if (0 == pdbl->LoadBinStream(package_file.c_str())) {
 			return true;
 		}
 	}
@@ -544,11 +595,11 @@ void startDialog::on_Connect_clicked()
 	
     WriteLog("begin connect to server....");
 
-    const char*filename = _getFromIocfg("gm_send_msg");
-	const char *client_script = _getFromIocfg("connect_script");
-	const char *package_file = _getFromIocfg("game_data_package_file");
+    std::string filename = getPathFromConfig("gm_send_msg");
+	std::string client_script = getPathFromConfig("connect_script");
+	std::string package_file = getPathFromConfig("game_data_package_file");
 
-	_LOAD_XML(xmlSend, filename, "utf8", 0);
+	_LOAD_XML(xmlSend, filename.c_str(), "utf8", 0);
 
 
     ConnectDialog dlg(NULL) ;
@@ -556,8 +607,7 @@ void startDialog::on_Connect_clicked()
     dlg.m_editor_setting =&m_editor_setting;
     dlg.m_gmCfg = &xmlSend;
 	
-	if (!dlg.LoadClientScript(client_script, package_file))	{
-		//AfxMessageBox("load message data type error");
+	if (!dlg.LoadClientScript(client_script.c_str(), package_file.c_str()))	{
 		QMessageBox::warning(this, "Error", "load message data type error!", QMessageBox::Ok);
 	}
 
@@ -568,7 +618,7 @@ void startDialog::on_Connect_clicked()
 		ndxml_delnode(msgRoot, "history");
 	}
 
-    ndxml_save_encode(&xmlSend, filename, E_SRC_CODE_UTF_8, E_SRC_CODE_UTF_8);
+    ndxml_save_encode(&xmlSend, filename.c_str(), E_SRC_CODE_UTF_8, E_SRC_CODE_UTF_8);
     ndxml_destroy(&xmlSend) ;
 
     WriteLog("...\n connect server end!");
@@ -584,10 +634,9 @@ void startDialog::on_ScriptEdit_clicked()
 		nd_logerror("load database error\n");
 	}
 
-	apoEditorSetting *g_seting = apoEditorSetting::getInstant();
-	const char *defProj = g_seting->getProjectConfig("script_root");
+	std::string defProj = getPathFromConfig("script_root");
 
-	if (pMain->myInit(defProj)) {
+	if (!defProj.empty() && pMain->myInit(defProj.c_str() )) {
 		this->setVisible(false);
 		pMain->showMaximized();
 	}
@@ -609,7 +658,7 @@ void startDialog::on_Compile_clicked()
         WriteLog("compile script error");
         return;
     }
-     WriteLog("=========compile script success===========\n");
+    WriteLog("=========compile script success===========\n");
 
     const char *packaged_cmd = _getFromIocfg("compiled_rum_cmd");
 

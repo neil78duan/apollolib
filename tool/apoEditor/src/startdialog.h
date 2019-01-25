@@ -1,13 +1,6 @@
 #ifndef STARTDIALOG_H
 #define STARTDIALOG_H
 
-#define CONFIG_FILE_PATH "../cfg/editor_config_setting.json"
-#ifdef __MAC_OS__
-#define CONFIG_IO_SETTING "../cfg/io_config_mac.xml"
-#else
-#define CONFIG_IO_SETTING "../cfg/io_config.xml"
-#endif
-
 #include <QDialog>
 #include <string>
 
@@ -48,6 +41,7 @@ public:
 
     void ClearLog() ;
     void WriteLog(const char *logText) ;
+	void setProjectPath(const char *Path);
 	//bool InitConfigFile(const char *ioConfig, const char *scriptSetting);
 	
 private slots:
@@ -86,6 +80,8 @@ private:
 
 	bool expLua(const char *outPath, const DBLDatabase &db);
 
+	std::string getPathFromProject(const char *relativePath);
+	std::string getPathFromConfig(const char *configName);
     Ui::startDialog *ui;
 
     ndxml_root &m_editor_setting;
@@ -93,6 +89,7 @@ private:
 
 	std::string editorConfigFile ;
 	std::string ioConfigFile;
+	std::string m_projectPath;
 
 };
 
