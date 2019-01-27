@@ -68,7 +68,7 @@ public:
 	RESULT_T ReloginBackground();
 	RESULT_T ReloginEx(void *session, size_t sessionSize, bool bReloginOffline);
 	
-	RESULT_T LoginAccountOneKey(const char *account, const char *passwd, int accType = ACC_APOLLO, int channel = 0, bool skipAuth = false);
+	RESULT_T LoginAccountOneKey(const char *account, const char *passwd, int accType= ACC_APOLLO, int channel=0, bool skipAuth=false);
 	RESULT_T LoginOnly(const char *account, const char *passwd, int accType = ACC_APOLLO, int channel = 0, bool skipAuth = false);
 	RESULT_T CreateAccount(const char *userName, const char *passwd, int channel=0);
 	RESULT_T CreateOnly(const char *userName, const char *passwd, int channel=0);
