@@ -122,8 +122,14 @@ if (!_conn) {	\
 	return NDSYS_ERR_INVALID_HANDLE;		\
 }
 
-ApoClient::ApoClient() :m_pconn(0), m_login(0), m_accId(0), m_runningUpdate(ERUN_UP_STOP), m_roleId(0)
+ApoClient::ApoClient()
 {
+	m_accId = 0 ;
+	m_runningUpdate= ERUN_UP_STOP;
+	m_pconn = NULL;
+	m_roleId = 0 ;
+	m_login = 0 ;
+	
 	m_isRelogin = 0;
 	m_updateIndex = 0;
 	time(&m_localTm);
