@@ -9,30 +9,22 @@
 #ifndef _APO_CLIENT_U3D_H_
 #define _APO_CLIENT_U3D_H_
 
+#include "ndlib.h"
+#include "apollo_errors.h"
 
-#include "apollo_client.h"
-
-#ifndef WITHOUT_LOGIC_PARSER
-#include "logic_parser/logicEngineRoot.h"
-//#include "logic_parser/dbl_mgr.h"
+#ifdef BUILD_AS_THIRD_PARTY
+#include "loginBase.h"
+#else 
+#include "login_apollo.h"
 #endif
-#include "ndapplib/ndsingleton.h"
 
 #include <string>
 
-
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#if 0
-#define APO_EXCEL_DATA_FILE_TMP "cehua.dat.tmp"
-#define APO_SCRIPT_FILE_TMP "script.bin.tmp"
-#define APO_EXCEL_DATA_FILE_ORG "cehua_data.dat"
-#define APO_SCRIPT_FILE_ORG "client_script.bin"
-#define APO_EXCEL_DATA_FILE _getWritableFile(APO_EXCEL_DATA_FILE_TMP)
-#define APO_SCRIPT_FILE _getWritableFile(APO_SCRIPT_FILE_TMP)
-#else
+#ifndef WITHOUT_LOGIC_PARSER
+#include "logic_parser/logicEngineRoot.h"
 #define APO_EXCEL_DATA_FILE "cehua_data.dat"
 #define APO_SCRIPT_FILE "client_script.bin"
-#endif 
+#endif
 
 
 #define APO_LOGIN_SESSION_FILE "acc_login.sec"
@@ -110,9 +102,6 @@ private:
 	void _closeConnect();
 	int _trytoOpen();
 	bool openSendStreamLog();
-	//bool _moveFileToWritable();
-	//bool _moveFileToWritable(const char *infileName, const char*outFileName);
-	//std::string _getWritableFile(const char *file);
 	RESULT_T _enterGame(const char *host, int port, const char *roleName,bool bWithoutLoadBalance=false);
 	enum eRunningUpdate
 	{

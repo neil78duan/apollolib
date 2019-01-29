@@ -9,11 +9,12 @@
 #ifndef dbManager_apollo_errors_h
 #define dbManager_apollo_errors_h
 
-#if defined(BUILD_AS_THIRD_PARTY)
-#include "ndlib.h"
-#else 
+// #if defined(BUILD_AS_THIRD_PARTY)
+// #include "ndlib.h"
+// #else 
+// #endif
+
 #include "nd_common/nd_define.h"
-#endif
 
 enum eApollo_errors {
 	ESERVER_ERR_SUCCESS = 0,

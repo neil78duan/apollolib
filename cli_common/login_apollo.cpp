@@ -7,6 +7,7 @@
 //
 
 #include "nd_common/nd_common.h"
+#include "nd_net/nd_netlib.h"
 #include "nd_crypt/nd_crypt.h"
 #include "nd_crypt/crypt_file.h"
 #include "msg_def.h"
@@ -92,10 +93,6 @@ void ApolloDestroyLoginInst(LoginBase *pLogin)
 	delete pLogin;
 }
 
-void LoginBase::SetDeviceInfo(const char *udid, const char *devDesc)
-{
-	LoginApollo::SetDeviceInfo( udid,  devDesc) ;
-}
 
 #else 
 LoginApollo *ApolloCreateLoginInst()
@@ -110,9 +107,32 @@ void ApolloDestroyLoginInst(LoginApollo *pLogin)
 
 #endif
 
+void ApolloSetDeviceInfo(const char *udid, const char *devDesc)
+{
+	LoginApollo::SetDeviceInfo(udid, devDesc);
+}
+
+
 NDUINT8 LoginApollo::m_udid[DEVICE_UDID_SIZE] = "unknown-udid";
 NDUINT8 LoginApollo::m_deviceDesc[DEVICE_UDID_SIZE] = "unknown-device";
 NDUINT64 LoginApollo::m_localToken = 0 ;
+
+
+void LoginApollo::SetDeviceInfo(const char *udid, const char *devDesc)
+{
+	LoginApollo::m_udid[0] = 0;
+	LoginApollo::m_deviceDesc[0] = 0;
+
+	if (udid && udid[0]) {
+		strncpy((char*)LoginApollo::m_udid, udid, sizeof(LoginApollo::m_udid));
+		nd_logdebug("set udid =%s\n", LoginApollo::m_udid);
+	}
+
+	if (devDesc && devDesc[0]) {
+		strncpy((char*)LoginApollo::m_deviceDesc, devDesc, sizeof(LoginApollo::m_deviceDesc));
+		nd_logdebug("set udid =%s\n", LoginApollo::m_deviceDesc);
+	}
+}
 
 NDUINT32 LoginApollo::getAccountID() 
 {
@@ -169,22 +189,6 @@ LoginApollo::~LoginApollo()
 	}
 }
 
-
-void LoginApollo::SetDeviceInfo(const char *udid, const char *devDesc)
-{
-	m_udid[0] = 0; 
-	m_deviceDesc[0] = 0;
-
-	if (udid && udid[0]) {
-		strncpy((char*)m_udid, udid, sizeof(m_udid))  ;
-		nd_logdebug("set udid =%s\n", m_udid);
-	}
-
-	if (devDesc && devDesc[0])	{
-		strncpy((char*)m_deviceDesc, devDesc, sizeof(m_deviceDesc));
-		nd_logdebug("set udid =%s\n", m_deviceDesc);
-	}
-}
 
 
 const char *LoginApollo::GetLocalToken()

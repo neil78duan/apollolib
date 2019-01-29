@@ -7,7 +7,9 @@
 */
 
 #include "apoClientU3d.h"
-//#include "netMessage/message_inc.h"
+#include "ndapplib/ndsingleton.h"
+#include "nd_common/nd_common.h"
+#include "nd_net/nd_netlib.h"
 
 
 #ifndef WITHOUT_LOGIC_PARSER

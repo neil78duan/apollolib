@@ -5,6 +5,9 @@ public class NdNetClient : ModuleRules
 {
     public NdNetClient(ReadOnlyTargetRules Target) : base (Target)
     {
+
+        PrivatePCHHeaderFile = "src/NdnetPCH.h";
+
         PrivateIncludePaths.AddRange(
           new string[] {
                "NdNetClient/include"
@@ -20,7 +23,8 @@ public class NdNetClient : ModuleRules
 
         PublicDefinitions.Add("_CRT_SECURE_NO_WARNINGS");
         PublicDefinitions.Add("WITHOUT_LOGIC_PARSER");
-        
+        PublicDefinitions.Add("BUILD_AS_THIRD_PARTY");
+
         PublicDefinitions.Add("NDCLIENT_FOR_UE4=1");
         PublicDefinitions.Add("WITHOUT_ICONV=1");
         PublicDefinitions.Add("USING_WIN_PSDK");
