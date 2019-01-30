@@ -78,12 +78,33 @@ static const char *__in_config = NULL;
 static const char *__in_proj_path = NULL;
 static int __run_type = 0;		// 0 develop tool 1 gmtool 2 base-editor
 
-static void workingConfigInit();
+static bool workingConfigInit(QString &init_working);
+
+static bool initWorkingPath()
+{
+	QString workingPath;
+	if (__in_working_path && *__in_working_path) {
+		workingPath = __in_working_path;
+	}
+	while(!workingConfigInit(workingPath)) {
+		if(trytoGetSetting(workingPath) && workingConfigInit(workingPath)) {
+			break ;
+		}
+		
+		if (!inputSetting(workingPath, NULL)) {
+			QMessageBox::critical(NULL, "Error", "can not enter working path !");
+			exit(1) ;
+		}
+		QDir::setCurrent(workingPath);
+	}
+	return true ;
+}
 
 int runEditor(int argc,  char *argv[])
 {
 	QApplication a(argc, argv);
-	workingConfigInit();
+	//workingConfigInit();
+	initWorkingPath() ;
 
 	//load dbl data
 	const char *package_file = apoEditorSetting::getInstant()->getProjectConfig("game_data_package_file");
@@ -104,7 +125,7 @@ int runEditor(int argc,  char *argv[])
 int runDevelopTool(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	workingConfigInit();
+	initWorkingPath();
 
 	startDialog dlg;
 	dlg.setProjectPath(__in_proj_path);
@@ -127,6 +148,7 @@ int runGm(int argc,  char *argv[])
     QApplication a(argc, argv);
 	//use utf8 
 	ndstr_set_code(APO_QT_SRC_TEXT_ENCODE);
+	initWorkingPath();
 
 	ConnectDialog dlg;
 
@@ -182,6 +204,39 @@ int parser_args(int argc, char *argv[])
 	return 0;
 }
 
+static bool workingConfigInit(QString &init_working)
+{
+	if (init_working.size() ) {
+		//if (!QDir::setCurrent(init_working)) {
+		if(-1==nd_chdir(init_working.toStdString().c_str())){
+			return false ;
+		}
+	}
+	else {
+		const char *pCurPath = nd_getcwd();
+		if (ndstrstr(pCurPath, "editor")) {
+			nd_chdir("..");
+		}
+	}
+	
+	if (!__in_config) {
+		__in_config = "../cfg/config.xml";
+	}
+	
+	if (!nd_existfile(__in_config)) {
+		//QMessageBox::critical(NULL, "Error", "can not found root config file !");
+		return false ;
+	}
+	
+	if (!apoEditorSetting::getInstant()->Init(__in_config, APO_QT_SRC_TEXT_ENCODE)) {
+		//QMessageBox::critical(NULL, "Error", "can not found root config file !");
+		return false ;
+	}
+	
+	return true ;
+}
+
+/*
 void workingConfigInit()
 {
 	if (__in_working_path && *__in_working_path) {
@@ -214,6 +269,7 @@ void workingConfigInit()
 	
 
 }
+ */
 int main(int argc, char *argv[])
 {
 	initGlobalParser();

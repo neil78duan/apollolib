@@ -8,28 +8,6 @@ ndsdk_dir = ../../../ndsdk
 apolib_dir = ../..
 apoBP_dir = ../../../nodeflow
 
-macx:{
-
-    QMAKE_MAC_SDK = macosx10.13
-    DEFINES += __ND_MAC__
-    platform_name = darwin_x86_64
-
-    LIBS += -liconv
-}
-
-unix:!macx{
-    message(BUILD LINUX!)
-    DEFINES += __ND_LINUX__
-    platform_name = linux_x86_64
-    LIBS += -liconv
-}
-
-win32{
-    message(WIN32!)
-    platform_name = Win64
-    DEFINES += __ND_WIN__ DO_NOT_CONVERT_PRINT_TEXT
-}
-
 CONFIG(debug, debug|release) {
     message(BUILD win32 -debug)
     LIBS += -lndclient_s_d -lnfParser_s_d -lapoBluePrint_d
@@ -38,6 +16,35 @@ CONFIG(debug, debug|release) {
     message(BUILD win32 -release)
     LIBS += -lndclient_s -lnfParser_s -lapoBluePrint
 }
+
+macx:{
+
+    QMAKE_MAC_SDK = macosx10.14
+    DEFINES += __ND_MAC__
+    platform_name = darwin_x86_64
+
+    LIBS += -liconv
+
+    TARGET = ../../editor/apolloEditor
+}
+
+unix:!macx{
+    message(BUILD LINUX!)
+    DEFINES += __ND_LINUX__
+    platform_name = linux_x86_64
+    LIBS += -liconv
+
+    TARGET = ../../editor/apolloEditor
+}
+
+win32{
+    message(WIN32!)
+    platform_name = Win64
+    DEFINES += __ND_WIN__ DO_NOT_CONVERT_PRINT_TEXT
+    TARGET = ../../../editor/apolloEditor
+}
+
+
 
 libsub = lib/$$platform_name
 LIBS += -L$$ndsdk_dir/lib  -L$$ndsdk_dir/$$libsub  -L$$apoBP_dir/$$libsub
@@ -56,7 +63,6 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = ../../../editor/apolloEditor
 TEMPLATE = app
 
 
