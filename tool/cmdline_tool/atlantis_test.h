@@ -10,6 +10,7 @@
 #define __nddebugger__atlantis_test__
 
 #include "ndcli/nd_iconn.h"
+#include "nd_common/nd_cmdline.h"
 //#include "atls_room.h"
 
 #define COMMON_TEST_UDID "common_cmd_tool_udid"

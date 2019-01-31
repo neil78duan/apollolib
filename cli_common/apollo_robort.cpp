@@ -10,6 +10,7 @@
 
 
 #include "nd_common/nd_common.h"
+#include "nd_common/nd_iconv.h"
 //#include "cli_common/netui_atl.h"
 //#include "commonTest.h"
 //#include "cli_common/gameMessage.h"
