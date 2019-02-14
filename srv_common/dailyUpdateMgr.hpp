@@ -187,4 +187,8 @@ private:
 	static weeklyUpCfg_vct s_global_monthlyCfgInfo;
 };
 
+
+int loadAlarmConfig(const char *dailyTable, const char *weeklyTable, const char *monthlyTable);
+void destroyAlarmConfig();
+
 #endif /* dailyUpdateMgr_hpp */
