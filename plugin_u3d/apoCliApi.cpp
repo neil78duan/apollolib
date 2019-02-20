@@ -9,10 +9,10 @@
 #define APO_RESULT_T  RESULT_T
 
 #include "nd_common/nd_common.h"
+#include "nd_common/nd_iconv.h"
 #include "cli_common/login_apollo.h"
 #include "cli_common/apoClientU3d.h"
 #include "apollo_errors.h"
-//#include "cli_common/netui_atl.h"
 #include "ndcli/nd_api_c.h"
 #include "msg_def.h"
 
