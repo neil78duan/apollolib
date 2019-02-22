@@ -983,7 +983,18 @@ int DBLDatabase::_loadText(const char *datapath, const char *list_file, int enco
 	filename[0] = 0;
 	while (fgets(filename, sizeof(filename), pf)) {
 		if (filename[0]){
+
+			char tmpf[128];
+			tmpf[0] = 0;
 			const char *p = ndstr_first_valid(filename);
+			if (!p) {
+				continue; 
+			}
+			nd_file_name_without_ext(p,tmpf, sizeof(tmpf));
+			snprintf(filepath, sizeof(filepath), "%s/%s.txt", datapath, tmpf);
+			NDTRAC("BEGIN IMPORT %s ...\n", tmpf);
+
+			/*const char *p = ndstr_first_valid(filename);
 			if (!p || !*p)	{
 				continue; 
 			}
@@ -996,6 +1007,7 @@ int DBLDatabase::_loadText(const char *datapath, const char *list_file, int enco
 
 			NDTRAC("BEGIN IMPORT %s ...\n", tmpf);
 			snprintf(filepath, sizeof(filepath), "%s/%s.txt", datapath, tmpf);
+			*/
 
 			DBLTable *ptable = new DBLTable(DBLDatabase::m_pool, tmpf);
 			if (!ptable) {
@@ -1021,10 +1033,10 @@ int DBLDatabase::_loadText(const char *datapath, const char *list_file, int enco
 		}
 	}
 	//load version 
-	if (m_tables.find("version.xlsx")==m_tables.end() )	{
+	if (m_tables.find("version")==m_tables.end() )	{
 		snprintf(filepath, sizeof(filepath), "%s/version.txt", datapath);
 
-		DBLTable *ptable = new DBLTable(DBLDatabase::m_pool, "version.xlsx");
+		DBLTable *ptable = new DBLTable(DBLDatabase::m_pool, "version");
 		if (ptable) {
 			if (-1 == ptable->loadFromText(filepath, encodeType)){
 				ptable->Destroy();
@@ -1032,7 +1044,7 @@ int DBLDatabase::_loadText(const char *datapath, const char *list_file, int enco
 				return -1;
 			}
 
-			std::pair<table_vct_t::iterator, bool> ret = m_tables.insert(std::make_pair("version.xlsx", ptable));
+			std::pair<table_vct_t::iterator, bool> ret = m_tables.insert(std::make_pair("version", ptable));
 			if (!ret.second) {
 				ptable->Destroy();
 				delete ptable;

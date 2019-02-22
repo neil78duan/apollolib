@@ -377,24 +377,12 @@ bool startDialog::expExcel()
 
 	const char *encodeName = getGameDateEncodeType();
 	const char *inputCode = encodeName;
-
-	if (python_version && *python_version == '3') {
 #ifdef WIN32
-		inputCode = "gbk";
-		snprintf(exp_cmdbuf, sizeof(exp_cmdbuf), " %s %s %s %s ", exp_cmd, excel_list, excel_path, text_path);
+	snprintf(exp_cmdbuf, sizeof(exp_cmdbuf), " %s %s %s %s %s ", exp_cmd, excel_list, excel_path, text_path, encodeName);
 #else
-		inputCode = "utf8";
-		snprintf(exp_cmdbuf, sizeof(exp_cmdbuf), "sh %s %s %s %s", exp_cmd, excel_list, excel_path, text_path);
+	snprintf(exp_cmdbuf, sizeof(exp_cmdbuf), "sh %s %s %s %s %s ", exp_cmd, excel_list, excel_path, text_path, encodeName);
 #endif
-
-	}
-	else {
-#ifdef WIN32
-		snprintf(exp_cmdbuf, sizeof(exp_cmdbuf), " %s %s %s %s %s ", exp_cmd, excel_list, excel_path, text_path, encodeName);
-#else
-		snprintf(exp_cmdbuf, sizeof(exp_cmdbuf), "sh %s %s %s %s %s ", exp_cmd, excel_list, excel_path, text_path, encodeName);
-#endif
-	}	
+	
 	int ret = ::system(exp_cmdbuf);	
     if (0 != ret)	{
 		nd_logerror("[%s] run export shell %s\nerror: %s \n",nd_getcwd(), exp_cmdbuf,nd_last_error());

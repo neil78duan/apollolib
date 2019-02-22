@@ -98,7 +98,7 @@ protected:
 	table_map_t m_rocords;
 public:
 #ifdef ND_DEBUG
-	char m_raw_name[32] ;
+	char m_raw_name[DBL_NAME_SIZE] ;
 #endif 
 };
 

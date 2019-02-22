@@ -3,17 +3,17 @@
 SETLOCAL ENABLEDELAYEDEXPANSION 
 
 @if "%1" == "" (
-	echo "usage: exp_xls.bat file-list.txt input-excel-path output-text-path [encode-type(gbk|utf8)] [is-auto-svn-up 0|1]"
+	echo "usage: exp_xls.bat file-list.txt input-excel-path output-text-path [encode-type(gbk|utf8)] "
 	goto :EOF 
 )
 
 @if "%2" == "" (
-	echo "usage: exp_xls.bat file-list.txt input-excel-path output-text-path [encode-type(gbk|utf8)] [is-auto-svn-up 0|1]"
+	echo "usage: exp_xls.bat file-list.txt input-excel-path output-text-path [encode-type(gbk|utf8)] "
 	goto :EOF 
 )
 
 @if "%3" == "" (
-	echo "usage: exp_xls.bat file-list.txt input-excel-path output-text-path [encode-type(gbk|utf8)] [is-auto-svn-up 0|1]"
+	echo "usage: exp_xls.bat file-list.txt input-excel-path output-text-path [encode-type(gbk|utf8)] "
 	goto :EOF 
 )
 
@@ -23,7 +23,7 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 @set encodeType=%4
 :set_encode_end
 
-@set in_filelist=%1
+@set out_filelist=%1
 @set inputPath=%2
 @set outputPath=%3
 
@@ -36,11 +36,6 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 	 goto :EOF
 )
 
-@if "%5" == "1" (
-	cd %inputPath%
-	@svn up
-	@if %errorlevel% NEQ 0 goto ERROR	
-)
 
 cd %workDir%
 
@@ -48,14 +43,27 @@ cd %workDir%
 call getSvnVer.bat  %inputPath% > %outputPath%\version.txt
 @rem --end
 
-@set READEXCL=xls2txt.py
+@set READEXCL=XLStoTxt2.py
 
 
-@for /f "tokens=1-2" %%i in (%in_filelist%) do (
+@for /f "delims=" %%i in ('dir /b/a "%inputPath%\*.xlsx"') do (
 	@echo " begin %%i"
-	%READEXCL% %inputPath%/%%i  %outputPath%/%%i.txt %encodeType%
+	%READEXCL% %inputPath% %%i %outputPath% %encodeType%
 	@if %errorlevel% NEQ 0 goto ERROR
+	@echo " end %%i"
 )
+
+@echo "excel to txt successs!!!!!!!!!!"
+
+@for /f "delims=" %%i in ('dir /b/a "%outputPath%\*.txt"') do (
+	@echo %%i >> %out_filelist%
+)
+
+@rem @for /f "tokens=1-2" %%i in (%in_filelist%) do (
+@rem 	@echo " begin %%i"
+@rem 	%READEXCL% %inputPath%/%%i  %outputPath%/%%i.txt %encodeType%
+@rem 	@if %errorlevel% NEQ 0 goto ERROR
+@rem  )
 
 @goto :EOF
 
