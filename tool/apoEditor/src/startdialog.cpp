@@ -356,8 +356,7 @@ bool startDialog::expExcel()
 
     DBLDatabase::destroy_Instant();
 	const char *exp_cmd = _getFromIocfg("game_data_export_cmd");
-	const char *python_version = _getFromIocfg("python_ver");
-
+	
 	std::string stdstr_excel_path = getPathFromConfig("excel_data_in_path");
 	std::string stdstr_text_path = getPathFromConfig("text_data_out_path");
 	std::string stdstr_package_file = getPathFromConfig("game_data_package_file");

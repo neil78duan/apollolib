@@ -43,7 +43,8 @@ cd %workDir%
 call getSvnVer.bat  %inputPath% > %outputPath%\version.txt
 @rem --end
 
-@set READEXCL=XLStoTxt2.py
+@rem set READEXCL=python XLStoTxt2.py
+@set READEXCL=python XlsToTxt_python3.py
 
 
 @for /f "delims=" %%i in ('dir /b/a "%inputPath%\*.xlsx"') do (
@@ -54,7 +55,7 @@ call getSvnVer.bat  %inputPath% > %outputPath%\version.txt
 )
 
 @echo "excel to txt successs!!!!!!!!!!"
-
+del %out_filelist%
 @for /f "delims=" %%i in ('dir /b/a "%outputPath%\*.txt"') do (
 	@echo %%i >> %out_filelist%
 )
