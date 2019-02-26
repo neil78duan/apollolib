@@ -204,6 +204,9 @@
     <ClInclude Include="..\..\game_parser\dbl_mgr.h">
       <Filter>apollo\parser4game</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_logger.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp">
