@@ -72,7 +72,7 @@ int RoleAttrHelper::Create(const char*)
 
 int RoleAttrHelper::loadUplevelExp(const char *file)
 {
-	const char *pfields[] = { "id", "UplevelExp"};
+	const char *pfields[] = { "id", "NeedExp"};
 
 	m_maxLevel = 0;
 	memset(m_upLevelExp, 0, sizeof(m_upLevelExp));

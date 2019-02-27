@@ -665,18 +665,23 @@ bool MonthAlarmMgr::_UpdateNode(const WeeklyUpdateCfg *pCfg, dailyEventInfo *eve
 
 int loadAlarmConfig(const char *dailyTable, const char *weeklyTable, const char *monthlyTable)
 {
-
-	if (0 != DailyUpdateMgr::LoadDailyUpConfig(dailyTable)) {
-		nd_logerror("LOAD daily reset time error\n");
-		return -1;
+	if (dailyTable) {
+		if (0 != DailyUpdateMgr::LoadDailyUpConfig(dailyTable)) {
+			nd_logerror("LOAD daily reset time error\n");
+			return -1;
+		}
 	}
-	if (0 != WeekAlarmMgr::LoadWeeklyConfig(weeklyTable)) {
-		nd_logerror("LOAD weekly reset time error\n");
-		return -1;
+	if (weeklyTable) {
+		if (0 != WeekAlarmMgr::LoadWeeklyConfig(weeklyTable)) {
+			nd_logerror("LOAD weekly reset time error\n");
+			return -1;
+		}
 	}
-	if (0 != MonthAlarmMgr::LoadMonthlyConfig(monthlyTable)) {
-		nd_logerror("LOAD monthly reset time error\n");
-		return -1;
+	if (monthlyTable) {
+		if (0 != MonthAlarmMgr::LoadMonthlyConfig(monthlyTable)) {
+			nd_logerror("LOAD monthly reset time error\n");
+			return -1;
+		}
 	}
 	return 0;
 }

@@ -85,4 +85,14 @@ ErrorElement(ESERVER_ERR_TRAINING_FAIL, "训练失败"),
 ErrorElement(ESERVER_ERR_TRAINING_ADD, "训练增加属性错误"),
 ErrorElement(ESERVER_ERR_TRAINING_LIMINT, "训练点数不足 不能升级"),
 
+//building 
+ErrorElement(ESERVER_ERR_NO_BUILDING, "沒有建筑物"),
+ErrorElement(ESERVER_ERR_BUILDING_LEVEL_LOW, "建筑物等级不够"),
+
+ErrorElement(ESERVER_ERR_BUILDING_GRID_IN_USING, "建筑格子被占用"),
+
+ErrorElement(ESERVER_ERR_BUILDING_IN_CREATE, "建筑在建造升級中"),
+ErrorElement(ESERVER_ERR_BUILDING_CREATE_SUCCESS, "建筑已经升级成功"),
+ErrorElement(ESERVER_ERR_ALREADY_UPLEVEL, "已经升级成功"),
+
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

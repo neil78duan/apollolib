@@ -56,9 +56,6 @@ def ReadSheet(fileName, outPath, sheet, outEncoding):
 		type_list = []
 		for i in range(0, nrows):
 		
-			if i == 1:
-				continue
-			
 			tmptxt=""
 			for j in range(0,ncols ):
 				if(i == 2):
@@ -67,7 +64,11 @@ def ReadSheet(fileName, outPath, sheet, outEncoding):
 					tmptxt += ReadArray(str(sheet.cell(i,j).value)) + "\t"	
 				else:
 					tmptxt += str(sheet.cell(i,j).value) + "\t"
-					
+			
+			
+			if i == 2:
+				continue
+			
 			tmptxt += "\n"
 			outfile.write(tmptxt)
 		
