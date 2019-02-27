@@ -63,7 +63,7 @@ private slots:
 
 private:
 
-	bool showScriptError(const char *scriptFile, const char *nodeDescript);
+	bool showScriptError(const char *scriptFile, const char *nodeDescript, const char *editorWorkingPath);
 	const char *getScriptSetting(ndxml *scriptXml, const char *settingName);
 	int getScriptExpEncodeType(ndxml *scriptXml);
 	bool getScriptExpDebugInfo(ndxml *scriptXml);
@@ -71,7 +71,7 @@ private:
     const char *getGameDateEncodeType();
 
     const char *_getFromIocfg(const char *cfgName);
-	bool compileScript(const char *scriptFile);
+	bool compileScript(const char *scriptFile,const char *editorWorkingPath);
 	bool compile();
 
     bool runTest();

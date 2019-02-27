@@ -79,7 +79,7 @@ void startDialog::WriteLog(const char *logText)
 void startDialog::setProjectPath(const char *Path)
 {
 	if (Path) {
-		if (nd_path_is_relative) {
+		if (nd_path_is_relative(Path)) {
 			char buf[ND_FILE_PATH_SIZE];
 			if (nd_absolute_path(Path, buf, sizeof(buf))) {
 				m_projectPath = buf;
@@ -228,7 +228,7 @@ bool startDialog::compile()
 		}
 		scriptPath += ndxml_getattr_val(node, "main_file");
 
-		if (!compileScript(scriptPath.c_str())) {
+		if (!compileScript(scriptPath.c_str(),__pathHelper.workingPath())) {
 			ret = false;
 			break;
 		}
@@ -239,7 +239,7 @@ bool startDialog::compile()
 	return true;
 }
 
-bool startDialog::compileScript(const char *scriptFile)
+bool startDialog::compileScript(const char *scriptFile, const char *editorWorkingPath)
 {
 	ndxml_root xmlScript;
 	ndxml_initroot(&xmlScript);
@@ -336,7 +336,7 @@ bool startDialog::compileScript(const char *scriptFile)
 
 		const char *curErrNode = scriptRoot->getGlobalParser().getLastErrorNode();
 		if (curErrNode && *curErrNode) {
-			showScriptError(scriptFile, curErrNode);
+			showScriptError(scriptFile, curErrNode,editorWorkingPath);
 		}
 
 		LogicEngineRoot::destroy_Instant();
@@ -549,13 +549,14 @@ ERROR_EXIT:
 }
 
 
-bool startDialog::showScriptError(const char *scriptFile, const char *nodeDescript)
+bool startDialog::showScriptError(const char *scriptFile, const char *nodeDescript, const char *editorWorkingPath)
 {
+	nd_chdir(editorWorkingPath);
+
 	EditorFrame *pMain = new EditorFrame();
 	pMain->setHostWidget(this);
 	pMain->setAttribute(Qt::WA_DeleteOnClose, true);
-
-
+	
 	if (pMain->myInit()) {
 		this->setVisible(false);
 
