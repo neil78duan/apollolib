@@ -42,8 +42,8 @@ ND_LOG_WRAPPER_IMPLEMENTION(startDialog);
 startDialog::startDialog(QWidget *parent) :
 	QDialog(parent), 
     ui(new Ui::startDialog),
-	m_editor_setting(*(apoEditorSetting::getInstant()->getConfig())),
-	m_io_setting(*(apoEditorSetting::getInstant()->getIoConfig())),
+	//m_editor_setting(*(apoEditorSetting::getInstant()->getConfig())),
+	//m_io_setting(*(apoEditorSetting::getInstant()->getIoConfig())),
 	editorConfigFile(apoEditorSetting::getInstant()->getConfigFileName()),
 	ioConfigFile(apoEditorSetting::getInstant()->m_projConfigFile)
 {
@@ -170,18 +170,23 @@ void startDialog::on_Setting_clicked()
     dialogCloseHelper _helperClose(this) ;
     XMLDialog xmlDlg(NULL);
 	
-    xmlDlg.showXml( &m_io_setting,"EditorConfig");
+	ndxml_root *pConfig = apoEditorSetting::getInstant()->getIoConfig();
+	if (pConfig) {
+		xmlDlg.showXml(pConfig, "EditorConfig");
 
-    if (xmlDlg.exec() == QDialog::Accepted) {
+		if (xmlDlg.exec() == QDialog::Accepted) {
 
-        //nd_chdir(nd_getcwd());
-        ndxml_save(&m_io_setting, ioConfigFile.c_str());
-        WriteLog("save script ok\n");
-    }
-    else {
-        WriteLog("script unedited\n");
-    }
+			//nd_chdir(nd_getcwd());
+			ndxml_save(pConfig, ioConfigFile.c_str());
+			WriteLog("save script ok\n");
+		}
+		else {
+			WriteLog("script unedited\n");
+		}
 
+	}
+
+    
 }
 
 bool startDialog::compile()
@@ -357,10 +362,10 @@ bool startDialog::expExcel()
     DBLDatabase::destroy_Instant();
 	const char *exp_cmd = _getFromIocfg("game_data_export_cmd");
 	
-	std::string stdstr_excel_path = getPathFromConfig("excel_data_in_path");
-	std::string stdstr_text_path = getPathFromConfig("text_data_out_path");
-	std::string stdstr_package_file = getPathFromConfig("game_data_package_file");
-	std::string stdstr_excel_list = getPathFromConfig("game_data_listfile");
+	std::string stdstr_excel_path = _getFromIocfg("excel_data_in_path");
+	std::string stdstr_text_path = _getFromIocfg("text_data_out_path");
+	std::string stdstr_package_file = _getFromIocfg("game_data_package_file");
+	std::string stdstr_excel_list = _getFromIocfg("game_data_listfile");
 
 	const char *excel_path = stdstr_excel_path.c_str();
 	const char *text_path = stdstr_text_path.c_str();
@@ -373,6 +378,9 @@ bool startDialog::expExcel()
 		WriteLog("export excel error : on read config file\n");
 		return false;
 	}
+
+	WorkingPathSwitchHelper __pathHelper(m_projectPath.c_str());
+
 
 	const char *encodeName = getGameDateEncodeType();
 	const char *inputCode = encodeName;
@@ -593,7 +601,7 @@ void startDialog::on_Connect_clicked()
 
     ConnectDialog dlg(NULL) ;
 	
-    dlg.m_editor_setting =&m_editor_setting;
+    dlg.m_editor_setting = apoEditorSetting::getInstant()->getConfig() ;
     dlg.m_gmCfg = &xmlSend;
 	
 	if (!dlg.LoadClientScript(client_script.c_str(), package_file.c_str()))	{

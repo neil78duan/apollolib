@@ -84,8 +84,8 @@ private:
 	std::string getPathFromConfig(const char *configName);
     Ui::startDialog *ui;
 
-    ndxml_root &m_editor_setting;
-    ndxml_root &m_io_setting;
+    //ndxml_root &m_editor_setting;
+    //ndxml_root &m_io_setting;
 
 	std::string editorConfigFile ;
 	std::string ioConfigFile;

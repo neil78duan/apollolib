@@ -82,22 +82,87 @@ static bool workingConfigInit(QString &init_working);
 
 static bool initWorkingPath()
 {
-	QString workingPath;
 	if (__in_working_path && *__in_working_path) {
-		workingPath = __in_working_path;
-	}
-	while(!workingConfigInit(workingPath)) {
-		if(trytoGetSetting(workingPath) && workingConfigInit(workingPath)) {
-			break ;
-		}
+		char tmpbuf[ND_FILE_PATH_SIZE];
 		
-		if (!inputSetting(workingPath, NULL)) {
-			QMessageBox::critical(NULL, "Error", "can not enter working path !");
-			exit(1) ;
+		if (!nd_absolute_filename(__in_working_path, tmpbuf, sizeof(tmpbuf))) {
+
+			QMessageBox::critical(NULL, "Error", "Get wroking path error !");
+			return false;
 		}
-		QDir::setCurrent(workingPath);
+
+		if (-1 == nd_chdir(tmpbuf)) {
+			QMessageBox::critical(NULL, "Error", "Switch wroking path error !");
+			return false;
+		}
+
 	}
-	return true ;
+
+	if (__in_config && *__in_config) {		
+		if (!nd_existfile(__in_config)) {
+			QMessageBox::critical(NULL, "Error", "can not found config file !");
+			return false;
+		}
+
+		if (!apoEditorSetting::getInstant()->Init(__in_config, APO_QT_SRC_TEXT_ENCODE)) {
+			QMessageBox::critical(NULL, "Error", "Set editor config error");
+			return false;
+		}
+	}
+	else {
+		__in_config = "../cfg/config.xml"; //set default config file
+
+		if (__in_working_path) {
+			if (!apoEditorSetting::getInstant()->Init(__in_config, APO_QT_SRC_TEXT_ENCODE)) {
+				QMessageBox::critical(NULL, "Error", "Set editor config error");
+				return false;
+			}
+		}
+		else {
+			QString workingPath;
+			while (!workingConfigInit(workingPath)) {
+				if (trytoGetSetting(workingPath) && workingConfigInit(workingPath)) {
+					break;
+				}
+
+				//GET working path
+				if (!inputSetting(workingPath, NULL)) {
+					exit(1);
+				}
+				QDir::setCurrent(workingPath);
+			}
+			return true;
+		}
+
+	}
+	
+	return true;
+}
+
+static bool workingConfigInit(QString &init_working)
+{
+	if (init_working.size()) {
+		if (-1 == nd_chdir(init_working.toStdString().c_str())) {
+			return false;
+		}
+	}
+	else {
+		const char *pCurPath = nd_getcwd();
+		if (ndstrstr(pCurPath, "editor")) {
+			nd_chdir("..");
+		}
+	}
+
+
+	if (!nd_existfile(__in_config)) {
+		return false;
+	}
+
+	if (!apoEditorSetting::getInstant()->Init(__in_config, APO_QT_SRC_TEXT_ENCODE)) {
+		return false;
+	}
+
+	return true;
 }
 
 int runEditor(int argc,  char *argv[])
@@ -125,10 +190,19 @@ int runEditor(int argc,  char *argv[])
 int runDevelopTool(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	initWorkingPath();
 
 	startDialog dlg;
-	dlg.setProjectPath(__in_proj_path);
+	if (__in_proj_path) {
+		char tmpbuf[ND_FILE_PATH_SIZE];
+		if (!nd_absolute_filename(__in_proj_path, tmpbuf, sizeof(tmpbuf))) {
+			QMessageBox::critical(NULL, "Error", "init project path error!");
+			return 1;
+		}
+		dlg.setProjectPath(tmpbuf);
+	}
+
+	initWorkingPath();
+
 	dlg.show();
 	return a.exec();
 }
@@ -204,72 +278,8 @@ int parser_args(int argc, char *argv[])
 	return 0;
 }
 
-static bool workingConfigInit(QString &init_working)
-{
-	if (init_working.size() ) {
-		//if (!QDir::setCurrent(init_working)) {
-		if(-1==nd_chdir(init_working.toStdString().c_str())){
-			return false ;
-		}
-	}
-	else {
-		const char *pCurPath = nd_getcwd();
-		if (ndstrstr(pCurPath, "editor")) {
-			nd_chdir("..");
-		}
-	}
-	
-	if (!__in_config) {
-		__in_config = "../cfg/config.xml";
-	}
-	
-	if (!nd_existfile(__in_config)) {
-		//QMessageBox::critical(NULL, "Error", "can not found root config file !");
-		return false ;
-	}
-	
-	if (!apoEditorSetting::getInstant()->Init(__in_config, APO_QT_SRC_TEXT_ENCODE)) {
-		//QMessageBox::critical(NULL, "Error", "can not found root config file !");
-		return false ;
-	}
-	
-	return true ;
-}
 
-/*
-void workingConfigInit()
-{
-	if (__in_working_path && *__in_working_path) {
-		if (!QDir::setCurrent(__in_working_path)) {
-			QString workingPath ;
-			if (!inputSetting(workingPath, NULL)) {
-				QMessageBox::critical(NULL, "Error", "can not enter working path !");
-				exit(1);
-			}
-			QDir::setCurrent(workingPath);
-		}
-	}
 
-	if (!__in_config) {
-		__in_config = CONFIG_IO_SETTING;
-	}
-
-	//use utf8 
-	ndstr_set_code(APO_QT_SRC_TEXT_ENCODE);
-
-	if (!nd_existfile(__in_config)) {
-		QMessageBox::critical(NULL, "Error", "can not found root config file !");
-		exit(1);
-	}
-
-	if (!apoEditorSetting::getInstant()->Init(__in_config, APO_QT_SRC_TEXT_ENCODE)) {
-		QMessageBox::critical(NULL, "Error", "can not found root config file !");
-		exit(1);
-	}
-	
-
-}
- */
 int main(int argc, char *argv[])
 {
 	initGlobalParser();
