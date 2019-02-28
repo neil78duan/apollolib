@@ -147,7 +147,7 @@ int StatMachine::load_stat_info(const char *tablename)
 			}
 		}
 		if (is_new_field && s_stat_forbid_buf[i][0] && s_stat_valbit[cur_main]==E_OP_VAL) {
-			nd_logerror("[%s]表格错误 [%d] 行, 互斥状态[%s]不允许有禁止列 \n " AND tablename AND i AND s_stat_names[i]) ;
+			//nd_logerror("[%s]表格错误 [%d] 行, 互斥状态[%s]不允许有禁止列 \n " AND tablename AND i AND s_stat_names[i]) ;
 			return -1 ;
 		}
 		++i;
