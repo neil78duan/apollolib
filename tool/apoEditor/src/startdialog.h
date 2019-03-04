@@ -70,7 +70,7 @@ private:
 	
     const char *getGameDateEncodeType();
 
-    const char *_getFromIocfg(const char *cfgName);
+    const char *_getFromIocfg(const char *cfgName, const char *rootName=NULL);
 	bool compileScript(const char *scriptFile,const char *editorWorkingPath);
 	bool compile();
 

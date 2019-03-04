@@ -171,11 +171,14 @@ int runEditor(int argc,  char *argv[])
 	//workingConfigInit();
 	initWorkingPath() ;
 
-	//load dbl data
-	const char *package_file = apoEditorSetting::getInstant()->getProjectConfig("game_data_package_file");
-	if (package_file) {
-		DBLDatabase::get_Instant()->LoadBinStream(package_file);
+	if (__in_proj_path) {
+		nd_chdir(__in_proj_path);
 	}
+	//load dbl data
+// 	const char *package_file = apoEditorSetting::getInstant()->getValueFromSetting("game_data_package_file");
+// 	if (package_file) {
+// 		DBLDatabase::get_Instant()->LoadBinStream(package_file);
+// 	}
 
 	EditorFrame mainFrame;
 	if (!mainFrame.myInit()) {

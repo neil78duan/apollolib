@@ -107,8 +107,7 @@ std::string startDialog::getPathFromProject(const char *relativePath)
 
 std::string startDialog::getPathFromConfig(const char *configName)
 {
-	apoEditorSetting *g_seting = apoEditorSetting::getInstant();
-	const char *cfgVal = g_seting->getProjectConfig(configName);
+	const char *cfgVal = _getFromIocfg(configName);
 	if (!cfgVal) {
 		return std::string();
 	}
@@ -123,9 +122,24 @@ const char *startDialog::getGameDateEncodeType()
 }
 
 
-const char *startDialog::_getFromIocfg(const char *cfgName)
+const char *startDialog::_getFromIocfg(const char *cfgName,const char *rootName)
 {
-	return	apoEditorSetting::getInstant()->getProjectConfig(cfgName);
+	//return	apoEditorSetting::getInstant()->getValueFromSetting(cfgName);
+	apoEditorSetting *setting = apoEditorSetting::getInstant();
+
+	if (!rootName) {
+		rootName ="project_config";
+	}
+
+	ndxml *node = ndxml_getnode(setting->getIoConfig(), rootName);
+	if (node) {
+		ndxml *cfgxml = ndxml_getnode(node, cfgName);
+		if (cfgxml) {
+			return ndxml_getval(cfgxml);
+		}
+	}
+	return NULL;
+
 
 }
 
@@ -289,7 +303,7 @@ bool startDialog::compileScript(const char *scriptFile, const char *editorWorkin
 	//outFile = outPath.c_str();
 
 	int orderType = ND_L_ENDIAN;
-	const char *orderName = _getFromIocfg("bin_data_byte_order");
+	const char *orderName = apoEditorSetting::getInstant()->getValueFromSetting("bin_data_byte_order");
 	if (orderName) {
 		orderType = atoi(orderName);
 	}
@@ -315,10 +329,6 @@ bool startDialog::compileScript(const char *scriptFile, const char *editorWorkin
 	nd_logmsg("!!!!!!!!!!COMPILE %s success !!!!!!!!!!!\n begining run script...\n", scriptFile);
 
 	ClientMsgHandler::ApoConnectScriptOwner apoOwner;
-// 	if (!apoOwner.loadDataType(_getFromIocfg("net_data_def"))) {
-// 		WriteLog("load data type error\n");
-// 		return false;
-// 	}
 	
 	LogicEngineRoot *scriptRoot = LogicEngineRoot::get_Instant();
 	nd_assert(scriptRoot);
@@ -401,7 +411,7 @@ bool startDialog::expExcel()
 
 	//get byte order  
 	int orderType = ND_L_ENDIAN;
-	const char *orderName = _getFromIocfg("bin_data_byte_order");
+	const char *orderName = apoEditorSetting::getInstant()->getValueFromSetting("bin_data_byte_order");
 	if (orderName) {
 		orderType = atoi(orderName);
 	}
