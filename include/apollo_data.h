@@ -54,6 +54,8 @@ enum eServerType {
 	ESERVER_SOCIAL,		// SOCIAL SERVER
 	ESERVER_ACCOUNT,	//
 	ESERVER_GM,			// GM Server½Úµã
+	ESERVER_HALL,
+	ESERVER_ROOM
 
 };
 
