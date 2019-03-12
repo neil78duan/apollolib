@@ -41,7 +41,7 @@ $(PLUGIN_NAME):$(PLUGOBJ)
 .c.o:
 	$(CC) $(INCLUDE) $(CFLAGS) -o $(OBJDIR)/$*.o $<
 .cpp.o:
-	$(CPP) $(INCLUDE) $(CFLAGS) -o $(OBJDIR)/$*.o $<
+	$(CPP) $(INCLUDE) $(CFLAGS) $(CPPFLAGS) -o $(OBJDIR)/$*.o $<
 	
 clean_dll:
 	rm -rf $(PATH_PLUGOBJ) PLUGIN_NAME
