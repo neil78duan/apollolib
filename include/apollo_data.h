@@ -47,7 +47,7 @@ enum eGameStat {
 };
 
 enum eServerType {
-	ESERVER_UNKNOW = 0,
+	ESERVER_UNKNOW = 0,		//common client
 	ESERVER_WORLD,	// WorldServer
 	ESERVER_GAME,   // 游戏服务器
 	ESERVER_GATE,		// 游戏入口

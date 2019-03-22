@@ -54,11 +54,7 @@ public:
 protected:
 	roleid_t m_roleID ;	
 	NDUINT8 m_nick[USER_NAME_SIZE];
-	//NDUINT8 m_guildName[USER_NAME_SIZE];
-
-	apolloSession *m_mySession;
-	
-	//userdata_info m_userData ;
+	apolloSession *m_mySession;	
 	
 };
 

@@ -95,4 +95,7 @@ ErrorElement(ESERVER_ERR_BUILDING_IN_CREATE, "建筑在建造升級中"),
 ErrorElement(ESERVER_ERR_BUILDING_CREATE_SUCCESS, "建筑已经升级成功"),
 ErrorElement(ESERVER_ERR_ALREADY_UPLEVEL, "已经升级成功"),
 
+ErrorElement(ESERVER_ERR_HOST_BUSY, "服务器忙"),
+
+
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

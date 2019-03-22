@@ -728,7 +728,7 @@ APOLLO_SCRIPT_API_DEF(apollo_func_get_userDataType, "获得消息数据类型(类型名字)"
 	}
 
 	if (!_get_format_type(parser, args[1].GetText(), result)) {
-		nd_logerror("data type name %s not found\n", args[2].GetText());
+		nd_logerror("data type name %s not found\n", args[1].GetText());
 		parser->setErrno(NDERR_INVALID_INPUT);
 		return false;
 	}
