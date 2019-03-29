@@ -687,12 +687,14 @@ int ConnectDialog::_connectHost(const char *host, int port)
         //DestroyConnectorObj(m_pConn);
     }
 
-    NDIConn *pConn = CreateConnectorObj(NULL);
+	const char *connectorName = ui->isUDP->checkState() ? "udt-connector" : "tcp-connector";
+
+    NDIConn *pConn = CreateConnectorObj(connectorName);
     if (!pConn) {
         return 0;
     }
 
-    if (-1 == pConn->Open(host, port, "tcp-connector", NULL)) {
+    if (-1 == pConn->Open(host, port, connectorName, NULL)) {
         nd_logmsg( "connect %s:%d ERROR \n", host, port);
         DestroyConnectorObj(pConn);
         return -1;

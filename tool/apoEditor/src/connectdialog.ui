@@ -139,7 +139,7 @@
    <widget class="QCheckBox" name="skipAuth">
     <property name="geometry">
      <rect>
-      <x>310</x>
+      <x>290</x>
       <y>120</y>
       <width>71</width>
       <height>16</height>
@@ -171,7 +171,7 @@
    <widget class="QCheckBox" name="showServers">
     <property name="geometry">
      <rect>
-      <x>310</x>
+      <x>290</x>
       <y>140</y>
       <width>161</width>
       <height>16</height>
@@ -184,7 +184,7 @@
    <widget class="QCheckBox" name="logSendCheck">
     <property name="geometry">
      <rect>
-      <x>390</x>
+      <x>410</x>
       <y>120</y>
       <width>71</width>
       <height>16</height>
@@ -197,7 +197,7 @@
    <widget class="QLineEdit" name="timeOutEdit">
     <property name="geometry">
      <rect>
-      <x>310</x>
+      <x>290</x>
       <y>160</y>
       <width>91</width>
       <height>20</height>
@@ -207,7 +207,7 @@
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>400</x>
       <y>160</y>
       <width>71</width>
       <height>16</height>
@@ -215,6 +215,19 @@
     </property>
     <property name="text">
      <string>超时时间(S)</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="isUDP">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>140</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>UDP-NET</string>
     </property>
    </widget>
   </widget>
