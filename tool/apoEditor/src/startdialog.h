@@ -88,7 +88,7 @@ private:
     //ndxml_root &m_io_setting;
 
 	std::string editorConfigFile ;
-	std::string ioConfigFile;
+	//std::string ioConfigFile;
 	std::string m_projectPath;
 
 };

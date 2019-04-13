@@ -461,13 +461,13 @@ int DBLTable::parseTableTypeInfo(FILE *pf, int encodeType)
 						continue;
 					}
 					else if (-1 == type) {
-						nd_logerror("parse col %s error at (%d,%d) text=%s\n", line1[i].c_str(), rowIndex, i, record[i].c_str());
+						nd_logerror("parse col %s error at (%d,%d) id= %s text=%s\n", line1[i].c_str(), rowIndex, i, record[0].c_str(),record[i].c_str());
 						return -1;
 					}
 					
 					if (m_pcols[i].type == OT_ARRAY ) {
 						if (type != OT_ARRAY) {
-							nd_logerror("parse col %s error at (%d,%d) text=%s , need array\n", line1[i].c_str(), rowIndex, i, record[i].c_str());
+							nd_logerror("parse col %s error at (%d,%d) id=%s text=%s , need array\n", line1[i].c_str(), rowIndex, i, record[0].c_str(),record[i].c_str());
 							return -1;
 						}
 						m_pcols[i].sub_type = NDMAX(m_pcols[i].sub_type, (DBL_ELEMENT_TYPE)subType); 
@@ -1044,7 +1044,7 @@ int DBLDatabase::_loadText(const char *datapath, const char *list_file, int enco
 				return -1;
 			}
 
-			std::pair<table_vct_t::iterator, bool> ret = m_tables.insert(std::make_pair("version", ptable));
+			std::pair<table_vct_t::iterator, bool> ret = m_tables.insert(std::make_pair("version.xlsx", ptable));
 			if (!ret.second) {
 				ptable->Destroy();
 				delete ptable;

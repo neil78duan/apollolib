@@ -44,8 +44,8 @@ startDialog::startDialog(QWidget *parent) :
     ui(new Ui::startDialog),
 	//m_editor_setting(*(apoEditorSetting::getInstant()->getConfig())),
 	//m_io_setting(*(apoEditorSetting::getInstant()->getIoConfig())),
-	editorConfigFile(apoEditorSetting::getInstant()->getConfigFileName()),
-	ioConfigFile(apoEditorSetting::getInstant()->m_projConfigFile)
+	editorConfigFile(apoEditorSetting::getInstant()->getConfigFileName())
+	//ioConfigFile(apoEditorSetting::getInstant()->m_projConfigFile)
 {
     ui->setupUi(this);
 
@@ -190,6 +190,7 @@ void startDialog::on_Setting_clicked()
 
 		if (xmlDlg.exec() == QDialog::Accepted) {
 
+			std::string &ioConfigFile = apoEditorSetting::getInstant()->m_projConfigFile ;
 			//nd_chdir(nd_getcwd());
 			ndxml_save(pConfig, ioConfigFile.c_str());
 			WriteLog("save script ok\n");

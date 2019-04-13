@@ -277,13 +277,13 @@ int StatMachine::load_op_info(const char *tablename)
 //#include "nd_common/nd_common.h"
 int StatMachine::load(const char *forbid_file, const char* state_file, const char*operate_file) 
 {
-	if (load_forbid_names("operate_forbid_list.xlsx")==-1){
+	if (load_forbid_names("state_forbid_list.xlsx")==-1){
 		return -1;
 	}
-	if (-1==load_stat_info("role_state.xlsx") ){
+	if (-1==load_stat_info("state_main.xlsx") ){
 		return -1;
 	}
-	if (-1==load_op_info("role_operate_check.xlsx") ){
+	if (-1==load_op_info("state_operate_check.xlsx") ){
 		return -1;
 	}
 	
