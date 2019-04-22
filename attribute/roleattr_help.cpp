@@ -72,7 +72,7 @@ int RoleAttrHelper::Create(const char*)
 
 int RoleAttrHelper::loadUplevelExp(const char *file)
 {
-	const char *pfields[] = { "id", "NeedExp"};
+	const char *pfields[] = { "id", "UplevelExp"};
 
 	m_maxLevel = 0;
 	memset(m_upLevelExp, 0, sizeof(m_upLevelExp));
@@ -103,12 +103,10 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 {
 	std::string attrmax[ROLE_ATTR_CAPACITY][3];
 	const char *pfields[] = { "id", "name", "formula", "save_db", "sync", "min_val", "max_val",			//7
-		"client_change", "real_name","forRole", "affect_card",	"forCard", "friend_read", "save_log", //14
-		 "unlimited_max"};
+		"client_change", "real_name","friend_read", "save_log", "unlimited_max"};
 	m_wa_num = 0 ;
 	role_attr_description *pwa_desc ;
 	int i = 0 ;
-	//DBL_BEGIN_CURSOR(attr_file, pfields) {
 	DBLTable * pTable = DBL_FindTable(attr_file);
 	nd_assert(pTable);
 	
@@ -121,13 +119,13 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 	for (; result != -1; result = cursor.FetchNext()) {
 		NDUINT32 aid  = cursor[0].GetInt();
 		if (aid > ROLE_ATTR_CAPACITY) {
-			nd_logfatal("attr_test: 编号为%d属性超过了%d\n" , aid , ROLE_ATTR_CAPACITY);
+			nd_logfatal("attr_test:read attribute config table id is %d, more than %d\n" , aid , ROLE_ATTR_CAPACITY);
 			return -1 ;
 		}
 		pwa_desc = &m_wahelper_bufs[aid] ;
 
 		if ( !cursor[1].CheckValid() )	{
-			nd_logfatal("attr_test: 第%d行错误,属性名字为空\n" AND i) ;
+			nd_logfatal("attr_test: attribute name is NULL\n" AND i) ;
 			return -1;
 		}
 		strncpy(pwa_desc->name.attrname, cursor[1].GetText(), ATTR_NAME_SIZE);
@@ -146,24 +144,16 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 		pwa_desc->issync = cursor[4].GetInt();
 		pwa_desc->isChangeByclient = cursor[7].GetInt();
 
-		pwa_desc->forRole = cursor[9].GetInt();
-
-		const char *pfields[] = { "id", "name", "formula", "save_db", "sync", "min_val", "max_val",			//7
-			"client_change", "real_name","forRole", "affect_card",	"forCard", "friend_read", "save_log", //14
-			"unlimited_max" };
-
-		pwa_desc->isAffectCard = cursor[10].GetInt();
-		pwa_desc->forCard = cursor[11].GetInt();
-		pwa_desc->friend_get = cursor[12].GetInt();
-		pwa_desc->islog = cursor[13].GetInt();
-
+		pwa_desc->friend_get = cursor[9].GetInt();
+		pwa_desc->islog = cursor[10].GetInt();
+		
 		pwa_desc->wa_id = (attrid_t ) aid ;
 		if (m_wa_num < aid)
 			m_wa_num = aid ;
 
 		attrmax[aid][1] = cursor[5].GetString();
 		attrmax[aid][0] = cursor[6].GetString();
-		attrmax[aid][2] = cursor[14].GetString();
+		attrmax[aid][2] = cursor[11].GetString();
 		++i;
 	}
 	m_wa_num++ ;

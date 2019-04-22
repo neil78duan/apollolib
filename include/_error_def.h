@@ -1,4 +1,4 @@
-﻿//
+//
 //  _error_def.h
 //  worldManager
 //
@@ -75,6 +75,7 @@ ErrorElement(ESERVER_ERR_MAIL_RECEIVED, "邮件已经被领取过了"),
 ErrorElement(ESERVER_ERR_NEED_COMPLETED_CHAPTER, "前置章节没有通过"),
 ErrorElement(ESERVER_ERR_NEED_TRIG_EVENT, "需要先处理事件"),
 ErrorElement(ESERVER_ERR_CHAPTER_NOT_COMPLETE, "当前章节没有完成"),
+ErrorElement(ESERVER_ERR_MAP_NOT_COMPLATE, "没有完成地图"),
 
 ErrorElement(ESERVER_ERR_SEND_CHAT_WORLDTIME, "世界频道发送频繁"),
 ErrorElement(ESERVER_ERR_SEND_CHAT_LEV_NOTENOUGHenough, "发送世界频道需要的等级不足"),

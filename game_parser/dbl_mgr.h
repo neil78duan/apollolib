@@ -118,6 +118,7 @@ public:
 	void Close() ;			
 
 	const char *GetColName(int index) ;
+	const char *GetAliasName(int index) ;
 	int GetCols() ;
 
 	bool GetDataNode(const char* _pszColName, DBLDataNode& _dataNode,  int encodeType = E_SRC_CODE_ANSI);

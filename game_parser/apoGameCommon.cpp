@@ -372,7 +372,7 @@ APOLLO_SCRIPT_API_DEF(apollo_read_excel_line, "∂¡»°excel––json(tablename, index)
 
 	LogicUserDefStruct line;
 	for (int i = 0; i < cursor.GetCols(); i++) {
-		line.push_back(cursor.GetColName(i), cursor[i]);
+		line.push_back(cursor.GetAliasName(i), cursor[i]);
 	}
 
 	result.InitSet(line);

@@ -142,6 +142,7 @@ public:
 	}
 };
 static ConnectScriptOwner  __myScriptOwner;
+ILogicObject *__orgOwner = NULL ;
 
 
 void destroy_apollo_object(NDIConn *)
@@ -156,6 +157,7 @@ void initGlobalParser()
 	LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
 	parser.setSimulate(true);
 	
+	__orgOwner = parser.getOwner() ;
 	parser.setOwner(&__myScriptOwner);
 
 }
@@ -275,6 +277,12 @@ ConnectDialog::~ConnectDialog()
 	if (m_msgHistory.size()){
 		saveSendMsgHistory(m_msgHistory);
 	}
+	
+	LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
+	parser.setOwner(__orgOwner);
+
+	
+	__myScriptOwner.setConn( NULL);
 }
 
 void ConnectDialog::saveHost(const QString &hostName)

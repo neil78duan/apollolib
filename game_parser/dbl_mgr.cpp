@@ -900,6 +900,24 @@ const char *DBLCursor::GetColName(int index)
 	}
 	return NULL;
 }
+
+const char *DBLCursor::GetAliasName(int index)
+{
+	if (index < 0){
+		return NULL;
+	}
+	if(m_bAllcol) {
+		if (index < m_ptable->m_cols){
+			return m_ptable->GetColAliaName(index) ;
+		}
+	}
+	else {
+		if (index< m_sel_cols.size())	{
+			return m_ptable->GetColAliaName(m_sel_cols[index]) ;
+		}
+	}
+	return NULL;
+}
 int DBLCursor::GetCols() 
 {
 	if(m_bAllcol) {
