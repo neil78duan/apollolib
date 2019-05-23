@@ -12,7 +12,7 @@
 #include "nd_common/nd_cmdline.h"
 #include "nd_msg.h"
 #include "msg_def.h"
-#include "ndcli/nd_api_c.h"
+//#include "ndcli/nd_api_c.h"
 
 
 NDOStreamMsg _g_omsg ;

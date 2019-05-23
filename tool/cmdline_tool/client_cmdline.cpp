@@ -10,9 +10,9 @@
 #include "ndcli/nd_iconn.h"
 #include "nd_msg.h"
 #include "msg_def.h"
-#include "ndcli/nd_api_c.h"
+//#include "ndcli/nd_api_c.h"
 //#include "netui_atl.h"
-#include "ndapplib/nd_datatransfer.h"
+//#include "ndapplib/nd_datatransfer.h"
 #include "login_apollo.h"
 
 #include "apollo_data.h"
@@ -206,29 +206,29 @@ void  send_file_ok(nd_handle nethandle, NDUINT64 param , int error_code)
 		fprintf(stdout, "send file %s\n", error_code ? "error": "success") ;
 	}	
 }
-
-ND_CMDLINE_FUNC_INSTANCE(sendfile)
-{
-	ND_CMDLINE_CHECK_SHOW_HELP(argc, argv,"sendfile file-name-path") ;
-	if (argc < 2) {		
-		fprintf(stdout, "USAGE:  sendfile file-name-path \n") ;
-		return 1 ;
-	}
-	if (!__g_conn) {
-		fprintf(stderr, "Need login\n") ;
-	}
-	size_t file_size =0 ;
-	void* pdata = nd_load_file(argv[1], &file_size); 
-	if (!pdata) {
-    	fprintf(stderr, "open file %s error \n", argv[1]) ;
-		return -1;
-	}
-	BigDataAsyncSend(__g_conn->GetHandle(), pdata, file_size, 0, send_file_ok) ;
-	
-	nd_unload_file(pdata) ;
-	
-	return 0;
-}
+//
+//ND_CMDLINE_FUNC_INSTANCE(sendfile)
+//{
+//	ND_CMDLINE_CHECK_SHOW_HELP(argc, argv,"sendfile file-name-path") ;
+//	if (argc < 2) {		
+//		fprintf(stdout, "USAGE:  sendfile file-name-path \n") ;
+//		return 1 ;
+//	}
+//	if (!__g_conn) {
+//		fprintf(stderr, "Need login\n") ;
+//	}
+//	size_t file_size =0 ;
+//	void* pdata = nd_load_file(argv[1], &file_size); 
+//	if (!pdata) {
+//    	fprintf(stderr, "open file %s error \n", argv[1]) ;
+//		return -1;
+//	}
+//	BigDataAsyncSend(__g_conn->GetHandle(), pdata, file_size, 0, send_file_ok) ;
+//	
+//	nd_unload_file(pdata) ;
+//	
+//	return 0;
+//}
 
 ND_CMDLINE_FUNC_INSTANCE(redirect_to_server)
 {

@@ -11,7 +11,7 @@
 #include "nd_crypt/nd_crypt.h"
 #include "nd_crypt/crypt_file.h"
 #include "msg_def.h"
-#include "ndcli/nd_api_c.h"
+//#include "ndcli/nd_api_c.h"
 #include "apollo_errors.h"
 
 #include "login_apollo.h"
@@ -309,8 +309,8 @@ int LoginApollo::ReloginEx(void *session_data, size_t size)
 		return 0;
 	}
 	else {
-		nd_logmsg("RE-login ERROR %d\n", ndGetLastError(m_conn));
-		if (ndGetLastError(m_conn) == NDSYS_ERR_USERNAME) {
+		nd_logmsg("RE-login ERROR %d\n", nd_object_lasterror(m_conn));
+		if (nd_object_lasterror(m_conn) == NDSYS_ERR_USERNAME) {
 			return 1;
 		}
 	}
@@ -411,7 +411,7 @@ int LoginApollo::Relogin()
 	}
 	else {		
 		nd_logmsg("RE-login ERROR\n") ;	
-		if (ndGetLastError(m_conn) == NDSYS_ERR_USERNAME) {
+		if (nd_object_lasterror(m_conn) == NDSYS_ERR_USERNAME) {
 			nd_rmfile(m_session_file) ;
 			return 1;
 		}
@@ -689,7 +689,7 @@ int LoginApollo::ReadyGame()
 	//return 0;
 }
 
-int LoginApollo::GetLastError() {return ndGetLastError(m_conn) ;}
+int LoginApollo::GetLastError() {return nd_object_lasterror(m_conn) ;}
 
 
 int LoginApollo::EnterServer(ndip_t ip, NDUINT16 port, bool bNotLoadBalance )
@@ -1032,9 +1032,9 @@ int LoginApollo::onLogin(NDIStreamMsg &inmsg)
 int LoginApollo::TrytoGetCryptKey()
 {
 	if (!nd_connector_check_crypt(m_conn)) {
-		int ret = nd_exchange_key((netObject)m_conn, (void*)m_srv_key);
+		int ret = nd_exchange_key(m_conn, (void*)m_srv_key);
 		if (-1 == ret) {
-			nd_logerror("exchange key error %s\n", ndGetLastErrorDesc(m_conn));
+			nd_logerror("exchange key error %s\n", nd_object_errordesc(m_conn));
 		}
 		return ret;
 	}

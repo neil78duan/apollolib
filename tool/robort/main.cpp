@@ -8,7 +8,7 @@
 
 
 #include "ndcli/nd_iconn.h"
-#include "ndcli/nd_api_c.h"
+//#include "ndcli/nd_api_c.h"
 
 #include "testConnector.h"
 #include <vector>

@@ -12,7 +12,7 @@
 #if !defined(BUILD_AS_THIRD_PARTY)
 #include "ndcli/nd_iconn.h"
 #endif
-#include "ndcli/nd_api_c.h"
+//#include "ndcli/nd_api_c.h"
 
 #ifndef APO_RESULT_T 
 typedef int  APO_RESULT_T;

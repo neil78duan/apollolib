@@ -13,7 +13,7 @@
 #include "cli_common/login_apollo.h"
 #include "cli_common/apoClientU3d.h"
 #include "apollo_errors.h"
-#include "ndcli/nd_api_c.h"
+//#include "ndcli/nd_api_c.h"
 #include "msg_def.h"
 
 #include "apollo_errors.h"
