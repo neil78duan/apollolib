@@ -240,7 +240,7 @@ ConnectDialog::ConnectDialog(QWidget *parent) :
 
     //SET_EDIT_DFTVAL(host, "192.168.8.49") ;
     SET_EDIT_DFTVAL(port, "6600") ;
-    SET_EDIT_DFTVAL(name, "tRobort1") ;
+    SET_EDIT_DFTVAL(name, "test1") ;
     SET_EDIT_DFTVAL(passwd, "test123") ;
 
 #undef SET_EDIT_DFTVAL
