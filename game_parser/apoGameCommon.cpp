@@ -19,15 +19,15 @@
 #include "logic_parser/logic_editor_helper.h"
 #include "nd_common/cJSON.h"
 
-int apollo_message_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t *msg, const char *script)
+int apollo_message_script_entry(void *engine, NDBaseConnector *netconn, nd_usermsgbuf_t *msg, const char *script)
 {
 	LogicParserEngine *scriptEngine = (LogicParserEngine *)engine;
 	if (!scriptEngine) {
-		NDObject *pObj = NDObject::FromHandle(handle);
-		if (!pObj) {
-			return -1;
-		}
-		scriptEngine = (LogicParserEngine *)pObj->getScriptEngine();
+//		NDObject *pObj = NDObject::FromHandle(handle);
+//		if (!pObj) {
+//			return -1;
+//		}
+		scriptEngine = (LogicParserEngine *)netconn->getScriptEngine();
 		if (!scriptEngine) {
 			nd_logerror("can not get role script parser\n");
 			return -1;
@@ -42,7 +42,7 @@ int apollo_message_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t
 	params.push_back(LogicDataObj(script));
 
 	//receive message user
-	params.push_back(LogicDataObj((void*)handle, OT_OBJ_NDHANDLE));
+	params.push_back(LogicDataObj(netconn));
 
 	//message object
 	params.push_back(LogicDataObj((void*)&inmsg, OT_OBJ_MSGSTREAM));
@@ -151,7 +151,7 @@ APOLLO_SCRIPT_API_DEF(apollo_set_connector_script_parser, "绑定消息处理引擎(netO
 		return false;
 	}
 
-	if (-1 == nd_message_set_script_engine(h, paimParser, apollo_message_script_entry)) {
+	if (-1 == nd_message_set_script_engine(h, paimParser,(nd_msg_script_entry) apollo_message_script_entry)) {
 		nd_logerror("set script engine for GMConnector error\n");
 
 		parser->setErrno(NDERR_SYSTEM);

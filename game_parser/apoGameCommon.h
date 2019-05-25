@@ -33,7 +33,8 @@ public:
 
 };
 
-int apollo_message_script_entry(void *engine, nd_handle  handle, nd_usermsgbuf_t *msg, const char *script);
+class NDBaseConnector ;
+int apollo_message_script_entry(void *engine, NDBaseConnector*  handle, nd_usermsgbuf_t *msg, const char *script);
 nd_handle apollo_getNetHanlder(ILogicObject *owner, LogicDataObj &netObj);
 
 #endif

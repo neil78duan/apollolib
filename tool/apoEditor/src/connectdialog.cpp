@@ -172,7 +172,7 @@ static bool init_apollo_object(NDIConn *pConn, const char*script_file)
     nd_assert(scriptRoot);
 
 	LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
-	nd_message_set_script_engine(pConn->GetHandle(), (void*)&parser, apollo_message_script_entry);
+	nd_message_set_script_engine(pConn->GetHandle(), (void*)&parser,(nd_msg_script_entry) apollo_message_script_entry);
 	initGlobalParser();
 
 	scriptRoot->setPrint(ND_LOG_WRAPPER_PRINT(ConnectDialog), NULL);

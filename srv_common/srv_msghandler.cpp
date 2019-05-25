@@ -19,18 +19,18 @@ MSG_ENTRY_INSTANCE(register2MgrAck)
     NDIStreamMsg inmsg(msg) ;
     NDUINT8 isOk =1;
     
-    NDConnector *pconn =  htoConnector(nethandle);
+    //NDConnector *pconn =  htoConnector(nethandle);
     
     if (0==inmsg.Read(isOk) && isOk==0) {
         int isRegisterOk = 1 ;
         int size = sizeof(int) ;
 
-        pconn->Ioctl(NDIOCTL_SET_LEVEL, &isRegisterOk, &size) ;
+        netconn->Ioctl(NDIOCTL_SET_LEVEL, &isRegisterOk, &size) ;
     }
 	else {
-		pconn->Close(0);
+		netconn->Close(0);
 	}
-	nd_logmsg("%s regisger to server  %s\n",pconn->getName(),  isOk ? "FAILED":"SUCCESS") ;
+	nd_logmsg("%s regisger to server  %s\n",netconn->getName(),  isOk ? "FAILED":"SUCCESS") ;
     
     return 0;
 }
@@ -66,7 +66,7 @@ MSG_ENTRY_INSTANCE(unwrap_sendto_player_entry)
 	
 	nd_logdebug("recved (%d,%d ) length = %d from %s wrapped by (%d, %d) direct-to-client session=%d\n",
 		ND_USERMSG_MAXID(&realMsg), ND_USERMSG_MINID(&realMsg), ND_USERMSG_LEN(&realMsg),
-		nd_object_get_instname(nethandle), inmsg.MsgMaxid(), inmsg.MsgMinid(), inmsg.MsgLength(), sid);
+		netconn->getName(), inmsg.MsgMaxid(), inmsg.MsgMinid(), inmsg.MsgLength(), sid);
 	
 	if (0==sid) {		
 		//nd_logdebug("world request broadcast (%d, %d) length = %d\n", ND_USERMSG_MAXID(&realMsg),  ND_USERMSG_MINID(&realMsg), ND_USERMSG_LEN(&realMsg)) ;
@@ -114,7 +114,7 @@ MSG_ENTRY_INSTANCE(unwrap_call_session_msgproc_entry)
 	
 	nd_logdebug("recved (%d,%d ) length = %d from %s wrapped by (%d, %d) call-msg-process session=%d\n",
 		ND_USERMSG_MAXID(&realMsg), ND_USERMSG_MINID(&realMsg), ND_USERMSG_LEN(&realMsg),
-		nd_object_get_instname(nethandle), inmsg.MsgMaxid(), inmsg.MsgMinid(), inmsg.MsgLength(), sid);
+		netconn->getName(), inmsg.MsgMaxid(), inmsg.MsgMinid(), inmsg.MsgLength(), sid);
 	
 	if (0==sid) {		
 		playerMgr->CallMsgProcInHost(&realMsg.msg_hdr) ;
@@ -149,7 +149,7 @@ MSG_ENTRY_INSTANCE(bridge_to_client_dirctly_entry)
 	
 
 	nd_logdebug("bridge message  (%d,%d ) length = %d from %s to client\n",
-		inmsg.MsgMaxid(), inmsg.MsgMinid(), inmsg.MsgLength(),	nd_object_get_instname(nethandle));
+		inmsg.MsgMaxid(), inmsg.MsgMinid(), inmsg.MsgLength(),	netconn->getName());
 
 	//nd_logdebug("world server direct send to client  (%d, %d)\n", inmsg.MsgMaxid(), inmsg.MsgMinid()) ;
 	
@@ -176,7 +176,7 @@ MSG_ENTRY_INSTANCE(resend_to_world_handler)
 	NDIStreamMsg inmsg(msg) ;
 	NDOStreamMsg omsg(inmsg.MsgMaxid(), inmsg.MsgMinid()) ;
 	
-	omsg.Write(nd_session_getid(nethandle)) ;
+	omsg.Write(netconn->GetSessionID()) ;
 	if (inmsg.LeftData() > 0) {
 		inmsg.Read(omsg) ;
 	}	
@@ -193,7 +193,7 @@ MSG_ENTRY_INSTANCE(resend_playermsg_to_world_handler)
 	NDIStreamMsg inmsg(msg) ;
 	NDOStreamMsg omsg(inmsg.MsgMaxid(), inmsg.MsgMinid()) ;
 	
-	NDSession *pSession = (NDSession *) NDGetSession(nethandle);
+	NDSession *pSession = static_cast<NDSession*>(netconn);
 	
 	omsg.Write(pSession->GetSessionID()) ;
 	omsg.Write((NDUINT32)pSession->GetID()) ;
@@ -214,8 +214,6 @@ MSG_ENTRY_INSTANCE(sys_get_error_desc)
 	NDIStreamMsg inmsg(msg);
 	NDOStreamMsg omsg(inmsg.MsgMaxid(), inmsg.MsgMinid());
 
-	NDSession *pSession = (NDSession *) NDGetSession(nethandle);
-
 	NDUINT32 errorId = 0 ;
 
 	inmsg.Read(errorId);
@@ -226,6 +224,6 @@ MSG_ENTRY_INSTANCE(sys_get_error_desc)
 	if (perr){
 		omsg.Write(perr);
 	}
-	pSession->SendMsg(omsg);
+	netconn->SendMsg(omsg);
 	return 0;
 }
