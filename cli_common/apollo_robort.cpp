@@ -105,7 +105,7 @@ bool ApolloRobort::checkLogin()
 		int priv_level = 0 ;
 		int size = sizeof(priv_level) ;
 		
-		m_pConn->ioctl(NDIOCTL_GET_LEVEL, &priv_level, &size) ;
+		m_pConn->Ioctl(NDIOCTL_GET_LEVEL, &priv_level, &size) ;
 		return  priv_level >= EPL_LOGIN ;
 	}
 	return false;

@@ -12,7 +12,7 @@
 #define _APOLLO_ROBORT_H
 
 
-class NDIConn;
+class NDCliConnector;
 class LoginApollo;
 
 class ApolloRobort
@@ -26,14 +26,14 @@ public:
 	bool checkLogin();
 	bool CheckValid() ;
 	
-	NDIConn *getConn() { return m_pConn; }
+	NDCliConnector *getConn() { return m_pConn; }
 	LoginApollo *getLogin() { return m_login; };
 protected:
 	int _connectHost(const char *host, int port);
 	int _login(const char *acc, const char *passwd,int iAccType = 2);
 	int _selOrCreateRole(const char *roleName);
 	int _createRole(const char *roleName);
-	NDIConn *m_pConn;
+	NDCliConnector *m_pConn;
 	LoginApollo *m_login;
 	char m_account[100];
 };

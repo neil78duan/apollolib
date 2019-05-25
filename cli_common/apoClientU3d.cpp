@@ -366,7 +366,7 @@ RESULT_T ApoClient::_connectHost(const char *host, int port)
 
 	int level = ndGetTimeoutVal();
 	int size = sizeof(int);
-	m_pconn->ioctl(NDIOCTL_SET_TIMEOUT, &level, &size);
+	m_pconn->Ioctl(NDIOCTL_SET_TIMEOUT, &level, &size);
 		
 	if (m_login) {
 		delete m_login;
@@ -711,7 +711,8 @@ bool ApoClient::Update()
 			m_pconn->Close() ;
 		}
 		if ((m_updateIndex & 255) == 255){
-			m_pconn->Send(ND_MAIN_ID_SYS, ND_MSG_SYS_GAME_TIME, NULL, 0);
+			NDOStreamMsg omsg(ND_MAIN_ID_SYS, ND_MSG_SYS_GAME_TIME) ;
+			m_pconn->Send(omsg);
 		}
 	}
 
@@ -747,7 +748,7 @@ bool ApoClient::openSendStreamLog()
 {
 	const char *pFielName = "./apoGameNetStream.data";
 	int length = (int)strlen(pFielName);
-	if (m_pconn->ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)pFielName, &length) == -1){
+	if (m_pconn->Ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)pFielName, &length) == -1){
 		nd_logmsg("log net message bin-data errror\n");
 		return false;
 	}

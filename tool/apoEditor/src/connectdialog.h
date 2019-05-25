@@ -5,7 +5,7 @@
 #include "nd_common/nd_common.h"
 #include <vector>
 
-class NDIConn;
+class NDCliConnector;
 class LoginApollo;
 class QTimer ;
 
@@ -35,7 +35,7 @@ public:
     //int createRole(const char *roleName);
     int getRoleData();
 
-	NDIConn *getConnect(){ return m_pConn; }
+	NDCliConnector *getConnect(){ return m_pConn; }
 
 	bool LoadClientScript(const char *file, const char *dblFile);
 
@@ -82,7 +82,7 @@ private:
     Ui::ConnectDialog *ui;
     QTimer *timer ;
 
-    NDIConn *m_pConn;
+    NDCliConnector *m_pConn;
     LoginApollo *m_login;
 	MsgHistoryVct_t m_msgHistory;
 };

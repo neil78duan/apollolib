@@ -334,10 +334,10 @@ namespace ClientMsgHandler
 	{
 
 		NDUINT16 msgId = ND_MAKE_WORD(ND_MAIN_ID_SYS, ND_MSG_SYS_GET_MESSAGE_FORMAT_LIST);
-		handleMsgFirstFromFileBeforTime(pconn, APOLLO_MSG_ID_NAME_FORMAT, newVersionTime, msgId, get_id_name_format_handler);
+		handleMsgFirstFromFileBeforTime(pconn, APOLLO_MSG_ID_NAME_FORMAT, newVersionTime, msgId, (nd_iconn_func)get_id_name_format_handler);
 
 		msgId = ND_MAKE_WORD(ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
-		handleMsgFirstFromFileBeforTime(pconn, APOLLO_DATA_FORMAT, newVersionTime, msgId, get_data_format_handler);
+		handleMsgFirstFromFileBeforTime(pconn, APOLLO_DATA_FORMAT, newVersionTime, msgId, (nd_iconn_func)get_data_format_handler);
 
 		return true;
 

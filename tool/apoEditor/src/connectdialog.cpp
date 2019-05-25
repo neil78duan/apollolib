@@ -585,7 +585,7 @@ void ConnectDialog::on_loginButton_clicked()
 
 			const char *msg_stream_file = "./test_robort.data";
 			int length = (int)strlen(msg_stream_file);
-			if (m_pConn->ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)msg_stream_file, &length) == -1) {
+			if (m_pConn->Ioctl(NDIOCTL_LOG_SEND_STRAM_FILE, (void*)msg_stream_file, &length) == -1) {
 				nd_logmsg("log net message bin-data errror\n");
 			}
 		}

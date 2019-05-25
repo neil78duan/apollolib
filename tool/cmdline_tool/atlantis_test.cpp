@@ -147,7 +147,7 @@ int getConnectStat(NDIConn *pConn)
 		int priv_level = 0 ;
 		int size = sizeof(priv_level) ;
 		
-		pConn->ioctl(NDIOCTL_GET_LEVEL, &priv_level, &size) ;
+		pConn->Ioctl(NDIOCTL_GET_LEVEL, &priv_level, &size) ;
 		return  priv_level ;
 	}
 	return 0;

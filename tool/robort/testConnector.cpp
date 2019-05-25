@@ -37,7 +37,7 @@ int SendHelper::Send(void *data , int size )
 	NDUINT8 isCrypt = pMsg->msg_hdr.packet_hdr.encrypt ;
 	pMsg->msg_hdr.packet_hdr.encrypt = 0 ;
 	
-	int ret = m_pConn->SendMsg(pMsg, isCrypt ? ESF_ENCRYPT: ESF_NORMAL) ;
+	int ret = m_pConn->SendMsg((nd_usermsghdr_t*)pMsg, isCrypt ? ESF_ENCRYPT: ESF_NORMAL) ;
 	
 	pMsg->msg_hdr.packet_hdr.encrypt =  isCrypt ;
 	
