@@ -93,7 +93,7 @@ static NDIConn*  _create_connector_object()
 	__scriptObjOwner.setConn(p);
 
 	LogicParserEngine  &parser = LogicEngineRoot::get_Instant()->getGlobalParser();
-	nd_message_set_script_engine(p->GetHandle(), (void*)&parser, apollo_message_script_entry);
+	nd_message_set_script_engine(p->GetHandle(), (void*)&parser,(nd_msg_script_entry) apollo_message_script_entry);
 	
 	ClientMsgHandler::InstallDftClientHandler(p);
 	return p;
