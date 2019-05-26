@@ -646,7 +646,7 @@ namespace ClientMsgHandler
 		CONNECT_INSTALL_MSG(pconn, msg_get_version_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GETVERSION);
 		
 #ifdef WITHOUT_LOGIC_PARSER
-		pconn->SetDftMsgHandler(msg_default_handler);
+		pconn->SetDftMsgHandler((nd_conn_msg_entry)msg_default_handler);
 #else 
 		CONNECT_INSTALL_MSG(pconn, get_message_protocol_build_time, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_MESSAGE_BUILD_TIME);
 		CONNECT_INSTALL_MSG(pconn, get_id_name_format_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_MESSAGE_FORMAT_LIST);

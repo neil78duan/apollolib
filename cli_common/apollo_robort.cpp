@@ -63,7 +63,7 @@ int ApolloRobort::Create(const char *host, int port, const char *accountName, co
 	}
 	nd_logmsg("ACCOUNT %s login SUCCESS\n", accountName);
 
-	m_pConn->SetDftMsgHandler(my_msg_default_handler);
+	m_pConn->SetDftMsgHandler((nd_conn_msg_entry)my_msg_default_handler);
 	//gmtoolMsgHandlerInit(m_pConn);
 	char roleName[100];
 	snprintf(roleName, sizeof(roleName), "%s_role", accountName);

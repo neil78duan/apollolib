@@ -114,7 +114,7 @@ void atlantis_base_message(NDIConn *pconn)
 	CONNECT_INSTALL_MSG(pconn, msg_get_version_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GETVERSION);
 	CONNECT_INSTALL_MSG(pconn, msg_get_rlimit_handler, ND_MAIN_ID_SYS, ND_MSG_SYS_GET_RLIMIT);
 	
-	pconn->SetDftMsgHandler(msg_default_handler);
+	pconn->SetDftMsgHandler((nd_conn_msg_entry)msg_default_handler);
 	
 }
 
