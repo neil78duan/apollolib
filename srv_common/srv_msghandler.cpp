@@ -72,7 +72,8 @@ MSG_ENTRY_INSTANCE(unwrap_sendto_player_entry)
 		//nd_logdebug("world request broadcast (%d, %d) length = %d\n", ND_USERMSG_MAXID(&realMsg),  ND_USERMSG_MINID(&realMsg), ND_USERMSG_LEN(&realMsg)) ;
 		playerMgr->BroadCastInHost(&realMsg.msg_hdr, encrypt?true:false) ;
 	}
-	else {		
+	else {
+		nd_handle h_listen = netconn->GetListenerHandle() ;
 		if(!h_listen){
 			h_listen = getbase_inst()->GetDeftListener()->GetHandle() ;
 			nd_assert(h_listen) ;
@@ -119,7 +120,8 @@ MSG_ENTRY_INSTANCE(unwrap_call_session_msgproc_entry)
 	if (0==sid) {		
 		playerMgr->CallMsgProcInHost(&realMsg.msg_hdr) ;
 	}
-	else {		
+	else {
+		nd_handle h_listen = netconn->GetListenerHandle() ;
 		if(!h_listen){
 			h_listen = getbase_inst()->GetDeftListener()->GetHandle() ;
 			nd_assert(h_listen) ;
@@ -140,8 +142,9 @@ MSG_ENTRY_INSTANCE(bridge_to_client_dirctly_entry)
 	
 	
 	NDOStreamMsg omsg(inmsg.MsgMaxid(), inmsg.MsgMinid()) ;
-	inmsg.Read(omsg) ;	
+	inmsg.Read(omsg) ;
 	
+	nd_handle h_listen = netconn->GetListenerHandle() ;
 	if(!h_listen){
 		h_listen = getbase_inst()->GetDeftListener()->GetHandle() ;
 		nd_assert(h_listen) ;
