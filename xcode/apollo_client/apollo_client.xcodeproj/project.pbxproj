@@ -302,6 +302,9 @@
 		0742FF0B2298CD91006CEEE8 /* nd_connector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nd_connector.cpp; sourceTree = "<group>"; };
 		0742FF112298CD91006CEEE8 /* nd_msgpack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nd_msgpack.cpp; sourceTree = "<group>"; };
 		0742FF132298CD91006CEEE8 /* nd_baseConn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nd_baseConn.cpp; sourceTree = "<group>"; };
+		0749E860229D25F000630782 /* nd_baseConn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nd_baseConn.h; sourceTree = "<group>"; };
+		0749E861229D25F000630782 /* nd_iBaseObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nd_iBaseObj.h; sourceTree = "<group>"; };
+		0749E862229D2C6000630782 /* nd_objfactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nd_objfactory.h; sourceTree = "<group>"; };
 		074C0F5421F9C31C0003BAE4 /* logic_compile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logic_compile.cpp; sourceTree = "<group>"; };
 		074C0F5521F9C31C0003BAE4 /* logic_debugger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logic_debugger.cpp; sourceTree = "<group>"; };
 		074C0F5621F9C31C0003BAE4 /* logic_editor_helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logic_editor_helper.cpp; sourceTree = "<group>"; };
@@ -795,6 +798,9 @@
 		07EC84F61D54400300C32925 /* ndapplib */ = {
 			isa = PBXGroup;
 			children = (
+				0749E862229D2C6000630782 /* nd_objfactory.h */,
+				0749E860229D25F000630782 /* nd_baseConn.h */,
+				0749E861229D25F000630782 /* nd_iBaseObj.h */,
 				07EC84F71D54400300C32925 /* applib.h */,
 				07EC84F81D54400300C32925 /* httpParser.h */,
 				07EC84F91D54400300C32925 /* nd_affair.h */,

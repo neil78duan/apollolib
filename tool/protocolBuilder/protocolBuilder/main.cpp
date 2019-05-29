@@ -1127,15 +1127,15 @@ int main(int argc, char *argv[])
 	}while(0)
 
 	RESET_OUT_PATH("/cpp");
-	RESET_OUT_PATH("/cpp_ue");
+	//RESET_OUT_PATH("/cpp_ue");
 
 	std::string outFile;
 	
-	outFile = _output_dir + "/cpp_ue/auto_dataType";
-	if (-1 == build_dataTypeForUE4(&xmlDatatype, outFile.c_str())) {
-		fprintf(stderr, "export datatype error \n");
-		exit(1);
-	}
+//	outFile = _output_dir + "/cpp_ue/auto_dataType";
+//	if (-1 == build_dataTypeForUE4(&xmlDatatype, outFile.c_str())) {
+//		fprintf(stderr, "export datatype error \n");
+//		exit(1);
+//	}
 
 	outFile = _output_dir + "/cpp/auto_dataType";
 	if(-1==build_dataType(&xmlDatatype, outFile.c_str(),false ) ) {
@@ -1166,7 +1166,7 @@ int main(int argc, char *argv[])
 	ndxml_destroy(&xmlDatatype);
 	ndxml_destroy(&xmlMessage);
 
-	/*
+
 	//export cs
 	//load for utf8
 	RESET_OUT_PATH("/csharp");
@@ -1198,7 +1198,7 @@ int main(int argc, char *argv[])
 	}
 	
 	ndxml_destroy(&xmlMarco); ndxml_destroy(&xmlDatatype); ndxml_destroy(&xmlMessage) ;
-	*/
+	
 
 	exit(0) ;
 }

@@ -76,7 +76,7 @@ namespace ClientMsgHandler
 	//read message from file, the message first file is 64bits time,
 	// if time newer than @gentime pass the message to @func else send to server 
 	//return true read from file ,else send to server
-	bool handleMsgFirstFromFileBeforTime(NDIConn *pconn, const char *file,NDUINT64 genTime, NDUINT16 msgId, nd_iconn_func func);
+	bool handleMsgFirstFromFileBeforTime(NDIConn *pconn, const char *file,NDUINT64 genTime, NDUINT16 msgId, nd_conn_msg_entry func);
 
 	int OutputMessage2File(NDIConn *pconn, const char *file, const NDIStreamMsg &inmsg);
 	int ReadMessageFromFile(NDIConn *pconn, const char *file, NDOStreamMsg &omsg);

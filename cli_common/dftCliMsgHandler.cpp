@@ -202,7 +202,7 @@ namespace ClientMsgHandler
 		return (ApoConnectScriptOwner *)val.GetObjectAddr();
 	}
 
-	bool handleMsgFirstFromFileBeforTime(NDIConn *pconn, const char *file, NDUINT64 genTime, NDUINT16 msgId, nd_iconn_func func)
+	bool handleMsgFirstFromFileBeforTime(NDIConn *pconn, const char *file, NDUINT64 genTime, NDUINT16 msgId, nd_conn_msg_entry func)
 	{
 		bool isOK = false;
 		NDOStreamMsg omsg;
@@ -334,10 +334,10 @@ namespace ClientMsgHandler
 	{
 
 		NDUINT16 msgId = ND_MAKE_WORD(ND_MAIN_ID_SYS, ND_MSG_SYS_GET_MESSAGE_FORMAT_LIST);
-		handleMsgFirstFromFileBeforTime(pconn, APOLLO_MSG_ID_NAME_FORMAT, newVersionTime, msgId, (nd_iconn_func)get_id_name_format_handler);
+		handleMsgFirstFromFileBeforTime(pconn, APOLLO_MSG_ID_NAME_FORMAT, newVersionTime, msgId, (nd_conn_msg_entry)get_id_name_format_handler);
 
 		msgId = ND_MAKE_WORD(ND_MAIN_ID_SYS, ND_MSG_SYS_GET_USER_DEFINE_DATA);
-		handleMsgFirstFromFileBeforTime(pconn, APOLLO_DATA_FORMAT, newVersionTime, msgId, (nd_iconn_func)get_data_format_handler);
+		handleMsgFirstFromFileBeforTime(pconn, APOLLO_DATA_FORMAT, newVersionTime, msgId, (nd_conn_msg_entry)get_data_format_handler);
 
 		return true;
 
