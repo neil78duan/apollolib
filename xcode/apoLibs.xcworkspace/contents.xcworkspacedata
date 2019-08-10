@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "container:"
+      name = "nds">
+      <FileRef
+         location = "group:../../ndsdk/xcode/ndcommon_mac/ndcommon_mac.xcodeproj">
+      </FileRef>
+   </Group>
+   <Group
+      location = "container:"
+      name = "apollolib">
+      <Group
+         location = "group:../attribute"
+         name = "attribute">
+         <FileRef
+            location = "group:attr_mgr.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:attr_mgr.h">
+         </FileRef>
+         <FileRef
+            location = "group:Makefile">
+         </FileRef>
+         <FileRef
+            location = "group:roleattr_help.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:roleattr_help.h">
+         </FileRef>
+         <FileRef
+            location = "group:stat_data.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:stat_data.h">
+         </FileRef>
+         <FileRef
+            location = "group:stat_machine.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:stat_machine.h">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:../bin"
+         name = "bin">
+         <FileRef
+            location = "group:build_protocol.bat">
+         </FileRef>
+         <FileRef
+            location = "group:build_protocol.sh">
+         </FileRef>
+         <FileRef
+            location = "group:exp_xls.bat">
+         </FileRef>
+         <FileRef
+            location = "group:exp_xls.sh">
+         </FileRef>
+         <FileRef
+            location = "group:filelist-unix.txt">
+         </FileRef>
+         <FileRef
+            location = "group:get_svn_ver.sh">
+         </FileRef>
+         <FileRef
+            location = "group:readme.txt">
+         </FileRef>
+         <FileRef
+            location = "group:xls2txt.py">
+         </FileRef>
+         <FileRef
+            location = "group:xls2txt_unix.py">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:../build_client.sh">
+      </FileRef>
+      <Group
+         location = "group:../cfg"
+         name = "cfg">
+         <FileRef
+            location = "group:gm_msg.xml">
+         </FileRef>
+         <FileRef
+            location = "group:io_config.xml">
+         </FileRef>
+         <FileRef
+            location = "group:io_config_mac.xml">
+         </FileRef>
+         <FileRef
+            location = "group:sample_script.xml">
+         </FileRef>
+         <FileRef
+            location = "group:script_root.xml">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:../cli_common"
+         name = "cli_common">
+         <FileRef
+            location = "group:apoClientU3d.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:apoClientU3d.h">
+         </FileRef>
+         <FileRef
+            location = "group:apollo_robort.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:apollo_robort.h">
+         </FileRef>
+         <FileRef
+            location = "group:dftCliMsgHandler.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:dftCliMsgHandler.h">
+         </FileRef>
+         <FileRef
+            location = "group:login_apollo.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:login_apollo.h">
+         </FileRef>
+         <FileRef
+            location = "group:Makefile">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:../config.sh">
+      </FileRef>
+      <Group
+         location = "group:../db_common"
+         name = "db_common">
+         <FileRef
+            location = "group:commonDataMgr.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:commonDataMgr.h">
+         </FileRef>
+         <FileRef
+            location = "group:CommonDataSql.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:CommonDataSql.h">
+         </FileRef>
+         <FileRef
+            location = "group:gameDBConnector.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:gameDBConnector.h">
+         </FileRef>
+         <FileRef
+            location = "group:Makefile">
+         </FileRef>
+         <FileRef
+            location = "group:mydatabase.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:mydatabase.h">
+         </FileRef>
+         <FileRef
+            location = "group:sqlThMsgHandler.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:sqlThMsgHandler.hpp">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:../include"
+         name = "include">
+         <FileRef
+            location = "group:_error_def.h">
+         </FileRef>
+         <FileRef
+            location = "group:apollo_client.h">
+         </FileRef>
+         <FileRef
+            location = "group:apollo_data.h">
+         </FileRef>
+         <FileRef
+            location = "group:apollo_errors.h">
+         </FileRef>
+         <FileRef
+            location = "group:common_inc.h">
+         </FileRef>
+         <FileRef
+            location = "group:msg_def.h">
+         </FileRef>
+         <FileRef
+            location = "group:rankMap.h">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:../plugin_u3d"
+         name = "plugin_u3d">
+         <FileRef
+            location = "group:apoCliApi.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:apoCliApi.h">
+         </FileRef>
+         <FileRef
+            location = "group:apoClientU3d.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:apoFormula.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:apoFormula.h">
+         </FileRef>
+         <FileRef
+            location = "group:ApolloBridge.cs">
+         </FileRef>
+         <FileRef
+            location = "group:FormulaParser.cs">
+         </FileRef>
+         <FileRef
+            location = "group:ndMsgStream.cs">
+         </FileRef>
+         <FileRef
+            location = "group:smcs.rsp">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:../proj.androin"
+         name = "proj.androin">
+         <Group
+            location = "group:jni"
+            name = "jni">
+            <FileRef
+               location = "group:Android.mk">
+            </FileRef>
+            <FileRef
+               location = "group:Application.mk">
+            </FileRef>
+         </Group>
+      </Group>
+      <Group
+         location = "group:../srv_common"
+         name = "srv_common">
+         <FileRef
+            location = "group:comm_msghandler.h">
+         </FileRef>
+         <FileRef
+            location = "group:dailyUpdateMgr.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:dailyUpdateMgr.hpp">
+         </FileRef>
+         <FileRef
+            location = "group:gameRole.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:gameRole.h">
+         </FileRef>
+         <FileRef
+            location = "group:Makefile">
+         </FileRef>
+         <FileRef
+            location = "group:ndmath.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:ndmath.h">
+         </FileRef>
+         <FileRef
+            location = "group:ndrand.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:ndrand.h">
+         </FileRef>
+         <FileRef
+            location = "group:playerMgr.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:playerMgr.h">
+         </FileRef>
+         <FileRef
+            location = "group:srv_msghandler.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:userAddtionData.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:userAddtionData.h">
+         </FileRef>
+      </Group>
+   </Group>
+   <Group
+      location = "container:"
+      name = "libs">
+      <FileRef
+         location = "group:../../nodeflow/src/apolloEditorUI/apoBluePrint.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:../../nodeflow/xcode/nfParser/nfParser.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:apollo_client/apollo_client.xcodeproj">
+      </FileRef>
+   </Group>
+   <Group
+      location = "container:"
+      name = "tools">
+      <FileRef
+         location = "group:../tool/apoEditor/apolloEditor.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:protocolBuilder/protocolBuilder.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:robort/robort.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:cmdline_tool/cmdline_tool.xcodeproj">
+      </FileRef>
+   </Group>
+</Workspace>

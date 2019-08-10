@@ -184,7 +184,7 @@ static bool init_apollo_object(NDIConn *pConn, const char*script_file)
         return false;
     }
     ClientMsgHandler::InstallDftClientHandler(pConn);
-    pConn->SetDftMsgHandler(ClientMsgHandler::apollo_dft_message_handler);
+    pConn->SetDftMsgHandler((nd_conn_msg_entry)ClientMsgHandler::apollo_dft_message_handler);
 
     return true;
 }
@@ -1095,7 +1095,7 @@ void ConnectDialog::on_pushButton_2_clicked()
 void ConnectDialog::on_pushButtonGetPingVal_clicked()
 {
 	if (m_pConn && m_pConn->CheckValid()){
-		m_pConn->InstallMsgFunc(ClientMsgHandler::msg_show_echo_time, ND_MAIN_ID_SYS, ND_MSG_SYS_ECHO);
+		m_pConn->InstallMsgFunc((nd_conn_msg_entry)ClientMsgHandler::msg_show_echo_time, ND_MAIN_ID_SYS, ND_MSG_SYS_ECHO);
 		NDOStreamMsg omsg(ND_MAIN_ID_SYS, ND_MSG_SYS_ECHO);
 		ndtime_t now = nd_time();
 		omsg.Write((NDUINT32)now);
