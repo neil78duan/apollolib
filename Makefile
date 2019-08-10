@@ -17,13 +17,19 @@ release:
 	for n in $(SUBDIRS); do $(MAKE) -C $$n DEBUG="n" PROFILE="n" || exit 1; done
 	cd tool ; make release
 
-dll: dll_release
+dll: dll-debug
 
-dll_debug:
+dll-debug:
 	cd game_parser ; make dll DEBUG="y" PROFILE="y" BUILD_DLL="y"
 
-dll_release:
+dll-release:
 	cd game_parser ; make dll DEBUG="n" PROFILE="n" BUILD_DLL="y"
+
+update:
+	git commit -m "auto commit " -a ; git pull
+
+commit:
+	make update ;  git push
 
 tool:
 	cd tool ;make 
