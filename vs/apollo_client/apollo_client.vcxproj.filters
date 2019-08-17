@@ -37,6 +37,9 @@
     <Filter Include="apollo\attribute">
       <UniqueIdentifier>{4a919c48-b281-4868-9bad-ae9fd8463301}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\nd_cli">
+      <UniqueIdentifier>{086c410b-4dee-43ff-b7e8-bd9fdcc78be8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -203,24 +206,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_datatransfer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_msgpack.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\ndsdk\src\ndclient\cpp_api\nd_client.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\msg_format.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\nd_connector.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\nd_exch_key.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\bintree.c">
       <Filter>src\common</Filter>
     </ClCompile>
@@ -359,9 +344,6 @@
     <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\proxy_cli.c">
       <Filter>src\nd_net</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\udt_icmp.c">
-      <Filter>src\nd_net</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\udt_net.c">
       <Filter>src\nd_net</Filter>
     </ClCompile>
@@ -406,6 +388,24 @@
     </ClCompile>
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\nd_logger.c">
       <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndclient\nd_client.cpp">
+      <Filter>src\nd_cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndclient\nd_exch_key.cpp">
+      <Filter>src\nd_cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_baseConn.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_msgpack.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_object.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_connector.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

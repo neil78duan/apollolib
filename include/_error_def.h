@@ -7,96 +7,96 @@
 //
 
 // define game error
-ErrorElement(ESERVER_ERR_GAME_CONFIG,"ç­–åˆ’æ•°æ®é…é”™äº†"),
-ErrorElement(ESERVER_ERR_IN_CD,"CDä¸­"),
-ErrorElement(ESERVER_ERR_SHORT_ITEM, "ç‰©å“ä¸è¶³"),
-ErrorElement(ESERVER_ERR_NO_ITEM, "ç‰©å“ä¸å­˜åœ¨"),
-ErrorElement(ESERVER_ERR_ATTR_NOT_ENOUGH, "å±žæ€§ä¸è¶³"),
-ErrorElement(ESERVER_ERR_ATTR_TOO_MUCH, "å±žæ€§å¤ªé«˜"),
-ErrorElement(ESERVER_ERR_LEVEL_LOW, "ç­‰çº§å¤ªä½Ž"),
-ErrorElement(ESERVER_ERR_SHORT_MONEY, "æ¸¸æˆå¸ä¸è¶³"),
-ErrorElement(ESERVER_ERR_MAX_LEVEL, "å·²ç»è¾¾åˆ°æœ€é«˜çº§"),
+ErrorElement(ESERVER_ERR_GAME_CONFIG,"²ß»®Êý¾ÝÅä´íÁË"),
+ErrorElement(ESERVER_ERR_IN_CD,"CDÖÐ"),
+ErrorElement(ESERVER_ERR_SHORT_ITEM, "ÎïÆ·²»×ã"),
+ErrorElement(ESERVER_ERR_NO_ITEM, "ÎïÆ·²»´æÔÚ"),
+ErrorElement(ESERVER_ERR_ATTR_NOT_ENOUGH, "ÊôÐÔ²»×ã"),
+ErrorElement(ESERVER_ERR_ATTR_TOO_MUCH, "ÊôÐÔÌ«¸ß"),
+ErrorElement(ESERVER_ERR_LEVEL_LOW, "µÈ¼¶Ì«µÍ"),
+ErrorElement(ESERVER_ERR_SHORT_MONEY, "ÓÎÏ·±Ò²»×ã"),
+ErrorElement(ESERVER_ERR_MAX_LEVEL, "ÒÑ¾­´ïµ½×î¸ß¼¶"),
 
-ErrorElement(ESERVER_ERR_AIM_DISSAGREE, "å¯¹æ–¹ä¸åŒæ„"),
-ErrorElement(ESERVER_ERR_WAIT_REPLY_TIMEOUT, "ç­‰å¾…å¯¹æ–¹å›žåº”è¶…æ—¶"),
-ErrorElement(ESERVER_ERR_TYPE_NOT_MATCH, "ç±»åž‹ä¸åŒ¹é…"),
+ErrorElement(ESERVER_ERR_AIM_DISSAGREE, "¶Ô·½²»Í¬Òâ"),
+ErrorElement(ESERVER_ERR_WAIT_REPLY_TIMEOUT, "µÈ´ý¶Ô·½»ØÓ¦³¬Ê±"),
+ErrorElement(ESERVER_ERR_TYPE_NOT_MATCH, "ÀàÐÍ²»Æ¥Åä"),
 
-ErrorElement(ESERVER_ERR_PACKAGE_FULL, "èƒŒåŒ…å·²æ»¡"),
-ErrorElement(ESERVER_ERR_SHOP_NOT_EXIST, "å•†åº—ä¸å­˜åœ¨"),
-ErrorElement(ESERVER_ERR_ITEM_OUT_SALE, "ç‰©å“å”®å®Œ"),
-
-
-ErrorElement(ESERVER_ERR_SIGNED_IN, "å·²ç»ç­¾åˆ°"),
-ErrorElement(ESERVER_ERR_TOO_ROLES, "è§’è‰²è¿‡å¤šä¸èƒ½åˆ›å»º"),
+ErrorElement(ESERVER_ERR_PACKAGE_FULL, "±³°üÒÑÂú"),
+ErrorElement(ESERVER_ERR_SHOP_NOT_EXIST, "ÉÌµê²»´æÔÚ"),
+ErrorElement(ESERVER_ERR_ITEM_OUT_SALE, "ÎïÆ·ÊÛÍê"),
 
 
-ErrorElement(ESERVER_ERR_INVITE_CODE_INVALID, "æ— æ•ˆçš„é‚€è¯·ç "),
-ErrorElement(ESERVER_ERR_INVITE_BE_INVITED, "å·²ç»è¢«é‚€è¯·è¿‡"),
-ErrorElement(ESERVER_ERR_INVITE_NOT_BE_INVITED, "ä¸èƒ½è¢«é‚€è¯·"),
+ErrorElement(ESERVER_ERR_SIGNED_IN, "ÒÑ¾­Ç©µ½"),
+ErrorElement(ESERVER_ERR_TOO_ROLES, "½ÇÉ«¹ý¶à²»ÄÜ´´½¨"),
 
 
-ErrorElement(ESERVER_ERR_FREE_TIME_OVER, "å…è´¹æ¬¡æ•°ç”¨å®Œ"),
-ErrorElement(ESERVER_ERR_AWARDS_GOT, "å¥–åŠ±å·²ç»é¢†å–"),
-ErrorElement(ESERVER_ERR_CANNOT_GET_THIS_TASK, "ä¸èƒ½é¢†å–è¯¥ä»»åŠ¡"),
-ErrorElement(ESERVER_ERR_NO_THIS_TASK, "ä»»åŠ¡ä¸å­˜åœ¨"),
-
-ErrorElement(ESERVER_ERR_TASK_NOT_COMPLETED, "ä»»åŠ¡æ²¡æœ‰å®Œæˆ"),
-ErrorElement(ESERVER_ERR_ACHIEVMENT_NOT_COMPLETED, "æˆå°±æ²¡æœ‰è¾¾æˆ"),
+ErrorElement(ESERVER_ERR_INVITE_CODE_INVALID, "ÎÞÐ§µÄÑûÇëÂë"),
+ErrorElement(ESERVER_ERR_INVITE_BE_INVITED, "ÒÑ¾­±»ÑûÇë¹ý"),
+ErrorElement(ESERVER_ERR_INVITE_NOT_BE_INVITED, "²»ÄÜ±»ÑûÇë"),
 
 
-ErrorElement(ESERVER_ERR_TASK_IN_RUNNING, "ä»»åŠ¡æ‰§è¡Œä¸­"),
-ErrorElement(ESERVER_ERR_AIM_ROLE_NOT_EXIST, "ç›®æ ‡ç”¨æˆ·ä¸å­˜åœ¨"),
+ErrorElement(ESERVER_ERR_FREE_TIME_OVER, "Ãâ·Ñ´ÎÊýÓÃÍê"),
+ErrorElement(ESERVER_ERR_AWARDS_GOT, "½±ÀøÒÑ¾­ÁìÈ¡"),
+ErrorElement(ESERVER_ERR_CANNOT_GET_THIS_TASK, "²»ÄÜÁìÈ¡¸ÃÈÎÎñ"),
+ErrorElement(ESERVER_ERR_NO_THIS_TASK, "ÈÎÎñ²»´æÔÚ"),
 
-ErrorElement(ESERVER_ERR_NEED_PASS_MAP, "éœ€è¦å…ˆé€šå…³åœ°å›¾"),
+ErrorElement(ESERVER_ERR_TASK_NOT_COMPLETED, "ÈÎÎñÃ»ÓÐÍê³É"),
+ErrorElement(ESERVER_ERR_ACHIEVMENT_NOT_COMPLETED, "³É¾ÍÃ»ÓÐ´ï³É"),
 
-ErrorElement(ESERVER_ERR_POS_ERROR, "ä½ç½®é”™è¯¯"),
-ErrorElement(ESERVER_ERR_MAIL_FULL, "é‚®ä»¶æ»¡äº†"),
 
-ErrorElement(ESERVER_ERR_ITEM_TOO_MUCH, "ç‰©å“æ»¡äº†"),
+ErrorElement(ESERVER_ERR_TASK_IN_RUNNING, "ÈÎÎñÖ´ÐÐÖÐ"),
+ErrorElement(ESERVER_ERR_AIM_ROLE_NOT_EXIST, "Ä¿±êÓÃ»§²»´æÔÚ"),
 
-ErrorElement(ESERVER_ERR_NO_EQUIP, "æ²¡æœ‰è£…å¤‡"),
-ErrorElement(ESERVER_ERR_NO_STAR_CARD, "æ²¡æœ‰æ˜Žæ˜Ÿ"),
-ErrorElement(ESERVER_ERR_NO_ASSISTANT, "æ²¡æœ‰åŠ©ç†"),
-ErrorElement(ESERVER_ERR_ITEM_INUSING, "ç‰©å“ä½¿ç”¨ä¸­"),
-ErrorElement(ESERVER_ERR_BAD_REQUEST, "éžæ³•è¯·æ±‚"),
+ErrorElement(ESERVER_ERR_NEED_PASS_MAP, "ÐèÒªÏÈÍ¨¹ØµØÍ¼"),
 
-ErrorElement(ESERVER_ERR_STAR_ENERGY_LOWER, "æ˜Žæ˜Ÿä½“åŠ›ä¸è¶³"),
+ErrorElement(ESERVER_ERR_POS_ERROR, "Î»ÖÃ´íÎó"),
+ErrorElement(ESERVER_ERR_MAIL_FULL, "ÓÊ¼þÂúÁË"),
 
-ErrorElement(ESERVER_ERR_EQUIP_NOTFIND, "æœªæ‰¾åˆ°æ­¤è£…å¤‡"),
-ErrorElement(ESERVER_ERR_EQUIP_STRENGTH_MAXLEV, "è£…å¤‡å¼ºåŒ–è¾¾åˆ°æœ€å¤§ç­‰çº§"),
-ErrorElement(ESERVER_ERR_EQUIP_STRENGTH, "è£…å¤‡å¼ºåŒ–å†…éƒ¨é”™è¯¯"),
-ErrorElement(ESERVER_ERR_EQUIP_REFIT, "è£…å¤‡æ”¹é€ é”™è¯¯"),
-ErrorElement(ESERVER_ERR_SHORT_EQUIPMENTMONEY, "èˆžå°ç²¾åŽä¸è¶³"),
+ErrorElement(ESERVER_ERR_ITEM_TOO_MUCH, "ÎïÆ·ÂúÁË"),
 
-ErrorElement(ESERVER_ERR_CARD_STARLEVMAX, "æ˜Žæ˜Ÿæ˜Ÿçº§è¾¾åˆ°æœ€å¤§ç­‰çº§"),
+ErrorElement(ESERVER_ERR_NO_EQUIP, "Ã»ÓÐ×°±¸"),
+ErrorElement(ESERVER_ERR_NO_STAR_CARD, "Ã»ÓÐÃ÷ÐÇ"),
+ErrorElement(ESERVER_ERR_NO_ASSISTANT, "Ã»ÓÐÖúÀí"),
+ErrorElement(ESERVER_ERR_ITEM_INUSING, "ÎïÆ·Ê¹ÓÃÖÐ"),
+ErrorElement(ESERVER_ERR_BAD_REQUEST, "·Ç·¨ÇëÇó"),
 
-ErrorElement(ESERVER_ERR_MAIL_RECEIVED, "é‚®ä»¶å·²ç»è¢«é¢†å–è¿‡äº†"),
+ErrorElement(ESERVER_ERR_STAR_ENERGY_LOWER, "Ã÷ÐÇÌåÁ¦²»×ã"),
 
-ErrorElement(ESERVER_ERR_NEED_COMPLETED_CHAPTER, "å‰ç½®ç« èŠ‚æ²¡æœ‰é€šè¿‡"),
-ErrorElement(ESERVER_ERR_NEED_TRIG_EVENT, "éœ€è¦å…ˆå¤„ç†äº‹ä»¶"),
-ErrorElement(ESERVER_ERR_CHAPTER_NOT_COMPLETE, "å½“å‰ç« èŠ‚æ²¡æœ‰å®Œæˆ"),
-ErrorElement(ESERVER_ERR_MAP_NOT_COMPLATE, "æ²¡æœ‰å®Œæˆåœ°å›¾"),
+ErrorElement(ESERVER_ERR_EQUIP_NOTFIND, "Î´ÕÒµ½´Ë×°±¸"),
+ErrorElement(ESERVER_ERR_EQUIP_STRENGTH_MAXLEV, "×°±¸Ç¿»¯´ïµ½×î´óµÈ¼¶"),
+ErrorElement(ESERVER_ERR_EQUIP_STRENGTH, "×°±¸Ç¿»¯ÄÚ²¿´íÎó"),
+ErrorElement(ESERVER_ERR_EQUIP_REFIT, "×°±¸¸ÄÔì´íÎó"),
+ErrorElement(ESERVER_ERR_SHORT_EQUIPMENTMONEY, "ÎèÌ¨¾«»ª²»×ã"),
 
-ErrorElement(ESERVER_ERR_SEND_CHAT_WORLDTIME, "ä¸–ç•Œé¢‘é“å‘é€é¢‘ç¹"),
-ErrorElement(ESERVER_ERR_SEND_CHAT_LEV_NOTENOUGHenough, "å‘é€ä¸–ç•Œé¢‘é“éœ€è¦çš„ç­‰çº§ä¸è¶³"),
-ErrorElement(ESERVER_ERR_SEND_CHAT_LEN, "èŠå¤©æ–‡å­—é•¿åº¦è¿‡é•¿"),
+ErrorElement(ESERVER_ERR_CARD_STARLEVMAX, "Ã÷ÐÇÐÇ¼¶´ïµ½×î´óµÈ¼¶"),
 
-ErrorElement(ESERVER_ERR_TRAINING_ID, "è®­ç»ƒè£…å¤‡IDé”™è¯¯"),
-ErrorElement(ESERVER_ERR_TRAINING_FAIL, "è®­ç»ƒå¤±è´¥"),
-ErrorElement(ESERVER_ERR_TRAINING_ADD, "è®­ç»ƒå¢žåŠ å±žæ€§é”™è¯¯"),
-ErrorElement(ESERVER_ERR_TRAINING_LIMINT, "è®­ç»ƒç‚¹æ•°ä¸è¶³ ä¸èƒ½å‡çº§"),
+ErrorElement(ESERVER_ERR_MAIL_RECEIVED, "ÓÊ¼þÒÑ¾­±»ÁìÈ¡¹ýÁË"),
+
+ErrorElement(ESERVER_ERR_NEED_COMPLETED_CHAPTER, "Ç°ÖÃÕÂ½ÚÃ»ÓÐÍ¨¹ý"),
+ErrorElement(ESERVER_ERR_NEED_TRIG_EVENT, "ÐèÒªÏÈ´¦ÀíÊÂ¼þ"),
+ErrorElement(ESERVER_ERR_CHAPTER_NOT_COMPLETE, "µ±Ç°ÕÂ½ÚÃ»ÓÐÍê³É"),
+ErrorElement(ESERVER_ERR_MAP_NOT_COMPLATE, "Ã»ÓÐÍê³ÉµØÍ¼"),
+
+ErrorElement(ESERVER_ERR_SEND_CHAT_WORLDTIME, "ÊÀ½çÆµµÀ·¢ËÍÆµ·±"),
+ErrorElement(ESERVER_ERR_SEND_CHAT_LEV_NOTENOUGHenough, "·¢ËÍÊÀ½çÆµµÀÐèÒªµÄµÈ¼¶²»×ã"),
+ErrorElement(ESERVER_ERR_SEND_CHAT_LEN, "ÁÄÌìÎÄ×Ö³¤¶È¹ý³¤"),
+
+ErrorElement(ESERVER_ERR_TRAINING_ID, "ÑµÁ·×°±¸ID´íÎó"),
+ErrorElement(ESERVER_ERR_TRAINING_FAIL, "ÑµÁ·Ê§°Ü"),
+ErrorElement(ESERVER_ERR_TRAINING_ADD, "ÑµÁ·Ôö¼ÓÊôÐÔ´íÎó"),
+ErrorElement(ESERVER_ERR_TRAINING_LIMINT, "ÑµÁ·µãÊý²»×ã ²»ÄÜÉý¼¶"),
 
 //building 
-ErrorElement(ESERVER_ERR_NO_BUILDING, "æ²’æœ‰å»ºç­‘ç‰©"),
-ErrorElement(ESERVER_ERR_BUILDING_LEVEL_LOW, "å»ºç­‘ç‰©ç­‰çº§ä¸å¤Ÿ"),
+ErrorElement(ESERVER_ERR_NO_BUILDING, "›]ÓÐ½¨ÖþÎï"),
+ErrorElement(ESERVER_ERR_BUILDING_LEVEL_LOW, "½¨ÖþÎïµÈ¼¶²»¹»"),
 
-ErrorElement(ESERVER_ERR_BUILDING_GRID_IN_USING, "å»ºç­‘æ ¼å­è¢«å ç”¨"),
+ErrorElement(ESERVER_ERR_BUILDING_GRID_IN_USING, "½¨Öþ¸ñ×Ó±»Õ¼ÓÃ"),
 
-ErrorElement(ESERVER_ERR_BUILDING_IN_CREATE, "å»ºç­‘åœ¨å»ºé€ å‡ç´šä¸­"),
-ErrorElement(ESERVER_ERR_BUILDING_CREATE_SUCCESS, "å»ºç­‘å·²ç»å‡çº§æˆåŠŸ"),
-ErrorElement(ESERVER_ERR_ALREADY_UPLEVEL, "å·²ç»å‡çº§æˆåŠŸ"),
+ErrorElement(ESERVER_ERR_BUILDING_IN_CREATE, "½¨ÖþÔÚ½¨ÔìÉý¼‰ÖÐ"),
+ErrorElement(ESERVER_ERR_BUILDING_CREATE_SUCCESS, "½¨ÖþÒÑ¾­Éý¼¶³É¹¦"),
+ErrorElement(ESERVER_ERR_ALREADY_UPLEVEL, "ÒÑ¾­Éý¼¶³É¹¦"),
 
-ErrorElement(ESERVER_ERR_HOST_BUSY, "æœåŠ¡å™¨å¿™"),
+ErrorElement(ESERVER_ERR_HOST_BUSY, "·þÎñÆ÷Ã¦"),
 
 
 ErrorElement(ESERVER_ERR_NUMBER, "error number"),

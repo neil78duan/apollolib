@@ -121,7 +121,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\..\..\nodeflow\lib\Win64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>nfParser_s_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libnodeflow_s_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -164,7 +164,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;APOLLO_U3D_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;..\..\..\nodeflow\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -172,7 +172,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>..\..\..\nodeflow\lib\Win64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ndParser_s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libnodeflow_s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -181,7 +181,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\ndsdk\include\ndapplib\nd_msgpacket.h" />
-    <ClInclude Include="..\..\..\ndsdk\include\ndcli\nd_api_c.h" />
     <ClInclude Include="..\..\..\ndsdk\include\ndcli\nd_iconn.h" />
     <ClInclude Include="..\..\..\ndsdk\include\ndlib.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\list.h" />
@@ -238,12 +237,12 @@
     <ClInclude Include="..\..\plugin_u3d\apoFormula.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_datatransfer.cpp" />
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_baseConn.cpp" />
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_connector.cpp" />
     <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_msgpack.cpp" />
-    <ClCompile Include="..\..\..\ndsdk\src\ndclient\cpp_api\nd_client.cpp" />
-    <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\msg_format.cpp" />
-    <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\nd_connector.c" />
-    <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\nd_exch_key.cpp" />
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_object.cpp" />
+    <ClCompile Include="..\..\..\ndsdk\src\ndclient\nd_client.cpp" />
+    <ClCompile Include="..\..\..\ndsdk\src\ndclient\nd_exch_key.cpp" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\bintree.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\callstack.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\cJSON.c" />
@@ -293,7 +292,6 @@
     <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\nd_udp.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\net_srv.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\proxy_cli.c" />
-    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\udt_icmp.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\udt_net.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\udt_socket.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\udt_srv.c" />

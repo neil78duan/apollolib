@@ -37,12 +37,12 @@
     <Filter Include="apollo\parser4game">
       <UniqueIdentifier>{7476a78a-5c34-4b23-8e4e-93bd1550cd6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\nd_cli">
+      <UniqueIdentifier>{41257cbb-a821-4327-bfc8-5bb95ae101d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\ndsdk\include\ndapplib\nd_msgpacket.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\ndsdk\include\ndcli\nd_api_c.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\ndsdk\include\ndlib.h">
@@ -215,21 +215,6 @@
     <ClCompile Include="..\..\cli_common\login_apollo.cpp">
       <Filter>apollo\login</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_datatransfer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_msgpack.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\msg_format.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\nd_connector.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\nd_exch_key.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\bintree.c">
       <Filter>src\common</Filter>
     </ClCompile>
@@ -371,9 +356,6 @@
     <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\proxy_cli.c">
       <Filter>src\nd_net</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\udt_icmp.c">
-      <Filter>src\nd_net</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\udt_net.c">
       <Filter>src\nd_net</Filter>
     </ClCompile>
@@ -401,9 +383,6 @@
     <ClCompile Include="..\..\plugin_u3d\apoFormula.cpp">
       <Filter>apollo</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\ndsdk\src\ndclient\cpp_api\nd_client.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\cli_common\apoClientU3d.cpp">
       <Filter>apollo\login</Filter>
     </ClCompile>
@@ -424,6 +403,24 @@
     </ClCompile>
     <ClCompile Include="..\..\game_parser\dbl_mgr.cpp">
       <Filter>apollo\parser4game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndclient\nd_client.cpp">
+      <Filter>src\nd_cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndclient\nd_exch_key.cpp">
+      <Filter>src\nd_cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_baseConn.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_msgpack.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_object.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_connector.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

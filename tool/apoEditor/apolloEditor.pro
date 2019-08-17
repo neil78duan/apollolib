@@ -83,6 +83,23 @@ SOURCES += src/main.cpp\
     $$apolib_dir/attribute/attr_mgr.cpp	   \
     $$apolib_dir/attribute/stat_data.cpp
 
+win32{
+    SOURCES +=  $$apoBP_dir/src/winPlug/export2Exe.cpp \
+    $$apoBP_dir/src/winPlug/pelib.cpp \
+    $$apoBP_dir/src/winPlug/peliberr.cpp
+ 
+
+    HEADERS += $$apoBP_dir/src/winPlug/pelib.h \
+    $$apoBP_dir/src/winPlug/peliberr.h
+}
+
+macx:{
+    SOURCES += $$apoBP_dir/src/machoPlug/machoLoader.cpp
+
+    HEADERS += $$apoBP_dir/src/machoPlug/machoLoader.h \
+    $$apoBP_dir/src/machoPlug/nfsection_def.h
+}
+
 
 HEADERS  += \
     src/startdialog.h \

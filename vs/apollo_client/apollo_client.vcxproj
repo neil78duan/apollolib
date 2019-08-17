@@ -204,12 +204,12 @@
     <ClInclude Include="..\..\cli_common\login_apollo.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_datatransfer.cpp" />
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_baseConn.cpp" />
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_connector.cpp" />
     <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_msgpack.cpp" />
-    <ClCompile Include="..\..\..\ndsdk\src\ndclient\cpp_api\nd_client.cpp" />
-    <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\msg_format.cpp" />
-    <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\nd_connector.c" />
-    <ClCompile Include="..\..\..\ndsdk\src\ndclient\c_api\nd_exch_key.cpp" />
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_object.cpp" />
+    <ClCompile Include="..\..\..\ndsdk\src\ndclient\nd_client.cpp" />
+    <ClCompile Include="..\..\..\ndsdk\src\ndclient\nd_exch_key.cpp" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\bintree.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\callstack.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\cJSON.c" />
@@ -259,7 +259,6 @@
     <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\nd_udp.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\net_srv.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\proxy_cli.c" />
-    <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\udt_icmp.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\udt_net.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\udt_socket.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_net\src\udt_srv.c" />

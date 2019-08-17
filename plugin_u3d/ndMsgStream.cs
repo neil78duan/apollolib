@@ -702,6 +702,18 @@ namespace NetMessage
 	        byte m = (byte)((byte)marker << 4 | (byte)(sizebytes & 0xf));
             return OrgWriteUint8(m);	
         }
+		public int PeekType()
+		{
+			int tmpindex = m_readIndex ;
+			
+            eNDnetStreamMarker type;
+            byte size;
+			if (-1 == _ReadTypeSize(out type, out size) ) {
+				return -1 ;
+			}
+			m_readIndex = tmpindex;
+			return (int) type ;
+		}
 
         int _ReadTypeSize(out eNDnetStreamMarker type, out byte size)
         {

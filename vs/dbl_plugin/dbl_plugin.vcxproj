@@ -108,7 +108,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ndcommon.lib;nfParser.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ndcommon.lib;libnodeflow.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\nodeflow\lib\Win64; ..\..\..\ndsdk\lib\Win64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -139,7 +139,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ndcommon_d.lib;nfParser_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ndcommon_d.lib;libnodeflow_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\nodeflow\lib\Win64; ..\..\..\ndsdk\lib\Win64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
