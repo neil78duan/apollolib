@@ -5,6 +5,9 @@
       location = "container:"
       name = "nds">
       <FileRef
+         location = "group:../../ndsdk/xcode/ndclient_mac/ndclient_mac.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:../../ndsdk/xcode/ndcommon_mac/ndcommon_mac.xcodeproj">
       </FileRef>
    </Group>
@@ -290,10 +293,10 @@
       location = "container:"
       name = "libs">
       <FileRef
-         location = "group:../../nodeflow/src/apolloEditorUI/apoBluePrint.xcodeproj">
+         location = "group:../../nodeflow/xcode/nodeflow/nodeflow.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:../../nodeflow/xcode/nfParser/nfParser.xcodeproj">
+         location = "group:../../nodeflow/src/apolloEditorUI/apoBluePrint.xcodeproj">
       </FileRef>
       <FileRef
          location = "group:apollo_client/apollo_client.xcodeproj">

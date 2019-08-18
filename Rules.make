@@ -67,7 +67,7 @@ ifeq ($(DEBUG),y)
 	SRV_DLL := ndsrv_d
 	COMMON_DLL := ndcommon_d
 
-	NF_PARSER = nfParser_d
+	NF_PARSER = nodeflow_d
 
 else
 	CFLAGS += -DNDEBUG
@@ -80,7 +80,7 @@ else
 	SRV_DLL := ndsrv
 	COMMON_DLL := ndcommon
 
-	NF_PARSER = nfParser
+	NF_PARSER = nodeflow
 endif
 
 ND_LIBOUTPUT := $(NDHOME)/lib/$(AIM_NAME)

@@ -10,8 +10,8 @@
 		078974C92080AD360097C58A /* buildCS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 078974C62080AD360097C58A /* buildCS.cpp */; };
 		078974CA2080AD360097C58A /* expLua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 078974C72080AD360097C58A /* expLua.cpp */; };
 		078974CB2080AD360097C58A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 078974C82080AD360097C58A /* main.cpp */; };
-		078974CD2080AE740097C58A /* libndcommon_mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 078974CE2080AE740097C58A /* libndcommon_mac.a */; };
 		078974D02080AE7B0097C58A /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 078974CF2080AE7B0097C58A /* libiconv.tbd */; };
+		07E1EC4F230907C500AD5883 /* libndcommon_s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 07E1EC4E230907C500AD5883 /* libndcommon_s.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +33,7 @@
 		078974C82080AD360097C58A /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		078974CE2080AE740097C58A /* libndcommon_mac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libndcommon_mac.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		078974CF2080AE7B0097C58A /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		07E1EC4E230907C500AD5883 /* libndcommon_s.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libndcommon_s.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,8 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07E1EC4F230907C500AD5883 /* libndcommon_s.a in Frameworks */,
 				078974D02080AE7B0097C58A /* libiconv.tbd in Frameworks */,
-				078974CD2080AE740097C58A /* libndcommon_mac.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +80,7 @@
 		078974CC2080AE740097C58A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				07E1EC4E230907C500AD5883 /* libndcommon_s.a */,
 				078974CF2080AE7B0097C58A /* libiconv.tbd */,
 				078974CE2080AE740097C58A /* libndcommon_mac.a */,
 			);
