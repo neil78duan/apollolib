@@ -142,7 +142,8 @@ static bool initWorkingPath()
 static bool workingConfigInit(QString &init_working)
 {
 	if (init_working.size()) {
-		if (-1 == nd_chdir(init_working.toStdString().c_str())) {
+		std::string strworkpath = init_working.toStdString();
+		if (-1 == nd_chdir(strworkpath.c_str())) {
 			return false;
 		}
 	}
