@@ -138,7 +138,7 @@ LogicParserEngine *apoLogicObject4Game::getScriptHandler()
 }
 
 //////////////////////////////////////////////////////////
-APOLLO_SCRIPT_API_DEF(apollo_set_connector_script_parser, "°ó¶¨ÏûÏ¢´¦ÀíÒıÇæ(netObject , parser)")
+APOLLO_SCRIPT_API_DEF(apollo_set_connector_script_parser, "ç»‘å®šæ¶ˆæ¯å¤„ç†å¼•æ“(netObject , parser)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 
@@ -319,7 +319,7 @@ APOLLO_SCRIPT_API_DEF(_sys_binread_file_stream, "sys_BinReadStream(fileStream, r
 }
 
 //bool apollo_get_dbl_name(LogicParserEngine*parser, parse_arg_list_t &args, LogicDataObj &result)
-APOLLO_SCRIPT_API_DEF(apollo_get_dbl_name, "»ñµÃdblĞÅÏ¢()")
+APOLLO_SCRIPT_API_DEF(apollo_get_dbl_name, "è·å¾—dblä¿¡æ¯()")
 {
 	DBLDatabase *pdbl = DBLDatabase::get_Instant();
 	if (!pdbl) {
@@ -330,7 +330,7 @@ APOLLO_SCRIPT_API_DEF(apollo_get_dbl_name, "»ñµÃdblĞÅÏ¢()")
 	result.InitSet(pdbl->getDatabaseName());
 	return true;
 }
-APOLLO_SCRIPT_API_DEF(apollo_get_dbl_encode, "»ñµÃdbl±àÂë()")
+APOLLO_SCRIPT_API_DEF(apollo_get_dbl_encode, "è·å¾—dblç¼–ç ()")
 {
 	DBLDatabase *pdbl = DBLDatabase::get_Instant();
 	if (!pdbl) {
@@ -346,7 +346,7 @@ APOLLO_SCRIPT_API_DEF(apollo_get_dbl_encode, "»ñµÃdbl±àÂë()")
 	return false;
 }
 
-APOLLO_SCRIPT_API_DEF(apollo_read_excel_line, "¶ÁÈ¡excelĞĞjson(tablename, index)")
+APOLLO_SCRIPT_API_DEF(apollo_read_excel_line, "è¯»å–excelè¡Œjson(tablename, index)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 	const char*tableName = args[1].GetText();
@@ -379,7 +379,7 @@ APOLLO_SCRIPT_API_DEF(apollo_read_excel_line, "¶ÁÈ¡excelĞĞjson(tablename, index)
 	return true;
 }
 
-APOLLO_SCRIPT_API_DEF(apollo_read_excel_node, "¶ÁÈ¡excelµ¥Ôª¸ñ(tablename, fieldName, index)")
+APOLLO_SCRIPT_API_DEF(apollo_read_excel_node, "è¯»å–excelå•å…ƒæ ¼(tablename, fieldName, index)")
 {
 	CHECK_ARGS_NUM(args, 4, parser);
 	const char*tableName = args[1].GetText();
@@ -396,7 +396,7 @@ APOLLO_SCRIPT_API_DEF(apollo_read_excel_node, "¶ÁÈ¡excelµ¥Ôª¸ñ(tablename, fieldN
 	return true;
 }
 
-APOLLO_SCRIPT_API_DEF(apollo_read_excel_line_text, "¶ÁÈ¡excelĞĞtext(tablename, index)")
+APOLLO_SCRIPT_API_DEF(apollo_read_excel_line_text, "è¯»å–excelè¡Œtext(tablename, index)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 	const char*tableName = args[1].GetText();
@@ -450,7 +450,7 @@ APOLLO_SCRIPT_API_DEF(apollo_read_excel_line_text, "¶ÁÈ¡excelĞĞtext(tablename, i
 }
 
 //bool apollo_run_test(LogicParserEngine*parser, parse_arg_list_t &args, LogicDataObj &result)
-APOLLO_SCRIPT_API_DEF(apollo_run_test, "²âÊÔÊı¾İµ¼³ö(test_output_path)")
+APOLLO_SCRIPT_API_DEF(apollo_run_test, "æµ‹è¯•æ•°æ®å¯¼å‡º(test_output_path)")
 {
 
 	CHECK_ARGS_NUM(args, 2, parser);
@@ -498,7 +498,7 @@ nd_handle apollo_getNetHanlder(ILogicObject *owner, LogicDataObj &netObj)
 }
 
 //bool apollo_set_message_handler(LogicParserEngine*parser, parse_arg_list_t &args, LogicDataObj &result)
-APOLLO_SCRIPT_API_DEF(apollo_set_message_handler, "°²×°ÏûÏ¢´¦ÀíÆ÷(netobject, str:func, int maxId, int minId, int privilege)")
+APOLLO_SCRIPT_API_DEF(apollo_set_message_handler, "å®‰è£…æ¶ˆæ¯å¤„ç†å™¨(netobject, str:func, int maxId, int minId, int privilege)")
 {
 	CHECK_ARGS_NUM(args, 6, parser);
 
@@ -529,7 +529,7 @@ APOLLO_SCRIPT_API_DEF(apollo_set_message_handler, "°²×°ÏûÏ¢´¦ÀíÆ÷(netobject, str
 
 //call message-handler write by script for test
 //bool apollo_call_script_msgHandler_test(LogicParserEngine*parser, parse_arg_list_t &args, LogicDataObj &result)
-APOLLO_SCRIPT_API_DEF(apollo_call_script_msgHandler_test, "²âÊÔÏûÏ¢´¦Àí(script, maxId,minId, data1,data2...)")
+APOLLO_SCRIPT_API_DEF(apollo_call_script_msgHandler_test, "æµ‹è¯•æ¶ˆæ¯å¤„ç†(script, maxId,minId, data1,data2...)")
 {
 	CHECK_ARGS_NUM(args, 4, parser);
 
@@ -577,7 +577,7 @@ APOLLO_SCRIPT_API_DEF(apollo_call_script_msgHandler_test, "²âÊÔÏûÏ¢´¦Àí(script, 
 
 //send message api apollo_func_send_msg
 //bool apollo_func_send_msg(LogicParserEngine*parser, parse_arg_list_t &args, LogicDataObj &result)
-APOLLO_SCRIPT_API_DEF(apollo_func_send_msg, "·¢ËÍÏûÏ¢(int:maxID,int:minId, msg_varlist...)")
+APOLLO_SCRIPT_API_DEF(apollo_func_send_msg, "å‘é€æ¶ˆæ¯(int:maxID,int:minId, msg_varlist...)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 
@@ -623,7 +623,7 @@ APOLLO_SCRIPT_API_DEF(apollo_func_send_msg, "·¢ËÍÏûÏ¢(int:maxID,int:minId, msg_v
 	parser->setErrno(NDERR_BAD_GAME_OBJECT);
 	return false;
 }
-APOLLO_SCRIPT_API_DEF(apollo_func_send_msg_by_netobject, "·¢ËÍÏûÏ¢Í¨¹ıÌØ¶¨½Ó¿Ú(connector,int:maxID,int:minId, msg_varlist...)")
+APOLLO_SCRIPT_API_DEF(apollo_func_send_msg_by_netobject, "å‘é€æ¶ˆæ¯é€šè¿‡ç‰¹å®šæ¥å£(connector,int:maxID,int:minId, msg_varlist...)")
 {
 	CHECK_ARGS_NUM(args, 4, parser);
 	int maxId = 0, minId = 0;
@@ -654,7 +654,7 @@ APOLLO_SCRIPT_API_DEF(apollo_func_send_msg_by_netobject, "·¢ËÍÏûÏ¢Í¨¹ıÌØ¶¨½Ó¿Ú(c
 
 //send message api
 //bool apollo_func_read_msg(LogicParserEngine*parser, parse_arg_list_t &args, LogicDataObj &result)
-APOLLO_SCRIPT_API_DEF(apollo_func_read_msg, "¶ÁÈ¡ÏûÏ¢(int:Êı¾İÀàĞÍ)")
+APOLLO_SCRIPT_API_DEF(apollo_func_read_msg, "è¯»å–æ¶ˆæ¯(int:æ•°æ®ç±»å‹)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 
@@ -716,7 +716,7 @@ static bool _get_format_type(LogicParserEngine*parser, const char *typeName, Log
 
 //get data type
 //bool apollo_func_get_userDataType(LogicParserEngine*parser, parse_arg_list_t &args, LogicDataObj &result)
-APOLLO_SCRIPT_API_DEF(apollo_func_get_userDataType, "»ñµÃÏûÏ¢Êı¾İÀàĞÍ(ÀàĞÍÃû×Ö)")
+APOLLO_SCRIPT_API_DEF(apollo_func_get_userDataType, "è·å¾—æ¶ˆæ¯æ•°æ®ç±»å‹(ç±»å‹åå­—)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
 	CHECK_DATA_TYPE(args[1], OT_STRING, parser);
@@ -736,7 +736,7 @@ APOLLO_SCRIPT_API_DEF(apollo_func_get_userDataType, "»ñµÃÏûÏ¢Êı¾İÀàĞÍ(ÀàĞÍÃû×Ö)"
 }
 
 //bool apollo_func_read_userData_from_msg(LogicParserEngine*parser, parse_arg_list_t &args, LogicDataObj &result)
-APOLLO_SCRIPT_API_DEF(apollo_func_read_userData_from_msg, "´ÓÏûÏ¢ÖĞ¶ÁUserDefÀàĞÍ(ÊäÈëÏûÏ¢, ÀàĞÍÃû×Ö)")
+APOLLO_SCRIPT_API_DEF(apollo_func_read_userData_from_msg, "ä»æ¶ˆæ¯ä¸­è¯»UserDefç±»å‹(è¾“å…¥æ¶ˆæ¯, ç±»å‹åå­—)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 	CHECK_DATA_TYPE(args[2], OT_STRING, parser);
@@ -799,7 +799,7 @@ static bool _binData2Json(LogicParserEngine*parser, void *data, size_t size, con
 }
 
 //bool apollo_func_binary_to_userData(LogicParserEngine*parser, parse_arg_list_t &args, LogicDataObj &result)
-APOLLO_SCRIPT_API_DEF(apollo_func_binary_to_userData, "¶ş½øÖÆ×ªdataType(binary,ÀàĞÍÃû×Ö)")
+APOLLO_SCRIPT_API_DEF(apollo_func_binary_to_userData, "äºŒè¿›åˆ¶è½¬dataType(binary,ç±»å‹åå­—)")
 {
 	CHECK_ARGS_NUM(args, 3, parser);
 	CHECK_DATA_TYPE(args[1], OT_BINARY_DATA, parser);
@@ -872,7 +872,7 @@ static bool _additon2Json(LogicParserEngine*parser, void *data, size_t size, Log
 	return true;
 }
 
-APOLLO_SCRIPT_API_DEF(apollo_func_addition_to_json, "addition×ªdataType(binary)")
+APOLLO_SCRIPT_API_DEF(apollo_func_addition_to_json, "additionè½¬dataType(binary)")
 {
 	CHECK_ARGS_NUM(args, 2, parser);
 	CHECK_DATA_TYPE(args[1], OT_BINARY_DATA, parser);

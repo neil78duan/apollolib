@@ -19,8 +19,8 @@
 // 	MYSQL *handle_sql ;
 // }*HANDLE_DB ;		
 
-typedef MYSQL_RES *HANDLE_SQLRESULT ;		//½á¹û¼¯
-typedef MYSQL_ROW ROW_SQL ;					//½á¹û¼¯µÄĞĞÖ¸Õë
+typedef MYSQL_RES *HANDLE_SQLRESULT ;		//ç»“æœé›†
+typedef MYSQL_ROW ROW_SQL ;					//ç»“æœé›†çš„è¡ŒæŒ‡é’ˆ
 
 typedef MYSQL_STMT *STMT_CONTEXT ;
 typedef MYSQL_STMT **STMT_HANDLE ;
@@ -32,8 +32,8 @@ typedef MYSQL_FIELD *FIELD_INFO;
 
 //major_version*10000 + minor_version *100 + sub_version
 #define MYDB_VERSION(a,b,c) ((a)*10000 + (b)*100 +(c))
-//¶¨ÒåÊı¾İ¿â²Ù×÷µÄ½Ó¿ÚÊµÀı
-//Êı¾İ¿â·ÃÎÊÊÇ²»¿ÉÖØÈëµÄ, reentry disable 
+//å®šä¹‰æ•°æ®åº“æ“ä½œçš„æ¥å£å®ä¾‹
+//æ•°æ®åº“è®¿é—®æ˜¯ä¸å¯é‡å…¥çš„, reentry disable 
 class CMyDatabase
 {
 private:
@@ -72,16 +72,16 @@ private :
 #endif
 public:
 	MYSQL *get_mysql_handle() {return db_handle;}
-	/* ´ò¿ªÊı¾İ¿â on error return -1  */
-	int open_database(const char *host, 		/*Êı¾İ¿â·şÎñÆ÷*/
+	/* æ‰“å¼€æ•°æ®åº“ on error return -1  */
+	int open_database(const char *host, 		/*æ•°æ®åº“æœåŠ¡å™¨*/
 		int port ,
-		const char *user, 		/*ÓÃ»§Ãû*/
-		const char* passwd, 	/* ÃÜÂë*/
+		const char *user, 		/*ç”¨æˆ·å*/
+		const char* passwd, 	/* å¯†ç */
 		const char *dbinstance,
 		const char *characterSet = "utf8"
-		);/*Êı¾İ¿âÊµÀı*/	
+		);/*æ•°æ®åº“å®ä¾‹*/	
 	
-	/*µÃµ½¿Í»§¶ËµÄ°æ±¾ºÅ*/
+	/*å¾—åˆ°å®¢æˆ·ç«¯çš„ç‰ˆæœ¬å·*/
 	/* for mysql
 	Returns an integer that represents the client library version. 
 	The value has the format XYYZZ where X is the major version, 
@@ -91,16 +91,16 @@ public:
 	*/
 	unsigned long get_version() ;
 
-	/*µÃµ½·şÎñÆ÷¶Ë°æ±¾ºÅ*/
+	/*å¾—åˆ°æœåŠ¡å™¨ç«¯ç‰ˆæœ¬å·*/
 	unsigned long get_server_version() ;
 
-	/*´ò¿ª¶à¸ö²éÑ¯¹¦ÄÜ
+	/*æ‰“å¼€å¤šä¸ªæŸ¥è¯¢åŠŸèƒ½
 	 *flag = 1 support multi query 0 single query
 	 * return 0 success!
 	*/
 	int set_multi_query(int flag=1) ;
 
-	/*²éÑ¯Êı¾İ¿â hconnect£º Êı¾İ¿â¾ä±ú
+	/*æŸ¥è¯¢æ•°æ®åº“ hconnectï¼š æ•°æ®åº“å¥æŸ„
 	 * return 0 success !
 	 */
 	int sql_execute(const char *sqlstatement );
@@ -108,84 +108,84 @@ public:
 	int sql_executeex(const char * sqlstm,unsigned long length) ;
 
 	unsigned long* sql_fetch_lengths() ;
-	/* ´æ´¢½á¹û¼¯ */
+	/* å­˜å‚¨ç»“æœé›† */
 	int sql_store_result() ;
 
-	/* ³õÊ¼»¯½á¹û¼¯ */
+	/* åˆå§‹åŒ–ç»“æœé›† */
 	int sql_use_result() ;
-	/* ÌáÈ¡½á¹û¼¯£¬Ã¿´ÎÒ»¸ö¼ÇÂ¼
-	 * return NULL ,Ã»ÓĞÈ¡µ½½á¹û
+	/* æå–ç»“æœé›†ï¼Œæ¯æ¬¡ä¸€ä¸ªè®°å½•
+	 * return NULL ,æ²¡æœ‰å–åˆ°ç»“æœ
 	 */
 	ROW_SQL sql_fetch() ;
-	/* ½á¹û¼¯ºÏÖĞµÄ¼ÇÂ¼Êı */
+	/* ç»“æœé›†åˆä¸­çš„è®°å½•æ•° */
 	int sql_affected_rows();
 
 	int sql_num_rows();		/* get num of rows */
 	int sql_num_fields();	/* get num of fields */
 	FIELD_INFO sql_field_info(int filed_index);
 
-	 /*µÃµ½½á¹û¼¯ÖĞµÄÁĞÊı,ÔÚmysql_store_result() ºóÊ¹ÓÃ*/
+	 /*å¾—åˆ°ç»“æœé›†ä¸­çš„åˆ—æ•°,åœ¨mysql_store_result() åä½¿ç”¨*/
 	 int sql_field_count() ;
 
-	/*ÊÍ·Å½á¹û¼¯*/
+	/*é‡Šæ”¾ç»“æœé›†*/
 	 void sql_free_result() ;
-	/* ¹Ø±ÕÊı¾İ¿â */
+	/* å…³é—­æ•°æ®åº“ */
 	 void close_database();
-	/* ·µ»Ø×î½üÒ»´Î²Ù×÷´íÎóÃèÊö */
+	/* è¿”å›æœ€è¿‘ä¸€æ¬¡æ“ä½œé”™è¯¯æè¿° */
 	 const char * sql_error();
 	 int sql_errno() ;
-	 /*·µ»Ø×îºóÒ»´Îinsert Ê±AUTO_INCREMENT  ×Ö¶ÎµÄÖµ*/
+	 /*è¿”å›æœ€åä¸€æ¬¡insert æ—¶AUTO_INCREMENT  å­—æ®µçš„å€¼*/
 	 unsigned long sql_insert_id() ;
 	
 	 int sql_ping() ;
 
-	/* Ëø±í
+	/* é”è¡¨
 	 * flag = 0 read lock 
 	 * flag = 1 write lock 
-	 * Ëø±í³É¹¦·µ»Ø0 
-	 * Èç¹û²»³É¹¦½ø³Ì½«±»×èÈû
-	 * ½¨ÒéÕı³£Çé¿öÏÂ²»ÒªÊ¹ÓÃ£¬
-	 * Ëø±íÖ®ºóÓ¦¸ÃÁ¢¼´ÊÍ·Å
+	 * é”è¡¨æˆåŠŸè¿”å›0 
+	 * å¦‚æœä¸æˆåŠŸè¿›ç¨‹å°†è¢«é˜»å¡
+	 * å»ºè®®æ­£å¸¸æƒ…å†µä¸‹ä¸è¦ä½¿ç”¨ï¼Œ
+	 * é”è¡¨ä¹‹ååº”è¯¥ç«‹å³é‡Šæ”¾
 	 * 
-	 * NOTE £¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡
-	 * Ëø±íÊÇÔÚ½ø³ÌµÄ¼¶±ğÉÏÉÏËøµÄ£¬Èç¹ûµ±Ç°½ø³ÌËø×¡±í£¬ÆäËû½ø³Ì²»ÄÜÊÍ·Å£¬Ò²²»ÄÜ·ÃÎÊ
-	 * Ê¹ÓÃÊ±ÇëÎñ±Ø×¢Òâ
+	 * NOTE ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼
+	 * é”è¡¨æ˜¯åœ¨è¿›ç¨‹çš„çº§åˆ«ä¸Šä¸Šé”çš„ï¼Œå¦‚æœå½“å‰è¿›ç¨‹é”ä½è¡¨ï¼Œå…¶ä»–è¿›ç¨‹ä¸èƒ½é‡Šæ”¾ï¼Œä¹Ÿä¸èƒ½è®¿é—®
+	 * ä½¿ç”¨æ—¶è¯·åŠ¡å¿…æ³¨æ„
 	 */
 	 int sql_lock_table(  const char *tablename, int flag );
 	 void sql_unlock_table( );
-	/* ÉêÃ÷ĞèÒªÒ»¸öÊÂÎñ
-	 * Ê¹ÓÃ·½·¨ºÍsql_lock_table²î²»¶à£¬ÔÚ¸ÅÄîÉÏ»ù±¾Ò»ÖÂ£¬
-	 * Ê¹ÓÃÊ±Ò»¶¨ÒªĞ¡ĞÄ
+	/* ç”³æ˜éœ€è¦ä¸€ä¸ªäº‹åŠ¡
+	 * ä½¿ç”¨æ–¹æ³•å’Œsql_lock_tableå·®ä¸å¤šï¼Œåœ¨æ¦‚å¿µä¸ŠåŸºæœ¬ä¸€è‡´ï¼Œ
+	 * ä½¿ç”¨æ—¶ä¸€å®šè¦å°å¿ƒ
 	 * 
-	 * Ä¿Ç°µÄMySQL. µÄÁùÖÖ±íÀàĞÍÖĞÓĞÁ½ÖÖÖ§³ÖÊÂÎñ²Ù×÷µÄ±í.
-	 * ÀàĞÍBDB, InnoDB£¬»¹ÓĞËÄÖÖ²»Ö§³ÖÊÂÎñµÄ. ±íÀàĞÍ(HEAP, ISAM, MERGE, and MyISAM)
+	 * ç›®å‰çš„MySQL. çš„å…­ç§è¡¨ç±»å‹ä¸­æœ‰ä¸¤ç§æ”¯æŒäº‹åŠ¡æ“ä½œçš„è¡¨.
+	 * ç±»å‹BDB, InnoDBï¼Œè¿˜æœ‰å››ç§ä¸æ”¯æŒäº‹åŠ¡çš„. è¡¨ç±»å‹(HEAP, ISAM, MERGE, and MyISAM)
 	 */
 	 int begin_affairs( ) ;
-	/* ½áÊøÊÂÎñ*/
+	/* ç»“æŸäº‹åŠ¡*/
 	 int end_affairs( ) ;
-	/* »Ø¹öÊÂÎñ*/
+	/* å›æ»šäº‹åŠ¡*/
 	 int sql_rollback( ) ;
 	 
-	/*ÉèÖÃ×Ô¶¯Ìá½»»¹ÊÇÊÖ¶¯Ìá½»
-	 * flag = 1 ×Ô¶¯, flag= 0 ÊÖ¶¯
+	/*è®¾ç½®è‡ªåŠ¨æäº¤è¿˜æ˜¯æ‰‹åŠ¨æäº¤
+	 * flag = 1 è‡ªåŠ¨, flag= 0 æ‰‹åŠ¨
 	 * return 0 success
 	*/
 	int set_auto_commit(int flag=1) ;
 
 	int sql_commit() ;
 
-	/* ¼ì²ésqlÓï·¨ÊÇ·ñº¬ÓĞ·Ç·¨×Ö·û´®
-	 * Ö÷ÒªÊÇ¹ıÂËµôÖîÈç ; ' "µÈ×Ö·û
-	 * return value : return 0 ,Ã»ÓĞ·Ç·¨×Ö·û
-	 * return -1 º¬ÓĞ·Ç·¨×Ö·û
+	/* æ£€æŸ¥sqlè¯­æ³•æ˜¯å¦å«æœ‰éæ³•å­—ç¬¦ä¸²
+	 * ä¸»è¦æ˜¯è¿‡æ»¤æ‰è¯¸å¦‚ ; ' "ç­‰å­—ç¬¦
+	 * return value : return 0 ,æ²¡æœ‰éæ³•å­—ç¬¦
+	 * return -1 å«æœ‰éæ³•å­—ç¬¦
 	 */
 	 int check_sql_statments(const char *sql_statment) ;
-	/* ×Ö·û×ªÒå£¬½«Ò»Ğ©ÌØÊâ×Ö·û×ª»»³ÉÊı¾İÖ§³ÖµÄ×Ö·û
-	 * db_handle Êı¾İ¿â¾ä±ú
-	 * result_str ½á¹û×Ö·û´®
-	 * original_str ĞèÒª×ª»»×Ö·û´®
-	 * orginal_len ×Ö·û´¨original_str µÄ³¤¶È
-	 * return value : result_str ×Ö·ûµÄ³¤¶È£¬ result_str ÓĞ½áÎ² '\0'
+	/* å­—ç¬¦è½¬ä¹‰ï¼Œå°†ä¸€äº›ç‰¹æ®Šå­—ç¬¦è½¬æ¢æˆæ•°æ®æ”¯æŒçš„å­—ç¬¦
+	 * db_handle æ•°æ®åº“å¥æŸ„
+	 * result_str ç»“æœå­—ç¬¦ä¸²
+	 * original_str éœ€è¦è½¬æ¢å­—ç¬¦ä¸²
+	 * orginal_len å­—ç¬¦å·original_str çš„é•¿åº¦
+	 * return value : result_str å­—ç¬¦çš„é•¿åº¦ï¼Œ result_str æœ‰ç»“å°¾ '\0'
 	 */
 	 int escape_sql_string(  char *result_str, char *original_str, unsigned long orginal_len) ;
 	 

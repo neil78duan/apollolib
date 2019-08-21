@@ -49,11 +49,11 @@ enum eGameStat {
 enum eServerType {
 	ESERVER_UNKNOW = 0,		//common client
 	ESERVER_WORLD,	// WorldServer
-	ESERVER_GAME,   // ÓÎÏ··şÎñÆ÷
-	ESERVER_GATE,		// ÓÎÏ·Èë¿Ú
+	ESERVER_GAME,   // æ¸¸æˆæœåŠ¡å™¨
+	ESERVER_GATE,		// æ¸¸æˆå…¥å£
 	ESERVER_SOCIAL,		// SOCIAL SERVER
 	ESERVER_ACCOUNT,	//
-	ESERVER_GM,			// GM Server½Úµã
+	ESERVER_GM,			// GM ServerèŠ‚ç‚¹
 	ESERVER_HALL,
 	ESERVER_ROOM
 
@@ -118,7 +118,7 @@ struct account_base_info
 	//NDUINT8 gender;
 	NDUINT8 isAdult;
 	NDUINT16 serverGroupId;
-	NDUINT32 channel;				//ÇşµÀid
+	NDUINT32 channel;				//æ¸ é“id
 	NDUINT16 reserved;
 
 	NDUINT8 acc_name[ACCOUNT_NAME_SIZE];
@@ -134,7 +134,7 @@ struct account_base_info
 		type = 2 ;
 		isAdult = 0 ;
 		serverGroupId = 1;
-		channel = 0;				//ÇşµÀid
+		channel = 0;				//æ¸ é“id
 		reserved = 0;
 
 		acc_name[0] = 0;
@@ -150,8 +150,8 @@ struct account_base_info
 		omsg.Write(isAdult);
 
 		omsg.Write(serverGroupId );
-		omsg.Write(channel );				//ÇşµÀid
-		omsg.Write(reserved);				//ÇşµÀid
+		omsg.Write(channel );				//æ¸ é“id
+		omsg.Write(reserved);				//æ¸ é“id
 
 		omsg.Write(acc_name);
 		omsg.Write(nick);
@@ -172,7 +172,7 @@ struct account_base_info
 		if (-1 == inmsg.Read(isAdult)) { return -1; }
 
 		if (-1 == inmsg.Read(serverGroupId)) { return -1; }
-		//if (-1 == inmsg.Read(channel)) { return -1; }				//ÇşµÀid
+		//if (-1 == inmsg.Read(channel)) { return -1; }				//æ¸ é“id
                 eNDnetStreamMarker channelDataType = (eNDnetStreamMarker) inmsg.PeekDataType();
 		if (channelDataType == ENDSTREAM_MARKER_INT32){
 			inmsg.Read(channel);

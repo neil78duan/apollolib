@@ -45,10 +45,10 @@ int  CMyDatabase::open_database(const char *host, int port, const char *user, co
 		mysql_set_character_set(&m_mysqlinst, characterSet);
 	}
 
-// 	unsigned int oflag = 360 ;//²âÊÔ120Ãë¶Ï¿ª
+// 	unsigned int oflag = 360 ;//æµ‹è¯•120ç§’æ–­å¼€
 // 	my_bool reconn = 1 ;
 // 	mysql_options(&m_mysqlinst, MYSQL_OPT_CONNECT_TIMEOUT,(const void*) &oflag) ;
-	//mysql_options(&m_mysqlinst, MYSQL_OPT_RECONNECT, &reconn) ; // --²»ÄÜÊ¹ÓÃmysql×Ô¶¯ÖØÁ¬ÒòÎªSTMT²»»áËæ×Å×Ô¶¯ÖØÁ¬¶ø¸üĞÂ
+	//mysql_options(&m_mysqlinst, MYSQL_OPT_RECONNECT, &reconn) ; // --ä¸èƒ½ä½¿ç”¨mysqlè‡ªåŠ¨é‡è¿å› ä¸ºSTMTä¸ä¼šéšç€è‡ªåŠ¨é‡è¿è€Œæ›´æ–°
 	
 	db_handle =   mysql_real_connect(&m_mysqlinst,host, user, passwd, dbinstance,m_port,NULL,CLIENT_MULTI_RESULTS|CLIENT_MULTI_STATEMENTS);
 	if(!db_handle || 0!=mysql_errno(&m_mysqlinst)){		
@@ -197,7 +197,7 @@ int CMyDatabase::sql_store_result( )
 	return -1 ;
 }
 
-/* ³õÊ¼»¯½á¹û¼¯ */
+/* åˆå§‹åŒ–ç»“æœé›† */
 int CMyDatabase::sql_use_result() 
 {
 	m_result_sql = mysql_use_result(db_handle);
@@ -300,7 +300,7 @@ int CMyDatabase::sql_ping()
 
 unsigned long CMyDatabase::sql_insert_id()
 {
-	//¼ì²éÊÇ·ñÊ±insertÓï¾ä
+	//æ£€æŸ¥æ˜¯å¦æ—¶insertè¯­å¥
 	unsigned long used_id ;
 	MYSQL_RES *result ;
 	if ((result = mysql_store_result(db_handle)) == 0 &&

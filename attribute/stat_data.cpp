@@ -14,37 +14,37 @@
 #include "game_parser/dbl_mgr.h"
 
 
-int StatMachine::s_forbid_num = 0 ;	//²ß»®ÌîµÄ½ûÖ¹ÁĞ±í¸öÊı
-int StatMachine::s_stat_num = 0;		//²ß»®ÌîµÄ×´Ì¬¸öÊı
+int StatMachine::s_forbid_num = 0 ;	//ç­–åˆ’å¡«çš„ç¦æ­¢åˆ—è¡¨ä¸ªæ•°
+int StatMachine::s_stat_num = 0;		//ç­–åˆ’å¡«çš„çŠ¶æ€ä¸ªæ•°
 int StatMachine::s_operate_num =0;
  
 int StatMachine::s_main_stat_num =0;	
 
 char StatMachine::s_main_stat_names[STATE_BUF_SIZE][STAT_NAME_SIZE] ;
-char StatMachine::s_stat_names[StatMachine::STAT_INDEX_BUF][StatMachine::STAT_NAME_SIZE] ;	//×´Ì¬Ãû×Ö
-char StatMachine::s_forbid_names[StatMachine::FORBID_BUF_SIZE][StatMachine::STAT_NAME_SIZE] ;	//½ûÖ¹ÁĞ±í
-char StatMachine::s_operate_names[StatMachine::OPERATE_NUMBERS][StatMachine::STAT_NAME_SIZE] ;	//¶¯×÷Ãû×Ö
+char StatMachine::s_stat_names[StatMachine::STAT_INDEX_BUF][StatMachine::STAT_NAME_SIZE] ;	//çŠ¶æ€åå­—
+char StatMachine::s_forbid_names[StatMachine::FORBID_BUF_SIZE][StatMachine::STAT_NAME_SIZE] ;	//ç¦æ­¢åˆ—è¡¨
+char StatMachine::s_operate_names[StatMachine::OPERATE_NUMBERS][StatMachine::STAT_NAME_SIZE] ;	//åŠ¨ä½œåå­—
 
-//Ã¿¸ö¶ÔÓ¦µÄ×´Ì¬ÊÇ°´Öµ»¹ÊÇ°´Î»²Ù×÷
+//æ¯ä¸ªå¯¹åº”çš„çŠ¶æ€æ˜¯æŒ‰å€¼è¿˜æ˜¯æŒ‰ä½æ“ä½œ
 unsigned char StatMachine::s_stat_valbit[StatMachine::STATE_BUF_SIZE] ;
-//Ã¿¸ö¶¯×÷ĞèÒª¼ì²âµÄ½ûÖ¹ÁĞ±í
+//æ¯ä¸ªåŠ¨ä½œéœ€è¦æ£€æµ‹çš„ç¦æ­¢åˆ—è¡¨
 int StatMachine::s_operate_check_forbid[StatMachine::OPERATE_NUMBERS][StatMachine::FORBID_BUF_SIZE+1] ;
-//Ã¿¸ö×´Ì¬¶ÔÓ¦µÄË÷Òı
+//æ¯ä¸ªçŠ¶æ€å¯¹åº”çš„ç´¢å¼•
 int StatMachine::s_stat_index_buf[StatMachine::STAT_INDEX_BUF][2];
 
 int StatMachine::s_stat_need_counter[StatMachine::STAT_INDEX_BUF];
 
-//Ã¿¸ö×´Ì¬¶ÔÓ¦µÄ½ûÖ¹ÁĞ±íÖµ
+//æ¯ä¸ªçŠ¶æ€å¯¹åº”çš„ç¦æ­¢åˆ—è¡¨å€¼
 int StatMachine::s_stat_forbid_buf[StatMachine::STAT_INDEX_BUF][StatMachine::FORBID_BUF_SIZE+1];
 
 
 //StateDataHeaper g_stat_script ;
 
-//Ã¿¸ö×´Ì¬µÄ½øÈë/Àë¿ªº¯Êı
+//æ¯ä¸ªçŠ¶æ€çš„è¿›å…¥/ç¦»å¼€å‡½æ•°
 stat_entry StatMachine::s_insted_enter[STAT_INDEX_BUF] ;
 stat_entry StatMachine::s_insted_leave[STAT_INDEX_BUF] ;
 
-//°Ñ×Ö·û´®½âÎö³ÉÊı×é
+//æŠŠå­—ç¬¦ä¸²è§£ææˆæ•°ç»„
 static int text2StringArray(const char *src, char outbuf[StatMachine::FORBID_BUF_SIZE][StatMachine::STAT_NAME_SIZE])
 {
 	int orgCodeType = -1;
@@ -89,7 +89,7 @@ int StatMachine::load_forbid_names(const char *tablename)
 	}
 	return 0;
 }
-//¼ÓÔØ×´Ì¬±í
+//åŠ è½½çŠ¶æ€è¡¨
 int StatMachine::load_stat_info(const char *tablename)
 {
 	int cur_main  ,cur_sub ;
@@ -107,7 +107,7 @@ int StatMachine::load_stat_info(const char *tablename)
 		const char *mainName = cursor[0].GetText();
 		//int input_id = cursor[0].GetInt();
 		if (cur_main==-1 || strcmp(lastStatName, mainName) ){
-			//¿ªÊ¼¶ÁÈ¡Ò»¸öĞÂµÄÓò
+			//å¼€å§‹è¯»å–ä¸€ä¸ªæ–°çš„åŸŸ
 			cur_main++ ;
 			cur_sub= 0 ;
 			main_stat_id[cur_main] = cur_main ;
@@ -117,13 +117,13 @@ int StatMachine::load_stat_info(const char *tablename)
 			is_new_field = 1 ;
 		}
 
-		//¶ÁÈ¡×´Ì¬Ãû×Ö
+		//è¯»å–çŠ¶æ€åå­—
 		strncpy(s_stat_names[i], cursor[2].GetText(), STAT_NAME_SIZE) ;		
-		s_stat_index_buf[i][0] = cur_main ;	//×´Ì¬Ë÷Òı±í¼ÇÂ¼µ±Ç°×Ó×´Ì¬ÊôÓÚÄÇ¸ö±äÁ¿(Ö÷×´Ì¬)
+		s_stat_index_buf[i][0] = cur_main ;	//çŠ¶æ€ç´¢å¼•è¡¨è®°å½•å½“å‰å­çŠ¶æ€å±äºé‚£ä¸ªå˜é‡(ä¸»çŠ¶æ€)
 
-		s_stat_need_counter[i] = cursor[4].GetInt() ;;//¼ÇÂ¼Ã¿¸ö×´Ì¬ÊÇ·ñĞèÒª¼ÆÊıÆ÷
+		s_stat_need_counter[i] = cursor[4].GetInt() ;;//è®°å½•æ¯ä¸ªçŠ¶æ€æ˜¯å¦éœ€è¦è®¡æ•°å™¨
 
-		//°´Öµ»¹ÊÇ°´Î»²Ù×÷
+		//æŒ‰å€¼è¿˜æ˜¯æŒ‰ä½æ“ä½œ
 		if (s_stat_valbit[cur_main] ==E_OP_VAL)	{
 			s_stat_index_buf[i][1] = cur_sub ;
 		}
@@ -132,7 +132,7 @@ int StatMachine::load_stat_info(const char *tablename)
 		}
 		cur_sub++ ;
 
-		//½âÎö½ûÖ¹ÁĞ±í
+		//è§£æç¦æ­¢åˆ—è¡¨
 		s_stat_forbid_buf[i][0] = 0;
 
 		const char *forbidText = cursor[3].GetText();
@@ -147,7 +147,7 @@ int StatMachine::load_stat_info(const char *tablename)
 			}
 		}
 		if (is_new_field && s_stat_forbid_buf[i][0] && s_stat_valbit[cur_main]==E_OP_VAL) {
-			//nd_logerror("[%s]±í¸ñ´íÎó [%d] ĞĞ, »¥³â×´Ì¬[%s]²»ÔÊĞíÓĞ½ûÖ¹ÁĞ \n " AND tablename AND i AND s_stat_names[i]) ;
+			//nd_logerror("[%s]è¡¨æ ¼é”™è¯¯ [%d] è¡Œ, äº’æ–¥çŠ¶æ€[%s]ä¸å…è®¸æœ‰ç¦æ­¢åˆ— \n " AND tablename AND i AND s_stat_names[i]) ;
 			return -1 ;
 		}
 		++i;
@@ -157,14 +157,14 @@ int StatMachine::load_stat_info(const char *tablename)
 	return 0;
 }
 
-//¼ÓÔØ×´Ì¬±í
+//åŠ è½½çŠ¶æ€è¡¨
 int StatMachine::load_op_info(const char *tablename)
 {
 	const char *pfields[] = { "name", "checklist"} ;
 	int i= 0;
 	DBL_BEGIN_CURSOR(tablename, pfields) {
 		strncpy(s_operate_names[i], cursor[0].GetText(), STAT_NAME_SIZE) ;		
-		//½âÎö²Ù×÷¶ÔÓ¦µÄ½ûÖ¹ÁĞ±í
+		//è§£ææ“ä½œå¯¹åº”çš„ç¦æ­¢åˆ—è¡¨
 		s_operate_check_forbid[i][0] = 0 ;		
 
 		const char *forbidText = cursor[1].GetText();
@@ -189,10 +189,10 @@ int StatMachine::load_op_info(const char *tablename)
 // {
 // 	int i= 0;
 // 
-// 	const char *pfields[] =  {"×´Ì¬Ãû³Æ","Íæ¼Ò½øÈëÊÂ¼ş","Íæ¼ÒÍË³öÊÂ¼ş","¹ÖÎï½øÈëÊÂ¼ş","¹ÖÎïÍË³öÊÂ¼ş"};
+// 	const char *pfields[] =  {"çŠ¶æ€åç§°","ç©å®¶è¿›å…¥äº‹ä»¶","ç©å®¶é€€å‡ºäº‹ä»¶","æ€ªç‰©è¿›å…¥äº‹ä»¶","æ€ªç‰©é€€å‡ºäº‹ä»¶"};
 // 	
 // 	LogicDataObj *pDataObj = NULL;
-// 	DBL_BEGIN_CURSOR("½ÇÉ«_×´Ì¬_ÊÂ¼şÍ¨Öª", pfields) {
+// 	DBL_BEGIN_CURSOR("è§’è‰²_çŠ¶æ€_äº‹ä»¶é€šçŸ¥", pfields) {
 // 		statindex_t stindx = StatMachine::get_index(cursor[0].GetText()) ;
 // 		if (-1==stindx) {
 // 			continue;
@@ -294,8 +294,8 @@ int StatMachine::load(const char *forbid_file, const char* state_file, const cha
 
 void StatMachine::Destroy() 
 {
-	s_forbid_num = 0 ;	//²ß»®ÌîµÄ½ûÖ¹ÁĞ±í¸öÊı
-	s_stat_num = 0;		//²ß»®ÌîµÄ×´Ì¬¸öÊı
+	s_forbid_num = 0 ;	//ç­–åˆ’å¡«çš„ç¦æ­¢åˆ—è¡¨ä¸ªæ•°
+	s_stat_num = 0;		//ç­–åˆ’å¡«çš„çŠ¶æ€ä¸ªæ•°
 	s_operate_num = 0;
 	s_main_stat_num = 0;
 

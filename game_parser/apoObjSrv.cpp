@@ -16,7 +16,7 @@
 
 
 //bool apollo_func_machine_version(LogicParserEngine*parser, parse_arg_list_t &args, LogicDataObj &result)
-APOLLO_SCRIPT_API_DEF_GLOBAL(apollo_func_machine_version, "获取主机信息()")
+APOLLO_SCRIPT_API_DEF_GLOBAL(apollo_func_machine_version, "鑾峰彇涓绘満淇℃伅()")
 {
 	ND_TRACE_FUNC();
 	char buf[512];

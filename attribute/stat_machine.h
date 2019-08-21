@@ -21,7 +21,7 @@ typedef unsigned int forbidval_t;
 
 #define APOLLO_STATUS_NUMBER 8
 
-//×´Ì¬±ä»¯Í¨Öªº¯Êı
+//çŠ¶æ€å˜åŒ–é€šçŸ¥å‡½æ•°
 typedef void (*stat_entry)(StatMachine *pStmache,statindex_t index,const char*st_name) ;
 
 class StatMachine
@@ -32,41 +32,41 @@ public:
 	enum {OPERATE_NUMBERS = 32 };
 	enum {STAT_INDEX_BUF = 64};
 	enum {STAT_NAME_SIZE = 32};
-	enum {FORBID_CHANGE_TIMES = 8};		//½ûÖ¹ÁĞ±í×î¶à±»ÀÛ¼ÓµÄ´ÎÊı,¼ÇÂ¼Ã¿¸ö½ûÖ¹Àà±ğ±»ÄÄ¸ö×´Ì¬Ëù¸Ä±ä
+	enum {FORBID_CHANGE_TIMES = 8};		//ç¦æ­¢åˆ—è¡¨æœ€å¤šè¢«ç´¯åŠ çš„æ¬¡æ•°,è®°å½•æ¯ä¸ªç¦æ­¢ç±»åˆ«è¢«å“ªä¸ªçŠ¶æ€æ‰€æ”¹å˜
 
 	enum {
-		E_OP_VAL ,		//°´Öµ²Ù×÷
-		E_OP_BIT		//°´Î»²Ù×÷
+		E_OP_VAL ,		//æŒ‰å€¼æ“ä½œ
+		E_OP_BIT		//æŒ‰ä½æ“ä½œ
 	};
 
 	typedef statval_t *iterator ;
 	StatMachine() ;
 	virtual ~StatMachine() ;	
 
-	//µÃµ½×´Ì¬Öµ
+	//å¾—åˆ°çŠ¶æ€å€¼
 	statval_t GetStat(statfieldid_t statid) ;
 	statval_t SetStat(statfieldid_t statid, statval_t val) ;
 	statval_t Replace(statfieldid_t statid, statval_t val);
 	statval_t ClearStat(statfieldid_t statid, statval_t val) ;
-	bool CheckStat(statfieldid_t statid, statval_t val) ;//¼ì²âÊÇ·ñÊÇÄ³¸ö×´Ì¬,return true ÔÚÕâ¸ö×´Ì¬,false²»ÔÚÕâ¸ö×´Ì¬
+	bool CheckStat(statfieldid_t statid, statval_t val) ;//æ£€æµ‹æ˜¯å¦æ˜¯æŸä¸ªçŠ¶æ€,return true åœ¨è¿™ä¸ªçŠ¶æ€,falseä¸åœ¨è¿™ä¸ªçŠ¶æ€
 
 	bool Set(const char *statname) ;
 	bool Clear(const char *statname) ;
-	bool Check(const char *statname) ;			//return true ÔÚÕâ¸ö×´Ì¬,false²»ÔÚÕâ¸ö×´Ì¬
-	bool CheckOp(const char *operation_name) ;	//true ±íÊ¾¿ÉÒÔÖ´ĞĞ¸Ã¶¯×÷,false¶¯×÷±»½ûÖ¹
-	forbidval_t GetForbidVal(const char *forbid_name) ;	//µÃµÀÄ³¸ö½ûÖ¹ÁĞ±íµÄÖµ
-	const char *GetUnoperateReason(const char *opname) ;	//µÃµ½¶¯×÷±»ÄÄ¸ö×´Ì¬¸ø½ûÖ¹µÄ
-	bool CheckForbidUnset(const char *forbid_name){return GetForbidVal(forbid_name)==0;}	//¼ì²â½ûÖ¹ÁĞ±íÊÇ·ñÎ´±»ÉèÖÃ,true Ã»ÓĞ±»ÉèÖÃ
-	bool ClearField(const char *mainstat);		//Çå¿Õ×´Ì¬Óò(Çå¿ÕÖ÷×´Ì¬)
+	bool Check(const char *statname) ;			//return true åœ¨è¿™ä¸ªçŠ¶æ€,falseä¸åœ¨è¿™ä¸ªçŠ¶æ€
+	bool CheckOp(const char *operation_name) ;	//true è¡¨ç¤ºå¯ä»¥æ‰§è¡Œè¯¥åŠ¨ä½œ,falseåŠ¨ä½œè¢«ç¦æ­¢
+	forbidval_t GetForbidVal(const char *forbid_name) ;	//å¾—é“æŸä¸ªç¦æ­¢åˆ—è¡¨çš„å€¼
+	const char *GetUnoperateReason(const char *opname) ;	//å¾—åˆ°åŠ¨ä½œè¢«å“ªä¸ªçŠ¶æ€ç»™ç¦æ­¢çš„
+	bool CheckForbidUnset(const char *forbid_name){return GetForbidVal(forbid_name)==0;}	//æ£€æµ‹ç¦æ­¢åˆ—è¡¨æ˜¯å¦æœªè¢«è®¾ç½®,true æ²¡æœ‰è¢«è®¾ç½®
+	bool ClearField(const char *mainstat);		//æ¸…ç©ºçŠ¶æ€åŸŸ(æ¸…ç©ºä¸»çŠ¶æ€)
 	
-	size_t GetStatDesc(char *in_buf, size_t buf_size) ;	//µÃµ½µ±Ç°Ëù´¦×´Ì¬µÄĞÅÏ¢(ÎÄ±¾)return text size
-	size_t GetForbidDesc(char *in_buf, size_t buf_size) ;//µÃµ½µ±Ç°½ûÖ¹ÁĞ±íÃèÊöĞÅÏ¢(ÎÄ±¾)
+	size_t GetStatDesc(char *in_buf, size_t buf_size) ;	//å¾—åˆ°å½“å‰æ‰€å¤„çŠ¶æ€çš„ä¿¡æ¯(æ–‡æœ¬)return text size
+	size_t GetForbidDesc(char *in_buf, size_t buf_size) ;//å¾—åˆ°å½“å‰ç¦æ­¢åˆ—è¡¨æè¿°ä¿¡æ¯(æ–‡æœ¬)
 	
-	//¼ì²â½ûÖ¹×´Ì¬
-	bool CheckForbid(int forbid_index) ;		//¼ì²âÄ³¸ö½ûÖ¹×´Ì¬ forbid_index , return true ½ûÖ¹ÁĞ±í±»½ûÖ¹
-	bool CheckForbids(int forbid_buf[], int num) ;	//¼ì²âforbid_buf¶ÔÓ¦µÄ½ûÖ¹×´Ì¬(Í¬ÉÏ)
-	bool CheckOperate(int operate_index) ;	//¼ì²â²Ù±àºÅ×÷¶ÔÓ¦µÄ¶¯×÷ÊÇ·ñ±»½ûÖ¹ true ±íÊ¾¿ÉÒÔÖ´ĞĞ¸Ã¶¯×÷,false¶¯×÷±»½ûÖ¹
-	const char *GetForbidReason(int forbid_index) ;	//µÃµ½½ûÖ¹ÁĞ±í±»ÄÄ¸ö×´Ì¬enable
+	//æ£€æµ‹ç¦æ­¢çŠ¶æ€
+	bool CheckForbid(int forbid_index) ;		//æ£€æµ‹æŸä¸ªç¦æ­¢çŠ¶æ€ forbid_index , return true ç¦æ­¢åˆ—è¡¨è¢«ç¦æ­¢
+	bool CheckForbids(int forbid_buf[], int num) ;	//æ£€æµ‹forbid_bufå¯¹åº”çš„ç¦æ­¢çŠ¶æ€(åŒä¸Š)
+	bool CheckOperate(int operate_index) ;	//æ£€æµ‹æ“ç¼–å·ä½œå¯¹åº”çš„åŠ¨ä½œæ˜¯å¦è¢«ç¦æ­¢ true è¡¨ç¤ºå¯ä»¥æ‰§è¡Œè¯¥åŠ¨ä½œ,falseåŠ¨ä½œè¢«ç¦æ­¢
+	const char *GetForbidReason(int forbid_index) ;	//å¾—åˆ°ç¦æ­¢åˆ—è¡¨è¢«å“ªä¸ªçŠ¶æ€enable
 
 	void IncForbid(int forbid_index ,statindex_t raise_stat) ;
 	void DecForbid(int forbid_index ,statindex_t raise_stat) ;
@@ -78,46 +78,46 @@ public:
 	iterator end() ;
 protected :
 	
-	//×´Ì¬¸Ä±äºóÍ¨Öªº¯Êı
+	//çŠ¶æ€æ”¹å˜åé€šçŸ¥å‡½æ•°
 	virtual void OnChange(statfieldid_t /*statid*/, statval_t /*newval*/) {}
 
-	//½øÈë×´Ì¬Í¨Öªº¯Êı
+	//è¿›å…¥çŠ¶æ€é€šçŸ¥å‡½æ•°
 	virtual void OnEnter(statindex_t /*st_index*/) {}
 
-	//Àë¿ª×´Ì¬Í¨Öªº¯Êı
+	//ç¦»å¼€çŠ¶æ€é€šçŸ¥å‡½æ•°
 	virtual void OnLeave(statindex_t /*st_index*/) {}
 
-	//½øÈë½ûÖ¹ÁĞ±íÍ¨Öªº¯Êı
+	//è¿›å…¥ç¦æ­¢åˆ—è¡¨é€šçŸ¥å‡½æ•°
 	virtual void OnEnterForbid(int /*forbidid*/){}
 
-	//Àë¿ª½ûÖ¹Í¨Öªº¯Êı
+	//ç¦»å¼€ç¦æ­¢é€šçŸ¥å‡½æ•°
 	virtual void OnLeaveForbid(int /*forbidid*/){}
 
-	//µÃµ½×´Ì¬ÓòÊôĞÔµÄÄ¬ÈÏÖµ
+	//å¾—åˆ°çŠ¶æ€åŸŸå±æ€§çš„é»˜è®¤å€¼
 	virtual statval_t GetDefvalue(statfieldid_t /*statid*/) {return 0;}	
 
 
-	//×´Ì¬±»ÉèÖÃµÄ»Øµ÷º¯Êı(¸ø½ûÖ¹ÁĞ±í¼Ó1)
+	//çŠ¶æ€è¢«è®¾ç½®çš„å›è°ƒå‡½æ•°(ç»™ç¦æ­¢åˆ—è¡¨åŠ 1)
 	void on_status_set(statfieldid_t statid, statval_t val) ;
-	//×´Ì¬±»Çå³ıµÄ»Øµ÷º¯Êı(¸ø½ûÖ¹ÁĞ±í¼õ1)
+	//çŠ¶æ€è¢«æ¸…é™¤çš„å›è°ƒå‡½æ•°(ç»™ç¦æ­¢åˆ—è¡¨å‡1)
 	void on_status_clear(statfieldid_t statid, statval_t val) ;
 
 	statval_t *ref_status(statfieldid_t statid) ;
 	forbidval_t *ref_forbid(int statid) ;
 
-	//µÃµ½Ã¿¸ö×´Ì¬Öµ¶ÔÓ¦µÄ½ûÖ¹ÁĞ±í
+	//å¾—åˆ°æ¯ä¸ªçŠ¶æ€å€¼å¯¹åº”çš„ç¦æ­¢åˆ—è¡¨
 	//int* load_forbid_values(int stat_index, int *num) ;
-	//ĞŞ¸Ä½ûÖ¹ÁĞ±íµÄÖµ,flag = 1Ôö¼Ó 0¼õÉÙ(¸ù¾İ×´Ì¬Óò¶ÔÓ¦µÄÖµ,ÕÒµ½½ûÖ¹ÁĞ±í,È»ºóĞŞ¸Ä½ûÖ¹ÁĞ±íÖµ)
+	//ä¿®æ”¹ç¦æ­¢åˆ—è¡¨çš„å€¼,flag = 1å¢åŠ  0å‡å°‘(æ ¹æ®çŠ¶æ€åŸŸå¯¹åº”çš„å€¼,æ‰¾åˆ°ç¦æ­¢åˆ—è¡¨,ç„¶åä¿®æ”¹ç¦æ­¢åˆ—è¡¨å€¼)
 	void change_forbids_values(statindex_t stat_index, int flag) ;
 // 
 // 	inline void inc_refcount(int stat_index) {	++(m_refcount[stat_index]) ;}
 // 	void dec_refcount(int stat_index) {	--(m_refcount[stat_index]) ;}
 // 	unsigned char get_refcount(int stat_index) {return m_refcount[stat_index] ;	}
 	
-	statval_t m_stbuf[STATE_BUF_SIZE] ;			//×´Ì¬Öµ
-	forbidval_t m_forbid_buf[FORBID_BUF_SIZE];	//½ûÖ¹ÁĞ±íÖµ
-	unsigned char m_refcount[STAT_INDEX_BUF] ;				//×´Ì¬¶ÔÓ¦µÄÒıÓÃ¼ÆÊı
-	statindex_t m_forbid_changed_list[FORBID_BUF_SIZE][FORBID_CHANGE_TIMES] ;//¼ÇÂ¼Ã¿¸ö½ûÖ¹ÁĞ±í±»ÄÇĞ©×´Ì¬Ëù¸Ä±ä
+	statval_t m_stbuf[STATE_BUF_SIZE] ;			//çŠ¶æ€å€¼
+	forbidval_t m_forbid_buf[FORBID_BUF_SIZE];	//ç¦æ­¢åˆ—è¡¨å€¼
+	unsigned char m_refcount[STAT_INDEX_BUF] ;				//çŠ¶æ€å¯¹åº”çš„å¼•ç”¨è®¡æ•°
+	statindex_t m_forbid_changed_list[FORBID_BUF_SIZE][FORBID_CHANGE_TIMES] ;//è®°å½•æ¯ä¸ªç¦æ­¢åˆ—è¡¨è¢«é‚£äº›çŠ¶æ€æ‰€æ”¹å˜
 
 private:
 	unsigned char GetOpType(statfieldid_t statid) ;
@@ -136,19 +136,19 @@ public:
 	static int load_stat_info(const char *tablename) ;
 	static int load_op_info(const char *tablename);
 
-	static int s_forbid_num ;	//²ß»®ÌîµÄ½ûÖ¹ÁĞ±í¸öÊı
-	static int s_stat_num;		//²ß»®ÌîµÄ×´Ì¬¸öÊı
+	static int s_forbid_num ;	//ç­–åˆ’å¡«çš„ç¦æ­¢åˆ—è¡¨ä¸ªæ•°
+	static int s_stat_num;		//ç­–åˆ’å¡«çš„çŠ¶æ€ä¸ªæ•°
 	static int s_operate_num;
 	static int s_main_stat_num;	
-	static unsigned char s_stat_valbit[STATE_BUF_SIZE] ;	//Ã¿¸ö¶ÔÓ¦µÄ×´Ì¬ÊÇ°´Öµ»¹ÊÇ°´Î»²Ù×÷
-	static int s_operate_check_forbid[OPERATE_NUMBERS][FORBID_BUF_SIZE+1] ;	//Ã¿¸ö¶¯×÷ĞèÒª¼ì²âµÄ½ûÖ¹ÁĞ±í
-	static int s_stat_index_buf[STAT_INDEX_BUF][2] ;		//Ã¿¸ö×´Ì¬¶ÔÓ¦µÄË÷Òı(Â¼µ±Ç°×Ó×´Ì¬ÊôÓÚÄÇ¸ö±äÁ¿(Ö÷×´Ì¬),ºÍ²Ù×÷ÀàĞÍ)
-	static int s_stat_forbid_buf[STAT_INDEX_BUF][FORBID_BUF_SIZE+1] ; //Ã¿¸ö×´Ì¬¶ÔÓ¦µÄ½ûÖ¹ÁĞ±íÖµ
-	static int s_stat_need_counter[STAT_INDEX_BUF];//¼ÇÂ¼Ã¿¸ö×´Ì¬ÊÇ·ñĞèÒª¼ÆÊıÆ÷
+	static unsigned char s_stat_valbit[STATE_BUF_SIZE] ;	//æ¯ä¸ªå¯¹åº”çš„çŠ¶æ€æ˜¯æŒ‰å€¼è¿˜æ˜¯æŒ‰ä½æ“ä½œ
+	static int s_operate_check_forbid[OPERATE_NUMBERS][FORBID_BUF_SIZE+1] ;	//æ¯ä¸ªåŠ¨ä½œéœ€è¦æ£€æµ‹çš„ç¦æ­¢åˆ—è¡¨
+	static int s_stat_index_buf[STAT_INDEX_BUF][2] ;		//æ¯ä¸ªçŠ¶æ€å¯¹åº”çš„ç´¢å¼•(å½•å½“å‰å­çŠ¶æ€å±äºé‚£ä¸ªå˜é‡(ä¸»çŠ¶æ€),å’Œæ“ä½œç±»å‹)
+	static int s_stat_forbid_buf[STAT_INDEX_BUF][FORBID_BUF_SIZE+1] ; //æ¯ä¸ªçŠ¶æ€å¯¹åº”çš„ç¦æ­¢åˆ—è¡¨å€¼
+	static int s_stat_need_counter[STAT_INDEX_BUF];//è®°å½•æ¯ä¸ªçŠ¶æ€æ˜¯å¦éœ€è¦è®¡æ•°å™¨
 
-	static char s_stat_names[STAT_INDEX_BUF][STAT_NAME_SIZE] ;	//×´Ì¬Ãû×Ö
-	static char s_forbid_names[FORBID_BUF_SIZE][STAT_NAME_SIZE] ;	//½ûÖ¹ÁĞ±í
-	static char s_operate_names[OPERATE_NUMBERS][STAT_NAME_SIZE] ;	//¶¯×÷Ãû×Ö
+	static char s_stat_names[STAT_INDEX_BUF][STAT_NAME_SIZE] ;	//çŠ¶æ€åå­—
+	static char s_forbid_names[FORBID_BUF_SIZE][STAT_NAME_SIZE] ;	//ç¦æ­¢åˆ—è¡¨
+	static char s_operate_names[OPERATE_NUMBERS][STAT_NAME_SIZE] ;	//åŠ¨ä½œåå­—
 	static char s_main_stat_names[STATE_BUF_SIZE][STAT_NAME_SIZE] ;
 
 	static stat_entry s_insted_enter[STAT_INDEX_BUF] ;
@@ -156,7 +156,7 @@ public:
 };
 
 
-//×¢²á×´Ì¬±ä»¯´¦Àíº¯Êı,ÓëOnEnter /onleve²¢ÁĞ
+//æ³¨å†ŒçŠ¶æ€å˜åŒ–å¤„ç†å‡½æ•°,ä¸OnEnter /onleveå¹¶åˆ—
 int GlobalInsStatEntry(const char *st_name, stat_entry func, bool bEnter = true) ;
 
 #endif

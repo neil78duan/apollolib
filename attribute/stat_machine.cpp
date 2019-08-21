@@ -56,7 +56,7 @@ bool StatMachine::Clear(const char *statname)
 
 }
 
-//Çå¿Õ×´Ì¬Óò
+//æ¸…ç©ºçŠ¶æ€åŸŸ
 bool StatMachine::ClearField(const char *mainstat)
 {
 	int field = get_main_index(mainstat) ;
@@ -100,7 +100,7 @@ forbidval_t StatMachine::GetForbidVal(const char *forbid_name)
 	
 }
 
-//µÃµ½½ûÖ¹ÁĞ±í±»ÄÄ¸ö×´Ì¬enable
+//å¾—åˆ°ç¦æ­¢åˆ—è¡¨è¢«å“ªä¸ªçŠ¶æ€enable
 const char *StatMachine::GetForbidReason(int forbid_index)
 {
 	int st_index = -1 ;
@@ -117,7 +117,7 @@ const char *StatMachine::GetForbidReason(int forbid_index)
 	}
 	return NULL;
 }
-//µÃµ½¶¯×÷±»ÄÄ¸ö×´Ì¬¸ø½ûÖ¹µÄ
+//å¾—åˆ°åŠ¨ä½œè¢«å“ªä¸ªçŠ¶æ€ç»™ç¦æ­¢çš„
 const char *StatMachine::GetUnoperateReason(const char *opname)
 {
 	int stindex = StatMachine::get_operate_index(opname) ;
@@ -187,13 +187,13 @@ size_t StatMachine::GetForbidDesc(char *in_buf, size_t buf_size)
 }
 
 
-//µÃµ½²Ù×÷ÀàĞÍ
+//å¾—åˆ°æ“ä½œç±»å‹
 unsigned char StatMachine::GetOpType(statfieldid_t statid)
 {
 	return StatMachine::s_stat_valbit[statid] ;
 }
 
-//µÃµ½×´Ì¬Öµ
+//å¾—åˆ°çŠ¶æ€å€¼
 statval_t StatMachine::GetStat(statfieldid_t statid) 
 {
 	statval_t *p = ref_status(statid) ;
@@ -201,7 +201,7 @@ statval_t StatMachine::GetStat(statfieldid_t statid)
 }
 
 
-//ÉèÖÃ×´Ì¬Öµ
+//è®¾ç½®çŠ¶æ€å€¼
 statval_t StatMachine::SetStat(statfieldid_t statid, statval_t val) 
 {
 	statval_t old ;
@@ -220,19 +220,19 @@ statval_t StatMachine::SetStat(statfieldid_t statid, statval_t val)
 		}
 	}
 	else {
-		statval_t changed = (val^ *p) & val ;		//µÃµ½×´Ì¬¸Ä±äµÄÎ»(Èç¹ûÔ­ÒòÒÑ¾­ÊÇ1,Ôò²»ĞèÒª¸Ä±ä)
-		statval_t unchang = *p & val ;			//µÃµ½Ã»ÓĞ¸Ä±äµÄ
+		statval_t changed = (val^ *p) & val ;		//å¾—åˆ°çŠ¶æ€æ”¹å˜çš„ä½(å¦‚æœåŸå› å·²ç»æ˜¯1,åˆ™ä¸éœ€è¦æ”¹å˜)
+		statval_t unchang = *p & val ;			//å¾—åˆ°æ²¡æœ‰æ”¹å˜çš„
 		old = *p & val ;
 		if(changed) {
 			*p |= val ;
 			on_status_set(statid, changed) ;
-			OnChange(statid, *p)  ;		//Í¨Öª¿Í»§×´Ì¬ÒÑ¾­¸Ä±ä
+			OnChange(statid, *p)  ;		//é€šçŸ¥å®¢æˆ·çŠ¶æ€å·²ç»æ”¹å˜
 		}
 		if (unchang){
-			//°ÑÒıÓÃ¼ÆÊı¼Ó1
+			//æŠŠå¼•ç”¨è®¡æ•°åŠ 1
 			while(unchang) {
 				statval_t tmp = (unchang & (unchang-1)) ;
-				statval_t index = tmp ^ (unchang) ;		//ÕÒµ½×îµÍÎ»ÊÇ1µÄÎ»ÖÃ
+				statval_t index = tmp ^ (unchang) ;		//æ‰¾åˆ°æœ€ä½ä½æ˜¯1çš„ä½ç½®
 				unchang = tmp ;
 				statindex_t st_index = get_state_index(statid,  index) ;
 				if ((statindex_t)-1==st_index){
@@ -248,7 +248,7 @@ statval_t StatMachine::SetStat(statfieldid_t statid, statval_t val)
 	return old ;
 }
 
-//ÓÃĞÂÖµÌæ»»Ô­À´µÄÖµ(¿Í»§¶ËÓÃ)
+//ç”¨æ–°å€¼æ›¿æ¢åŸæ¥çš„å€¼(å®¢æˆ·ç«¯ç”¨)
 statval_t StatMachine::Replace(statfieldid_t statid, statval_t val) 
 {
 
@@ -271,11 +271,11 @@ statval_t StatMachine::Replace(statfieldid_t statid, statval_t val)
 		statval_t change = val ^ old ;
 		if(change==0)
 			return old;
-		//µÃµ½±»ÉèÖÃµÄÎ»
+		//å¾—åˆ°è¢«è®¾ç½®çš„ä½
 		statval_t setbits =  val & change ;
 		on_status_set(statid, setbits) ;
 
-		//µÃµ½±»Çå³ıµÄÎ»
+		//å¾—åˆ°è¢«æ¸…é™¤çš„ä½
 		statval_t clearbits =  old & change ;
 
 		*p = val ;
@@ -286,7 +286,7 @@ statval_t StatMachine::Replace(statfieldid_t statid, statval_t val)
 }
 
 
-//Çå³ı×´Ì¬ÓòµÄÖµ
+//æ¸…é™¤çŠ¶æ€åŸŸçš„å€¼
 statval_t StatMachine::ClearStat(statfieldid_t statid, statval_t val) 
 {
 	statval_t old, deft_val ;
@@ -306,7 +306,7 @@ statval_t StatMachine::ClearStat(statfieldid_t statid, statval_t val)
 		}
 	}
 	else {
-		statval_t changed  = *p & val ;		//µÃµ½ĞèÒªÖÃ0µÄÎ»
+		statval_t changed  = *p & val ;		//å¾—åˆ°éœ€è¦ç½®0çš„ä½
 		if(changed) {
 			statval_t v1 = changed ;
 			while(v1) {
@@ -318,7 +318,7 @@ statval_t StatMachine::ClearStat(statfieldid_t statid, statval_t val)
 					break ;
 				}
 				if ((--m_refcount[st_index]) > 0){
-					changed &= ~index ;		//Õâ¸öÎ»ÓĞ¶à´ÎÒıÓÃ,²»ÄÜÇå³ı
+					changed &= ~index ;		//è¿™ä¸ªä½æœ‰å¤šæ¬¡å¼•ç”¨,ä¸èƒ½æ¸…é™¤
 				}
 			}
 			if (changed) {
@@ -332,7 +332,7 @@ statval_t StatMachine::ClearStat(statfieldid_t statid, statval_t val)
 	return old ;
 }
 
-//¼ì²â×´Ì¬Öµ
+//æ£€æµ‹çŠ¶æ€å€¼
 bool StatMachine::CheckStat(statfieldid_t statid, statval_t val) 
 {
 	statval_t *p = ref_status(statid) ;
@@ -377,7 +377,7 @@ bool StatMachine::ClearByIndex(statindex_t  stindex)
 	return true ;
 }
 
-//Ôö¼Ó½ûÖ¹×´Ì¬
+//å¢åŠ ç¦æ­¢çŠ¶æ€
 void StatMachine::IncForbid(int forbid_index ,statindex_t raise_stat) 
 {
 	forbidval_t *p = ref_forbid(forbid_index) ;
@@ -396,7 +396,7 @@ void StatMachine::IncForbid(int forbid_index ,statindex_t raise_stat)
 }
 
 
-//¼õÉÙ½ûÖ¹×´Ì¬
+//å‡å°‘ç¦æ­¢çŠ¶æ€
 void StatMachine::DecForbid(int forbid_index ,statindex_t raise_stat)
 {
 	forbidval_t *p = ref_forbid(forbid_index) ;
@@ -414,7 +414,7 @@ void StatMachine::DecForbid(int forbid_index ,statindex_t raise_stat)
 	}
 }
 
-//¼ì²â½ûÖ¹×´Ì¬
+//æ£€æµ‹ç¦æ­¢çŠ¶æ€
 bool StatMachine::CheckForbid(int statid) 
 {
 	forbidval_t *p = ref_forbid(statid) ;
@@ -480,7 +480,7 @@ StatMachine::iterator StatMachine::end()
 	return &m_stbuf[StatMachine::s_main_stat_num];
 }
 
-//×´Ì¬±»ÉèÖÃµÄ»Øµ÷º¯Êı
+//çŠ¶æ€è¢«è®¾ç½®çš„å›è°ƒå‡½æ•°
 void StatMachine::on_status_set(statfieldid_t statid, statval_t val) 
 {
 	statindex_t  st_index;
@@ -491,16 +491,16 @@ void StatMachine::on_status_set(statfieldid_t statid, statval_t val)
 		}
 		change_forbids_values( st_index, 1) ;
 		OnEnter( st_index ) ;
-		m_refcount[st_index] = 1 ;		//Ôö¼ÓÒıÓÃ¼ÆÊı
+		m_refcount[st_index] = 1 ;		//å¢åŠ å¼•ç”¨è®¡æ•°
 		if (s_insted_enter[st_index]){
 			s_insted_enter[st_index](this, st_index, s_stat_names[st_index]) ;
 		}
 	}
 	else {
-		//ÕÒµ½¶ÔÓ¦Î»µÄ½ûÖ¹ÁĞ±í
+		//æ‰¾åˆ°å¯¹åº”ä½çš„ç¦æ­¢åˆ—è¡¨
 		while(val) {
 			statval_t tmp = (val & (val-1)) ;
-			statval_t index = tmp ^ (val) ;		//ÕÒµ½×îµÍÎ»ÊÇ1µÄÎ»ÖÃ
+			statval_t index = tmp ^ (val) ;		//æ‰¾åˆ°æœ€ä½ä½æ˜¯1çš„ä½ç½®
 			val = tmp ;
 			st_index = get_state_index(statid,  index) ;
 			if ((statindex_t)-1==st_index){
@@ -517,7 +517,7 @@ void StatMachine::on_status_set(statfieldid_t statid, statval_t val)
 }
 
 
-//×´Ì¬±»Çå³ıµÄ»Øµ÷º¯Êı
+//çŠ¶æ€è¢«æ¸…é™¤çš„å›è°ƒå‡½æ•°
 void StatMachine::on_status_clear(statfieldid_t statid, statval_t val)
 {
 	statindex_t  st_index;
@@ -534,7 +534,7 @@ void StatMachine::on_status_clear(statfieldid_t statid, statval_t val)
 		}
 	}
 	else {
-		//ÕÒµ½¶ÔÓ¦Î»µÄ½ûÖ¹ÁĞ±í
+		//æ‰¾åˆ°å¯¹åº”ä½çš„ç¦æ­¢åˆ—è¡¨
 		while(val) {
 			statval_t tmp = (val & (val-1)) ;
 			statval_t index = tmp ^ (val) ;
@@ -554,7 +554,7 @@ void StatMachine::on_status_clear(statfieldid_t statid, statval_t val)
 	}
 }
 
-//ĞŞ¸Ä½ûÖ¹ÁĞ±íµÄÖµ,flag = 1Ôö¼Ó 0¼õÉÙ
+//ä¿®æ”¹ç¦æ­¢åˆ—è¡¨çš„å€¼,flag = 1å¢åŠ  0å‡å°‘
 void StatMachine::change_forbids_values(statindex_t stat_index, int flag)
 {
 	int num , i;
@@ -591,9 +591,9 @@ statindex_t StatMachine::get_state_index(statfieldid_t statid, statval_t val)
 	return -1;
 }
 
-//µÃµ½Ã¿¸ö×´Ì¬Öµ¶ÔÓ¦µÄ½ûÖ¹ÁĞ±í
-//ÁĞ±íÎªÒ»¸öÕûÊıÊı×é
-//@statid ¶ÔÓ¦×´Ì¬Óò,val×´Ì¬Öµ,Èç¹ûÊÇbit²Ù×÷,valÖ»ÄÜÊÇÒ»¸öbitÎ»(val==1<<n
+//å¾—åˆ°æ¯ä¸ªçŠ¶æ€å€¼å¯¹åº”çš„ç¦æ­¢åˆ—è¡¨
+//åˆ—è¡¨ä¸ºä¸€ä¸ªæ•´æ•°æ•°ç»„
+//@statid å¯¹åº”çŠ¶æ€åŸŸ,valçŠ¶æ€å€¼,å¦‚æœæ˜¯bitæ“ä½œ,valåªèƒ½æ˜¯ä¸€ä¸ªbitä½(val==1<<n
 /*
 int* StatMachine::load_forbid_values(int statid, statval_t val, int *num)
 {
