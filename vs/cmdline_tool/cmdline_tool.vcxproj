@@ -89,6 +89,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../../cli_common;../../include;../../../ndsdk/include;../../;../../../nodeflow/include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WITHOUT_LOGIC_PARSER;ND_DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../../../ndsdk/lib/Win64;../../../nodeflow/lib/Win64;../../lib/Win64</AdditionalLibraryDirectories>
@@ -133,6 +134,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../../cli_common;../../include;../../../ndsdk/include;../../;../../../nodeflow/include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WITHOUT_LOGIC_PARSER;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
