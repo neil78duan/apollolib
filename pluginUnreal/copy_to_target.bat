@@ -26,8 +26,10 @@ xcopy /s %NDHOME%\include\nd_crypt	%myTarget%\include\nd_crypt\
 xcopy /s %NDHOME%\include\nd_net	%myTarget%\include\nd_net\
 xcopy /s %NDHOME%\include\ndcli		%myTarget%\include\ndcli\
 copy /y %NDHOME%\include\ndapplib\nd_msgpacket.h	%myTarget%\include\ndapplib\
+copy /y %NDHOME%\include\ndapplib\nd_object.h	%myTarget%\include\ndapplib\
 copy /y %NDHOME%\include\ndapplib\nd_iBaseObj.h	%myTarget%\include\ndapplib\
-copy /y %NDHOME%\include\ndapplib\nd_datatransfer.h	%myTarget%\include\ndapplib\
+copy /y %NDHOME%\include\ndapplib\nd_baseConn.h	%myTarget%\include\ndapplib\
+copy /y %NDHOME%\include\ndapplib\nd_connector.h	%myTarget%\include\ndapplib\
 copy /y %NDHOME%\include\ndapplib\ndsingleton.h	%myTarget%\include\ndapplib\
 copy /y %NDHOME%\include\ndapplib\readcfg.h	%myTarget%\include\ndapplib\
 copy /y %NDHOME%\include\ndlib.h	%myTarget%\include\
@@ -39,7 +41,7 @@ copy /y %APOLLOLIB%\include\apollo_errors.h		%myTarget%\include\
 copy /y %APOLLOLIB%\include\msg_def.h			%myTarget%\include\
 copy /y %APOLLOLIB%\include\_error_def.h		%myTarget%\include\
 copy /y %APOLLOLIB%\cli_common\login_apollo.h	%myTarget%\include\
-copy /y %APOLLOLIB%\cli_common\apoClientU3d.h	%myTarget%\include\
+copy /y %APOLLOLIB%\cli_common\apoClientObj.h	%myTarget%\include\
 
 @rem copy src 
 xcopy /s %NDHOME%\src\nd_crypt		%myTarget%\src\nd_crypt\
@@ -48,10 +50,9 @@ copy /y %NDHOME%\src\nd_common\src\*.c 	%myTarget%\src\nd_common\
 copy /y %NDHOME%\src\nd_net\src\*.c 	%myTarget%\src\nd_net\
 
 copy /y %NDHOME%\src\ndapplib\nd_msgpack.cpp %myTarget%\src\ndapplib\
-copy /y %NDHOME%\src\ndapplib\nd_datatransfer.cpp	%myTarget%\src\ndapplib\
 
 copy /y %APOLLOLIB%\cli_common\login_apollo.cpp		%myTarget%\src\login\
-copy /y %APOLLOLIB%\cli_common\apoClientU3d.cpp		%myTarget%\src\login\
+copy /y %APOLLOLIB%\cli_common\apoClientObj.cpp		%myTarget%\src\login\
 
 pause
 exit /B 0 

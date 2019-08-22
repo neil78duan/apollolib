@@ -69,7 +69,7 @@ LOCAL_SRC_FILES := ../../../ndsdk/src/nd_common/src/bintree.c \
 ../../../ndsdk/src/ndapplib/nd_baseConn.cpp \
 ../../cli_common/login_apollo.cpp \
 ../../cli_common/dftCliMsgHandler.cpp \
-../../cli_common/apoClientU3d.cpp	\
+../../cli_common/apoClientObj.cpp	\
 ../../plugin_u3d/apoCliApi.cpp	\
 ../../plugin_u3d/apoFormula.cpp	\
 ../../plugin_u3d/apoAttrCalcHelper.cpp	\
