@@ -36,7 +36,7 @@
     <ClCompile Include="..\..\cli_common\login_apollo.cpp">
       <Filter>cli_common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\cli_common\apoClientU3d.cpp">
+    <ClCompile Include="..\..\cli_common\apoClientObj.cpp">
       <Filter>cli_common</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,7 +50,7 @@
     <ClInclude Include="..\..\cli_common\login_apollo.h">
       <Filter>cli_common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\cli_common\apoClientU3d.h">
+    <ClInclude Include="..\..\cli_common\apoClientObj.h">
       <Filter>cli_common</Filter>
     </ClInclude>
   </ItemGroup>

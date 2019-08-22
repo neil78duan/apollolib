@@ -21,7 +21,7 @@
 #include "apollo_errors.h"
 //#include "commonTest.h"
 #include "dftCliMsgHandler.h"
-#include "apoClientU3d.h"
+#include "apoClientObj.h"
 //#include "gameMessage.h"
 //#include "sanguo_msg.h"
 #define _DFT_SESSION_FILE "./test_session.sen"

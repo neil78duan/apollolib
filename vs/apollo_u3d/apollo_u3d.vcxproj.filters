@@ -186,9 +186,6 @@
     <ClInclude Include="..\..\plugin_u3d\apoFormula.h">
       <Filter>apollo</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\cli_common\apoClientU3d.h">
-      <Filter>apollo\login</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\ndsdk\include\ndcli\nd_iconn.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -206,6 +203,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\ndsdk\include\nd_common\nd_logger.h">
       <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cli_common\apoClientObj.h">
+      <Filter>apollo\login</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -383,9 +383,6 @@
     <ClCompile Include="..\..\plugin_u3d\apoFormula.cpp">
       <Filter>apollo</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\cli_common\apoClientU3d.cpp">
-      <Filter>apollo\login</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\cJSON.c">
       <Filter>src\common</Filter>
     </ClCompile>
@@ -421,6 +418,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_connector.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cli_common\apoClientObj.cpp">
+      <Filter>apollo\login</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

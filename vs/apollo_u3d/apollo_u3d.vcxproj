@@ -116,6 +116,8 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;..\..\..\nodeflow\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -165,6 +167,8 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\include;..\..;..\..\..\ndsdk\include;..\..\..\nodeflow\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -226,7 +230,7 @@
     <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_udp.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_udt.h" />
     <ClInclude Include="..\..\..\ndsdk\include\nd_net\nd_udthdr.h" />
-    <ClInclude Include="..\..\cli_common\apoClientU3d.h" />
+    <ClInclude Include="..\..\cli_common\apoClientObj.h" />
     <ClInclude Include="..\..\cli_common\dftCliMsgHandler.h" />
     <ClInclude Include="..\..\cli_common\login_apollo.h" />
     <ClInclude Include="..\..\game_parser\apoGameCommon.h" />
@@ -299,7 +303,7 @@
     <ClCompile Include="..\..\..\ndsdk\src\nd_vm\src\nd_formula.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_vm\src\nd_vm.c" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_vm\src\nd_vmdbg.c" />
-    <ClCompile Include="..\..\cli_common\apoClientU3d.cpp" />
+    <ClCompile Include="..\..\cli_common\apoClientObj.cpp" />
     <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp" />
     <ClCompile Include="..\..\cli_common\login_apollo.cpp" />
     <ClCompile Include="..\..\game_parser\apoGameCommon.cpp" />

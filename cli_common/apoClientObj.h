@@ -6,8 +6,8 @@
  * 2016.8.18
  */
 
-#ifndef _APO_CLIENT_U3D_H_
-#define _APO_CLIENT_U3D_H_
+#ifndef _APO_CLIENT_OBJ_H_
+#define _APO_CLIENT_OBJ_H_
 
 #include "ndlib.h"
 #include "apollo_errors.h"

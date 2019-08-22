@@ -90,6 +90,8 @@
       <AdditionalIncludeDirectories>../../cli_common;../../include;../../../ndsdk/include;../../;../../../nodeflow/include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WITHOUT_LOGIC_PARSER;ND_DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../../../ndsdk/lib/Win64;../../../nodeflow/lib/Win64;../../lib/Win64</AdditionalLibraryDirectories>
@@ -135,6 +137,8 @@
       <AdditionalIncludeDirectories>../../cli_common;../../include;../../../ndsdk/include;../../;../../../nodeflow/include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WITHOUT_LOGIC_PARSER;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -144,7 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\cli_common\apoClientU3d.cpp" />
+    <ClCompile Include="..\..\cli_common\apoClientObj.cpp" />
     <ClCompile Include="..\..\cli_common\dftCliMsgHandler.cpp" />
     <ClCompile Include="..\..\cli_common\login_apollo.cpp" />
     <ClCompile Include="..\..\tool\cmdline_tool\atlantis_test.cpp" />
@@ -153,7 +157,7 @@
     <ClCompile Include="..\..\tool\cmdline_tool\test_msgsend.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\cli_common\apoClientU3d.h" />
+    <ClInclude Include="..\..\cli_common\apoClientObj.h" />
     <ClInclude Include="..\..\cli_common\dftCliMsgHandler.h" />
     <ClInclude Include="..\..\cli_common\login_apollo.h" />
     <ClInclude Include="..\..\tool\cmdline_tool\atlantis_test.h" />
