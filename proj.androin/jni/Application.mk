@@ -1,7 +1,9 @@
-APP_STL := gnustl_static
+APP_STL := c++_static
 
-#APP_ABI := arm64-v8a  armeabi armeabi-v7a x86
-APP_ABI := armeabi
+APP_PLATFORM=android-16
+
+#APP_ABI := arm64-v8a  armeabi-v7a x86
+APP_ABI := armeabi-v7a
 
 APP_CPPFLAGS := -frtti -D__ND_ANDROID__  -DND_CLIENT_ONLY
 APP_CFLAGS :=  -D__ND_ANDROID__ -DND_CLIENT_ONLY
