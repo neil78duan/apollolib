@@ -85,8 +85,6 @@
 		074C0FC821F9C32E0003BAE4 /* pluginsMgr.h in Headers */ = {isa = PBXBuildFile; fileRef = 074C0FBA21F9C32E0003BAE4 /* pluginsMgr.h */; };
 		074D850E1D6C2C2A00201121 /* nd_time.c in Sources */ = {isa = PBXBuildFile; fileRef = 074D850D1D6C2C2A00201121 /* nd_time.c */; };
 		074D85101D6C2DE600201121 /* nd_time.c in Sources */ = {isa = PBXBuildFile; fileRef = 074D850D1D6C2C2A00201121 /* nd_time.c */; };
-		07533A2C1D6EF0B9004DD290 /* dftCliMsgHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07533A2A1D6EF0B9004DD290 /* dftCliMsgHandler.cpp */; };
-		07533A2D1D6EF0F2004DD290 /* dftCliMsgHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07533A2A1D6EF0B9004DD290 /* dftCliMsgHandler.cpp */; };
 		075A8E7C1EA77BAD00710AEA /* apoFormula.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 075A8E791EA77BAD00710AEA /* apoFormula.cpp */; };
 		075A8E7D1EA77BAD00710AEA /* apoFormula.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 075A8E791EA77BAD00710AEA /* apoFormula.cpp */; };
 		075A8E7E1EA77BAD00710AEA /* apoFormula.h in Headers */ = {isa = PBXBuildFile; fileRef = 075A8E7A1EA77BAD00710AEA /* apoFormula.h */; };
@@ -159,17 +157,28 @@
 		0776F9411E31C1AE005DCB69 /* udt_socket.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85581D54400300C32925 /* udt_socket.c */; };
 		0776F9421E31C1AE005DCB69 /* udt_srv.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85591D54400300C32925 /* udt_srv.c */; };
 		0776F9481E31C1AE005DCB69 /* apoCliApi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0776F8F11E31BECD005DCB69 /* apoCliApi.cpp */; };
-		0776F9591E31C1DF005DCB69 /* dftCliMsgHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07533A2A1D6EF0B9004DD290 /* dftCliMsgHandler.cpp */; };
-		0776F95A1E31C1DF005DCB69 /* login_apollo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC86581D54411E00C32925 /* login_apollo.cpp */; };
 		0778FE47207B50F90057D91B /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = 0778FE46207B50F90057D91B /* cJSON.c */; };
 		077C59392105E2A900BB4D44 /* apoAttrCalcHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 077C59372105E2A900BB4D44 /* apoAttrCalcHelper.h */; };
 		077C593A2105E2A900BB4D44 /* apoAttrCalcHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 077C59382105E2A900BB4D44 /* apoAttrCalcHelper.cpp */; };
 		077C593B2105E2A900BB4D44 /* apoAttrCalcHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 077C59382105E2A900BB4D44 /* apoAttrCalcHelper.cpp */; };
 		077C593C2105E2A900BB4D44 /* apoAttrCalcHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 077C59382105E2A900BB4D44 /* apoAttrCalcHelper.cpp */; };
 		078014822193EA1F00BFF5D0 /* apoGameCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07D804132191A86E001D437C /* apoGameCommon.cpp */; };
-		0796E066202BF32100B7C9E5 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */; };
-		0796E067202BF3D100B7C9E5 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */; };
-		0796E068202BF3E700B7C9E5 /* apoClientU3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */; };
+		07C4D981230F74C300820D45 /* apoClientObj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D96B230F74C300820D45 /* apoClientObj.cpp */; };
+		07C4D982230F74C300820D45 /* apoClientObj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D96B230F74C300820D45 /* apoClientObj.cpp */; };
+		07C4D983230F74C300820D45 /* apoClientObj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D96B230F74C300820D45 /* apoClientObj.cpp */; };
+		07C4D984230F74C300820D45 /* apoClientObj.h in Headers */ = {isa = PBXBuildFile; fileRef = 07C4D96C230F74C300820D45 /* apoClientObj.h */; };
+		07C4D989230F74C300820D45 /* dftCliMsgHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D96F230F74C300820D45 /* dftCliMsgHandler.cpp */; };
+		07C4D98A230F74C300820D45 /* dftCliMsgHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D96F230F74C300820D45 /* dftCliMsgHandler.cpp */; };
+		07C4D98B230F74C300820D45 /* dftCliMsgHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D96F230F74C300820D45 /* dftCliMsgHandler.cpp */; };
+		07C4D98C230F74C300820D45 /* dftCliMsgHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 07C4D970230F74C300820D45 /* dftCliMsgHandler.h */; };
+		07C4D98D230F74C300820D45 /* login_apollo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D971230F74C300820D45 /* login_apollo.cpp */; };
+		07C4D98E230F74C300820D45 /* login_apollo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D971230F74C300820D45 /* login_apollo.cpp */; };
+		07C4D98F230F74C300820D45 /* login_apollo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D971230F74C300820D45 /* login_apollo.cpp */; };
+		07C4D990230F74C300820D45 /* login_apollo.h in Headers */ = {isa = PBXBuildFile; fileRef = 07C4D972230F74C300820D45 /* login_apollo.h */; };
+		07C4D991230F74C300820D45 /* loginBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 07C4D973230F74C300820D45 /* loginBase.h */; };
+		07C4D992230F74C300820D45 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D974230F74C300820D45 /* Makefile */; };
+		07C4D993230F74C300820D45 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D974230F74C300820D45 /* Makefile */; };
+		07C4D994230F74C300820D45 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D974230F74C300820D45 /* Makefile */; };
 		07D8041A2191A86F001D437C /* apoGameCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07D804132191A86E001D437C /* apoGameCommon.cpp */; };
 		07D8041B2191A86F001D437C /* dbl_mgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07D804152191A86E001D437C /* dbl_mgr.cpp */; };
 		07D8041C2191A86F001D437C /* dbldata2netstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07D804172191A86E001D437C /* dbldata2netstream.cpp */; };
@@ -228,7 +237,6 @@
 		07EC86231D54400400C32925 /* udt_net.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85571D54400300C32925 /* udt_net.c */; };
 		07EC86241D54400400C32925 /* udt_socket.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85581D54400300C32925 /* udt_socket.c */; };
 		07EC86251D54400400C32925 /* udt_srv.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85591D54400300C32925 /* udt_srv.c */; };
-		07EC865C1D54411E00C32925 /* login_apollo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC86581D54411E00C32925 /* login_apollo.cpp */; };
 		07EC86611D54433700C32925 /* bintree.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85201D54400300C32925 /* bintree.c */; };
 		07EC86621D54433700C32925 /* callstack.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85211D54400300C32925 /* callstack.c */; };
 		07EC86631D54433700C32925 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85221D54400300C32925 /* common.c */; };
@@ -278,7 +286,6 @@
 		07EC86921D54433800C32925 /* udt_net.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85571D54400300C32925 /* udt_net.c */; };
 		07EC86931D54433800C32925 /* udt_socket.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85581D54400300C32925 /* udt_socket.c */; };
 		07EC86941D54433800C32925 /* udt_srv.c in Sources */ = {isa = PBXBuildFile; fileRef = 07EC85591D54400300C32925 /* udt_srv.c */; };
-		07EC86991D54433800C32925 /* login_apollo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07EC86581D54411E00C32925 /* login_apollo.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -334,8 +341,6 @@
 		074C0FBA21F9C32E0003BAE4 /* pluginsMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pluginsMgr.h; sourceTree = "<group>"; };
 		074D850D1D6C2C2A00201121 /* nd_time.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = nd_time.c; sourceTree = "<group>"; };
 		074D850F1D6C2C3500201121 /* nd_time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nd_time.h; sourceTree = "<group>"; };
-		07533A2A1D6EF0B9004DD290 /* dftCliMsgHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dftCliMsgHandler.cpp; path = ../../../cli_common/dftCliMsgHandler.cpp; sourceTree = "<group>"; };
-		07533A2B1D6EF0B9004DD290 /* dftCliMsgHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dftCliMsgHandler.h; path = ../../../cli_common/dftCliMsgHandler.h; sourceTree = "<group>"; };
 		075A8E791EA77BAD00710AEA /* apoFormula.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apoFormula.cpp; sourceTree = "<group>"; };
 		075A8E7A1EA77BAD00710AEA /* apoFormula.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apoFormula.h; sourceTree = "<group>"; };
 		075A8E7B1EA77BAD00710AEA /* FormulaParser.cs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FormulaParser.cs; sourceTree = "<group>"; };
@@ -354,8 +359,14 @@
 		0778FE46207B50F90057D91B /* cJSON.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cJSON.c; sourceTree = "<group>"; };
 		077C59372105E2A900BB4D44 /* apoAttrCalcHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apoAttrCalcHelper.h; sourceTree = "<group>"; };
 		077C59382105E2A900BB4D44 /* apoAttrCalcHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apoAttrCalcHelper.cpp; sourceTree = "<group>"; };
-		0796E064202BF32100B7C9E5 /* apoClientU3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = apoClientU3d.h; path = ../../../cli_common/apoClientU3d.h; sourceTree = "<group>"; };
-		0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = apoClientU3d.cpp; path = ../../../cli_common/apoClientU3d.cpp; sourceTree = "<group>"; };
+		07C4D96B230F74C300820D45 /* apoClientObj.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apoClientObj.cpp; sourceTree = "<group>"; };
+		07C4D96C230F74C300820D45 /* apoClientObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apoClientObj.h; sourceTree = "<group>"; };
+		07C4D96F230F74C300820D45 /* dftCliMsgHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dftCliMsgHandler.cpp; sourceTree = "<group>"; };
+		07C4D970230F74C300820D45 /* dftCliMsgHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dftCliMsgHandler.h; sourceTree = "<group>"; };
+		07C4D971230F74C300820D45 /* login_apollo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = login_apollo.cpp; sourceTree = "<group>"; };
+		07C4D972230F74C300820D45 /* login_apollo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = login_apollo.h; sourceTree = "<group>"; };
+		07C4D973230F74C300820D45 /* loginBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = loginBase.h; sourceTree = "<group>"; };
+		07C4D974230F74C300820D45 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		07D804132191A86E001D437C /* apoGameCommon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apoGameCommon.cpp; sourceTree = "<group>"; };
 		07D804142191A86E001D437C /* apoGameCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apoGameCommon.h; sourceTree = "<group>"; };
 		07D804152191A86E001D437C /* dbl_mgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dbl_mgr.cpp; sourceTree = "<group>"; };
@@ -489,8 +500,6 @@
 		07EC85571D54400300C32925 /* udt_net.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = udt_net.c; sourceTree = "<group>"; };
 		07EC85581D54400300C32925 /* udt_socket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = udt_socket.c; sourceTree = "<group>"; };
 		07EC85591D54400300C32925 /* udt_srv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = udt_srv.c; sourceTree = "<group>"; };
-		07EC86581D54411E00C32925 /* login_apollo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = login_apollo.cpp; path = ../../../cli_common/login_apollo.cpp; sourceTree = "<group>"; };
-		07EC86591D54411E00C32925 /* login_apollo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = login_apollo.h; path = ../../../cli_common/login_apollo.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -582,19 +591,6 @@
 			path = ../../../nodeflow/include/logic_parser;
 			sourceTree = "<group>";
 		};
-		074C8F711D66A85000590A34 /* login */ = {
-			isa = PBXGroup;
-			children = (
-				0796E065202BF32100B7C9E5 /* apoClientU3d.cpp */,
-				0796E064202BF32100B7C9E5 /* apoClientU3d.h */,
-				07533A2A1D6EF0B9004DD290 /* dftCliMsgHandler.cpp */,
-				07533A2B1D6EF0B9004DD290 /* dftCliMsgHandler.h */,
-				07EC86581D54411E00C32925 /* login_apollo.cpp */,
-				07EC86591D54411E00C32925 /* login_apollo.h */,
-			);
-			name = login;
-			sourceTree = "<group>";
-		};
 		0764F6931D631BD900E91673 /* vm */ = {
 			isa = PBXGroup;
 			children = (
@@ -641,6 +637,22 @@
 			name = logic_parse;
 			sourceTree = "<group>";
 		};
+		07C4D965230F74C300820D45 /* cli_common */ = {
+			isa = PBXGroup;
+			children = (
+				07C4D96B230F74C300820D45 /* apoClientObj.cpp */,
+				07C4D96C230F74C300820D45 /* apoClientObj.h */,
+				07C4D96F230F74C300820D45 /* dftCliMsgHandler.cpp */,
+				07C4D970230F74C300820D45 /* dftCliMsgHandler.h */,
+				07C4D971230F74C300820D45 /* login_apollo.cpp */,
+				07C4D972230F74C300820D45 /* login_apollo.h */,
+				07C4D973230F74C300820D45 /* loginBase.h */,
+				07C4D974230F74C300820D45 /* Makefile */,
+			);
+			name = cli_common;
+			path = ../../../cli_common;
+			sourceTree = "<group>";
+		};
 		07D804122191A86E001D437C /* game_parser */ = {
 			isa = PBXGroup;
 			children = (
@@ -680,9 +692,9 @@
 		07EC848C1D543B8400C32925 /* apollo_client */ = {
 			isa = PBXGroup;
 			children = (
+				07C4D965230F74C300820D45 /* cli_common */,
 				07D804122191A86E001D437C /* game_parser */,
 				0776F8F01E31BECD005DCB69 /* plugin_u3d */,
-				074C8F711D66A85000590A34 /* login */,
 			);
 			path = apollo_client;
 			sourceTree = "<group>";
@@ -965,15 +977,19 @@
 				074C0FC521F9C32E0003BAE4 /* logicParser.h in Headers */,
 				074C0FC421F9C32E0003BAE4 /* logicEngineRoot.h in Headers */,
 				074C0FBB21F9C32E0003BAE4 /* _logicEventId.h in Headers */,
+				07C4D990230F74C300820D45 /* login_apollo.h in Headers */,
 				074C0FC221F9C32E0003BAE4 /* logicDataType.h in Headers */,
 				074C0FBC21F9C32E0003BAE4 /* logic_compile.h in Headers */,
 				0776F8FA1E31BECD005DCB69 /* apoCliApi.h in Headers */,
 				074C0FC321F9C32E0003BAE4 /* logicEndian.h in Headers */,
 				074C0FBD21F9C32E0003BAE4 /* logic_debugger.h in Headers */,
 				074C0FC621F9C32E0003BAE4 /* logicStruct.hpp in Headers */,
+				07C4D991230F74C300820D45 /* loginBase.h in Headers */,
 				074C0FC821F9C32E0003BAE4 /* pluginsMgr.h in Headers */,
+				07C4D98C230F74C300820D45 /* dftCliMsgHandler.h in Headers */,
 				074C0FC721F9C32E0003BAE4 /* objectBaseMgr.h in Headers */,
 				074C0FBE21F9C32E0003BAE4 /* logic_editor_helper.h in Headers */,
+				07C4D984230F74C300820D45 /* apoClientObj.h in Headers */,
 				075A8E7E1EA77BAD00710AEA /* apoFormula.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1088,6 +1104,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07C4D98B230F74C300820D45 /* dftCliMsgHandler.cpp in Sources */,
 				0742FF562298CE1A006CEEE8 /* nd_object.cpp in Sources */,
 				0742FF572298CE1A006CEEE8 /* nd_connector.cpp in Sources */,
 				0742FF582298CE1A006CEEE8 /* nd_msgpack.cpp in Sources */,
@@ -1100,10 +1117,7 @@
 				07D804202191A9A7001D437C /* dbldata2netstream.cpp in Sources */,
 				07272F522137FFAF00D66BB0 /* nd_logger.c in Sources */,
 				07253495207C8D69001FD566 /* cJSON.c in Sources */,
-				0796E067202BF3D100B7C9E5 /* apoClientU3d.cpp in Sources */,
 				075A8E7F1EA77CC900710AEA /* apoFormula.cpp in Sources */,
-				0776F9591E31C1DF005DCB69 /* dftCliMsgHandler.cpp in Sources */,
-				0776F95A1E31C1DF005DCB69 /* login_apollo.cpp in Sources */,
 				0776F9221E31C1AE005DCB69 /* desc.c in Sources */,
 				0776F9231E31C1AE005DCB69 /* digit.c in Sources */,
 				0776F9241E31C1AE005DCB69 /* md2c.c in Sources */,
@@ -1122,6 +1136,7 @@
 				0776F92E1E31C1AE005DCB69 /* rsa.c in Sources */,
 				0776F92F1E31C1AE005DCB69 /* nd_cryptfile.c in Sources */,
 				0776F9301E31C1AE005DCB69 /* nd_pubkey.c in Sources */,
+				07C4D98F230F74C300820D45 /* login_apollo.cpp in Sources */,
 				074C0F9621F9C31C0003BAE4 /* logicDataType.cpp in Sources */,
 				0776F9311E31C1AE005DCB69 /* ndcrypt.c in Sources */,
 				0776F9321E31C1AE005DCB69 /* ndrsa.c in Sources */,
@@ -1146,6 +1161,7 @@
 				0776F9421E31C1AE005DCB69 /* udt_srv.c in Sources */,
 				0776F9481E31C1AE005DCB69 /* apoCliApi.cpp in Sources */,
 				074C0FA521F9C31D0003BAE4 /* Makefile in Sources */,
+				07C4D994230F74C300820D45 /* Makefile in Sources */,
 				0776F90E1E31C18C005DCB69 /* nd_time.c in Sources */,
 				0776F90F1E31C18C005DCB69 /* bintree.c in Sources */,
 				0776F9101E31C18C005DCB69 /* callstack.c in Sources */,
@@ -1162,6 +1178,7 @@
 				0776F9191E31C18C005DCB69 /* nd_timer.c in Sources */,
 				0776F91A1E31C18C005DCB69 /* nd_trace.c in Sources */,
 				0776F91B1E31C18C005DCB69 /* nd_unix.c in Sources */,
+				07C4D983230F74C300820D45 /* apoClientObj.cpp in Sources */,
 				0776F91C1E31C18C005DCB69 /* nd_win.c in Sources */,
 				0776F91D1E31C18C005DCB69 /* nd_xml.c in Sources */,
 				0776F91E1E31C18C005DCB69 /* nddir.c in Sources */,
@@ -1180,8 +1197,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07C4D992230F74C300820D45 /* Makefile in Sources */,
 				074C0F8E21F9C31C0003BAE4 /* logic_function.cpp in Sources */,
-				07533A2C1D6EF0B9004DD290 /* dftCliMsgHandler.cpp in Sources */,
+				07C4D98D230F74C300820D45 /* login_apollo.cpp in Sources */,
 				074C0F9A21F9C31C0003BAE4 /* logicParser.cpp in Sources */,
 				07EC86181D54400400C32925 /* ipraw.c in Sources */,
 				074C0F8521F9C31C0003BAE4 /* logic_compile.cpp in Sources */,
@@ -1239,11 +1257,10 @@
 				074D850E1D6C2C2A00201121 /* nd_time.c in Sources */,
 				07EC85FE1D54400400C32925 /* nd_win.c in Sources */,
 				07EC861A1D54400400C32925 /* nd_net.c in Sources */,
-				07EC865C1D54411E00C32925 /* login_apollo.cpp in Sources */,
 				07EC860A1D54400400C32925 /* prime.c in Sources */,
-				0796E066202BF32100B7C9E5 /* apoClientU3d.cpp in Sources */,
 				07EC86091D54400400C32925 /* nn.c in Sources */,
 				07D8041C2191A86F001D437C /* dbldata2netstream.cpp in Sources */,
+				07C4D981230F74C300820D45 /* apoClientObj.cpp in Sources */,
 				07EC86191D54400400C32925 /* nd_msgentry.c in Sources */,
 				07EC861E1D54400400C32925 /* nd_tcp.c in Sources */,
 				07EC860D1D54400400C32925 /* r_enhanc.c in Sources */,
@@ -1254,6 +1271,7 @@
 				074C0F9121F9C31C0003BAE4 /* logicApi4c.cpp in Sources */,
 				074C0F9D21F9C31C0003BAE4 /* logicStruct.cpp in Sources */,
 				07EC85F11D54400400C32925 /* bintree.c in Sources */,
+				07C4D989230F74C300820D45 /* dftCliMsgHandler.cpp in Sources */,
 				07EC86081D54400400C32925 /* md5c.c in Sources */,
 				07EC860F1D54400400C32925 /* r_random.c in Sources */,
 				07EC861C1D54400400C32925 /* nd_netui.c in Sources */,
@@ -1284,10 +1302,9 @@
 				075E674022968F480084C66A /* nd_logger.c in Sources */,
 				078014822193EA1F00BFF5D0 /* apoGameCommon.cpp in Sources */,
 				07253494207C8D5C001FD566 /* cJSON.c in Sources */,
-				0796E068202BF3E700B7C9E5 /* apoClientU3d.cpp in Sources */,
-				07533A2D1D6EF0F2004DD290 /* dftCliMsgHandler.cpp in Sources */,
 				074C0F8921F9C31C0003BAE4 /* logic_debugger.cpp in Sources */,
 				077C593B2105E2A900BB4D44 /* apoAttrCalcHelper.cpp in Sources */,
+				07C4D982230F74C300820D45 /* apoClientObj.cpp in Sources */,
 				074D85101D6C2DE600201121 /* nd_time.c in Sources */,
 				075A8E7D1EA77BAD00710AEA /* apoFormula.cpp in Sources */,
 				0764F69E1D631C7F00E91673 /* nd_asm.c in Sources */,
@@ -1314,6 +1331,7 @@
 				07EC866F1D54433700C32925 /* nd_xml.c in Sources */,
 				07EC86701D54433700C32925 /* nddir.c in Sources */,
 				07EC86711D54433700C32925 /* node_mgr.c in Sources */,
+				07C4D98E230F74C300820D45 /* login_apollo.cpp in Sources */,
 				07EC86721D54433700C32925 /* recbuf.c in Sources */,
 				07EC86741D54433700C32925 /* desc.c in Sources */,
 				07EC86751D54433700C32925 /* digit.c in Sources */,
@@ -1329,6 +1347,7 @@
 				07EC867C1D54433700C32925 /* r_enhanc.c in Sources */,
 				07EC867D1D54433700C32925 /* r_keygen.c in Sources */,
 				07EC867E1D54433700C32925 /* r_random.c in Sources */,
+				07C4D993230F74C300820D45 /* Makefile in Sources */,
 				07EC867F1D54433700C32925 /* r_stdlib.c in Sources */,
 				07EC86801D54433700C32925 /* rsa.c in Sources */,
 				07EC86811D54433700C32925 /* nd_cryptfile.c in Sources */,
@@ -1345,6 +1364,7 @@
 				07EC868A1D54433700C32925 /* nd_netobj.c in Sources */,
 				07EC868B1D54433700C32925 /* nd_netui.c in Sources */,
 				074C0F9521F9C31C0003BAE4 /* logicDataType.cpp in Sources */,
+				07C4D98A230F74C300820D45 /* dftCliMsgHandler.cpp in Sources */,
 				07EC868C1D54433700C32925 /* nd_socket.c in Sources */,
 				07EC868D1D54433700C32925 /* nd_tcp.c in Sources */,
 				07EC868E1D54433700C32925 /* nd_udp.c in Sources */,
@@ -1356,7 +1376,6 @@
 				07EC86941D54433800C32925 /* udt_srv.c in Sources */,
 				074C0F9B21F9C31C0003BAE4 /* logicParser.cpp in Sources */,
 				074C0F8621F9C31C0003BAE4 /* logic_compile.cpp in Sources */,
-				07EC86991D54433800C32925 /* login_apollo.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
