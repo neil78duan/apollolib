@@ -422,5 +422,11 @@
     <ClCompile Include="..\..\cli_common\apoClientObj.cpp">
       <Filter>apollo\login</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_protoStream.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_vartype.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

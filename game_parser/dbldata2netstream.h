@@ -40,4 +40,5 @@ int UserDefFormatFromMessage(userDefineDataType_map_t &userDataRoot, NDIStreamMs
 
 bool LogicOutputMsgByFormat(logic_print print_func, void *log_file, const char *formatText, NDIStreamMsg &inmsg, userDefineDataType_map_t &dataDef);
 
+
 #endif

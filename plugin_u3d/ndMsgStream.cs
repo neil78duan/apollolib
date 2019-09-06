@@ -37,6 +37,174 @@ namespace NetMessage
             return netstream.WriteBuf(m_data);
         }
     }
+	public struct varDataType
+	{
+		enum NDVTYPE_ELEMENT_TYPE
+		{
+			ND_VT_INT ,
+			ND_VT_FLOAT ,
+			ND_VT_STRING,
+			ND_VT_INT8 ,
+			ND_VT_INT16 ,
+			ND_VT_INT64 ,
+			ND_VT_BINARY ,
+		};
+		private int m_type ;
+		
+		public int Type 
+		{
+            get { return m_type; }
+        }
+		
+		private ulong m_iValue ;
+		private float m_fValue;
+		private string m_strValue ;
+		private byte[] m_binValue;
+		
+		public void setInt(uint a) 
+		{
+			m_type = NDVTYPE_ELEMENT_TYPE.ND_VT_INT ;
+			m_iValue = (ulong)a ;
+		}
+		public void setInt8(byte a)  
+		{
+			m_type = NDVTYPE_ELEMENT_TYPE.ND_VT_INT8 ;
+			m_iValue = (ulong)a ;
+		}
+		public void setInt16(ushort a)  
+		{
+			m_type = NDVTYPE_ELEMENT_TYPE.ND_VT_INT16 ;
+			m_iValue = (ulong)a ;
+		}
+		
+		public void setInt64(ulong a)  
+		{
+			m_type = NDVTYPE_ELEMENT_TYPE.ND_VT_INT64 ;
+			m_iValue = (ulong)a ;
+		}
+		public void setFloat(float a)  
+		{
+			m_type = NDVTYPE_ELEMENT_TYPE.ND_VT_FLOAT ;
+			m_fValue = a ;
+		}
+		public void setString(string text) 
+		{
+			m_type = NDVTYPE_ELEMENT_TYPE.ND_VT_STRING ;
+			m_strValue = text ;
+			
+		}
+		public void setBinary(byte[] data)
+		{
+			m_type = NDVTYPE_ELEMENT_TYPE.ND_VT_BINARY ;			
+            m_binValue = new byte[data.Length];
+			data.CopyTo(m_binValue, 0);
+		}
+		
+		
+		public uint getInt() 
+		{
+			return (uint)m_iValue;
+		}
+		public byte getInt8()
+		{
+			return (byte)m_iValue;
+		}
+		public ushort getInt16() 
+		{
+			return (ushort)m_iValue;
+		}
+		public ulong getInt64() 
+		{
+			return m_iValue;
+		}
+		public float getFloat() 
+		{
+			return m_fValue ;
+		}
+		public string getString() 
+		{
+			return m_strValue ;
+		}
+		
+		public byte[]  getBinary()
+		{
+			return m_binValue ;
+		}
+		
+		///read from stream
+		public int Read(ref NDMsgStream netstream)
+        {
+			public int type = netstream.PeekType() ;
+			
+			if(type==NDMsgStream.eNDnetStreamMarker.ENDSTREAM_MARKER_INT8) {
+				byte a= netstream.ReadUint8();
+				setInt8(a) ;
+			}
+			else if(type==NDMsgStream.eNDnetStreamMarker.ENDSTREAM_MARKER_INT16) {				
+				ushort a= netstream.ReadUint16();
+				setInt16(a) ;
+			}
+			else if(type==NDMsgStream.eNDnetStreamMarker.ENDSTREAM_MARKER_INT32) {				
+				uint a= netstream.ReadUint32();
+				setInt32(a) ;
+			}
+			else if(type==NDMsgStream.eNDnetStreamMarker.ENDSTREAM_MARKER_INT64) {				
+				ulong a= netstream.ReadUint64();
+				setInt64(a) ;
+			}
+			else if(type==NDMsgStream.eNDnetStreamMarker.ENDSTREAM_MARKER_FLOAT) {
+								
+				float a= netstream.ReadFloat();
+				setFloat(a) ;
+			}
+			else if(type==NDMsgStream.eNDnetStreamMarker.ENDSTREAM_MARKER_TEXT) {
+				m_strValue = netstream.ReadString();				
+				m_type = NDVTYPE_ELEMENT_TYPE.ND_VT_STRING ;
+			}
+			
+			else if(type==NDMsgStream.eNDnetStreamMarker.ENDSTREAM_MARKER_BIN) {				
+				if(netstream.ReadBuf(out m_binValue)>0) {
+					m_type = NDVTYPE_ELEMENT_TYPE.ND_VT_BINARY ;
+				}
+			}
+			else {
+				return -1;
+			}
+			return 0;
+        }
+        public int Write(ref NDMsgStream netstream)
+        {
+			int ret = -1 ;
+			switch (m_type) {
+				
+			case NDVTYPE_ELEMENT_TYPE.ND_VT_INT :
+				ret = netstream.WriteUint32((uint)m_iValue);
+				break ;
+			case NDVTYPE_ELEMENT_TYPE.ND_VT_FLOAT :
+				ret = netstream.WriteFloat(m_fValue);
+				break ;
+			case NDVTYPE_ELEMENT_TYPE.ND_VT_STRING:
+				ret = netstream.WriteString(m_strValue);
+				break ;
+			case NDVTYPE_ELEMENT_TYPE.ND_VT_INT8 :
+				ret = netstream.WriteUint8((byte)m_iValue);
+				break ;
+			case NDVTYPE_ELEMENT_TYPE.ND_VT_INT16 :
+				ret = netstream.WriteUint16((ushort)m_iValue);
+				break ;
+			case NDVTYPE_ELEMENT_TYPE.ND_VT_INT64 :
+				ret = netstream.WriteUint64(m_iValue);
+				break ;
+			case NDVTYPE_ELEMENT_TYPE.ND_VT_BINARY :				
+				ret = netstream.WriteBuf(m_binValue);
+				break ;
+			default :
+				break ;
+			}
+			return -1;
+        }
+		
+	}
 
     public struct NDMsgStream
     {
