@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07079A60231FEF7F001F6983 /* nd_vartype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07079A5F231FEF7F001F6983 /* nd_vartype.cpp */; };
+		07079A61231FEF7F001F6983 /* nd_vartype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07079A5F231FEF7F001F6983 /* nd_vartype.cpp */; };
+		07079A62231FEF7F001F6983 /* nd_vartype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07079A5F231FEF7F001F6983 /* nd_vartype.cpp */; };
 		07253494207C8D5C001FD566 /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = 0778FE46207B50F90057D91B /* cJSON.c */; };
 		07253495207C8D69001FD566 /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = 0778FE46207B50F90057D91B /* cJSON.c */; };
 		07272F252137FE2100D66BB0 /* nd_logger.c in Sources */ = {isa = PBXBuildFile; fileRef = 07272F242137FE2100D66BB0 /* nd_logger.c */; };
@@ -301,6 +304,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		07079A5F231FEF7F001F6983 /* nd_vartype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nd_vartype.cpp; sourceTree = "<group>"; };
 		07272F242137FE2100D66BB0 /* nd_logger.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = nd_logger.c; sourceTree = "<group>"; };
 		0742FEEE2298CD91006CEEE8 /* nd_exch_key.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nd_exch_key.cpp; sourceTree = "<group>"; };
 		0742FEEF2298CD91006CEEE8 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
@@ -540,6 +544,7 @@
 		0742FEF12298CD91006CEEE8 /* ndapplib */ = {
 			isa = PBXGroup;
 			children = (
+				07079A5F231FEF7F001F6983 /* nd_vartype.cpp */,
 				0742FEF22298CD91006CEEE8 /* nd_object.cpp */,
 				0742FF0B2298CD91006CEEE8 /* nd_connector.cpp */,
 				0742FF112298CD91006CEEE8 /* nd_msgpack.cpp */,
@@ -1174,6 +1179,7 @@
 				077C593C2105E2A900BB4D44 /* apoAttrCalcHelper.cpp in Sources */,
 				0776F9171E31C18C005DCB69 /* nd_static_alloc.c in Sources */,
 				074C0F9021F9C31C0003BAE4 /* logic_function.cpp in Sources */,
+				07079A62231FEF7F001F6983 /* nd_vartype.cpp in Sources */,
 				0776F9181E31C18C005DCB69 /* nd_str.c in Sources */,
 				0776F9191E31C18C005DCB69 /* nd_timer.c in Sources */,
 				0776F91A1E31C18C005DCB69 /* nd_trace.c in Sources */,
@@ -1234,6 +1240,7 @@
 				0742FF212298CD91006CEEE8 /* nd_exch_key.cpp in Sources */,
 				07EC85F91D54400400C32925 /* nd_static_alloc.c in Sources */,
 				074C0FA621F9C31D0003BAE4 /* objectBaseMgr.cpp in Sources */,
+				07079A60231FEF7F001F6983 /* nd_vartype.cpp in Sources */,
 				0776F8F81E31BECD005DCB69 /* apoCliApi.cpp in Sources */,
 				0778FE47207B50F90057D91B /* cJSON.c in Sources */,
 				07EC85FA1D54400400C32925 /* nd_str.c in Sources */,
@@ -1360,6 +1367,7 @@
 				07EC86871D54433700C32925 /* ipraw.c in Sources */,
 				074C0FA121F9C31D0003BAE4 /* main_exe_entry.cpp in Sources */,
 				07EC86881D54433700C32925 /* nd_msgentry.c in Sources */,
+				07079A61231FEF7F001F6983 /* nd_vartype.cpp in Sources */,
 				07EC86891D54433700C32925 /* nd_net.c in Sources */,
 				07EC868A1D54433700C32925 /* nd_netobj.c in Sources */,
 				07EC868B1D54433700C32925 /* nd_netui.c in Sources */,
