@@ -523,6 +523,8 @@ int UserDefFormatFromMessage(userDefineDataType_map_t &userDataRoot, NDIStreamMs
 	return 0;
 }
 
+
+
 //////////////////////////////////////////////////////////////////////////
 
 

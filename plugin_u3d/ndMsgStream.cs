@@ -37,7 +37,7 @@ namespace NetMessage
             return netstream.WriteBuf(m_data);
         }
     }
-	public struct NDVarType
+	public struct varDataType
 	{
 		enum NDVTYPE_ELEMENT_TYPE
 		{

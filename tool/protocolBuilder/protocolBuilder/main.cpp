@@ -27,7 +27,9 @@ static type_name_info alias_type[] = {
 	{"uint16_t" , "NDUINT16"} ,
 	{"uint32_t" , "NDUINT32"} ,
 	{"uint64_t" , "NDUINT64"} ,
-	{"float" , "float"}
+	{"float" , "float"},
+	{"float" , "float"},
+	{"varDataType", "NDVarType"}
 };
 
 
@@ -41,7 +43,8 @@ static type_name_info alias_typeUE4[] = {
 	{"uint16_t" , "uint16"} ,
 	{"uint32_t" , "uint32"} ,
 	{"uint64_t" , "uint64"} ,
-	{"float" , "float"}
+	{"float" , "float"},
+	{"varDataType", "NDVarType"}
 };
 
 static const char *get_type_from_alias(const char *in_alias,type_name_info *info, int size)

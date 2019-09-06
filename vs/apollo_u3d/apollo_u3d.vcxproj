@@ -246,6 +246,7 @@
     <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_msgpack.cpp" />
     <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_object.cpp" />
     <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_protoStream.cpp" />
+    <ClCompile Include="..\..\..\ndsdk\src\ndapplib\nd_vartype.cpp" />
     <ClCompile Include="..\..\..\ndsdk\src\ndclient\nd_client.cpp" />
     <ClCompile Include="..\..\..\ndsdk\src\ndclient\nd_exch_key.cpp" />
     <ClCompile Include="..\..\..\ndsdk\src\nd_common\src\bintree.c" />
