@@ -10,6 +10,7 @@
 #define _ROLE_ATTR_HELPER_
 
 #include "nd_common/nd_common.h"
+#include "ndapplib/nd_vartype.h"
 #include <vector>
 
 #define ROLE_ATTR_CAPACITY 200
@@ -20,7 +21,11 @@
 
 
 typedef unsigned char attrid_t;
-typedef float attrval_t;
+//typedef float attrval_t;
+typedef NDVarType attrval_t;
+#define isValideAttrVal(attrVal) ((attrVal).checkValid())
+#define AttrVal2STDString(attrVal) ((attrVal).getString()) 
+#define AttrValWriteStream(omsg,attrVal ) omsg.WriteVar((const NDVarType&)attrVal)
 
 #define INVALID_ATTR_ID 0xff
 

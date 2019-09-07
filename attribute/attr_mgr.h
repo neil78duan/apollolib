@@ -27,10 +27,10 @@ struct role_attr_data
 
 	role_attr_data() :datasCount(0)
 	{
-		for (int i = 0; i < ROLE_ATTR_CAPACITY; i++)
-		{
-			datas[i] = 0;
-		}
+// 		for (int i = 0; i < ROLE_ATTR_CAPACITY; i++)
+// 		{
+// 			datas[i] = 0;
+// 		}
 	}
 	
 };
@@ -53,6 +53,11 @@ struct UserBaseAttribute
 };
 */
 
+struct memnodeForVM
+{
+	attrid_t aid;
+	float fval;
+};
 
 typedef NDAffair<attrid_t, attrval_t> RoleAttrAffair;
 
@@ -75,13 +80,13 @@ public:
 	attrval_t getVal(attrid_t index)const;
 	attrval_t getVal(const char *name)const;
 
-	bool setVal(attrid_t index, attrval_t val);
-	bool addVal(attrid_t index, attrval_t val);
-	bool subVal(attrid_t index, attrval_t val);
+	bool setVal(attrid_t index, const attrval_t &val);
+	bool addVal(attrid_t index, const attrval_t &val);
+	bool subVal(attrid_t index, const attrval_t &val);
 	
-	bool setVal(const char *name, attrval_t newval);
-	bool addVal(const char *name, attrval_t addval);
-	bool subVal(const char *name, attrval_t subval);
+	bool setVal(const char *name, const attrval_t &val);
+	bool addVal(const char *name, const attrval_t &val);
+	bool subVal(const char *name, const attrval_t &val);
 
 	bool setVal(const attr_node_buf &attrs);
 	bool addVal(const attr_node_buf &attrs);
@@ -124,14 +129,14 @@ public:
 	virtual void setLastErrorAttrID(attrid_t errId);
 	virtual void setLastError(int errcode);
 	
-	bool setValRaw(attrid_t index, attrval_t val);
-	bool setValRaw(const char *name, attrval_t newval);
+	bool setValRaw(attrid_t index, const attrval_t & val);
+	bool setValRaw(const char *name, const attrval_t & newval);
 	bool setValRaw(const attr_node_buf &attrs);
 
+	float *getMMAddr(attrid_t aid);
 protected:
-
 	
-	int _set_val(attrval_t val, attrid_t aid);
+	int _set_val(const attrval_t & val, attrid_t aid);
 
 	void init_vm();
 
@@ -145,12 +150,18 @@ protected:
 	float m_attrRate ;
 	
 private:
+	void resetMMAddr();
 	role_attr_data *m_data;
 	vm_cpu	m_vm;
 
 	typedef std::vector<attrval_node>  attrValVct_t;
 	bool m_recordChange;
 	attrValVct_t m_changed;
+	enum {
+		MM_NODE_NUMBER =16 
+	};
+	int m_mmnodeNum;
+	memnodeForVM m_runtime_mm[MM_NODE_NUMBER];
 };
 
 
