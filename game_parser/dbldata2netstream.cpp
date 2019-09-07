@@ -71,7 +71,14 @@ int logicDataWrite(LogicDataObj &data, NDOStreamMsg &omsg)
 	case OT_INT64:
 	case OT_TIME:
 		return omsg.Write((NDUINT64)data.GetInt64());
-
+	case OT_VAR_DATATYPE:
+	{
+		const NDVarType *pData = data.GetVarData();
+		if (pData) {
+			ret= omsg.WriteVar(*pData);
+		}
+	}
+		break;
 	case OT_USER_DEFINED:
 		return _writeMsgToUserDef(data, omsg);
 	case  OT_ARRAY:
@@ -159,6 +166,16 @@ int logicDataRead(LogicDataObj &data, NDIStreamMsg &inmsg)
 		break;
 	case OT_USER_DEFINED:
 		return _readMsgToUserDef(data, inmsg);
+	case OT_VAR_DATATYPE:
+	{
+		NDVarType vdata;
+		ret = inmsg.ReadVar(vdata);
+		if (-1 != ret) {
+			data.InitSet(vdata);
+		}
+		break;
+	}
+
 	case OT_STRING:
 	{
 		buf[0] = 0;
@@ -299,7 +316,8 @@ static type_name_info alias_type[] = {
 	{ "int16", OT_INT16 },
 	{ "int32", OT_INT },
 	{ "int64", OT_INT64 },
-	{ "text", OT_STRING }
+	{ "text", OT_STRING },
+	{"varDataType", OT_VAR_DATATYPE}
 };
 
 
@@ -309,7 +327,7 @@ int get_type_from_alias(const char *name )
 {
 	char tmpName[128];
 	ndstr_parse_word_n(name, tmpName, 128);
-	for (int i = 0; i < 11; ++i) {
+	for (int i = 0; i < ND_ELEMENTS_NUM(alias_type); ++i) {
 		if (0 == ndstricmp((char*)alias_type[i].alias, tmpName)) {
 			return alias_type[i].type;
 		}

@@ -407,11 +407,11 @@ int RoleAttrHelper::parse_minmax(const char *maxval, const char *minval, const c
 		attrid_t attid = GetID(maxval) ;
 		if(INVALID_ATTR_ID!=attid)  {
 			pwa->ismax = 2 ;
-			pwa->maxval =  (attrval_t )attid ;
+			pwa->maxval =  (int )attid ;
 		}
 		else {
 			pwa->ismax = 1 ;
-			pwa->maxval =  (attrval_t )atof(maxval) ;
+			pwa->maxval =  (float)atof(maxval) ;
 		}
 	}
 	else {
@@ -422,11 +422,11 @@ int RoleAttrHelper::parse_minmax(const char *maxval, const char *minval, const c
 		attrid_t attid = GetID(minval) ;
 		if(INVALID_ATTR_ID!=attid)  {
 			pwa->ismin = 2 ;
-			pwa->minval =  (attrval_t )attid  ;
+			pwa->minval =  (int )attid  ;
 		}
 		else {
 			pwa->ismin = 1 ;
-			pwa->minval =  (attrval_t )atof(minval) ;
+			pwa->minval =  (float)atof(minval) ;
 		}
 	}
 	else {
@@ -441,7 +441,7 @@ int RoleAttrHelper::parse_minmax(const char *maxval, const char *minval, const c
 		}
 		else {
 			pwa->isUnlimitedMax = 1;
-			pwa->unlimitMax = (attrval_t)atof(maxval);
+			pwa->unlimitMax = (float)atof(maxval);
 		}
 	}
 	else {
