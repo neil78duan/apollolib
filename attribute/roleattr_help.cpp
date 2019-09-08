@@ -712,7 +712,7 @@ int DBL_ReadAttrList(const char *tableName, int index, attr_node_buf &attrbuf)
 	for (int i = 0; i < num; i++){
 		float val = cursor[i].GetFloat(); 
 		if (fabsf(val) > ATTR_VALUE_DETA)	{
-			attrbuf.buf[n].val = cursor[i].GetFloat();
+            attrbuf.buf[n].val = LogicDataObj::ToVarData(cursor[i]); //cursor[i].GetFloat();
 			attrbuf.buf[n].id = attr_ids[i];
 			++n;
 		}

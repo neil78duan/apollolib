@@ -113,7 +113,7 @@ int logicDataWrite(LogicDataObj &data, NDOStreamMsg &omsg)
 		omsg.Write((NDUINT16)data_attr->count);
 		for (int i = 0; i < data_attr->count; i++)	{
 			omsg.Write(data_attr->datas[i].aid);
-			omsg.Write(data_attr->datas[i].val);
+			omsg.WriteVar(data_attr->datas[i].val);
 		}
 		return 0;
 	}

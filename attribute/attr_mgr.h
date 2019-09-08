@@ -32,6 +32,20 @@ struct role_attr_data
 // 			datas[i] = 0;
 // 		}
 	}
+    void destroy()
+    {
+        for(int i=0 ;i<datasCount; i++) {
+            datas[i].destroy() ;
+        }
+        datasCount = 0 ;
+    }
+    role_attr_data & operator =(const role_attr_data&r) {
+        destroy() ;
+        for(int i=0 ;i<r.datasCount; i++) {
+            datas[i]= r.datas[i] ;
+        }
+        return *this;
+    }
 	
 };
 /*

@@ -32,8 +32,9 @@ bool RoleAttrAsset::Create()
     
     for (int i=0; i<root->GetAttrNum(); i++) {
         role_attr_description *pdesc = root->get_wa_desc((attrid_t)i) ;
-        nd_assert(pdesc) ;
-        m_data->datas[i].InitType((NDVarType::NDVTYPE_ELEMENT_TYPE)pdesc->data_type);
+        if(pdesc){
+            m_data->datas[i].InitType((NDVarType::NDVTYPE_ELEMENT_TYPE)pdesc->data_type);
+        }
     }
     return 0;
 }

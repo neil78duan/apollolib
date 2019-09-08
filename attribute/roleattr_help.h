@@ -46,6 +46,18 @@ struct attrval_node
 	attrid_t id;
 	attrval_t val;
 
+    attrval_node():id(-1)
+    {
+        
+    }
+    attrval_node &operator =(const attrval_node&r){
+        id = r.id ;
+        val = r.val ;
+        return *this ;
+    }
+    void destroy(){
+        val.destroy();
+    }
 };
 
 struct attr_node_buf
@@ -56,6 +68,13 @@ struct attr_node_buf
 	{
 
 	}
+    void destroy()
+    {
+        for (int i = 0; i < number; i++) {
+            buf[i].destroy();
+        }
+        
+    }
 	bool push_back(attrid_t id, attrval_t val)
 	{
 		if (number >= ROLE_ATTR_CAPACITY)
@@ -86,6 +105,7 @@ struct attr_node_buf
 	}
 	attr_node_buf & operator = (const attr_node_buf &r)
 	{
+        destroy();
 		for (int i = 0; i < r.number; i++) {
 			buf[i].id = r.buf[i].id;
 			buf[i].val = r.buf[i].val;
@@ -96,14 +116,14 @@ struct attr_node_buf
 	void operator *= (float deta)
 	{
 		for (int i = 0; i < number; i++) {
-			buf[i].val = deta;
+			buf[i].val *= attrval_t(deta);
 		}
 	}
-	size_t getBinSize()
-	{
-
-		return sizeof(attr_node_buf) - sizeof(this->buf) + this->number * sizeof(this->buf[0]);
-	}
+//    size_t getBinSize()
+//    {
+//
+//        return sizeof(attr_node_buf) - sizeof(this->buf) + this->number * sizeof(this->buf[0]);
+//    }
 };
 // 
 // struct base_attr_t
@@ -214,7 +234,7 @@ int DBL_ReadAttrList(const char *table, int index, attr_node_buf &attrbuf);
 static inline void LogicType2Attrbuf(attr_node_buf *to_buf,LogicDataObj &fromData )
 {
 	//size_t size = fromData.GetBinarySize();
-	attr_node_buf *p = (attr_node_buf*)fromData.GetBinary();
+	attr_node_buf *p = (attr_node_buf*)fromData.GetObjectAddr();
 	nd_assert(p);
 	if (p){
 		*to_buf = *p;
@@ -224,9 +244,9 @@ static inline void LogicType2Attrbuf(attr_node_buf *to_buf,LogicDataObj &fromDat
 //void InitSet(void *binary, size_t size, DBL_ELEMENT_TYPE eleType = OT_BINARY_DATA);
 static inline void Attrbuf2LogicType(LogicDataObj &toData, attr_node_buf *from_buf )
 {
-	nd_assert(from_buf);
-	size_t size = sizeof(attr_node_buf) - sizeof(from_buf->buf) + from_buf->number * sizeof(attrval_node);
-	toData.InitSet((void*)from_buf, size, OT_ATTR_DATA);
+	//nd_assert(from_buf);
+	//size_t size = sizeof(attr_node_buf) - sizeof(from_buf->buf) + from_buf->number * sizeof(attrval_node);
+	toData.InitSet( (const _attrDataBin&)*from_buf);
 }
 
 //dataString read from excel-table
