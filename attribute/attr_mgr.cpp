@@ -103,12 +103,26 @@ bool RoleAttrAsset::setVal(attrid_t index, const attrval_t &val)
 	int ret = 0;
 	attrval_t *pdata = &m_data->datas[index];
 	
-	if (val != *pdata) {
-		ret = _set_val(val, index);
-		if (ret > 0  && m_EnableRecalc){
-			Recalc();
-		}
-	}
+    if(pdata->isNumber()) {
+    
+        if (val != *pdata) {
+            ret = _set_val(val, index);
+            if (ret > 0  && m_EnableRecalc){
+                Recalc();
+            }
+        }
+    }
+    else {
+        attrval_t oldval = *pdata ;
+        *pdata = val ;
+        if (CheckInAffair()){
+            AffairModify(index, oldval);
+        }
+        else {
+            OnChanged(index, *pdata, oldval);
+        }
+        SetDataChanged();
+    }
 	return true;
 
 }
@@ -148,6 +162,12 @@ bool RoleAttrAsset::setValRaw(const attr_node_buf &attrs)
 
 bool RoleAttrAsset::addVal(attrid_t index, const attrval_t & val)
 {
+    if(!m_data->datas[index].isNumber()) {
+        setLastError(ESERVER_ERR_TYPE_NOT_MATCH);
+        setLastErrorAttrID(index);
+        return  false;
+    }
+    
 	if (checkUnlimitMax(index)) {
 		setLastError(ESERVER_ERR_ATTR_TOO_MUCH);
 		setLastErrorAttrID(index);
@@ -173,6 +193,13 @@ bool RoleAttrAsset::addVal(attrid_t index, const attrval_t & val)
 
 bool RoleAttrAsset::subVal(attrid_t index, const attrval_t & val)
 {
+    if(!m_data->datas[index].isNumber()) {
+        setLastError(ESERVER_ERR_TYPE_NOT_MATCH);
+        setLastErrorAttrID(index);
+        return  false;
+    }
+    
+    
 	attrval_t step = val;
 	if (fabsf(m_attrRate - 1.0f) > 0.001f) {
 		step *= attrval_t(m_attrRate) ;
@@ -277,7 +304,13 @@ bool RoleAttrAsset::addVal(const char *name, const attrval_t &addval)
 	if (waid != INVALID_ATTR_ID){
 		return addVal(waid, addval);
 	}
-
+    
+    if(!m_data->datas[waid].isNumber()) {
+        setLastError(ESERVER_ERR_TYPE_NOT_MATCH);
+        setLastErrorAttrID(waid);
+        return  false;
+    }
+    
 	setLastError(NDERR_INVALID_INPUT);
 	setLastErrorAttrID(INVALID_ATTR_ID);
 	//m_lastErrorCode = NDERR_INVALID_INPUT;
@@ -297,6 +330,12 @@ bool RoleAttrAsset::subVal(const char *name, const attrval_t &subval)
 		return  subVal(waid, subval);
 	}
 
+    if(!m_data->datas[waid].isNumber()) {
+        setLastError(ESERVER_ERR_TYPE_NOT_MATCH);
+        setLastErrorAttrID(waid);
+        return  false;
+    }
+    
 	setLastError(NDERR_INVALID_INPUT);
 	setLastErrorAttrID(INVALID_ATTR_ID);
 	//m_lastErrorCode = NDERR_INVALID_INPUT;
