@@ -30,7 +30,7 @@ typedef NDVarType attrval_t;
 #define INVALID_ATTR_ID 0xff
 
 #define ATTR_VALUE_DETA 0.0001f
-//ĞéÄâ»úÖ¸Áî
+//è™šæ‹ŸæœºæŒ‡ä»¤
 struct ndvm_cmd_node
 {
 	int size ;
@@ -114,26 +114,27 @@ struct attr_node_buf
 // 	NDUINT8 m_is_create_role_set:1;
 // 	char attrname[ATTR_NAME_SIZE];
 // };
-//ÊôĞÔ¼ÆËã¹«Ê½
-//¼ÆËãÃ¿¸öÊôĞÔµÄ¹«Ê½ºÍÏà¹ØµÄÓÅÏÈË³Ğò
+//å±æ€§è®¡ç®—å…¬å¼
+//è®¡ç®—æ¯ä¸ªå±æ€§çš„å…¬å¼å’Œç›¸å…³çš„ä¼˜å…ˆé¡ºåº
 struct role_attr_description{
 	attrid_t wa_id ;
+    unsigned char data_type ;
 	unsigned char issave, issync,isChangeByclient,iscallEvent,islog ;	//
 	unsigned char friend_get;
 	unsigned char isReadOnly;
-	int infection_num ;				//ÊÜµ±Ç°ÊôĞÔÓ°ÏìµÄÊôĞÔ
-	int need_num ;					//µ±Ç°ÊôĞÔ¼ÆËãĞèÒªµÄÊôĞÔ¸öÊı
+	int infection_num ;				//å—å½“å‰å±æ€§å½±å“çš„å±æ€§
+	int need_num ;					//å½“å‰å±æ€§è®¡ç®—éœ€è¦çš„å±æ€§ä¸ªæ•°
 	attr_name_t name;
 	attr_name_t real_name;
 	char input_for[NDVM_CMD_SIZE];
-	char ismin, ismax, isUnlimitedMax ;				//ÊÇ·ñÓĞ×î´óÖµ0Ã»ÓĞ,1 ÊäÈëÊıÖµ, 2 ²»³¬¹ıÄ³¸öÊôĞÔ
-	attrval_t minval ,maxval, unlimitMax ;		//×î´ó×îĞ¡Öµ
+	char ismin, ismax, isUnlimitedMax ;				//æ˜¯å¦æœ‰æœ€å¤§å€¼0æ²¡æœ‰,1 è¾“å…¥æ•°å€¼, 2 ä¸è¶…è¿‡æŸä¸ªå±æ€§
+	attrval_t minval ,maxval, unlimitMax ;		//æœ€å¤§æœ€å°å€¼
 	attrid_t infections[ROLE_ATTR_CAPACITY];
 	attrid_t need_buf[ROLE_ATTR_CAPACITY];
 	ndvm_cmd_node cmd_data;
 };
 
-//¹«Ê½Ö´ĞĞË³Ğò
+//å…¬å¼æ‰§è¡Œé¡ºåº
 struct formula_run_sort
 {
 	int num ;
@@ -141,7 +142,7 @@ struct formula_run_sort
 };
 
 typedef std::vector<attr_name_t> baseattr_vct ;
-//Õ½¶·ÊôĞÔÃèÊö¹ÜÀíÆ÷
+//æˆ˜æ–—å±æ€§æè¿°ç®¡ç†å™¨
 class RoleAttrHelper
 {
 
@@ -150,7 +151,7 @@ public:
 	inline attrid_t GetIDByRealName(const char *name) { return GetID(name); }
 	//attrid_t GetIDByRealName(const char *name);
 
-	attrid_t GetIDEx(const char *name,int &MinOrMax);		//µÃµ½Õ½¶·ÊôĞÔMinOrMax =1 min , 2max , 0 none (ref ×ÊÖÊmin	×ÊÖÊmax)
+	attrid_t GetIDEx(const char *name,int &MinOrMax);		//å¾—åˆ°æˆ˜æ–—å±æ€§MinOrMax =1 min , 2max , 0 none (ref èµ„è´¨min	èµ„è´¨max)
 	const char *Getname(attrid_t wa_id);
 	const char *GetRealname(attrid_t wa_id);
 	//attrid_t GetwaIDBase() ;
@@ -203,11 +204,11 @@ extern RoleAttrHelper *get_attr_helper();
 #include "game_parser/dbl_mgr.h"
 #include "logic_parser/logicDataType.h"
 
-//Í¨¹ı±í²éÑ¯ÊôĞÔIDºÍÁĞÃû return value ,number of attributes , return -1 on error
+//é€šè¿‡è¡¨æŸ¥è¯¢å±æ€§IDå’Œåˆ—å return value ,number of attributes , return -1 on error
 int DBL_GetAttrIDName(const char *table, attrid_t ids[], const char *[], int bufsize) ;
 
 
-//´Ó±íÖĞ¶ÁÈ¡½ÇÉ«ÊôĞÔ return value ,number of attributes , return -1 on error
+//ä»è¡¨ä¸­è¯»å–è§’è‰²å±æ€§ return value ,number of attributes , return -1 on error
 int DBL_ReadAttrList(const char *table, int index, attr_node_buf &attrbuf);
 
 static inline void LogicType2Attrbuf(attr_node_buf *to_buf,LogicDataObj &fromData )

@@ -68,6 +68,7 @@ public:
 	RoleAttrAsset(role_attr_data *data);
 	virtual ~RoleAttrAsset();
 
+    bool Create() ;
 	float setAttrRate(float newVal) ;
 	
 	int getChanged(attrval_node *buf, size_t size);

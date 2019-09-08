@@ -11,10 +11,33 @@
 #include "nd_common/nd_common.h"
 #include "game_parser/dbl_mgr.h"
 #include "ndapplib/ndsingleton.h"
-
 #include <math.h>
 
 int place_name_entry(char *input, char *buf, int size, void *user_data);
+
+struct _typeNameId
+{
+    int type ;
+    const char *name ;
+};
+static _typeNameId _s_attrTypeInfo[] = {
+    {NDVarType::ND_VT_INT, "int"},
+    {NDVarType::ND_VT_FLOAT, "float"},
+    {NDVarType::ND_VT_INT64, "long"},
+    {NDVarType::ND_VT_STRING, "string"},
+    {NDVarType::ND_VT_BINARY, "binary"}
+};
+static int _getAttrDataType(const char *name)
+{
+    if(name && *name){
+        for (int i=0; i<ND_ELEMENTS_NUM(_s_attrTypeInfo); i++) {
+            if(0==ndstricmp(name, _s_attrTypeInfo[i].name)) {
+                return _s_attrTypeInfo[i].type ;
+            }
+        }
+    }
+    return NDVarType::ND_VT_FLOAT;
+}
 
 RoleAttrHelper *get_Instant()
 {
@@ -103,7 +126,7 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 {
 	std::string attrmax[ROLE_ATTR_CAPACITY][3];
 	const char *pfields[] = { "id", "name", "formula", "save_db", "sync", "min_val", "max_val",			//7
-		"client_change", "real_name","friend_read", "save_log", "unlimited_max"};
+		"client_change", "real_name","friend_read", "save_log", "unlimited_max","data_type"};
 	m_wa_num = 0 ;
 	role_attr_description *pwa_desc ;
 	int i = 0 ;
@@ -154,6 +177,7 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 		attrmax[aid][1] = cursor[5].GetString();
 		attrmax[aid][0] = cursor[6].GetString();
 		attrmax[aid][2] = cursor[11].GetString();
+        pwa_desc->data_type =(unsigned char) _getAttrDataType(cursor[12].GetText());
 		++i;
 	}
 	m_wa_num++ ;
@@ -176,7 +200,7 @@ int RoleAttrHelper::Load(const char *attr_file, const char *up_level_file)
 }
 
 
-//»ñµÃĞèÒªÍ¬²½¸øÆäËûÍæ¼ÒµÄÊôĞÔ
+//è·å¾—éœ€è¦åŒæ­¥ç»™å…¶ä»–ç©å®¶çš„å±æ€§
 int RoleAttrHelper::FetchAttr2Others(attrval_t *inbufs,int bufsize, attrval_node *out_nodes, int out_size ) 
 {
 	int ret = 0 ;
@@ -295,19 +319,19 @@ int RoleAttrHelper::place_param_name(char *input, char *buf, int size)
 		if(0==strcmp(input,pwa->name.attrname)) {
 			snprintf(buf,size,"[%d]", pwa->wa_id ) ;
 			if(m_current_parse != i) {
-				pwa->infections[(pwa->infection_num)++] = m_current_parse;		//¼ÇÂ¼ÊôĞÔÏà¹Ø
-				m_wahelper_bufs[m_current_parse].need_buf[(m_wahelper_bufs[m_current_parse].need_num)++] = i  ;		//¼ÇÂ¼ÊôĞÔÏà¹Ø
+				pwa->infections[(pwa->infection_num)++] = m_current_parse;		//è®°å½•å±æ€§ç›¸å…³
+				m_wahelper_bufs[m_current_parse].need_buf[(m_wahelper_bufs[m_current_parse].need_num)++] = i  ;		//è®°å½•å±æ€§ç›¸å…³
 			}
 			return 0 ;
 		}
 	}
 	
 	//
-	nd_logfatal("¹«Ê½½âÎö´íÎó:²»ÄÜÕÒµ½±äÁ¿[%s]\n" AND input) ;
+	nd_logfatal("å…¬å¼è§£æé”™è¯¯:ä¸èƒ½æ‰¾åˆ°å˜é‡[%s]\n" AND input) ;
 	return -1 ;
 }
 
-//ÔËĞĞÊ±Ãû×ÖÌæ»»
+//è¿è¡Œæ—¶åå­—æ›¿æ¢
 int place_name_runtime(char *input, char *buf, int size,void *user_data) 
 {
 	int i ;
@@ -324,7 +348,7 @@ int place_name_runtime(char *input, char *buf, int size,void *user_data)
 	}
 	
 
-	nd_logfatal("¹«Ê½½âÎö´íÎó:²»ÄÜÕÒµ½±äÁ¿[%s]\n" AND input) ;
+	nd_logfatal("å…¬å¼è§£æé”™è¯¯:ä¸èƒ½æ‰¾åˆ°å˜é‡[%s]\n" AND input) ;
 	return -1 ;
 }
 
@@ -342,7 +366,7 @@ int RoleAttrHelper::parse_form(const char *cmd_txt, ndvm_cmd_node *cmdnode)
 
 int RoleAttrHelper::ParseFormula() 
 {
-	//·­Òë¹«Ê½
+	//ç¿»è¯‘å…¬å¼
 	role_attr_description  *pwa = m_wahelper_bufs;
 	for(int i=0; i<m_wa_num; i++,pwa++){
 		if (pwa->wa_id == INVALID_ATTR_ID){
@@ -360,8 +384,8 @@ int RoleAttrHelper::ParseFormula()
 			m_current_parse = i ;
 			size_t size = vm_parse_expression((char*)pwa->input_for, pwa->cmd_data.cmd_buf, NDVM_CMD_SIZE, (vm_param_replace_func)place_name_entry, this);
 			if(size==0) {
-				nd_logfatal("½âÎö¹«Ê½%s´íÎó \n row = %d " AND (char*)pwa->input_for AND i+1) ;
-				//show_error("½âÎö¹«Ê½%s´íÎó \n row = %d ",vct_warattr[i].str_formula.c_str(), i+2) ;
+				nd_logfatal("è§£æå…¬å¼%sé”™è¯¯ \n row = %d " AND (char*)pwa->input_for AND i+1) ;
+				//show_error("è§£æå…¬å¼%sé”™è¯¯ \n row = %d ",vct_warattr[i].str_formula.c_str(), i+2) ;
 				return -1 ;
 			}
 			pwa->cmd_data.size = (int) size;
@@ -461,7 +485,7 @@ int RoleAttrHelper::check_canbe_run(role_attr_description *node, attrid_t *buf)
 	return 0 ;
 
 }
-//½âÎö¹«Ê½µÄÖ´ĞĞË³Ğò,Èç¹ûAÊ¹ÓÃÁËB,ÄÇÃ´Ó¦¸ÃÏÈÔËËãB
+//è§£æå…¬å¼çš„æ‰§è¡Œé¡ºåº,å¦‚æœAä½¿ç”¨äº†B,é‚£ä¹ˆåº”è¯¥å…ˆè¿ç®—B
 int RoleAttrHelper::parse_run_sort()
 {
 	int i ;
@@ -500,8 +524,8 @@ int RoleAttrHelper::parse_run_sort()
 	}while(done && (--number > 0) ) ;
 	if(number <= 0) {
 
-		nd_logfatal("¹«Ê½½âÎö´íÎó,±äÁ¿Ïà»¥Ç¶Ì×,Çë¼ì²é¹«Ê½") ;
-		//show_error( "¹«Ê½Ç¶Ì×¹ıÉî,Çë¼ì²é¹«Ê½")  ;
+		nd_logfatal("å…¬å¼è§£æé”™è¯¯,å˜é‡ç›¸äº’åµŒå¥—,è¯·æ£€æŸ¥å…¬å¼") ;
+		//show_error( "å…¬å¼åµŒå¥—è¿‡æ·±,è¯·æ£€æŸ¥å…¬å¼")  ;
 		return -1 ;
 	}
 
@@ -628,7 +652,7 @@ RoleAttrHelper *get_attr_helper()
 	return  NDSingleton<RoleAttrHelper> ::Get();
 }
 
-//Í¨¹ı±í²éÑ¯½ÇÉ«ÊôĞÔIDºÍÁĞÃû
+//é€šè¿‡è¡¨æŸ¥è¯¢è§’è‰²å±æ€§IDå’Œåˆ—å
 int DBL_GetAttrIDName(const char *table, attrid_t attr_ids[], const char *attr_name[], int bufsize) 
 {
 	RoleAttrHelper *wahelper = get_attr_helper() ;
