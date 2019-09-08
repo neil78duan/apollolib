@@ -171,6 +171,7 @@ int logicDataRead(LogicDataObj &data, NDIStreamMsg &inmsg)
 		NDVarType vdata;
 		ret = inmsg.ReadVar(vdata);
 		if (-1 != ret) {
+            //data = LogicDataObj::FromVarData(vdata) ;
 			data.InitSet(vdata);
 		}
 		break;
