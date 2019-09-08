@@ -14,29 +14,34 @@
 #include <math.h>
 
 int place_name_entry(char *input, char *buf, int size, void *user_data);
+//
+//struct _typeNameId
+//{
+//    int type ;
+//    const char *name ;
+//};
+//static _typeNameId _s_attrTypeInfo[] = {
+//    {NDVarType::ND_VT_INT, "int"},
+//    {NDVarType::ND_VT_FLOAT, "float"},
+//    {NDVarType::ND_VT_INT64, "long"},
+//    {NDVarType::ND_VT_STRING, "string"},
+//    {NDVarType::ND_VT_BINARY, "binary"}
+//};
+//static int _getAttrDataType(const char *name)
+//{
+//    if(name && *name){
+//        for (int i=0; i<ND_ELEMENTS_NUM(_s_attrTypeInfo); i++) {
+//            if(0==ndstricmp(name, _s_attrTypeInfo[i].name)) {
+//                return _s_attrTypeInfo[i].type ;
+//            }
+//        }
+//    }
+//    return NDVarType::ND_VT_FLOAT;
+//}
 
-struct _typeNameId
-{
-    int type ;
-    const char *name ;
-};
-static _typeNameId _s_attrTypeInfo[] = {
-    {NDVarType::ND_VT_INT, "int"},
-    {NDVarType::ND_VT_FLOAT, "float"},
-    {NDVarType::ND_VT_INT64, "long"},
-    {NDVarType::ND_VT_STRING, "string"},
-    {NDVarType::ND_VT_BINARY, "binary"}
-};
 static int _getAttrDataType(const char *name)
 {
-    if(name && *name){
-        for (int i=0; i<ND_ELEMENTS_NUM(_s_attrTypeInfo); i++) {
-            if(0==ndstricmp(name, _s_attrTypeInfo[i].name)) {
-                return _s_attrTypeInfo[i].type ;
-            }
-        }
-    }
-    return NDVarType::ND_VT_FLOAT;
+    return NDVarType::getTypeByName(name);
 }
 
 RoleAttrHelper *get_Instant()

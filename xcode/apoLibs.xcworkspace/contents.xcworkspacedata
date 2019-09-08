@@ -296,9 +296,6 @@
          location = "group:../../nodeflow/xcode/nodeflow/nodeflow.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:../../nodeflow/src/apolloEditorUI/apoBluePrint.xcodeproj">
-      </FileRef>
-      <FileRef
          location = "group:apollo_client/apollo_client.xcodeproj">
       </FileRef>
    </Group>
