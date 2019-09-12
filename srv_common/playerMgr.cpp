@@ -91,7 +91,7 @@ int PlayerMgr::Send(account_index_t playerid, nd_usermsghdr_t *msghdr, bool encr
 	if(session_id) {
 		//GameInstance &inst = get_instance() ;
 		NDInstanceBase *inst = getbase_inst() ;
-		ret = nd_send_toclient_ex(session_id, msghdr, inst->GetDeftListener()->GetHandle(),encrypt?1:0) ; 
+		ret = nd_session_send_id(session_id, msghdr, inst->GetDeftListener()->GetHandle(),encrypt?1:0) ; 
 	}
 	else {
 		ret = wrapToWorld(msghdr, ND_MAIN_ID_SYS, ND_MSG_SYS_DIRECTLY_TO_CLIENT_WRAPPER, playerid,encrypt,isSaved) ;
@@ -112,7 +112,7 @@ int PlayerMgr::Send(account_index_t playerid, nd_usermsghdr_t *msghdr, bool encr
 // 	if (session_id) {
 // 		//GameInstance &inst = get_instance() ;
 // 		NDInstanceBase *inst = getbase_inst();
-// 		ret = nd_send_toclient_ex(session_id, msghdr, inst->GetDeftListener()->GetHandle(), encrypt ? 1 : 0);
+// 		ret = nd_session_send_id(session_id, msghdr, inst->GetDeftListener()->GetHandle(), encrypt ? 1 : 0);
 // 	}
 // 	else {
 // 		ret = wrapToNation(msghdr, ND_MAIN_ID_SYS, ND_MSG_SYS_DIRECTLY_TO_CLIENT_WRAPPER, playerid, encrypt, isSaved);
@@ -183,7 +183,7 @@ int PlayerMgr::BroadCastInHost(nd_usermsghdr_t *msghdr,bool encrypt)
 	ND_TRACE_FUNC() ;
 	
 	nd_handle lh = getbase_inst()->GetDeftListener()->GetHandle() ;
-	return nd_sendto_all_ex(msghdr, lh, EPL_READY,encrypt?1:0) ;
+	return nd_session_send_all(msghdr, lh, EPL_READY,encrypt?1:0) ;
 	
 }
 

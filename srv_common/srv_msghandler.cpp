@@ -79,7 +79,7 @@ MSG_ENTRY_INSTANCE(unwrap_sendto_player_entry)
 			nd_assert(h_listen) ;
 		}		
 		//nd_logdebug("world translate to client real message (%d, %d)\n", ND_USERMSG_MAXID(&realMsg), ND_USERMSG_MAXID(&realMsg)) ;
-		nd_send_toclient_ex(sid, &realMsg.msg_hdr, h_listen, (int)encrypt) ; 
+		nd_session_send_id(sid, &realMsg.msg_hdr, h_listen, (int)encrypt) ; 
 	}
 	return 0;
 }
@@ -162,7 +162,7 @@ MSG_ENTRY_INSTANCE(bridge_to_client_dirctly_entry)
 		playerMgr->BroadCastInHost((nd_usermsghdr_t*)omsg.GetMsgAddr()) ;
 	}
 	else {
-		if(-1==nd_send_tocliet(sid,(nd_usermsghdr_t*)omsg.GetMsgAddr(), h_listen) ){
+		if(-1==nd_session_msg_send_id(sid,(nd_usermsghdr_t*)omsg.GetMsgAddr(), h_listen) ){
 			nd_logmsg("nd_netmsg_handle() to %d error\n", sid) ;		
 		}	
 	}
