@@ -34,8 +34,8 @@ commit:
 tool:
 	cd tool ;make 
 
-clean_dll:
-	cd game_parser ;make clean_dll
+clean-dll:
+	cd game_parser ;make clean-dll
 
 clean:
 	for n in $(SUBDIRS); do $(MAKE) -C $$n clean DEBUG="n" PROFILE="n"; done

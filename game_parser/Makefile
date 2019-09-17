@@ -43,7 +43,7 @@ $(PLUGIN_NAME):$(PLUGOBJ)
 .cpp.o:
 	$(CPP) $(INCLUDE) $(CFLAGS) $(CPPFLAGS) -o $(OBJDIR)/$*.o $<
 	
-clean_dll:
+clean-dll:
 	rm -rf $(PATH_PLUGOBJ) PLUGIN_NAME
 clean:
 	rm -f $(PROJS) $(PathOBJS)  $(PathOBJS:.o=.d)
