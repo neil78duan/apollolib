@@ -9,12 +9,12 @@
 #include "nd_common/nd_common.h"
 #include "nd_net/nd_netlib.h"
 #include "nd_crypt/nd_crypt.h"
-#include "nd_crypt/crypt_file.h"
 #include "msg_def.h"
 //#include "ndcli/nd_api_c.h"
 #include "apollo_errors.h"
-
 #include "login_apollo.h"
+
+#include "nd_crypt/crypt_file.h"
 
 //#define _DFT_SESSION_INFO_FILE_NAME "./session.tmp"
 
