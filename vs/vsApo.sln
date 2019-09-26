@@ -52,6 +52,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "extlibs", "extlibs", "{E41D
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libnodeflow_s", "..\..\nodeflow\vs\libnodeflow_s\libnodeflow_s.vcxproj", "{BA69E746-73B9-4713-801D-BCEB354634F8}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testRedis", "testRedis\testRedis.vcxproj", "{48BE4E12-076C-4154-8035-FDBDB9462D0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -160,6 +162,14 @@ Global
 		{BA69E746-73B9-4713-801D-BCEB354634F8}.Release|x64.Build.0 = Release|x64
 		{BA69E746-73B9-4713-801D-BCEB354634F8}.Release|x86.ActiveCfg = Release|Win32
 		{BA69E746-73B9-4713-801D-BCEB354634F8}.Release|x86.Build.0 = Release|Win32
+		{48BE4E12-076C-4154-8035-FDBDB9462D0E}.Debug|x64.ActiveCfg = Debug|x64
+		{48BE4E12-076C-4154-8035-FDBDB9462D0E}.Debug|x64.Build.0 = Debug|x64
+		{48BE4E12-076C-4154-8035-FDBDB9462D0E}.Debug|x86.ActiveCfg = Debug|Win32
+		{48BE4E12-076C-4154-8035-FDBDB9462D0E}.Debug|x86.Build.0 = Debug|Win32
+		{48BE4E12-076C-4154-8035-FDBDB9462D0E}.Release|x64.ActiveCfg = Release|x64
+		{48BE4E12-076C-4154-8035-FDBDB9462D0E}.Release|x64.Build.0 = Release|x64
+		{48BE4E12-076C-4154-8035-FDBDB9462D0E}.Release|x86.ActiveCfg = Release|Win32
+		{48BE4E12-076C-4154-8035-FDBDB9462D0E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -178,6 +188,7 @@ Global
 		{8236BBCF-FEB2-4A70-A633-90488EE65D63} = {E41DB152-629C-4CF6-84AA-47DA95649CB7}
 		{64245E65-0866-3A9E-BD63-996E794A8BAF} = {E41DB152-629C-4CF6-84AA-47DA95649CB7}
 		{BA69E746-73B9-4713-801D-BCEB354634F8} = {E41DB152-629C-4CF6-84AA-47DA95649CB7}
+		{48BE4E12-076C-4154-8035-FDBDB9462D0E} = {68D35C3A-2161-4CAB-955F-6AA97D1BA45A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F842CBAF-C8D4-4BC0-A339-B1DBCF47C0A0}
