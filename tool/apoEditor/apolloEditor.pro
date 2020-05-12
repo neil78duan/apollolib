@@ -10,11 +10,11 @@ apoBP_dir = ../../../nodeflow
 
 CONFIG(debug, debug|release) {
     message(BUILD win32 -debug)
-    LIBS += -lndclient_s_d -lnfParser_s_d
+    LIBS += -lndclient_s_d -lnodeflow_s_d
     DEFINES +=  ND_DEBUG
 } else {
     message(BUILD win32 -release)
-    LIBS += -lndclient_s -lnfParser_s -lapoBluePrint
+    LIBS += -lndclient_s -lnodeflow_s
 }
 
 LIBS +=  -lapoBluePrint
