@@ -10,6 +10,9 @@
 		07079A60231FEF7F001F6983 /* nd_vartype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07079A5F231FEF7F001F6983 /* nd_vartype.cpp */; };
 		07079A61231FEF7F001F6983 /* nd_vartype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07079A5F231FEF7F001F6983 /* nd_vartype.cpp */; };
 		07079A62231FEF7F001F6983 /* nd_vartype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07079A5F231FEF7F001F6983 /* nd_vartype.cpp */; };
+		0718698B246BC7AA00F5C8F9 /* nd_protoStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0718698A246BC7AA00F5C8F9 /* nd_protoStream.cpp */; };
+		0718698C246BC7AA00F5C8F9 /* nd_protoStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0718698A246BC7AA00F5C8F9 /* nd_protoStream.cpp */; };
+		0718698D246BC7AA00F5C8F9 /* nd_protoStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0718698A246BC7AA00F5C8F9 /* nd_protoStream.cpp */; };
 		07253494207C8D5C001FD566 /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = 0778FE46207B50F90057D91B /* cJSON.c */; };
 		07253495207C8D69001FD566 /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = 0778FE46207B50F90057D91B /* cJSON.c */; };
 		07272F252137FE2100D66BB0 /* nd_logger.c in Sources */ = {isa = PBXBuildFile; fileRef = 07272F242137FE2100D66BB0 /* nd_logger.c */; };
@@ -305,6 +308,7 @@
 
 /* Begin PBXFileReference section */
 		07079A5F231FEF7F001F6983 /* nd_vartype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nd_vartype.cpp; sourceTree = "<group>"; };
+		0718698A246BC7AA00F5C8F9 /* nd_protoStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nd_protoStream.cpp; sourceTree = "<group>"; };
 		07272F242137FE2100D66BB0 /* nd_logger.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = nd_logger.c; sourceTree = "<group>"; };
 		0742FEEE2298CD91006CEEE8 /* nd_exch_key.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nd_exch_key.cpp; sourceTree = "<group>"; };
 		0742FEEF2298CD91006CEEE8 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
@@ -544,6 +548,7 @@
 		0742FEF12298CD91006CEEE8 /* ndapplib */ = {
 			isa = PBXGroup;
 			children = (
+				0718698A246BC7AA00F5C8F9 /* nd_protoStream.cpp */,
 				07079A5F231FEF7F001F6983 /* nd_vartype.cpp */,
 				0742FEF22298CD91006CEEE8 /* nd_object.cpp */,
 				0742FF0B2298CD91006CEEE8 /* nd_connector.cpp */,
@@ -1145,6 +1150,7 @@
 				074C0F9621F9C31C0003BAE4 /* logicDataType.cpp in Sources */,
 				0776F9311E31C1AE005DCB69 /* ndcrypt.c in Sources */,
 				0776F9321E31C1AE005DCB69 /* ndrsa.c in Sources */,
+				0718698D246BC7AA00F5C8F9 /* nd_protoStream.cpp in Sources */,
 				0776F9331E31C1AE005DCB69 /* tea.c in Sources */,
 				0776F9341E31C1AE005DCB69 /* Makefile in Sources */,
 				0776F9351E31C1AE005DCB69 /* ipraw.c in Sources */,
@@ -1286,6 +1292,7 @@
 				07EC861B1D54400400C32925 /* nd_netobj.c in Sources */,
 				07EC86101D54400400C32925 /* r_stdlib.c in Sources */,
 				07EC86051D54400400C32925 /* desc.c in Sources */,
+				0718698B246BC7AA00F5C8F9 /* nd_protoStream.cpp in Sources */,
 				07EC86231D54400400C32925 /* udt_net.c in Sources */,
 				07EC85FD1D54400400C32925 /* nd_unix.c in Sources */,
 				074C0F8821F9C31C0003BAE4 /* logic_debugger.cpp in Sources */,
@@ -1308,6 +1315,7 @@
 				0742FF552298CE03006CEEE8 /* nd_client.cpp in Sources */,
 				075E674022968F480084C66A /* nd_logger.c in Sources */,
 				078014822193EA1F00BFF5D0 /* apoGameCommon.cpp in Sources */,
+				0718698C246BC7AA00F5C8F9 /* nd_protoStream.cpp in Sources */,
 				07253494207C8D5C001FD566 /* cJSON.c in Sources */,
 				074C0F8921F9C31C0003BAE4 /* logic_debugger.cpp in Sources */,
 				077C593B2105E2A900BB4D44 /* apoAttrCalcHelper.cpp in Sources */,

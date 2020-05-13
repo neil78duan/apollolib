@@ -68,6 +68,7 @@ LOCAL_SRC_FILES := ../../../ndsdk/src/nd_common/src/bintree.c \
 ../../../ndsdk/src/ndapplib/nd_connector.cpp \
 ../../../ndsdk/src/ndapplib/nd_baseConn.cpp \
 ../../../ndsdk/src/ndapplib/nd_vartype.cpp \
+../../../ndsdk/src/ndapplib/nd_protoStream.cpp \
 ../../cli_common/login_apollo.cpp \
 ../../cli_common/dftCliMsgHandler.cpp \
 ../../cli_common/apoClientObj.cpp	\
